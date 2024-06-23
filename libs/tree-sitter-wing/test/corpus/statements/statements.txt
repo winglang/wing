@@ -78,6 +78,8 @@ z -= 1;
 
 let var y = "hello";
 
+let w: (((num))) = 1;
+
 --------------------------------------------------------------------------------
 
 (source
@@ -107,7 +109,11 @@ let var y = "hello";
   (variable_definition_statement
     reassignable: (reassignable)
     name: (identifier)
-    value: (string)))
+    value: (string))
+  (variable_definition_statement
+    name: (identifier)
+    type: (builtin_type)
+    value: (number)))
 
 ================================================================================
 If
@@ -458,6 +464,53 @@ if let x = y {} elif let x = z {} else {}
       name: (identifier)
       value: (reference
         (reference_identifier))
+      block: (block))
+    else_block: (block)))
+
+================================================================================
+(If Let) (Elif) (Elif Let) (Else)
+================================================================================
+
+if let x = y {} elif let x = z {} else {}
+
+--------------------------------------------------------------------------------
+
+(source
+  (if_let_statement
+    name: (identifier)
+    value: (reference
+      (reference_identifier))
+    block: (block)
+    elif_let_block: (elif_let_block
+      name: (identifier)
+      value: (reference
+        (reference_identifier))
+      block: (block))
+    else_block: (block)))
+
+================================================================================
+(If Let) (Elif Let) (Elif) (Else)
+================================================================================
+
+if let x = y {} elif let x = z {} elif v? {} else {}
+
+--------------------------------------------------------------------------------
+
+(source
+  (if_let_statement
+    name: (identifier)
+    value: (reference
+      (reference_identifier))
+    block: (block)
+    elif_let_block: (elif_let_block
+      name: (identifier)
+      value: (reference
+        (reference_identifier))
+      block: (block))
+    elif_block: (elif_block
+      condition: (optional_test
+        (reference
+          (reference_identifier)))
       block: (block))
     else_block: (block)))
 

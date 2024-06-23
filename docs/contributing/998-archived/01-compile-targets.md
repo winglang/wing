@@ -33,7 +33,7 @@ These targets contain a combination of provisioning engine and cloud environment
 
 ## Portability
 
-The [Wing Cloud Library](/docs/category/cloud-library) has several classes representing abstracted cloud resources, whose APIs are not specific to a single cloud provider.
+The [Wing Cloud Library](/docs/category/cloud) has several classes representing abstracted cloud resources, whose APIs are not specific to a single cloud provider.
 This allows you to write code that can be deployed to any supported cloud environment or provisioning engine.
 
 Here's an example of a portable code snippet:
@@ -91,7 +91,7 @@ In this example, we want to sleep briefly for the Simulator target and for 30 se
 
 Compiler plugins serve to extend the capabilities of the Wing compiler. They offer customization for the compilation output, such as infrastructure definitions. For instance, a compiler plugin can be employed to enforce a specific tagging convention on all resources within the resulting infrastructure.
 
-Learn more about compiler plugins [here](https://www.winglang.io/docs/tools/compiler-plugins)
+Learn more about compiler plugins [here](https://www.winglang.io/contributing/archived/compiler-plugins)
 
 
 

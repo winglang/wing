@@ -162,7 +162,7 @@ if let val = jsonElements.tryGet("strings")?.tryGet("single")?.asStr() {
 }
 
 if let vals = jsonElements.tryGet("strings")?.tryGet("array") {
-  // Try getting an index 
+  // Try getting an index
   if let hello = vals.tryGetAt(0) {
     assert(hello == "Hello");
   } else {
@@ -206,7 +206,7 @@ assert(notSpecified.get("foo") == "bar");
 
 // Check that empty {} is a Json
 let empty = {};
-assert(Json.has(empty, "something") == false);
+assert(empty.has("something") == false);
 
 struct Base {
   base: str;
@@ -225,16 +225,23 @@ struct StructyJson {
   foo: str;
   stuff: Array<num>;
   maybe: InnerStructyJson?;
+  buckets: Array<cloud.Bucket>?;
 }
 
 let arrayStruct: Array<StructyJson> = [ { foo: "", stuff: [] } ];
-let setStruct: Set<StructyJson> = { { foo: "", stuff: [] } };
+let setStruct: Set<StructyJson> = Set<StructyJson>[ { foo: "", stuff: [] } ];
 let mapStruct: Map<StructyJson> = { "1" => ({ foo: "", stuff: [] }) };
-let deepCollectionStruct: Map<Array<Set<StructyJson>>> = { "1" => [ { { foo: "", stuff: [] } } ] };
+let deepCollectionStruct: Map<Array<Set<StructyJson>>> = { "1" => [ Set<StructyJson>[ { foo: "", stuff: [] } ] ] };
 
 let notJsonMissingField: StructyJson = {
   foo: "bar",
   stuff: [],
+};
+
+let notJsonWithInnerArray: StructyJson = {
+  foo: "bar",
+  stuff: [],
+  buckets: [new cloud.Bucket() as "B1InList"]
 };
 
 let notJson: StructyJson = {
@@ -267,3 +274,20 @@ let hasBucket: HasInnerBucket = {
     a: new cloud.Bucket()
   }
 };
+
+let numVar = 1;
+let strVar = "s";
+let punnedJson1 = {numVar, strVar};
+assert(punnedJson1["numVar"] == 1);
+assert(punnedJson1["strVar"] == "s");
+let punnedMutJson1 = MutJson {numVar};
+punnedMutJson1.set("numVar", punnedMutJson1["numVar"].asNum() + 1);
+assert(punnedMutJson1["numVar"] == 2);
+
+struct StructToPun {
+  numVar: num;
+  strVar: str;
+}
+let structToPunFromJson: StructToPun = Json {numVar, strVar};
+assert(structToPunFromJson.numVar == 1);
+assert(structToPunFromJson.strVar == "s");

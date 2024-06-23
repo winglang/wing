@@ -1,53 +1,53 @@
+import * as http from "http";
+import { deserialize } from "./serialization";
 import type {
   SimulatorServerRequest,
   SimulatorServerResponse,
 } from "./simulator";
-import { Datetime } from "../std/datetime";
 
-// TODO: more robust serialization scheme
-
-export function serializeValue(input: any): string {
-  return JSON.stringify(input, (_key, value) => {
-    if (value instanceof Datetime) {
-      return {
-        $kind: "datetime",
-        day: value.dayOfMonth,
-        hour: value.hours,
-        min: value.min,
-        month: value.month,
-        sec: value.sec,
-        year: value.year,
-        ms: value.ms,
-        tz: value.timezone,
-      };
-    }
-    return value;
-  });
+interface HttpRequestOptions extends http.RequestOptions {
+  body?: string;
 }
 
-export function deserializeValue(input: string): any {
-  return JSON.parse(input, (_key, value) => {
-    // assumption: Wing APIs don't distinguish between null and undefined, so we can swap them
-    if (value === null) {
-      return undefined;
-    }
-    if (value.$kind === "datetime") {
-      return Datetime.fromComponents({
-        day: value.day,
-        hour: value.hour,
-        min: value.min,
-        month: value.month,
-        sec: value.sec,
-        year: value.year,
-        ms: value.ms,
-        tz: value.tz,
+function makeHttpRequest(options: HttpRequestOptions): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const req = http.request(options, (res) => {
+      let data = "";
+
+      res.on("data", (chunk) => {
+        data += chunk;
       });
+
+      res.on("end", () => {
+        resolve(data);
+      });
+    });
+
+    req.on("error", (e) => {
+      reject(e);
+    });
+
+    if (options.body !== undefined) {
+      req.write(options.body);
     }
-    return value;
+
+    req.end();
   });
 }
 
-export function makeSimulatorClient(url: string, handle: string) {
+/**
+ * Creates a proxy object that forwards method calls to the simulator server.
+ *
+ * @param url The URL of the simulator server
+ * @param handle The handle for the resource we're calling methods on or getting properties from
+ * @param caller The handle of the resource that is making the calls
+ * @returns A proxy object that forwards calls to the simulator server
+ */
+export function makeSimulatorClient(
+  url: string,
+  handle: string,
+  caller: string
+) {
   let proxy: any;
   let hasThenMethod = true; // assume that the object has a "then" method until proven otherwise
 
@@ -57,29 +57,20 @@ export function makeSimulatorClient(url: string, handle: string) {
     }
 
     return async function (...args: any[]) {
-      const body: SimulatorServerRequest = { handle, method, args };
-      let resp;
-      try {
-        // import undici dynamically to reduce the time it takes to load Wing SDK
-        // undici is used instead of the built-in fetch so that we can customize the
-        // keep-alive and headers timeouts to be 15 minutes instead of the default 5 seconds
-        const { fetch, Agent } = await import("undici");
-        resp = await fetch(url + "/v1/call", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-          dispatcher: new Agent({
-            keepAliveTimeout: 15 * 60 * 1000,
-            keepAliveMaxTimeout: 15 * 60 * 1000,
-            headersTimeout: 15 * 60 * 1000,
-            bodyTimeout: 15 * 60 * 1000,
-          }),
-        });
-      } catch (e) {
-        throw e;
-      }
+      const body: SimulatorServerRequest = { caller, handle, method, args };
+      const parsedUrl = new URL(url);
+      const resp = await makeHttpRequest({
+        hostname: parsedUrl.hostname,
+        port: parsedUrl.port,
+        path: "/v1/call",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
 
-      let parsed: SimulatorServerResponse = deserializeValue(await resp.text());
+      let parsed: SimulatorServerResponse = deserialize(resp);
 
       if (parsed.error) {
         // objects with "then" methods are special-cased by the JS runtime
@@ -91,7 +82,9 @@ export function makeSimulatorClient(url: string, handle: string) {
         // [0]: https://stackoverflow.com/questions/55262996/does-awaiting-a-non-promise-have-any-detectable-effect
         if (
           method === "then" &&
-          parsed.error?.message?.startsWith("Method then not found on resource")
+          parsed.error?.message?.startsWith(
+            'Method "then" not found on resource'
+          )
         ) {
           hasThenMethod = false;
           // args[0] is the onFulfilled callback passed to the then method.
@@ -102,8 +95,13 @@ export function makeSimulatorClient(url: string, handle: string) {
 
         let err = new Error();
         err.message = parsed.error?.message;
-        err.stack = parsed.error?.stack;
         err.name = parsed.error?.name;
+
+        if (parsed.error?.stack) {
+          // combine the stack trace from the server with the stack trace from the client
+          err.stack = `${parsed.error.stack}\n${err.stack}`;
+        }
+
         throw err;
       }
 

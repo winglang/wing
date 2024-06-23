@@ -7,22 +7,23 @@ exports[`create a topic 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
+    "resources": {
+      "root/my_topic": {
+        "addr": "c81b9a117401b1959f70a55462f9df8add290b0fda",
         "path": "root/my_topic",
         "props": {},
         "type": "@winglang/sdk.cloud.Topic",
       },
-    ],
+      "root/my_topic/Policy": {
+        "addr": "c8635ef174eab9aa010e5bed09a712307a6b70e731",
+        "path": "root/my_topic/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_topic#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -33,13 +34,13 @@ exports[`create a topic 1`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -73,14 +74,6 @@ exports[`create a topic 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -89,9 +82,21 @@ exports[`create a topic 1`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -106,23 +111,25 @@ exports[`create a topic 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_topic": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_topic/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A pub/sub notification topic",
@@ -134,53 +141,13 @@ exports[`create a topic 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
     "version": "tree-0.1",
   },
 }
-`;
-
-exports[`topic publishes messages as they are received 1`] = `
-[
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "Publish (message=Alpha).",
-  "Sending message (message=Alpha, subscriber=sim-1).",
-  "Publish (message=Beta).",
-  "Sending message (message=Beta, subscriber=sim-1).",
-  "Received Alpha",
-  "Invoke (payload=\\"Alpha\\").",
-  "Received Beta",
-  "Invoke (payload=\\"Beta\\").",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
-]
-`;
-
-exports[`topic publishes messages to multiple subscribers 1`] = `
-[
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "Publish (message=Alpha).",
-  "Sending message (message=Alpha, subscriber=sim-1).",
-  "Sending message (message=Alpha, subscriber=sim-4).",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
-]
 `;

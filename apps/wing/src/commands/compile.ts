@@ -1,5 +1,5 @@
 import { promises as fsPromise } from "fs";
-import { relative, resolve } from "path";
+import { dirname, relative, resolve } from "path";
 
 import * as wingCompiler from "@winglang/compiler";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
@@ -7,6 +7,7 @@ import chalk from "chalk";
 import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import debug from "debug";
 import { glob } from "glob";
+import { loadEnvVariables } from "../env";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -35,7 +36,7 @@ export interface CompileOptions {
    */
   readonly value?: string;
   /**
-   * Path to the YAML file with specific platform values
+   * Path to the file with specific platform values (TOML|YAML|JSON)
    *
    * example of the file's content:
    * root/Default/Domain:
@@ -48,6 +49,11 @@ export interface CompileOptions {
    * @default "./target"
    */
   readonly targetDir?: string;
+  /**
+   * The overrides the location to save the compilation output
+   * @default "./target/<entrypoint>.<target>"
+   */
+  readonly output?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.
@@ -63,10 +69,10 @@ export interface CompileOptions {
  */
 export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
   if (!entrypoint) {
-    const wingFiles = (await glob("{main,*.main}.w")).sort();
+    const wingFiles = (await glob("{main,*.main}.{w,ts}")).sort();
     if (wingFiles.length === 0) {
       throw new Error(
-        "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+        "Cannot find an entrypoint file (main.w, main.ts, *.main.w, *.main.ts) in the current directory."
       );
     }
     if (wingFiles.length > 1) {
@@ -78,7 +84,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
     }
     entrypoint = wingFiles[0];
   }
-
+  loadEnvVariables({ cwd: resolve(dirname(entrypoint)) });
   const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   try {
     return await wingCompiler.compile(entrypoint, {
@@ -103,31 +109,27 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
         if (span?.file_id) {
           // `span` should only be null if source file couldn't be read etc.
           const source = await fsPromise.readFile(span.file_id, "utf8");
-          const start = byteOffsetFromLineAndColumn(source, span.start.line, span.start.col);
-          const end = byteOffsetFromLineAndColumn(source, span.end.line, span.end.col);
+          const start = span.start_offset;
+          const end = span.end_offset;
           const filePath = relative(cwd, span.file_id);
           files.push({ name: filePath, source });
           labels.push({
             fileId: filePath,
             rangeStart: start,
             rangeEnd: end,
-            message,
+            message: "",
             style: "primary",
           });
         }
 
         for (const annotation of annotations) {
+          // file_id might be "" if the span is synthetic (see #2521)
+          if (!annotation.span?.file_id) {
+            continue;
+          }
           const source = await fsPromise.readFile(annotation.span.file_id, "utf8");
-          const start = byteOffsetFromLineAndColumn(
-            source,
-            annotation.span.start.line,
-            annotation.span.start.col
-          );
-          const end = byteOffsetFromLineAndColumn(
-            source,
-            annotation.span.end.line,
-            annotation.span.end.col
-          );
+          const start = annotation.span.start_offset;
+          const end = annotation.span.end_offset;
           const filePath = relative(cwd, annotation.span.file_id);
           files.push({ name: filePath, source });
           labels.push({
@@ -164,7 +166,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       if (process.env.DEBUG) {
         output +=
           "\n--------------------------------- ORIGINAL STACK TRACE ---------------------------------\n" +
-          (error.stack ?? "(no stacktrace available)");
+          (error.causedBy.stack ?? "(no stacktrace available)");
       }
 
       error.causedBy.message = output;
@@ -174,17 +176,4 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       throw error;
     }
   }
-}
-
-function byteOffsetFromLineAndColumn(source: string, line: number, column: number) {
-  const lines = source.split("\n");
-  let offset = 0;
-  for (let i = 0; i < line; i++) {
-    offset += lines[i].length + 1;
-  }
-
-  // Convert char offset to byte offset
-  const encoder = new TextEncoder();
-  const srouce_bytes = encoder.encode(source.substring(0, offset));
-  return srouce_bytes.length + column;
 }

@@ -3,12 +3,8 @@ import { test, expect } from "vitest";
 import { cloud, simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-import { sanitizeCode, awscdkSanitize } from "./util";
-
-const CDK_APP_OPTS = {
-  stackName: "my-project",
-  entrypointDir: __dirname,
-};
+import { sanitizeCode, awscdkSanitize, CDK_APP_OPTS } from "./util";
+import { lift } from "@winglang/sdk/lib/core";
 
 test("default counter behavior", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
@@ -49,47 +45,37 @@ test("counter with initial value", () => {
 test("function with a counter binding", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = simulator.Testing.makeHandler(`async handle(event) {
-  const val = await this.my_counter.inc(2);
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.INC],
-      },
-    }
-  );
-  new cloud.Function(app, "Function", inflight);
+  const handler = lift({ my_counter: counter }).grant({my_counter: [cloud.CounterInflightMethods.INC]}).inflight(async (ctx) => {
+    const val = await ctx.my_counter.inc(2);
+    console.log(val);
+  });
+
+  new cloud.Function(app, "Function", handler);
   const output = app.synth();
 
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::DynamoDB::Table", 1);
-  template.resourceCountIs("AWS::IAM::Role", 2);
-  template.resourceCountIs("AWS::IAM::Policy", 2);
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::IAM::Role", 1);
+  template.resourceCountIs("AWS::IAM::Policy", 1);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("inc() policy statement", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = simulator.Testing.makeHandler(`async handle(event) {
-  const val = await this.my_counter.inc(2);
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.INC],
-      },
-    }
-  );
-  new cloud.Function(app, "Function", inflight);
+
+
+  const handler = lift({ my_counter: counter }).grant({my_counter: [cloud.CounterInflightMethods.INC]}).inflight(async (ctx) => {
+    const val = await ctx.my_counter.inc(2);
+    console.log(val);
+    });
+
+  new cloud.Function(app, "Function", handler);
   const output = app.synth();
 
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.hasResourceProperties("AWS::IAM::Policy", {
     PolicyDocument: {
@@ -107,21 +93,16 @@ test("inc() policy statement", () => {
 test("dec() policy statement", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = simulator.Testing.makeHandler(`async handle(event) {
-  const val = await this.my_counter.dec(2);
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.DEC],
-      },
-    }
-  );
-  new cloud.Function(app, "Function", inflight);
+
+  const handler = lift({ my_counter: counter }).grant({my_counter: [cloud.CounterInflightMethods.DEC]}).inflight(async (ctx) => {
+    const val = await ctx.my_counter.dec(2);
+    console.log(val);
+  });
+
+  new cloud.Function(app, "Function", handler);
   const output = app.synth();
 
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.hasResourceProperties("AWS::IAM::Policy", {
     PolicyDocument: {
@@ -139,21 +120,16 @@ test("dec() policy statement", () => {
 test("peek() policy statement", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = simulator.Testing.makeHandler(`async handle(event) {
-  const val = await this.my_counter.peek();
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.PEEK],
-      },
-    }
-  );
-  new cloud.Function(app, "Function", inflight);
+
+  const handler = lift({ my_counter: counter }).grant({my_counter: [cloud.CounterInflightMethods.PEEK]}).inflight(async (ctx) => {
+    const val = await ctx.my_counter.peek();
+    console.log(val);
+  });
+
+  new cloud.Function(app, "Function", handler);
   const output = app.synth();
 
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.hasResourceProperties("AWS::IAM::Policy", {
     PolicyDocument: {
@@ -171,21 +147,16 @@ test("peek() policy statement", () => {
 test("set() policy statement", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = simulator.Testing.makeHandler(`async handle(event) {
-  const val = await this.my_counter.set();
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.SET],
-      },
-    }
-  );
-  new cloud.Function(app, "Function", inflight);
+
+  const handler = lift({ my_counter: counter }).grant({my_counter: [cloud.CounterInflightMethods.SET]}).inflight(async (ctx) => {
+    const val = await ctx.my_counter.set(12);
+    console.log(val);
+  });
+
+  new cloud.Function(app, "Function", handler);
   const output = app.synth();
 
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.hasResourceProperties("AWS::IAM::Policy", {
     PolicyDocument: {

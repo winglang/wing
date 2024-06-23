@@ -1,3 +1,4 @@
+import { workspace } from "vscode";
 import { LanguageClientOptions } from "vscode-languageclient";
 import {
   LanguageClient,
@@ -40,6 +41,13 @@ export class LanguageServerManager {
       debug: run,
     };
     let clientOptions: LanguageClientOptions = {
+      initializationOptions: {
+        parameterHints: workspace
+          .getConfiguration("editor.parameterHints", {
+            languageId: "wing",
+          })
+          .get<boolean>("enabled", true),
+      },
       documentSelector: [
         { scheme: "file", language: "wing", pattern: "**/*.w" },
       ],

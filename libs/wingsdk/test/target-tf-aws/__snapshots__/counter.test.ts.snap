@@ -2,11 +2,6 @@
 
 exports[`counter name valid 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_dynamodb_table": {
       "TheAmazing-Counter_01": {
@@ -38,15 +33,16 @@ exports[`counter name valid 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/The.Amazing-Counter_01/Default",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -58,63 +54,45 @@ exports[`counter name valid 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -124,11 +102,6 @@ exports[`counter name valid 2`] = `
 
 exports[`counter with initial value 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_dynamodb_table": {
       "Counter": {
@@ -160,15 +133,16 @@ exports[`counter with initial value 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -180,63 +154,45 @@ exports[`counter with initial value 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -246,11 +202,6 @@ exports[`counter with initial value 2`] = `
 
 exports[`dec() policy statement 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -273,12 +224,12 @@ exports[`dec() policy statement 1`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Counter.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:UpdateItem"],"Resource":["\${aws_dynamodb_table.Counter.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -305,7 +256,7 @@ exports[`dec() policy statement 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -342,8 +293,9 @@ exports[`dec() policy statement 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
               },
@@ -352,15 +304,16 @@ exports[`dec() policy statement 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -374,63 +327,70 @@ exports[`dec() policy statement 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -439,66 +399,59 @@ exports[`dec() policy statement 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -508,11 +461,6 @@ exports[`dec() policy statement 2`] = `
 
 exports[`default counter behavior 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_dynamodb_table": {
       "Counter": {
@@ -532,30 +480,25 @@ exports[`default counter behavior 1`] = `
 `;
 
 exports[`function with a counter binding 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+"(await (async () => {
+  const $func = async (ctx) => {
+    const val = await ctx.my_counter.inc(2);
+    console.log(val);
   }
-  async handle(event) {
-  const val = await this.my_counter.inc(2);
-  console.log(val);
+  const $ctx = {
+  my_counter: new (require("[REDACTED]/wingsdk/src/shared-aws/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_6cb5a3a4"], 0)
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0)
-})"
+)())"
 `;
 
 exports[`function with a counter binding 2`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -578,12 +521,12 @@ exports[`function with a counter binding 2`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Counter.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:UpdateItem"],"Resource":["\${aws_dynamodb_table.Counter.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -610,7 +553,7 @@ exports[`function with a counter binding 2`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -647,8 +590,9 @@ exports[`function with a counter binding 3`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
               },
@@ -657,15 +601,16 @@ exports[`function with a counter binding 3`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -679,63 +624,70 @@ exports[`function with a counter binding 3`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -744,66 +696,59 @@ exports[`function with a counter binding 3`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -813,11 +758,6 @@ exports[`function with a counter binding 3`] = `
 
 exports[`inc() policy statement 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -840,12 +780,12 @@ exports[`inc() policy statement 1`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Counter.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:UpdateItem"],"Resource":["\${aws_dynamodb_table.Counter.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -872,7 +812,7 @@ exports[`inc() policy statement 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -909,8 +849,9 @@ exports[`inc() policy statement 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
               },
@@ -919,15 +860,16 @@ exports[`inc() policy statement 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -941,63 +883,70 @@ exports[`inc() policy statement 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1006,66 +955,59 @@ exports[`inc() policy statement 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -1075,11 +1017,6 @@ exports[`inc() policy statement 2`] = `
 
 exports[`peek() policy statement 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -1102,12 +1039,12 @@ exports[`peek() policy statement 1`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Counter.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:GetItem"],"Resource":["\${aws_dynamodb_table.Counter.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -1134,7 +1071,7 @@ exports[`peek() policy statement 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -1171,8 +1108,9 @@ exports[`peek() policy statement 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
               },
@@ -1181,15 +1119,16 @@ exports[`peek() policy statement 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -1203,63 +1142,70 @@ exports[`peek() policy statement 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1268,66 +1214,59 @@ exports[`peek() policy statement 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -1337,11 +1276,6 @@ exports[`peek() policy statement 2`] = `
 
 exports[`replace invalid character from counter name 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_dynamodb_table": {
       "TheAmazingCounter01": {
@@ -1373,15 +1307,16 @@ exports[`replace invalid character from counter name 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/The*Amazing%Counter@01/Default",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -1393,63 +1328,45 @@ exports[`replace invalid character from counter name 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -1459,11 +1376,6 @@ exports[`replace invalid character from counter name 2`] = `
 
 exports[`set() policy statement 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -1486,12 +1398,12 @@ exports[`set() policy statement 1`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Counter.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:UpdateItem"],"Resource":["\${aws_dynamodb_table.Counter.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -1518,7 +1430,7 @@ exports[`set() policy statement 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -1555,8 +1467,9 @@ exports[`set() policy statement 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
               },
@@ -1565,15 +1478,16 @@ exports[`set() policy statement 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -1587,63 +1501,70 @@ exports[`set() policy statement 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1652,66 +1573,59 @@ exports[`set() policy statement 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },

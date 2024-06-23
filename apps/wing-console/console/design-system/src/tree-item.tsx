@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { PropsWithChildren, ReactNode, KeyboardEvent, memo } from "react";
+import type { PropsWithChildren, ReactNode, KeyboardEvent } from "react";
+import { memo } from "react";
 
 import { TreeItem as HeadlessTreeItem } from "./headless/tree-item.js";
 import { useTheme } from "./theme-provider.js";
@@ -11,6 +12,7 @@ export interface TreeItemProps {
   secondaryLabel?: ReactNode | (() => JSX.Element);
   icon?: ReactNode;
   title?: string;
+  selectable?: boolean;
   onKeyDown?: (event: KeyboardEvent<HTMLElement>) => void;
 }
 
@@ -20,6 +22,7 @@ export const TreeItem = memo(
     secondaryLabel,
     title,
     icon,
+    selectable = true,
     children,
     ...props
   }: PropsWithChildren<TreeItemProps>) => {
@@ -35,11 +38,13 @@ export const TreeItem = memo(
               "flex items-center gap-1.5",
               "px-2 py-0.5",
               "select-none",
-              "cursor-pointer",
               "border border-transparent",
-              item.focused && "group-focus:border-sky-500",
-              item.selected && theme.bg2,
-              !item.selected && theme.bg2Hover,
+              selectable && [
+                "cursor-pointer",
+                item.focused && "group-focus:border-sky-500",
+                item.selected && theme.bg2,
+                !item.selected && theme.bg2Hover,
+              ],
             )}
             title={title}
           >

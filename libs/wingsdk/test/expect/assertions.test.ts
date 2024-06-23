@@ -2,9 +2,9 @@
 // to a bug in `v8-to-istanbul` that causes it to
 // exit with a non-zero code when trying to generate
 // coverage reports. See https://github.com/istanbuljs/v8-to-istanbul/issues/198
+import { AssertionError } from "node:assert/strict";
 import { test, describe, expect } from "vitest";
 import { Util as Assert } from "../../src/expect";
-import { Range } from "../../src/std/range";
 
 describe("equal string", () => {
   test("is equal", () => {
@@ -184,10 +184,59 @@ describe("is not nil", () => {
   });
 });
 
-describe("range", () => {
-  test("works", () => {
+describe("match", () => {
+  test("is match", () => {
     expect(() => {
-      Assert.equal(Range.of(1, 5), [1, 2, 3, 4]);
+      Assert.match("abc", "abc");
     }).not.toThrow();
+  });
+
+  test("is not match", () => {
+    expect(() => {
+      Assert.match("abc", "def");
+    }).toThrow(
+      new AssertionError({
+        message: "The input did not match the regular expression def",
+      })
+    );
+  });
+});
+
+describe("does not match", () => {
+  test("is match", () => {
+    expect(() => {
+      Assert.doesNotMatch("abc", "abc");
+    }).toThrow(
+      new AssertionError({
+        message: "The input should not match the regular expression abc",
+      })
+    );
+  });
+
+  test("is not match", () => {
+    expect(() => {
+      Assert.doesNotMatch("abc", "def");
+    }).not.toThrow();
+  });
+});
+describe("fail", () => {
+  test("fail", () => {
+    expect(() => {
+      Assert.fail("fail");
+    }).toThrow();
+  });
+});
+
+describe("ok", () => {
+  test("is true", () => {
+    expect(() => {
+      Assert.ok(true);
+    }).not.toThrow();
+  });
+
+  test("is false", () => {
+    expect(() => {
+      Assert.ok(false);
+    }).toThrow();
   });
 });

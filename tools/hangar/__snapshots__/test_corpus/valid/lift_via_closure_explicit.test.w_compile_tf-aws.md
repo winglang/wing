@@ -1,8 +1,9 @@
 # [lift_via_closure_explicit.test.w](../../../../../examples/tests/valid/lift_via_closure_explicit.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $fn }) {
   class $Closure1 {
     constructor({  }) {
@@ -16,12 +17,13 @@ module.exports = function({ $fn }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.MyClosure-1.js
-```js
+## inflight.MyClosure-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyClosure {
     constructor({ $this_q }) {
@@ -36,7 +38,7 @@ module.exports = function({  }) {
   }
   return MyClosure;
 }
-//# sourceMappingURL=inflight.MyClosure-1.js.map
+//# sourceMappingURL=inflight.MyClosure-1.cjs.map
 ```
 
 ## main.tf.json
@@ -46,22 +48,9 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -70,15 +59,15 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_sqs_queue": {
-      "MyClosure_cloudQueue_465FD228": {
+      "MyClosure_Queue_7DFF9F76": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyClosure/cloud.Queue/Default",
-            "uniqueId": "MyClosure_cloudQueue_465FD228"
+            "path": "root/Default/Default/MyClosure/Queue/Default",
+            "uniqueId": "MyClosure_Queue_7DFF9F76"
           }
         },
         "message_retention_seconds": 3600,
-        "name": "cloud-Queue-c8cccb9b",
+        "name": "Queue-c832d7dc",
         "visibility_timeout_seconds": 30
       }
     }
@@ -86,34 +75,36 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class MyClosure extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+        this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyClosure-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyClosure-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const MyClosureClient = ${MyClosure._toInflightType(this)};
+            const MyClosureClient = ${MyClosure._toInflightType()};
             const client = new MyClosureClient({
               $this_q: ${$stdlib.core.liftObject(this.q)},
             });
@@ -122,28 +113,26 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          MyClosure._registerOnLiftObject(this.q, host, []);
-        }
-        if (ops.includes("handle")) {
-          MyClosure._registerOnLiftObject(this.q, host, ["push"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [this.q, ["push"]],
+          ],
+          "$inflight_init": [
+            [this.q, []],
+          ],
+        });
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $fn: ${$stdlib.core.liftObject(fn)},
           })
         `;
@@ -151,7 +140,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -159,14 +148,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(fn, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [fn, ["handle"]],
+          ],
+          "$inflight_init": [
+            [fn, []],
+          ],
+        });
       }
     }
     const fn = new MyClosure(this, "MyClosure");
@@ -176,6 +166,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "lift_via_closure_explicit.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

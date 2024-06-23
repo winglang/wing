@@ -1,8 +1,9 @@
 # [bring_cdktf.test.w](../../../../../examples/tests/valid/bring_cdktf.test.w) | compile | tf-aws
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -10,7 +11,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-//# sourceMappingURL=inflight.Foo-1.js.map
+//# sourceMappingURL=inflight.Foo-1.cjs.map
 ```
 
 ## main.tf.json
@@ -20,22 +21,9 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -62,14 +50,16 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const aws = require("@cdktf/provider-aws");
 const cdktf = require("cdktf");
 class $Root extends $stdlib.std.Resource {
@@ -82,14 +72,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Foo-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this)};
+            const FooClient = ${Foo._toInflightType()};
             const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -97,16 +87,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
-    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket", aws.s3Bucket.S3Bucket, this, "Bucket", { bucketPrefix: "hello", versioning: ({"enabled": true, "mfaDelete": true}) });
+    const bucket = this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket", aws.s3Bucket.S3Bucket, this, "Bucket", { bucketPrefix: "hello", versioning: ({"enabled": true, "mfaDelete": true}) });
+    $helpers.nodeof(bucket).color = "pink";
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_cdktf.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

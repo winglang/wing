@@ -1,8 +1,9 @@
 # [resource_captures_globals.test.w](../../../../../examples/tests/valid/resource_captures_globals.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $res }) {
   class $Closure1 {
     constructor({  }) {
@@ -16,12 +17,13 @@ module.exports = function({ $res }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Another }) {
   class $Closure2 {
     constructor({  }) {
@@ -30,17 +32,18 @@ module.exports = function({ $Another }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Another.myStaticMethod()),0)))};
+      $helpers.assert($helpers.eq((await $Another.myStaticMethod()), 0), "Another.myStaticMethod() == 0");
     }
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
-## inflight.Another-1.js
-```js
+## inflight.Another-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $globalCounter }) {
   class Another {
     constructor({  }) {
@@ -53,17 +56,18 @@ module.exports = function({ $globalCounter }) {
       return (await $globalCounter.peek());
     }
     async $inflight_init() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $globalCounter.peek()),0)))};
+      $helpers.assert($helpers.eq((await $globalCounter.peek()), 0), "globalCounter.peek() == 0");
     }
   }
   return Another;
 }
-//# sourceMappingURL=inflight.Another-1.js.map
+//# sourceMappingURL=inflight.Another-1.cjs.map
 ```
 
-## inflight.First-1.js
-```js
+## inflight.First-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class First {
     constructor({  }) {
@@ -71,40 +75,46 @@ module.exports = function({  }) {
   }
   return First;
 }
-//# sourceMappingURL=inflight.First-1.js.map
+//# sourceMappingURL=inflight.First-1.cjs.map
 ```
 
-## inflight.MyResource-1.js
-```js
+## inflight.MyResource-1.cjs
+```cjs
 "use strict";
-module.exports = function({ $Another, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $Another, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalArrayOfStr, $globalBool, $globalBucket, $globalMapOfNum, $globalNum, $globalSetOfStr, $globalStr, $util_Util }) {
   class MyResource {
-    constructor({ $this_localTopic }) {
+    constructor({ $this_localCounter, $this_localTopic }) {
+      this.$this_localCounter = $this_localCounter;
       this.$this_localTopic = $this_localTopic;
     }
     async myPut() {
       (await this.$this_localTopic.publish("hello"));
       (await $globalBucket.put("key", "value"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalStr,"hello")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalBool,true)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalNum,42)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_,"hello")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__,(-5))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})($_globalSetOfStr_has__a___)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalAnother_myField,"hello!")))};
+      $helpers.assert($helpers.eq($globalStr, "hello"), "globalStr == \"hello\"");
+      $helpers.assert($helpers.eq($globalBool, true), "globalBool == true");
+      $helpers.assert($helpers.eq($globalNum, 42), "globalNum == 42");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($globalArrayOfStr, 0), "hello"), "globalArrayOfStr.at(0) == \"hello\"");
+      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })($globalMapOfNum, "a"), (-5)), "globalMapOfNum.get(\"a\") == -5");
+      $helpers.assert((await $globalSetOfStr.has("a")), "globalSetOfStr.has(\"a\")");
+      $helpers.assert($helpers.eq($globalAnother_myField, "hello!"), "globalAnother.myField == \"hello!\"");
       (await $globalAnother_first_myResource.put("key", "value"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await $globalAnother.myMethod()) > 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await $Another.myStaticMethod()) > 0))};
+      $helpers.assert(((await $globalAnother.myMethod()) > 0), "globalAnother.myMethod() > 0");
+      $helpers.assert(((await $Another.myStaticMethod()) > 0), "Another.myStaticMethod() > 0");
+      (await $util_Util.waitUntil((async () => {
+        return ((await this.$this_localCounter.peek()) > 0);
+      })));
     }
   }
   return MyResource;
 }
-//# sourceMappingURL=inflight.MyResource-1.js.map
+//# sourceMappingURL=inflight.MyResource-1.cjs.map
 ```
 
-## inflight.R-1.js
-```js
+## inflight.R-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
     constructor({  }) {
@@ -119,7 +129,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   }
   return R;
 }
-//# sourceMappingURL=inflight.R-1.js.map
+//# sourceMappingURL=inflight.R-1.cjs.map
 ```
 
 ## main.tf.json
@@ -129,22 +139,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -153,23 +150,23 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "MyResource_cloudTopic-OnMessage0_CloudwatchLogGroup_51183C3F": {
+      "MyResource_Topic-OnMessage0_CloudwatchLogGroup_AE327804": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage0/CloudwatchLogGroup",
-            "uniqueId": "MyResource_cloudTopic-OnMessage0_CloudwatchLogGroup_51183C3F"
+            "path": "root/Default/Default/MyResource/Topic-OnMessage0/CloudwatchLogGroup",
+            "uniqueId": "MyResource_Topic-OnMessage0_CloudwatchLogGroup_AE327804"
           }
         },
-        "name": "/aws/lambda/cloud-Topic-OnMessage0-c8316e5b",
+        "name": "/aws/lambda/Topic-OnMessage0-c8bb74dc",
         "retention_in_days": 30
       }
     },
     "aws_dynamodb_table": {
-      "MyResource_cloudCounter_0782991D": {
+      "Counter": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Counter/Default",
-            "uniqueId": "MyResource_cloudCounter_0782991D"
+            "path": "root/Default/Default/Counter/Default",
+            "uniqueId": "Counter"
           }
         },
         "attribute": [
@@ -180,13 +177,13 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c87187fa"
+        "name": "wing-counter-Counter-c824ef62"
       },
-      "cloudCounter": {
+      "MyResource_Counter_D9D84476": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "cloudCounter"
+            "path": "root/Default/Default/MyResource/Counter/Default",
+            "uniqueId": "MyResource_Counter_D9D84476"
           }
         },
         "attribute": [
@@ -197,50 +194,50 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c866f225"
+        "name": "wing-counter-Counter-c8736322"
       }
     },
     "aws_iam_role": {
-      "MyResource_cloudTopic-OnMessage0_IamRole_961468EB": {
+      "MyResource_Topic-OnMessage0_IamRole_CFB3A523": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage0/IamRole",
-            "uniqueId": "MyResource_cloudTopic-OnMessage0_IamRole_961468EB"
+            "path": "root/Default/Default/MyResource/Topic-OnMessage0/IamRole",
+            "uniqueId": "MyResource_Topic-OnMessage0_IamRole_CFB3A523"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "MyResource_cloudTopic-OnMessage0_IamRolePolicy_FFC9A778": {
+      "MyResource_Topic-OnMessage0_IamRolePolicy_0A01161C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage0/IamRolePolicy",
-            "uniqueId": "MyResource_cloudTopic-OnMessage0_IamRolePolicy_FFC9A778"
+            "path": "root/Default/Default/MyResource/Topic-OnMessage0/IamRolePolicy",
+            "uniqueId": "MyResource_Topic-OnMessage0_IamRolePolicy_0A01161C"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.MyResource_cloudCounter_0782991D.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage0_IamRole_961468EB.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.MyResource_Counter_D9D84476.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.MyResource_Topic-OnMessage0_IamRole_CFB3A523.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "MyResource_cloudTopic-OnMessage0_IamRolePolicyAttachment_26007303": {
+      "MyResource_Topic-OnMessage0_IamRolePolicyAttachment_D50F7CD0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage0/IamRolePolicyAttachment",
-            "uniqueId": "MyResource_cloudTopic-OnMessage0_IamRolePolicyAttachment_26007303"
+            "path": "root/Default/Default/MyResource/Topic-OnMessage0/IamRolePolicyAttachment",
+            "uniqueId": "MyResource_Topic-OnMessage0_IamRolePolicyAttachment_D50F7CD0"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage0_IamRole_961468EB.name}"
+        "role": "${aws_iam_role.MyResource_Topic-OnMessage0_IamRole_CFB3A523.name}"
       }
     },
     "aws_lambda_function": {
-      "MyResource_cloudTopic-OnMessage0_F8F986EA": {
+      "MyResource_Topic-OnMessage0_E4479D24": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage0/Default",
-            "uniqueId": "MyResource_cloudTopic-OnMessage0_F8F986EA"
+            "path": "root/Default/Default/MyResource/Topic-OnMessage0/Default",
+            "uniqueId": "MyResource_Topic-OnMessage0_E4479D24"
           }
         },
         "architectures": [
@@ -248,21 +245,21 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
-            "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
+            "DYNAMODB_TABLE_NAME_2aca4cc2": "${aws_dynamodb_table.MyResource_Counter_D9D84476.name}",
+            "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage0-c8316e5b",
+            "WING_FUNCTION_NAME": "Topic-OnMessage0-c8bb74dc",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Topic-OnMessage0-c8316e5b",
+        "function_name": "Topic-OnMessage0-c8bb74dc",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage0_IamRole_961468EB.arn}",
-        "runtime": "nodejs18.x",
+        "role": "${aws_iam_role.MyResource_Topic-OnMessage0_IamRole_CFB3A523.arn}",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.MyResource_cloudTopic-OnMessage0_S3Object_720C2491.key}",
+        "s3_key": "${aws_s3_object.MyResource_Topic-OnMessage0_S3Object_80106925.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -271,28 +268,38 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_lambda_permission": {
-      "MyResource_cloudTopic-OnMessage0_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_913E405C": {
+      "MyResource_Topic-OnMessage0_InvokePermission-c83f0429eb66f0735813ef826c23f64489a7bdf635_2A49C462": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage0/InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf",
-            "uniqueId": "MyResource_cloudTopic-OnMessage0_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_913E405C"
+            "path": "root/Default/Default/MyResource/Topic-OnMessage0/InvokePermission-c83f0429eb66f0735813ef826c23f64489a7bdf635",
+            "uniqueId": "MyResource_Topic-OnMessage0_InvokePermission-c83f0429eb66f0735813ef826c23f64489a7bdf635_2A49C462"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.MyResource_cloudTopic-OnMessage0_F8F986EA.function_name}",
+        "function_name": "${aws_lambda_function.MyResource_Topic-OnMessage0_E4479D24.function_name}",
         "principal": "sns.amazonaws.com",
-        "source_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
+        "source_arn": "${aws_sns_topic.MyResource_Topic_08B3CB09.arn}"
       }
     },
     "aws_s3_bucket": {
-      "Another_First_cloudBucket_DB822B7C": {
+      "Another_First_Bucket_490007B4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Another/First/cloud.Bucket/Default",
-            "uniqueId": "Another_First_cloudBucket_DB822B7C"
+            "path": "root/Default/Default/Another/First/Bucket/Default",
+            "uniqueId": "Another_First_Bucket_490007B4"
           }
         },
-        "bucket_prefix": "cloud-bucket-c84d72a1-",
+        "bucket_prefix": "bucket-c8b9b2e9-",
+        "force_destroy": false
+      },
+      "Bucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
+          }
+        },
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       },
       "Code": {
@@ -303,24 +310,14 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
           }
         },
         "bucket_prefix": "code-c84a50b1-"
-      },
-      "cloudBucket": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
-          }
-        },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
-        "force_destroy": false
       }
     },
     "aws_s3_object": {
-      "MyResource_cloudTopic-OnMessage0_S3Object_720C2491": {
+      "MyResource_Topic-OnMessage0_S3Object_80106925": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage0/S3Object",
-            "uniqueId": "MyResource_cloudTopic-OnMessage0_S3Object_720C2491"
+            "path": "root/Default/Default/MyResource/Topic-OnMessage0/S3Object",
+            "uniqueId": "MyResource_Topic-OnMessage0_S3Object_80106925"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -329,60 +326,63 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_sns_topic": {
-      "MyResource_cloudTopic_1F3310C3": {
+      "MyResource_Topic_08B3CB09": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic/Default",
-            "uniqueId": "MyResource_cloudTopic_1F3310C3"
+            "path": "root/Default/Default/MyResource/Topic/Default",
+            "uniqueId": "MyResource_Topic_08B3CB09"
           }
         },
-        "name": "cloud-Topic-c8f2c43e"
+        "name": "Topic-c83f0429"
       }
     },
     "aws_sns_topic_subscription": {
-      "MyResource_cloudTopic_TopicSubscription0_4C261870": {
+      "MyResource_Topic_TopicSubscription0_46151CAE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic/TopicSubscription0",
-            "uniqueId": "MyResource_cloudTopic_TopicSubscription0_4C261870"
+            "path": "root/Default/Default/MyResource/Topic/TopicSubscription0",
+            "uniqueId": "MyResource_Topic_TopicSubscription0_46151CAE"
           }
         },
-        "endpoint": "${aws_lambda_function.MyResource_cloudTopic-OnMessage0_F8F986EA.arn}",
+        "endpoint": "${aws_lambda_function.MyResource_Topic-OnMessage0_E4479D24.arn}",
         "protocol": "lambda",
-        "topic_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
+        "topic_arn": "${aws_sns_topic.MyResource_Topic_08B3CB09.arn}"
       }
     }
   }
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
       }
       static _toInflightType() {
         return `
-          require("./inflight.First-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.First-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const FirstClient = ${First._toInflightType(this)};
+            const FirstClient = ${First._toInflightType()};
             const client = new FirstClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -390,8 +390,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Another extends $stdlib.std.Resource {
@@ -402,7 +405,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Another-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.cjs")({
             $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
           })
         `;
@@ -410,7 +413,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const AnotherClient = ${Another._toInflightType(this)};
+            const AnotherClient = ${Another._toInflightType()};
             const client = new AnotherClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -418,39 +421,38 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "myMethod", "myStaticMethod", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "myMethod": [
+            [globalCounter, [].concat(["inc"], ["peek"])],
+          ],
+          "$inflight_init": [
+            [globalCounter, ["peek"]],
+          ],
+        });
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Another._registerOnLiftObject(globalCounter, host, ["peek"]);
-        }
-        if (ops.includes("myMethod")) {
-          Another._registerOnLiftObject(globalCounter, host, ["inc", "peek"]);
-        }
-        super._registerOnLift(host, ops);
-      }
-      static _registerOnLift(host, ops) {
-        if (ops.includes("myStaticMethod")) {
-          Another._registerOnLiftObject(globalCounter, host, ["peek"]);
-        }
-        super._registerOnLift(host, ops);
+      static get _liftTypeMap() {
+        return ({
+          "myStaticMethod": [
+            [globalCounter, ["peek"]],
+          ],
+        });
       }
     }
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.localTopic = this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "cloud.Topic");
-        this.localCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+        this.localTopic = this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "Topic");
+        this.localCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
         const $parentThis = this;
         class R extends $stdlib.std.Resource {
-          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+          _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
           }
           static _toInflightType() {
             return `
-              require("./inflight.R-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.R-1.cjs")({
                 $_parentThis_localCounter: ${$stdlib.core.liftObject($parentThis.localCounter)},
                 $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
               })
@@ -459,7 +461,7 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return `
               (await (async () => {
-                const RClient = ${R._toInflightType(this)};
+                const RClient = ${R._toInflightType()};
                 const client = new RClient({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -467,41 +469,45 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
-          }
-          _registerOnLift(host, ops) {
-            if (ops.includes("handle")) {
-              R._registerOnLiftObject($parentThis.localCounter, host, ["inc"]);
-              R._registerOnLiftObject(globalCounter, host, ["inc"]);
-            }
-            super._registerOnLift(host, ops);
+          get _liftMap() {
+            return ({
+              "handle": [
+                [$parentThis.localCounter, ["inc"]],
+                [globalCounter, ["inc"]],
+              ],
+              "$inflight_init": [
+                [$parentThis.localCounter, []],
+                [globalCounter, []],
+              ],
+            });
           }
         }
         (this.localTopic.onMessage(new R(this, "R")));
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.cjs")({
             $Another: ${$stdlib.core.liftObject(Another)},
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0))},
-            $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"))},
-            $_globalSetOfStr_has__a___: ${$stdlib.core.liftObject((globalSetOfStr.has("a")))},
             $globalAnother: ${$stdlib.core.liftObject(globalAnother)},
             $globalAnother_first_myResource: ${$stdlib.core.liftObject(globalAnother.first.myResource)},
             $globalAnother_myField: ${$stdlib.core.liftObject(globalAnother.myField)},
+            $globalArrayOfStr: ${$stdlib.core.liftObject(globalArrayOfStr)},
             $globalBool: ${$stdlib.core.liftObject(globalBool)},
             $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
+            $globalMapOfNum: ${$stdlib.core.liftObject(globalMapOfNum)},
             $globalNum: ${$stdlib.core.liftObject(globalNum)},
+            $globalSetOfStr: ${$stdlib.core.liftObject(globalSetOfStr)},
             $globalStr: ${$stdlib.core.liftObject(globalStr)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const MyResourceClient = ${MyResource._toInflightType(this)};
+            const MyResourceClient = ${MyResource._toInflightType()};
             const client = new MyResourceClient({
+              $this_localCounter: ${$stdlib.core.liftObject(this.localCounter)},
               $this_localTopic: ${$stdlib.core.liftObject(this.localTopic)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -509,39 +515,50 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "myPut", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          MyResource._registerOnLiftObject(this.localTopic, host, []);
-        }
-        if (ops.includes("myPut")) {
-          MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0), host, []);
-          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), host, []);
-          MyResource._registerOnLiftObject((globalSetOfStr.has("a")), host, []);
-          MyResource._registerOnLiftObject(Another, host, ["myStaticMethod"]);
-          MyResource._registerOnLiftObject(globalAnother, host, ["myMethod"]);
-          MyResource._registerOnLiftObject(globalAnother.first.myResource, host, ["put"]);
-          MyResource._registerOnLiftObject(globalAnother.myField, host, []);
-          MyResource._registerOnLiftObject(globalBool, host, []);
-          MyResource._registerOnLiftObject(globalBucket, host, ["put"]);
-          MyResource._registerOnLiftObject(globalNum, host, []);
-          MyResource._registerOnLiftObject(globalStr, host, []);
-          MyResource._registerOnLiftObject(this.localTopic, host, ["publish"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "myPut": [
+            [Another, ["myStaticMethod"]],
+            [globalAnother, ["myMethod"]],
+            [globalAnother.first.myResource, ["put"]],
+            [globalAnother.myField, []],
+            [globalArrayOfStr, ["at"]],
+            [globalBool, []],
+            [globalBucket, ["put"]],
+            [globalMapOfNum, ["get"]],
+            [globalNum, []],
+            [globalSetOfStr, ["has"]],
+            [globalStr, []],
+            [this.localCounter, ["peek"]],
+            [this.localTopic, ["publish"]],
+          ],
+          "$inflight_init": [
+            [Another, []],
+            [globalAnother, []],
+            [globalAnother.first.myResource, []],
+            [globalAnother.myField, []],
+            [globalArrayOfStr, []],
+            [globalBool, []],
+            [globalBucket, []],
+            [globalMapOfNum, []],
+            [globalNum, []],
+            [globalSetOfStr, []],
+            [globalStr, []],
+            [this.localCounter, []],
+            [this.localTopic, []],
+          ],
+        });
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $res: ${$stdlib.core.liftObject(res)},
           })
         `;
@@ -549,7 +566,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -557,25 +574,26 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(res, host, ["myPut"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [res, ["myPut"]],
+          ],
+          "$inflight_init": [
+            [res, []],
+          ],
+        });
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $Another: ${$stdlib.core.liftObject(Another)},
           })
         `;
@@ -583,7 +601,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
+            const $Closure2Client = ${$Closure2._toInflightType()};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -591,18 +609,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(Another, host, ["myStaticMethod"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [Another, ["myStaticMethod"]],
+          ],
+          "$inflight_init": [
+            [Another, []],
+          ],
+        });
       }
     }
-    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
-    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
     const globalStr = "hello";
     const globalBool = true;
     const globalNum = 42;
@@ -618,6 +637,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource_captures_globals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

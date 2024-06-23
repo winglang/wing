@@ -1,23 +1,21 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { SimApp } from "../sim-app";
 
-const HANDLER_WITH_START = `\
-async handle() {
+const HANDLER_WITH_START = inflight(async () => {
   console.log("start!");
-}`;
+});
 
-const HANDLER_WITH_START_AND_STOP = `\
-async handle() {
+const HANDLER_WITH_START_AND_STOP = inflight(async () => {
   console.log("start!");
   return () => console.log("stop!");
-}`;
+});
 
 test("create a service with on start method", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Service(app, "my_service", Testing.makeHandler(HANDLER_WITH_START));
+  new cloud.Service(app, "my_service", HANDLER_WITH_START);
 
   // WHEN
   const s = await app.startSimulator();
@@ -28,10 +26,12 @@ test("create a service with on start method", async () => {
       handle: expect.any(String),
     },
     path: "root/my_service",
+    addr: expect.any(String),
+    policy: [],
     props: {
+      autoStart: true,
       sourceCodeFile: expect.any(String),
       environmentVariables: {},
-      autoStart: true,
     },
     type: cloud.SERVICE_FQN,
   });
@@ -43,15 +43,10 @@ test("create a service with on start method", async () => {
 test("create a service with a on stop method", async () => {
   // Given
   const app = new SimApp();
-  new cloud.Service(
-    app,
-    "my_service",
-    Testing.makeHandler(HANDLER_WITH_START_AND_STOP)
-  );
+  new cloud.Service(app, "my_service", HANDLER_WITH_START_AND_STOP);
 
   // WHEN
   const s = await app.startSimulator();
-  await s.stop();
 
   // THEN
   expect(s.getResourceConfig("/my_service")).toEqual({
@@ -59,13 +54,17 @@ test("create a service with a on stop method", async () => {
       handle: expect.any(String),
     },
     path: "root/my_service",
+    addr: expect.any(String),
+    policy: [],
     props: {
+      autoStart: true,
       sourceCodeFile: expect.any(String),
       environmentVariables: {},
-      autoStart: true,
     },
     type: cloud.SERVICE_FQN,
   });
+
+  await s.stop();
 
   expect(
     s
@@ -74,25 +73,21 @@ test("create a service with a on stop method", async () => {
       .map((trace) => trace.data.message)
   ).toEqual([
     "start!",
-    "@winglang/sdk.cloud.Service created.",
+    "root/my_service started",
     "stop!",
-    "@winglang/sdk.cloud.Service deleted.",
+    "root/my_service stopped",
   ]);
 });
 
 test("create a service without autostart", async () => {
   // Given
   const app = new SimApp();
-  new cloud.Service(
-    app,
-    "my_service",
-    Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
-    { autoStart: false }
-  );
+  new cloud.Service(app, "my_service", HANDLER_WITH_START_AND_STOP, {
+    autoStart: false,
+  });
 
   // WHEN
   const s = await app.startSimulator();
-  await s.stop();
 
   // THEN
   expect(s.getResourceConfig("/my_service")).toEqual({
@@ -100,37 +95,33 @@ test("create a service without autostart", async () => {
       handle: expect.any(String),
     },
     path: "root/my_service",
+    addr: expect.any(String),
+    policy: [],
     props: {
+      autoStart: false,
       sourceCodeFile: expect.any(String),
       environmentVariables: {},
-      autoStart: false,
     },
     type: cloud.SERVICE_FQN,
   });
+
+  await s.stop();
 
   expect(
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual([
-    "@winglang/sdk.cloud.Service created.", // Service created never started
-    "@winglang/sdk.cloud.Service deleted.",
-  ]);
+  ).toEqual(["root/my_service started", "root/my_service stopped"]);
 });
 
 test("start and stop service", async () => {
   // Given
   const app = new SimApp();
 
-  new cloud.Service(
-    app,
-    "my_service",
-    Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
-    {
-      autoStart: false,
-    }
-  );
+  new cloud.Service(app, "my_service", HANDLER_WITH_START_AND_STOP, {
+    autoStart: false,
+  });
   const s = await app.startSimulator();
   const service = s.getResource("/my_service") as cloud.IServiceClient;
 
@@ -146,26 +137,15 @@ test("start and stop service", async () => {
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual([
-    "@winglang/sdk.cloud.Service created.",
-    "start!",
-    "stop!",
-    "start!",
-    "stop!",
-  ]);
+  ).toEqual(["root/my_service started", "start!", "stop!", "start!", "stop!"]);
 });
 
 test("consecutive start and stop service", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Service(
-    app,
-    "my_service",
-    Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
-    {
-      autoStart: false,
-    }
-  );
+  new cloud.Service(app, "my_service", HANDLER_WITH_START_AND_STOP, {
+    autoStart: false,
+  });
   const s = await app.startSimulator();
   const service = s.getResource("/my_service") as cloud.IServiceClient;
 
@@ -183,5 +163,24 @@ test("consecutive start and stop service", async () => {
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual(["@winglang/sdk.cloud.Service created.", "start!", "stop!"]);
+  ).toEqual(["root/my_service started", "start!", "stop!"]);
+});
+
+test("throws during service start", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Service(
+    app,
+    "my_service",
+    inflight(async () => {
+      throw new Error("ThisIsAnError");
+    })
+  );
+
+  const s = await app.startSimulator();
+  const msg = s
+    .listTraces()
+    .find((t) => t.data.message.startsWith("Failed to start service"));
+  expect(msg).toBeTruthy();
+  expect(msg?.data.message).toEqual("Failed to start service: ThisIsAnError");
 });

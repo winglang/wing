@@ -24,11 +24,17 @@ export interface Compiler {
 export interface CreateCompilerProps {
   wingfile: string;
   platform?: string[];
+  testing?: boolean;
+  stateDir?: string;
+  watchGlobs?: string[];
 }
 
 export const createCompiler = ({
   wingfile,
   platform = [wing.BuiltinPlatform.SIM],
+  testing = false,
+  stateDir,
+  watchGlobs,
 }: CreateCompilerProps): Compiler => {
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
@@ -44,6 +50,7 @@ export const createCompiler = ({
       await events.emit("compiling");
       const simfile = await wing.compile(wingfile, {
         platform,
+        testing,
       });
       await events.emit("compiled", { simfile });
     } catch (error) {
@@ -72,14 +79,20 @@ export const createCompiler = ({
   };
 
   const dirname = path.dirname(wingfile);
-  //TODO: infer React App resource folders from source files https://github.com/winglang/wing/issues/3956
-  const ignoreList = [
-    `${dirname}/target/**`,
-    "**/node_modules/**",
-    "**/.git/**",
+
+  const pathsToWatch = [
+    `!**/node_modules/**`,
+    `!**/.git/**`,
+    `!${dirname}/target/**`,
+    dirname,
+    ...(watchGlobs ?? []),
   ];
-  const watcher = chokidar.watch(dirname, {
-    ignored: ignoreList,
+
+  if (stateDir) {
+    pathsToWatch.push(`!${stateDir}`);
+  }
+
+  const watcher = chokidar.watch(pathsToWatch, {
     ignoreInitial: true,
   });
   watcher.on("change", recompile);

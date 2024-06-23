@@ -1,9 +1,23 @@
 import * as fs from "fs";
 import { join } from "path";
+import { onTestFailed } from "vitest";
 import { directorySnapshot, mkdtemp } from "./util";
-import { Function, IFunctionClient } from "../src/cloud";
-import { Simulator, Testing } from "../src/simulator";
+import { Function, IFunctionClient, IFunctionHandler } from "../src/cloud";
+import { Simulator } from "../src/simulator";
 import { App } from "../src/target-sim/app";
+
+/**
+ * @see AppProps
+ */
+export interface SimAppProps {
+  /**
+   * The output directory for the synthesized app.
+   * @default - a fresh temporary directory
+   */
+  readonly outdir?: string;
+  readonly isTestEnvironment?: boolean;
+  readonly rootConstruct?: any;
+}
 
 /**
  * A simulated app.
@@ -16,14 +30,26 @@ export class SimApp extends App {
   private _synthesized: boolean = false;
   private functionIndex: number = 0;
 
-  constructor() {
-    super({ outdir: mkdtemp(), entrypointDir: __dirname });
+  constructor(props: SimAppProps = {}) {
+    const { isTestEnvironment, rootConstruct, outdir } = props;
+    super({
+      outdir: outdir ?? mkdtemp(),
+      entrypointDir: __dirname,
+      isTestEnvironment,
+      rootConstruct,
+    });
 
     // symlink the node_modules so we can test imports and stuffs
-    fs.symlinkSync(
-      join(__dirname, "..", "node_modules"),
-      join(this.outdir, "node_modules")
-    );
+    try {
+      fs.symlinkSync(
+        join(__dirname, "..", "node_modules"),
+        join(this.outdir, "node_modules")
+      );
+    } catch (e) {
+      if (e.code !== "EEXIST") {
+        throw e;
+      }
+    }
   }
 
   /**
@@ -32,20 +58,15 @@ export class SimApp extends App {
    * @returns An "invoker" function which can be used to invoke the function after the simulator had
    * started.
    */
-  public newCloudFunction(code: string) {
+  public newCloudFunction(handler: IFunctionHandler) {
     const id = `Function.${this.functionIndex++}`;
-    new Function(
-      this,
-      id,
-      Testing.makeHandler(`async handle() {
-          ${code}
-        }`)
-    );
+
+    new Function(this, id, handler);
 
     // returns an "invoker" for this function
     return async (s: Simulator) => {
       const fn = s.getResource("/" + id) as IFunctionClient;
-      return fn.invoke("");
+      return fn.invoke();
     };
   }
 
@@ -54,28 +75,20 @@ export class SimApp extends App {
    *
    * @returns A started `Simulator` instance. No need to call `start()` again.
    */
-  public async startSimulator(): Promise<Simulator> {
+  public async startSimulator(stateDir?: string): Promise<Simulator> {
     this.synthIfNeeded();
     const simfile = this.synth();
-    const s = new Simulator({ simfile });
+    const s = new Simulator({ simfile, stateDir });
     await s.start();
-    return s;
-  }
 
-  /**
-   * Executes a code block with a simulator, will stop the simulator after the
-   * code block is done.
-   *
-   * @param cb code block closure to execute with the simulator
-   * @internal
-   */
-  public async _withSimulator(cb: (s: Simulator) => Promise<void>) {
-    const s = await this.startSimulator();
-    try {
-      await cb(s);
-    } finally {
-      await s.stop();
-    }
+    // When tests fail, we still want to make sure the simulator is stopped
+    onTestFailed(async () => {
+      if ((s as any)._running === "running") {
+        await s.stop();
+      }
+    });
+
+    return s;
   }
 
   /**

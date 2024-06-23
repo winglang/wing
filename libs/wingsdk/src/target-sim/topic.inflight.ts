@@ -4,44 +4,52 @@ import {
   TopicSchema,
   TopicSubscriber,
   EventSubscription,
-  FunctionHandle,
+  ResourceHandle,
 } from "./schema-resources";
 import { IFunctionClient, ITopicClient, TOPIC_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 export class Topic
   implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
 {
   private readonly subscribers = new Array<TopicSubscriber>();
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
 
-  constructor(props: TopicSchema["props"], context: ISimulatorContext) {
-    this.context = context;
-    props;
+  constructor(_props: TopicSchema) {}
+
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
   }
 
-  public async init(): Promise<TopicAttributes> {
+  public async init(context: ISimulatorContext): Promise<TopicAttributes> {
+    this._context = context;
     return {};
   }
 
   public async cleanup(): Promise<void> {}
 
+  public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
   private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {
-      const fnClient = this.context.findInstance(
-        subscriber.functionHandle!
-      ) as IFunctionClient & ISimulatorResourceInstance;
-
-      if (!fnClient) {
-        throw new Error("No function client found!");
-      }
-
+      const fnClient = this.context.getClient(
+        subscriber.functionHandle
+      ) as IFunctionClient;
       this.context.addTrace({
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         data: {
           message: `Sending message (message=${message}, subscriber=${subscriber.functionHandle}).`,
         },
@@ -50,26 +58,12 @@ export class Topic
         timestamp: new Date().toISOString(),
       });
 
-      // we are not awaiting `fnClient.invoke` so that if the function sleeps,
-      // performs IO, etc. it does not block the other subscribers
-      process.nextTick(() => {
-        fnClient.invoke(message).catch((err) => {
-          this.context.addTrace({
-            data: {
-              message: `Subscriber error: ${err}`,
-            },
-            sourcePath: this.context.resourcePath,
-            sourceType: TOPIC_FQN,
-            type: TraceType.RESOURCE,
-            timestamp: new Date().toISOString(),
-          });
-        });
-      });
+      await fnClient.invokeAsync(message);
     }
   }
 
   public async addEventSubscription(
-    subscriber: FunctionHandle,
+    subscriber: ResourceHandle,
     subscriptionProps: EventSubscription
   ): Promise<void> {
     let s = {
@@ -79,17 +73,29 @@ export class Topic
     this.subscribers.push(s);
   }
 
-  public async publish(message: string): Promise<void> {
-    this.context.addTrace({
-      data: {
-        message: `Publish (message=${message}).`,
-      },
-      sourcePath: this.context.resourcePath,
-      sourceType: TOPIC_FQN,
-      type: TraceType.RESOURCE,
-      timestamp: new Date().toISOString(),
-    });
+  public async removeEventSubscription(subscriber: string): Promise<void> {
+    const index = this.subscribers.findIndex(
+      (s) => s.functionHandle === subscriber
+    );
+    if (index >= 0) {
+      this.subscribers.splice(index, 1);
+    }
+  }
 
-    return this.publishMessage(message);
+  public publish(...messages: string[]): Promise<void> {
+    return this.context.withTrace({
+      message: `Publish (messages=${messages}).`,
+      activity: async () => {
+        if (messages.includes("")) {
+          throw new Error("Empty messages are not allowed");
+        }
+        let publishAll: Array<Promise<void>> = [];
+        for (const message of messages) {
+          publishAll.push(this.publishMessage(message));
+        }
+
+        return Promise.all(publishAll);
+      },
+    });
   }
 }

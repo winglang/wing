@@ -42,7 +42,7 @@ export class Array {
   /**
    * Get the value at the given index, returning nil if the index is out of bounds.
    *
-   * @macro ($self$.at($args$))
+   * @macro $self$.at($args$)
    *
    * @param index index of the value to get
    * @returns the value at the given index, or undefined if the index is out of bounds
@@ -123,6 +123,21 @@ export class Array {
    */
   public lastIndexOf(searchElement: T1): number {
     searchElement;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns a shallow copy of a portion of the array.
+   *
+   * @macro $self$.slice($args$)
+   *
+   * @param start the beginning index of the slice, inclusive.
+   * @param end the ending index of the slice, exclusive.
+   * @returns a new array containing the sliced elements.
+   */
+  public slice(start?: number, end?: number): Array {
+    start;
+    end;
     throw new Error("Macro");
   }
 }
@@ -236,12 +251,15 @@ export class MutArray {
   }
 
   /**
-   * Add value to end of array
-   * @param value value to add
+   * Add values to end of array
+   *
+   * @macro $self$.push($args$)
+   *
+   * @param values values to add
    */
-  public push(value: T1): void {
-    value;
-    throw new Error("Abstract");
+  public push(...values: T1[]): void {
+    values;
+    throw new Error("Macro");
   }
 
   /**
@@ -306,6 +324,21 @@ export class MutArray {
    */
   public removeFirst(value: T1): boolean {
     value;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns a shallow copy of a portion of the array.
+   *
+   * @macro $self$.slice($args$)
+   *
+   * @param start the beginning index of the slice, inclusive.
+   * @param end the ending index of the slice, exclusive.
+   * @returns a new array containing the sliced elements.
+   */
+  public slice(start?: number, end?: number): MutArray {
+    start;
+    end;
     throw new Error("Macro");
   }
 }

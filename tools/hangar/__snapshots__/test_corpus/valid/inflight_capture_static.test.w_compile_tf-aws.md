@@ -1,8 +1,9 @@
 # [inflight_capture_static.test.w](../../../../../examples/tests/valid/inflight_capture_static.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Preflight }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,17 +12,18 @@ module.exports = function({ $Preflight }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Preflight.staticMethod(123) == \"foo-123\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Preflight.staticMethod(123)),"foo-123")))};
+      $helpers.assert($helpers.eq((await $Preflight.staticMethod(123)), "foo-123"), "Preflight.staticMethod(123) == \"foo-123\"");
     }
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $OuterInflight }) {
   class $Closure2 {
     constructor({  }) {
@@ -30,17 +32,18 @@ module.exports = function({ $OuterInflight }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: OuterInflight.staticMethod(\"hello\") == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $OuterInflight.staticMethod("hello")),5)))};
+      $helpers.assert($helpers.eq((await $OuterInflight.staticMethod("hello")), 5), "OuterInflight.staticMethod(\"hello\") == 5");
     }
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -54,17 +57,18 @@ module.exports = function({  }) {
           return "hello";
         }
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: InnerInflight.staticMethod() == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await InnerInflight.staticMethod()),"hello")))};
+      $helpers.assert($helpers.eq((await InnerInflight.staticMethod()), "hello"), "InnerInflight.staticMethod() == \"hello\"");
     }
   }
   return $Closure3;
 }
-//# sourceMappingURL=inflight.$Closure3-1.js.map
+//# sourceMappingURL=inflight.$Closure3-1.cjs.map
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $util_Util }) {
   class $Closure4 {
     constructor({  }) {
@@ -77,22 +81,23 @@ module.exports = function({ $util_Util }) {
         const $if_let_value = (await $util_Util.tryEnv("WING_TARGET"));
         if ($if_let_value != undefined) {
           const target = $if_let_value;
-          {console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target))};
+          console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target));
         }
         else {
-          {((cond) => {if (!cond) throw new Error("assertion failed: false /* target not defined*/")})(false)};
+          $helpers.assert(false, "false /* target not defined*/");
         }
       }
     }
   }
   return $Closure4;
 }
-//# sourceMappingURL=inflight.$Closure4-1.js.map
+//# sourceMappingURL=inflight.$Closure4-1.cjs.map
 ```
 
-## inflight.OuterInflight-1.js
-```js
+## inflight.OuterInflight-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class OuterInflight {
     static async staticMethod(b) {
@@ -101,12 +106,13 @@ module.exports = function({  }) {
   }
   return OuterInflight;
 }
-//# sourceMappingURL=inflight.OuterInflight-1.js.map
+//# sourceMappingURL=inflight.OuterInflight-1.cjs.map
 ```
 
-## inflight.Preflight-1.js
-```js
+## inflight.Preflight-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Preflight {
     constructor({  }) {
@@ -117,7 +123,7 @@ module.exports = function({  }) {
   }
   return Preflight;
 }
-//# sourceMappingURL=inflight.Preflight-1.js.map
+//# sourceMappingURL=inflight.Preflight-1.cjs.map
 ```
 
 ## main.tf.json
@@ -127,22 +133,9 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -152,14 +145,16 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -170,14 +165,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Preflight-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Preflight-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const PreflightClient = ${Preflight._toInflightType(this)};
+            const PreflightClient = ${Preflight._toInflightType()};
             const client = new PreflightClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -185,8 +180,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "staticMethod", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+      static get _liftTypeMap() {
+        return ({
+          "staticMethod": [
+          ],
+        });
       }
     }
     class OuterInflight extends $stdlib.std.Resource {
@@ -195,14 +199,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.OuterInflight-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.OuterInflight-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const OuterInflightClient = ${OuterInflight._toInflightType(this)};
+            const OuterInflightClient = ${OuterInflight._toInflightType()};
             const client = new OuterInflightClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -210,19 +214,28 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "staticMethod", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+      static get _liftTypeMap() {
+        return ({
+          "staticMethod": [
+          ],
+        });
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $Preflight: ${$stdlib.core.liftObject(Preflight)},
           })
         `;
@@ -230,7 +243,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -238,25 +251,26 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(Preflight, host, ["staticMethod"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [Preflight, ["staticMethod"]],
+          ],
+          "$inflight_init": [
+            [Preflight, []],
+          ],
+        });
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $OuterInflight: ${$stdlib.core.liftObject(OuterInflight)},
           })
         `;
@@ -264,7 +278,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
+            const $Closure2Client = ${$Closure2._toInflightType()};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -272,26 +286,31 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure3 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const $Closure3Client = ${$Closure3._toInflightType()};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -299,19 +318,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
-    class $Closure4 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure4 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure4-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
             $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
@@ -319,7 +343,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType(this)};
+            const $Closure4Client = ${$Closure4._toInflightType()};
             const client = new $Closure4Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -327,8 +351,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:call static method of preflight", new $Closure1(this, "$Closure1"));
@@ -340,6 +369,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_capture_static.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

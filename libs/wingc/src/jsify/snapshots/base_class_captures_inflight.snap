@@ -21,27 +21,29 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.Base-1.js
+## inflight.Base-1.cjs
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $x }) {
   class Base {
     constructor({  }) {
     }
     async bar() {
-      {console.log($x)};
+      console.log($x);
     }
   }
   return Base;
 }
-//# sourceMappingURL=inflight.Base-1.js.map
+//# sourceMappingURL=inflight.Base-1.cjs.map
 ```
 
-## inflight.Derived-1.js
+## inflight.Derived-1.cjs
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Base }) {
   class Derived extends $Base {
     constructor({  }) {
@@ -53,10 +55,10 @@ module.exports = function({ $Base }) {
   }
   return Derived;
 }
-//# sourceMappingURL=inflight.Derived-1.js.map
+//# sourceMappingURL=inflight.Derived-1.cjs.map
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -65,6 +67,8 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -74,7 +78,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Base-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Base-1.cjs")({
             $x: ${$stdlib.core.liftObject(x)},
           })
         `;
@@ -82,7 +86,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const BaseClient = ${Base._toInflightType(this)};
+            const BaseClient = ${Base._toInflightType()};
             const client = new BaseClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -90,14 +94,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "bar", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("bar")) {
-          Base._registerOnLiftObject(x, host, []);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "bar": [
+            [x, []],
+          ],
+          "$inflight_init": [
+            [x, []],
+          ],
+        });
       }
     }
     class Derived extends Base {
@@ -106,7 +111,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Derived-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Derived-1.cjs")({
             $Base: ${$stdlib.core.liftObject(Base)},
           })
         `;
@@ -114,7 +119,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const DerivedClient = ${Derived._toInflightType(this)};
+            const DerivedClient = ${Derived._toInflightType()};
             const client = new DerivedClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -122,14 +127,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "foo", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("foo")) {
-          Derived._registerOnLiftObject(this, host, ["bar"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "foo": [
+            [this, ["bar"]],
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const x = "hello";
@@ -138,6 +143,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

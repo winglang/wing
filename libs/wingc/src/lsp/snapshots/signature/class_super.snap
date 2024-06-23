@@ -1,0 +1,12 @@
+---
+source: libs/wingc/src/lsp/signature.rs
+---
+signatures:
+  - label: "(hello: num): Base"
+    documentation:
+      kind: markdown
+      value: ""
+    parameters:
+      - label: "hello: num"
+    activeParameter: 0
+

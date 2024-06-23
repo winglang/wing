@@ -1,11 +1,12 @@
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { App } from "./app";
 import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import { DynamodbTableItem } from "../.gen/providers/aws/dynamodb-table-item";
 import * as core from "../core";
 import * as ex from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { AwsInflightHost } from "../shared-aws";
 import { IAwsTable } from "../shared-aws/table";
 import { Json, IInflightHost } from "../std";
 
@@ -29,6 +30,8 @@ export class Table extends ex.Table implements IAwsTable {
   constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
     super(scope, id, props);
 
+    const isTestEnvironment = App.of(scope).isTestEnvironment;
+
     this.table = new DynamodbTable(this, "Default", {
       name: ResourceNames.generateName(this, {
         prefix: this.name,
@@ -37,6 +40,7 @@ export class Table extends ex.Table implements IAwsTable {
       attribute: [{ name: this.primaryKey, type: "S" }],
       hashKey: this.primaryKey,
       billingMode: "PAY_PER_REQUEST",
+      pointInTimeRecovery: isTestEnvironment ? undefined : { enabled: true },
     });
   }
 
@@ -53,8 +57,8 @@ export class Table extends ex.Table implements IAwsTable {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("tables can only be bound by tfaws.Function for now");
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     if (
@@ -119,16 +123,16 @@ export class Table extends ex.Table implements IAwsTable {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      ex.TableInflightMethods.INSERT,
-      ex.TableInflightMethods.UPSERT,
-      ex.TableInflightMethods.UPDATE,
-      ex.TableInflightMethods.DELETE,
-      ex.TableInflightMethods.GET,
-      ex.TableInflightMethods.TRYGET,
-      ex.TableInflightMethods.LIST,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [ex.TableInflightMethods.INSERT]: [],
+      [ex.TableInflightMethods.UPSERT]: [],
+      [ex.TableInflightMethods.UPDATE]: [],
+      [ex.TableInflightMethods.DELETE]: [],
+      [ex.TableInflightMethods.GET]: [],
+      [ex.TableInflightMethods.TRYGET]: [],
+      [ex.TableInflightMethods.LIST]: [],
+    };
   }
 
   private envName(): string {

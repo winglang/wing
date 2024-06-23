@@ -46,7 +46,7 @@ exports[`api configured for cors 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get__0_28A24394.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_0-c86d29bb/invocations",
         },
       },
     },
@@ -86,10 +86,10 @@ exports[`api configured for cors 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                #if ($context.httpMethod == \\"OPTIONS\\")
-                    {\\"statusCode\\": 204}
+                #if ($context.httpMethod == "OPTIONS")
+                    {"statusCode": 204}
                 #else
-                    {\\"statusCode\\": 404}
+                    {"statusCode": 404}
                 #end
               ",
           },
@@ -111,7 +111,7 @@ exports[`api configured for cors 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -120,13 +120,250 @@ exports[`api configured for cors 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
           },
           "type": "mock",
         },
+      },
+    },
+  },
+}
+`;
+
+exports[`api will be private when vpc_api_gateway is true 1`] = `
+{
+  "data": {
+    "aws_caller_identity": {
+      "account": {},
+    },
+    "aws_region": {
+      "Region": {},
+    },
+    "aws_vpc_endpoint_service": {
+      "Api_api_apiServiceLookup_C62CF75C": {
+        "service": "execute-api",
+      },
+    },
+  },
+  "output": {
+    "Api_Endpoint_Url_473FEE9F": {
+      "value": "https://\${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.\${data.aws_region.Region.name}.amazonaws.com/\${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}",
+    },
+  },
+  "resource": {
+    "aws_api_gateway_deployment": {
+      "Api_api_deployment_7FB64CC4": {
+        "lifecycle": {
+          "create_before_destroy": true,
+        },
+        "rest_api_id": "\${aws_api_gateway_rest_api.Api_api_91C07D84.id}",
+        "triggers": {
+          "redeployment": "\${sha256(aws_api_gateway_rest_api.Api_api_91C07D84.body)}",
+        },
+      },
+    },
+    "aws_api_gateway_rest_api": {
+      "Api_api_91C07D84": {
+        "body": "{"paths":{"/{proxy+}":{"x-amazon-apigateway-any-method":{"produces":["application/json"],"x-amazon-apigateway-integration":{"type":"mock","requestTemplates":{"application/json":"\\n                {\\"statusCode\\": 404}\\n              "},"passthroughBehavior":"never","responses":{"404":{"statusCode":"404","responseParameters":{"method.response.header.Content-Type":"'application/json'"},"responseTemplates":{"application/json":"{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}"}},"default":{"statusCode":"404","responseParameters":{"method.response.header.Content-Type":"'application/json'"},"responseTemplates":{"application/json":"{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}"}}}},"responses":{"404":{"description":"404 response","headers":{"Content-Type":{"type":"string"}}}}}}},"openapi":"3.0.3"}",
+        "endpoint_configuration": {
+          "types": [
+            "PRIVATE",
+          ],
+          "vpc_endpoint_ids": [
+            "\${aws_vpc_endpoint.Api_api_api-vpc-endpoint_F7BB1063.id}",
+          ],
+        },
+        "lifecycle": {
+          "create_before_destroy": true,
+        },
+        "name": "api-c8f613f0",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":"execute-api:Invoke","Resource":["*"]},{"Effect":"Deny","Principal":"*","Action":"execute-api:Invoke","Resource":["*"],"Condition":{"StringNotEquals":{"aws:sourceVpce":"\${aws_vpc_endpoint.Api_api_api-vpc-endpoint_F7BB1063.id}"}}}]}",
+      },
+    },
+    "aws_api_gateway_stage": {
+      "Api_api_stage_E0FA39D6": {
+        "deployment_id": "\${aws_api_gateway_deployment.Api_api_deployment_7FB64CC4.id}",
+        "rest_api_id": "\${aws_api_gateway_rest_api.Api_api_91C07D84.id}",
+        "stage_name": "prod",
+      },
+    },
+    "aws_eip": {
+      "EIP": {},
+    },
+    "aws_internet_gateway": {
+      "InternetGateway": {
+        "tags": {
+          "Name": "Default-c82bf964-internet-gateway",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_nat_gateway": {
+      "NATGateway": {
+        "allocation_id": "\${aws_eip.EIP.id}",
+        "subnet_id": "\${aws_subnet.PublicSubnet.id}",
+        "tags": {
+          "Name": "Default-c82bf964-nat-gateway",
+        },
+      },
+    },
+    "aws_route_table": {
+      "PrivateRouteTable": {
+        "route": [
+          {
+            "carrier_gateway_id": null,
+            "cidr_block": "0.0.0.0/0",
+            "core_network_arn": null,
+            "destination_prefix_list_id": null,
+            "egress_only_gateway_id": null,
+            "gateway_id": null,
+            "ipv6_cidr_block": null,
+            "local_gateway_id": null,
+            "nat_gateway_id": "\${aws_nat_gateway.NATGateway.id}",
+            "network_interface_id": null,
+            "transit_gateway_id": null,
+            "vpc_endpoint_id": null,
+            "vpc_peering_connection_id": null,
+          },
+        ],
+        "tags": {
+          "Name": "Default-c82bf964-private-route-table-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "PrivateRouteTable2": {
+        "route": [
+          {
+            "carrier_gateway_id": null,
+            "cidr_block": "0.0.0.0/0",
+            "core_network_arn": null,
+            "destination_prefix_list_id": null,
+            "egress_only_gateway_id": null,
+            "gateway_id": null,
+            "ipv6_cidr_block": null,
+            "local_gateway_id": null,
+            "nat_gateway_id": "\${aws_nat_gateway.NATGateway.id}",
+            "network_interface_id": null,
+            "transit_gateway_id": null,
+            "vpc_endpoint_id": null,
+            "vpc_peering_connection_id": null,
+          },
+        ],
+        "tags": {
+          "Name": "Default-c82bf964-private-route-table-2",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "PublicRouteTable": {
+        "route": [
+          {
+            "carrier_gateway_id": null,
+            "cidr_block": "0.0.0.0/0",
+            "core_network_arn": null,
+            "destination_prefix_list_id": null,
+            "egress_only_gateway_id": null,
+            "gateway_id": "\${aws_internet_gateway.InternetGateway.id}",
+            "ipv6_cidr_block": null,
+            "local_gateway_id": null,
+            "nat_gateway_id": null,
+            "network_interface_id": null,
+            "transit_gateway_id": null,
+            "vpc_endpoint_id": null,
+            "vpc_peering_connection_id": null,
+          },
+        ],
+        "tags": {
+          "Name": "Default-c82bf964-public-route-table-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_route_table_association": {
+      "PrivateRouteTableAssociation": {
+        "route_table_id": "\${aws_route_table.PrivateRouteTable.id}",
+        "subnet_id": "\${aws_subnet.PrivateSubnet.id}",
+      },
+      "PrivateRouteTableAssociation2": {
+        "route_table_id": "\${aws_route_table.PrivateRouteTable2.id}",
+        "subnet_id": "\${aws_subnet.PrivateSubnet2.id}",
+      },
+      "PublicRouteTableAssociation": {
+        "route_table_id": "\${aws_route_table.PublicRouteTable.id}",
+        "subnet_id": "\${aws_subnet.PublicSubnet.id}",
+      },
+    },
+    "aws_security_group": {
+      "Api_api_apiSecurityGroup_CF67DC80": {
+        "ingress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0",
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0,
+          },
+        ],
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_subnet": {
+      "PrivateSubnet": {
+        "availability_zone": "\${data.aws_region.Region.name}a",
+        "cidr_block": "10.0.4.0/22",
+        "tags": {
+          "Name": "Default-c82bf964-private-subnet-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "PrivateSubnet2": {
+        "availability_zone": "\${data.aws_region.Region.name}b",
+        "cidr_block": "10.0.8.0/22",
+        "tags": {
+          "Name": "Default-c82bf964-private-subnet-2",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "PublicSubnet": {
+        "availability_zone": "\${data.aws_region.Region.name}a",
+        "cidr_block": "10.0.0.0/24",
+        "tags": {
+          "Name": "Default-c82bf964-public-subnet-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_vpc": {
+      "VPC": {
+        "cidr_block": "10.0.0.0/16",
+        "enable_dns_hostnames": true,
+        "enable_dns_support": true,
+        "tags": {
+          "Name": "Default-c82bf964-vpc",
+        },
+      },
+    },
+    "aws_vpc_endpoint": {
+      "Api_api_api-vpc-endpoint_F7BB1063": {
+        "private_dns_enabled": true,
+        "security_group_ids": [
+          "\${aws_security_group.Api_api_apiSecurityGroup_CF67DC80.id}",
+        ],
+        "service_name": "\${data.aws_vpc_endpoint_service.Api_api_apiServiceLookup_C62CF75C.service_name}",
+        "subnet_ids": [
+          "\${aws_subnet.PrivateSubnet.id}",
+          "\${aws_subnet.PrivateSubnet2.id}",
+        ],
+        "vpc_endpoint_type": "Interface",
+        "vpc_id": "\${aws_vpc.VPC.id}",
       },
     },
   },
@@ -174,11 +411,11 @@ exports[`api with 'name' & 'age' parameter 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_name_age_0_89726BCD.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_-name_-age0-c8483afe/invocations",
         },
       },
     },
-    "/{proxy+}": {
+    "/{name}/{age}/{proxy+}": {
       "x-amazon-apigateway-any-method": {
         "produces": [
           "application/json",
@@ -197,7 +434,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -206,7 +443,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -215,7 +452,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -261,11 +498,11 @@ exports[`api with 'name' parameter 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_name_0_91363CD1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_-name0-c8d13803/invocations",
         },
       },
     },
-    "/{proxy+}": {
+    "/{name}/{proxy+}": {
       "x-amazon-apigateway-any-method": {
         "produces": [
           "application/json",
@@ -284,7 +521,7 @@ exports[`api with 'name' parameter 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -293,7 +530,7 @@ exports[`api with 'name' parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -302,7 +539,7 @@ exports[`api with 'name' parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -339,7 +576,7 @@ exports[`api with CONNECT route 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_connect__0_51B16936.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:connect_0-c83420d1/invocations",
         },
       },
     },
@@ -362,7 +599,7 @@ exports[`api with CONNECT route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -371,7 +608,7 @@ exports[`api with CONNECT route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -380,7 +617,7 @@ exports[`api with CONNECT route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -417,7 +654,7 @@ exports[`api with DELETE route 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_delete__0_114F7202.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:delete_0-c85ab39c/invocations",
         },
       },
     },
@@ -440,7 +677,7 @@ exports[`api with DELETE route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -449,7 +686,7 @@ exports[`api with DELETE route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -458,7 +695,7 @@ exports[`api with DELETE route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -495,7 +732,7 @@ exports[`api with GET route at root 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get__0_28A24394.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_0-c86d29bb/invocations",
         },
       },
     },
@@ -518,7 +755,7 @@ exports[`api with GET route at root 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -527,7 +764,7 @@ exports[`api with GET route at root 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -536,7 +773,7 @@ exports[`api with GET route at root 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -573,7 +810,7 @@ exports[`api with GET routes with common prefix 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_bat0-c8a08a1c/invocations",
         },
       },
     },
@@ -597,7 +834,7 @@ exports[`api with GET routes with common prefix 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
         },
       },
     },
@@ -620,7 +857,7 @@ exports[`api with GET routes with common prefix 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -629,7 +866,7 @@ exports[`api with GET routes with common prefix 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -638,7 +875,7 @@ exports[`api with GET routes with common prefix 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -675,7 +912,7 @@ exports[`api with GET routes with different prefix 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_foo_bar0-c8d108f9/invocations",
         },
       },
     },
@@ -699,7 +936,7 @@ exports[`api with GET routes with different prefix 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
         },
       },
     },
@@ -722,7 +959,7 @@ exports[`api with GET routes with different prefix 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -731,7 +968,7 @@ exports[`api with GET routes with different prefix 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -740,7 +977,7 @@ exports[`api with GET routes with different prefix 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -777,7 +1014,7 @@ exports[`api with HEAD route 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_head__0_C5A391F7.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:head_0-c857e3ff/invocations",
         },
       },
     },
@@ -800,7 +1037,7 @@ exports[`api with HEAD route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -809,7 +1046,7 @@ exports[`api with HEAD route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -818,7 +1055,7 @@ exports[`api with HEAD route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -855,7 +1092,7 @@ exports[`api with OPTIONS route 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_options__0_87A882E5.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:options_0-c8aab680/invocations",
         },
       },
     },
@@ -878,7 +1115,7 @@ exports[`api with OPTIONS route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -887,7 +1124,7 @@ exports[`api with OPTIONS route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -896,7 +1133,7 @@ exports[`api with OPTIONS route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -933,7 +1170,7 @@ exports[`api with PATCH route 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_patch__0_2A535309.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:patch_0-c8eaba1e/invocations",
         },
       },
     },
@@ -956,7 +1193,7 @@ exports[`api with PATCH route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -965,7 +1202,7 @@ exports[`api with PATCH route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -974,7 +1211,7 @@ exports[`api with PATCH route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1011,7 +1248,7 @@ exports[`api with POST route 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_post__0_FC38D853.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:post_0-c8d25f85/invocations",
         },
       },
     },
@@ -1034,7 +1271,7 @@ exports[`api with POST route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1043,7 +1280,7 @@ exports[`api with POST route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1052,7 +1289,7 @@ exports[`api with POST route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1089,7 +1326,7 @@ exports[`api with PUT route 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_put__0_C3CFB295.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:put_0-c80fcd0a/invocations",
         },
       },
     },
@@ -1112,7 +1349,7 @@ exports[`api with PUT route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1121,7 +1358,7 @@ exports[`api with PUT route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1130,7 +1367,7 @@ exports[`api with PUT route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1167,7 +1404,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
         },
       },
     },
@@ -1191,7 +1428,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
         },
       },
     },
@@ -1214,7 +1451,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1223,7 +1460,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1232,7 +1469,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1269,7 +1506,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:post_hello_bat0-c8596849/invocations",
         },
       },
     },
@@ -1293,7 +1530,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
         },
       },
     },
@@ -1316,7 +1553,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1325,7 +1562,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1334,7 +1571,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1371,7 +1608,7 @@ exports[`api with multiple methods and one lambda 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
         },
       },
     },
@@ -1395,7 +1632,7 @@ exports[`api with multiple methods and one lambda 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
         },
       },
     },
@@ -1418,7 +1655,7 @@ exports[`api with multiple methods and one lambda 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1427,7 +1664,7 @@ exports[`api with multiple methods and one lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1436,7 +1673,7 @@ exports[`api with multiple methods and one lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1473,7 +1710,7 @@ exports[`api with multiple methods on same route 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get__0_28A24394.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_0-c86d29bb/invocations",
         },
       },
       "put": {
@@ -1495,7 +1732,7 @@ exports[`api with multiple methods on same route 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get__0_28A24394.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_0-c86d29bb/invocations",
         },
       },
     },
@@ -1518,7 +1755,7 @@ exports[`api with multiple methods on same route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1527,7 +1764,7 @@ exports[`api with multiple methods on same route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1536,7 +1773,7 @@ exports[`api with multiple methods on same route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1582,7 +1819,7 @@ exports[`api with path parameter 1`] = `
             },
           },
           "type": "aws_proxy",
-          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_world_0_DAB3CC5C.arn}/invocations",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_-world0-c81e38f8/invocations",
         },
       },
     },
@@ -1605,7 +1842,7 @@ exports[`api with path parameter 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1614,7 +1851,7 @@ exports[`api with path parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1623,7 +1860,7 @@ exports[`api with path parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },

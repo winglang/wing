@@ -4,7 +4,7 @@ const { resolve, relative } = require("node:path");
 
 const which = require("npm-which")(__dirname);
 const tsx = relative(process.cwd(), which.sync("tsx"));
-const cliSource = relative(process.cwd(), resolve(__dirname, "../src/turbo-diff.ts"));
+const cliSource = relative(process.cwd(), resolve(__dirname, "../src/turbo-diff.cli.ts"));
 execSync(`${tsx} ${cliSource} ${process.argv.slice(2).join(" ")}`, {
   stdio: "inherit",
 });

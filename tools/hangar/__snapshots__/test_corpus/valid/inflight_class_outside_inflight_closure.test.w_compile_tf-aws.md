@@ -1,8 +1,9 @@
 # [inflight_class_outside_inflight_closure.test.w](../../../../../examples/tests/valid/inflight_class_outside_inflight_closure.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $BinaryOperation }) {
   class $Closure1 {
     constructor({  }) {
@@ -12,17 +13,18 @@ module.exports = function({ $BinaryOperation }) {
     }
     async handle() {
       const op = (await (async () => {const o = new $BinaryOperation(10, 20); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await op.add()),30)))};
+      $helpers.assert($helpers.eq((await op.add()), 30), "op.add() == 30");
     }
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.BinaryOperation-1.js
-```js
+## inflight.BinaryOperation-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class BinaryOperation {
     async add() {
@@ -37,7 +39,7 @@ module.exports = function({  }) {
   }
   return BinaryOperation;
 }
-//# sourceMappingURL=inflight.BinaryOperation-1.js.map
+//# sourceMappingURL=inflight.BinaryOperation-1.cjs.map
 ```
 
 ## main.tf.json
@@ -47,22 +49,9 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -72,14 +61,16 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -90,14 +81,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.BinaryOperation-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.BinaryOperation-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const BinaryOperationClient = ${BinaryOperation._toInflightType(this)};
+            const BinaryOperationClient = ${BinaryOperation._toInflightType()};
             const client = new BinaryOperationClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -105,28 +96,30 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "lhs", "rhs", "add", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          BinaryOperation._registerOnLiftObject(this, host, ["lhs", "rhs"]);
-        }
-        if (ops.includes("add")) {
-          BinaryOperation._registerOnLiftObject(this, host, ["lhs", "rhs"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "add": [
+            [this, [].concat(["lhs"], ["rhs"])],
+          ],
+          "$inflight_init": [
+            [this, [].concat(["lhs"], ["rhs"])],
+          ],
+          "lhs": [
+          ],
+          "rhs": [
+          ],
+        });
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $BinaryOperation: ${$stdlib.core.liftObject(BinaryOperation)},
           })
         `;
@@ -134,7 +127,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -142,8 +135,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class outside inflight closure", new $Closure1(this, "$Closure1"));
@@ -152,6 +150,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_class_outside_inflight_closure.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

@@ -2,11 +2,6 @@
 
 exports[`basic function 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "azurerm_application_insights": {
       "ApplicationInsights": {
@@ -35,7 +30,7 @@ exports[`basic function 1`] = `
           "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
           "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
           "application_stack": {
-            "node_version": "18",
+            "node_version": "20",
           },
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
@@ -111,8 +106,9 @@ exports[`basic function 2`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "ApplicationInsights",
                 "path": "root/Default/ApplicationInsights",
               },
@@ -121,24 +117,27 @@ exports[`basic function 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
                   },
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Function",
                     "path": "root/Default/Function/Function",
                   },
@@ -147,15 +146,16 @@ exports[`basic function 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
                       },
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -167,15 +167,16 @@ exports[`basic function 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -187,95 +188,81 @@ exports[`basic function 2`] = `
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "LogAnalyticsWorkspace",
                 "path": "root/Default/LogAnalyticsWorkspace",
               },
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
               },
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
               },
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "azure",
                 "path": "root/Default/azure",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -285,11 +272,6 @@ exports[`basic function 2`] = `
 
 exports[`basic function with environment variables 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "azurerm_application_insights": {
       "ApplicationInsights": {
@@ -320,7 +302,7 @@ exports[`basic function with environment variables 1`] = `
           "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
           "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
           "application_stack": {
-            "node_version": "18",
+            "node_version": "20",
           },
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
@@ -396,8 +378,9 @@ exports[`basic function with environment variables 2`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "ApplicationInsights",
                 "path": "root/Default/ApplicationInsights",
               },
@@ -406,24 +389,27 @@ exports[`basic function with environment variables 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
                   },
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Function",
                     "path": "root/Default/Function/Function",
                   },
@@ -432,15 +418,16 @@ exports[`basic function with environment variables 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
                       },
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -452,15 +439,16 @@ exports[`basic function with environment variables 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -472,95 +460,81 @@ exports[`basic function with environment variables 2`] = `
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "LogAnalyticsWorkspace",
                 "path": "root/Default/LogAnalyticsWorkspace",
               },
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
               },
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
               },
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "azure",
                 "path": "root/Default/azure",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -570,11 +544,6 @@ exports[`basic function with environment variables 2`] = `
 
 exports[`replace invalid character from function name 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "azurerm_application_insights": {
       "ApplicationInsights": {
@@ -603,7 +572,7 @@ exports[`replace invalid character from function name 1`] = `
           "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
           "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
           "application_stack": {
-            "node_version": "18",
+            "node_version": "20",
           },
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
@@ -679,97 +648,83 @@ exports[`replace invalid character from function name 2`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "ApplicationInsights",
                 "path": "root/Default/ApplicationInsights",
               },
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "LogAnalyticsWorkspace",
                 "path": "root/Default/LogAnalyticsWorkspace",
               },
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
               },
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
               },
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "azure",
                 "path": "root/Default/azure",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "someFunction01": {
                 "children": {
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/someFunction01/Asset",
                   },
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CodeBlob",
                     "path": "root/Default/someFunction01/CodeBlob",
                   },
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Function",
                     "path": "root/Default/someFunction01/Function",
                   },
@@ -778,15 +733,16 @@ exports[`replace invalid character from function name 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Bucket",
                         "path": "root/Default/someFunction01/FunctionBucket/Bucket",
                       },
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -798,15 +754,16 @@ exports[`replace invalid character from function name 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/someFunction01/ReadLambdaCodeAssignment",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -818,32 +775,36 @@ exports[`replace invalid character from function name 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },

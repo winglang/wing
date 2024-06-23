@@ -1,26 +1,15 @@
-import { readdirSync } from "fs";
-import { JsonFile, cdk, javascript } from "projen";
-import * as cloud from "./src";
+import { JsonFile, cdk, javascript, DependencyType } from "projen";
 
-const JSII_DEPS = ["constructs@~10.2.69"];
-const CDKTF_VERSION = "0.17.0";
+const JSII_DEPS = ["constructs@^10.3"];
+const CDKTF_VERSION = "0.20.3";
+const AWS_SDK_VERSION = "3.577.0";
 
 const CDKTF_PROVIDERS = [
-  "aws@~>4.65.0",
+  "aws@~>5.31.0",
   "random@~>3.5.1",
-  "azurerm@~>3.54.0",
-  "google@~>4.63.1",
+  "azurerm@~>3.96.0",
+  "google@~>5.10.0",
 ];
-
-// those will be skipped out of the docs
-const SKIPPED_MODULES = ["cloud", "ex", "std", "simulator", "core", "platform"];
-const publicModules = Object.keys(cloud).filter(
-  (item) => !SKIPPED_MODULES.includes(item)
-);
-
-const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
-const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
-const STD_DOCS_PREFIX = "../../docs/docs/04-standard-library/03-std/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
@@ -44,6 +33,7 @@ const project = new cdk.JsiiProject({
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
   tsconfig: {
+    include: ["src/**/*.ts", "test/**/*.ts", "*.ts", "*.mts", "scripts/*.mts"],
     compilerOptions: {
       lib: ["es2020", "dom", "dom.iterable"],
     },
@@ -52,89 +42,144 @@ const project = new cdk.JsiiProject({
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
     // preflight dependencies
-    "esbuild-wasm",
     "safe-stable-stringify",
-    // aws client dependencies
-    // (note: these should always be updated together, otherwise they will
-    // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.449.0",
-    "@aws-sdk/client-dynamodb@3.449.0",
-    "@aws-sdk/client-elasticache@3.449.0",
-    "@aws-sdk/util-dynamodb@3.449.0",
-    "@aws-sdk/client-lambda@3.449.0",
-    "@aws-sdk/client-secrets-manager@3.449.0",
-    "@aws-sdk/client-sqs@3.449.0",
-    "@aws-sdk/client-sns@3.449.0",
-    "@aws-sdk/client-s3@3.449.0",
-    "@aws-sdk/s3-request-presigner@3.449.0",
-    "@aws-sdk/types@3.449.0",
+    "jiti",
+    // aws sdk client dependencies
+    // change `AWS_SDK_VERSION` to update all deps at once
+    "@aws-sdk/client-cloudwatch-logs",
+    "@aws-sdk/client-dynamodb",
+    "@aws-sdk/client-elasticache",
+    "@aws-sdk/client-lambda",
+    "@aws-sdk/client-s3",
+    "@aws-sdk/client-secrets-manager",
+    "@aws-sdk/client-sns",
+    "@aws-sdk/client-sqs",
+    "@aws-sdk/s3-request-presigner",
+    "@aws-sdk/util-dynamodb",
+    // aws other client dependencies
     "@smithy/util-stream@2.0.17",
     "@smithy/util-utf8@2.0.0",
     "@types/aws-lambda",
+    "@aws-sdk/types",
     "mime-types",
     "mime@^3.0.0",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
-    "@azure/identity@3.1.3",
+    "@azure/data-tables@13.2.2",
+    "@azure/identity@4.0.1",
     "@azure/core-paging",
     // gcp client dependencies
     "@google-cloud/storage@6.9.5",
+    "@google-cloud/datastore@8.4.0",
     "google-auth-library",
+    "protobufjs@7.2.5",
     // simulator dependencies
     "express",
     "uuid",
-    "undici",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
     "nanoid@^3.3.6",
     "cron-parser",
     // shared client dependencies
     "ioredis",
-    "jsonschema",
+    "ajv",
+    "cron-validator",
     // fs module dependency
     "yaml",
+    "toml",
     // enhanced diagnostics
     "stacktracey",
+    "ulid",
+    "vlq",
+    // tunnels
+    "@winglang/wingtunnels@workspace:^",
+    "glob",
   ],
   devDeps: [
-    `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
+    `@cdktf/provider-aws@^19`, // only for testing Wing plugins
     "wing-api-checker",
     "bump-pack",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
-    "mock-gcs@^1.0.0",
+    "mock-gcs@^1.2.0",
     "@types/express",
-    "aws-sdk-client-mock",
-    "aws-sdk-client-mock-jest",
+    "@types/glob",
+    "aws-sdk-client-mock@3.0.0",
+    "aws-sdk-client-mock-jest@3.0.0",
     `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
     "fs-extra",
     "vitest",
     "@types/uuid",
-    "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
     "chalk",
+    "tsx",
     ...JSII_DEPS,
   ],
+  eslintOptions: {
+    dirs: ["src"],
+    devdirs: ["test", "scripts"],
+    ignorePatterns: ["src/.gen/", "**/*.d.ts"],
+  },
   jest: false,
+  depsUpgrade: false,
   prettier: true,
   npmignoreEnabled: false,
-  minNodeVersion: "18.13.0",
+  minNodeVersion: "20.0.0",
   projenCommand: "pnpm exec projen",
   packageManager: javascript.NodePackageManager.PNPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "5.0.11",
+  jsiiVersion: "~5.3.11",
 });
+project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
+project.deps.removeDependency("ts-node");
 
-project.eslint?.addPlugins("sort-exports");
-project.eslint?.addOverride({
+/**
+ * Pin AWS SDK version and keep deps in sync
+ *
+ * `@aws-sdk/types` is excluded since it gets updated independently
+ * and its version may not match that of the AWS SDK clients
+ */
+project.deps.all
+  .filter(
+    (dep) => dep.name.startsWith("@aws-sdk/") && dep.name !== "@aws-sdk/types"
+  )
+  .map((dep) => project.addBundledDeps(`${dep.name}@${AWS_SDK_VERSION}`));
+
+project.deps.addDependency("eslint@^8.56.0", DependencyType.BUILD);
+project.deps.addDependency(
+  "@typescript-eslint/eslint-plugin@^7",
+  DependencyType.BUILD
+);
+project.deps.addDependency(
+  "@typescript-eslint/parser@^7",
+  DependencyType.BUILD
+);
+project.eslint!.addPlugins("sort-exports");
+project.eslint!.addOverride({
   files: ["src/**/index.ts"],
   rules: {
     "sort-exports/sort-exports": ["error", { sortDir: "asc" }],
   },
+});
+
+project.eslint!.addOverride({
+  files: ["vitest.config.mts"],
+  rules: {
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        devDependencies: true,
+      },
+    ],
+  },
+});
+
+project.package.addField("optionalDependencies", {
+  esbuild: "^0.19.12",
 });
 
 // use fork of jsii-docgen with wing-ish support
@@ -186,6 +231,7 @@ function disallowImportsRule(target: Zone, from: Zone): DisallowImportsRule {
 
 // Prevent unsafe imports between preflight and inflight and simulator code
 project.eslint!.addRules({
+  "@typescript-eslint/no-misused-promises": "error",
   "import/no-restricted-paths": [
     "error",
     {
@@ -248,114 +294,15 @@ project.tasks
 
 // --------------- docs -----------------
 
-const docsPrefix = (name: string) => {
-  return `../../docs/docs/04-standard-library/${name}`;
-};
-const docsFrontMatter = (name: string) => `---
-title: API reference
-id: api-reference
-description: Wing standard library API reference for the ${name} module
-keywords: [Wing sdk, sdk, Wing API Reference]
-hide_title: true
-sidebar_position: 100
----
-
-<!-- This file is automatically generated. Do not edit manually. -->
-`;
-
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
-
-// copy readme docs
-docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
-docgen.exec(`cp -r src/ex/*.md ${EX_DOCS_PREFIX}`);
-
-// generate api reference for each submodule
-for (const mod of publicModules) {
-  const prefix = docsPrefix(mod);
-  const docsPath = prefix + "/api-reference.md";
-  docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
-  docgen.exec(`mkdir -p ${prefix}`);
-  docgen.exec(`echo '${docsFrontMatter(mod)}' > ${docsPath}`);
-  docgen.exec(`cat API.md >> ${docsPath}`);
-}
-
-const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
-const UNDOCUMENTED_EX_FILES = ["index"];
-
-const toCamelCase = (str: string) =>
-  str.replace(/_(.)/g, (_, chr) => chr.toUpperCase());
-
-function generateResourceApiDocs(
-  module: string,
-  pathToFolder: string,
-  docsPath: string,
-  excludedFiles: string[] = [],
-  allowUndocumented = false
-) {
-  const cloudFiles = readdirSync(pathToFolder);
-
-  const cloudResources: Set<string> = new Set(
-    cloudFiles.map((filename) => filename.split(".")[0])
-  );
-
-  excludedFiles.forEach((file) => cloudResources.delete(file));
-
-  const undocumentedResources = Array.from(cloudResources).filter(
-    (file) => !cloudFiles.includes(`${file}.md`)
-  );
-
-  if (undocumentedResources.length && !allowUndocumented) {
-    throw new Error(
-      `Detected undocumented resources: ${undocumentedResources.join(
-        ", "
-      )}. Please add the corresponding .md files in ${pathToFolder} folder.`
-    );
-  }
-
-  // generate api reference for each cloud/submodule and append it to the doc file
-  for (const mod of cloudResources) {
-    if (undocumentedResources.includes(mod)) {
-      // adding a title
-      docgen.exec(
-        `echo "---\ntitle: ${toCamelCase(mod)}\nid: ${toCamelCase(
-          mod
-        )}\n---\n\n" > ${docsPath}${mod}.md`
-      );
-    }
-    docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${module}/${mod}`);
-    docgen.exec(`cat API.md >> ${docsPath}${mod}.md`);
-  }
-}
-
-generateResourceApiDocs(
-  "cloud",
-  "./src/cloud",
-  CLOUD_DOCS_PREFIX,
-  UNDOCUMENTED_CLOUD_FILES
-);
-generateResourceApiDocs(
-  "ex",
-  "./src/ex",
-  EX_DOCS_PREFIX,
-  UNDOCUMENTED_EX_FILES
-);
-
-generateResourceApiDocs(
-  "std",
-  "./src/std",
-  STD_DOCS_PREFIX,
-  ["README", "index", "test-runner", "resource", "test", "range", "generics"],
-  true
-);
-
-docgen.exec("rm API.md");
+docgen.exec("tsx scripts/docgen.mts");
 
 // --------------- end of docs -----------------
 
 // set up vitest related config
 project.addGitIgnore("/coverage/");
-project.testTask.reset("vitest run --coverage --update --passWithNoTests");
+project.testTask.reset("vitest run --update");
 const testWatch = project.addTask("test:watch");
 testWatch.exec("vitest"); // Watch is default mode for vitest
 testWatch.description = "Run vitest in watch mode";
@@ -390,12 +337,14 @@ new JsonFile(project, "cdktf.json", {
 });
 project.gitignore.addPatterns("src/.gen");
 
-project.preCompileTask.exec("cdktf get --force");
+project.preCompileTask.exec("cdktf get");
 
 project.package.file.addDeletionOverride("pnpm");
 
 project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");
+
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

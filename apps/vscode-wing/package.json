@@ -15,10 +15,8 @@
     "eslint": "pnpm exec projen eslint",
     "package": "pnpm exec projen package",
     "post-compile": "pnpm exec projen post-compile",
-    "post-upgrade": "pnpm exec projen post-upgrade",
     "pre-compile": "pnpm exec projen pre-compile",
     "test": "pnpm exec projen test",
-    "upgrade": "pnpm exec projen upgrade",
     "watch": "pnpm exec projen watch",
     "projen": "pnpm exec projen"
   },
@@ -29,8 +27,8 @@
     "organization": true
   },
   "devDependencies": {
-    "@trpc/client": "^10.38.1",
-    "@types/node": "^16",
+    "@trpc/client": "^10.45.2",
+    "@types/node": "^20.11.0",
     "@types/node-fetch": "^2.6.4",
     "@types/vscode": "^1.70.0",
     "@types/which": "^3.0.0",
@@ -38,8 +36,6 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@vscode/vsce": "^2.21.0",
-    "@wingconsole/app": "workspace:^",
-    "@wingconsole/server": "workspace:^",
     "eslint": "^8",
     "eslint-config-prettier": "^8.10.0",
     "eslint-import-resolver-node": "^0.3.9",
@@ -47,13 +43,12 @@
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-prettier": "^4.2.1",
     "node-fetch": "^2.6.7",
-    "npm-check-updates": "^16",
     "open": "^8.4.2",
     "prettier": "^2.8.8",
     "projen": "^0.71.163",
-    "ts-node": "^10.9.1",
-    "tsup": "^6.7.0",
-    "typescript": "^4.9.5",
+    "tsup": "^8.0.2",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
     "vscode-languageclient": "^8.1.0",
     "which": "^4.0.0",
     "winglang": "workspace:^",
@@ -89,9 +84,15 @@
     "Programming Languages"
   ],
   "activationEvents": [
-    "onLanguage:wing"
+    "onLanguage:wing",
+    "onDebug"
   ],
   "contributes": {
+    "breakpoints": [
+      {
+        "language": "wing"
+      }
+    ],
     "languages": [
       {
         "id": "wing",
@@ -108,6 +109,52 @@
           "light": "resources/icon-light.png",
           "dark": "resources/icon-dark.png"
         }
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "wing",
+        "label": "Wing Debug",
+        "program": "",
+        "languages": [
+          "wing"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "entrypoint": {
+              "type": "string",
+              "description": "The entrypoint to run",
+              "default": "${file}"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "Wing CLI arguments",
+              "default": "test"
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "label": "Wing Debug: Launch",
+            "description": "Launch a Wing program",
+            "body": {
+              "type": "wing",
+              "request": "launch",
+              "name": "Launch"
+            }
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Wing Debug: Launch",
+            "description": "Launch a Wing program",
+            "body": {
+              "type": "wing",
+              "request": "launch",
+              "name": "Launch"
+            }
+          }
+        ]
       }
     ],
     "grammars": [
@@ -135,61 +182,14 @@
           "light": "resources/icon-light.svg",
           "dark": "resources/icon-dark.svg"
         }
-      },
-      {
-        "command": "wing.openFile",
-        "title": "Open source file",
-        "icon": {
-          "light": "resources/icon-light.svg",
-          "dark": "resources/icon-dark.svg"
-        }
-      },
-      {
-        "command": "wingConsole.openResource",
-        "title": "Open resource"
-      },
-      {
-        "command": "wingConsole.runTest",
-        "title": "Run test",
-        "icon": {
-          "light": "resources/play-light.svg",
-          "dark": "resources/play-dark.svg"
-        }
-      },
-      {
-        "command": "wingConsole.runAllTests",
-        "title": "Run all tests",
-        "icon": {
-          "light": "resources/play-all-light.svg",
-          "dark": "resources/play-all-dark.svg"
-        }
       }
     ],
     "menus": {
       "editor/title": [
         {
-          "when": "resourceLangId == wing && activeWebviewPanelId != 'wing.console'",
+          "when": "resourceLangId == wing",
           "command": "wing.openConsole",
           "group": "navigation"
-        },
-        {
-          "when": "resourceLangId != wing && activeWebviewPanelId == 'wing.console'",
-          "command": "wing.openFile",
-          "group": "navigation"
-        }
-      ],
-      "view/item/context": [
-        {
-          "command": "wingConsole.runTest",
-          "when": "view == consoleTestsExplorer",
-          "group": "inline"
-        }
-      ],
-      "explorer/context": [
-        {
-          "command": "wingConsole.runAllTests",
-          "when": "view == consoleTestsExplorer",
-          "group": "inline"
         }
       ]
     },
@@ -203,19 +203,7 @@
           }
         }
       }
-    ],
-    "views": {
-      "explorer": [
-        {
-          "id": "consoleExplorer",
-          "name": "Wing Resources"
-        },
-        {
-          "id": "consoleTestsExplorer",
-          "name": "Wing Tests"
-        }
-      ]
-    }
+    ]
   },
   "volta": {
     "extends": "../../package.json"

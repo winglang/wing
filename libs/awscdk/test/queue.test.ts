@@ -3,12 +3,8 @@ import { test, expect } from "vitest";
 import { std, simulator, cloud } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-import { sanitizeCode, awscdkSanitize } from "./util";
-
-const CDK_APP_OPTS = {
-  stackName: "my-project",
-  entrypointDir: __dirname,
-};
+import { sanitizeCode, awscdkSanitize, CDK_APP_OPTS } from "./util";
+import { inflight } from "@winglang/sdk/lib/core";
 
 test("default queue behavior", () => {
   // GIVEN
@@ -53,11 +49,10 @@ test("queue with a consumer function", () => {
   const queue = new cloud.Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
-  const processor = simulator.Testing.makeHandler(`\
-async handle(event) {
-  console.log("Received " + event.name);
-}`
-  );
+  const processor = inflight(async (_, event) => {
+    console.log("Received " + event.name);
+
+  });
   const processorFn = queue.setConsumer(processor);
   const output = app.synth();
 
@@ -66,9 +61,9 @@ async handle(event) {
 
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::SQS::Queue", 1);
-  template.resourceCountIs("AWS::Lambda::Function", 2);
-  template.resourceCountIs("AWS::IAM::Role", 2);
-  template.resourceCountIs("AWS::IAM::Policy", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
+  template.resourceCountIs("AWS::IAM::Role", 1);
+  template.resourceCountIs("AWS::IAM::Policy", 1);
   template.resourceCountIs("AWS::Lambda::EventSourceMapping", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

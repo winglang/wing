@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
-import { Topic } from "./topic";
+import { ITopicOnMessageHandler, Topic, TopicInflightMethods } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
-import { convertBetweenHandlers } from "../shared/convert";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
 
 /**
@@ -33,6 +33,8 @@ export interface BucketProps {
 export class Bucket extends Resource {
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IBucketClient;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     if (new.target === Bucket) {
@@ -84,28 +86,19 @@ export class Bucket extends Resource {
   /**
    * Creates a topic for subscribing to notification events
    * @param actionType
-   * @returns the created topi
+   * @returns the created topic
    */
   protected createTopic(actionType: BucketEventType): Topic {
-    const topic = new Topic(this, actionType.toLowerCase());
-
+    const topic = new Topic(this, actionType);
     this.node.addDependency(topic);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: topic,
-      name: `${actionType}()`,
-    });
-
     return topic;
   }
 
   /**
    * Gets topic form the topics map, or creates if not exists
    * @param actionType
-   * @returns
    */
-  private getTopic(actionType: BucketEventType): Topic {
+  protected getTopic(actionType: BucketEventType): Topic {
     if (!this._topics.has(actionType)) {
       this._topics.set(actionType, this.createTopic(actionType));
     }
@@ -113,31 +106,17 @@ export class Bucket extends Resource {
   }
 
   /**
-   * Resolves the path to the bucket.onevent.inflight file
-   */
-  protected eventHandlerLocation(): string {
-    throw new Error(
-      "please specify under the target file (to get the right relative path)"
-    );
-  }
-
-  /**
    * Creates an inflight handler from inflight code
    * @param eventType
    * @param inflight
-   * @returns
    */
-  private createInflightHandler(
+  protected createTopicHandler(
     eventType: BucketEventType,
     inflight: IBucketEventHandler
-  ): IInflight {
-    return convertBetweenHandlers(
-      inflight,
-      // since uses __dirname should be specified under the target directory
-      this.eventHandlerLocation(),
-      "BucketEventHandlerClient",
-      { eventType }
-    );
+  ): ITopicOnMessageHandler {
+    eventType;
+    inflight;
+    throw new Error("Method not implemented.");
   }
 
   /**
@@ -153,19 +132,55 @@ export class Bucket extends Resource {
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
-      this.getTopic(BucketEventType.CREATE).onMessage(
-        this.createInflightHandler(BucketEventType.CREATE, inflight)
+      const topic = this.getTopic(BucketEventType.CREATE).onMessage(
+        this.createTopicHandler(BucketEventType.CREATE, inflight)
       );
+      for (const op of [
+        BucketInflightMethods.PUT,
+        BucketInflightMethods.PUT_JSON,
+      ]) {
+        Node.of(this).addConnection({
+          source: this,
+          sourceOp: op,
+          target: topic,
+          targetOp: TopicInflightMethods.PUBLISH,
+          name: BucketEventType.CREATE,
+        });
+      }
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
-      this.getTopic(BucketEventType.UPDATE).onMessage(
-        this.createInflightHandler(BucketEventType.UPDATE, inflight)
+      const topic = this.getTopic(BucketEventType.UPDATE).onMessage(
+        this.createTopicHandler(BucketEventType.UPDATE, inflight)
       );
+      for (const op of [
+        BucketInflightMethods.PUT,
+        BucketInflightMethods.PUT_JSON,
+      ]) {
+        Node.of(this).addConnection({
+          source: this,
+          sourceOp: op,
+          target: topic,
+          targetOp: TopicInflightMethods.PUBLISH,
+          name: BucketEventType.UPDATE,
+        });
+      }
     }
     if (eventNames.includes(BucketEventType.DELETE)) {
-      this.getTopic(BucketEventType.DELETE).onMessage(
-        this.createInflightHandler(BucketEventType.DELETE, inflight)
+      const topic = this.getTopic(BucketEventType.DELETE).onMessage(
+        this.createTopicHandler(BucketEventType.DELETE, inflight)
       );
+      for (const op of [
+        BucketInflightMethods.DELETE,
+        BucketInflightMethods.TRY_DELETE,
+      ]) {
+        Node.of(this).addConnection({
+          source: this,
+          sourceOp: op,
+          target: topic,
+          targetOp: TopicInflightMethods.PUBLISH,
+          name: BucketEventType.DELETE,
+        });
+      }
     }
   }
 
@@ -229,6 +244,28 @@ export interface ObjectMetadata {
 }
 
 /**
+ * Options for `Bucket.get()`.
+ */
+export interface BucketGetOptions {
+  /**
+   * The starting byte to read from.
+   * @default - undefined
+   */
+  readonly startByte?: number;
+
+  /**
+   * The ending byte to read up to (including).
+   * @default - undefined
+   */
+  readonly endByte?: number;
+}
+
+/**
+ * Options for `Bucket.tryGet()`.
+ */
+export interface BucketTryGetOptions extends BucketGetOptions {}
+
+/**
  * Options for `Bucket.put()`.
  */
 export interface BucketPutOptions {
@@ -253,13 +290,34 @@ export interface BucketDeleteOptions {
 }
 
 /**
+ * Specifies the action permitted by a presigned URL for a bucket.
+ */
+export enum BucketSignedUrlAction {
+  /**
+   * Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket.
+   */
+  DOWNLOAD = "DOWNLOAD",
+  /**
+   * Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket.
+   */
+  UPLOAD = "UPLOAD",
+}
+
+/**
  * Options for `Bucket.signedUrl()`.
  */
 export interface BucketSignedUrlOptions {
   /**
-   * The duration for the signed url to expire
+   * The duration for the signed URL to expire.
+   * @default 15m
    */
   readonly duration?: Duration;
+
+  /**
+   * The action allowed by the signed URL.
+   * @default BucketSignedUrlAction.DOWNLOAD
+   */
+  readonly action?: BucketSignedUrlAction;
 }
 
 /**
@@ -292,20 +350,27 @@ export interface IBucketClient {
 
   /**
    * Retrieve an object from the bucket.
+   * If the bytes returned are not a valid UTF-8 string, an error is thrown.
    * @param key Key of the object.
+   * @param options Additional get options
    * @Throws if no object with the given key exists.
    * @Returns the object's body.
    * @inflight
    */
-  get(key: string): Promise<string>;
+  get(key: string, options?: BucketGetOptions): Promise<string>;
 
   /**
    * Get an object from the bucket if it exists
+   * If the bytes returned are not a valid UTF-8 string, an error is thrown.
    * @param key Key of the object.
+   * @param options Additional get options
    * @returns the contents of the object as a string if it exists, nil otherwise
    * @inflight
    */
-  tryGet(key: string): Promise<string | undefined>;
+  tryGet(
+    key: string,
+    options?: BucketTryGetOptions
+  ): Promise<string | undefined>;
 
   /**
    * Retrieve a Json object from the bucket.
@@ -375,14 +440,23 @@ export interface IBucketClient {
 
   /**
    * Copy an object to a new location in the bucket. If the destination object
-   * already exists, it will be overwritten. Returns once the copying is finished.
-   *
+   * already exists, it will be overwritten.
    * @param srcKey The key of the source object you wish to copy.
    * @param dstKey The key of the destination object after copying.
    * @throws if `srcKey` object doesn't exist.
    * @inflight
    */
   copy(srcKey: string, dstKey: string): Promise<void>;
+
+  /**
+   * Move an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten. Returns once the renaming is finished.
+   * @param srcKey The key of the source object you wish to rename.
+   * @param dstKey The key of the destination object after renaming.
+   * @throws if `srcKey` object doesn't exist or if it matches `dstKey`.
+   * @inflight
+   */
+  rename(srcKey: string, dstKey: string): Promise<void>;
 }
 
 /**
@@ -409,9 +483,12 @@ export interface BucketOnEventOptions {}
  * A resource with an inflight "handle" method that can be passed to
  * the bucket events.
  *
- * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
+ * @inflight `@winglang/sdk.cloud.IBucketEventHandlerClient`
  */
-export interface IBucketEventHandler extends IInflight {}
+export interface IBucketEventHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IBucketEventHandlerClient["handle"];
+}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -447,15 +524,15 @@ export enum BucketEventType {
   /**
    * Create
    */
-  CREATE = "onCreate",
+  CREATE = "OnCreate",
   /**
    * Delete
    */
-  DELETE = "onDelete",
+  DELETE = "OnDelete",
   /**
    * Update
    */
-  UPDATE = "onUpdate",
+  UPDATE = "OnUpdate",
 }
 
 /**
@@ -491,4 +568,6 @@ export enum BucketInflightMethods {
   METADATA = "metadata",
   /** `Bucket.copy` */
   COPY = "copy",
+  /** `Bucket.rename` */
+  RENAME = "rename",
 }

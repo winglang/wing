@@ -1,3 +1,13 @@
+bring expect; 
+
+interface IFoo {
+  // other types can reference structs before they are defined
+  field0(): A;
+}
+
+// type annotations can reference structs before they are defined
+let a: A? = nil;
+
 struct A {
   field0: str;
 }
@@ -71,3 +81,59 @@ test "struct definitions are phase independant" {
 
   assert(s2.a == "foo");
 }
+
+// mutually referential structs
+struct M1 {
+  m2: M2?;
+}
+
+struct M2 {
+  m1: M1?;
+}
+
+// Self referential struct
+struct Node {
+	val: str;
+	next: Node?;
+}
+
+let aNode = Node {val: "someval"};
+let bNode = Node {val: "otherval", next: aNode};
+
+expect.equal(Json.stringify(bNode), "\{\"val\":\"otherval\",\"next\":\{\"val\":\"someval\"\}\}");
+
+// A documented struct (should be parsed without errors)
+/// Struct documentation
+/// blah blah blah
+struct DocumentedStruct {
+    /// Field documentation
+    /// blah blah blah
+    field: str;
+}
+
+struct SomeStruct1 {
+  numField: num;
+}
+struct SomeStruct2 {
+  structField: SomeStruct1;
+  strField: str;
+}
+struct SomeStruct3 extends SomeStruct2 {
+  boolField: bool;
+  otherField: str;
+}
+let numField = 1337;
+let strField = "leet";
+let boolField = true;
+let structField = SomeStruct1 { numField };
+// Struct literal initialization with punning
+let someStruct3 = SomeStruct3 { 
+  boolField, 
+  strField, 
+  otherField: "good",
+  structField 
+};
+assert(someStruct3.boolField == true);
+assert(someStruct3.strField == "leet");
+assert(someStruct3.structField.numField == 1337);
+assert(someStruct3.otherField == "good");

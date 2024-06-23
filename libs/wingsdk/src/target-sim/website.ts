@@ -4,22 +4,34 @@ import { WebsiteSchema, FileRoutes } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { BaseResourceSchema } from "../simulator/simulator";
-import { IInflightHost } from "../std";
+import { ToSimulatorOutput } from "../simulator";
+import { IInflightHost, Node } from "../std";
 
 /**
  * A static website.
  */
 export class Website extends cloud.Website implements ISimulatorResource {
   private fileRoutes: FileRoutes = {};
+  private readonly endpoint: cloud.Endpoint;
+  private readonly errorDocument?: string;
 
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
     super(scope, id, props);
+
+    this.endpoint = new cloud.Endpoint(
+      this,
+      "Endpoint",
+      simulatorAttrToken(this, "url"),
+      { label: `Website ${this.node.path}`, browserSupport: true }
+    );
+
+    Node.of(this.endpoint).hidden = true;
+
+    this.errorDocument = props.errorDocument;
   }
 
-  /** The url of the website */
-  public get url(): string {
-    return simulatorAttrToken(this, "url");
+  protected get _endpoint(): cloud.Endpoint {
+    return this.endpoint;
   }
 
   /** Adds a file to the website during deployment */
@@ -37,18 +49,20 @@ export class Website extends cloud.Website implements ISimulatorResource {
   }
 
   /** Returns sim schema */
-  public toSimulator(): BaseResourceSchema {
-    const schema: WebsiteSchema = {
-      type: cloud.WEBSITE_FQN,
-      path: this.node.path,
-      props: { staticFilesPath: this.path, fileRoutes: this.fileRoutes },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: WebsiteSchema = {
+      staticFilesPath: this.path,
+      fileRoutes: this.fileRoutes,
+      errorDocument: this.errorDocument,
     };
-    return schema;
+    return {
+      type: cloud.WEBSITE_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

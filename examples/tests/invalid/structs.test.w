@@ -30,7 +30,7 @@ let a = A {
   x: "Sup"
 };
 log(a.badField);
-//    ^^^^^^^^ Unknown symbol "badField"
+//    ^^^^^^^^ Property "badField" doesn't exist on "A"
 
 // two inherits with same field name but different type
 struct Razzle {
@@ -46,3 +46,26 @@ struct Showtime extends Razzle, Dazzle {}
 
 let x = new cloud.BucketProps(1);
           //^ Cannot instantiate type "BucketProps" because it is not a class
+
+let inlinePreflightStruct = () => {
+  struct PreflightStruct {
+      // ^ Structs must be declared at the top-level of a program: Struct PreflightStruct is not defined at the top-level
+    name: str;
+  }
+};
+          
+let inlineInflightStruct = inflight () => {
+  struct InflightStruct {
+      // ^ Structs must be declared at the top-level of a program: Struct InflightStruct is not defined at the top-level
+    name: str;
+  }
+};
+
+
+struct SomeStruct1 {
+  numField: num;
+}
+let numField = "hello";
+let noSuchField = 1;
+SomeStruct1 { numField }; // Wrong type when using punning
+SomeStruct1 { noSuchField }; // Wrong field when using punning

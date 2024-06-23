@@ -1,7 +1,7 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import {
@@ -29,9 +29,9 @@ test("topic with subscriber function", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "Topic");
-  const subscriber = Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
+  const subscriber = inflight(async (_, event) => {
+    console.log("Received: ", event);
+  });
 
   topic.onMessage(subscriber);
   const output = app.synth();
@@ -58,16 +58,14 @@ test("topic with multiple subscribers", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "Topic");
-  const subOne = Testing.makeHandler(
-    `async handle(event) { console.log("Got Event: ", event); }`
-  );
-  const subTwo = Testing.makeHandler(
-    `async handle(event) { console.log("Ohh yea!! ", event); }`
-  );
 
   // WHEN
-  topic.onMessage(subOne);
-  topic.onMessage(subTwo);
+  topic.onMessage(
+    inflight(async (_, event) => console.log("Got Event: ", event))
+  );
+  topic.onMessage(
+    inflight(async (_, event) => console.log("Ohh yea!! ", event))
+  );
 
   const output = app.synth();
 
@@ -122,9 +120,9 @@ test("topic with subscriber function timeout", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "Topic");
-  const subscriber = Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
+  const subscriber = inflight(async (_, event) => {
+    console.log("Received: ", event);
+  });
 
   topic.onMessage(subscriber, { timeout: Duration.fromSeconds(30) });
   const output = app.synth();

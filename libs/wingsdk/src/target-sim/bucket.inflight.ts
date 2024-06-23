@@ -1,10 +1,10 @@
 import * as crypto from "crypto";
 import * as fs from "fs";
-import * as os from "os";
 import { dirname, join } from "path";
 import * as url from "url";
 import mime from "mime-types";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
+import { exists } from "./util";
 import {
   ITopicClient,
   BucketSignedUrlOptions,
@@ -13,36 +13,70 @@ import {
   ObjectMetadata,
   BucketPutOptions,
   BucketDeleteOptions,
+  BucketGetOptions,
+  BucketTryGetOptions,
+  BUCKET_FQN,
 } from "../cloud";
+import { deserialize, serialize } from "../simulator/serialization";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
-import { Datetime, Json } from "../std";
+import { Datetime, Json, LogLevel, TraceType } from "../std";
+
+export const METADATA_FILENAME = "metadata.json";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
-  private readonly objectKeys: Set<string>;
-  private readonly _fileDir: string;
-  private readonly context: ISimulatorContext;
+  private _fileDir!: string;
+  private _context: ISimulatorContext | undefined;
   private readonly initialObjects: Record<string, string>;
   private readonly _public: boolean;
   private readonly topicHandlers: Partial<Record<BucketEventType, string>>;
-  private readonly _metadata: Record<string, ObjectMetadata> = {};
+  private _metadata: Map<string, ObjectMetadata>;
 
-  public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
-    this.objectKeys = new Set();
-    this._fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
-    this.context = context;
+  public constructor(props: BucketSchema) {
     this.initialObjects = props.initialObjects ?? {};
     this._public = props.public ?? false;
     this.topicHandlers = props.topics;
+    this._metadata = new Map();
   }
 
-  public get fileDir(): string {
-    return this._fileDir;
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
   }
 
-  public async init(): Promise<BucketAttributes> {
+  public async init(context: ISimulatorContext): Promise<BucketAttributes> {
+    this._context = context;
+    this._fileDir = join(context.statedir, "files");
+
+    const fileDirExists = await exists(this._fileDir);
+    if (!fileDirExists) {
+      await fs.promises.mkdir(this._fileDir, { recursive: true });
+    }
+
+    const metadataFileExists = await exists(
+      join(this.context.statedir, METADATA_FILENAME)
+    );
+    if (metadataFileExists) {
+      const metadataContents = await fs.promises.readFile(
+        join(this.context.statedir, METADATA_FILENAME),
+        "utf-8"
+      );
+      try {
+        const metadata = deserialize(metadataContents);
+        this._metadata = new Map(metadata);
+      } catch (e) {
+        this.addTrace(
+          `Failed to deserialize metadata: ${(e as Error).stack}`,
+          LogLevel.ERROR
+        );
+      }
+    }
+
     for (const [key, value] of Object.entries(this.initialObjects)) {
       await this.context.withTrace({
         message: `Adding object from preflight (key=${key}).`,
@@ -51,11 +85,23 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         },
       });
     }
+
     return {};
   }
 
-  public async cleanup(): Promise<void> {
-    await fs.promises.rm(this._fileDir, { recursive: true, force: true });
+  public async cleanup(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
+  public async save(): Promise<void> {
+    // no need to save individual files, since they are already persisted in the state dir
+    // during the bucket's lifecycle
+    fs.writeFileSync(
+      join(this.context.statedir, METADATA_FILENAME),
+      serialize(Array.from(this._metadata.entries())) // metadata contains Datetime values, so we need to serialize it
+    );
   }
 
   private async notifyListeners(
@@ -66,9 +112,9 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       return;
     }
 
-    const topicClient = this.context.findInstance(
+    const topicClient = this.context.getClient(
       this.topicHandlers[actionType]!
-    ) as ITopicClient & ISimulatorResourceInstance;
+    ) as ITopicClient;
 
     return topicClient.publish(key);
   }
@@ -77,7 +123,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Exists (key=${key}).`,
       activity: async () => {
-        return this.objectKeys.has(key);
+        return this._metadata.has(key);
       },
     });
   }
@@ -108,26 +154,57 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async get(key: string): Promise<string> {
+  public async get(key: string, options?: BucketGetOptions): Promise<string> {
     return this.context.withTrace({
       message: `Get (key=${key}).`,
       activity: async () => {
         const hash = this.hashKey(key);
         const filename = join(this._fileDir, hash);
+        let buffer;
         try {
-          return await fs.promises.readFile(filename, "utf8");
+          const file = await fs.promises.open(filename, "r");
+          const stat = await file.stat();
+
+          let start = 0;
+          if (options?.startByte !== undefined) {
+            start = options.startByte;
+          }
+
+          let length = stat.size;
+          if (options?.endByte !== undefined) {
+            length = options.endByte + 1;
+          }
+
+          buffer = Buffer.alloc(length - start);
+          await file.read(buffer, 0, length - start, start);
+          await file.close();
+        } catch (e) {
+          buffer = undefined;
+        }
+
+        if (!buffer) {
+          throw new Error(`Object does not exist (key=${key}).`);
+        }
+
+        try {
+          return new TextDecoder("utf8", { fatal: true }).decode(buffer);
         } catch (e) {
           throw new Error(
-            `Object does not exist (key=${key}): ${(e as Error).stack}`
+            `Object content could not be read as text (key=${key}): ${
+              (e as Error).stack
+            })}`
           );
         }
       },
     });
   }
 
-  public async tryGet(key: string): Promise<string | undefined> {
+  public async tryGet(
+    key: string,
+    options?: BucketTryGetOptions
+  ): Promise<string | undefined> {
     if (await this.exists(key)) {
-      return this.get(key);
+      return this.get(key, options);
     }
 
     return undefined;
@@ -158,18 +235,18 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const mustExist = opts?.mustExist ?? false;
 
-        if (!this.objectKeys.has(key) && mustExist) {
+        if (!this._metadata.has(key) && mustExist) {
           throw new Error(`Object does not exist (key=${key}).`);
         }
 
-        if (!this.objectKeys.has(key)) {
+        if (!this._metadata.has(key)) {
           return;
         }
 
         const hash = this.hashKey(key);
         const filename = join(this._fileDir, hash);
         await fs.promises.unlink(filename);
-        this.objectKeys.delete(key);
+        this._metadata.delete(key);
         await this.notifyListeners(BucketEventType.DELETE, key);
       },
     });
@@ -188,7 +265,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `List (prefix=${prefix ?? "null"}).`,
       activity: async () => {
-        return Array.from(this.objectKeys.values()).filter((key) => {
+        return Array.from(this._metadata.keys()).filter((key) => {
           if (prefix) {
             return key.startsWith(prefix);
           } else {
@@ -208,7 +285,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const filePath = join(this._fileDir, key);
 
-        if (!this.objectKeys.has(key)) {
+        if (!this._metadata.has(key)) {
           throw new Error(
             `Cannot provide public url for an non-existent key (key=${key})`
           );
@@ -240,13 +317,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Metadata (key=${key}).`,
       activity: async () => {
-        if (!this.objectKeys.has(key)) {
+        if (!this._metadata.has(key)) {
           throw new Error(`Object does not exist (key=${key}).`);
         }
-        if (!this._metadata[key]) {
-          throw new Error(`Metadata does not exist for object (key=${key}).`);
-        }
-        return this._metadata[key];
+        return this._metadata.get(key)!;
       },
     });
   }
@@ -255,7 +329,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Copy (srcKey=${srcKey} to dstKey=${dstKey}).`,
       activity: async () => {
-        if (!this.objectKeys.has(srcKey)) {
+        if (!this._metadata.has(srcKey)) {
           throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
         }
 
@@ -269,12 +343,23 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
+  public async rename(srcKey: string, dstKey: string): Promise<void> {
+    if (srcKey === dstKey) {
+      throw new Error(
+        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`
+      );
+    }
+
+    await this.copy(srcKey, dstKey);
+    await this.delete(srcKey);
+  }
+
   private async addFile(
     key: string,
     value: string,
     contentType?: string
   ): Promise<void> {
-    const actionType: BucketEventType = this.objectKeys.has(key)
+    const actionType: BucketEventType = this._metadata.has(key)
       ? BucketEventType.UPDATE
       : BucketEventType.CREATE;
 
@@ -289,17 +374,27 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     const determinedContentType =
       (contentType ?? mime.lookup(key)) || "application/octet-stream";
 
-    this._metadata[key] = {
+    this._metadata.set(key, {
       size: filestat.size,
       lastModified: Datetime.fromDate(filestat.mtime),
       contentType: determinedContentType,
-    };
+    });
 
-    this.objectKeys.add(key);
     await this.notifyListeners(actionType, key);
   }
 
   private hashKey(key: string): string {
-    return crypto.createHash("sha512").update(key).digest("hex");
+    return crypto.createHash("sha512").update(key).digest("hex").slice(-32);
+  }
+
+  private addTrace(message: string, level: LogLevel): void {
+    this.context.addTrace({
+      data: { message },
+      level,
+      type: TraceType.RESOURCE,
+      sourcePath: this.context.resourcePath,
+      sourceType: BUCKET_FQN,
+      timestamp: new Date().toISOString(),
+    });
   }
 }

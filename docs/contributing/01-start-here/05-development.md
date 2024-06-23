@@ -26,10 +26,10 @@ Some Guides:
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 
-- [Node.js] v18 and [PNPM] v8
+- [Node.js] v20 and [PNPM] v8
   - We recommend [volta] to manage node tools
 - [Rust]
-  - We recommend using [rustup] to manage your Rust installation
+  - We recommend using [rustup] to manage your Rust installation if Rust is not already installed. Be careful of conflicting Rust installations (homebrew rust and rustup)
 - [AWS CLI]
   - Only needed for integration tests - make sure to do the setup part to create credentials
 - [Terraform CLI]
@@ -280,3 +280,12 @@ Lastly you can show linting errors in your IDE by enabling the following setting
 // in your VS Code settings
 "rust-analyzer.check.command": "clippy",
 ```
+
+## 🏁 How do I add a quickstart template to the `wing` CLI?
+
+Adding a new template is straightforward!
+
+Each template is represented by a folder located at [project-templates](https://github.com/winglang/wing/tree/main/apps/wing/project-templates), containing all of the files that template should be initialized with.
+
+Create a new folder with the template name, and insert any code files that are needed to run it.
+Unit tests ran with `pnpm turbo test` (or in GitHub Actions once you make a pull request) will automatically validate that the template is valid.

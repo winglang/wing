@@ -4,9 +4,10 @@ import * as cdk from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
+import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
-import { DynamodbTable } from "./dynamodb-table";
+import { Endpoint } from "./endpoint";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -19,8 +20,10 @@ import { Website } from "./website";
 import { cloud } from "@winglang/sdk";
 
 const {
+  API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
+  ENDPOINT_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -30,7 +33,7 @@ const {
   WEBSITE_FQN,
 } = cloud;
 
-import { core, std, ex } from "@winglang/sdk";
+import { core, std } from "@winglang/sdk";
 import { Util } from "@winglang/sdk/lib/util";
 import { registerTokenResolver } from "@winglang/sdk/lib/core/tokens";
 
@@ -40,9 +43,18 @@ import { registerTokenResolver } from "@winglang/sdk/lib/core/tokens";
 export interface CdkAppProps extends core.AppProps {
   /**
    * CDK Stack Name
-   * @default - undefined
+   *
+   * @default - read from the CDK_STACK_NAME environment variable
    */
   readonly stackName?: string;
+
+  /**
+   * A hook for customizating the way the root CDK stack is created. You can override this if you wish to use a custom stack
+   * instead of the default `cdk.Stack`.
+   *
+   * @default - creates a standard `cdk.Stack`
+   */
+  readonly stackFactory?: (app: cdk.App, stackName: string, props?: cdk.StackProps) => cdk.Stack;
 }
 
 /**
@@ -54,19 +66,19 @@ export class App extends core.App {
 
   public readonly _target = "awscdk";
 
+  private awsAccount?: string;
+  private awsRegion?: string;
+
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
-  private synthHooks?: core.SynthHooks;
-
-  /**
-   * The test runner for this app.
-   */
-  protected readonly testRunner: TestRunner;
 
   constructor(props: CdkAppProps) {
+    const account = process.env.CDK_AWS_ACCOUNT ?? process.env.CDK_DEFAULT_ACCOUNT;
+    const region = process.env.CDK_AWS_REGION ?? process.env.CDK_DEFAULT_REGION;
+
     let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
       throw new Error(
@@ -84,10 +96,16 @@ export class App extends core.App {
     mkdirSync(cdkOutdir, { recursive: true });
 
     const cdkApp = new cdk.App({ outdir: cdkOutdir });
-    const cdkStack = new cdk.Stack(cdkApp, stackName);
+
+    const createStack =
+      props.stackFactory ?? ((app, stackName, props) => new cdk.Stack(app, stackName, props));
+
+    const cdkStack = createStack(cdkApp, stackName, {
+      env: { account, region }
+    });
 
     super(cdkStack, props.rootId ?? "Default", props);
-
+    
     // HACK: monkey patch the `new` method on the cdk app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.
     (cdkApp as any).new = (
@@ -105,17 +123,14 @@ export class App extends core.App {
       ...args: any[]
     ) => this.newAbstract(fqn, scope, id, ...args);
 
-    this.synthHooks = props.synthHooks;
-
     this.outdir = outdir;
     this.cdkApp = cdkApp;
     this.cdkStack = cdkStack;
     this.synthed = false;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     registerTokenResolver(new CdkTokens());
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
 
-    this.synthRoots(props, this.testRunner);
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   /**
@@ -132,8 +147,8 @@ export class App extends core.App {
     // call preSynthesize() on every construct in the tree
     core.preSynthesizeAllConstructs(this);
 
-    if (this.synthHooks?.preSynthesize) {
-      this.synthHooks.preSynthesize.forEach((hook) => hook(this));
+    if (this._synthHooks?.preSynthesize) {
+      this._synthHooks.preSynthesize.forEach((hook) => hook(this));
     }
 
     // synthesize cdk.Stack files in `outdir/cdk.out`
@@ -154,6 +169,9 @@ export class App extends core.App {
 
   protected typeForFqn(fqn: string): any {
     switch (fqn) {
+      case API_FQN:
+        return Api;
+
       case FUNCTION_FQN:
         return Function;
 
@@ -184,9 +202,29 @@ export class App extends core.App {
       case WEBSITE_FQN:
         return Website;
 
-      case ex.DYNAMODB_TABLE_FQN:
-        return DynamodbTable;
+      case ENDPOINT_FQN:
+        return Endpoint;
     }
     return undefined;
+  }
+
+  /**
+   * The AWS account ID of the App
+   */
+  public get accountId(): string {
+    if (!this.awsAccount) {
+      this.awsAccount = this.cdkStack.account;
+    }
+    return this.awsAccount;
+  }
+
+  /**
+   * The AWS region of the App
+   */
+  public get region(): string {
+    if (!this.awsRegion) {
+      this.awsRegion = this.cdkStack.region;
+    }
+    return this.awsRegion;
   }
 }

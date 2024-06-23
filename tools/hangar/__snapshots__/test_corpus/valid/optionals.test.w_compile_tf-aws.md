@@ -1,8 +1,9 @@
 # [optionals.test.w](../../../../../examples/tests/valid/optionals.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,7 +12,7 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__payloadWithoutOptions_b_____null_,false)))};
+      $helpers.assert($helpers.eq($__payloadWithoutOptions_b_____null_, false), "payloadWithoutOptions.b? == false");
       if ($__payloadWithBucket_c_____null_) {
         (await $payloadWithBucket_c?.put?.("x.txt", "something"));
       }
@@ -19,12 +20,13 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.Node-1.js
-```js
+## inflight.Node-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Node {
     constructor({  }) {
@@ -32,12 +34,13 @@ module.exports = function({  }) {
   }
   return Node;
 }
-//# sourceMappingURL=inflight.Node-1.js.map
+//# sourceMappingURL=inflight.Node-1.cjs.map
 ```
 
-## inflight.Sub-1.js
-```js
+## inflight.Sub-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Super }) {
   class Sub extends $Super {
     constructor({  }) {
@@ -46,26 +49,28 @@ module.exports = function({ $Super }) {
   }
   return Sub;
 }
-//# sourceMappingURL=inflight.Sub-1.js.map
+//# sourceMappingURL=inflight.Sub-1.cjs.map
 ```
 
-## inflight.Sub1-1.js
-```js
+## inflight.SubSub-1.cjs
+```cjs
 "use strict";
-module.exports = function({ $Super }) {
-  class Sub1 extends $Super {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $Sub }) {
+  class SubSub extends $Sub {
     constructor({  }) {
       super({  });
     }
   }
-  return Sub1;
+  return SubSub;
 }
-//# sourceMappingURL=inflight.Sub1-1.js.map
+//# sourceMappingURL=inflight.SubSub-1.cjs.map
 ```
 
-## inflight.Super-1.js
-```js
+## inflight.Super-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Super {
     constructor({  }) {
@@ -73,7 +78,7 @@ module.exports = function({  }) {
   }
   return Super;
 }
-//# sourceMappingURL=inflight.Super-1.js.map
+//# sourceMappingURL=inflight.Super-1.cjs.map
 ```
 
 ## main.tf.json
@@ -83,22 +88,9 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -122,18 +114,21 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    const Person = $stdlib.std.Struct._createJsonSchema({$id:"/Person",type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]});
     class Super extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -141,14 +136,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Super-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Super-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const SuperClient = ${Super._toInflightType(this)};
+            const SuperClient = ${Super._toInflightType()};
             const client = new SuperClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -156,8 +151,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Sub extends Super {
@@ -167,7 +165,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Sub-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Sub-1.cjs")({
             $Super: ${$stdlib.core.liftObject(Super)},
           })
         `;
@@ -175,7 +173,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const SubClient = ${Sub._toInflightType(this)};
+            const SubClient = ${Sub._toInflightType()};
             const client = new SubClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -183,35 +181,41 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
-    class Sub1 extends Super {
+    class SubSub extends Sub {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.name = "Sub";
+        this.name = "SubSub";
       }
       static _toInflightType() {
         return `
-          require("./inflight.Sub1-1.js")({
-            $Super: ${$stdlib.core.liftObject(Super)},
+          require("${$helpers.normalPath(__dirname)}/inflight.SubSub-1.cjs")({
+            $Sub: ${$stdlib.core.liftObject(Sub)},
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const Sub1Client = ${Sub1._toInflightType(this)};
-            const client = new Sub1Client({
+            const SubSubClient = ${SubSub._toInflightType()};
+            const client = new SubSubClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Node extends $stdlib.std.Resource {
@@ -223,14 +227,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Node-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Node-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const NodeClient = ${Node._toInflightType(this)};
+            const NodeClient = ${Node._toInflightType()};
             const client = new NodeClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -238,19 +242,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $__payloadWithBucket_c_____null_: ${$stdlib.core.liftObject(((payloadWithBucket.c) != null))},
             $__payloadWithoutOptions_b_____null_: ${$stdlib.core.liftObject(((payloadWithoutOptions.b) != null))},
             $payloadWithBucket_c: ${$stdlib.core.liftObject(payloadWithBucket.c)},
@@ -260,7 +267,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -268,33 +275,37 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(((payloadWithBucket.c) != null), host, []);
-          $Closure1._registerOnLiftObject(((payloadWithoutOptions.b) != null), host, []);
-          $Closure1._registerOnLiftObject(payloadWithBucket.c, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [((payloadWithBucket.c) != null), []],
+            [((payloadWithoutOptions.b) != null), []],
+            [payloadWithBucket.c, ["put"]],
+          ],
+          "$inflight_init": [
+            [((payloadWithBucket.c) != null), []],
+            [((payloadWithoutOptions.b) != null), []],
+            [payloadWithBucket.c, []],
+          ],
+        });
       }
     }
     const x = 4;
-    {((cond) => {if (!cond) throw new Error("assertion failed: x? == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((x) != null),true)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: !x? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((!((x) != null)),false)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: x ?? 5 == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x ?? 5),4)))};
+    $helpers.assert($helpers.eq(((x) != null), true), "x? == true");
+    $helpers.assert($helpers.eq((!((x) != null)), false), "!x? == false");
+    $helpers.assert($helpers.eq((x ?? 5), 4), "x ?? 5 == 4");
     const y = (x ?? 5);
-    {((cond) => {if (!cond) throw new Error("assertion failed: y == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,4)))};
+    $helpers.assert($helpers.eq(y, 4), "y == 4");
     const optionalSup = new Super(this, "Super");
     const s = (optionalSup ?? new Sub(this, "Sub"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: s.name == \"Super\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s.name,"Super")))};
+    $helpers.assert($helpers.eq(s.name, "Super"), "s.name == \"Super\"");
+    const s2 = (optionalSup ?? (optionalSup ?? new SubSub(this, "SubSub")));
     let name = ({"first": "John", "last": "Doe"});
     {
       const $if_let_value = name;
       if ($if_let_value != undefined) {
         const n = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: n.first == \"John\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(n.first,"John")))};
+        $helpers.assert($helpers.eq(n.first, "John"), "n.first == \"John\"");
       }
     }
     name = undefined;
@@ -302,10 +313,10 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = name;
       if ($if_let_value != undefined) {
         const n = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert(false, "false");
       }
       else {
-        {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+        $helpers.assert(true, "true");
       }
     }
     const tryParseName = ((fullName) => {
@@ -313,7 +324,7 @@ class $Root extends $stdlib.std.Resource {
       if ((parts.length < 1)) {
         return undefined;
       }
-      return ({"first": ((parts.at(0)) ?? ""), "last": ((parts.at(1)) ?? "")});
+      return ({"first": (parts.at(0) ?? ""), "last": (parts.at(1) ?? "")});
     });
     const json_obj = ({"ghost": "spooky"});
     let something_else = false;
@@ -321,19 +332,19 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
       if ($if_let_value != undefined) {
         const y = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: y == true || y == false")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,true)) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,false))))};
+        $helpers.assert(($helpers.eq(y, true) || $helpers.eq(y, false)), "y == true || y == false");
       }
       else {
         const $elif_let_value0 = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
         if ($elif_let_value0 != undefined) {
           const y = $elif_let_value0;
-          {((cond) => {if (!cond) throw new Error("assertion failed: y + 0 == y")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((y + 0),y)))};
+          $helpers.assert($helpers.eq((y + 0), y), "y + 0 == y");
         }
         else {
           const $elif_let_value1 = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
           if ($elif_let_value1 != undefined) {
             const y = $elif_let_value1;
-            {((cond) => {if (!cond) throw new Error("assertion failed: y.length >= 0")})((y.length >= 0))};
+            $helpers.assert((y.length >= 0), "y.length >= 0");
           }
           else {
             something_else = true;
@@ -341,15 +352,15 @@ class $Root extends $stdlib.std.Resource {
         }
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: something_else")})(something_else)};
+    $helpers.assert(something_else, "something_else");
     const a = 1;
     {
       const $if_let_value = a;
       if ($if_let_value != undefined) {
         let z = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: z == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,1)))};
+        $helpers.assert($helpers.eq(z, 1), "z == 1");
         z = 2;
-        {((cond) => {if (!cond) throw new Error("assertion failed: z == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,2)))};
+        $helpers.assert($helpers.eq(z, 2), "z == 2");
       }
     }
     const b = 1;
@@ -357,22 +368,22 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = b;
       if ($if_let_value != undefined) {
         const z = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: z == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,1)))};
+        $helpers.assert($helpers.eq(z, 1), "z == 1");
       }
     }
     {
       const $if_let_value = (tryParseName("Good Name"));
       if ($if_let_value != undefined) {
         const parsedName = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"Good\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.first,"Good")))};
+        $helpers.assert($helpers.eq(parsedName.first, "Good"), "parsedName.first == \"Good\"");
         {
           const $if_let_value = parsedName.last;
           if ($if_let_value != undefined) {
             const lastName = $if_let_value;
-            {((cond) => {if (!cond) throw new Error("assertion failed: lastName == \"Name\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(lastName,"Name")))};
+            $helpers.assert($helpers.eq(lastName, "Name"), "lastName == \"Name\"");
           }
           else {
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+            $helpers.assert(false, "false");
           }
         }
       }
@@ -381,9 +392,9 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = (tryParseName("BadName"));
       if ($if_let_value != undefined) {
         const parsedName = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"BadName\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.first,"BadName")))};
-        if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.last,""))) {
-          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert($helpers.eq(parsedName.first, "BadName"), "parsedName.first == \"BadName\"");
+        if ($helpers.neq(parsedName.last, "")) {
+          $helpers.assert(false, "false");
         }
       }
     }
@@ -392,10 +403,10 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = falsy;
       if ($if_let_value != undefined) {
         const f = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f,false)))};
+        $helpers.assert($helpers.eq(f, false), "f == false");
       }
       else {
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert(false, "false");
       }
     }
     const shadow = "root";
@@ -403,16 +414,16 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = shadow;
       if ($if_let_value != undefined) {
         const shadow = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: shadow == \"root\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(shadow,"root")))};
+        $helpers.assert($helpers.eq(shadow, "root"), "shadow == \"root\"");
         const shadow1 = "nested";
         {
           const $if_let_value = shadow1;
           if ($if_let_value != undefined) {
             const shadow1 = $if_let_value;
-            {((cond) => {if (!cond) throw new Error("assertion failed: shadow1 == \"nested\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(shadow1,"nested")))};
+            $helpers.assert($helpers.eq(shadow1, "nested"), "shadow1 == \"nested\"");
           }
           else {
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+            $helpers.assert(false, "false");
           }
         }
       }
@@ -429,18 +440,18 @@ class $Root extends $stdlib.std.Resource {
         }
       }
     });
-    {((cond) => {if (!cond) throw new Error("assertion failed: fun(\"hello\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fun("hello")),"hello")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: fun(nil) == \"default\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fun(undefined)),"default")))};
+    $helpers.assert($helpers.eq((fun("hello")), "hello"), "fun(\"hello\") == \"hello\"");
+    $helpers.assert($helpers.eq((fun(undefined)), "default"), "fun(nil) == \"default\"");
     const tree = new Node(this, "eight", 8, new Node(this, "three", 3, new Node(this, "one", 1, undefined, undefined), new Node(this, "six", 6, undefined, undefined)), new Node(this, "ten", 10, undefined, new Node(this, "fourteen", 14, new Node(this, "thirteen", 13, undefined, undefined), undefined)));
     const thirteen = tree.right?.right?.left?.value;
     const notThere = tree.right?.right?.right;
-    {((cond) => {if (!cond) throw new Error("assertion failed: thirteen == 13")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(thirteen,13)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: notThere == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notThere,undefined)))};
+    $helpers.assert($helpers.eq(thirteen, 13), "thirteen == 13");
+    $helpers.assert($helpers.eq(notThere, undefined), "notThere == nil");
     {
       const $if_let_value = tree.left?.left;
       if ($if_let_value != undefined) {
         const o = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(o.value,1)))};
+        $helpers.assert($helpers.eq(o.value, 1), "o.value == 1");
       }
     }
     const payloadWithoutOptions = ({"a": "a"});
@@ -452,21 +463,82 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = str1;
       if ($if_let_value != undefined) {
         const s1 = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert(false, "false");
       }
       else {
         const $elif_let_value0 = str2;
         if ($elif_let_value0 != undefined) {
           const s2 = $elif_let_value0;
-          {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+          $helpers.assert(true, "true");
         }
       }
     }
+    let fn = (() => {
+      return (() => {
+        return 1337;
+      });
+    });
+    {
+      const $if_let_value = (fn());
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
+        $helpers.assert($helpers.eq((f()), 1337), "f() == 1337");
+      }
+      else {
+        $helpers.assert(false, "false");
+      }
+    }
+    fn = (() => {
+      return undefined;
+    });
+    {
+      const $if_let_value = (fn());
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
+        $helpers.assert(false, "false");
+      }
+      else {
+        $helpers.assert(true, "true");
+      }
+    }
+    const maybeVar = 123;
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeVar), 123), "maybeVar! == 123");
+    const maybeVarNull = undefined;
+    try {
+      const err = $helpers.unwrap(maybeVarNull);
+      $helpers.assert(false, "false");
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      $helpers.assert($helpers.eq(e, "Unexpected nil"), "e == \"Unexpected nil\"");
+    }
+    const maybeFn = ((b) => {
+      if (b) {
+        return ["hi"];
+      }
+    });
+    try {
+      $helpers.unwrap((maybeFn(false)));
+      $helpers.assert(false, "false");
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      $helpers.assert($helpers.eq(e, "Unexpected nil"), "e == \"Unexpected nil\"");
+    }
+    $helpers.assert($helpers.eq($helpers.unwrap((maybeFn(true))), ["hi"]), "maybeFn(true)! == [\"hi\"]");
+    const maybeVarBool = true;
+    $helpers.assert($helpers.eq((!$helpers.unwrap(maybeVarBool)), false), "!maybeVarBool! == false");
+    const person = $helpers.unwrap(Person._tryParseJson(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"name": "john", "age": 30}))));
+    $helpers.assert(($helpers.eq(person.name, "john") && $helpers.eq(person.age, 30)), "person.name == \"john\" && person.age == 30");
+    const maybeX = 0;
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeX), 0), "maybeX! == 0");
+    const maybeY = "";
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeY), ""), "maybeY! == \"\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "optionals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

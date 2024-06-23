@@ -2,11 +2,6 @@
 
 exports[`bucket is public 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -104,11 +99,6 @@ exports[`bucket is public 1`] = `
 
 exports[`bucket with onCreate method 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -129,33 +119,29 @@ import json
 import logging
 import urllib.request
 
-s3 = boto3.client(\\"s3\\")
+s3 = boto3.client("s3")
 
 EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
-
-CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+CONFIGURATION_TYPES = ["TopicConfigurations", "QueueConfigurations", "LambdaFunctionConfigurations"]
 
 def handler(event: dict, context):
-  response_status = \\"SUCCESS\\"
-  error_message = \\"\\"
+  response_status = "SUCCESS"
+  error_message = ""
   try:
-    props = event[\\"ResourceProperties\\"]
-    bucket = props[\\"BucketName\\"]
-    notification_configuration = props[\\"NotificationConfiguration\\"]
-    request_type = event[\\"RequestType\\"]
+    props = event["ResourceProperties"]
+    notification_configuration = props["NotificationConfiguration"]
     managed = props.get('Managed', 'true').lower() == 'true'
     stack_id = event['StackId']
-
+    old = event.get("OldResourceProperties", {}).get("NotificationConfiguration", {})
     if managed:
-      config = handle_managed(request_type, notification_configuration)
+      config = handle_managed(event["RequestType"], notification_configuration)
     else:
-      config = handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
-
-    put_bucket_notification_configuration(bucket, config)
+      config = handle_unmanaged(props["BucketName"], stack_id, event["RequestType"], notification_configuration, old)
+    s3.put_bucket_notification_configuration(Bucket=props["BucketName"], NotificationConfiguration=config)
   except Exception as e:
-    logging.exception(\\"Failed to put bucket notification configuration\\")
-    response_status = \\"FAILED\\"
-    error_message = f\\"Error: {str(e)}. \\"
+    logging.exception("Failed to put bucket notification configuration")
+    response_status = "FAILED"
+    error_message = f"Error: {str(e)}. "
   finally:
     submit_response(event, context, response_status, error_message)
 
@@ -164,15 +150,25 @@ def handle_managed(request_type, notification_configuration):
     return {}
   return notification_configuration
 
-def handle_unmanaged(bucket, stack_id, request_type, notification_configuration):
-  external_notifications = find_external_notifications(bucket, stack_id)
+def handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):
+  def with_id(n):
+    n['Id'] = f"{stack_id}-{hash(json.dumps(n, sort_keys=True))}"
+    return n
+
+  external_notifications = {}
+  existing_notifications = s3.get_bucket_notification_configuration(Bucket=bucket)
+  for t in CONFIGURATION_TYPES:
+    if request_type == 'Update':
+        ids = [with_id(n) for n in old.get(t, [])]
+        old_incoming_ids = [n['Id'] for n in ids]
+        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]
+    elif request_type == 'Create':
+        external_notifications[t] = [n for n in existing_notifications.get(t, [])]
+  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
+    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
 
   if request_type == 'Delete':
     return external_notifications
-
-  def with_id(notification):
-    notification['Id'] = f\\"{stack_id}-{hash(json.dumps(notification, sort_keys=True))}\\"
-    return notification
 
   notifications = {}
   for t in CONFIGURATION_TYPES:
@@ -187,46 +183,29 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
 
   return notifications
 
-def find_external_notifications(bucket, stack_id):
-  existing_notifications = get_bucket_notification_configuration(bucket)
-  external_notifications = {}
-  for t in CONFIGURATION_TYPES:
-    external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\\"{stack_id}-\\")]
-
-  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
-    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
-
-  return external_notifications
-
-def get_bucket_notification_configuration(bucket):
-  return s3.get_bucket_notification_configuration(Bucket=bucket)
-
-def put_bucket_notification_configuration(bucket, notification_configuration):
-  s3.put_bucket_notification_configuration(Bucket=bucket, NotificationConfiguration=notification_configuration)
-
 def submit_response(event: dict, context, response_status: str, error_message: str):
   response_body = json.dumps(
     {
-      \\"Status\\": response_status,
-      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
-      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
-      \\"StackId\\": event[\\"StackId\\"],
-      \\"RequestId\\": event[\\"RequestId\\"],
-      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
-      \\"NoEcho\\": False,
+      "Status": response_status,
+      "Reason": f"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}",
+      "PhysicalResourceId": event.get("PhysicalResourceId") or event["LogicalResourceId"],
+      "StackId": event["StackId"],
+      "RequestId": event["RequestId"],
+      "LogicalResourceId": event["LogicalResourceId"],
+      "NoEcho": False,
     }
-  ).encode(\\"utf-8\\")
-  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  ).encode("utf-8")
+  headers = {"content-type": "", "content-length": str(len(response_body))}
   try:
-    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    req = urllib.request.Request(url=event["ResponseURL"], headers=headers, data=response_body, method="PUT")
     with urllib.request.urlopen(req) as response:
-      print(response.read().decode(\\"utf-8\\"))
-    print(\\"Status code: \\" + response.reason)
+      print(response.read().decode("utf-8"))
+    print("Status code: " + response.reason)
   except Exception as e:
-      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+      print("send(..) failed executing request.urlopen(..): " + str(e))
 ",
         },
-        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Description": "AWS CloudFormation handler for "Custom::S3BucketNotifications" resources (@aws-cdk/aws-s3)",
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
@@ -286,85 +265,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "Roles": [
           {
             "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
-      "DependsOn": [
-        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-      ],
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 900,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "logs:PutRetentionPolicy",
-                "logs:DeleteRetentionPolicy",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-        "Roles": [
-          {
-            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
           },
         ],
       },
@@ -461,7 +361,17 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "mybucketOnCreate0LogGroup8E3C4A72",
+          },
+        },
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -469,33 +379,18 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketOnCreate0LogRetention8E65097C": {
+    "mybucketOnCreate0LogGroup8E3C4A72": {
+      "DeletionPolicy": "Retain",
       "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "mybucketOnCreate071865324",
-              },
-            ],
-          ],
-        },
         "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
       },
-      "Type": "Custom::LogRetention",
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
     "mybucketOnCreate0ServiceRole8EB9AE15": {
       "Properties": {
@@ -561,11 +456,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
 
 exports[`bucket with onDelete method 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -586,33 +476,29 @@ import json
 import logging
 import urllib.request
 
-s3 = boto3.client(\\"s3\\")
+s3 = boto3.client("s3")
 
 EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
-
-CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+CONFIGURATION_TYPES = ["TopicConfigurations", "QueueConfigurations", "LambdaFunctionConfigurations"]
 
 def handler(event: dict, context):
-  response_status = \\"SUCCESS\\"
-  error_message = \\"\\"
+  response_status = "SUCCESS"
+  error_message = ""
   try:
-    props = event[\\"ResourceProperties\\"]
-    bucket = props[\\"BucketName\\"]
-    notification_configuration = props[\\"NotificationConfiguration\\"]
-    request_type = event[\\"RequestType\\"]
+    props = event["ResourceProperties"]
+    notification_configuration = props["NotificationConfiguration"]
     managed = props.get('Managed', 'true').lower() == 'true'
     stack_id = event['StackId']
-
+    old = event.get("OldResourceProperties", {}).get("NotificationConfiguration", {})
     if managed:
-      config = handle_managed(request_type, notification_configuration)
+      config = handle_managed(event["RequestType"], notification_configuration)
     else:
-      config = handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
-
-    put_bucket_notification_configuration(bucket, config)
+      config = handle_unmanaged(props["BucketName"], stack_id, event["RequestType"], notification_configuration, old)
+    s3.put_bucket_notification_configuration(Bucket=props["BucketName"], NotificationConfiguration=config)
   except Exception as e:
-    logging.exception(\\"Failed to put bucket notification configuration\\")
-    response_status = \\"FAILED\\"
-    error_message = f\\"Error: {str(e)}. \\"
+    logging.exception("Failed to put bucket notification configuration")
+    response_status = "FAILED"
+    error_message = f"Error: {str(e)}. "
   finally:
     submit_response(event, context, response_status, error_message)
 
@@ -621,15 +507,25 @@ def handle_managed(request_type, notification_configuration):
     return {}
   return notification_configuration
 
-def handle_unmanaged(bucket, stack_id, request_type, notification_configuration):
-  external_notifications = find_external_notifications(bucket, stack_id)
+def handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):
+  def with_id(n):
+    n['Id'] = f"{stack_id}-{hash(json.dumps(n, sort_keys=True))}"
+    return n
+
+  external_notifications = {}
+  existing_notifications = s3.get_bucket_notification_configuration(Bucket=bucket)
+  for t in CONFIGURATION_TYPES:
+    if request_type == 'Update':
+        ids = [with_id(n) for n in old.get(t, [])]
+        old_incoming_ids = [n['Id'] for n in ids]
+        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]
+    elif request_type == 'Create':
+        external_notifications[t] = [n for n in existing_notifications.get(t, [])]
+  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
+    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
 
   if request_type == 'Delete':
     return external_notifications
-
-  def with_id(notification):
-    notification['Id'] = f\\"{stack_id}-{hash(json.dumps(notification, sort_keys=True))}\\"
-    return notification
 
   notifications = {}
   for t in CONFIGURATION_TYPES:
@@ -644,46 +540,29 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
 
   return notifications
 
-def find_external_notifications(bucket, stack_id):
-  existing_notifications = get_bucket_notification_configuration(bucket)
-  external_notifications = {}
-  for t in CONFIGURATION_TYPES:
-    external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\\"{stack_id}-\\")]
-
-  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
-    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
-
-  return external_notifications
-
-def get_bucket_notification_configuration(bucket):
-  return s3.get_bucket_notification_configuration(Bucket=bucket)
-
-def put_bucket_notification_configuration(bucket, notification_configuration):
-  s3.put_bucket_notification_configuration(Bucket=bucket, NotificationConfiguration=notification_configuration)
-
 def submit_response(event: dict, context, response_status: str, error_message: str):
   response_body = json.dumps(
     {
-      \\"Status\\": response_status,
-      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
-      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
-      \\"StackId\\": event[\\"StackId\\"],
-      \\"RequestId\\": event[\\"RequestId\\"],
-      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
-      \\"NoEcho\\": False,
+      "Status": response_status,
+      "Reason": f"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}",
+      "PhysicalResourceId": event.get("PhysicalResourceId") or event["LogicalResourceId"],
+      "StackId": event["StackId"],
+      "RequestId": event["RequestId"],
+      "LogicalResourceId": event["LogicalResourceId"],
+      "NoEcho": False,
     }
-  ).encode(\\"utf-8\\")
-  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  ).encode("utf-8")
+  headers = {"content-type": "", "content-length": str(len(response_body))}
   try:
-    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    req = urllib.request.Request(url=event["ResponseURL"], headers=headers, data=response_body, method="PUT")
     with urllib.request.urlopen(req) as response:
-      print(response.read().decode(\\"utf-8\\"))
-    print(\\"Status code: \\" + response.reason)
+      print(response.read().decode("utf-8"))
+    print("Status code: " + response.reason)
   except Exception as e:
-      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+      print("send(..) failed executing request.urlopen(..): " + str(e))
 ",
         },
-        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Description": "AWS CloudFormation handler for "Custom::S3BucketNotifications" resources (@aws-cdk/aws-s3)",
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
@@ -743,85 +622,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "Roles": [
           {
             "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
-      "DependsOn": [
-        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-      ],
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 900,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "logs:PutRetentionPolicy",
-                "logs:DeleteRetentionPolicy",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-        "Roles": [
-          {
-            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
           },
         ],
       },
@@ -918,7 +718,17 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "mybucketOnDelete0LogGroup44992347",
+          },
+        },
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -926,33 +736,18 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketOnDelete0LogRetentionD5F6857F": {
+    "mybucketOnDelete0LogGroup44992347": {
+      "DeletionPolicy": "Retain",
       "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "mybucketOnDelete0BC86CC27",
-              },
-            ],
-          ],
-        },
         "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
       },
-      "Type": "Custom::LogRetention",
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
     "mybucketOnDelete0ServiceRole57A03DE1": {
       "Properties": {
@@ -1018,11 +813,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
 
 exports[`bucket with onEvent method 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -1043,33 +833,29 @@ import json
 import logging
 import urllib.request
 
-s3 = boto3.client(\\"s3\\")
+s3 = boto3.client("s3")
 
 EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
-
-CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+CONFIGURATION_TYPES = ["TopicConfigurations", "QueueConfigurations", "LambdaFunctionConfigurations"]
 
 def handler(event: dict, context):
-  response_status = \\"SUCCESS\\"
-  error_message = \\"\\"
+  response_status = "SUCCESS"
+  error_message = ""
   try:
-    props = event[\\"ResourceProperties\\"]
-    bucket = props[\\"BucketName\\"]
-    notification_configuration = props[\\"NotificationConfiguration\\"]
-    request_type = event[\\"RequestType\\"]
+    props = event["ResourceProperties"]
+    notification_configuration = props["NotificationConfiguration"]
     managed = props.get('Managed', 'true').lower() == 'true'
     stack_id = event['StackId']
-
+    old = event.get("OldResourceProperties", {}).get("NotificationConfiguration", {})
     if managed:
-      config = handle_managed(request_type, notification_configuration)
+      config = handle_managed(event["RequestType"], notification_configuration)
     else:
-      config = handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
-
-    put_bucket_notification_configuration(bucket, config)
+      config = handle_unmanaged(props["BucketName"], stack_id, event["RequestType"], notification_configuration, old)
+    s3.put_bucket_notification_configuration(Bucket=props["BucketName"], NotificationConfiguration=config)
   except Exception as e:
-    logging.exception(\\"Failed to put bucket notification configuration\\")
-    response_status = \\"FAILED\\"
-    error_message = f\\"Error: {str(e)}. \\"
+    logging.exception("Failed to put bucket notification configuration")
+    response_status = "FAILED"
+    error_message = f"Error: {str(e)}. "
   finally:
     submit_response(event, context, response_status, error_message)
 
@@ -1078,15 +864,25 @@ def handle_managed(request_type, notification_configuration):
     return {}
   return notification_configuration
 
-def handle_unmanaged(bucket, stack_id, request_type, notification_configuration):
-  external_notifications = find_external_notifications(bucket, stack_id)
+def handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):
+  def with_id(n):
+    n['Id'] = f"{stack_id}-{hash(json.dumps(n, sort_keys=True))}"
+    return n
+
+  external_notifications = {}
+  existing_notifications = s3.get_bucket_notification_configuration(Bucket=bucket)
+  for t in CONFIGURATION_TYPES:
+    if request_type == 'Update':
+        ids = [with_id(n) for n in old.get(t, [])]
+        old_incoming_ids = [n['Id'] for n in ids]
+        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]
+    elif request_type == 'Create':
+        external_notifications[t] = [n for n in existing_notifications.get(t, [])]
+  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
+    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
 
   if request_type == 'Delete':
     return external_notifications
-
-  def with_id(notification):
-    notification['Id'] = f\\"{stack_id}-{hash(json.dumps(notification, sort_keys=True))}\\"
-    return notification
 
   notifications = {}
   for t in CONFIGURATION_TYPES:
@@ -1101,46 +897,29 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
 
   return notifications
 
-def find_external_notifications(bucket, stack_id):
-  existing_notifications = get_bucket_notification_configuration(bucket)
-  external_notifications = {}
-  for t in CONFIGURATION_TYPES:
-    external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\\"{stack_id}-\\")]
-
-  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
-    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
-
-  return external_notifications
-
-def get_bucket_notification_configuration(bucket):
-  return s3.get_bucket_notification_configuration(Bucket=bucket)
-
-def put_bucket_notification_configuration(bucket, notification_configuration):
-  s3.put_bucket_notification_configuration(Bucket=bucket, NotificationConfiguration=notification_configuration)
-
 def submit_response(event: dict, context, response_status: str, error_message: str):
   response_body = json.dumps(
     {
-      \\"Status\\": response_status,
-      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
-      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
-      \\"StackId\\": event[\\"StackId\\"],
-      \\"RequestId\\": event[\\"RequestId\\"],
-      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
-      \\"NoEcho\\": False,
+      "Status": response_status,
+      "Reason": f"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}",
+      "PhysicalResourceId": event.get("PhysicalResourceId") or event["LogicalResourceId"],
+      "StackId": event["StackId"],
+      "RequestId": event["RequestId"],
+      "LogicalResourceId": event["LogicalResourceId"],
+      "NoEcho": False,
     }
-  ).encode(\\"utf-8\\")
-  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  ).encode("utf-8")
+  headers = {"content-type": "", "content-length": str(len(response_body))}
   try:
-    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    req = urllib.request.Request(url=event["ResponseURL"], headers=headers, data=response_body, method="PUT")
     with urllib.request.urlopen(req) as response:
-      print(response.read().decode(\\"utf-8\\"))
-    print(\\"Status code: \\" + response.reason)
+      print(response.read().decode("utf-8"))
+    print("Status code: " + response.reason)
   except Exception as e:
-      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+      print("send(..) failed executing request.urlopen(..): " + str(e))
 ",
         },
-        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Description": "AWS CloudFormation handler for "Custom::S3BucketNotifications" resources (@aws-cdk/aws-s3)",
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
@@ -1205,91 +984,56 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::IAM::Policy",
     },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
-      "DependsOn": [
-        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-      ],
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 900,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "logs:PutRetentionPolicy",
-                "logs:DeleteRetentionPolicy",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-        "Roles": [
-          {
-            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "mybucketAllowBucketNotificationsTomyprojectmybucketOnEvent02929E14ED42BAD44": {
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnCreate0523E7CD109C74964": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "mybucketOnEvent02DE25E3B",
+            "mybucketOnCreate071865324",
+            "Arn",
+          ],
+        },
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId",
+        },
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "mybucketD601CBAA",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnDelete07E2A93E8688C7533": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketOnDelete0BC86CC27",
+            "Arn",
+          ],
+        },
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId",
+        },
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "mybucketD601CBAA",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnUpdate036B5F47FED7981DE": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketOnUpdate06503D6F0",
             "Arn",
           ],
         },
@@ -1330,7 +1074,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
     },
     "mybucketNotificationsB76B6B79": {
       "DependsOn": [
-        "mybucketAllowBucketNotificationsTomyprojectmybucketOnEvent02929E14ED42BAD44",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnCreate0523E7CD109C74964",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnDelete07E2A93E8688C7533",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnUpdate036B5F47FED7981DE",
       ],
       "Properties": {
         "BucketName": {
@@ -1345,7 +1091,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnEvent02DE25E3B",
+                  "mybucketOnCreate071865324",
                   "Arn",
                 ],
               },
@@ -1356,7 +1102,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnEvent02DE25E3B",
+                  "mybucketOnDelete0BC86CC27",
                   "Arn",
                 ],
               },
@@ -1367,7 +1113,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnEvent02DE25E3B",
+                  "mybucketOnUpdate06503D6F0",
                   "Arn",
                 ],
               },
@@ -1383,9 +1129,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::S3BucketNotifications",
     },
-    "mybucketOnEvent02DE25E3B": {
+    "mybucketOnCreate071865324": {
       "DependsOn": [
-        "mybucketOnEvent0ServiceRole1D46FF9D",
+        "mybucketOnCreate0ServiceRole8EB9AE15",
       ],
       "Properties": {
         "Architectures": [
@@ -1397,43 +1143,190 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "mybucketOnCreate0LogGroup8E3C4A72",
+          },
+        },
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "mybucketOnEvent0ServiceRole1D46FF9D",
+            "mybucketOnCreate0ServiceRole8EB9AE15",
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketOnEvent0LogRetentionAC7E64C8": {
+    "mybucketOnCreate0LogGroup8E3C4A72": {
+      "DeletionPolicy": "Retain",
       "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "mybucketOnEvent02DE25E3B",
-              },
-            ],
-          ],
-        },
         "RetentionInDays": 30,
-        "ServiceToken": {
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mybucketOnCreate0ServiceRole8EB9AE15": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mybucketOnDelete0BC86CC27": {
+      "DependsOn": [
+        "mybucketOnDelete0ServiceRole57A03DE1",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
+        "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "mybucketOnDelete0LogGroup44992347",
+          },
+        },
+        "MemorySize": 1024,
+        "Role": {
           "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "mybucketOnDelete0ServiceRole57A03DE1",
             "Arn",
           ],
         },
+        "Runtime": "nodejs20.x",
+        "Timeout": 60,
       },
-      "Type": "Custom::LogRetention",
+      "Type": "AWS::Lambda::Function",
     },
-    "mybucketOnEvent0ServiceRole1D46FF9D": {
+    "mybucketOnDelete0LogGroup44992347": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mybucketOnDelete0ServiceRole57A03DE1": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mybucketOnUpdate06503D6F0": {
+      "DependsOn": [
+        "mybucketOnUpdate0ServiceRoleAF91E9C7",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
+        "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "mybucketOnUpdate0LogGroupFDC75EA3",
+          },
+        },
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "mybucketOnUpdate0ServiceRoleAF91E9C7",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "mybucketOnUpdate0LogGroupFDC75EA3": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mybucketOnUpdate0ServiceRoleAF91E9C7": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1497,11 +1390,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
 
 exports[`bucket with onUpdate method 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -1522,33 +1410,29 @@ import json
 import logging
 import urllib.request
 
-s3 = boto3.client(\\"s3\\")
+s3 = boto3.client("s3")
 
 EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
-
-CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+CONFIGURATION_TYPES = ["TopicConfigurations", "QueueConfigurations", "LambdaFunctionConfigurations"]
 
 def handler(event: dict, context):
-  response_status = \\"SUCCESS\\"
-  error_message = \\"\\"
+  response_status = "SUCCESS"
+  error_message = ""
   try:
-    props = event[\\"ResourceProperties\\"]
-    bucket = props[\\"BucketName\\"]
-    notification_configuration = props[\\"NotificationConfiguration\\"]
-    request_type = event[\\"RequestType\\"]
+    props = event["ResourceProperties"]
+    notification_configuration = props["NotificationConfiguration"]
     managed = props.get('Managed', 'true').lower() == 'true'
     stack_id = event['StackId']
-
+    old = event.get("OldResourceProperties", {}).get("NotificationConfiguration", {})
     if managed:
-      config = handle_managed(request_type, notification_configuration)
+      config = handle_managed(event["RequestType"], notification_configuration)
     else:
-      config = handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
-
-    put_bucket_notification_configuration(bucket, config)
+      config = handle_unmanaged(props["BucketName"], stack_id, event["RequestType"], notification_configuration, old)
+    s3.put_bucket_notification_configuration(Bucket=props["BucketName"], NotificationConfiguration=config)
   except Exception as e:
-    logging.exception(\\"Failed to put bucket notification configuration\\")
-    response_status = \\"FAILED\\"
-    error_message = f\\"Error: {str(e)}. \\"
+    logging.exception("Failed to put bucket notification configuration")
+    response_status = "FAILED"
+    error_message = f"Error: {str(e)}. "
   finally:
     submit_response(event, context, response_status, error_message)
 
@@ -1557,15 +1441,25 @@ def handle_managed(request_type, notification_configuration):
     return {}
   return notification_configuration
 
-def handle_unmanaged(bucket, stack_id, request_type, notification_configuration):
-  external_notifications = find_external_notifications(bucket, stack_id)
+def handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):
+  def with_id(n):
+    n['Id'] = f"{stack_id}-{hash(json.dumps(n, sort_keys=True))}"
+    return n
+
+  external_notifications = {}
+  existing_notifications = s3.get_bucket_notification_configuration(Bucket=bucket)
+  for t in CONFIGURATION_TYPES:
+    if request_type == 'Update':
+        ids = [with_id(n) for n in old.get(t, [])]
+        old_incoming_ids = [n['Id'] for n in ids]
+        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]
+    elif request_type == 'Create':
+        external_notifications[t] = [n for n in existing_notifications.get(t, [])]
+  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
+    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
 
   if request_type == 'Delete':
     return external_notifications
-
-  def with_id(notification):
-    notification['Id'] = f\\"{stack_id}-{hash(json.dumps(notification, sort_keys=True))}\\"
-    return notification
 
   notifications = {}
   for t in CONFIGURATION_TYPES:
@@ -1580,46 +1474,29 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration)
 
   return notifications
 
-def find_external_notifications(bucket, stack_id):
-  existing_notifications = get_bucket_notification_configuration(bucket)
-  external_notifications = {}
-  for t in CONFIGURATION_TYPES:
-    external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\\"{stack_id}-\\")]
-
-  if EVENTBRIDGE_CONFIGURATION in existing_notifications:
-    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]
-
-  return external_notifications
-
-def get_bucket_notification_configuration(bucket):
-  return s3.get_bucket_notification_configuration(Bucket=bucket)
-
-def put_bucket_notification_configuration(bucket, notification_configuration):
-  s3.put_bucket_notification_configuration(Bucket=bucket, NotificationConfiguration=notification_configuration)
-
 def submit_response(event: dict, context, response_status: str, error_message: str):
   response_body = json.dumps(
     {
-      \\"Status\\": response_status,
-      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
-      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
-      \\"StackId\\": event[\\"StackId\\"],
-      \\"RequestId\\": event[\\"RequestId\\"],
-      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
-      \\"NoEcho\\": False,
+      "Status": response_status,
+      "Reason": f"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}",
+      "PhysicalResourceId": event.get("PhysicalResourceId") or event["LogicalResourceId"],
+      "StackId": event["StackId"],
+      "RequestId": event["RequestId"],
+      "LogicalResourceId": event["LogicalResourceId"],
+      "NoEcho": False,
     }
-  ).encode(\\"utf-8\\")
-  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  ).encode("utf-8")
+  headers = {"content-type": "", "content-length": str(len(response_body))}
   try:
-    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    req = urllib.request.Request(url=event["ResponseURL"], headers=headers, data=response_body, method="PUT")
     with urllib.request.urlopen(req) as response:
-      print(response.read().decode(\\"utf-8\\"))
-    print(\\"Status code: \\" + response.reason)
+      print(response.read().decode("utf-8"))
+    print("Status code: " + response.reason)
   except Exception as e:
-      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+      print("send(..) failed executing request.urlopen(..): " + str(e))
 ",
         },
-        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Description": "AWS CloudFormation handler for "Custom::S3BucketNotifications" resources (@aws-cdk/aws-s3)",
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
@@ -1679,85 +1556,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "Roles": [
           {
             "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
-      "DependsOn": [
-        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-      ],
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 900,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "logs:PutRetentionPolicy",
-                "logs:DeleteRetentionPolicy",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
-        "Roles": [
-          {
-            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
           },
         ],
       },
@@ -1854,7 +1652,17 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "mybucketOnUpdate0LogGroupFDC75EA3",
+          },
+        },
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -1862,33 +1670,18 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketOnUpdate0LogRetention8435180A": {
+    "mybucketOnUpdate0LogGroupFDC75EA3": {
+      "DeletionPolicy": "Retain",
       "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "mybucketOnUpdate06503D6F0",
-              },
-            ],
-          ],
-        },
         "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
       },
-      "Type": "Custom::LogRetention",
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
     },
     "mybucketOnUpdate0ServiceRoleAF91E9C7": {
       "Properties": {
@@ -1954,11 +1747,6 @@ def submit_response(event: dict, context, response_status: str, error_message: s
 
 exports[`bucket with two preflight files 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -1977,7 +1765,7 @@ exports[`bucket with two preflight files 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "9eb41a5505d37607ac419321497a4f8c21cf0ee1f9b4a6b29aa04301aea5c7fd.zip",
+          "S3Key": "e976a796f036a5efbf44b99e44cfb5a961df08d8dbf7cd37e60bf216fb982a00.zip",
         },
         "Environment": {
           "Variables": {
@@ -2194,7 +1982,7 @@ exports[`bucket with two preflight files 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "e2277687077a2abf9ae1af1cc9565e6715e2ebb62f79ec53aa75a1af9298f642.zip",
+          "S3Key": "3322b7049fb0ed2b7cbb644a2ada8d1116ff80c32dca89e6ada846b5de26f961.zip",
         },
         "Description": "/opt/awscli/aws",
       },
@@ -2266,11 +2054,6 @@ exports[`bucket with two preflight files 1`] = `
 
 exports[`bucket with two preflight objects 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -2578,11 +2361,6 @@ exports[`bucket with two preflight objects 1`] = `
 
 exports[`create a bucket 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",

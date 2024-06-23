@@ -1,12 +1,14 @@
 import * as fs from "fs";
-import { resolve } from "path";
-import { vi, test, expect } from "vitest";
+import { resolve, join } from "path";
+import { test, expect } from "vitest";
 import { listMessages, treeJsonOf, waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
 import { BucketEventType } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight, lift } from "../../src/core";
 import { Node } from "../../src/std";
+import { METADATA_FILENAME } from "../../src/target-sim/bucket.inflight";
 import { SimApp } from "../sim-app";
+import { mkdtemp } from "../util";
 
 test("create a bucket", async () => {
   // GIVEN
@@ -20,6 +22,8 @@ test("create a bucket", async () => {
       handle: expect.any(String),
     },
     path: "root/my_bucket",
+    addr: expect.any(String),
+    policy: [],
     props: {
       public: false,
       initialObjects: {},
@@ -36,22 +40,26 @@ test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const testInflight = Testing.makeHandler("null");
+  const testInflight = inflight(async () => console.log("I am done"));
   bucket.onCreate(testInflight);
 
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
-
-  const KEY = "greeting.txt";
-  const VALUE = JSON.stringify({ msg: "Hello world!" });
+  const KEY = "1.txt";
 
   // WHEN
-  await client.put(KEY, VALUE);
-  await client.put(KEY, JSON.stringify({ msg: "another msg" }));
+  await client.put(KEY, JSON.stringify({ msg: "Hello world 1!" }));
+  await client.put(KEY, JSON.stringify({ msg: "Hello world 2!" }));
+  await waitUntilTraceCount(s, 1, (trace) =>
+    trace.data.message.includes(`I am done`)
+  );
 
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
+  // The bucket notification topic should only publish one message, since the
+  // second put() call counts as an update, not a create.
+  expect(listMessages(s).filter((m) => m.includes(`Publish`))).toHaveLength(1);
 });
 
 test("bucket on event creates 3 topics, and sends the right event and key in the event handlers", async () => {
@@ -59,15 +67,12 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
   const logBucket = new cloud.Bucket(app, "log_bucket");
-  const testInflight = Testing.makeHandler(
-    `async handle(key, event) { await this.bucket.put(key, event); }`,
-    {
-      bucket: {
-        obj: logBucket,
-        ops: [cloud.BucketInflightMethods.PUT],
-      },
-    }
-  );
+  const testInflight = lift({ bucket: logBucket })
+    .grant({ bucket: [cloud.BucketInflightMethods.PUT] })
+    .inflight(async (ctx, key, event) => {
+      await ctx.bucket.put(key, event);
+      console.log("I am done");
+    });
 
   bucket.onEvent(testInflight);
 
@@ -79,17 +84,17 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   await client.put("a", "1");
   // wait for the subscriber to finish
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.includes("I am done")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.CREATE);
   await client.put("a", "2");
   await waitUntilTraceCount(s, 2, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.startsWith("I am done")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.UPDATE);
   await client.delete("a");
   await waitUntilTraceCount(s, 3, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.startsWith("I am done")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.DELETE);
   await s.stop();
@@ -367,9 +372,9 @@ test("removing a key will call onDelete method", async () => {
   const app = new SimApp();
 
   const bucket = new cloud.Bucket(app, bucketName);
-  const testInflight = Testing.makeHandler(
-    `async handle(key) { console.log("Received " + key); }`
-  );
+  const testInflight = inflight(async (_, key) => {
+    console.log("Received " + key);
+  });
   bucket.onDelete(testInflight);
 
   const s = await app.startSimulator();
@@ -380,7 +385,7 @@ test("removing a key will call onDelete method", async () => {
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
   const response = await client.delete(fileName);
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.startsWith("Received unknown.txt")
   );
 
   // THEN
@@ -768,6 +773,169 @@ test("copy non-existent object within the bucket", async () => {
     /Source object does not exist/
   );
   await s.stop();
+});
+
+test("rename valid object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+  let DST_KEY = "renamed.txt";
+
+  // WHEN
+  await client.put(SRC_KEY, SRC_VALUE);
+
+  await client.rename(SRC_KEY, DST_KEY);
+  const srcFileExists = await client.exists(SRC_KEY);
+  const dstFileExists = await client.exists(DST_KEY);
+  const dstFileValue = await client.get(DST_KEY);
+
+  // THEN
+  await s.stop();
+  expect(srcFileExists).toBe(false);
+  expect(dstFileExists).toBe(true);
+  expect(dstFileValue).toEqual(SRC_VALUE);
+});
+
+test("rename valid object with overwrite within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+  let DST_KEY = "to-overwrite.txt";
+  let DST_VALUE = "Hello, World!";
+
+  // WHEN
+  await client.put(SRC_KEY, SRC_VALUE);
+  await client.put(DST_KEY, DST_VALUE);
+
+  await client.rename(SRC_KEY, DST_KEY);
+  const srcFileExists = await client.exists(SRC_KEY);
+  const dstFileExists = await client.exists(DST_KEY);
+  const dstFileValue = await client.get(DST_KEY);
+
+  // THEN
+  await s.stop();
+  expect(srcFileExists).toBe(false);
+  expect(dstFileExists).toBe(true);
+  expect(dstFileValue).toEqual(SRC_VALUE);
+});
+
+test("rename invalid object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+
+  // WHEN
+  await client.put(SRC_KEY, SRC_VALUE);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
+    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`
+  );
+  await s.stop();
+});
+
+test("rename non-existent object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+  let DST_KEY = "renamed.txt";
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    /Source object does not exist/
+  );
+  await s.stop();
+});
+
+test("bucket is stateful across simulations", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const bucket = new cloud.Bucket(app, "my_bucket");
+
+  // addObject means that each deployment, object ("a", "1") will be set on the bucket
+  // even if a different object with the same key is added in-flight
+  bucket.addObject("a", "1");
+
+  // WHEN
+  const stateDir = mkdtemp();
+  const s = await app.startSimulator(stateDir);
+
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  await client.put("a", "2"); // override contents of file "a" inflight
+  await client.put("b", "2");
+  const metadata1 = await client.metadata("a");
+  const metadata2 = await client.metadata("b");
+  await s.stop();
+
+  // restart the simulator, re-initializing all resources
+  // this will reset "a" to its original value
+
+  await s.start();
+  const client2 = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const dataA = await client2.get("a");
+  const dataB = await client2.get("b");
+  const metadata3 = await client2.metadata("a");
+  const metadata4 = await client2.metadata("b");
+
+  // THEN
+  await s.stop();
+  expect(dataA).toEqual("1");
+  expect(dataB).toEqual("2"); // "b" will be remembered
+  expect(metadata1).not.toEqual(metadata3);
+  expect(metadata2).toEqual(metadata4);
+});
+
+test("bucket ignores corrupted state file", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  // run simulator one time
+  const stateDir = mkdtemp();
+  const s = await app.startSimulator(stateDir);
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  await client.put("a", "1");
+  await s.stop();
+
+  // WHEN
+  // corrupt the state file
+  const metadata = join(s.getResourceStateDir("/my_bucket"), METADATA_FILENAME);
+  fs.writeFileSync(metadata, "corrupted");
+
+  // restart the simulator
+  await s.start();
+  const client2 = s.getResource("/my_bucket") as cloud.IBucketClient;
+  await client2.put("b", "2");
+  const files = await client2.list();
+  await s.stop();
+
+  // THEN
+  // we lost all metadata, but the bucket is still functional
+  expect(files).toEqual(["b"]);
 });
 
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)

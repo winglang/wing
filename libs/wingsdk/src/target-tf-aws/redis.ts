@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Function } from "./function";
+import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
 import { ElasticacheCluster } from "../.gen/providers/aws/elasticache-cluster";
 import { ElasticacheSubnetGroup } from "../.gen/providers/aws/elasticache-subnet-group";
 import { SecurityGroup } from "../.gen/providers/aws/security-group";
@@ -12,6 +12,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
+import { AwsInflightHost } from "../shared-aws";
 import { IInflightHost } from "../std";
 
 const ELASTICACHE_NAME_OPTS: NameOptions = {
@@ -23,8 +24,8 @@ const ELASTICACHE_NAME_OPTS: NameOptions = {
 export class Redis extends ex.Redis {
   private readonly clusterId: string;
   private readonly clusterArn: string;
-  private readonly securityGroup: SecurityGroup;
-  private readonly subnet: Subnet;
+  private readonly securityGroups: SecurityGroup[];
+  private readonly subnets: (Subnet | DataAwsSubnet)[];
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -47,34 +48,38 @@ export class Redis extends ex.Redis {
 
     const app = App.of(this) as App;
     const vpc = app.vpc;
-    this.subnet = app.subnets.private;
+    this.subnets = app.subnets.private;
+    this.securityGroups = [];
     const clusterName = ResourceNames.generateName(this, ELASTICACHE_NAME_OPTS);
-
-    this.securityGroup = new SecurityGroup(this, "securityGroup", {
-      vpcId: vpc.id,
-      name: `${this.node.addr.slice(-8)}-securityGroup`,
-      ingress: [
-        {
-          cidrBlocks: [this.subnet.cidrBlock],
-          fromPort: REDIS_PORT,
-          toPort: REDIS_PORT,
-          protocol: "tcp",
-          selfAttribute: true,
-        },
-      ],
-      egress: [
-        {
-          cidrBlocks: ["0.0.0.0/0"],
-          fromPort: 0,
-          toPort: 0,
-          protocol: "-1",
-        },
-      ],
-    });
+    for (const subnet of this.subnets) {
+      this.securityGroups.push(
+        new SecurityGroup(this, `${subnet.id.slice(-8)}securityGroup`, {
+          vpcId: vpc.id,
+          name: `${this.node.addr.slice(-8)}-securityGroup`,
+          ingress: [
+            {
+              cidrBlocks: [subnet.cidrBlock],
+              fromPort: REDIS_PORT,
+              toPort: REDIS_PORT,
+              protocol: "tcp",
+              selfAttribute: true,
+            },
+          ],
+          egress: [
+            {
+              cidrBlocks: ["0.0.0.0/0"],
+              fromPort: 0,
+              toPort: 0,
+              protocol: "-1",
+            },
+          ],
+        })
+      );
+    }
 
     const subnetGroup = new ElasticacheSubnetGroup(this, "RedisSubnetGroup", {
       name: `${clusterName}-subnetGroup`,
-      subnetIds: [this.subnet.id],
+      subnetIds: [...this.subnets.map((s) => s.id)],
     });
 
     const cluster = new ElasticacheCluster(this, "RedisCluster", {
@@ -83,9 +88,9 @@ export class Redis extends ex.Redis {
       engineVersion,
       nodeType,
       parameterGroupName,
-      availabilityZone: this.subnet.availabilityZone,
+      availabilityZone: this.subnets[0].availabilityZone,
       subnetGroupName: subnetGroup.name,
-      securityGroupIds: [this.securityGroup.id],
+      securityGroupIds: [...this.securityGroups.map((s) => s.id)],
       numCacheNodes: 1, // This number will always be 1 for Redis
     });
 
@@ -94,25 +99,26 @@ export class Redis extends ex.Redis {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      ex.RedisInflightMethods.URL,
-      ex.RedisInflightMethods.SET,
-      ex.RedisInflightMethods.GET,
-      ex.RedisInflightMethods.HSET,
-      ex.RedisInflightMethods.HGET,
-      ex.RedisInflightMethods.SADD,
-      ex.RedisInflightMethods.SMEMBERS,
-      ex.RedisInflightMethods.DEL,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [ex.RedisInflightMethods.URL]: [],
+      [ex.RedisInflightMethods.SET]: [],
+      [ex.RedisInflightMethods.GET]: [],
+      [ex.RedisInflightMethods.HSET]: [],
+      [ex.RedisInflightMethods.HGET]: [],
+      [ex.RedisInflightMethods.SADD]: [],
+      [ex.RedisInflightMethods.SMEMBERS]: [],
+      [ex.RedisInflightMethods.DEL]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("redis can only be bound by tfaws.Function for now");
+    const env = this.envName();
+
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
-    const env = this.envName();
     // Ops do not matter here since the client connects directly to the cluster.
     // The only thing that we need to use AWS API for is to get the cluster endpoint
     // from the cluster ID.
@@ -122,9 +128,10 @@ export class Redis extends ex.Redis {
     });
 
     host.addEnvironment(env, this.clusterId);
-    host.addNetworkConfig({
-      securityGroupIds: [this.securityGroup.id],
-      subnetIds: [this.subnet.id],
+
+    host.addNetwork({
+      securityGroupIds: [...this.securityGroups.map((s) => s.id)],
+      subnetIds: [...this.subnets.map((s) => s.id)],
     });
 
     super.onLift(host, ops);

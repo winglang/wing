@@ -5,10 +5,13 @@ import {
   buildTheme,
 } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
+import { PersistentStateProvider } from "@wingconsole/use-persistent-state";
 
-import { LayoutProvider, LayoutType } from "./layout/layout-provider.js";
-import { trpc } from "./services/trpc.js";
-import { TestsContextProvider } from "./tests-context.js";
+import type { LayoutType } from "./features/layout/layout-provider.js";
+import { LayoutProvider } from "./features/layout/layout-provider.js";
+import { SelectionContextProvider } from "./features/selection-context/selection-context.js";
+import { TestsContextProvider } from "./features/tests-pane/tests-context.js";
+import { trpc } from "./trpc.js";
 
 export interface AppProps {
   layout?: LayoutType;
@@ -41,23 +44,23 @@ export const App = ({ layout, theme, color, onTrace }: AppProps) => {
   const layoutConfig = trpc["app.layoutConfig"].useQuery();
   const appDetails = trpc["app.details"].useQuery();
   const appState = trpc["app.state"].useQuery();
-  const themeMode = trpc["config.getThemeMode"].useQuery();
 
   return (
-    <ThemeProvider
-      mode={theme ?? themeMode?.data?.mode ?? "auto"}
-      theme={buildTheme(color)}
-    >
+    <ThemeProvider theme={buildTheme(color)}>
       <NotificationsProvider>
         <TestsContextProvider>
-          <LayoutProvider
-            layoutType={layout}
-            layoutProps={{
-              cloudAppState: appState.data ?? "compiling",
-              wingVersion: appDetails.data?.wingVersion,
-              layoutConfig: layoutConfig.data?.config,
-            }}
-          ></LayoutProvider>
+          <SelectionContextProvider>
+            <PersistentStateProvider>
+              <LayoutProvider
+                layoutType={layout}
+                layoutProps={{
+                  cloudAppState: appState.data ?? "compiling",
+                  wingVersion: appDetails.data?.wingVersion,
+                  layoutConfig: layoutConfig.data?.config,
+                }}
+              />
+            </PersistentStateProvider>
+          </SelectionContextProvider>
         </TestsContextProvider>
       </NotificationsProvider>
     </ThemeProvider>

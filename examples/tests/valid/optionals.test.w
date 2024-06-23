@@ -16,13 +16,14 @@ class Super {
 class Sub extends Super {
   new() { this.name = "Sub"; }
 }
-class Sub1 extends Super {
-  new() { this.name = "Sub"; }
+class SubSub extends Sub {
+  new() { this.name = "SubSub"; }
 }
 
 let optionalSup: Super? = new Super();
 let s = optionalSup ?? new Sub();
 assert(s.name == "Super");
+let s2 = optionalSup ?? optionalSup ?? new SubSub();
 
 struct Name {
   first: str;
@@ -204,3 +205,57 @@ if let s1 = str1 {
 } elif let s2 = str2 {
   assert(true);
 }
+
+// Optional function return type
+let var fn: (): ((): num)? = () => { return () => { return 1337; }; };
+if let f = fn() {
+  assert(f() == 1337);
+} else {
+  assert(false);
+}
+fn = () => { return nil; };
+if let f = fn() {
+  assert(false);
+} else {
+  assert(true);
+}
+
+let maybeVar: num? = 123;
+assert(maybeVar! == 123);
+
+let maybeVarNull: str? = nil;
+try {
+  let err = maybeVarNull!;
+  assert(false);
+} catch e {
+  assert(e == "Unexpected nil");
+}
+
+let maybeFn = (b: bool): Array<str>? => {
+  if b {
+    return ["hi"];
+  }
+};
+try {
+  maybeFn(false)!;
+  assert(false);
+} catch e {
+  assert(e == "Unexpected nil");
+}
+assert(maybeFn(true)! == ["hi"]);
+
+let maybeVarBool: bool? = true;
+assert(!maybeVarBool! == false);
+
+struct Person {
+  name: str;
+  age: num;
+}
+let person = Person.tryParseJson(Json.stringify({"name": "john", "age": 30}))!;
+assert(person.name == "john" && person.age == 30);
+
+let maybeX: num? = 0;
+assert(maybeX! == 0);
+
+let maybeY: str? = "";
+assert(maybeY! == "");

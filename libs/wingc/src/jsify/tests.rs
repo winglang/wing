@@ -200,7 +200,7 @@ fn preflight_collection_of_preflight_objects() {
     ];
     test "test" {
       assert(arr.length == 2);
-      arr.at(0).put("hello", "world");
+      arr[0].put("hello", "world");
     }
     "#
 	);
@@ -293,6 +293,25 @@ fn inflight_field() {
 
       inflight method() {
         log(this.x);
+      }
+    }
+    "#
+	);
+}
+
+#[test]
+fn reference_preflight_field_from_inflight_expr() {
+	assert_compile_fail!(
+		r#"
+    class A {
+      x: str;
+      new() {
+        this.x = "hello";
+      }
+
+      inflight method() {
+        let y = this;
+        log(y.x);
       }
     }
     "#
@@ -837,7 +856,7 @@ fn reference_static_inflight() {
 	assert_compile_ok!(
 		r#"
     class MyType {
-      pub static inflight myStaticMethod(): str {}
+      pub static inflight myStaticMethod(): str { return "hi"; }
     }
 
     test "test" {
@@ -1220,7 +1239,7 @@ fn capture_in_keyword_args() {
     let x = 1s;
     
     test "test" {
-      util.waitUntil((): bool => {}, interval: x);
+      util.waitUntil((): bool => { return true; }, interval: x);
     }
     "#
 	);
@@ -1272,34 +1291,60 @@ fn fail_unqualified_lift() {
     let q = new cloud.Queue();
 
     test "test "{
-      q;
+      let x = q;
+      x.push("hello");
     }
     "#
 	);
 }
 
 #[test]
-fn unqualified_lift_of_collection() {
+fn fail_unqualified_lift_as_arg() {
+	assert_compile_fail!(
+		r#"
+    bring cloud;
+
+    let q = new cloud.Queue();
+
+    let f = inflight (q: cloud.Queue) => {
+      q.push("hello");
+    };
+
+    test "test "{
+      f(q);
+    }
+    "#
+	);
+}
+
+#[test]
+fn fail_unqualified_lift_return() {
+	assert_compile_fail!(
+		r#"
+    bring cloud;
+
+    let q = new cloud.Queue();
+
+    let f = inflight (): cloud.Queue => {
+      return q;
+    };
+
+    test "test "{
+      f(); // this is fine
+      f().push("hello"); // unknown lift origin
+    }
+    "#
+	);
+}
+
+#[test]
+fn reference_lift_of_collection() {
 	assert_compile_ok!(
 		r#"
     let a = [1,2,3];
 
     test "test" {
       a;
-    }
-    "#
-	);
-}
-
-#[test]
-fn fails_lift_with_inflight_arguments() {
-	assert_compile_fail!(
-		r#"
-    let a = [1234];
-
-    test "test" {
-      let i = 0;
-      a.at(i);
     }
     "#
 	);
@@ -1313,7 +1358,8 @@ fn fail_unqualified_lift_element_from_collection_of_objects() {
     let a = [new cloud.Bucket()];
 
     test "test" {
-      a.at(0);
+      let x = 0;
+      a.at(x).list();
     }
     "#
 	);
@@ -1327,7 +1373,7 @@ fn lift_element_from_collection_of_objects() {
     let a = [new cloud.Bucket()];
 
     test "test" {
-      a.at(0).put("hello", "world");
+      a[0].put("hello", "world");
     }
     "#
 	);
@@ -1345,7 +1391,7 @@ fn lift_element_from_collection_as_field() {
       }
 
       inflight foo() {
-        this.arr.at(0).put("hello", "world");
+        this.arr[0].put("hello", "world");
       }
     }
     "#
@@ -1391,8 +1437,9 @@ fn func_returns_func() {
 		r#"
     test "test" {
       (s: str): (): bool => {
-        (): bool => { 
+        return (): bool => {
           s;
+          return true;
         };
       };
     }
@@ -1586,29 +1633,6 @@ fn base_class_with_lifted_fields() {
 }
 
 #[test]
-fn fails_base_class_with_lifted_field_object_unqualified() {
-	assert_compile_fail!(
-		r#"
-    bring cloud;
-
-    class Base {
-      b: cloud.Bucket;
-      new() {
-        this.b = new cloud.Bucket();
-      }
-    }
-
-    class Derived extends Base {
-      inflight foo() {
-        this.b;
-//           ^ Cannot qualify access to a lifted object of type "Bucket"
-      }
-    }
-    "#
-	);
-}
-
-#[test]
 fn base_class_with_lifted_field_object() {
 	assert_compile_ok!(
 		r#"
@@ -1769,7 +1793,7 @@ fn reassign_captured_variable() {
       let var i = 10;
     
       class Inner {
-        dang(): num {
+        dang(): void {
           i = i + 1;
         }
       }
@@ -2002,6 +2026,32 @@ fn lift_self_reference() {
 
       inflight bar() {
         Foo.static_method();
+      }
+    }
+    "#
+	);
+}
+
+#[test]
+fn entrypoint_this() {
+	assert_compile_ok!(
+		r#"
+    this;
+    "#
+	);
+}
+
+#[test]
+fn allow_type_def_before_super() {
+	assert_compile_ok!(
+		r#"
+    class Foo {
+      new(x: num) {}
+    }
+    class Bar extends Foo {
+      new() {
+        class Baz {}
+        super(1);
       }
     }
     "#

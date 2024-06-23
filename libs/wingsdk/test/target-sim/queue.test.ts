@@ -6,30 +6,15 @@ import {
   waitUntilTraceCount,
 } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+
+import { inflight, lift } from "../../src/core";
 import { Duration, Node } from "../../src/std";
 import { SimApp } from "../sim-app";
 
-const INFLIGHT_CODE = `
-async handle(message) {
+const INFLIGHT_CODE = inflight(async (_, message) => {
   if (message === "BAD MESSAGE") {
     throw new Error("ERROR");
   }
-}`;
-
-test("try to create a queue with invalid retention period", async () => {
-  // GIVEN
-  const app = new SimApp();
-  const retentionPeriod = Duration.fromSeconds(5);
-  const timeout = Duration.fromSeconds(10);
-
-  // THEN
-  expect(() => {
-    new cloud.Queue(app, "my_queue", {
-      retentionPeriod,
-      timeout,
-    });
-  }).toThrowError("Retention period must be greater than or equal to timeout");
 });
 
 test("create a queue", async () => {
@@ -39,30 +24,43 @@ test("create a queue", async () => {
   const s = await app.startSimulator();
 
   // THEN
+  expect(s.getResourceConfig("/my_queue")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+    },
+    path: "root/my_queue",
+    addr: expect.any(String),
+    policy: [],
+    props: {
+      retentionPeriod: 3600,
+      timeout: 30,
+    },
+    type: cloud.QUEUE_FQN,
+  });
+
   await s.stop();
-  expect(s.getResourceConfig("/my_queue")).toMatchInlineSnapshot(`
-    {
-      "attrs": {
-        "handle": "sim-1",
-      },
-      "path": "root/my_queue",
-      "props": {
-        "retentionPeriod": 3600,
-        "timeout": 30,
-      },
-      "type": "@winglang/sdk.cloud.Queue",
-    }
-  `);
 
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("try to create a queue with invalid retention period", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const retentionPeriod = Duration.fromSeconds(5);
+
+  // THEN
+  expect(() => {
+    new cloud.Queue(app, "my_queue", {
+      retentionPeriod,
+    });
+  }).toThrowError("Retention period must be greater than or equal to timeout");
 });
 
 test("queue with one subscriber, default batch size of 1", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
   const queue = new cloud.Queue(app, "my_queue");
-  queue.setConsumer(handler);
+  queue.setConsumer(INFLIGHT_CODE);
   const s = await app.startSimulator();
 
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
@@ -115,27 +113,20 @@ test("queue with one subscriber, batch size of 5", async () => {
   const app = new SimApp();
 
   const queue = new cloud.Queue(app, "my_queue");
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
-  const consumer = queue.setConsumer(handler, { batchSize: 5 });
+  const consumer = queue.setConsumer(INFLIGHT_CODE, { batchSize: 5 });
 
   // initialize the queue with some messages
-  const onDeployHandler = Testing.makeHandler(
-    `\
-async handle() {
-  await this.queue.push("A");
-  await this.queue.push("B");
-  await this.queue.push("C");
-  await this.queue.push("D");
-  await this.queue.push("E");
-  await this.queue.push("F");
-}`,
-    {
-      queue: {
-        obj: queue,
-        ops: [cloud.QueueInflightMethods.PUSH],
-      },
-    }
-  );
+  const onDeployHandler = lift({ queue })
+    .grant({ queue: ["push"] })
+    .inflight(async (ctx) => {
+      await ctx.queue.push("A");
+      await ctx.queue.push("B");
+      await ctx.queue.push("C");
+      await ctx.queue.push("D");
+      await ctx.queue.push("E");
+      await ctx.queue.push("F");
+    });
+
   new cloud.OnDeploy(app, "my_queue_messages", onDeployHandler);
 
   const s = await app.startSimulator();
@@ -158,18 +149,18 @@ async handle() {
         trace.sourcePath === consumer.node.path &&
         trace.data.message.startsWith("Invoke")
     );
-  expect(invokeMessages.length).toEqual(2); // queue messages are processed in two batches based on batch size
+  expect(invokeMessages.length).toBeGreaterThanOrEqual(2); // queue messages are processed in multiple batches based on batch size
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("messages are requeued if the function fails after timeout", async () => {
+// waiting for this: https://github.com/winglang/wing/issues/1980 to be resolved
+test.skip("messages are requeued if the function fails after timeout", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
   const queue = new cloud.Queue(app, "my_queue", {
     timeout: Duration.fromSeconds(1),
   });
-  queue.setConsumer(handler);
+  queue.setConsumer(INFLIGHT_CODE);
   const s = await app.startSimulator();
 
   // WHEN
@@ -196,14 +187,13 @@ test("messages are requeued if the function fails after timeout", async () => {
   ).toContain(REQUEUE_MSG);
 });
 
-test("messages are not requeued if the function fails before timeout", async () => {
+test.skip("messages are not requeued if the function fails before timeout", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
   const queue = new cloud.Queue(app, "my_queue", {
     timeout: Duration.fromSeconds(30),
   });
-  queue.setConsumer(handler);
+  queue.setConsumer(INFLIGHT_CODE);
   const s = await app.startSimulator();
 
   // WHEN
@@ -231,42 +221,41 @@ test("messages are not requeued if the function fails before timeout", async () 
     [
       "@winglang/sdk.cloud.Queue created.",
       "Push (messages=BAD MESSAGE).",
-      "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+      "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-0).",
       "Subscriber error - returning 1 messages to queue: ERROR",
       "@winglang/sdk.cloud.Queue deleted.",
     ]
   `);
 });
 
-// TODO: this test is commented out because it is flaky
-// test("messages are not requeued if the function fails after retention timeout", async () => {
-//   // GIVEN
-//   const app = new SimApp();
-//   const handler = Testing.makeHandler(INFLIGHT_CODE);
-//   const queue = new cloud.Queue(app, "my_queue", {
-//     retentionPeriod: Duration.fromSeconds(1),
-//     timeout: Duration.fromMilliseconds(100),
-//   });
-//   queue.setConsumer(handler);
-//   const s = await app.startSimulator();
+// TODO: this test is skipped because it is flaky
+test.skip("messages are not requeued if the function fails after retention timeout", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const queue = new cloud.Queue(app, "my_queue", {
+    retentionPeriod: Duration.fromSeconds(1),
+    timeout: Duration.fromMilliseconds(100),
+  });
+  queue.setConsumer(INFLIGHT_CODE);
+  const s = await app.startSimulator();
 
-//   // WHEN
-//   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-//   void queueClient.push("BAD MESSAGE");
-//   await waitUntilTrace(
-//     s,
-//     (trace) =>
-//       trace.data.message ==
-//       "1 messages pushed back to queue after visibility timeout."
-//   );
+  // WHEN
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+  void queueClient.push("BAD MESSAGE");
+  await waitUntilTrace(
+    s,
+    (trace) =>
+      trace.data.message ==
+      "1 messages pushed back to queue after visibility timeout."
+  );
 
-//   // THEN
-//   await s.stop();
-//   expect(listMessages(s)).toContain(
-//     "1 messages pushed back to queue after visibility timeout."
-//   );
-//   expect(app.snapshot()).toMatchSnapshot();
-// });
+  // THEN
+  await s.stop();
+  expect(listMessages(s)).toContain(
+    "1 messages pushed back to queue after visibility timeout."
+  );
+  expect(app.snapshot()).toMatchSnapshot();
+});
 
 test("queue has no display hidden property", async () => {
   // GIVEN

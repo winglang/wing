@@ -13,7 +13,7 @@ Learn about Wing's [core concepts](https://www.winglang.io/docs/category/core-co
 
 Or check out the documentation of the varios resources in Wing's [standard library](https://www.winglang.io/docs/category/standard-library) which abstracts the cloud.
 
-You can also check out Wing's [toolchain](https://www.winglang.io/docs/category/tools), including the [compiler plugins](https://www.winglang.io/docs/tools/compiler-plugins) that allow you to go below the abstraction layer and tweak the infrastructure definitions directly.
+You can also check out Wing's [toolchain](https://www.winglang.io/docs/category/tools), including the [platforms](https://www.winglang.io/docs/concepts/platforms) that allow you to go below the abstraction layer and tweak the infrastructure definitions directly.
 
 ### Interactive Tutorials 
 
@@ -42,4 +42,4 @@ Put your skills to the test using the [playground](https://docs.winglang.io/gett
 ### Community
 We also have a [YouTube channel](https://www.youtube.com/@winglangio) where we share clips of demos and guest interviews on our [Twitch show](https://www.twitch.tv/winglangio), and a [blog](https://www.winglang.io/blog).
 
-Finally, we encourage you to join our [Wing Slack](http://t.winglang.io/slack) where we help each other, answer questions, and share our cloud adventures.
+Finally, we encourage you to join our [Wing Discord](http://t.winglang.io/discord) where we help each other, answer questions, and share our cloud adventures.

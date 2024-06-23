@@ -53,7 +53,8 @@ where
 		| Type::MutJson
 		| Type::Nil
 		| Type::Unresolved
-		| Type::Enum(_) => {}
+		| Type::Enum(_)
+		| Type::Stringable => {}
 
 		Type::Inferred(node_unwrap([n])) => {
 			v.visit_inference(n);

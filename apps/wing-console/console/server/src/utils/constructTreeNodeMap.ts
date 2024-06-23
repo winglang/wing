@@ -1,10 +1,12 @@
-import { ConstructInfo, ConstructTreeNode } from "./construct-tree.js";
+import type { ConstructInfo, ConstructTreeNode } from "./construct-tree.js";
 
 export interface NodeDisplay {
   title?: string;
   description?: string;
   sourceModule?: string;
   hidden?: boolean;
+  color?: string;
+  icon?: string;
 }
 
 export interface NodeConnection {

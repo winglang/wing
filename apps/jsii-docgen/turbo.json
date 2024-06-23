@@ -4,6 +4,9 @@
   "pipeline": {
     "compile": {
       "outputs": ["lib/**"]
+    },
+    "test": {
+      "outputs": ["test/**/*.snap"]
     }
   }
 }

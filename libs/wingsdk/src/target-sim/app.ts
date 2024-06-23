@@ -1,17 +1,19 @@
 import * as fs from "fs";
 import * as path from "path";
+import { IConstruct } from "constructs";
 import { Api } from "./api";
 import { Bucket } from "./bucket";
+import { SIM_CONTAINER_FQN } from "./container";
 import { Counter } from "./counter";
 import { Domain } from "./domain";
-import { DynamodbTable } from "./dynamodb-table";
+import { Endpoint } from "./endpoint";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
+import { POLICY_FQN, Policy } from "./policy";
 import { Queue } from "./queue";
-import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
-import { isSimulatorResource } from "./resource";
+import { SIM_RESOURCE_FQN, isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Service } from "./service";
@@ -26,6 +28,7 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   DOMAIN_FQN,
+  ENDPOINT_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -39,8 +42,13 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { registerTokenResolver } from "../core/tokens";
-import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN, REACT_APP_FQN } from "../ex";
-import { TypeSchema, WingSimulatorSchema } from "../simulator/simulator";
+import { REDIS_FQN, TABLE_FQN } from "../ex";
+import {
+  BaseResourceSchema,
+  TypeSchema,
+  WingSimulatorSchema,
+} from "../simulator";
+import { resolveTokens } from "../simulator/tokens";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
@@ -51,19 +59,20 @@ export const SIMULATOR_FILE_PATH = "simulator.json";
 const SIMULATOR_CLASS_DATA = {
   [API_FQN]: "Api",
   [BUCKET_FQN]: "Bucket",
-  [COUNTER_FQN]: "Counter",
   [DOMAIN_FQN]: "Domain",
-  [DYNAMODB_TABLE_FQN]: "DynamodbTable",
+  [ENDPOINT_FQN]: "Endpoint",
   [EVENT_MAPPING_FQN]: "EventMapping",
   [FUNCTION_FQN]: "Function",
   [ON_DEPLOY_FQN]: "OnDeploy",
+  [POLICY_FQN]: "Policy",
   [QUEUE_FQN]: "Queue",
-  [REACT_APP_FQN]: "ReactApp",
   [REDIS_FQN]: "Redis",
   [SCHEDULE_FQN]: "Schedule",
   [SECRET_FQN]: "Secret",
   [SERVICE_FQN]: "Service",
   [STATE_FQN]: "State",
+  [SIM_CONTAINER_FQN]: "Container",
+  [SIM_RESOURCE_FQN]: "Resource",
   [TABLE_FQN]: "Table",
   [TEST_RUNNER_FQN]: "TestRunner",
   [TOPIC_FQN]: "Topic",
@@ -76,14 +85,7 @@ const SIMULATOR_CLASS_DATA = {
  */
 export class App extends core.App {
   public readonly outdir: string;
-  public readonly isTestEnvironment: boolean;
-
   public readonly _target = "sim";
-
-  /**
-   * The test runner for this app.
-   */
-  protected readonly testRunner: TestRunner;
 
   private synthed = false;
 
@@ -91,12 +93,9 @@ export class App extends core.App {
     // doesn't allow customize the root id- as used hardcoded in the code
     super(undefined as any, "root", props);
     this.outdir = props.outdir ?? ".";
-    this.isTestEnvironment = props.isTestEnvironment ?? false;
     registerTokenResolver(new SimTokens());
 
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
-
-    this.synthRoots(props, this.testRunner);
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   /** @internal */
@@ -108,14 +107,11 @@ export class App extends core.App {
       case BUCKET_FQN:
         return require.resolve("./bucket.inflight");
 
-      case COUNTER_FQN:
-        return require.resolve("./counter.inflight");
-
       case DOMAIN_FQN:
         return require.resolve("./domain.inflight");
 
-      case DYNAMODB_TABLE_FQN:
-        return require.resolve("./dynamodb-table.inflight");
+      case ENDPOINT_FQN:
+        return require.resolve("./endpoint.inflight");
 
       case EVENT_MAPPING_FQN:
         return require.resolve("./event-mapping.inflight");
@@ -126,11 +122,11 @@ export class App extends core.App {
       case ON_DEPLOY_FQN:
         return require.resolve("./on-deploy.inflight");
 
+      case POLICY_FQN:
+        return require.resolve("./policy.inflight");
+
       case QUEUE_FQN:
         return require.resolve("./queue.inflight");
-
-      case REACT_APP_FQN:
-        return require.resolve("./react-app.inflight");
 
       case REDIS_FQN:
         return require.resolve("./redis.inflight");
@@ -158,6 +154,12 @@ export class App extends core.App {
 
       case WEBSITE_FQN:
         return require.resolve("./website.inflight");
+
+      case SIM_CONTAINER_FQN:
+        return require.resolve("./container.inflight");
+
+      case SIM_RESOURCE_FQN:
+        return require.resolve("./resource.inflight");
     }
 
     return undefined;
@@ -177,8 +179,8 @@ export class App extends core.App {
       case DOMAIN_FQN:
         return Domain;
 
-      case DYNAMODB_TABLE_FQN:
-        return DynamodbTable;
+      case ENDPOINT_FQN:
+        return Endpoint;
 
       // EVENT_MAPPING_FQN skipped - it's not a multi-target construct
 
@@ -188,11 +190,11 @@ export class App extends core.App {
       case ON_DEPLOY_FQN:
         return OnDeploy;
 
+      case POLICY_FQN:
+        return Policy;
+
       case QUEUE_FQN:
         return Queue;
-
-      case REACT_APP_FQN:
-        return ReactApp;
 
       case REDIS_FQN:
         return Redis;
@@ -220,6 +222,10 @@ export class App extends core.App {
 
       case WEBSITE_FQN:
         return Website;
+
+      // SIM_CONTAINER_FQN skipped - it's not a multi-target construct
+
+      // SIM_RESOURCE_FQN skipped - it's not a multi-target construct
     }
 
     return undefined;
@@ -239,8 +245,14 @@ export class App extends core.App {
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
+    if (this._synthHooks?.preSynthesize) {
+      this._synthHooks.preSynthesize.forEach((hook) => hook(this));
+    }
+
     // write simulator.json file into workdir
-    this.synthSimulatorFile(this.outdir);
+    const spec = this.synthSimulatorFile(this.outdir);
+
+    this.addTokenConnections(spec);
 
     // write tree.json file into workdir
     core.synthesizeTree(this, this.outdir);
@@ -250,14 +262,56 @@ export class App extends core.App {
 
     this.synthed = true;
 
+    if (this._synthHooks?.postSynthesize) {
+      this._synthHooks.postSynthesize.forEach((hook) => hook(this));
+    }
+
     return this.outdir;
   }
 
+  /**
+   * Scans the app spec for token references and adds connections to reflect
+   * this relationship.
+   *
+   * @param spec The simulator spec
+   */
+  private addTokenConnections(spec: WingSimulatorSchema) {
+    const map: Record<string, IConstruct> = {};
+    for (const c of this.node.findAll()) {
+      map[c.node.path] = c;
+    }
+
+    for (const [from, resource] of Object.entries(spec.resources)) {
+      resolveTokens(resource.props, (to) => {
+        // skip references to the "handle" of the target resource because it would be reflected by
+        // the connections created by inflight method calls.
+        if (to.attr !== "handle") {
+          core.Connections.of(this).add({
+            source: map[from],
+            target: map[to.path],
+            targetOp: to.attr,
+            name: "<ref>",
+          });
+        }
+        return "<TOKEN>"; // <-- not used
+      });
+    }
+  }
+
   private synthSimulatorFile(outdir: string) {
-    const resources = new core.DependencyGraph(this.node)
-      .topology()
-      .filter(isSimulatorResource)
-      .map((res) => res.toSimulator());
+    const resources: Record<string, BaseResourceSchema> = {};
+    for (const r of new core.DependencyGraph(this.node).topology()) {
+      if (isSimulatorResource(r)) {
+        const deps = r.node.dependencies.map((d) => d.node.path);
+        resources[r.node.path] = {
+          ...r.toSimulator(),
+          path: r.node.path,
+          addr: r.node.addr,
+          deps: deps.length === 0 ? undefined : deps,
+          attrs: undefined as any,
+        };
+      }
+    }
 
     const types: { [fqn: string]: TypeSchema } = {};
     for (const [fqn, className] of Object.entries(SIMULATOR_CLASS_DATA)) {
@@ -283,5 +337,7 @@ export class App extends core.App {
       JSON.stringify(contents, undefined, 2),
       { encoding: "utf8" }
     );
+
+    return contents;
   }
 }

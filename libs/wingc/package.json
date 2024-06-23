@@ -2,7 +2,7 @@
   "name": "@winglang/wingc",
   "private": true,
   "scripts": {
-    "compile": "cargo build --target wasm32-wasi --release && ../../.cargo/binaryen-version_116/bin/wasm-opt --enable-bulk-memory --strip-debug --strip-producers -O3 -o wingc.wasm ../../target/wasm32-wasi/release/wingc.wasm",
+    "compile": "cargo build --target wasm32-wasi --release && ./scripts/postcompile.sh",
     "dev": "cargo run --example compile --release",
     "test": "cargo test",
     "lint": "cargo fmt && cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi --release"

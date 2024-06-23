@@ -1,3 +1,14 @@
+// enums can be referenced by other types before they are defined
+struct A {
+  e: SomeEnum;
+}
+
+// type annotations can reference enums before they are defined
+let opt: SomeEnum? = nil;
+
+// values can reference enums before they are defined
+let three = SomeEnum.THREE;
+
 enum SomeEnum {
     ONE, TWO, THREE
 }
@@ -8,4 +19,24 @@ let two: SomeEnum = SomeEnum.TWO; // Try with explicit type annotation
 test "inflight" {
   assert(one == SomeEnum.ONE);
   assert(two == SomeEnum.TWO);
+}
+
+// values stringify into their own names
+assert("{SomeEnum.ONE}" == "ONE");
+assert("{SomeEnum.TWO}" == "TWO");
+assert("{SomeEnum.THREE}" == "THREE");
+
+test "toStr inflight" {
+  assert("{SomeEnum.ONE}" == "ONE");
+  assert("{SomeEnum.TWO}" == "TWO");
+  assert("{SomeEnum.THREE}" == "THREE");
+}
+
+// A documented enum (should be parssed without errors)
+/// Enum documentation
+/// blah blah blah
+enum DocumentedEnum {
+    /// Variant documentation
+    /// blah blah blah
+    VARIANT
 }

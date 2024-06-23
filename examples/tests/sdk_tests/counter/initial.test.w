@@ -1,17 +1,21 @@
 bring cloud;
+bring expect;
 
 let counterA = new cloud.Counter() as "counterA";
 let counterB = new cloud.Counter(initial: 500) as "counterB";
 let counterC = new cloud.Counter(initial: -198) as "counterC";
 
-test "initial:default" {
-  assert(counterA.peek() == 0);
-}
+expect.equal(counterA.initial, 0);
+expect.equal(counterB.initial, 500);
+expect.equal(counterC.initial, -198);
 
-test "initial:positive-value" {
-  assert(counterB.peek() == 500);
-}
+test "initial" {
+// "initial:default"
+  expect.equal(counterA.peek(), 0);
 
-test "initial:negative-value" {
-  assert(counterC.peek() == -198);
+// "initial:positive-value" 
+  expect.equal(counterB.peek(), 500);
+
+// "initial:negative-value" 
+  expect.equal(counterC.peek(), -198);
 }

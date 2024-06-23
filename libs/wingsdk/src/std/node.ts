@@ -6,7 +6,8 @@ import {
   MetadataOptions,
   IValidation,
 } from "constructs";
-import { Connections } from "../core";
+import { Connections } from "../core/connections";
+import { ParameterRegistrar } from "../platform";
 
 const NODE_SYMBOL = Symbol.for("@winglang/sdk.std.Node");
 export const APP_SYMBOL = Symbol.for("@winglang/sdk.std.Node/app");
@@ -62,6 +63,40 @@ export class Node {
    */
   public hidden?: boolean;
 
+  /**
+   * The color of the construct for display purposes.
+   * Supported colors are:
+   * - orange
+   * - sky
+   * - emerald
+   * - lime
+   * - pink
+   * - amber
+   * - cyan
+   * - purple
+   * - red
+   * - violet
+   * - slate
+   */
+  public color?: string;
+
+  /**
+   * The icon of the construct for display purposes.
+   * Supported icons are from Heroicons:
+   * - https://heroicons.com/
+   * e.g.
+   * - "academic-cap"
+   */
+  public icon?: string;
+
+  /**
+   * Whether the node is expanded or collapsed by default in the UI.
+   * By default, nodes are collapsed. Set this to `true` if you want the node to be expanded by default.
+   *
+   * @default false
+   */
+  public expanded?: boolean;
+
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
   private _app: IApp | undefined;
@@ -77,7 +112,10 @@ export class Node {
    * metadata describing how one construct is related to another construct.
    */
   public addConnection(props: AddConnectionProps) {
-    this._connections.add(props);
+    this._connections.add({
+      source: props.source ?? this.construct,
+      ...props,
+    });
   }
 
   // ---- constructs 10.x APIs ----
@@ -396,13 +434,26 @@ export class Node {
 export interface AddConnectionProps {
   /**
    * The source of the connection.
+   * @default this
    */
-  readonly source: IConstruct;
+  readonly source?: IConstruct;
+
+  /**
+   * An operation that the source construct supports.
+   * @default - no operation
+   */
+  readonly sourceOp?: string;
 
   /**
    * The target of the connection.
    */
   readonly target: IConstruct;
+
+  /**
+   * An operation that the target construct supports.
+   * @default - no operation
+   */
+  readonly targetOp?: string;
 
   /**
    * A name for the connection.
@@ -434,6 +485,11 @@ export interface IApp extends IConstruct {
    * The directory of the entrypoint of the current program.
    */
   readonly entrypointDir: string;
+
+  /**
+   * The application's parameter registrar
+   */
+  readonly parameters: ParameterRegistrar;
 
   /**
    * Generate a unique ID for the given scope and prefix. The newly generated ID is

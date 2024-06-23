@@ -7,13 +7,17 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {
       "root": {
         "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
+          "Default": {
+            "aws-wing-website": {
+              "Endpoint": {
+                "Url": "aws-wing-website_Endpoint_Url_2C61EBBC"
+              }
+            }
           }
         }
       }
@@ -59,8 +63,8 @@
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
+    "aws-wing-website_Endpoint_Url_2C61EBBC": {
+      "value": "https://${aws_cloudfront_distribution.aws-wing-website_Distribution_87B2F767.domain_name}"
     }
   },
   "provider": {
@@ -173,6 +177,22 @@
       }
     },
     "aws_s3_object": {
+      "aws-wing-website_File--errorhtml_9E256301": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/aws-wing-website/File--error.html",
+            "uniqueId": "aws-wing-website_File--errorhtml_9E256301"
+          }
+        },
+        "bucket": "${aws_s3_bucket.aws-wing-website_WebsiteBucket_9D587AAD.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.aws-wing-website_WebsiteBucket_9D587AAD"
+        ],
+        "key": "/error.html",
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
+      },
       "aws-wing-website_File--indexhtml_D03F523C": {
         "//": {
           "metadata": {

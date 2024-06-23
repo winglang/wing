@@ -1,4 +1,4 @@
-import { IgnoreFile } from "projen";
+import { IgnoreFile, DependencyType } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptAppProject } from "projen/lib/typescript";
 import { VSCodeExtensionContributions } from "./src/project/vscode_types";
@@ -35,6 +35,7 @@ const project = new TypeScriptAppProject({
   buildWorkflow: false,
   jest: false,
   github: false,
+  depsUpgrade: false,
   npmignoreEnabled: false,
   entrypoint: "lib/extension.js",
   eslintOptions: {
@@ -60,17 +61,18 @@ const project = new TypeScriptAppProject({
     "@trpc/client",
     "ws",
     "open",
+    "tsx",
     "node-fetch@^2.6.7",
-    "@types/node",
     "@types/which",
     "@vscode/vsce",
     "@types/node-fetch",
     "@types/ws",
-    "@wingconsole/app@workspace:^",
-    "@wingconsole/server@workspace:^",
     "winglang@workspace:^",
   ],
 });
+
+project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
+project.deps.removeDependency("ts-node");
 
 // because we're bundling, allow dev deps in src
 project.eslint?.allowDevDeps("src/**");
@@ -93,6 +95,7 @@ vscodeIgnore.addPatterns(
 );
 
 const contributes: VSCodeExtensionContributions = {
+  breakpoints: [{ language: "wing" }],
   languages: [
     {
       id: "wing",
@@ -103,6 +106,50 @@ const contributes: VSCodeExtensionContributions = {
         light: "resources/icon-light.png",
         dark: "resources/icon-dark.png",
       },
+    },
+  ],
+  debuggers: [
+    {
+      type: "wing",
+      label: "Wing Debug",
+      program: "",
+      languages: ["wing"],
+      configurationAttributes: {
+        launch: {
+          entrypoint: {
+            type: "string",
+            description: "The entrypoint to run",
+            default: "${file}",
+          },
+          arguments: {
+            type: "string",
+            description: "Wing CLI arguments",
+            default: "test",
+          },
+        },
+      },
+      initialConfigurations: [
+        {
+          label: "Wing Debug: Launch",
+          description: "Launch a Wing program",
+          body: {
+            type: "wing",
+            request: "launch",
+            name: "Launch",
+          },
+        },
+      ],
+      configurationSnippets: [
+        {
+          label: "Wing Debug: Launch",
+          description: "Launch a Wing program",
+          body: {
+            type: "wing",
+            request: "launch",
+            name: "Launch",
+          },
+        },
+      ],
     },
   ],
   grammars: [
@@ -130,60 +177,13 @@ const contributes: VSCodeExtensionContributions = {
         dark: "resources/icon-dark.svg",
       },
     },
-    {
-      command: "wing.openFile",
-      title: "Open source file",
-      icon: {
-        light: "resources/icon-light.svg",
-        dark: "resources/icon-dark.svg",
-      },
-    },
-    {
-      command: "wingConsole.openResource",
-      title: "Open resource",
-    },
-    {
-      command: "wingConsole.runTest",
-      title: "Run test",
-      icon: {
-        light: "resources/play-light.svg",
-        dark: "resources/play-dark.svg",
-      },
-    },
-    {
-      command: "wingConsole.runAllTests",
-      title: "Run all tests",
-      icon: {
-        light: "resources/play-all-light.svg",
-        dark: "resources/play-all-dark.svg",
-      },
-    },
   ],
   menus: {
     "editor/title": [
       {
-        when: "resourceLangId == wing && activeWebviewPanelId != 'wing.console'",
+        when: "resourceLangId == wing",
         command: "wing.openConsole",
         group: "navigation",
-      },
-      {
-        when: "resourceLangId != wing && activeWebviewPanelId == 'wing.console'",
-        command: "wing.openFile",
-        group: "navigation",
-      },
-    ],
-    "view/item/context": [
-      {
-        command: "wingConsole.runTest",
-        when: "view == consoleTestsExplorer",
-        group: "inline",
-      },
-    ],
-    "explorer/context": [
-      {
-        command: "wingConsole.runAllTests",
-        when: "view == consoleTestsExplorer",
-        group: "inline",
       },
     ],
   },
@@ -199,18 +199,6 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   ],
-  views: {
-    explorer: [
-      {
-        id: "consoleExplorer",
-        name: "Wing Resources",
-      },
-      {
-        id: "consoleTestsExplorer",
-        name: "Wing Tests",
-      },
-    ],
-  },
 };
 
 project.addFields({
@@ -223,7 +211,7 @@ project.addFields({
     vscode: `^${VSCODE_BASE_VERSION}`,
   },
   categories: ["Programming Languages"],
-  activationEvents: ["onLanguage:wing"],
+  activationEvents: ["onLanguage:wing", "onDebug"],
   contributes,
 });
 
@@ -250,5 +238,7 @@ project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
 
 project.addTask("dev").exec("node scripts/dev.mjs");
+
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

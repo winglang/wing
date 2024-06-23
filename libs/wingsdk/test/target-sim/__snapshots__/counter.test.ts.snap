@@ -2,29 +2,124 @@
 
 exports[`create a counter 1`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = { onStop: () => {} };
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "tests": {},
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.std.TestRunner",
+        "type": "@winglang/sdk.sim.Resource",
       },
-      {
-        "attrs": {},
-        "path": "root/my_counter",
-        "props": {
-          "initial": 123,
-        },
-        "type": "@winglang/sdk.cloud.Counter",
-      },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -35,13 +130,13 @@ exports[`create a counter 1`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -75,14 +170,6 @@ exports[`create a counter 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -91,9 +178,21 @@ exports[`create a counter 1`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -108,23 +207,26 @@ exports[`create a counter 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -136,8 +238,9 @@ exports[`create a counter 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -148,42 +251,135 @@ exports[`create a counter 1`] = `
 
 exports[`dec 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Counter created.",
-  "Dec (amount=1).",
-  "Dec (amount=1).",
-  "Dec (amount=10).",
-  "Dec (amount=10).",
-  "@winglang/sdk.cloud.Counter deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
+  "root/my_counter/Resource started",
+  "dec()",
+  "dec()",
+  "dec(10)",
+  "dec(10)",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`dec 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = { onStop: () => {} };
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "tests": {},
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.std.TestRunner",
+        "type": "@winglang/sdk.sim.Resource",
       },
-      {
-        "attrs": {},
-        "path": "root/my_counter",
-        "props": {
-          "initial": 123,
-        },
-        "type": "@winglang/sdk.cloud.Counter",
-      },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -194,13 +390,13 @@ exports[`dec 2`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -234,14 +430,6 @@ exports[`dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -250,9 +438,21 @@ exports[`dec 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -267,23 +467,26 @@ exports[`dec 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -295,8 +498,9 @@ exports[`dec 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -307,42 +511,135 @@ exports[`dec 2`] = `
 
 exports[`inc 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Counter created.",
-  "Inc (amount=1).",
-  "Inc (amount=1).",
-  "Inc (amount=10).",
-  "Inc (amount=10).",
-  "@winglang/sdk.cloud.Counter deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
+  "root/my_counter/Resource started",
+  "inc()",
+  "inc()",
+  "inc(10)",
+  "inc(10)",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`inc 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = { onStop: () => {} };
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "tests": {},
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.std.TestRunner",
+        "type": "@winglang/sdk.sim.Resource",
       },
-      {
-        "attrs": {},
-        "path": "root/my_counter",
-        "props": {
-          "initial": 123,
-        },
-        "type": "@winglang/sdk.cloud.Counter",
-      },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -353,13 +650,13 @@ exports[`inc 2`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -393,14 +690,6 @@ exports[`inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -409,9 +698,21 @@ exports[`inc 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -426,23 +727,26 @@ exports[`inc 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -454,8 +758,9 @@ exports[`inc 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -466,42 +771,135 @@ exports[`inc 2`] = `
 
 exports[`key dec 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Counter created.",
-  "Dec (amount=1, key: my-key).",
-  "Dec (amount=1, key: my-key).",
-  "Dec (amount=10, key: my-key).",
-  "Dec (amount=10, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
+  "root/my_counter/Resource started",
+  "dec(1, "my-key")",
+  "dec(nil, "my-key")",
+  "dec(10, "my-key")",
+  "dec(10, "my-key")",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`key dec 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 0
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = { onStop: () => {} };
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "tests": {},
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.std.TestRunner",
+        "type": "@winglang/sdk.sim.Resource",
       },
-      {
-        "attrs": {},
-        "path": "root/my_counter",
-        "props": {
-          "initial": 0,
-        },
-        "type": "@winglang/sdk.cloud.Counter",
-      },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -512,13 +910,13 @@ exports[`key dec 2`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -552,14 +950,6 @@ exports[`key dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -568,9 +958,21 @@ exports[`key dec 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -585,23 +987,26 @@ exports[`key dec 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -613,8 +1018,9 @@ exports[`key dec 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -625,42 +1031,135 @@ exports[`key dec 2`] = `
 
 exports[`key inc 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Counter created.",
-  "Inc (amount=1, key: my-key).",
-  "Inc (amount=1, key: my-key).",
-  "Inc (amount=10, key: my-key).",
-  "Inc (amount=10, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
+  "root/my_counter/Resource started",
+  "inc(1, "my-key")",
+  "inc(nil, "my-key")",
+  "inc(10, "my-key")",
+  "inc(10, "my-key")",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`key inc 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 0
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = { onStop: () => {} };
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "tests": {},
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.std.TestRunner",
+        "type": "@winglang/sdk.sim.Resource",
       },
-      {
-        "attrs": {},
-        "path": "root/my_counter",
-        "props": {
-          "initial": 0,
-        },
-        "type": "@winglang/sdk.cloud.Counter",
-      },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -671,13 +1170,13 @@ exports[`key inc 2`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -711,14 +1210,6 @@ exports[`key inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -727,9 +1218,21 @@ exports[`key inc 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -744,23 +1247,26 @@ exports[`key inc 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -772,8 +1278,9 @@ exports[`key inc 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -784,40 +1291,133 @@ exports[`key inc 2`] = `
 
 exports[`key set to new value 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Counter created.",
-  "Set (value=5, key: my-key).",
-  "Peek (value=5, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
+  "root/my_counter/Resource started",
+  "set(5, "my-key")",
+  "peek("my-key")",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`key set to new value 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 0
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = { onStop: () => {} };
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "tests": {},
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.std.TestRunner",
+        "type": "@winglang/sdk.sim.Resource",
       },
-      {
-        "attrs": {},
-        "path": "root/my_counter",
-        "props": {
-          "initial": 0,
-        },
-        "type": "@winglang/sdk.cloud.Counter",
-      },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -828,13 +1428,13 @@ exports[`key set to new value 2`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -868,14 +1468,6 @@ exports[`key set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -884,9 +1476,21 @@ exports[`key set to new value 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -901,23 +1505,26 @@ exports[`key set to new value 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -929,8 +1536,9 @@ exports[`key set to new value 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -941,40 +1549,133 @@ exports[`key set to new value 2`] = `
 
 exports[`set to new value 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Counter created.",
-  "Set (value=5).",
-  "Peek (value=5).",
-  "@winglang/sdk.cloud.Counter deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
+  "root/my_counter/Resource started",
+  "set(5)",
+  "peek()",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`set to new value 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = { onStop: () => {} };
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "tests": {},
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.std.TestRunner",
+        "type": "@winglang/sdk.sim.Resource",
       },
-      {
-        "attrs": {},
-        "path": "root/my_counter",
-        "props": {
-          "initial": 123,
-        },
-        "type": "@winglang/sdk.cloud.Counter",
-      },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -985,13 +1686,13 @@ exports[`set to new value 2`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -1025,14 +1726,6 @@ exports[`set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1041,9 +1734,21 @@ exports[`set to new value 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1058,23 +1763,26 @@ exports[`set to new value 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -1086,8 +1794,9 @@ exports[`set to new value 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

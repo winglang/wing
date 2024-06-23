@@ -3,6 +3,7 @@ import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import {
+  getTfResource,
   mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
@@ -146,4 +147,32 @@ test("website with invalid path should throw error", () => {
     );
     app.synth();
   }).toThrowError('key must have a .json suffix. (current: "txt")');
+});
+
+test("custom error page", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  new cloud.Website(app, "Website", {
+    path: path.resolve(__dirname, "../test-files/website"),
+    errorDocument: "b.html",
+  });
+  const output = app.synth();
+
+  // THEN
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(
+    getTfResource(output, "aws_cloudfront_distribution", 0)
+      .custom_error_response
+  ).toEqual([
+    {
+      error_code: 404,
+      response_code: 200,
+      response_page_path: "/b.html",
+    },
+    {
+      error_code: 403,
+      response_code: 200,
+      response_page_path: "/b.html",
+    },
+  ]);
 });

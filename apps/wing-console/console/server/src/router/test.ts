@@ -1,9 +1,10 @@
-import { TestResult } from "@winglang/sdk/lib/std";
+import { TraceType, type TestResult } from "@winglang/sdk/lib/std";
 import { z } from "zod";
 
-import { ConsoleLogger } from "../consoleLogger.js";
+import type { ConsoleLogger } from "../consoleLogger.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { ITestRunnerClient, Simulator } from "../wingsdk.js";
+import { formatTraceError } from "../utils/format-wing-error.js";
+import type { ITestRunnerClient, Simulator } from "../wingsdk.js";
 
 const getTestName = (testPath: string) => {
   const test = testPath.split("/").pop() ?? testPath;
@@ -17,16 +18,18 @@ const listTests = (simulator: Simulator): Promise<string[]> => {
   return testRunner.listTests();
 };
 
+const reloadSimulator = async (simulator: Simulator, logger: ConsoleLogger) => {
+  logger.verbose("Reloading simulator...", "console", {
+    messageType: "info",
+  });
+  await simulator.reload(true);
+};
+
 const runTest = async (
   simulator: Simulator,
   resourcePath: string,
   logger: ConsoleLogger,
 ): Promise<InternalTestResult> => {
-  logger.log("Reloading simulator...", "console", {
-    messageType: "info",
-  });
-  await simulator.reload();
-
   const client = simulator.getResource(
     "root/cloud.TestRunner",
   ) as ITestRunnerClient;
@@ -41,6 +44,13 @@ const runTest = async (
   const startTime = Date.now();
   try {
     const t = await client.runTest(resourcePath);
+    for (const log of t.traces) {
+      if (log.type === TraceType.LOG) {
+        logger.log(log.data.message, "simulator");
+      } else {
+        logger.verbose(log.data.message, "simulator");
+      }
+    }
     result = {
       ...result,
       ...t,
@@ -57,7 +67,11 @@ const runTest = async (
         messageType: "success",
       },
     );
-  } catch {
+  } catch (error: any) {
+    let output = await formatTraceError(error?.message);
+    logger.log(output, "console", {
+      messageType: "fail",
+    });
     logger.log(
       `Test "${getTestName(resourcePath)}" failed (${
         Date.now() - startTime
@@ -80,7 +94,7 @@ export interface InternalTestResult extends TestResult {
 export const createTestRouter = () => {
   return createRouter({
     "test.list": createProcedure.query(async ({ input, ctx }) => {
-      const simulator = await ctx.simulator();
+      const simulator = await ctx.testSimulator();
       const list = await listTests(simulator);
 
       const testsState = ctx.testsStateManager();
@@ -93,6 +107,7 @@ export const createTestRouter = () => {
           label: getTestName(resourcePath),
           status: test?.status ?? "pending",
           time: test?.time ?? 0,
+          datetime: test?.datetime,
         };
       });
     }),
@@ -103,8 +118,9 @@ export const createTestRouter = () => {
         }),
       )
       .mutation(async ({ input, ctx }) => {
+        await reloadSimulator(await ctx.testSimulator(), ctx.logger);
         const response = await runTest(
-          await ctx.simulator(),
+          await ctx.testSimulator(),
           input.resourcePath,
           ctx.logger,
         );
@@ -115,12 +131,14 @@ export const createTestRouter = () => {
           label: getTestName(input.resourcePath),
           status: response.error ? "error" : "success",
           time: response.time,
+          datetime: Date.now(),
         });
 
         return response;
       }),
     "test.runAll": createProcedure.mutation(async ({ ctx }) => {
-      const simulator = await ctx.simulator();
+      const simulator = await ctx.testSimulator();
+      await reloadSimulator(simulator, ctx.logger);
       const testsState = ctx.testsStateManager();
 
       const testList = await listTests(simulator);
@@ -133,6 +151,7 @@ export const createTestRouter = () => {
           label: getTestName(resourcePath),
           status: response.error ? "error" : "success",
           time: response.time,
+          datetime: Date.now(),
         });
       }
 

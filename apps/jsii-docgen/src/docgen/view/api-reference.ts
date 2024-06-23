@@ -78,7 +78,7 @@ export class ApiReference {
     this.constructs = new Constructs(
       transpile,
       classes,
-      this.searchableInterfaces(interfaces)
+      this.searchableInterfaces([...assembly.allInterfaces])
     );
     this.classes = new Classes(transpile, classes);
     this.structs = new Structs(transpile, interfaces);

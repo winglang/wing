@@ -1,9 +1,9 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr, ExprKind,
-		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString,
-		InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-		TypeAnnotationKind, UserDefinedType,
+		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum,
+		ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet,
+		Interface, InterpolatedString, InterpolatedStringPart, Intrinsic, LiftQualification, Literal, New, Reference,
+		Scope, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -24,11 +24,17 @@ pub trait Fold {
 	fn fold_class_field(&mut self, node: ClassField) -> ClassField {
 		fold_class_field(self, node)
 	}
+	fn fold_struct(&mut self, node: Struct) -> Struct {
+		fold_struct(self, node)
+	}
 	fn fold_struct_field(&mut self, node: StructField) -> StructField {
 		fold_struct_field(self, node)
 	}
 	fn fold_interface(&mut self, node: Interface) -> Interface {
 		fold_interface(self, node)
+	}
+	fn fold_enum(&mut self, node: Enum) -> Enum {
+		fold_enum(self, node)
 	}
 	fn fold_expr(&mut self, node: Expr) -> Expr {
 		fold_expr(self, node)
@@ -87,8 +93,8 @@ where
 				BringSource::TrustedModule(name, module_dir) => BringSource::TrustedModule(f.fold_symbol(name), module_dir),
 				BringSource::WingLibrary(name, module_dir) => BringSource::WingLibrary(f.fold_symbol(name), module_dir),
 				BringSource::JsiiModule(name) => BringSource::JsiiModule(f.fold_symbol(name)),
-				BringSource::WingFile(name) => BringSource::WingFile(f.fold_symbol(name)),
-				BringSource::Directory(name) => BringSource::Directory(f.fold_symbol(name)),
+				BringSource::WingFile(path) => BringSource::WingFile(path),
+				BringSource::Directory(path) => BringSource::Directory(path),
 			},
 			identifier: identifier.map(|id| f.fold_symbol(id)),
 		},
@@ -130,11 +136,21 @@ where
 			var_name: f.fold_symbol(var_name),
 			elif_statements: elif_statements
 				.into_iter()
-				.map(|elif_let_block| ElifLetBlock {
-					reassignable: elif_let_block.reassignable,
-					statements: f.fold_scope(elif_let_block.statements),
-					value: f.fold_expr(elif_let_block.value),
-					var_name: f.fold_symbol(elif_let_block.var_name),
+				.map(|elif_block| match elif_block {
+					Elifs::ElifBlock(elif_block) => {
+						return Elifs::ElifBlock(ElifBlock {
+							condition: f.fold_expr(elif_block.condition),
+							statements: f.fold_scope(elif_block.statements),
+						})
+					}
+					Elifs::ElifLetBlock(elif_let_block) => {
+						return Elifs::ElifLetBlock(ElifLetBlock {
+							reassignable: elif_let_block.reassignable,
+							statements: f.fold_scope(elif_let_block.statements),
+							value: f.fold_expr(elif_let_block.value),
+							var_name: f.fold_symbol(elif_let_block.var_name),
+						});
+					}
 				})
 				.collect(),
 			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
@@ -169,22 +185,8 @@ where
 		StmtKind::Scope(scope) => StmtKind::Scope(f.fold_scope(scope)),
 		StmtKind::Class(class) => StmtKind::Class(f.fold_class(class)),
 		StmtKind::Interface(interface) => StmtKind::Interface(f.fold_interface(interface)),
-		StmtKind::Struct {
-			name,
-			extends,
-			fields,
-			access,
-		} => StmtKind::Struct {
-			name: f.fold_symbol(name),
-			extends: extends.into_iter().map(|e| f.fold_user_defined_type(e)).collect(),
-			fields: fields.into_iter().map(|field| f.fold_struct_field(field)).collect(),
-			access,
-		},
-		StmtKind::Enum { name, values, access } => StmtKind::Enum {
-			name: f.fold_symbol(name),
-			values: values.into_iter().map(|value| f.fold_symbol(value)).collect(),
-			access,
-		},
+		StmtKind::Struct(st) => StmtKind::Struct(f.fold_struct(st)),
+		StmtKind::Enum(enu) => StmtKind::Enum(f.fold_enum(enu)),
 		StmtKind::TryCatch {
 			try_statements,
 			catch_block,
@@ -201,11 +203,23 @@ where
 		StmtKind::SuperConstructor { arg_list } => StmtKind::SuperConstructor {
 			arg_list: f.fold_args(arg_list),
 		},
+		StmtKind::ExplicitLift(explicit_lift) => StmtKind::ExplicitLift(ExplicitLift {
+			qualifications: explicit_lift
+				.qualifications
+				.into_iter()
+				.map(|q| LiftQualification {
+					obj: f.fold_expr(q.obj),
+					ops: q.ops.into_iter().map(|op| f.fold_symbol(op)).collect(),
+				})
+				.collect(),
+			statements: f.fold_scope(explicit_lift.statements),
+		}),
 	};
 	Stmt {
 		kind,
 		span: node.span,
 		idx: node.idx,
+		doc: node.doc,
 	}
 }
 
@@ -232,6 +246,7 @@ where
 		phase: node.phase,
 		inflight_initializer: f.fold_function_definition(node.inflight_initializer),
 		access: node.access,
+		auto_id: node.auto_id,
 	}
 }
 
@@ -246,6 +261,7 @@ where
 		phase: node.phase,
 		is_static: node.is_static,
 		access: node.access,
+		doc: node.doc,
 	}
 }
 
@@ -256,6 +272,7 @@ where
 	StructField {
 		name: f.fold_symbol(node.name),
 		member_type: f.fold_type_annotation(node.member_type),
+		doc: node.doc,
 	}
 }
 
@@ -268,13 +285,41 @@ where
 		methods: node
 			.methods
 			.into_iter()
-			.map(|(name, sig)| (f.fold_symbol(name), f.fold_function_signature(sig)))
+			.map(|(name, sig, doc)| (f.fold_symbol(name), f.fold_function_signature(sig), doc))
 			.collect(),
 		extends: node
 			.extends
 			.into_iter()
 			.map(|interface| f.fold_user_defined_type(interface))
 			.collect(),
+		access: node.access,
+		phase: node.phase,
+	}
+}
+
+pub fn fold_struct<F>(f: &mut F, node: Struct) -> Struct
+where
+	F: Fold + ?Sized,
+{
+	Struct {
+		name: f.fold_symbol(node.name),
+		extends: node.extends.into_iter().map(|e| f.fold_user_defined_type(e)).collect(),
+		fields: node
+			.fields
+			.into_iter()
+			.map(|field| f.fold_struct_field(field))
+			.collect(),
+		access: node.access,
+	}
+}
+
+pub fn fold_enum<F>(f: &mut F, node: Enum) -> Enum
+where
+	F: Fold + ?Sized,
+{
+	Enum {
+		name: f.fold_symbol(node.name),
+		values: node.values.into_iter().map(|v| (f.fold_symbol(v.0), v.1)).collect(),
 		access: node.access,
 	}
 }
@@ -292,6 +337,11 @@ where
 			end: Box::new(f.fold_expr(*end)),
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
+		ExprKind::Intrinsic(intrinsic) => ExprKind::Intrinsic(Intrinsic {
+			arg_list: intrinsic.arg_list.map(|arg_list| f.fold_args(arg_list)),
+			name: f.fold_symbol(intrinsic.name),
+			kind: intrinsic.kind,
+		}),
 		ExprKind::Call { callee, arg_list } => ExprKind::Call {
 			callee: match callee {
 				CalleeKind::Expr(expr) => CalleeKind::Expr(Box::new(f.fold_expr(*expr))),
@@ -391,6 +441,7 @@ where
 		Literal::Boolean(x) => Literal::Boolean(x),
 		Literal::Number(x) => Literal::Number(x),
 		Literal::String(x) => Literal::String(x),
+		Literal::NonInterpolatedString(x) => Literal::NonInterpolatedString(x),
 		Literal::Nil => Literal::Nil,
 	}
 }
@@ -414,6 +465,10 @@ where
 			type_name: f.fold_user_defined_type(type_name),
 			property: f.fold_symbol(property),
 		},
+		Reference::ElementAccess { object, index } => Reference::ElementAccess {
+			object: Box::new(f.fold_expr(*object)),
+			index: Box::new(f.fold_expr(*index)),
+		},
 	}
 }
 
@@ -431,6 +486,7 @@ where
 		is_static: node.is_static,
 		span: node.span,
 		access: node.access,
+		doc: node.doc,
 	}
 }
 
@@ -473,6 +529,7 @@ where
 			.map(|(name, arg)| (f.fold_symbol(name), f.fold_expr(arg)))
 			.collect(),
 		span: node.span,
+		id: node.id,
 	}
 }
 

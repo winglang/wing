@@ -3,7 +3,11 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
-      "dependsOn": ["@winglang/wingii#compile", "@winglang/tree-sitter-wing#compile"],
+      "dependsOn": [
+        "@winglang/wingii#compile",
+        "@winglang/tree-sitter-wing#compile"
+      ],
+      "inputs": ["*.json", "*.toml", "src/**/*.rs", "scripts/postcompile.sh"],
       "outputs": [
         "../../target/wasm32-wasi/release/wingc.wasm",
         "../../target/wasm32-wasi/release/libwingc.*",
@@ -11,9 +15,15 @@
       ]
     },
     "test": {
-      "dependsOn": ["compile", "@winglang/sdk#compile", "examples-valid#topo", "examples-invalid#topo"]
+      "dependsOn": [
+        "@winglang/tree-sitter-wing#compile",
+        "@winglang/sdk#compile",
+        "examples-valid#topo",
+        "examples-invalid#topo"
+      ]
     },
     "dev": {
+      "inputs": ["*.json", "*.toml", "src/**/*.rs", "examples/**/*.rs"],
       "dependsOn": ["@winglang/sdk#compile"]
     }
   }

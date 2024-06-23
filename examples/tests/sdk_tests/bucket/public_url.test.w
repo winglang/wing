@@ -1,6 +1,7 @@
 bring cloud;
 bring http;
 bring util;
+bring expect;
 
 let publicBucket = new cloud.Bucket(public: true) as "publicBucket";
 let privateBucket = new cloud.Bucket() as "privateBucket";
@@ -11,7 +12,7 @@ test "publicUrl" {
     try {
       block();
     } catch actual {
-      assert(actual.contains(expected));
+      expect.equal(actual, expected);
       error = true;
     }
     assert(error);

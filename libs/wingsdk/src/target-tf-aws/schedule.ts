@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
@@ -6,7 +5,10 @@ import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule
 import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { convertBetweenHandlers } from "../shared/convert";
+import {
+  ScheduleOnTickHandler,
+  convertUnixCronToAWSCron,
+} from "../shared-aws/schedule";
 import { Node } from "../std";
 
 /**
@@ -24,21 +26,13 @@ export class Schedule extends cloud.Schedule {
 
     const { rate, cron } = props;
 
-    /*
-     * The schedule cron string is Unix cron format: [minute] [hour] [day of month] [month] [day of week]
-     * AWS EventBridge Schedule uses a 6 field format which includes year: [minute] [hour] [day of month] [month] [day of week] [year]
-     * https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html#cron-based
-     *
-     * We append * to the cron string for year field.
-     */
     this.scheduleExpression = rate
       ? rate.minutes === 1
         ? `rate(${rate.minutes} minute)`
         : `rate(${rate.minutes} minutes)`
-      : `cron(${cron} *)`;
+      : `cron(${convertUnixCronToAWSCron(cron!)})`;
 
     this.rule = new CloudwatchEventRule(this, "Schedule", {
-      isEnabled: true,
       scheduleExpression: this.scheduleExpression,
     });
   }
@@ -47,16 +41,8 @@ export class Schedule extends cloud.Schedule {
     inflight: cloud.IScheduleOnTickHandler,
     props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname.replace("target-tf-aws", "shared-aws"),
-        "schedule.ontick.inflight.js"
-      ),
-      "ScheduleOnTickHandlerClient"
-    );
-
-    let fn = this.handlers[inflight._hash];
+    const functionHandler = ScheduleOnTickHandler.toFunctionHandler(inflight);
+    let fn = this.handlers[inflight._id];
     if (fn) {
       return fn;
     }
@@ -67,7 +53,7 @@ export class Schedule extends cloud.Schedule {
       functionHandler,
       props
     );
-    this.handlers[inflight._hash] = fn;
+    this.handlers[inflight._id] = fn;
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
@@ -89,8 +75,10 @@ export class Schedule extends cloud.Schedule {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ScheduleInflightMethods.TICK,
       target: fn,
-      name: "onTick()",
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
+      name: "tick",
     });
 
     return fn;

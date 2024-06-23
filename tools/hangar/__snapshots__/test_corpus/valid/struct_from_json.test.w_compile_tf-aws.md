@@ -1,8 +1,9 @@
 # [struct_from_json.test.w](../../../../../examples/tests/valid/struct_from_json.test.w) | compile | tf-aws
 
-## inflight.$Closure1-2.js
-```js
+## inflight.$Closure1-2.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $cloud_BucketProps, $j }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,18 +12,19 @@ module.exports = function({ $cloud_BucketProps, $j }) {
       return $obj;
     }
     async handle() {
-      const x = ((json, validateOptions) => ($cloud_BucketProps._fromJson(json, validateOptions)))($j);
-      {((cond) => {if (!cond) throw new Error("assertion failed: x.public == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.public,false)))};
+      const x = $cloud_BucketProps._fromJson($j);
+      $helpers.assert($helpers.eq(x.public, false), "x.public == false");
     }
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-2.js.map
+//# sourceMappingURL=inflight.$Closure1-2.cjs.map
 ```
 
-## inflight.$Closure2-2.js
-```js
+## inflight.$Closure2-2.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student }) {
   class $Closure2 {
     constructor({  }) {
@@ -32,37 +34,38 @@ module.exports = function({ $Student }) {
     }
     async handle() {
       const jStudent3 = ({"firstName": "struct", "lastName": "greatest", "enrolled": true, "schoolId": "s3-inflight", "dob": ({"month": 4, "day": 1, "year": 1999}), "coursesTaken": [({"grade": "B", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 101", "credits": 2})}), ({"grade": "A", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 121", "credits": 4})})]});
-      const studentInflight1 = ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))(jStudent3);
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.firstName == \"struct\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.firstName,"struct")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.lastName == \"greatest\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.lastName,"greatest")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.enrolled")})(studentInflight1.enrolled)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.schoolId == \"s3-inflight\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.schoolId,"s3-inflight")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.dob.month == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.dob.month,4)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.dob.day == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.dob.day,1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.dob.year == 1999")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.dob.year,1999)))};
+      const studentInflight1 = $Student._fromJson(jStudent3);
+      $helpers.assert($helpers.eq(studentInflight1.firstName, "struct"), "studentInflight1.firstName == \"struct\"");
+      $helpers.assert($helpers.eq(studentInflight1.lastName, "greatest"), "studentInflight1.lastName == \"greatest\"");
+      $helpers.assert(studentInflight1.enrolled, "studentInflight1.enrolled");
+      $helpers.assert($helpers.eq(studentInflight1.schoolId, "s3-inflight"), "studentInflight1.schoolId == \"s3-inflight\"");
+      $helpers.assert($helpers.eq(studentInflight1.dob.month, 4), "studentInflight1.dob.month == 4");
+      $helpers.assert($helpers.eq(studentInflight1.dob.day, 1), "studentInflight1.dob.day == 1");
+      $helpers.assert($helpers.eq(studentInflight1.dob.year, 1999), "studentInflight1.dob.year == 1999");
       {
         const $if_let_value = studentInflight1.coursesTaken;
         if ($if_let_value != undefined) {
           const coursesTaken = $if_let_value;
           const course1 = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(coursesTaken, 0);
           const course2 = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(coursesTaken, 1);
-          {((cond) => {if (!cond) throw new Error("assertion failed: course1.grade == \"B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(course1.grade,"B")))};
-          {((cond) => {if (!cond) throw new Error("assertion failed: course2.grade == \"A\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(course2.grade,"A")))};
+          $helpers.assert($helpers.eq(course1.grade, "B"), "course1.grade == \"B\"");
+          $helpers.assert($helpers.eq(course2.grade, "A"), "course2.grade == \"A\"");
         }
         else {
-          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          $helpers.assert(false, "false");
         }
       }
     }
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-2.js.map
+//# sourceMappingURL=inflight.$Closure2-2.cjs.map
 ```
 
-## inflight.$Closure3-2.js
-```js
+## inflight.$Closure3-2.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student, $jStudent1 }) {
   class $Closure3 {
     constructor({  }) {
@@ -71,25 +74,26 @@ module.exports = function({ $Student, $jStudent1 }) {
       return $obj;
     }
     async handle() {
-      const studentInflight1 = ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))($jStudent1);
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.firstName == \"John\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.firstName,"John")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.lastName == \"Smith\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.lastName,"Smith")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.enrolled")})(studentInflight1.enrolled)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.schoolId == \"s1-xyz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.schoolId,"s1-xyz")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.dob.month == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.dob.month,10)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.dob.day == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.dob.day,10)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.dob.year == 2005")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.dob.year,2005)))};
+      const studentInflight1 = $Student._fromJson($jStudent1);
+      $helpers.assert($helpers.eq(studentInflight1.firstName, "John"), "studentInflight1.firstName == \"John\"");
+      $helpers.assert($helpers.eq(studentInflight1.lastName, "Smith"), "studentInflight1.lastName == \"Smith\"");
+      $helpers.assert(studentInflight1.enrolled, "studentInflight1.enrolled");
+      $helpers.assert($helpers.eq(studentInflight1.schoolId, "s1-xyz"), "studentInflight1.schoolId == \"s1-xyz\"");
+      $helpers.assert($helpers.eq(studentInflight1.dob.month, 10), "studentInflight1.dob.month == 10");
+      $helpers.assert($helpers.eq(studentInflight1.dob.day, 10), "studentInflight1.dob.day == 10");
+      $helpers.assert($helpers.eq(studentInflight1.dob.year, 2005), "studentInflight1.dob.year == 2005");
     }
   }
   return $Closure3;
 }
-//# sourceMappingURL=inflight.$Closure3-2.js.map
+//# sourceMappingURL=inflight.$Closure3-2.cjs.map
 ```
 
-## inflight.$Closure4-2.js
-```js
+## inflight.$Closure4-2.cjs
+```cjs
 "use strict";
-module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyStruct, $std_Json }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $MyStruct, $expectedSchema, $jMyStruct, $schema, $std_Json }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -97,19 +101,20 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
       return $obj;
     }
     async handle() {
-      const s = ($MyStruct);
+      const s = $MyStruct;
       (await s.validate($jMyStruct));
-      {((cond) => {if (!cond) throw new Error("assertion failed: schema.asStr() == Json.stringify(expectedSchema)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_schema_asStr___,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$expectedSchema]))))};
+      $helpers.assert($helpers.eq((await $schema.asStr()), ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
     }
   }
   return $Closure4;
 }
-//# sourceMappingURL=inflight.$Closure4-2.js.map
+//# sourceMappingURL=inflight.$Closure4-2.cjs.map
 ```
 
-## inflight.$Closure5-2.js
-```js
+## inflight.$Closure5-2.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) {
   class $Closure5 {
     constructor({  }) {
@@ -121,17 +126,18 @@ module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) 
       (await $std_String.fromJson(10, { unsafe: true }));
       (await $std_Boolean.fromJson(10, { unsafe: true }));
       (await $std_Number.fromJson("cool", { unsafe: true }));
-      ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}), { unsafe: true });
+      $Student._fromJson(({"obviously": "not a student"}), { unsafe: true });
     }
   }
   return $Closure5;
 }
-//# sourceMappingURL=inflight.$Closure5-2.js.map
+//# sourceMappingURL=inflight.$Closure5-2.cjs.map
 ```
 
-## inflight.UsesStructInImportedFile-1.js
-```js
+## inflight.UsesStructInImportedFile-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class UsesStructInImportedFile {
     constructor({  }) {
@@ -139,7 +145,7 @@ module.exports = function({  }) {
   }
   return UsesStructInImportedFile;
 }
-//# sourceMappingURL=inflight.UsesStructInImportedFile-1.js.map
+//# sourceMappingURL=inflight.UsesStructInImportedFile-1.cjs.map
 ```
 
 ## main.tf.json
@@ -149,22 +155,9 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -174,37 +167,38 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
-const externalStructs = require("./preflight.structs-1.js")({ $stdlib });
-const otherExternalStructs = require("./preflight.structs2-2.js")({ $stdlib });
+const externalStructs = require("./preflight.structs-1.cjs");
+const otherExternalStructs = require("./preflight.structs2-2.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const Bar = $stdlib.std.Struct._createJsonSchema({id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
-    const Foo = $stdlib.std.Struct._createJsonSchema({id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
-    const Foosible = $stdlib.std.Struct._createJsonSchema({id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
-    const MyStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyStruct",type:"object",properties:{m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["m1","m2",]});
-    const SomeStruct = $stdlib.std.Struct._createJsonSchema({id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",]});
-    const Student = $stdlib.std.Struct._createJsonSchema({id:"/Student",type:"object",properties:{additionalData:{type:"object"},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
-    const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
-    const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    const Bar = $stdlib.std.Struct._createJsonSchema({$id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
+    const Foo = $stdlib.std.Struct._createJsonSchema({$id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
+    const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
+    const MyStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyStruct",type:"object",properties:{m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["m1","m2",]});
+    const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:["object","string","boolean","number","array"]},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
+    const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({$id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
+    const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-2.cjs")({
             $cloud_BucketProps: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"))},
             $j: ${$stdlib.core.liftObject(j)},
           })
@@ -213,7 +207,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -221,25 +215,26 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(j, host, []);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [j, []],
+          ],
+          "$inflight_init": [
+            [j, []],
+          ],
+        });
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure2-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-2.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
           })
         `;
@@ -247,7 +242,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
+            const $Closure2Client = ${$Closure2._toInflightType()};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -255,19 +250,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure3 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure3-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-2.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
             $jStudent1: ${$stdlib.core.liftObject(jStudent1)},
           })
@@ -276,7 +276,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const $Closure3Client = ${$Closure3._toInflightType()};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -284,29 +284,30 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(jStudent1, host, []);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [jStudent1, []],
+          ],
+          "$inflight_init": [
+            [jStudent1, []],
+          ],
+        });
       }
     }
-    class $Closure4 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure4 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure4-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-2.cjs")({
             $MyStruct: ${$stdlib.core.liftObject(MyStruct)},
-            $_schema_asStr___: ${$stdlib.core.liftObject((schema.asStr()))},
             $expectedSchema: ${$stdlib.core.liftObject(expectedSchema)},
             $jMyStruct: ${$stdlib.core.liftObject(jMyStruct)},
+            $schema: ${$stdlib.core.liftObject(schema)},
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
@@ -314,7 +315,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType(this)};
+            const $Closure4Client = ${$Closure4._toInflightType()};
             const client = new $Closure4Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -322,27 +323,30 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure4._registerOnLiftObject((schema.asStr()), host, []);
-          $Closure4._registerOnLiftObject(expectedSchema, host, []);
-          $Closure4._registerOnLiftObject(jMyStruct, host, []);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [expectedSchema, []],
+            [jMyStruct, []],
+            [schema, ["asStr"]],
+          ],
+          "$inflight_init": [
+            [expectedSchema, []],
+            [jMyStruct, []],
+            [schema, []],
+          ],
+        });
       }
     }
-    class $Closure5 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure5 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure5-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-2.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
             $std_Boolean: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
             $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
@@ -353,7 +357,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure5Client = ${$Closure5._toInflightType(this)};
+            const $Closure5Client = ${$Closure5._toInflightType()};
             const client = new $Closure5Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -361,57 +365,62 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const j = ({"public": false});
-    const x = ((json, validateOptions) => (cloud_BucketProps._fromJson(json, validateOptions)))(j);
-    {((cond) => {if (!cond) throw new Error("assertion failed: x.public == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.public,false)))};
+    const x = cloud_BucketProps._fromJson(j);
+    $helpers.assert($helpers.eq(x.public, false), "x.public == false");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight jsii struct conversion", new $Closure1(this, "$Closure1"));
     const jFoo = ({"f": "bar"});
-    {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fromJson(jFoo).f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((json, validateOptions) => (Foo._fromJson(json, validateOptions)))(jFoo).f,"bar")))};
+    $helpers.assert($helpers.eq(Foo._fromJson(jFoo).f, "bar"), "Foo.fromJson(jFoo).f == \"bar\"");
     const jFoosible = ({});
     const jFoosible2 = ({"f": "bar"});
     {
-      const $if_let_value = ((json, validateOptions) => (Foosible._fromJson(json, validateOptions)))(jFoosible).f;
+      const $if_let_value = Foosible._fromJson(jFoosible).f;
       if ($if_let_value != undefined) {
         const f = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert(false, "false");
       }
     }
     {
-      const $if_let_value = ((json, validateOptions) => (Foosible._fromJson(json, validateOptions)))(jFoosible2).f;
+      const $if_let_value = Foosible._fromJson(jFoosible2).f;
       if ($if_let_value != undefined) {
         const f = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f,"bar")))};
+        $helpers.assert($helpers.eq(f, "bar"), "f == \"bar\"");
       }
       else {
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert(false, "false");
       }
     }
     const jBar = ({"f": "bar", "b": 10});
-    const b = ((json, validateOptions) => (Bar._fromJson(json, validateOptions)))(jBar);
-    {((cond) => {if (!cond) throw new Error("assertion failed: b.f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.f,"bar")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: b.b == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.b,10)))};
+    const b = Bar._fromJson(jBar);
+    $helpers.assert($helpers.eq(b.f, "bar"), "b.f == \"bar\"");
+    $helpers.assert($helpers.eq(b.b, 10), "b.b == 10");
     const jStudent1 = ({"firstName": "John", "lastName": "Smith", "enrolled": true, "schoolId": "s1-xyz", "dob": ({"month": 10, "day": 10, "year": 2005}), "enrolledCourses": []});
-    const student1 = ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(jStudent1);
-    {((cond) => {if (!cond) throw new Error("assertion failed: student1.firstName == \"John\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.firstName,"John")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student1.lastName == \"Smith\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.lastName,"Smith")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student1.enrolled")})(student1.enrolled)};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student1.schoolId == \"s1-xyz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.schoolId,"s1-xyz")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student1.dob.month == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.dob.month,10)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student1.dob.day == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.dob.day,10)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student1.dob.year == 2005")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.dob.year,2005)))};
+    const student1 = Student._fromJson(jStudent1);
+    $helpers.assert($helpers.eq(student1.firstName, "John"), "student1.firstName == \"John\"");
+    $helpers.assert($helpers.eq(student1.lastName, "Smith"), "student1.lastName == \"Smith\"");
+    $helpers.assert(student1.enrolled, "student1.enrolled");
+    $helpers.assert($helpers.eq(student1.schoolId, "s1-xyz"), "student1.schoolId == \"s1-xyz\"");
+    $helpers.assert($helpers.eq(student1.dob.month, 10), "student1.dob.month == 10");
+    $helpers.assert($helpers.eq(student1.dob.day, 10), "student1.dob.day == 10");
+    $helpers.assert($helpers.eq(student1.dob.year, 2005), "student1.dob.year == 2005");
     const jStudent2 = ({"advisor": ({"firstName": "Tom", "lastName": "Baker", "dob": ({"month": 1, "day": 1, "year": 1983}), "employeeID": "emp123"}), "firstName": "Sally", "lastName": "Reynolds", "enrolled": false, "schoolId": "s2-xyz", "dob": ({"month": 5, "day": 31, "year": 1987}), "enrolledCourses": [({"name": "COMP 101", "credits": 2}), ({"name": "COMP 121", "credits": 4})], "coursesTaken": [({"grade": "F", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 101", "credits": 2})}), ({"grade": "D", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 121", "credits": 4})})]});
-    const student2 = ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(jStudent2);
-    {((cond) => {if (!cond) throw new Error("assertion failed: student2.firstName == \"Sally\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.firstName,"Sally")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student2.lastName == \"Reynolds\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.lastName,"Reynolds")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: !student2.enrolled")})((!student2.enrolled))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student2.schoolId == \"s2-xyz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.schoolId,"s2-xyz")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student2.dob.month == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.dob.month,5)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student2.dob.day == 31")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.dob.day,31)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: student2.dob.year == 1987")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.dob.year,1987)))};
+    const student2 = Student._fromJson(jStudent2);
+    $helpers.assert($helpers.eq(student2.firstName, "Sally"), "student2.firstName == \"Sally\"");
+    $helpers.assert($helpers.eq(student2.lastName, "Reynolds"), "student2.lastName == \"Reynolds\"");
+    $helpers.assert((!student2.enrolled), "!student2.enrolled");
+    $helpers.assert($helpers.eq(student2.schoolId, "s2-xyz"), "student2.schoolId == \"s2-xyz\"");
+    $helpers.assert($helpers.eq(student2.dob.month, 5), "student2.dob.month == 5");
+    $helpers.assert($helpers.eq(student2.dob.day, 31), "student2.dob.day == 31");
+    $helpers.assert($helpers.eq(student2.dob.year, 1987), "student2.dob.year == 1987");
     {
       const $if_let_value = student2.enrolledCourses;
       if ($if_let_value != undefined) {
@@ -419,142 +428,132 @@ class $Root extends $stdlib.std.Resource {
         const courses = [...(enrolledCourses)];
         const s2Course1 = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(courses, 0);
         const s2Course2 = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(courses, 1);
-        {((cond) => {if (!cond) throw new Error("assertion failed: s2Course1.name == \"COMP 101\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s2Course1.name,"COMP 101")))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: s2Course1.credits == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s2Course1.credits,2)))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: s2Course2.name == \"COMP 121\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s2Course2.name,"COMP 121")))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: s2Course2.credits == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s2Course2.credits,4)))};
+        $helpers.assert($helpers.eq(s2Course1.name, "COMP 101"), "s2Course1.name == \"COMP 101\"");
+        $helpers.assert($helpers.eq(s2Course1.credits, 2), "s2Course1.credits == 2");
+        $helpers.assert($helpers.eq(s2Course2.name, "COMP 121"), "s2Course2.name == \"COMP 121\"");
+        $helpers.assert($helpers.eq(s2Course2.credits, 4), "s2Course2.credits == 4");
       }
       else {
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert(false, "false");
       }
     }
     const jStudent3 = ({"enrolled": false, "schoolId": "w/e", "firstName": student2.firstName, "lastName": student2.lastName, "dob": ({"month": 1, "day": 1, "year": 1959}), "additionalData": ({"notes": "wow such notes", "legacy": false, "emergencyContactsNumbers": ["123-345-9928"]})});
-    const student3 = ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(jStudent3);
+    const student3 = Student._fromJson(jStudent3);
     {
       const $if_let_value = student3.additionalData;
       if ($if_let_value != undefined) {
         const additionalData = $if_let_value;
         const notes = ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(additionalData, "notes");
-        {((cond) => {if (!cond) throw new Error("assertion failed: notes == \"wow such notes\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notes,"wow such notes")))};
+        $helpers.assert($helpers.eq(notes, "wow such notes"), "notes == \"wow such notes\"");
       }
       else {
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert(false, "false");
       }
     }
     const invalidStudent = ({"firstName": "I dont have", "lastName": "Any other info"});
     {
-      const $if_let_value = ((json) => (Student._tryFromJson(json)))(invalidStudent);
+      const $if_let_value = Student._tryFromJson(invalidStudent);
       if ($if_let_value != undefined) {
         const student = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert(false, "false");
       }
       else {
-        {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+        $helpers.assert(true, "true");
       }
     }
     {
-      const $if_let_value = ((json) => (Student._tryFromJson(json)))(jStudent2);
+      const $if_let_value = Student._tryFromJson(jStudent2);
       if ($if_let_value != undefined) {
         const student = $if_let_value;
-        {((cond) => {if (!cond) throw new Error("assertion failed: student.firstName == \"Sally\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.firstName,"Sally")))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: student.lastName == \"Reynolds\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.lastName,"Reynolds")))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: !student.enrolled")})((!student.enrolled))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: student.schoolId == \"s2-xyz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.schoolId,"s2-xyz")))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: student.dob.month == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.dob.month,5)))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: student.dob.day == 31")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.dob.day,31)))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: student.dob.year == 1987")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.dob.year,1987)))};
+        $helpers.assert($helpers.eq(student.firstName, "Sally"), "student.firstName == \"Sally\"");
+        $helpers.assert($helpers.eq(student.lastName, "Reynolds"), "student.lastName == \"Reynolds\"");
+        $helpers.assert((!student.enrolled), "!student.enrolled");
+        $helpers.assert($helpers.eq(student.schoolId, "s2-xyz"), "student.schoolId == \"s2-xyz\"");
+        $helpers.assert($helpers.eq(student.dob.month, 5), "student.dob.month == 5");
+        $helpers.assert($helpers.eq(student.dob.day, 31), "student.dob.day == 31");
+        $helpers.assert($helpers.eq(student.dob.year, 1987), "student.dob.year == 1987");
       }
       else {
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert(false, "false");
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:flight school student :)", new $Closure2(this, "$Closure2"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lifting a student", new $Closure3(this, "$Closure3"));
     const jj1 = ({"data": ({"val": 10})});
-    const externalBar = ((json, validateOptions) => (externalStructs_MyOtherStruct._fromJson(json, validateOptions)))(jj1);
-    {((cond) => {if (!cond) throw new Error("assertion failed: externalBar.data.val == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(externalBar.data.val,10)))};
+    const externalBar = externalStructs_MyOtherStruct._fromJson(jj1);
+    $helpers.assert($helpers.eq(externalBar.data.val, 10), "externalBar.data.val == 10");
     const jMyStruct = ({"m1": ({"val": 10}), "m2": ({"val": "10"})});
-    const myStruct = ((json, validateOptions) => (MyStruct._fromJson(json, validateOptions)))(jMyStruct);
-    {((cond) => {if (!cond) throw new Error("assertion failed: myStruct.m1.val == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myStruct.m1.val,10)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: myStruct.m2.val == \"10\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myStruct.m2.val,"10")))};
-    const schema = (MyStruct);
+    const myStruct = MyStruct._fromJson(jMyStruct);
+    $helpers.assert($helpers.eq(myStruct.m1.val, 10), "myStruct.m1.val == 10");
+    $helpers.assert($helpers.eq(myStruct.m2.val, "10"), "myStruct.m2.val == \"10\"");
+    const schema = MyStruct;
     (schema.validate(jMyStruct));
-    const expectedSchema = ({"id": "/MyStruct", "type": "object", "properties": ({"m1": ({"type": "object", "properties": ({"val": ({"type": "number"})}), "required": ["val"]}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"]})}), "required": ["m1", "m2"]});
-    {((cond) => {if (!cond) throw new Error("assertion failed: schema.asStr() == Json.stringify(expectedSchema)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((schema.asStr()),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([expectedSchema]))))};
+    const expectedSchema = ({"$id": "/MyStruct", "type": "object", "properties": ({"m1": ({"type": "object", "properties": ({"val": ({"type": "number"})}), "required": ["val"]}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"]})}), "required": ["m1", "m2"]});
+    $helpers.assert($helpers.eq((schema.asStr()), ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
     (std.String.fromJson(10, { unsafe: true }));
     (std.Boolean.fromJson(10, { unsafe: true }));
     (std.Number.fromJson("cool", { unsafe: true }));
-    ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}), { unsafe: true });
+    Student._fromJson(({"obviously": "not a student"}), { unsafe: true });
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:unsafe flight", new $Closure5(this, "$Closure5"));
-    new otherExternalStructs.UsesStructInImportedFile(this, "otherExternalStructs.UsesStructInImportedFile");
+    new otherExternalStructs.UsesStructInImportedFile(this, "UsesStructInImportedFile");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "struct_from_json.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
-## preflight.structs-1.js
-```js
+## preflight.structs-1.cjs
+```cjs
 "use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const Bar = $stdlib.std.Struct._createJsonSchema({id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
-  const Foo = $stdlib.std.Struct._createJsonSchema({id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
-  const Foosible = $stdlib.std.Struct._createJsonSchema({id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
-  const MyStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyStruct",type:"object",properties:{m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["m1","m2",]});
-  const SomeStruct = $stdlib.std.Struct._createJsonSchema({id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",]});
-  const Student = $stdlib.std.Struct._createJsonSchema({id:"/Student",type:"object",properties:{additionalData:{type:"object"},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
-  const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
-  const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
-  return {  };
-};
-//# sourceMappingURL=preflight.structs-1.js.map
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+module.exports = {  };
+//# sourceMappingURL=preflight.structs-1.cjs.map
 ```
 
-## preflight.structs2-2.js
-```js
+## preflight.structs2-2.cjs
+```cjs
 "use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const Bar = $stdlib.std.Struct._createJsonSchema({id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
-  const Foo = $stdlib.std.Struct._createJsonSchema({id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
-  const Foosible = $stdlib.std.Struct._createJsonSchema({id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
-  const MyStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyStruct",type:"object",properties:{m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["m1","m2",]});
-  const SomeStruct = $stdlib.std.Struct._createJsonSchema({id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",]});
-  const Student = $stdlib.std.Struct._createJsonSchema({id:"/Student",type:"object",properties:{additionalData:{type:"object"},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
-  const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
-  const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
-  class UsesStructInImportedFile extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-      this.someStruct = ((json, validateOptions) => (SomeStruct._fromJson(json, validateOptions)))(({"foo": "123"}));
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.UsesStructInImportedFile-1.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const UsesStructInImportedFileClient = ${UsesStructInImportedFile._toInflightType(this)};
-          const client = new UsesStructInImportedFileClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "$inflight_init"];
-    }
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+const SomeStruct = $stdlib.std.Struct._createJsonSchema({$id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",]});
+class UsesStructInImportedFile extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+    this.someStruct = SomeStruct._fromJson(({"foo": "123"}));
   }
-  return { UsesStructInImportedFile };
-};
-//# sourceMappingURL=preflight.structs2-2.js.map
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.UsesStructInImportedFile-1.cjs")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const UsesStructInImportedFileClient = ${UsesStructInImportedFile._toInflightType()};
+        const client = new UsesStructInImportedFileClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+module.exports = { UsesStructInImportedFile };
+//# sourceMappingURL=preflight.structs2-2.cjs.map
 ```
 

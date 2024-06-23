@@ -5,7 +5,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct Foo\n```\n---"
+    value: "```wing\nstruct Foo {\n  // No public members\n}\n```"
   sortText: hh|Foo
 - label: cloud
   kind: 9
@@ -22,12 +22,18 @@ source: libs/wingc/src/lsp/completions.rs
 - label: bool
   kind: 14
   sortText: kl|zybool
+- label: datetime
+  kind: 14
+  sortText: kl|zydatetime
 - label: duration
   kind: 14
   sortText: kl|zyduration
 - label: num
   kind: 14
   sortText: kl|zynum
+- label: regex
+  kind: 14
+  sortText: kl|zyregex
 - label: str
   kind: 14
   sortText: kl|zystr

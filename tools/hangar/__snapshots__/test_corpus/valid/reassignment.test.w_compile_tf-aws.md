@@ -1,8 +1,9 @@
 # [reassignment.test.w](../../../../../examples/tests/valid/reassignment.test.w) | compile | tf-aws
 
-## inflight.R-1.js
-```js
+## inflight.R-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class R {
     constructor({  }) {
@@ -10,7 +11,7 @@ module.exports = function({  }) {
   }
   return R;
 }
-//# sourceMappingURL=inflight.R-1.js.map
+//# sourceMappingURL=inflight.R-1.cjs.map
 ```
 
 ## main.tf.json
@@ -20,22 +21,9 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -45,14 +33,16 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -69,14 +59,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.R-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.R-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const RClient = ${R._toInflightType(this)};
+            const RClient = ${R._toInflightType()};
             const client = new RClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -84,34 +74,37 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     let x = 5;
-    {((cond) => {if (!cond) throw new Error("assertion failed: x == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,5)))};
+    $helpers.assert($helpers.eq(x, 5), "x == 5");
     x = (x + 1);
-    {((cond) => {if (!cond) throw new Error("assertion failed: x == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,6)))};
+    $helpers.assert($helpers.eq(x, 6), "x == 6");
     let z = 1;
     z += 2;
-    {((cond) => {if (!cond) throw new Error("assertion failed: z == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,3)))};
+    $helpers.assert($helpers.eq(z, 3), "z == 3");
     z -= 1;
-    {((cond) => {if (!cond) throw new Error("assertion failed: z == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,2)))};
+    $helpers.assert($helpers.eq(z, 2), "z == 2");
     const r = new R(this, "R");
     (r.inc());
-    {((cond) => {if (!cond) throw new Error("assertion failed: r.f == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(r.f,2)))};
+    $helpers.assert($helpers.eq(r.f, 2), "r.f == 2");
     const f = ((arg) => {
       arg = 0;
       return arg;
     });
     const y = 1;
-    {((cond) => {if (!cond) throw new Error("assertion failed: f(y) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((f(y)),0)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: y == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,1)))};
+    $helpers.assert($helpers.eq((f(y)), 0), "f(y) == 0");
+    $helpers.assert($helpers.eq(y, 1), "y == 1");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "reassignment.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

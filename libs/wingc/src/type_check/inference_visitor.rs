@@ -107,6 +107,7 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 				Type::Anything
 				| Type::Number
 				| Type::String
+				| Type::Stringable
 				| Type::Duration
 				| Type::Boolean
 				| Type::Void
@@ -165,7 +166,7 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 
 	fn visit_function_signature(&mut self, node: &'_ FunctionSignature) {
 		let expected_function_sig = if let Some(ref expected) = self.expected_type {
-			expected.as_deep_function_sig()
+			expected.maybe_unwrap_option().as_deep_function_sig()
 		} else {
 			None
 		};

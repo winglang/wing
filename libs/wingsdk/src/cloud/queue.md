@@ -26,7 +26,7 @@ Queues by default are not FIFO (first in, first out) - so the order of messages 
 
 ### Setting a Queue Consumer
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let q = new cloud.Queue();
@@ -43,9 +43,9 @@ new cloud.Function(inflight () => {
 
 ### Using Queue inflight api
 
-Pusing messages, popping them, and purge
+Pushing messages, popping them, and purging.
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let q = new cloud.Queue();
@@ -54,13 +54,54 @@ new cloud.Function(inflight () => {
   q.push("message a");
   q.push("message b", "message c", "message d");
   log("approxSize is ${q.approxSize()}");
-  log("popping message ${q.pop()}");
-  log("popping message ${q.pop()}");
+  log("popping message ${q.pop()!}");
+  log("popping message ${q.pop()!}");
   log("approxSize is ${q.approxSize()}");
   q.purge();
   log("approxSize is ${q.approxSize()}");
 });
 ```
+
+### Adding a dead-letter queue
+
+Creating a queue and adding a dead-letter queue with the maximum number of attempts configured
+
+```ts playground example
+bring cloud;
+
+let dlq = new cloud.Queue() as "dead-letter queue";
+let q = new cloud.Queue(
+  dlq: { 
+    queue: dlq,
+    maxDeliveryAttempts: 2
+  }
+);
+```
+
+### Referencing an external queue
+
+If you would like to reference an existing queue from within your application you can use the
+`QueueRef` classes in the target-specific namespaces.
+
+> This is currently only supported for `aws`.
+
+The following example defines a reference to an Amazon SQS queue with a specific ARN and sends a
+message to the queue from the function:
+
+```js example
+bring cloud;
+bring aws;
+
+let outbox = new aws.QueueRef("arn:aws:sqs:us-east-1:111111111111:Outbox");
+
+new cloud.Function(inflight () => {
+  outbox.push("send an email");
+});
+```
+
+This works both when running in the simulator (requires AWS credentials on the developer's machine)
+and when deployed to AWS. When this is deployed to AWS, the AWS Lambda IAM policy will include the
+needed permissions.
 
 ## Target-specific details
 

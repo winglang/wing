@@ -3,11 +3,12 @@ import fsPromises from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
-import { TestResult, TraceType } from "@winglang/sdk/lib/std";
+import { LogLevel, TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
 import { describe, test, expect, beforeEach, afterEach, vi, SpyInstance } from "vitest";
-import { filterTests, pickOneTestPerEnvironment, renderTestReport, test as wingTest } from ".";
+import { filterTests, renderTestReport, collectTestFiles, test as wingTest } from ".";
 import * as resultsFn from "./results";
+import { SnapshotMode } from "./snapshots";
 
 const defaultChalkLevel = chalk.level;
 const cwd = process.cwd();
@@ -22,14 +23,14 @@ describe("printing test reports", () => {
     process.chdir(cwd);
   });
 
-  test("resource traces are not shown if debug mode is disabled", async () => {
+  test("verbose traces are not shown if debug mode is disabled", async () => {
     const testReport = await renderTestReport("hello.w", EXAMPLE_TEST_RESULTS);
 
     expect(testReport).toMatchSnapshot();
     expect(testReport).not.toContain("Push (message=cool)");
   });
 
-  test("resource traces are shown if debug mode is enabled", async () => {
+  test("verbose traces are shown if debug mode is enabled", async () => {
     const oldDebug = process.env.DEBUG;
     process.env.DEBUG = "1";
 
@@ -82,7 +83,11 @@ describe("wing test (custom platform)", () => {
       module.exports = { Platform }`
     );
 
-    await wingTest([], { clean: true, platform: ["./custom-platform.js"] });
+    await wingTest([], {
+      clean: true,
+      platform: ["./custom-platform.js"],
+      snapshots: SnapshotMode.NEVER,
+    });
 
     expect(logSpy).toHaveBeenCalledWith(
       expect.stringMatching(/^pass ─ foo\.test\.tfaws\.\d+ \(no tests\)$/)
@@ -90,51 +95,123 @@ describe("wing test (custom platform)", () => {
   });
 });
 
-describe("wing test (no options)", () => {
-  let logSpy: SpyInstance;
-
-  beforeEach(() => {
-    chalk.level = 0;
-    logSpy = vi.spyOn(console, "log");
-  });
-
-  afterEach(() => {
-    chalk.level = defaultChalkLevel;
-    process.chdir(cwd);
-    logSpy.mockRestore();
-  });
-
-  test("default entrypoint behaviour", async () => {
+describe("collectTestFiles", () => {
+  test("default entrypoints", async () => {
     const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
     process.chdir(outDir);
-    fs.writeFileSync("foo.test.w", "bring cloud;");
-    fs.writeFileSync("bar.test.w", "bring cloud;");
-    fs.writeFileSync("baz.test.w", "bring cloud;");
+    fs.writeFileSync("foo.test.w", "");
+    fs.writeFileSync("bar.test.w", "");
+    fs.writeFileSync("baz.test.w", "");
+    fs.writeFileSync("main.ts", "");
 
-    await wingTest([], { clean: true, platform: [BuiltinPlatform.SIM] });
+    const files = await collectTestFiles([]);
 
-    expect(logSpy).toHaveBeenCalledWith("pass ─ foo.test.wsim (no tests)");
-    expect(logSpy).toHaveBeenCalledWith("pass ─ bar.test.wsim (no tests)");
-    expect(logSpy).toHaveBeenCalledWith("pass ─ baz.test.wsim (no tests)");
+    expect(files).toMatchInlineSnapshot(`
+      [
+        "main.ts",
+        "foo.test.w",
+        "baz.test.w",
+        "bar.test.w",
+      ]
+    `);
+  });
+
+  test("specific entrypoint", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+
+    process.chdir(outDir);
+    fs.writeFileSync("foo.test.w", "");
+    fs.writeFileSync("bar.test.w", "");
+    fs.writeFileSync("baz.test.w", "");
+
+    const files = await collectTestFiles(["foo.test.w"]);
+
+    expect(files).toMatchInlineSnapshot(`
+      [
+        "foo.test.w",
+      ]
+    `);
+  });
+
+  test("fuzzy match dir", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+
+    process.chdir(outDir);
+    fs.mkdirSync("foo");
+    fs.writeFileSync("foo/a.test.w", "");
+    fs.writeFileSync("foo/b.test.w", "");
+    fs.writeFileSync("foo.test.w", "");
+    fs.writeFileSync("baz.test.w", "");
+
+    const files = await collectTestFiles(["foo"]);
+
+    expect(files).toMatchInlineSnapshot(`
+      [
+        "foo.test.w",
+        "foo/b.test.w",
+        "foo/a.test.w",
+      ]
+    `);
+  });
+
+  test("absolute path dedupe", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+
+    process.chdir(outDir);
+    fs.mkdirSync("foo");
+    fs.writeFileSync("foo/a.test.w", "");
+    fs.writeFileSync("foo/b.test.w", "");
+    fs.writeFileSync("foo.test.w", "");
+    fs.writeFileSync("baz.test.w", "");
+
+    const files = await collectTestFiles(["foo"]);
+
+    expect(files).toMatchInlineSnapshot(`
+    [
+      "foo.test.w",
+      "foo/b.test.w",
+      "foo/a.test.w",
+    ]
+  `);
+  });
+
+  test("testing file outside current dir", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+    const subDir = join(outDir, "subdir");
+
+    process.chdir(outDir);
+
+    fs.writeFileSync("foo.test.w", "");
+
+    fs.mkdirSync(subDir);
+
+    process.chdir(subDir);
+
+    fs.writeFileSync("main.w", "");
+
+    const files = await collectTestFiles(["../foo.test.w"]);
+
+    expect(files).toMatchInlineSnapshot(`
+      [
+        "../foo.test.w",
+      ]
+    `);
   });
 });
 
 describe("output-file option", () => {
   let writeResultsSpy: SpyInstance;
-  let writeFileSpy: SpyInstance;
 
   beforeEach(() => {
     chalk.level = 0;
     writeResultsSpy = vi.spyOn(resultsFn, "writeResultsToFile");
-    writeFileSpy = vi.spyOn(fsPromises, "writeFile");
   });
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
     process.chdir(cwd);
     writeResultsSpy.mockRestore();
-    writeFileSpy.mockRestore();
   });
 
   test("wing test with output file calls writeResultsToFile", async () => {
@@ -158,10 +235,10 @@ describe("output-file option", () => {
     expect(testName).toBe("test.test.w");
     expect(writeResultsSpy.mock.calls[0][2]).toBe(outputFile);
 
-    expect(writeFileSpy).toBeCalledTimes(2);
-    const [filePath, output] = writeFileSpy.mock.calls[1];
-    expect(filePath).toBe("out.json");
-    expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
+    const outputFileExists = fs.existsSync(outputFile);
+    expect(outputFileExists).toBe(true);
+    const outputContents = fs.readFileSync(outputFile, "utf-8");
+    expect(JSON.parse(outputContents)).toMatchObject(OUTPUT_FILE);
   });
 
   test("wing test without output file calls writeResultsToFile", async () => {
@@ -201,7 +278,7 @@ describe("test-filter option", () => {
   });
 
   test("wing test (no test-filter)", () => {
-    const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS));
+    const filteredTests = filterTests(EXAMPLE_UNFILTERED_TESTS);
 
     expect(filteredTests.length).toBe(3);
     expect(filteredTests[0]).toBe("root/env0/test:get()");
@@ -210,7 +287,7 @@ describe("test-filter option", () => {
   });
 
   test("wing test --test-filter <regex>", () => {
-    const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS, "get"));
+    const filteredTests = filterTests(EXAMPLE_UNFILTERED_TESTS, "get");
 
     expect(filteredTests.length).toBe(2);
     expect(filteredTests[0]).toBe("root/env0/test:get()");
@@ -218,7 +295,7 @@ describe("test-filter option", () => {
   });
 });
 
-describe("retry option", () => {
+describe("retry and parallel options", () => {
   let logSpy: SpyInstance;
 
   beforeEach(() => {
@@ -279,7 +356,89 @@ describe("retry option", () => {
     });
 
     const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
-    expect(retryLogs.length).toBe(3);
+    expect(retryLogs.length).toBe(2);
+  });
+
+  test("wing test --parallel [batch]", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
+
+    process.chdir(outDir);
+
+    fs.writeFileSync(
+      "t1.test.w",
+      `
+bring util;
+
+test "t1" {
+  util.sleep(1s);
+  log("t1 ends");
+  assert(true);
+}
+  `
+    );
+    fs.writeFileSync(
+      "t2.test.w",
+      `
+bring util;
+
+test "t2" {
+  log("t2 ends");
+  assert(true);
+}
+  `
+    );
+
+    await wingTest(["t1.test.w", "t2.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      parallel: 1,
+    });
+    // we are running the tests one by one so first t1 should log and then t2
+    const t1Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t1 ends"));
+    const t2Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t2 ends"));
+
+    expect(t2Ends).toBeGreaterThan(t1Ends);
+  });
+
+  test("wing test --parallel 2", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
+
+    process.chdir(outDir);
+
+    fs.writeFileSync(
+      "t1.test.w",
+      `
+bring util;
+
+test "t1" {
+util.sleep(1s);
+log("t1 ends");
+assert(true);
+}
+  `
+    );
+    fs.writeFileSync(
+      "t2.test.w",
+      `
+bring util;
+
+test "t2" {
+  log("t2 ends");
+  assert(true);
+}
+  `
+    );
+
+    await wingTest(["t1.test.w", "t2.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      parallel: 2,
+    });
+    // we are running the tests in parallel so first t2 should log and then t1
+    const t2Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t2 ends"));
+    const t1Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t1 ends"));
+
+    expect(t2Ends).toBeLessThan(t1Ends);
   });
 });
 
@@ -292,6 +451,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: "Push (message=cool).", status: "success" },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         timestamp: "2023-05-15T16:20:46.886Z",
@@ -299,6 +459,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: "sleeping for 500 ms" },
         type: TraceType.LOG,
+        level: LogLevel.INFO,
         sourcePath: "root/env0/test:test/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:46.887Z",
@@ -306,6 +467,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         type: TraceType.RESOURCE,
         data: { message: 'Sending messages (messages=["cool"], subscriber=sim-4).' },
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         timestamp: "2023-05-15T16:20:46.961Z",
@@ -313,10 +475,9 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: {
           message: 'Invoke (payload="{\\"messages\\":[\\"cool\\"]}").',
-          status: "failure",
-          error: {},
         },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue-AddConsumer-0088483a",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:46.966Z",
@@ -329,18 +490,21 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         type: TraceType.RESOURCE,
+        level: LogLevel.ERROR,
         timestamp: "2023-05-15T16:20:46.966Z",
       },
       {
-        data: { message: "Get (key=file.txt).", status: "failure", error: {} },
+        data: { message: "Get (key=file.txt)." },
         type: TraceType.RESOURCE,
-        sourcePath: "root/env0/MyProcessor/cloud.Bucket",
+        level: LogLevel.VERBOSE,
+        sourcePath: "root/env0/MyProcessor/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
         timestamp: "2023-05-15T16:20:47.388Z",
       },
       {
-        data: { message: 'Invoke (payload="").', status: "failure", error: {} },
+        data: { message: 'Invoke (payload="").' },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/test:test/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:47.388Z",
@@ -367,17 +531,17 @@ const BUCKET_TEST_RESULT = [
       {
         data: { message: "Put (key=test1.txt).", status: "success" },
         type: "resource",
-        sourcePath: "root/env0/cloud.Bucket",
+        sourcePath: "root/env0/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
       },
       {
         data: { message: "Get (key=test1.txt).", status: "success", result: '"Foo"' },
         type: "resource",
-        sourcePath: "root/env0/cloud.Bucket",
+        sourcePath: "root/env0/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
       },
       {
-        data: { message: 'Invoke (payload="").', status: "success" },
+        data: { message: "Invoke (payload=undefined).", status: "success" },
         type: "resource",
         sourcePath: "root/env0/test:put/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
@@ -399,7 +563,7 @@ const OUTPUT_FILE = {
               status: "success",
             },
             type: "resource",
-            sourcePath: "root/env0/cloud.Bucket",
+            sourcePath: "root/env0/Bucket",
             sourceType: "@winglang/sdk.cloud.Bucket",
           },
           {
@@ -409,12 +573,12 @@ const OUTPUT_FILE = {
               result: '"Foo"',
             },
             type: "resource",
-            sourcePath: "root/env0/cloud.Bucket",
+            sourcePath: "root/env0/Bucket",
             sourceType: "@winglang/sdk.cloud.Bucket",
           },
           {
             data: {
-              message: 'Invoke (payload="").',
+              message: "Invoke (payload=undefined).",
               status: "success",
             },
             type: "resource",
@@ -429,12 +593,6 @@ const OUTPUT_FILE = {
 
 const EXAMPLE_UNFILTERED_TESTS: string[] = [
   "root/env0/test:get()",
-  "root/env0/test:get:At()",
-  "root/env0/test:stringify()",
-  "root/env1/test:get()",
   "root/env1/test:get:At()",
-  "root/env1/test:stringify()",
-  "root/env2/test:get()",
-  "root/env2/test:get:At()",
   "root/env2/test:stringify()",
 ];

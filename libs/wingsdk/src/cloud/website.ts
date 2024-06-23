@@ -4,6 +4,7 @@ import { cloud } from "..";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -25,10 +26,17 @@ export interface WebsiteOptions {
    * @example "./dist"
    */
   readonly path: string;
+
+  /**
+   * Name of the error document for the website.
+   * @example "404.html"
+   * @default - undefined
+   */
+  readonly errorDocument?: string;
 }
 
 /**
- * Options for `Website`, and `ReactApp`
+ * Options for `Website`
  */
 export interface WebsiteDomainOptions {
   /**
@@ -45,6 +53,9 @@ export interface WebsiteDomainOptions {
  * @abstract
  */
 export class Website extends Resource implements IWebsite {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IWebsiteClient;
+
   /** @internal */
   private readonly _path!: string;
 
@@ -77,9 +88,17 @@ export class Website extends Resource implements IWebsite {
 
   /**
    * The website's url.
-   * @abstract
    */
   public get url(): string {
+    return this._endpoint.url;
+  }
+
+  /**
+   * The Endpoint of the Website.
+   * @abstract
+   * @internal
+   */
+  protected get _endpoint(): cloud.Endpoint {
     throw new AbstractMemberError();
   }
 

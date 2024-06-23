@@ -1,14 +1,14 @@
-import * as vm from "vm";
-
 import { promises as fs, lstatSync } from "fs";
 import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
 import * as wingCompiler from "./wingc";
-import { copyDir, normalPath } from "./util";
+import { normalPath } from "./util";
 import { existsSync } from "fs";
 import { BuiltinPlatform } from "./constants";
 import { CompileError, PreflightError } from "./errors";
+import { readFile } from "fs/promises";
+import { fork } from "child_process";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -16,7 +16,8 @@ Error.stackTraceLimit = 50;
 
 // const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
-const WINGC_PREFLIGHT = "preflight.js";
+const WINGC_PREFLIGHT = "preflight.cjs";
+const DOT_WING = ".wing";
 
 const BUILTIN_PLATFORMS = [
   BuiltinPlatform.SIM,
@@ -62,6 +63,9 @@ export interface CompileOptions {
 
   // target directory for the output files
   readonly targetDir?: string;
+
+  // overrides the target directory for the output files
+  readonly output?: string;
 }
 
 /**
@@ -69,13 +73,7 @@ export interface CompileOptions {
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
  */
-function resolveSynthDir(
-  outDir: string,
-  entrypoint: string,
-  target: string,
-  testing: boolean = false,
-  tmp: boolean = false
-) {
+function resolveSynthDir(outDir: string, entrypoint: string, target: string, testing: boolean) {
   const targetDirSuffix = defaultSynthDir(target);
 
   let entrypointName;
@@ -95,9 +93,8 @@ function resolveSynthDir(
     throw new Error("Source file cannot be found");
   }
   const randomPart =
-    tmp || (testing && target !== BuiltinPlatform.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
-  const tmpSuffix = tmp ? ".tmp" : "";
-  const lastPart = `${entrypointName}.${targetDirSuffix}${randomPart}${tmpSuffix}`;
+    testing && target !== BuiltinPlatform.SIM ? `.${Date.now().toString().slice(-6)}` : "";
+  const lastPart = `${entrypointName}.${targetDirSuffix}${randomPart}`;
   if (testing) {
     return join(outDir, "test", lastPart);
   } else {
@@ -112,7 +109,9 @@ function resolveSynthDir(
  * @returns the resolved model
  */
 export function determineTargetFromPlatforms(platforms: string[]): string {
-  if (platforms.length === 0) { return ""; }
+  if (platforms.length === 0) {
+    return "";
+  }
   // determine target based on first platform
   const platform = platforms[0];
 
@@ -136,121 +135,87 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const { log } = options;
   // create a unique temporary directory for the compilation
   const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
-  const wingFile = resolve(entrypoint);
-  log?.("wing file: %s", wingFile);
-  const wingDir = resolve(dirname(wingFile));
+  const entrypointFile = resolve(entrypoint);
+  log?.("wing file: %s", entrypointFile);
+  const wingDir = resolve(dirname(entrypointFile));
   log?.("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
   const target = determineTargetFromPlatforms(options.platform);
-  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, target, testing, true);
-  log?.("temp synth dir: %s", tmpSynthDir);
-  const synthDir = resolveSynthDir(targetdir, wingFile, target, testing);
+  const synthDir = options.output ?? resolveSynthDir(targetdir, entrypointFile, target, testing);
   log?.("synth dir: %s", synthDir);
-  const workDir = resolve(tmpSynthDir, ".wing");
+  const workDir = resolve(synthDir, DOT_WING);
   log?.("work dir: %s", workDir);
 
-  // TODO: couldn't be moved to the context's since used in utils.env(...)
-  // in the future we may look for a unified approach
-  process.env["WING_TARGET"] = target;
-  process.env["WING_VALUES"] = options.value?.length == 0 ? undefined : options.value;
-  process.env["WING_VALUES_FILE"] = options.values;
-  process.env["WING_IS_TEST"] = testing.toString();
-  process.env["WING_PLATFORMS"] = resolvePlatformPaths(options.platform);
+  const nearestNodeModules = (dir: string): string => {
+    let nodeModules = join(dir, "node_modules");
+    while (!existsSync(nodeModules)) {
+      nodeModules = dirname(dirname(nodeModules));
 
-  const tempProcess: { env: Record<string, string | undefined> } = { env: { ...process.env } };
+      if (nodeModules === "/" || nodeModules.match(/^[A-Z]:\\/)) {
+        break;
+      }
 
-  tempProcess.env["WING_SOURCE_DIR"] = wingDir;
-  if (options.rootId) {
-    tempProcess.env["WING_ROOT_ID"] = options.rootId;
-  }
-  // from wingDir, find the nearest node_modules directory
-  let wingNodeModules = join(wingDir, "node_modules");
-  while (!existsSync(wingNodeModules)) {
-    wingNodeModules = dirname(dirname(wingNodeModules));
-
-    if (wingNodeModules === "/" || wingNodeModules.match(/^[A-Z]:\\/)) {
-      break;
+      nodeModules = resolve(nodeModules, "node_modules");
     }
 
-    wingNodeModules = resolve(wingNodeModules, "node_modules");
-  }
-
-  tempProcess.env["WING_SYNTH_DIR"] = tmpSynthDir;
-  tempProcess.env["WING_NODE_MODULES"] = wingNodeModules;
-
-  await Promise.all([
-    fs.mkdir(workDir, { recursive: true }),
-    fs.mkdir(tmpSynthDir, { recursive: true }),
-  ]);
-
-  let env: Record<string, string> = {
-    RUST_BACKTRACE: "full",
-    WING_SYNTH_DIR: normalPath(tmpSynthDir),
+    return nodeModules;
   };
-  if (options.color !== undefined) {
-    env.CLICOLOR = options.color ? "1" : "0";
-  }
 
-  const wingc = await wingCompiler.load({
-    env,
-    imports: {
-      env: {
-        send_diagnostic,
-      },
-    },
+  let wingNodeModules = nearestNodeModules(wingDir);
+
+  if (!existsSync(synthDir)) {
+    await fs.mkdir(workDir, { recursive: true });
+  }
+  const compileForPreflightResult = await compileForPreflight({
+    entrypointFile,
+    workDir,
+    wingDir,
+    synthDir,
+    color: options.color,
+    log,
   });
 
-  const errors: wingCompiler.WingDiagnostic[] = [];
-
-  function send_diagnostic(data_ptr: number, data_len: number) {
-    const data_buf = Buffer.from(
-      (wingc.exports.memory as WebAssembly.Memory).buffer,
-      data_ptr,
-      data_len
-    );
-    const data_str = new TextDecoder().decode(data_buf);
-    errors.push(JSON.parse(data_str));
-  }
-
-  const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(wingDir)}`;
-  log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  let compileSuccess: boolean;
-  try {
-    compileSuccess = wingCompiler.invoke(wingc, WINGC_COMPILE, arg) !== 0;
-  } catch (error) {
-    // This is a bug in the compiler, indicate a compilation failure.
-    // The bug details should be part of the diagnostics handling below.
-    compileSuccess = false;
-  }
-  if (!compileSuccess) {
-    // This is a bug in the user's code. Print the compiler diagnostics.
-    throw new CompileError(errors);
-  }
-
   if (isEntrypointFile(entrypoint)) {
-    await runPreflightCodeInVm(workDir, wingDir, tempProcess, log);
-  }
+    let preflightEnv: Record<string, string | undefined> = {
+      ...process.env,
+      WING_TARGET: target,
+      WING_PLATFORMS: resolvePlatformPaths(options.platform),
+      WING_SYNTH_DIR: synthDir,
+      WING_SOURCE_DIR: wingDir,
+      WING_IS_TEST: process.env["WING_IS_TEST"] ?? testing.toString(),
+      WING_VALUES: options.value?.length == 0 ? undefined : options.value,
+      WING_VALUES_FILE: options.values ?? defaultValuesFile(),
+      WING_NODE_MODULES: wingNodeModules,
+      WING_IMPORTED_NAMESPACES:
+        compileForPreflightResult.compilerOutput?.imported_namespaces.join(";"),
+    };
 
-  if (os.platform() === "win32") {
-    // Windows doesn't really support fully atomic moves.
-    // So we just copy the directory instead.
-    // Also only using sync methods to avoid possible async fs issues.
-    await fs.rm(synthDir, { recursive: true, force: true });
-    await fs.mkdir(synthDir, { recursive: true });
-    await copyDir(tmpSynthDir, synthDir);
-    await fs.rm(tmpSynthDir, { recursive: true, force: true });
-  } else {
-    // Move the temporary directory to the final target location in an atomic operation
-    await copyDir(tmpSynthDir, synthDir);
-    await fs.rm(tmpSynthDir, { recursive: true, force: true });
-  }
+    if (options.rootId) {
+      preflightEnv.WING_ROOT_ID = options.rootId;
+    }
 
+    if (os.platform() === "win32") {
+      // In worker threads on Windows, environment variables are case-sensitive.
+      // Most people probably already assume this is the case everywhere, so
+      // it is sufficient for now to just to normalize common automatic env vars.
+
+      if ("Path" in preflightEnv) {
+        preflightEnv.PATH = preflightEnv.Path;
+        delete preflightEnv.Path;
+      }
+    }
+    await runPreflightCodeInWorkerThread(
+      compileForPreflightResult.preflightEntrypoint,
+      preflightEnv
+    );
+  }
   return synthDir;
 }
 
 function isEntrypointFile(path: string) {
   return (
+    path.endsWith(".ts") ||
     path.endsWith(".main.w") ||
     path.endsWith(".test.w") ||
     path.endsWith("/main.w") ||
@@ -259,57 +224,137 @@ function isEntrypointFile(path: string) {
   );
 }
 
-async function runPreflightCodeInVm(
-  workDir: string,
-  wingDir: string,
-  tempProcess: { env: Record<string, string | undefined> },
-  log?: (...args: any[]) => void
+interface CompileForPreflightResult {
+  readonly preflightEntrypoint: string;
+  readonly compilerOutput?: {
+    imported_namespaces: string[];
+  };
+}
+
+async function compileForPreflight(props: {
+  entrypointFile: string;
+  workDir: string;
+  wingDir: string;
+  synthDir: string;
+  color?: boolean;
+  log?: (...args: any[]) => void;
+}): Promise<CompileForPreflightResult> {
+  if (props.entrypointFile.endsWith(".ts")) {
+    const typescriptFramework = await import("@wingcloud/framework")
+      .then((m) => m.internal)
+      .catch((err) => {
+        throw new Error(`\
+Failed to load "@wingcloud/framework": ${err.message}
+
+To use Wing with TypeScript files, you must install "@wingcloud/framework" as a dependency of your project.
+npm i @wingcloud/framework
+`);
+      });
+
+    return {
+      preflightEntrypoint: await typescriptFramework.compile({
+        workDir: props.workDir,
+        entrypoint: props.entrypointFile,
+      }),
+    };
+  } else {
+    let env: Record<string, string> = {
+      RUST_BACKTRACE: "full",
+      WING_SYNTH_DIR: normalPath(props.synthDir),
+    };
+    if (props.color !== undefined) {
+      env.CLICOLOR = props.color ? "1" : "0";
+    }
+
+    const wingc = await wingCompiler.load({
+      env,
+      imports: {
+        env: {
+          send_diagnostic,
+        },
+      },
+    });
+
+    const errors: wingCompiler.WingDiagnostic[] = [];
+
+    function send_diagnostic(data_ptr: number, data_len: number) {
+      const data_buf = Buffer.from(
+        (wingc.exports.memory as WebAssembly.Memory).buffer,
+        data_ptr,
+        data_len
+      );
+      const data_str = new TextDecoder().decode(data_buf);
+      errors.push(JSON.parse(data_str));
+    }
+
+    const arg = `${normalPath(props.entrypointFile)};${normalPath(props.workDir)};${normalPath(
+      props.wingDir
+    )}`;
+    props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
+    let compileSuccess: boolean;
+    let compilerOutput: string | number = "";
+    try {
+      compilerOutput = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+      compileSuccess = compilerOutput !== 0;
+    } catch (error) {
+      // This is a bug in the compiler, indicate a compilation failure.
+      // The bug details should be part of the diagnostics handling below.
+      compileSuccess = false;
+    }
+    if (!compileSuccess) {
+      // This is a bug in the user's code. Print the compiler diagnostics.
+      throw new CompileError(errors);
+    }
+
+    return {
+      preflightEntrypoint: join(props.workDir, WINGC_PREFLIGHT),
+      compilerOutput: JSON.parse(compilerOutput as string),
+    };
+  }
+}
+
+/**
+ * Check if in the current working directory there is a default values file
+ * only the first match is returned from the list of default values files
+ *
+ * @returns default values file from the current working directory
+ */
+function defaultValuesFile() {
+  const defaultConfigs = ["wing.toml", "wing.yaml", "wing.yml", "wing.json"];
+
+  for (const configFile of defaultConfigs) {
+    if (existsSync(join(process.cwd(), configFile))) {
+      return configFile;
+    }
+  }
+  return "";
+}
+
+async function runPreflightCodeInWorkerThread(
+  entrypoint: string,
+  env: Record<string, string | undefined>
 ): Promise<void> {
-  const artifactPath = join(workDir, WINGC_PREFLIGHT);
-  log?.("reading artifact from %s", artifactPath);
-  const artifact = await fs.readFile(artifactPath, "utf-8");
-  log?.("artifact: %s", artifact);
-
-  // Try looking for dependencies not only in the current directory (wherever
-  // the wing CLI was installed to), but also in the source code directory.
-  // This is necessary because the Wing app may have installed dependencies in
-  // the project directory.
-  const requireResolve = (path: string) =>
-    require.resolve(path, { paths: [__dirname, wingDir, workDir] });
-  const preflightRequire = (path: string) => require(requireResolve(path));
-  preflightRequire.resolve = requireResolve;
-
-  // If you're wondering how the execution of the preflight works, despite it
-  // being in a different directory: it works because at the top of the file
-  // require.resolve is called to cache wingsdk in-memory. So by the time VM
-  // is starting up, the passed context already has wingsdk in it.
-  // "__dirname" is also synthetically changed so nested requires work.
-  const context = vm.createContext({
-    require: preflightRequire,
-    process: tempProcess,
-    console,
-    __dirname: workDir,
-    __filename: artifactPath,
-    // since the SDK is loaded in the outer VM, we need these to be the same class instance,
-    // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
-    // `serializeImmutableData` which has special cases for serializing these types.
-    Map,
-    Set,
-    Array,
-    Promise,
-    Object,
-    RegExp,
-    String,
-    Date,
-    Function,
-  });
-
   try {
-    vm.runInContext(artifact, context, {
-      filename: artifactPath
+    env.WING_PREFLIGHT_ENTRYPOINT = JSON.stringify(entrypoint);
+
+    await new Promise((resolve, reject) => {
+      const worker = fork(join(__dirname, "..", "preflight.shim.cjs"), {
+        env,
+        stdio: "inherit",
+      });
+      worker.on("message", reject);
+      worker.on("error", reject);
+      worker.on("exit", (code) => {
+        if (code === 0) {
+          resolve(undefined);
+        } else {
+          reject(new Error(`Worker stopped with exit code ${code}`));
+        }
+      });
     });
   } catch (error) {
-    throw new PreflightError(error as any, artifactPath, artifact);
+    const artifact = await readFile(entrypoint, "utf-8");
+    throw new PreflightError(error as any, entrypoint, artifact);
   }
 }
 

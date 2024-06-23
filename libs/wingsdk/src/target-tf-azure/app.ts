@@ -1,4 +1,5 @@
 import { Bucket } from "./bucket";
+import { Counter } from "./counter";
 import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
 import { TestRunner } from "./test-runner";
@@ -8,7 +9,7 @@ import { AzurermProvider } from "../.gen/providers/azurerm/provider";
 import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
 import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
-import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
+import { BUCKET_FQN, FUNCTION_FQN, COUNTER_FQN } from "../cloud";
 import { AppProps } from "../core";
 import {
   CaseConventions,
@@ -80,13 +81,11 @@ export class App extends CdktfApp {
   private _servicePlan?: ServicePlan;
   private _applicationInsights?: ApplicationInsights;
   private _logAnalyticsWorkspace?: LogAnalyticsWorkspace;
-  protected readonly testRunner: TestRunner;
 
   constructor(props: AzureAppProps) {
     super(props);
     this.location = props.location ?? process.env.AZURE_LOCATION;
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
-    this.synthRoots(props, this.testRunner);
+    TestRunner._createTree(this, props.rootConstruct);
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.location === undefined) {
@@ -107,21 +106,6 @@ export class App extends CdktfApp {
       enumerable: false,
       writable: false,
     });
-  }
-
-  protected synthRoots(props: AppProps, testRunner: TestRunner): void {
-    if (props.rootConstruct) {
-      const Root = props.rootConstruct;
-      if (this.isTestEnvironment) {
-        new Root(this, "env0");
-        const tests = testRunner.findTests();
-        for (let i = 1; i < tests.length; i++) {
-          new Root(this, "env" + i);
-        }
-      } else {
-        new Root(this, "Default");
-      }
-    }
   }
 
   public get logAnalyticsWorkspace() {
@@ -216,6 +200,9 @@ export class App extends CdktfApp {
 
       case BUCKET_FQN:
         return Bucket;
+
+      case COUNTER_FQN:
+        return Counter;
     }
 
     return undefined;

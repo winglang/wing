@@ -7,22 +7,9 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -31,11 +18,11 @@
   },
   "resource": {
     "aws_dynamodb_table": {
-      "cloudCounter": {
+      "invoke-counter1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "cloudCounter"
+            "path": "root/Default/Default/invoke-counter1/Default",
+            "uniqueId": "invoke-counter1"
           }
         },
         "attribute": [
@@ -46,7 +33,41 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c866f225"
+        "name": "wing-counter-invoke-counter1-c8df96b3"
+      },
+      "invoke-counter2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/invoke-counter2/Default",
+            "uniqueId": "invoke-counter2"
+          }
+        },
+        "attribute": [
+          {
+            "name": "id",
+            "type": "S"
+          }
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "hash_key": "id",
+        "name": "wing-counter-invoke-counter2-c8400881"
+      },
+      "invoke-counter3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/invoke-counter3/Default",
+            "uniqueId": "invoke-counter3"
+          }
+        },
+        "attribute": [
+          {
+            "name": "id",
+            "type": "S"
+          }
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "hash_key": "id",
+        "name": "wing-counter-invoke-counter3-c8668bff"
       }
     }
   }

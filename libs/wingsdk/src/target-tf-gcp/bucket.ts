@@ -1,13 +1,14 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as GCPFunction } from "./function";
-import { RoleType } from "./permissions";
+import { calculateBucketPermissions } from "./permissions";
+import { ProjectService } from "../.gen/providers/google/project-service";
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
-import { InflightClient } from "../core";
+import { InflightClient, LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
 import {
   CaseConventions,
@@ -61,6 +62,18 @@ export class Bucket extends cloud.Bucket {
 
     const isTestEnvironment = App.of(scope).isTestEnvironment;
 
+    // Enable `IAM Service Account Credentials API` for the project
+    // This is disabled by default, but required for generating presigned URLs
+    const iamServiceAccountCredentialsApi = new ProjectService(
+      this,
+      "IamServiceAccountCredentialsApi",
+      {
+        service: "iamcredentials.googleapis.com",
+        disableDependentServices: false,
+        disableOnDestroy: false,
+      }
+    );
+
     this.bucket = new StorageBucket(this, "Default", {
       name: bucketName + "-" + randomId.hex,
       location: (App.of(this) as App).region,
@@ -68,33 +81,38 @@ export class Bucket extends cloud.Bucket {
       uniformBucketLevelAccess: true,
       publicAccessPrevention: props.public ? "inherited" : "enforced",
       forceDestroy: !!isTestEnvironment,
+      dependsOn: [iamServiceAccountCredentialsApi],
     });
 
     if (props.public) {
       // https://cloud.google.com/storage/docs/access-control/making-data-public#terraform
       new StorageBucketIamMember(this, "PublicAccessIamMember", {
         bucket: this.bucket.name,
-        role: RoleType.STORAGE_READ,
+        role: "roles/storage.objectViewer",
         member: "allUsers",
       });
     }
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.BucketInflightMethods.DELETE,
-      cloud.BucketInflightMethods.GET,
-      cloud.BucketInflightMethods.GET_JSON,
-      cloud.BucketInflightMethods.LIST,
-      cloud.BucketInflightMethods.PUT,
-      cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
-      cloud.BucketInflightMethods.EXISTS,
-      cloud.BucketInflightMethods.TRY_GET,
-      cloud.BucketInflightMethods.TRY_GET_JSON,
-      cloud.BucketInflightMethods.TRY_DELETE,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+      [cloud.BucketInflightMethods.SIGNED_URL]: [],
+    };
   }
 
   public addObject(key: string, body: string): void {
@@ -115,7 +133,11 @@ export class Bucket extends cloud.Bucket {
     fn;
     opts;
     throw new NotImplementedError(
-      "onCreate method isn't implemented yet on the current target."
+      "onCreate method isn't implemented yet on the current target.",
+      {
+        resource: this.constructor.name,
+        operation: cloud.BucketEventType.CREATE,
+      }
     );
   }
 
@@ -129,7 +151,11 @@ export class Bucket extends cloud.Bucket {
     fn;
     opts;
     throw new NotImplementedError(
-      "onDelete method isn't implemented yet on the current target."
+      "onDelete method isn't implemented yet on the current target.",
+      {
+        resource: this.constructor.name,
+        operation: cloud.BucketEventType.DELETE,
+      }
     );
   }
 
@@ -143,7 +169,11 @@ export class Bucket extends cloud.Bucket {
     fn;
     opts;
     throw new NotImplementedError(
-      "onUpdate method isn't implemented yet on the current target."
+      "onUpdate method isn't implemented yet on the current target.",
+      {
+        resource: this.constructor.name,
+        operation: cloud.BucketEventType.UPDATE,
+      }
     );
   }
 
@@ -157,7 +187,8 @@ export class Bucket extends cloud.Bucket {
     fn;
     opts;
     throw new NotImplementedError(
-      "onEvent method isn't implemented yet on the current target."
+      "onEvent method isn't implemented yet on the current target.",
+      { resource: this.constructor.name, operation: "onEvent" }
     );
   }
 
@@ -165,27 +196,11 @@ export class Bucket extends cloud.Bucket {
     if (!(host instanceof GCPFunction)) {
       throw new Error("buckets can only be bound by tfgcp.Function for now");
     }
-    if (
-      ops.includes(cloud.BucketInflightMethods.GET) ||
-      ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
-      ops.includes(cloud.BucketInflightMethods.LIST) ||
-      ops.includes(cloud.BucketInflightMethods.EXISTS) ||
-      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
-      // ops.includes(cloud.BucketInflightMethods.SIGNED_URL) ||
-      ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
-      ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON)
-    ) {
-      host.addPermission(this, RoleType.STORAGE_READ);
-    } else if (
-      ops.includes(cloud.BucketInflightMethods.DELETE) ||
-      ops.includes(cloud.BucketInflightMethods.PUT) ||
-      ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
-      ops.includes(cloud.BucketInflightMethods.TRY_DELETE)
-    ) {
-      host.addPermission(this, RoleType.STORAGE_READ_WRITE);
-    }
-    host.addEnvironment(this.envName(), this.bucket.name);
 
+    const permissions = calculateBucketPermissions(ops);
+    host.addPermissions(permissions);
+
+    host.addEnvironment(this.envName(), this.bucket.name);
     super.onLift(host, ops);
   }
 

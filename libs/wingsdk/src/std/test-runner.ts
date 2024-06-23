@@ -1,7 +1,9 @@
 import { Construct } from "constructs";
 import { Resource } from "./resource";
 import { Test } from "./test";
+import { Function, FunctionProps, IFunctionHandler } from "../cloud";
 import { fqnForType } from "../constants";
+import { App, LiftMap } from "../core";
 import { Node } from "../std";
 
 /**
@@ -23,6 +25,47 @@ export interface TestRunnerProps {}
  * @abstract
  */
 export class TestRunner extends Resource {
+  /**
+   * Instantiate one or more copies of a tree inside of an app based
+   * on how many isolated environments are needed for testing.
+   * @internal
+   */
+  public static _createTree(app: App, Root: any) {
+    if (app.isTestEnvironment) {
+      app._testRunner = new TestRunner(app, "cloud.TestRunner");
+    }
+
+    if (Root) {
+      // mark the root type so that we can find it later through
+      // Node.of(root).root
+      Node._markRoot(Root);
+
+      if (app.isTestEnvironment) {
+        new Root(app, "env0");
+        const tests = app._testRunner!.findTests();
+        for (let i = 1; i < tests.length; i++) {
+          new Root(app, "env" + i);
+        }
+      } else {
+        new Root(app, "Default");
+      }
+    }
+  }
+
+  /**
+   * List of isolated environment names where we've already created a cloud.Function
+   * for a unit test. We keep track of these so that we don't synthesize
+   * multiple test functions into the same isolated environment.
+   */
+  private _synthedEnvs: Set<string> = new Set();
+
+  /**
+   * List of test paths that we have already created a cloud.Function for.
+   * We keep track of these so that we don't create identical test functions in multiple
+   * isolated environments.
+   */
+  private _synthedTests: Set<string> = new Set();
+
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     if (new.target === TestRunner) {
       return Resource._newFromFactory(TEST_RUNNER_FQN, scope, id, props);
@@ -39,11 +82,38 @@ export class TestRunner extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      TestRunnerInflightMethods.LIST_TESTS,
-      TestRunnerInflightMethods.RUN_TEST,
-    ];
+  public _addTestFunction(
+    scope: Construct,
+    id: string,
+    inflight: IFunctionHandler,
+    props: FunctionProps
+  ): Function | undefined {
+    // searching exactly for `env${number}`
+    const testEnv = scope.node.path.match(/env[0-9]+/)?.at(0)!;
+    // searching for the rest of the path that appears after `env${number}`- this would be the test path
+    const testPath =
+      scope.node.path
+        .match(/env[\d]+\/.+/)
+        ?.at(0)!
+        .replace(`${testEnv}/`, "") +
+      "/" +
+      id;
+
+    if (!this._synthedEnvs.has(testEnv) && !this._synthedTests.has(testPath)) {
+      this._synthedEnvs.add(testEnv);
+      this._synthedTests.add(testPath);
+      return new Function(scope, id, inflight, props);
+    }
+
+    return undefined;
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {
+      [TestRunnerInflightMethods.LIST_TESTS]: [],
+      [TestRunnerInflightMethods.RUN_TEST]: [],
+    };
   }
 
   /**
@@ -100,6 +170,21 @@ export interface TestResult {
   readonly unsupported?: boolean;
 
   /**
+   * Unsupported resource tested
+   */
+  readonly unsupportedResource?: string;
+
+  /**
+   * Unsupported method used in test
+   */
+  readonly unsupportedOperation?: string;
+
+  /**
+   * Place for extra test runner arguments that can be added through platforms
+   */
+  readonly args?: Record<string, unknown>;
+
+  /**
    * The error message if the test failed.
    */
   readonly error?: string;
@@ -136,6 +221,11 @@ export interface Trace {
   readonly type: TraceType;
 
   /**
+   * The log level of the event.
+   */
+  readonly level: LogLevel;
+
+  /**
    * The timestamp of the event, in ISO 8601 format.
    * @example 2020-01-01T00:00:00.000Z
    */
@@ -143,10 +233,39 @@ export interface Trace {
 }
 
 /**
+ * Log level
+ */
+export enum LogLevel {
+  /**
+   * Mostly used for debugging
+   */
+  VERBOSE = "verbose",
+
+  /**
+   * Information that is useful to developers
+   */
+  INFO = "info",
+
+  /**
+   * Warnings that are not errors, but may require attention
+   */
+  WARNING = "warning",
+
+  /**
+   * Errors that should be addressed
+   */
+  ERROR = "error",
+}
+
+/**
  * The type of a trace.
  * @skipDocs
  */
 export enum TraceType {
+  /**
+   * A trace representing simulator activity.
+   */
+  SIMULATOR = "simulator",
   /**
    * A trace representing a resource activity.
    */

@@ -7,22 +7,9 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -53,11 +40,11 @@
       }
     },
     "aws_dynamodb_table": {
-      "cloudCounter": {
+      "Counter": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "cloudCounter"
+            "path": "root/Default/Default/Counter/Default",
+            "uniqueId": "Counter"
           }
         },
         "attribute": [
@@ -68,7 +55,7 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c866f225"
+        "name": "wing-counter-Counter-c824ef62"
       }
     },
     "aws_iam_role": {
@@ -99,7 +86,7 @@
             "uniqueId": "envfn_IamRolePolicy_63955289"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.envfn_IamRole_88E952E6.name}"
       },
       "memoryfn_IamRolePolicy_5DA20EF5": {
@@ -109,7 +96,7 @@
             "uniqueId": "memoryfn_IamRolePolicy_5DA20EF5"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.memoryfn_IamRole_87751238.name}"
       }
     },
@@ -148,7 +135,7 @@
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "env-fn-c8a226dd",
             "WING_TARGET": "tf-aws",
@@ -161,7 +148,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.envfn_IamRole_88E952E6.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.envfn_S3Object_0080F00E.key}",
         "timeout": 60,
@@ -182,7 +169,7 @@
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "memory-fn-c844bdf7",
             "WING_TARGET": "tf-aws"
@@ -193,7 +180,7 @@
         "memory_size": 128,
         "publish": true,
         "role": "${aws_iam_role.memoryfn_IamRole_87751238.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.memoryfn_S3Object_3B51C445.key}",
         "timeout": 60,
@@ -204,6 +191,16 @@
       }
     },
     "aws_s3_bucket": {
+      "Bucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
+          }
+        },
+        "bucket_prefix": "bucket-c88fdc5f-",
+        "force_destroy": false
+      },
       "Code": {
         "//": {
           "metadata": {
@@ -212,16 +209,6 @@
           }
         },
         "bucket_prefix": "code-c84a50b1-"
-      },
-      "cloudBucket": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
-          }
-        },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
-        "force_destroy": false
       }
     },
     "aws_s3_object": {

@@ -13,8 +13,10 @@ const skip = [
   "std.TestRunner",
   "std.TestRunnerInflightMethods",
   "std.TraceType",
+  "std.LogLevel",
   "std.TEST_RUNNER_FQN",
   "std.Resource",
+  "std.AutoIdResource",
   "std.APP_SYMBOL",
   "std.CONNECTIONS_FILE_PATH",
   "std.SDK_SOURCE_MODULE",
@@ -22,6 +24,7 @@ const skip = [
   "util.RequestCache", // an enum
   "util.RequestRedirect", // an enum
   "util.HttpMethod", // an enum
+  "util.Stdio", // an enum
 ];
 
 // checks that the class `className` in module `module` has a `_toInflightType()` method and that it

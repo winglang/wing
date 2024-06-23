@@ -4,14 +4,14 @@
   "description": "Wing Compiler",
   "files": [
     "wingc.wasm",
+    "preflight.shim.cjs",
     "dist/"
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=v18.0.0"
+    "node": ">=v20.0.0"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/winglang/wing.git"
@@ -24,19 +24,21 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
+    "@wingcloud/framework": "workspace:^",
     "@winglang/sdk": "workspace:^",
+    "jiti": "^1.21.0",
     "wasi-js": "^1.7.3"
   },
   "bundledDependencies": [
     "wasi-js"
   ],
   "devDependencies": {
-    "@types/node": "^18.17.13",
+    "@types/node": "^20.11.0",
     "@winglang/wingc": "workspace:^",
     "bump-pack": "workspace:^",
-    "tsup": "^6.7.0",
-    "typescript": "^4.9.5",
-    "vitest": "^0.30.1",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.6.0",
     "wasi-js": "^1.7.3"
   },
   "volta": {

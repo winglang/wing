@@ -111,6 +111,7 @@ obj.method();
         (nested_identifier
           object: (reference
             (reference_identifier))
+          accessor_type: (accessor)
           property: (member_identifier)))
       args: (argument_list))))
 
@@ -132,6 +133,7 @@ x == obj.method();
           (nested_identifier
             object: (reference
               (reference_identifier))
+            accessor_type: (accessor)
             property: (member_identifier)))
         args: (argument_list)))))
 
@@ -173,9 +175,9 @@ New expression with id and scope on different lines
 ================================================================================
 
 new A()
-  as 
-  "b" 
-  in 
+  as
+  "b"
+  in
   c;
 
 --------------------------------------------------------------------------------
@@ -296,17 +298,18 @@ Template string
 maybeVal ?? 2;
 maybeVal ?? 2 + 2;
 maybeVal ?? 2 == 2;
+maybeVal ?? "hi" ?? 2;
 
 --------------------------------------------------------------------------------
 
 (source
   (expression_statement
-    (binary_expression
+    (unwrap_or
       (reference
         (reference_identifier))
       (number)))
   (expression_statement
-    (binary_expression
+    (unwrap_or
       (reference
         (reference_identifier))
       (binary_expression
@@ -314,29 +317,59 @@ maybeVal ?? 2 == 2;
         (number))))
   (expression_statement
     (binary_expression
-      (binary_expression
+      (unwrap_or
         (reference
           (reference_identifier))
         (number))
-      (number))))
+      (number)))
+  (expression_statement
+    (unwrap_or
+      (reference
+        (reference_identifier))
+      (unwrap_or
+        (string)
+        (number)))))
 
 ================================================================================
->>>>>>> 7e08a6d3f92f31497406dace539d6ccbabc6426e
-Set Literal
+Unwrap expression
 ================================================================================
 
-{1, 2, 3};
-Set<num> { 1, 2, 3 };
+maybeVal!;
+tryGet()!;
+!tryGetBool()!;
+
 --------------------------------------------------------------------------------
 
 (source
   (expression_statement
-    (set_literal
-      element: (number)
-      element: (number)
-      element: (number)))
+    (optional_unwrap
+      (reference
+        (reference_identifier))))
   (expression_statement
-    (set_literal
+    (optional_unwrap
+      (call
+        (reference
+          (reference_identifier))
+        (argument_list))))
+  (expression_statement
+    (unary_expression
+      (optional_unwrap
+        (call
+          (reference
+            (reference_identifier))
+          (argument_list))))))
+
+================================================================================
+Set Literal
+================================================================================
+
+Set<num>[ 1, 2, 3 ];
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (array_literal
       type: (immutable_container_type
         type_parameter: (builtin_type))
       element: (number)
@@ -360,9 +393,9 @@ Empty Json Map Literal
 Map Literal
 ================================================================================
 
-{ 
-  "a" => 1, 
-  "b" => 2, 
+{
+  "a" => 1,
+  "b" => 2,
   str_func() => 3,
 };
 
@@ -490,7 +523,9 @@ a?;
               (nested_identifier
                 object: (reference
                   (reference_identifier))
+                accessor_type: (accessor)
                 property: (member_identifier)))
+            accessor_type: (accessor)
             property: (member_identifier)))))))
 
 ================================================================================
@@ -561,3 +596,69 @@ let mo = 10mo;
     value: (duration
       (months
         value: (number)))))
+
+================================================================================
+Array access
+================================================================================
+
+log(x[y]);
+x[y] += 3;
+assert(x[y] == w[z]);
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (call
+      (reference
+        (reference_identifier))
+      (argument_list
+        (positional_argument
+          (reference
+            (structured_access_expression
+              (reference
+                (reference_identifier))
+              (reference
+                (reference_identifier))))))))
+  (variable_assignment_statement
+    (lvalue
+      (structured_access_expression
+        (reference
+          (reference_identifier))
+        (reference
+          (reference_identifier))))
+    (assignment_operator)
+    (number))
+  (expression_statement
+    (call
+      (reference
+        (reference_identifier))
+      (argument_list
+        (positional_argument
+          (binary_expression
+            (reference
+              (structured_access_expression
+                (reference
+                  (reference_identifier))
+                (reference
+                  (reference_identifier))))
+            (reference
+              (structured_access_expression
+                (reference
+                  (reference_identifier))
+                (reference
+                  (reference_identifier))))))))))
+
+================================================================================
+Intrinsic
+================================================================================
+
+@hi();
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (intrinsic
+      (intrinsic_identifier)
+      (argument_list))))

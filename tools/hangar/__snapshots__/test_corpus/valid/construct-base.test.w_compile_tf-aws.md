@@ -1,8 +1,9 @@
 # [construct-base.test.w](../../../../../examples/tests/valid/construct-base.test.w) | compile | tf-aws
 
-## inflight.WingResource-1.js
-```js
+## inflight.WingResource-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class WingResource {
     constructor({  }) {
@@ -10,7 +11,7 @@ module.exports = function({  }) {
   }
   return WingResource;
 }
-//# sourceMappingURL=inflight.WingResource-1.js.map
+//# sourceMappingURL=inflight.WingResource-1.cjs.map
 ```
 
 ## main.tf.json
@@ -20,22 +21,9 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -44,11 +32,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_sqs_queue": {
-      "awssqsQueueSqsQueue": {
+      "SqsQueue": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/aws.sqsQueue.SqsQueue",
-            "uniqueId": "awssqsQueueSqsQueue"
+            "path": "root/Default/Default/SqsQueue",
+            "uniqueId": "SqsQueue"
           }
         }
       }
@@ -57,14 +45,16 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 const cx = require("constructs");
 const aws = require("@cdktf/provider-aws");
@@ -74,18 +64,18 @@ class $Root extends $stdlib.std.Resource {
     class WingResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        {console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id))};
+        console.log(String.raw({ raw: ["my id is ", ""] }, $helpers.nodeof(this).id));
       }
       static _toInflightType() {
         return `
-          require("./inflight.WingResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.WingResource-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const WingResourceClient = ${WingResource._toInflightType(this)};
+            const WingResourceClient = ${WingResource._toInflightType()};
             const client = new WingResourceClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -93,28 +83,32 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const getPath = ((c) => {
-      return c.node.path;
+      return $helpers.nodeof(c).path;
     });
     const getDisplayName = ((r) => {
-      return (std.Node.of(r)).title;
+      return $helpers.nodeof(r).title;
     });
-    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "aws.sqsQueue.SqsQueue");
+    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "SqsQueue");
     const wr = new WingResource(this, "WingResource");
     const another_resource = wr;
-    {console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))))};
-    {console.log(String.raw({ raw: ["path of wing resource: ", ""] }, (getPath(wr))))};
+    console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))));
+    console.log(String.raw({ raw: ["path of wing resource: ", ""] }, (getPath(wr))));
     const title = ((getDisplayName(wr)) ?? "no display name");
-    {console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title))};
+    console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title));
+    console.log((cx.Node.of(wr)).path);
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "construct-base.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

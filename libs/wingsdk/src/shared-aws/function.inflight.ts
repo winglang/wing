@@ -5,10 +5,21 @@ import {
   LogType,
 } from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@smithy/util-utf8";
+import { ILambdaContext } from "./function";
 import { IFunctionClient } from "../cloud";
-import { Trace, TraceType } from "../std";
+import { LogLevel, Trace, TraceType } from "../std";
 
 export class FunctionClient implements IFunctionClient {
+  public static async context(): Promise<ILambdaContext | undefined> {
+    const obj = (globalThis as any).$awsLambdaContext;
+    if (!obj) {
+      return undefined;
+    }
+    // workaround for the fact that JSII doesn't allow methods to start with "get"
+    obj.remainingTimeInMillis = obj.getRemainingTimeInMillis;
+    return obj;
+  }
+
   constructor(
     private readonly functionArn: string,
     private readonly constructPath: string,
@@ -16,33 +27,47 @@ export class FunctionClient implements IFunctionClient {
   ) {}
 
   /**
-   * Invoke the function, passing the given payload as an argument.
-   *  @returns the function returned payload only
+   * Invokes the function with a payload and waits for the result.
+   *  @returns the function response payload.
    */
-  public async invoke(payload: string): Promise<string> {
+  public async invoke(payload?: string): Promise<string | undefined> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
-      Payload: fromUtf8(JSON.stringify(payload)),
+      // If payload is undefined, pass json `null` as the payload to the function
+      // to ensure the received event will be `null` (which will be converted to `undefined` in the function code)
+      // If the Payload is undefined, the resulting event will instead be `{}`
+      Payload: fromUtf8(
+        payload !== undefined ? JSON.stringify(payload) : "null"
+      ),
     });
     const response = await this.lambdaClient.send(command);
-
-    const value = parseCommandOutput(response, this.functionArn);
-
-    if (!value) {
-      return "";
-    }
-    if (typeof value !== "string") {
-      throw new Error(
-        `function returned value of type ${typeof value}, not string`
-      );
-    }
-    return value;
+    return parseCommandOutput(response, this.functionArn);
   }
 
   /**
-   * Invoke the function, passing the given payload as an argument.
-   *
-   * @returns the function returned payload and logs
+   * Kicks off the execution of the function with a payload and returns immediately while the function is running.
+   * @returns immediately once the event has been handed off to AWS Lambda.
+   */
+  public async invokeAsync(payload: string): Promise<void> {
+    const command = new InvokeCommand({
+      FunctionName: this.functionArn,
+      Payload: fromUtf8(JSON.stringify(payload)),
+      InvocationType: "Event",
+    });
+    const response = await this.lambdaClient.send(command);
+
+    if (response.StatusCode !== 202) {
+      console.error("Error: " + response.FunctionError);
+      console.error(response.Payload ? toUtf8(response.Payload) : "");
+      throw new Error(
+        `Failed to enqueue event. Received status code: ${response.StatusCode}`
+      );
+    }
+  }
+
+  /**
+   * Invokes the function synchronously, passing the given payload as an argument.
+   * @returns the function response payload with execution logs included.
    */
   public async invokeWithLogs(payload: string): Promise<[string, Trace[]]> {
     const command = new InvokeCommand({
@@ -72,7 +97,7 @@ export class FunctionClient implements IFunctionClient {
 function parseCommandOutput(
   payload: InvokeCommandOutput,
   functionArn: string
-): any | undefined {
+): string | undefined {
   if (payload.FunctionError) {
     let errorText = toUtf8(payload.Payload!);
     let errorData;
@@ -81,26 +106,33 @@ function parseCommandOutput(
     } catch (_) {}
 
     if (errorData && "errorMessage" in errorData) {
-      const newError = new Error(
-        `Invoke failed with message: "${
-          errorData.errorMessage
-        }"\nLogs: ${cloudwatchLogsPath(functionArn)}`
+      let errorMessage = `Invoke failed with message: "${
+        errorData.errorMessage
+      }"\nLogs: ${cloudwatchLogsPath(functionArn)}`;
+      errorMessage = errorMessage.replace(
+        "Task timed out after",
+        "Function timed out after"
       );
+
+      const newError = new Error();
+      newError.message = errorMessage;
       newError.name = errorData.errorType;
       newError.stack = errorData.trace?.join("\n");
       throw newError;
     }
+
     throw new Error(
       `Invoke failed with message: "${
         payload.FunctionError
       }"\nLogs: ${cloudwatchLogsPath(functionArn)}\nFull Error: "${errorText}"`
     );
+  }
+
+  if (!payload.Payload) {
+    return undefined;
   } else {
-    if (!payload.Payload) {
-      return undefined;
-    } else {
-      return JSON.parse(toUtf8(payload.Payload));
-    }
+    const returnObject = JSON.parse(toUtf8(payload.Payload));
+    return returnObject === null ? undefined : returnObject;
   }
 }
 
@@ -134,6 +166,7 @@ export function parseLogs(logs: string, sourcePath: string) {
         sourceType: "@winglang/sdk.cloud.Function",
         sourcePath,
         type: TraceType.LOG,
+        level: LogLevel.INFO,
       };
       traces.push(trace);
     }

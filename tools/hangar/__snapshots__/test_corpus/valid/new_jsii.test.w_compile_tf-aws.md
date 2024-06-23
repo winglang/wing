@@ -1,8 +1,9 @@
 # [new_jsii.test.w](../../../../../examples/tests/valid/new_jsii.test.w) | compile | tf-aws
 
-## inflight.CustomScope-1.js
-```js
+## inflight.CustomScope-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class CustomScope {
     constructor({  }) {
@@ -10,7 +11,7 @@ module.exports = function({  }) {
   }
   return CustomScope;
 }
-//# sourceMappingURL=inflight.CustomScope-1.js.map
+//# sourceMappingURL=inflight.CustomScope-1.cjs.map
 ```
 
 ## main.tf.json
@@ -20,22 +21,9 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -44,14 +32,14 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "CustomScope_cloudBucket_17614466": {
+      "CustomScope_Bucket_8BBB89A4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/CustomScope/cloud.Bucket/Default",
-            "uniqueId": "CustomScope_cloudBucket_17614466"
+            "path": "root/Default/Default/CustomScope/Bucket/Default",
+            "uniqueId": "CustomScope_Bucket_8BBB89A4"
           }
         },
-        "bucket_prefix": "cloud-bucket-c89807a1-",
+        "bucket_prefix": "bucket-c830af09-",
         "force_destroy": false
       }
     }
@@ -59,14 +47,16 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -78,14 +68,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.CustomScope-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.CustomScope-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const CustomScopeClient = ${CustomScope._toInflightType(this)};
+            const CustomScopeClient = ${CustomScope._toInflightType()};
             const client = new CustomScopeClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -93,18 +83,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     let count = 0;
-    ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "cloud.Bucket"))(new CustomScope(this, "CustomScope"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: count == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(count,1)))};
+    ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "Bucket"))(new CustomScope(this, "CustomScope"));
+    $helpers.assert($helpers.eq(count, 1), "count == 1");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "new_jsii.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

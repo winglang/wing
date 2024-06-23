@@ -3,8 +3,8 @@ set -eo pipefail
 
 TOOL_INSTALL_DIR="./.cargo"
 
-BINARYEN_VERSION="version_116"
-WASI_SDK_VERSION="20"
+BINARYEN_VERSION="version_117"
+WASI_SDK_VERSION="21"
 WASI_SDK_VERSION_FULL="$WASI_SDK_VERSION.0"
 
 SYS_OS=$OSTYPE
@@ -49,8 +49,6 @@ if [ ! -f $BINARYEN_BINARIES ]; then
         echo "Error extracting Binaryen. Exiting."
         exit 1
     fi
-else
-    echo "Binaryen $BINARYEN_VERSION already installed."
 fi
 
 # Download wasi-sdk

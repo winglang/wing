@@ -1,4 +1,5 @@
 bring cloud;
+bring util;
 
 // User defined resource
 class Foo {
@@ -139,8 +140,12 @@ let bigOlPublisher = new BigPublisher();
 
 test "dependency cycles" {
   bigOlPublisher.publish("foo");
-  let count = bigOlPublisher.getObjectCount();
-  // assert(count == 2); // TODO: This fails due to issue: https://github.com/winglang/wing/issues/2082
+
+  util.waitUntil(inflight () => {
+    let count = bigOlPublisher.getObjectCount();
+    return count == 2;
+  });
+  assert(bigOlPublisher.getObjectCount() == 2);
 }
 
 // Scope and ID tests
@@ -153,18 +158,18 @@ class ScopeAndIdTestClass {
   new() {
     // Create a Dummy in my scope
     let d1 = new Dummy();
-    assert(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"));
+    assert(nodeof(d1).path.endsWith("/ScopeAndIdTestClass/Dummy"));
     // Create a Dummy in someone else's scope
     let d2 = new Dummy() in d1;
-    assert(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"));
+    assert(nodeof(d2).path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"));
     // Create a Dummy in someone else's scope (reference)
     let d3 = new Dummy() in Dummy.getInstance(d2);
-    assert(d3.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"));
+    assert(nodeof(d3).path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"));
     // Generate multiple Dummys with different id's
     for i in 0..3 {
       let x = new Dummy() as "tc{i}";
       let expected_path = "/ScopeAndIdTestClass/tc{i}";
-      assert(x.node.path.endsWith(expected_path));
+      assert(nodeof(x).path.endsWith(expected_path));
     }
   }
 }

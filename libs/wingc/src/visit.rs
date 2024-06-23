@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-		FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind,
-		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, BringSource, CalleeKind, Class, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope,
+		Stmt, StmtKind, Struct, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -42,8 +42,14 @@ pub trait Visit<'ast> {
 	fn visit_class(&mut self, node: &'ast Class) {
 		visit_class(self, node);
 	}
+	fn visit_struct(&mut self, node: &'ast Struct) {
+		visit_struct(self, node);
+	}
 	fn visit_interface(&mut self, node: &'ast Interface) {
 		visit_interface(self, node);
+	}
+	fn visit_enum(&mut self, node: &'ast Enum) {
+		visit_enum(self, node);
 	}
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		visit_expr(self, node);
@@ -100,8 +106,7 @@ where
 				BringSource::TrustedModule(name, _module_dir) => v.visit_symbol(name),
 				BringSource::WingLibrary(name, _module_dir) => v.visit_symbol(name),
 				BringSource::JsiiModule(name) => v.visit_symbol(name),
-				BringSource::WingFile(name) => v.visit_symbol(name),
-				BringSource::Directory(name) => v.visit_symbol(name),
+				BringSource::WingFile(_) | BringSource::Directory(_) => {}
 			}
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);
@@ -146,9 +151,17 @@ where
 			v.visit_expr(value);
 			v.visit_scope(statements);
 			for elif in elif_statements {
-				v.visit_symbol(&elif.var_name);
-				v.visit_expr(&elif.value);
-				v.visit_scope(&elif.statements);
+				match elif {
+					Elifs::ElifBlock(elif_block) => {
+						v.visit_expr(&elif_block.condition);
+						v.visit_scope(&elif_block.statements);
+					}
+					Elifs::ElifLetBlock(elif_let_block) => {
+						v.visit_symbol(&elif_let_block.var_name);
+						v.visit_expr(&elif_let_block.value);
+						v.visit_scope(&elif_let_block.statements);
+					}
+				}
 			}
 			if let Some(statements) = else_statements {
 				v.visit_scope(statements);
@@ -170,9 +183,7 @@ where
 				v.visit_scope(statements);
 			}
 		}
-		StmtKind::Expression(expr) => {
-			v.visit_expr(&expr);
-		}
+		StmtKind::Expression(expr) => v.visit_expr(&expr),
 		StmtKind::Assignment {
 			kind: _,
 			variable,
@@ -186,43 +197,12 @@ where
 				v.visit_expr(expr);
 			}
 		}
-		StmtKind::Throw(expr) => {
-			v.visit_expr(expr);
-		}
-		StmtKind::Scope(scope) => {
-			v.visit_scope(scope);
-		}
-		StmtKind::Class(class) => {
-			v.visit_class(class);
-		}
-		StmtKind::Interface(interface) => {
-			v.visit_interface(interface);
-		}
-		StmtKind::Struct {
-			name,
-			extends,
-			fields,
-			access: _,
-		} => {
-			v.visit_symbol(name);
-			for extend in extends {
-				v.visit_user_defined_type(extend);
-			}
-			for member in fields {
-				v.visit_symbol(&member.name);
-				v.visit_type_annotation(&member.member_type);
-			}
-		}
-		StmtKind::Enum {
-			name,
-			values,
-			access: _,
-		} => {
-			v.visit_symbol(name);
-			for value in values {
-				v.visit_symbol(value);
-			}
-		}
+		StmtKind::Throw(expr) => v.visit_expr(expr),
+		StmtKind::Scope(scope) => v.visit_scope(scope),
+		StmtKind::Class(class) => v.visit_class(class),
+		StmtKind::Interface(interface) => v.visit_interface(interface),
+		StmtKind::Struct(st) => v.visit_struct(st),
+		StmtKind::Enum(enu) => v.visit_enum(enu),
 		StmtKind::TryCatch {
 			try_statements,
 			catch_block,
@@ -240,6 +220,15 @@ where
 			}
 		}
 		StmtKind::CompilerDebugEnv => {}
+		StmtKind::ExplicitLift(explict_lift) => {
+			for q in explict_lift.qualifications.iter() {
+				v.visit_expr(&q.obj);
+				for op in q.ops.iter() {
+					v.visit_symbol(op);
+				}
+			}
+			v.visit_scope(&explict_lift.statements);
+		}
 	}
 }
 
@@ -271,6 +260,20 @@ where
 	}
 }
 
+pub fn visit_struct<'ast, V>(v: &mut V, node: &'ast Struct)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+	for extend in &node.extends {
+		v.visit_user_defined_type(&extend);
+	}
+	for member in &node.fields {
+		v.visit_symbol(&member.name);
+		v.visit_type_annotation(&member.member_type);
+	}
+}
+
 pub fn visit_interface<'ast, V>(v: &mut V, node: &'ast Interface)
 where
 	V: Visit<'ast> + ?Sized,
@@ -284,6 +287,17 @@ where
 
 	for extend in &node.extends {
 		v.visit_user_defined_type(extend);
+	}
+}
+
+pub fn visit_enum<'ast, V>(v: &mut V, node: &'ast Enum)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+	for (value, _doc) in &node.values {
+		v.visit_symbol(value);
+		// TODO: Visit _doc
 	}
 }
 
@@ -322,6 +336,12 @@ where
 		}
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
+		}
+		ExprKind::Intrinsic(instrinsic) => {
+			v.visit_symbol(&instrinsic.name);
+			if let Some(arg_list) = &instrinsic.arg_list {
+				v.visit_args(arg_list);
+			}
 		}
 		ExprKind::Call { callee, arg_list } => {
 			match callee {
@@ -404,6 +424,7 @@ where
 		Literal::Boolean(_) => {}
 		Literal::Number(_) => {}
 		Literal::String(_) => {}
+		Literal::NonInterpolatedString(_) => {}
 	}
 }
 
@@ -426,6 +447,10 @@ where
 		Reference::TypeMember { type_name, property } => {
 			v.visit_user_defined_type(type_name);
 			v.visit_symbol(property);
+		}
+		Reference::ElementAccess { object, index } => {
+			v.visit_expr(object);
+			v.visit_expr(index);
 		}
 	}
 }

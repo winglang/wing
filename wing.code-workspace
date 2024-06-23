@@ -1,30 +1,6 @@
 {
   "folders": [
     {
-      "name": "ROOT",
-      "path": "./"
-    },
-    {
-      "name": "CLI",
-      "path": "./apps/wing"
-    },
-    {
-      "name": "Compiler",
-      "path": "./libs/wingcompiler"
-    },
-    {
-      "name": "SDK",
-      "path": "./libs/wingsdk"
-    },
-    {
-      "name": "SDK Tests",
-      "path": "./examples/tests/sdk_tests"
-    },
-    {
-      "name": "Docs",
-      "path": "./docs/docs"
-    },
-    {
       "name": "Console App",
       "path": "./apps/wing-console/console/app"
     },
@@ -37,28 +13,60 @@
       "path": "./apps/wing-console/console/ui"
     },
     {
-      "name": "VSCode",
-      "path": "./apps/vscode-wing"
+      "name": "Compiler",
+      "path": "./libs/wingcompiler"
     },
     {
       "name": "API Docs Generator",
       "path": "./apps/jsii-docgen"
     },
     {
-      "name": "API Checker",
-      "path": "./apps/wing-api-checker"
+      "name": "ROOT",
+      "path": "./"
     },
     {
-      "name": "Tests: Valid",
-      "path": "./examples/tests/valid"
+      "name": "SDK",
+      "path": "./libs/wingsdk"
+    },
+    {
+      "name": "Docs",
+      "path": "./docs/docs"
+    },
+    {
+      "name": "Tests: Error",
+      "path": "./examples/tests/error"
     },
     {
       "name": "Tests: Invalid",
       "path": "./examples/tests/invalid"
     },
     {
-      "name": "Tests: Error",
-      "path": "./examples/tests/error"
+      "name": "SDK Tests",
+      "path": "./examples/tests/sdk_tests"
+    },
+    {
+      "name": "Tests: Valid",
+      "path": "./examples/tests/valid"
+    },
+    {
+      "name": "VSCode",
+      "path": "./apps/vscode-wing"
+    },
+    {
+      "name": "API Checker",
+      "path": "./apps/wing-api-checker"
+    },
+    {
+      "name": "CLI",
+      "path": "./apps/wing"
+    },
+    {
+      "name": "CLIv2",
+      "path": "./apps/wingcli-v2"
+    },
+    {
+      "name": "Tunnel Server",
+      "path": "./libs/wingtunnels"
     }
   ],
   "settings": {}

@@ -2,11 +2,6 @@
 
 exports[`basic function 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
@@ -14,25 +9,52 @@ exports[`basic function 1`] = `
         "description": "This function was created by Wing",
         "entry_point": "handler",
         "environment_variables": {},
+        "https_trigger_security_level": "SECURE_ALWAYS",
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs18",
-        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 120,
         "trigger_http": true,
       },
     },
+    "google_project_iam_custom_role": {
+      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
+        "permissions": [
+          "cloudfunctions.functions.get",
+        ],
+        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_ProjectIamMember_F891F2CD": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+      },
+    },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
-      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
         "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -69,16 +91,27 @@ exports[`basic function 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
+                  },
+                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "DefaultFunction",
                     "path": "root/Default/Function/DefaultFunction",
                   },
@@ -87,23 +120,34 @@ exports[`basic function 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.3",
+                        },
+                        "display": {},
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Id",
                         "path": "root/Default/Function/FunctionBucket/Id",
                       },
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -115,23 +159,34 @@ exports[`basic function 2`] = `
                   "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
-                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                  "ProjectIamMember": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
-                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "display": {},
+                    "id": "ProjectIamMember",
+                    "path": "root/Default/Function/ProjectIamMember",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -140,74 +195,57 @@ exports[`basic function 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -217,11 +255,6 @@ exports[`basic function 2`] = `
 
 exports[`basic function with environment variables 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
@@ -232,25 +265,52 @@ exports[`basic function with environment variables 1`] = `
           "BOOM": "BAM",
           "FOO": "BAR",
         },
+        "https_trigger_security_level": "SECURE_ALWAYS",
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs18",
-        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 120,
         "trigger_http": true,
       },
     },
+    "google_project_iam_custom_role": {
+      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
+        "permissions": [
+          "cloudfunctions.functions.get",
+        ],
+        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_ProjectIamMember_F891F2CD": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+      },
+    },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
-      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
         "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -287,16 +347,27 @@ exports[`basic function with environment variables 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
+                  },
+                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "DefaultFunction",
                     "path": "root/Default/Function/DefaultFunction",
                   },
@@ -305,23 +376,34 @@ exports[`basic function with environment variables 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.3",
+                        },
+                        "display": {},
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Id",
                         "path": "root/Default/Function/FunctionBucket/Id",
                       },
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -333,23 +415,34 @@ exports[`basic function with environment variables 2`] = `
                   "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
-                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                  "ProjectIamMember": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
-                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "display": {},
+                    "id": "ProjectIamMember",
+                    "path": "root/Default/Function/ProjectIamMember",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -358,74 +451,57 @@ exports[`basic function with environment variables 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -433,15 +509,10 @@ exports[`basic function with environment variables 2`] = `
 }
 `;
 
-exports[`basic function with memory beyond the allowed range 1`] = `"Memory must be between 128 and 8192 MB for GCP Cloud Functions"`;
+exports[`basic function with memory beyond the allowed range 1`] = `[Error: Memory must be between 128 and 8192 MB for GCP Cloud Functions]`;
 
 exports[`basic function with memory size specified 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
@@ -449,25 +520,52 @@ exports[`basic function with memory size specified 1`] = `
         "description": "This function was created by Wing",
         "entry_point": "handler",
         "environment_variables": {},
+        "https_trigger_security_level": "SECURE_ALWAYS",
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs18",
-        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 120,
         "trigger_http": true,
       },
     },
+    "google_project_iam_custom_role": {
+      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
+        "permissions": [
+          "cloudfunctions.functions.get",
+        ],
+        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_ProjectIamMember_F891F2CD": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+      },
+    },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
-      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
         "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -504,16 +602,27 @@ exports[`basic function with memory size specified 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
+                  },
+                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "DefaultFunction",
                     "path": "root/Default/Function/DefaultFunction",
                   },
@@ -522,23 +631,34 @@ exports[`basic function with memory size specified 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.3",
+                        },
+                        "display": {},
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Id",
                         "path": "root/Default/Function/FunctionBucket/Id",
                       },
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -550,23 +670,34 @@ exports[`basic function with memory size specified 2`] = `
                   "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
-                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                  "ProjectIamMember": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
-                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "display": {},
+                    "id": "ProjectIamMember",
+                    "path": "root/Default/Function/ProjectIamMember",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -575,74 +706,57 @@ exports[`basic function with memory size specified 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -650,15 +764,10 @@ exports[`basic function with memory size specified 2`] = `
 }
 `;
 
-exports[`basic function with timeout beyond the allowed range 1`] = `"Timeout must be between 1 and 540 seconds for GCP Cloud Functions"`;
+exports[`basic function with timeout beyond the allowed range 1`] = `[Error: Timeout must be between 1 and 540 seconds for GCP Cloud Functions]`;
 
 exports[`basic function with timeout explicitly set 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
@@ -666,25 +775,52 @@ exports[`basic function with timeout explicitly set 1`] = `
         "description": "This function was created by Wing",
         "entry_point": "handler",
         "environment_variables": {},
+        "https_trigger_security_level": "SECURE_ALWAYS",
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs18",
-        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 30,
         "trigger_http": true,
       },
     },
+    "google_project_iam_custom_role": {
+      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
+        "permissions": [
+          "cloudfunctions.functions.get",
+        ],
+        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_ProjectIamMember_F891F2CD": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+      },
+    },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
-      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
         "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -721,16 +857,27 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
+                  },
+                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "DefaultFunction",
                     "path": "root/Default/Function/DefaultFunction",
                   },
@@ -739,23 +886,34 @@ exports[`basic function with timeout explicitly set 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.3",
+                        },
+                        "display": {},
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Id",
                         "path": "root/Default/Function/FunctionBucket/Id",
                       },
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -767,23 +925,34 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
-                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                  "ProjectIamMember": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
-                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "display": {},
+                    "id": "ProjectIamMember",
+                    "path": "root/Default/Function/ProjectIamMember",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -792,74 +961,57 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },

@@ -3,32 +3,36 @@ import { IFunctionClient, IOnDeployClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 
 export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
   private functionHandle: string;
-  private readonly context: ISimulatorContext;
 
-  public constructor(
-    props: OnDeploySchema["props"],
-    context: ISimulatorContext
-  ) {
+  public constructor(props: OnDeploySchema) {
     this.functionHandle = props.functionHandle;
-    this.context = context;
   }
 
-  public async init(): Promise<OnDeployAttributes> {
-    const functionClient = this.context.findInstance(
-      this.functionHandle
-    ) as IFunctionClient & ISimulatorResourceInstance;
-    await this.context.withTrace({
+  public async init(context: ISimulatorContext): Promise<OnDeployAttributes> {
+    const functionClient = context.getClient(
+      this.functionHandle,
+      true
+    ) as IFunctionClient;
+    await context.withTrace({
       message: "OnDeploy invoked.",
       activity: async () => {
-        return functionClient.invoke("");
+        return functionClient.invoke();
       },
     });
     return {};
   }
 
   public async cleanup(): Promise<void> {}
+
+  public async save(): Promise<void> {}
+
+  public async plan() {
+    // OnDeploy runs on every deployment, so always replace
+    return UpdatePlan.REPLACE;
+  }
 }

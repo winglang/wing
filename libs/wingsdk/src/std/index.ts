@@ -8,7 +8,7 @@ export * from "./json_schema";
 export * from "./map";
 export * from "./node";
 export * from "./number";
-export * from "./range";
+export * from "./regex";
 export * from "./resource";
 export * from "./set";
 export * from "./string";

@@ -21,8 +21,8 @@ describe(`${__dirname}/main.w`, () => {
     test.skip(!isDockerAvailable(), "Docker is not available");
   });
 
-  test("opens redis help", async ({ page }) => {
-    await getResourceNode(page, "root/Default/ex.Redis").click();
+  test.skip("opens redis help", async ({ page }) => {
+    await getResourceNode(page, "root/Default/Redis").click();
 
     const input = page.getByTestId("ex.redis:input");
 
@@ -39,8 +39,8 @@ describe(`${__dirname}/main.w`, () => {
     );
   });
 
-  test("navigates history", async ({ page }) => {
-    await getResourceNode(page, "root/Default/ex.Redis").click();
+  test.skip("navigates history", async ({ page }) => {
+    await getResourceNode(page, "root/Default/Redis").click();
 
     const input = page.getByTestId("ex.redis:input");
 

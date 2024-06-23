@@ -44,7 +44,7 @@ export class FunctionClient implements IFunctionClient {
    * Invoke the function, passing the given payload as an argument.
    *  @returns the function returned payload only
    */
-  public async invoke(payload: string): Promise<string> {
+  public async invoke(payload?: string): Promise<string | undefined> {
     try {
       const auth = new GoogleAuth();
       const client = await auth.getIdTokenClient(this.functionURL);
@@ -65,7 +65,7 @@ export class FunctionClient implements IFunctionClient {
           },
         },
       });
-      return (res.data as string) ?? "";
+      return res.data as string | undefined;
     } catch (error) {
       throw new Error(
         `Error while invoking the function ${this.functionName}:\n${
@@ -73,6 +73,10 @@ export class FunctionClient implements IFunctionClient {
         }`
       );
     }
+  }
+
+  public async invokeAsync(_payload?: string): Promise<void> {
+    throw new Error("invokeAsync not implemented");
   }
 
   /**

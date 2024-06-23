@@ -1,10 +1,12 @@
 import { Bucket } from "./bucket";
+import { Counter } from "./counter";
 import { Function } from "./function";
+import { Schedule } from "./schedule";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
-import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
+import { BUCKET_FQN, COUNTER_FQN, FUNCTION_FQN, SCHEDULE_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
 import { TABLE_FQN } from "../ex";
 import { CdktfApp } from "../shared-tf/app";
@@ -29,7 +31,7 @@ export interface AppProps extends CdktfAppProps {
    * The Google Cloud zone, used for all resources.
    * @see https://cloud.google.com/functions/docs/locations
    */
-  readonly zone: string;
+  readonly zone?: string;
 }
 
 /**
@@ -53,7 +55,6 @@ export class App extends CdktfApp {
   public readonly zone: string;
 
   public readonly _target = "tf-gcp";
-  protected readonly testRunner: TestRunner;
 
   constructor(props: AppProps) {
     super(props);
@@ -80,23 +81,7 @@ export class App extends CdktfApp {
     });
     new RandomProvider(this, "random");
 
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
-    this.synthRoots(props, this.testRunner);
-  }
-
-  protected synthRoots(props: AppProps, testRunner: TestRunner): void {
-    if (props.rootConstruct) {
-      const Root = props.rootConstruct;
-      if (this.isTestEnvironment) {
-        new Root(this, "env0");
-        const tests = testRunner.findTests();
-        for (let i = 1; i < tests.length; i++) {
-          new Root(this, "env" + i);
-        }
-      } else {
-        new Root(this, "Default");
-      }
-    }
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   protected typeForFqn(fqn: string): any {
@@ -109,6 +94,10 @@ export class App extends CdktfApp {
         return Function;
       case TABLE_FQN:
         return Table;
+      case COUNTER_FQN:
+        return Counter;
+      case SCHEDULE_FQN:
+        return Schedule;
     }
 
     return undefined;

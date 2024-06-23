@@ -1,13 +1,18 @@
 name: PR Creation Comment
 
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   comment:
     runs-on: ubuntu-latest
+    if: ${{ !startsWith(github.head_ref, 'mergify/merge-queue/') }}
     steps:
       - name: Comment on new PR
         uses: thollander/actions-comment-pull-request@v2
@@ -15,7 +20,7 @@ jobs:
           message: |
             Thanks for opening this pull request! :tada:
             Please consult the [contributing guidelines](https://www.winglang.io/contributing) for details on how to contribute to this project.
-            If you need any assistence, don't hesitate to ping the relevant owner over [Slack](https://t.winglang.io/slack).
+            If you need any assistance, don't hesitate to ping the relevant owner over [Discord](https://t.winglang.io/discord).
 
             | Topic                                               | Owner                                                         |
             |-----------------------------------------------------|---------------------------------------------------------------|
@@ -24,7 +29,7 @@ jobs:
             | JSON, structs, primitives and collections           | `@hasanaburayyan`
             | Platforms and plugins                               | `@hasanaburayyan`
             | Frontend resources (website, react, etc)            | `@tsuf239`
-            | Language design                                     | `@eladb`
+            | Language design                                     | `@chriscbr`
             | VSCode extension and language server                | `@markmcculloh`
             | Compiler architecture, inflights, lifting           | `@yoav-steinberg`
             | Wing Testing Framework                              | `@tsuf239`
@@ -33,8 +38,8 @@ jobs:
             | Library Ecosystem                                   | `@chriscbr`
             | Documentation                                       | `@hasanaburayyan`
             | SDK test suite                                      | `@tsuf239` 
-            | Examples                                            | `@skorfmann`
+            | Examples                                            | `@hasanaburayyan`
             | Wing Playground                                     | `@eladcon`
 
           comment_tag: New PR
-          GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

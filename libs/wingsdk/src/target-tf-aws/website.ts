@@ -18,6 +18,7 @@ import * as cloud from "../cloud";
 import { normalPath } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import * as aws from "../shared-aws";
+import { Node } from "../std";
 
 const INDEX_FILE = "index.html";
 
@@ -29,6 +30,7 @@ const INDEX_FILE = "index.html";
 export class Website extends cloud.Website implements aws.IAwsWebsite {
   public readonly bucket: S3Bucket;
   private readonly _url: string;
+  private readonly endpoint: cloud.Endpoint;
 
   constructor(scope: Construct, id: string, props: aws.AwsWebsiteProps) {
     super(scope, id, props);
@@ -38,6 +40,9 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
     new S3BucketWebsiteConfiguration(this, "BucketWebsiteConfiguration", {
       bucket: this.bucket.bucket,
       indexDocument: { suffix: INDEX_FILE },
+      errorDocument: props.errorDocument
+        ? { key: props.errorDocument }
+        : undefined,
     });
 
     this.uploadFiles(this.path);
@@ -72,6 +77,20 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
         },
       ],
       defaultRootObject: INDEX_FILE,
+      customErrorResponse: props.errorDocument
+        ? [
+            {
+              errorCode: 404,
+              responseCode: 200,
+              responsePagePath: `/${props.errorDocument}`,
+            },
+            {
+              errorCode: 403,
+              responseCode: 200,
+              responsePagePath: `/${props.errorDocument}`,
+            },
+          ]
+        : undefined,
       defaultCacheBehavior: {
         allowedMethods: ["GET", "HEAD"],
         cachedMethods: ["GET", "HEAD"],
@@ -153,10 +172,17 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
     }
 
     this._url = `https://${distribution.domainName}`;
+
+    this.endpoint = new cloud.Endpoint(this, "Endpoint", this._url, {
+      label: `Website ${this.node.path}`,
+      browserSupport: true,
+    });
+
+    Node.of(this.endpoint).hidden = true;
   }
 
-  public get url(): string {
-    return this._url;
+  protected get _endpoint(): cloud.Endpoint {
+    return this.endpoint;
   }
 
   public addFile(

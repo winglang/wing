@@ -1,8 +1,9 @@
 # [bring_wing_library.test.w](../../../../../examples/tests/valid/bring_wing_library.test.w) | compile | tf-aws
 
-## inflight.$Closure1-3.js
-```js
+## inflight.$Closure1-3.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $fixture_Store }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,40 +12,49 @@ module.exports = function({ $fixture_Store }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: fixture.Store.makeKeyInflight(\"hello\") == \"data/hello.json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fixture_Store.makeKeyInflight("hello")),"data/hello.json")))};
+      $helpers.assert($helpers.eq((await $fixture_Store.makeKeyInflight("hello")), "data/hello.json"), "fixture.Store.makeKeyInflight(\"hello\") == \"data/hello.json\"");
     }
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-3.js.map
+//# sourceMappingURL=inflight.$Closure1-3.cjs.map
 ```
 
-## inflight.Store-2.js
-```js
+## inflight.Store-2.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $myutil_Util }) {
   class Store {
-    constructor({ $this_data }) {
+    constructor({ $this_data, $this_handlers }) {
       this.$this_data = $this_data;
+      this.$this_handlers = $this_handlers;
     }
     static async makeKeyInflight(name) {
-      return (require("<ABSOLUTE_PATH>/util.js")["makeKeyInflight"])(name)
+      return (require("@winglibs/testfixture/util.js")["makeKeyInflight"])(name)
     }
     async set(message) {
       (await this.$this_data.put("data.txt", (await $myutil_Util.double(message))));
+      for (const handler of this.$this_handlers) {
+        (await handler(message));
+      }
     }
   }
   return Store;
 }
-//# sourceMappingURL=inflight.Store-2.js.map
+//# sourceMappingURL=inflight.Store-2.cjs.map
 ```
 
-## inflight.Util-1.js
-```js
+## inflight.Util-1.cjs
+```cjs
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
+    }
+    static async makeKeyInflight(name) {
+      return (require("@winglibs/testfixture/util.js")["makeKeyInflight"])(name)
     }
     static async double(msg) {
       return String.raw({ raw: ["", "", ""] }, msg, msg);
@@ -52,7 +62,7 @@ module.exports = function({  }) {
   }
   return Util;
 }
-//# sourceMappingURL=inflight.Util-1.js.map
+//# sourceMappingURL=inflight.Util-1.cjs.map
 ```
 
 ## main.tf.json
@@ -62,22 +72,9 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -86,14 +83,14 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "fixtureStore_cloudBucket_0EE75A93": {
+      "Store_Bucket_42A4CEFB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/fixture.Store/cloud.Bucket/Default",
-            "uniqueId": "fixtureStore_cloudBucket_0EE75A93"
+            "path": "root/Default/Default/Store/Bucket/Default",
+            "uniqueId": "Store_Bucket_42A4CEFB"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8afb3a9-",
+        "bucket_prefix": "bucket-c843dbb0-",
         "force_destroy": false
       }
     }
@@ -101,46 +98,31 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.enums-1.js
-```js
-"use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const FavoriteNumbers =
-    (function (tmp) {
-      tmp[tmp["SEVEN"] = 0] = ",SEVEN";
-      tmp[tmp["FORTY_TWO"] = 1] = ",FORTY_TWO";
-      return tmp;
-    })({})
-  ;
-  return { FavoriteNumbers };
-};
-//# sourceMappingURL=preflight.enums-1.js.map
-```
-
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-const fixture = require("./preflight.testfixture-5.js")({ $stdlib });
-const testfixture = require("./preflight.testfixture-5.js")({ $stdlib });
-const testfixture2 = require("./preflight.testfixture-5.js")({ $stdlib });
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+const fixture = require("./preflight.testfixture-5.cjs");
+const testfixture = require("./preflight.testfixture-5.cjs");
+const testfixture2 = require("./preflight.testfixture-5.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-3.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-3.cjs")({
             $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
           })
         `;
@@ -148,7 +130,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -156,141 +138,187 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), host, ["makeKeyInflight"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), ["makeKeyInflight"]],
+          ],
+          "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), []],
+          ],
+        });
       }
     }
-    new fixture.Store(this, "fixture.Store");
+    new fixture.Store(this, "Store");
     const fave_num = fixture.FavoriteNumbers.SEVEN;
     const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
-    {((cond) => {if (!cond) throw new Error("assertion failed: fixture.Store.makeKey(\"hello\") == \"data/hello.json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fixture.Store.makeKey("hello")),"data/hello.json")))};
+    $helpers.assert($helpers.eq((fixture.Store.makeKey("hello")), "data/hello.json"), "fixture.Store.makeKey(\"hello\") == \"data/hello.json\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_wing_library.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
-## preflight.store-3.js
-```js
+## preflight.enums-1.cjs
+```cjs
 "use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const cloud = $stdlib.cloud;
-  const myutil = require("./preflight.util-2.js")({ $stdlib });
-  class Store extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-      this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
-    }
-    static makeKey(name) {
-      return (require("<ABSOLUTE_PATH>/util.js")["makeKey"])(name)
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Store-2.js")({
-          $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const StoreClient = ${Store._toInflightType(this)};
-          const client = new StoreClient({
-            $this_data: ${$stdlib.core.liftObject(this.data)},
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "makeKeyInflight", "set", "$inflight_init"];
-    }
-    _registerOnLift(host, ops) {
-      if (ops.includes("$inflight_init")) {
-        Store._registerOnLiftObject(this.data, host, []);
-      }
-      if (ops.includes("set")) {
-        Store._registerOnLiftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), host, ["double"]);
-        Store._registerOnLiftObject(this.data, host, ["put"]);
-      }
-      super._registerOnLift(host, ops);
-    }
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+const FavoriteNumbers =
+  (function (tmp) {
+    tmp["SEVEN"] = "SEVEN";
+    tmp["FORTY_TWO"] = "FORTY_TWO";
+    return tmp;
+  })({})
+;
+module.exports = { FavoriteNumbers };
+//# sourceMappingURL=preflight.enums-1.cjs.map
+```
+
+## preflight.store-3.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+const cloud = $stdlib.cloud;
+const myutil = require("./preflight.util-2.cjs");
+class Store extends $stdlib.std.Resource {
+  constructor($scope, $id, options) {
+    super($scope, $id);
+    this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    this.handlers = [];
   }
-  return { Store };
-};
-//# sourceMappingURL=preflight.store-3.js.map
-```
-
-## preflight.subdir-4.js
-```js
-"use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  return {
-    ...require("./preflight.util-2.js")({ $stdlib }),
-  };
-};
-//# sourceMappingURL=preflight.subdir-4.js.map
-```
-
-## preflight.testfixture-5.js
-```js
-"use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  return {
-    subdir: require("./preflight.subdir-4.js")({ $stdlib }),
-    ...require("./preflight.store-3.js")({ $stdlib }),
-    ...require("./preflight.enums-1.js")({ $stdlib }),
-  };
-};
-//# sourceMappingURL=preflight.testfixture-5.js.map
-```
-
-## preflight.util-2.js
-```js
-"use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  class Util extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Util-1.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const UtilClient = ${Util._toInflightType(this)};
-          const client = new UtilClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "double", "$inflight_init"];
-    }
+  static makeKey(name) {
+    return ($extern("@winglibs/testfixture/util.js")["makeKey"])(name)
   }
-  return { Util };
+  onSet(handler) {
+    this.handlers.push(handler);
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.Store-2.cjs")({
+        $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const StoreClient = ${Store._toInflightType()};
+        const client = new StoreClient({
+          $this_data: ${$stdlib.core.liftObject(this.data)},
+          $this_handlers: ${$stdlib.core.liftObject(this.handlers)},
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "set": [
+        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), ["double"]],
+        [this.data, ["put"]],
+        [this.handlers, []],
+      ],
+      "$inflight_init": [
+        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), []],
+        [this.data, []],
+        [this.handlers, []],
+      ],
+    });
+  }
+  static get _liftTypeMap() {
+    return ({
+      "makeKeyInflight": [
+      ],
+    });
+  }
+}
+module.exports = { Store };
+//# sourceMappingURL=preflight.store-3.cjs.map
+```
+
+## preflight.subdir-4.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+module.exports = {
+  ...require("./preflight.util-2.cjs"),
 };
-//# sourceMappingURL=preflight.util-2.js.map
+//# sourceMappingURL=preflight.subdir-4.cjs.map
+```
+
+## preflight.testfixture-5.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+module.exports = {
+  get subdir() { return require("./preflight.subdir-4.cjs") },
+  ...require("./preflight.store-3.cjs"),
+  ...require("./preflight.enums-1.cjs"),
+};
+//# sourceMappingURL=preflight.testfixture-5.cjs.map
+```
+
+## preflight.util-2.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+class Util extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.cjs")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const UtilClient = ${Util._toInflightType()};
+        const client = new UtilClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+  static get _liftTypeMap() {
+    return ({
+      "makeKeyInflight": [
+      ],
+      "double": [
+      ],
+    });
+  }
+}
+module.exports = { Util };
+//# sourceMappingURL=preflight.util-2.cjs.map
 ```
 

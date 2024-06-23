@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import { RefObject, memo, useMemo, useState } from "react";
+import type { RefObject } from "react";
+import { memo, useMemo, useState } from "react";
 
 import { useTheme } from "./theme-provider.js";
 
@@ -67,7 +68,7 @@ export const RowInput = memo(
           type === "checkbox" && [
             theme.focusInput,
             theme.bg4,
-            "w-4 h-4 dark:ring-offset-gray-800",
+            "w-4 h-4 dark:ring-offset-slate-800",
           ],
           type === "date" &&
             !value &&

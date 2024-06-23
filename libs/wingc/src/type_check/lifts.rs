@@ -1,4 +1,6 @@
-use std::collections::{BTreeMap, BTreeSet, HashMap};
+use std::collections::{BTreeMap, HashMap};
+
+use indexmap::IndexSet;
 
 use crate::ast::{Symbol, UserDefinedType};
 
@@ -30,7 +32,7 @@ pub enum Liftable {
 #[derive(Debug)]
 pub struct LiftQualification {
 	/// The operations that qualify the lift (the property names)
-	pub ops: BTreeSet<String>,
+	pub ops: IndexSet<String>,
 }
 
 /// A record that describes a lift from a class.
@@ -57,27 +59,26 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, method: Option<Symbol>, property: Option<Symbol>, code: &str, is_field: bool) {
-		let method = method.map(|m| m.name).unwrap_or(Default::default());
+	pub fn lift(&mut self, method: Symbol, qualification: Option<String>, code: &str) {
+		self.add_lift(method.to_string(), code, qualification.clone());
 
-		self.add_lift(method, code, property.as_ref().map(|s| s.name.clone()));
-
-		// add a lift to the inflight initializer or capture it if its not a field
-		if is_field {
+		// Add a lift to the inflight initializer to signify this class requires access to that preflight object.
+		// "this" is a special case since it's already in scope and doesn't need to be lifted.
+		if code != "this" {
 			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), code, None);
 		}
 	}
 
-	fn add_lift(&mut self, method: String, code: &str, property: Option<String>) {
+	fn add_lift(&mut self, method: String, code: &str, qualification: Option<String>) {
 		let lift = self
 			.lifts_qualifications
 			.entry(method)
 			.or_default()
 			.entry(code.to_string())
-			.or_insert(LiftQualification { ops: BTreeSet::new() });
+			.or_insert(LiftQualification { ops: IndexSet::new() });
 
-		if let Some(op) = &property {
-			lift.ops.insert(op.clone());
+		if let Some(op) = qualification {
+			lift.ops.insert(op);
 		}
 	}
 
@@ -124,17 +125,12 @@ impl Lifts {
 	}
 
 	/// List of all lifted fields in the class. (map from lift token to preflight code)
-	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
-		let mut result: BTreeMap<String, String> = BTreeMap::new();
-
+	pub fn lifted_fields(&self) -> impl Iterator<Item = (String, String)> + '_ {
 		self
 			.captures
 			.iter()
 			.filter(|(_, lift)| lift.is_field)
-			.for_each(|(token, lift)| {
-				result.insert(token.clone(), lift.code.clone());
-			});
-		result
+			.map(|(t, c)| (t.clone(), c.code.clone()))
 	}
 }
 

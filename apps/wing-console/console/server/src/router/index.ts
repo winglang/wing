@@ -5,14 +5,17 @@ import { createAppRouter } from "./app.js";
 import { createBucketRouter } from "./bucket.js";
 import { createConfigRouter } from "./config.js";
 import { createCounterRouter } from "./counter.js";
-import { createDynamodbTableRouter } from "./dynamodb-table.js";
+import { createEndpointRouter } from "./endpoint.js";
+import { createFileBrowserRouter } from "./file-browser.js";
 import { createFunctionRouter } from "./function.js";
+import { createHttpClientRouter } from "./http-client.js";
 import { createQueueRouter } from "./queue.js";
-import { createReactAppRouter } from "./react-app.js";
 import { createRedisRouter } from "./redis.js";
 import { createTableRouter } from "./table.js";
 import { createTestRouter } from "./test.js";
 import { createTopicRouter } from "./topic.js";
+import { createUiButtonRouter } from "./ui-button.js";
+import { createUiFieldRouter } from "./ui-field.js";
 import { createUpdaterRouter } from "./updater.js";
 import { createWebsiteRouter } from "./website.js";
 
@@ -32,9 +35,12 @@ export const mergeAllRouters = () => {
     createUpdaterRouter(),
     createRedisRouter(),
     createWebsiteRouter(),
-    createReactAppRouter(),
     createConfigRouter(),
-    createDynamodbTableRouter(),
+    createEndpointRouter(),
+    createUiButtonRouter(),
+    createUiFieldRouter(),
+    createHttpClientRouter(),
+    createFileBrowserRouter(),
   );
 
   return { router };

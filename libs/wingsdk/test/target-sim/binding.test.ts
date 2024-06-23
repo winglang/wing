@@ -1,13 +1,14 @@
 import { test, expect } from "vitest";
-import { Function } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { Bucket, Function } from "../../src/cloud";
+import { Lifting, inflight } from "../../src/core";
 import { SimApp } from "../sim-app";
 
-test.skip("binding throws if a method is unsupported", () => {
+test("binding throws if a method is unsupported", () => {
   const app = new SimApp();
-  const handler = Testing.makeHandler("async handle() {}");
+  const bucket = new Bucket(app, "Bucket");
+  const handler = inflight(async () => {});
   const host = new Function(app, "Function", handler);
-  expect(() => (handler as any)._addOnLift(host, ["foo", "bar"])).toThrow(
-    /Resource root\/Handler does not support inflight operation foo \(requested by root\/Function\)/
+  expect(() => Lifting.lift(bucket, host, ["foo", "bar"])).toThrow(
+    /Resource root\/Bucket does not support inflight operation foo/
   );
 });

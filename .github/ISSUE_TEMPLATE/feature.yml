@@ -5,28 +5,33 @@ body:
 - type: markdown
   attributes:
     value: |
-       :pray: Thanks for taking the time to fill out this enhancement request! Feel free to ping us on [Wing Slack](https://t.winglang.io/slack) if you have any questions or need help.
+       :pray: Thanks for taking the time to fill out this enhancement request! Feel free to ping us on [Wing Discord](https://t.winglang.io/discord) if you have any questions or need help.
+
 - type: markdown
   attributes:
     value: |
       ## Enhancement Request
-- type: textarea
-  id: spec
-  attributes:
-    label: Feature Spec
-    description:
-    placeholder: |
-      Describe the feature as if it was already released. Write a hypothetical doc/readme/changelog/contributing section for this new enhancement, code snippets and all.
-  validations:
-    required: true
+
 - type: textarea
   id: use-cases
   attributes:
-    label: Use Cases
+    label: Use Case
     placeholder: |
-      What problems does this solves? List of use cases this feature or enhancement is designed to address.
+      What problem are you trying to solve? Describe a *concrete* example of something you are trying to do and as many details as possible
+      about your motivation, the environment, etc.
   validations:
     required: true
+
+- type: textarea
+  id: proposal
+  attributes:
+    label: Proposed Solution
+    description:
+    placeholder: |
+      Optionally, describe how you would have ideally wanted Wing to support this use case.
+      This can be a hypothetical "user story" or syntax or a snippet of code that would have been your ideal experience.
+      The purpose of this section is not to design a complete solution but rather to inspire the designer on what a user would have intuitively expected the solution to look like.
+
 - type: textarea
   id: implementation-notes
   attributes:
@@ -34,6 +39,7 @@ body:
     description: 
     placeholder: |
       Any thoughts regarding how this should be implemented?
+
 - type: dropdown
   id: Component
   attributes:
@@ -53,10 +59,10 @@ body:
     - Documentation
     - Development Environment
     - Contributor Experience
+    - Libraries
     - Other
   validations:
     required: false
-
 
 - type: textarea
   attributes:
@@ -65,4 +71,4 @@ body:
       <!-- Please keep this note for the community -->
       * Please vote by adding a 👍 reaction to the issue to help us prioritize.
       * If you are interested to work on this issue, please leave a comment.
-      * If this issue is labeled **needs-discussion**, it means the spec has not been finalized yet. Please reach out on the #dev channel in the [Wing Slack](https://t.winglang.io/slack).
+      * If this issue is labeled **needs-discussion**, it means the spec has not been finalized yet. Please reach out on the #dev channel in the [Wing Discord](https://t.winglang.io/discord).

@@ -1,0 +1,8 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: s
+  kind: 5
+  detail: str
+  sortText: ab|s
+

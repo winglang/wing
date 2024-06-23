@@ -2,20 +2,22 @@
 
 exports[`create a bucket 1`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle() { return 'hello'; }
-};
-})())({
-
-})).handle(event);
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => "hello"
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -28,17 +30,9 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
+    "resources": {
+      "root/my_bucket": {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
@@ -47,18 +41,29 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-      {
-        "attrs": {},
-        "path": "root/my_function",
+      "root/my_bucket/Policy": {
+        "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
+        "path": "root/my_bucket/Policy",
         "props": {
+          "principal": "\${wsim#root/my_bucket#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+      "root/my_function": {
+        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
+        "path": "root/my_function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -69,13 +74,13 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -109,14 +114,6 @@ return class Handler {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -125,9 +122,21 @@ return class Handler {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -142,23 +151,25 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_bucket": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_bucket/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud object store",
@@ -170,7 +181,7 @@ return class Handler {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -182,12 +193,26 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
     "version": "tree-0.1",
   },
+}
+`;
+
+exports[`source can be omitted from \`nodeof(x).addConnection()\` 1`] = `
+{
+  "connections": [
+    {
+      "name": "my_connection",
+      "source": "root/B1",
+      "target": "root/B2",
+    },
+  ],
+  "version": "connections-0.1",
 }
 `;

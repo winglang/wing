@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: MutJson): Json"
   documentation:
     kind: markdown
-    value: "```wing\nstatic deepCopy: (json: MutJson): Json\n```\n---\nCreates an immutable deep copy of the Json.\n### Parameters\n- `json` — `MutJson` — to copy.\n\n### Returns\nthe immutable copy of the Json"
+    value: "Creates an immutable deep copy of the Json.\n\n#### Returns\nthe immutable copy of the Json"
   sortText: ff|deepCopy
   insertText: deepCopy($1)
   insertTextFormat: 2
@@ -18,7 +18,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: Json): MutJson"
   documentation:
     kind: markdown
-    value: "```wing\nstatic deepCopyMut: (json: Json): MutJson\n```\n---\nCreates a mutable deep copy of the Json.\n### Parameters\n- `json` — `Json` — to copy.\n\n### Returns\nthe mutable copy of the Json"
+    value: "Creates a mutable deep copy of the Json.\n\n#### Returns\nthe mutable copy of the Json"
   sortText: ff|deepCopyMut
   insertText: deepCopyMut($1)
   insertTextFormat: 2
@@ -30,7 +30,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: MutJson, key: str): void"
   documentation:
     kind: markdown
-    value: "```wing\nstatic delete: (json: MutJson, key: str): void\n```\n---\nDeletes a key in a given Json.\n### Parameters\n- `json` — `MutJson` — to delete key from.\n- `key` — `str` — the key to delete."
+    value: Deletes a key in a given Json.
   sortText: ff|delete
   insertText: delete($1)
   insertTextFormat: 2
@@ -42,21 +42,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: Json): Array<JsonEntry>"
   documentation:
     kind: markdown
-    value: "```wing\nstatic entries: (json: Json): Array<JsonEntry>\n```\n---\nReturns the entries from the Json.\n### Parameters\n- `json` — `Json` — map to get the entries from.\n\n### Returns\nthe entries as Array<JsonEntry>"
+    value: "Returns the entries from the Json.\n\n#### Returns\nthe entries as Array<JsonEntry>"
   sortText: ff|entries
   insertText: entries($1)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
-- label: has
-  kind: 2
-  detail: "(json: Json, key: str): bool"
-  documentation:
-    kind: markdown
-    value: "```wing\nstatic has: (json: Json, key: str): bool\n```\n---\nChecks if a Json object has a given key.\n### Parameters\n- `json` — `Json` — The json object to inspect.\n- `key` — `str` — The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
-  sortText: ff|has
-  insertText: has($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -66,7 +54,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: any): Array<str>"
   documentation:
     kind: markdown
-    value: "```wing\nstatic keys: (json: any): Array<str>\n```\n---\nReturns the keys from the Json.\n### Parameters\n- `json` — `any` — map to get the keys from.\n\n### Returns\nthe keys as Array<String>"
+    value: "Returns the keys from the Json.\n\n#### Returns\nthe keys as Array<String>"
   sortText: ff|keys
   insertText: keys($1)
   insertTextFormat: 2
@@ -78,7 +66,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(str: str): Json"
   documentation:
     kind: markdown
-    value: "```wing\nstatic parse: (str: str): Json\n```\n---\nParse a string into a Json.\n### Parameters\n- `str` — `str` — to parse as Json.\n\n### Returns\nJson representation of the string"
+    value: "Parse a string into a Json.\n\n#### Returns\nJson representation of the string"
   sortText: ff|parse
   insertText: parse($1)
   insertTextFormat: 2
@@ -90,7 +78,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: any, options: JsonStringifyOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic stringify: (json: any, options: JsonStringifyOptions?): str\n```\n---\nFormats Json as string.\n### Parameters\n- `json` — `any` — to format as string.\n- `...options` — `JsonStringifyOptions?`\n  \n  - `indent` — `num` — Indentation spaces number.\n\n### Returns\nstring representation of the Json"
+    value: "Formats Json as string.\n\n#### Returns\nstring representation of the Json"
   sortText: ff|stringify
   insertText: stringify($1)
   insertTextFormat: 2
@@ -102,7 +90,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(str: str?): Json?"
   documentation:
     kind: markdown
-    value: "```wing\nstatic tryParse: (str: str?): Json?\n```\n---\nTry to parse a string into a Json.\n### Parameters\n- `str` — `str?` — to parse as Json.\n\n### Returns\nJson representation of the string or undefined if string is not parsable"
+    value: "Try to parse a string into a Json.\n\n#### Returns\nJson representation of the string or undefined if string is not parsable"
   sortText: ff|tryParse
   insertText: tryParse($1)
   insertTextFormat: 2
@@ -114,7 +102,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: Json): Array<Json>"
   documentation:
     kind: markdown
-    value: "```wing\nstatic values: (json: Json): Array<Json>\n```\n---\nReturns the values from the Json.\n### Parameters\n- `json` — `Json` — map to get the values from.\n\n### Returns\nthe values as Array<Json>"
+    value: "Returns the values from the Json.\n\n#### Returns\nthe values as Array<Json>"
   sortText: ff|values
   insertText: values($1)
   insertTextFormat: 2

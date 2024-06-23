@@ -1,9 +1,10 @@
 {
   "name": "examples-invalid",
   "dependencies": {
-    "cdktf": "0.17.0",
-    "constructs": "^10.2.70",
-    "jsii-code-samples": "1.7.0"
+    "cdktf": "0.20.3",
+    "constructs": "^10.3",
+    "jsii-code-samples": "1.7.0",
+    "jsii-fixture": "workspace:^"
   },
   "volta": {
     "extends": "../../../package.json"

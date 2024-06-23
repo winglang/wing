@@ -1,4 +1,5 @@
 bring cloud;
+bring expect;
 bring http;
 bring util;
 
@@ -15,6 +16,18 @@ api.get("/path", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     status: 200,
     body: body
+  };
+});
+
+// default status is 200
+
+api.get("/default-response", inflight () => {
+  log("200 ok");
+});
+
+api.get("/default-status", inflight () => {
+  return {
+    body: "ok"
   };
 });
 
@@ -37,4 +50,21 @@ test "http.get and http.fetch can preform a call to an api" {
     assert(fetchResponseNoMethod.body == body);
     assert(fetchResponseNoMethod.status == 200);
     assert(fetchResponseNoMethod.url == url);
+
+  // "default response is 200 with no body"
+  let r1 = http.get("{api.url}/default-response");
+  log(r1.body);
+  expect.equal(200, r1.status);
+  expect.equal("", r1.body);
+
+
+//  "default status is 200" 
+  let r2 = http.get("{api.url}/default-status");
+  log(r2.body);
+  expect.equal(200, r2.status);
+  expect.equal("ok", r2.body);
+
 }
+
+
+

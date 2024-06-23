@@ -3,7 +3,8 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Lifting } from "../core";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { IInflight, IInflightHost, Node, Resource } from "../std";
 
@@ -38,10 +39,18 @@ export interface ServiceProps {
  * @abstract
  */
 export class Service extends Resource implements IInflightHost {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IServiceClient;
+
   /**
-   * The entrypoint of the service.
+   * The path where the entrypoint of the service source code will be eventually written to.
    */
   protected readonly entrypoint!: string;
+
+  /**
+   * Reference to the service's handler - an inflight closure.
+   */
+  protected readonly handler!: IServiceHandler;
 
   private readonly _env: Record<string, string> = {};
 
@@ -64,25 +73,6 @@ export class Service extends Resource implements IInflightHost {
     Node.of(this).title = "Service";
     Node.of(this).description = "A cloud service";
 
-    // indicates that we are calling the inflight constructor and the
-    // inflight "handle" method on the handler resource.
-    handler._registerOnLift(this, ["handle", "$inflight_init"]);
-
-    const inflightClient = handler._toInflight();
-    const lines = new Array<string>();
-
-    lines.push('"use strict";');
-    lines.push("let $obj;");
-
-    lines.push("async function $initOnce() {");
-    lines.push(`  $obj = $obj || (await (${inflightClient}));`);
-    lines.push("  return $obj;");
-    lines.push("};");
-
-    lines.push("exports.handle = async function() {");
-    lines.push("  return (await $initOnce()).handle();");
-    lines.push("};");
-
     const assetName = ResourceNames.generateName(this, {
       disallowedRegex: /[><:"/\\|?*\s]/g, // avoid characters that may cause path issues
       case: CaseConventions.LOWERCASE,
@@ -91,13 +81,47 @@ export class Service extends Resource implements IInflightHost {
 
     const workdir = App.of(this).workdir;
     mkdirSync(workdir, { recursive: true });
-    const entrypoint = join(workdir, `${assetName}.js`);
-    writeFileSync(entrypoint, lines.join("\n"));
+    const entrypoint = join(workdir, `${assetName}.cjs`);
     this.entrypoint = entrypoint;
 
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
     }
+
+    this.handler = handler;
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    const inflightClient = this.handler._toInflight();
+    const code = `\
+      "use strict";
+      let $stop;
+      exports.start = async function() {
+        if ($stop) {
+          throw Error('service already started');
+        }
+        const client = await ${inflightClient};
+        const noop = () => {};
+        $stop = (await client.handle()) ?? noop;
+      };
+
+      exports.stop = async function() {
+        if (!$stop) {
+          throw Error('service not started');
+        }
+        await $stop();
+        $stop = undefined;
+      };
+      `;
+
+    writeFileSync(this.entrypoint, code);
+
+    // indicates that we are calling the inflight constructor and the
+    // inflight "handle" method on the handler resource.
+    Lifting.lift(this.handler, this, ["handle"]);
   }
 
   /**
@@ -153,7 +177,10 @@ export interface IServiceClient {
  *
  * @inflight `@winglang/sdk.cloud.IServiceHandlerClient`
  */
-export interface IServiceHandler extends IInflight {}
+export interface IServiceHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IServiceHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IServiceHandler`.
@@ -166,7 +193,7 @@ export interface IServiceHandlerClient {
    * DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
    * running process, start it asynchronously.
    *
-   *
+   * @inflight
    * @returns an optional function that can be used to cleanup any resources when the service is
    * stopped.
    *
@@ -180,7 +207,6 @@ export interface IServiceHandlerClient {
    *     log("stoping service...");
    *   };
    * });
-   *
    */
   handle(): Promise<IServiceStopHandler | undefined>;
 }
@@ -190,7 +216,10 @@ export interface IServiceHandlerClient {
  *
  * @inflight `@winglang/sdk.cloud.IServiceStopHandlerClient`
  */
-export interface IServiceStopHandler extends IInflight {}
+export interface IServiceStopHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IServiceStopHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IServiceStopHandler`.

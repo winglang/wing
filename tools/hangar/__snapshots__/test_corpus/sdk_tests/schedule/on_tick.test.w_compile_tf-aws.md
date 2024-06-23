@@ -7,22 +7,9 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -38,7 +25,6 @@
             "uniqueId": "from_cron_Schedule_6C1613E8"
           }
         },
-        "is_enabled": true,
         "schedule_expression": "cron(* * * * ? *)"
       },
       "from_rate_Schedule_5B82E706": {
@@ -48,7 +34,6 @@
             "uniqueId": "from_rate_Schedule_5B82E706"
           }
         },
-        "is_enabled": true,
         "schedule_expression": "rate(1 minute)"
       }
     },
@@ -220,7 +205,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.from_cron_OnTick0_IamRole_70AA37F2.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.from_cron_OnTick0_S3Object_0A802C5C.key}",
         "timeout": 60,
@@ -252,7 +237,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.from_rate_OnTick0_IamRole_A7066F91.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.from_rate_OnTick0_S3Object_C6F96441.key}",
         "timeout": 60,

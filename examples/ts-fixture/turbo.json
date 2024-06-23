@@ -1,0 +1,10 @@
+{
+    "$schema": "https://turborepo.org/schema.json",
+    "extends": ["//"],
+    "pipeline": {
+      "compile": {
+        "outputs": ["src/target/**"]
+      },
+      "test": {}
+    }
+  }

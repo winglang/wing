@@ -1,7 +1,8 @@
 import { Construct } from "constructs";
+import { DomainSchema } from "./schema-resources";
 import { makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { BaseResourceSchema } from "../simulator";
+import { ToSimulatorOutput } from "../simulator";
 
 /**
  * Simulator implementation of `cloud.Domain`
@@ -18,12 +19,11 @@ export class Domain extends cloud.Domain {
     return makeSimulatorJsClient(__filename, this);
   }
 
-  public toSimulator(): BaseResourceSchema {
+  public toSimulator(): ToSimulatorOutput {
+    const props: DomainSchema = {};
     return {
       type: cloud.DOMAIN_FQN,
-      path: this.node.path,
-      props: {},
-      attrs: {},
+      props,
     };
   }
 }

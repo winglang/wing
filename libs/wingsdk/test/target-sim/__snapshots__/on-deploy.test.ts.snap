@@ -2,55 +2,54 @@
 
 exports[`create an OnDeploy 1`] = `
 {
-  ".wing/function_c83fbf14.js": "\\"use strict\\";
+  ".wing/function_c83fbf14.cjs": ""use strict";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle() { console.log(\\"super duper success\\"); }
-};
-})())({
-
-})).handle(event);
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => console.log("super duper success")
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_on_deploy/Function",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c83fbf14.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "attrs": {},
+    "resources": {
+      "root/my_on_deploy": {
+        "addr": "c8e2618b976544550a8396a3817f0bad07099f7050",
+        "deps": [
+          "root/my_on_deploy/Function",
+        ],
         "path": "root/my_on_deploy",
         "props": {
           "functionHandle": "\${wsim#root/my_on_deploy/Function#attrs.handle}",
         },
         "type": "@winglang/sdk.cloud.OnDeploy",
       },
-    ],
+      "root/my_on_deploy/Function": {
+        "addr": "c83fbf14da06343c694e42a8758f43bcb1f1c2c389",
+        "path": "root/my_on_deploy/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c83fbf14.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -61,13 +60,13 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -101,14 +100,6 @@ return class Handler {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -117,9 +108,21 @@ return class Handler {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -134,25 +137,12 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_on_deploy": {
           "children": {
             "Function": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -165,7 +155,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "Run code during the app's deployment.",
@@ -177,8 +167,9 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -189,14 +180,12 @@ return class Handler {
 
 exports[`create an OnDeploy 2`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Function created.",
+  "root/my_on_deploy/Function started",
   "super duper success",
-  "Invoke (payload=\\"\\").",
+  "Invoke (payload=undefined).",
   "OnDeploy invoked.",
-  "@winglang/sdk.cloud.OnDeploy created.",
-  "@winglang/sdk.cloud.OnDeploy deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
+  "root/my_on_deploy started",
+  "root/my_on_deploy stopped",
+  "root/my_on_deploy/Function stopped",
 ]
 `;

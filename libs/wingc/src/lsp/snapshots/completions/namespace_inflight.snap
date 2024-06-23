@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic inflight delete: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a DELETE request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the DELETE request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the DELETE request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
+    value: "Executes a DELETE request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
   sortText: ff|delete
   insertText: delete($1)
   insertTextFormat: 2
@@ -18,7 +18,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic inflight fetch: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a HTTP request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the HTTP request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call\n\n### Remarks\nThis method allows various HTTP methods based on the provided options.\n\n*@throws* *Only throws if there is a networking error*"
+    value: "Executes a HTTP request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call\n\n#### Remarks\nThis method allows various HTTP methods based on the provided options.\n\n*@throws* *Only throws if there is a networking error*"
   sortText: ff|fetch
   insertText: fetch($1)
   insertTextFormat: 2
@@ -30,7 +30,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (url: Url, options: FormatUrlOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic inflight formatUrl: inflight (url: Url, options: FormatUrlOptions?): str\n```\n---\nSerializes an URL Struct to a String.\n### Parameters\n- `url` — `Url` — The URL Struct to be formatted.\n- `...options` — `FormatUrlOptions?`\n  \n  - `auth?` — `bool?` — Whether the formatted URL should include the username and password.\n  - `fragment?` — `bool?` — Whether the formatted URL should include the fragment identifier.\n  - `search?` — `bool?` — Whether the formatted URL should include the search query.\n  - `unicode?` — `bool?` — Whether the formatted URL should represent Unicode characters for the host component.\n\n### Returns\nA formatted URL String.\n\n*@throws* *Will throw an error if the input URL has invalid fields.*"
+    value: "Serializes an URL Struct to a String.\n\n#### Returns\nA formatted URL String.\n\n*@throws* *Will throw an error if the input URL has invalid fields.*"
   sortText: ff|formatUrl
   insertText: formatUrl($1)
   insertTextFormat: 2
@@ -42,7 +42,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic inflight get: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a GET request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the GET request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the GET request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
+    value: "Executes a GET request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
   sortText: ff|get
   insertText: get($1)
   insertTextFormat: 2
@@ -54,7 +54,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (urlString: str): Url"
   documentation:
     kind: markdown
-    value: "```wing\nstatic inflight parseUrl: inflight (urlString: str): Url\n```\n---\nParses the input URL String using WHATWG URL API and returns an URL Struct.\n### Parameters\n- `urlString` — `str` — The URL String to be parsed.\n\n### Returns\nAn URL Struct.\n\n*@throws* *Will throw an error if the input String is not a valid URL.*"
+    value: "Parses the input URL String using WHATWG URL API and returns an URL Struct.\n\n#### Returns\nAn URL Struct.\n\n*@throws* *Will throw an error if the input String is not a valid URL.*"
   sortText: ff|parseUrl
   insertText: parseUrl($1)
   insertTextFormat: 2
@@ -66,7 +66,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic inflight patch: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a PATCH request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the PATCH request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the PATCH request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
+    value: "Executes a PATCH request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
   sortText: ff|patch
   insertText: patch($1)
   insertTextFormat: 2
@@ -78,7 +78,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic inflight post: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a POST request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the POST request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the POST request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
+    value: "Executes a POST request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
   sortText: ff|post
   insertText: post($1)
   insertTextFormat: 2
@@ -90,7 +90,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic inflight put: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a PUT request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the PUT request.\n- `...options` — `RequestOptions?` — ptional parameters for customizing the PUT request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
+    value: "Executes a PUT request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
   sortText: ff|put
   insertText: put($1)
   insertTextFormat: 2
@@ -101,48 +101,48 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Util\n```\n---\nThe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources.\n\n### Methods\n- `delete` — `inflight (url: str, options: RequestOptions?): Response` — Executes a DELETE request to a specified URL and provides a formatted response.\n- `fetch` — `inflight (url: str, options: RequestOptions?): Response` — Executes a HTTP request to a specified URL and provides a formatted response.\n- `formatUrl` — `inflight (url: Url, options: FormatUrlOptions?): str` — Serializes an URL Struct to a String.\n- `get` — `inflight (url: str, options: RequestOptions?): Response` — Executes a GET request to a specified URL and provides a formatted response.\n- `parseUrl` — `inflight (urlString: str): Url` — Parses the input URL String using WHATWG URL API and returns an URL Struct.\n- `patch` — `inflight (url: str, options: RequestOptions?): Response` — Executes a PATCH request to a specified URL and provides a formatted response.\n- `post` — `inflight (url: str, options: RequestOptions?): Response` — Executes a POST request to a specified URL and provides a formatted response.\n- `put` — `inflight (url: str, options: RequestOptions?): Response` — Executes a PUT request to a specified URL and provides a formatted response."
+    value: "```wing\nclass Util {\n  static inflight delete(): Response;\n  static inflight fetch(): Response;\n  static inflight formatUrl(): str;\n  static inflight get(): Response;\n  static inflight parseUrl(): Url;\n  static inflight patch(): Response;\n  /* ... */\n}\n```\n---\nThe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources."
   sortText: gg|Util
 - label: FormatUrlOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct FormatUrlOptions\n```\n---\nOptions for serializing a WHATWG URL to a String.\n### Fields\n- `auth?` — `bool?` — Whether the formatted URL should include the username and password.\n- `fragment?` — `bool?` — Whether the formatted URL should include the fragment identifier.\n- `search?` — `bool?` — Whether the formatted URL should include the search query.\n- `unicode?` — `bool?` — Whether the formatted URL should represent Unicode characters for the host component."
+    value: "```wing\nstruct FormatUrlOptions {\n  auth?: bool;\n  fragment?: bool;\n  search?: bool;\n  unicode?: bool;\n}\n```\n---\nOptions for serializing a WHATWG URL to a String."
   sortText: hh|FormatUrlOptions
 - label: RequestOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct RequestOptions\n```\n---\nAn object containing any custom settings that you want to apply to the request.\n### Fields\n- `body?` — `str?` — Any body that you want to add to your request.\n- `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n- `headers?` — `Map<str>?` — Any headers you want to add to your request.\n- `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n- `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n- `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL."
+    value: "```wing\nstruct RequestOptions {\n  body?: str;\n  cache?: RequestCache;\n  headers?: Map<str>;\n  method?: HttpMethod;\n  redirect?: RequestRedirect;\n  referrer?: str;\n}\n```\n---\nAn object containing any custom settings that you want to apply to the request."
   sortText: hh|RequestOptions
 - label: Response
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct Response\n```\n---\nThe response to a HTTP request.\n### Fields\n- `body` — `str` — A string representation of the body contents.\n- `headers` — `Map<str>` — The map of header information associated with the response.\n- `ok` — `bool` — A boolean indicating whether the response was successful (status in the range 200 – 299) or not.\n- `status` — `num` — The status code of the response.\n- `url` — `str` — The URL of the response."
+    value: "```wing\nstruct Response {\n  body: str;\n  headers: Map<str>;\n  ok: bool;\n  status: num;\n  url: str;\n}\n```\n---\nThe response to a HTTP request."
   sortText: hh|Response
 - label: Url
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct Url\n```\n---\nAn URL following WHATWG URL Standard.\n### Fields\n- `hash` — `str` — The URL's fragment.\n- `host` — `str` — The URL's host.\n- `hostname` — `str` — The URL's hostname.\n- `href` — `str` — The entire URL.\n- `origin` — `str` — The URL's origin.\n- `password` — `str` — The URL’s password.\n- `pathname` — `str` — The URL's pathname.\n- `port` — `str` — The URL's port.\n- `protocol` — `str` — The URL's protocol.\n- `search` — `str` — The URL's search.\n- `username` — `str` — The URL's username."
+    value: "```wing\nstruct Url {\n  hash: str;\n  host: str;\n  hostname: str;\n  href: str;\n  origin: str;\n  password: str;\n  /* ... */\n}\n```\n---\nAn URL following WHATWG URL Standard."
   sortText: hh|Url
 - label: HttpMethod
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum HttpMethod\n```\n---\nThe request's method.\n- `GET`\n- `PUT`\n- `DELETE`\n- `PATCH`\n- `POST`\n- `OPTIONS`\n- `HEAD`"
+    value: "```wing\nenum HttpMethod {\n  GET,\n  PUT,\n  DELETE,\n  PATCH,\n  POST,\n  OPTIONS,\n  HEAD,\n}\n```\n---\nThe request's method."
   sortText: jj|HttpMethod
 - label: RequestCache
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum RequestCache\n```\n---\nThe cache mode of the request.\n- `DEFAULT`\n- `NO_STORE`\n- `RELOAD`\n- `NO_CACHE`\n- `FORCE_CACHE`\n\n\n### Remarks\nIt controls how a request will interact with the system's HTTP cache."
+    value: "```wing\nenum RequestCache {\n  DEFAULT,\n  NO_STORE,\n  RELOAD,\n  NO_CACHE,\n  FORCE_CACHE,\n}\n```\n---\nThe cache mode of the request.\n\n#### Remarks\nIt controls how a request will interact with the system's HTTP cache."
   sortText: jj|RequestCache
 - label: RequestRedirect
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum RequestRedirect\n```\n---\nThe redirect read-only property that contains the mode for how redirects are handled.\n- `FOLLOW`\n- `ERROR`"
+    value: "```wing\nenum RequestRedirect {\n  MANUAL,\n  FOLLOW,\n  ERROR,\n}\n```\n---\nThe redirect read-only property that contains the mode for how redirects are handled."
   sortText: jj|RequestRedirect
 

@@ -12,7 +12,8 @@ use camino::{Utf8Path, Utf8PathBuf};
 use serde_json::Value;
 
 static ROOT: &str = "/";
-static NODE_EXTENSIONS: [&str; 3] = [".js", "json", ".node"];
+static NODE_WING_FIELD: &str = "wing";
+static NODE_EXTENSIONS: [&str; 5] = [".js", ".cjs", ".mjs", "json", ".node"];
 static NODE_MAIN_FIELDS: [&str; 1] = ["main"];
 static NODE_BUILTINS: [&str; 33] = [
 	"assert",
@@ -103,17 +104,20 @@ fn resolve_as_file(path: &Utf8Path) -> Result<Utf8PathBuf, Box<dyn Error>> {
 /// Resolve by walking up node_modules folders.
 fn resolve_node_modules(target: &str, basedir: &Utf8Path) -> Result<Utf8PathBuf, Box<dyn Error>> {
 	let node_modules = basedir.join("node_modules");
-	if node_modules.is_dir() {
+	let result = if node_modules.is_dir() {
 		let path = node_modules.join(target);
-		let result = resolve_as_file(&path).or_else(|_| resolve_as_directory(&path));
-		if result.is_ok() {
-			return result;
-		}
+		resolve_as_file(&path).or_else(|_| resolve_as_directory(&path))
+	} else {
+		Err(String::from("Not Found").into())
+	};
+
+	if result.is_ok() {
+		return result;
 	}
 
 	match basedir.parent() {
 		Some(parent) => resolve_node_modules(target, parent),
-		None => Err(String::from("Not Found").into()),
+		None => result,
 	}
 }
 
@@ -143,6 +147,11 @@ fn resolve_package_main(pkg_path: &Utf8Path) -> Result<Utf8PathBuf, Box<dyn Erro
 	let pkg: Value = serde_json::from_slice(&fs::read(pkg_path)?)?;
 	if !pkg.is_object() {
 		return Err(String::from("package.json is not an object").into());
+	}
+
+	// wing packages don't need a main field
+	if pkg[NODE_WING_FIELD].as_bool().unwrap_or(false) {
+		return Ok(pkg_dir.into());
 	}
 
 	let main_field = NODE_MAIN_FIELDS

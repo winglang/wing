@@ -1,23 +1,15 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`create a queue 2`] = `
+exports[`create a queue 1`] = `
 {
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
+    "resources": {
+      "root/my_queue": {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
@@ -25,7 +17,16 @@ exports[`create a queue 2`] = `
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
-    ],
+      "root/my_queue/Policy": {
+        "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
+        "path": "root/my_queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_queue#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -36,13 +37,13 @@ exports[`create a queue 2`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -76,14 +77,6 @@ exports[`create a queue 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -92,9 +85,21 @@ exports[`create a queue 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -109,23 +114,25 @@ exports[`create a queue 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_queue/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -137,8 +144,9 @@ exports[`create a queue 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -149,26 +157,25 @@ exports[`create a queue 2`] = `
 
 exports[`messages are not requeued if the function fails before timeout 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Queue created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Push (messages=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-0).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Queue deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`messages are not requeued if the function fails before timeout 2`] = `
 {
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -184,7 +191,8 @@ async handle(message) {
 };
 })())({
 
-}), args: {} })).handle(event);
+}), args: {} }));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -199,14 +207,7 @@ async handle(message) {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
         "props": {
@@ -218,6 +219,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "attrs": {},
         "path": "root/my_queue",
         "props": {
@@ -227,6 +229,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Queue",
       },
       {
+        "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "attrs": {},
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
@@ -257,6 +260,10 @@ async handle(message) {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -322,25 +329,12 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
             "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -351,7 +345,7 @@ async handle(message) {
             "SetConsumer0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -364,7 +358,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -376,7 +370,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -388,18 +382,16 @@ async handle(message) {
 
 exports[`messages are requeued if the function fails after timeout 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Queue created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Push (messages=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-0).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Queue deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
   "1 messages pushed back to queue after visibility timeout.",
 ]
 `;
@@ -407,8 +399,9 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
 exports[`messages are requeued if the function fails after timeout 2`] = `
 {
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -424,7 +417,8 @@ async handle(message) {
 };
 })())({
 
-}), args: {} })).handle(event);
+}), args: {} }));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -439,14 +433,7 @@ async handle(message) {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
         "props": {
@@ -458,6 +445,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "attrs": {},
         "path": "root/my_queue",
         "props": {
@@ -467,6 +455,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Queue",
       },
       {
+        "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "attrs": {},
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
@@ -497,6 +486,10 @@ async handle(message) {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -562,25 +555,12 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
             "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -591,7 +571,7 @@ async handle(message) {
             "SetConsumer0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -604,7 +584,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -616,7 +596,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -628,11 +608,11 @@ async handle(message) {
 
 exports[`push rejects empty message 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Queue created.",
-  "Push (messages=).",
-  "@winglang/sdk.cloud.Queue deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
+  "root/my_queue started",
+  "root/my_queue/Policy started",
+  "Error: Empty messages are not allowed (Push (messages=).)",
+  "root/my_queue/Policy stopped",
+  "root/my_queue stopped",
 ]
 `;
 
@@ -643,17 +623,9 @@ exports[`push rejects empty message 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
+    "resources": {
+      "root/my_queue": {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
@@ -661,7 +633,16 @@ exports[`push rejects empty message 2`] = `
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
-    ],
+      "root/my_queue/Policy": {
+        "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
+        "path": "root/my_queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_queue#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -672,13 +653,13 @@ exports[`push rejects empty message 2`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -712,14 +693,6 @@ exports[`push rejects empty message 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -728,9 +701,21 @@ exports[`push rejects empty message 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -745,23 +730,25 @@ exports[`push rejects empty message 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_queue/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -773,8 +760,9 @@ exports[`push rejects empty message 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -785,15 +773,15 @@ exports[`push rejects empty message 2`] = `
 
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "@winglang/sdk.cloud.Queue created.",
+  "root/my_queue started",
+  "root/my_queue/Policy started",
   "Push (messages=A).",
   "Push (messages=B).",
   "ApproxSize ().",
   "Purge ().",
   "ApproxSize ().",
-  "@winglang/sdk.cloud.Queue deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
+  "root/my_queue/Policy stopped",
+  "root/my_queue stopped",
 ]
 `;
 
@@ -804,17 +792,9 @@ exports[`queue batch size of 2, purge the queue 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
+    "resources": {
+      "root/my_queue": {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
@@ -822,7 +802,16 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
-    ],
+      "root/my_queue/Policy": {
+        "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
+        "path": "root/my_queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_queue#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -833,13 +822,13 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -873,14 +862,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -889,9 +870,21 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -906,23 +899,25 @@ exports[`queue batch size of 2, purge the queue 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_queue/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -934,8 +929,9 @@ exports[`queue batch size of 2, purge the queue 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -946,101 +942,123 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
 {
-  ".wing/function_c8ab799f.js": "\\"use strict\\";
+  ".wing/consumer0_c87f5b09.cjs": ""use strict";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            const batchItemFailures = [];
+            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
+            if (!parsed.messages)
+                throw new Error('No "messages" field in event.');
+            for (const $message of parsed.messages) {
+                try {
+                    await ctx.handler($message.payload);
+                }
+                catch (error) {
+                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
+                    batchItemFailures.push($message);
+                }
+            }
+            return batchItemFailures.length > 0
+                ? JSON.stringify(batchItemFailures)
+                : undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
+  if (message === "BAD MESSAGE") {
+    throw new Error("ERROR");
   }
-  async handle() {
-  await this.queue.push(\\"A\\");
-  await this.queue.push(\\"B\\");
-  await this.queue.push(\\"C\\");
-  await this.queue.push(\\"D\\");
-  await this.queue.push(\\"E\\");
-  await this.queue.push(\\"F\\");
 }
-};
-})())({
-queue: (function() {
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  ".wing/function_c8ab799f.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+    await ctx.queue.push("A");
+    await ctx.queue.push("B");
+    await ctx.queue.push("C");
+    await ctx.queue.push("D");
+    await ctx.queue.push("E");
+    await ctx.queue.push("F");
+  }
+  const $ctx = {
+  queue: (function() {
   let handle = process.env.QUEUE_HANDLE_54fcf4cd;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: QUEUE_HANDLE_54fcf4cd\\");
+    throw new Error("Missing environment variable: QUEUE_HANDLE_54fcf4cd");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
-    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
   }
-  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+  const caller = process.env.WING_SIMULATOR_CALLER;
+  if (!caller) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+  }
+  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
 })()
-})).handle(event);
-};",
-  ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
-exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-  if (message === \\"BAD MESSAGE\\") {
-    throw new Error(\\"ERROR\\");
-  }
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-
-}), args: {} })).handle(event);
+)()));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/my_queue",
-        "target": "root/my_queue/SetConsumer0",
+        "sourceOp": "push",
+        "target": "root/my_queue/Consumer0",
+        "targetOp": "invoke",
       },
       {
-        "name": "push()",
+        "name": "call",
         "source": "root/my_queue_messages/Function",
+        "sourceOp": "invoke",
         "target": "root/my_queue",
+        "targetOp": "push",
       },
       {
-        "name": "$inflight_init()",
+        "name": "call",
         "source": "root/my_queue_messages/Function",
+        "sourceOp": "invokeAsync",
         "target": "root/my_queue",
+        "targetOp": "push",
       },
     ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_queue/SetConsumer0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "attrs": {},
+    "resources": {
+      "root/my_queue": {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
@@ -1048,40 +1066,89 @@ async handle(message) {
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
-      {
-        "attrs": {},
+      "root/my_queue/Consumer0": {
+        "addr": "c87f5b093f4d7a68e031a80df92e521a0631f02a44",
+        "path": "root/my_queue/Consumer0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/consumer0_c87f5b09.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_queue/Policy": {
+        "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
+        "path": "root/my_queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_queue#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
+            },
+            {
+              "operation": "hasAvailableWorkers",
+              "resourceHandle": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+      "root/my_queue/QueueEventMapping0": {
+        "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
+        "deps": [
+          "root/my_queue/Consumer0",
+          "root/my_queue",
+          "root/my_queue/Policy",
+        ],
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_queue#attrs.handle}",
-          "subscriber": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 5,
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "attrs": {},
-        "path": "root/my_queue_messages/Function",
-        "props": {
-          "environmentVariables": {
-            "QUEUE_HANDLE_54fcf4cd": "\${wsim#root/my_queue#attrs.handle}",
-          },
-          "sourceCodeFile": ".wing/function_c8ab799f.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "attrs": {},
+      "root/my_queue_messages": {
+        "addr": "c8e2354407fd3536187725c2b37c5327f47bb841e9",
+        "deps": [
+          "root/my_queue_messages/Function",
+        ],
         "path": "root/my_queue_messages",
         "props": {
           "functionHandle": "\${wsim#root/my_queue_messages/Function#attrs.handle}",
         },
         "type": "@winglang/sdk.cloud.OnDeploy",
       },
-    ],
+      "root/my_queue_messages/Function": {
+        "addr": "c8ab799f6c9c9a3cd279909012c4f322ab902f5e19",
+        "deps": [
+          "root/my_queue",
+        ],
+        "path": "root/my_queue_messages/Function",
+        "policy": [
+          {
+            "operation": "push",
+            "resourceHandle": "\${wsim#root/my_queue#attrs.handle}",
+          },
+        ],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {
+            "QUEUE_HANDLE_54fcf4cd": "\${wsim#root/my_queue#attrs.handle}",
+          },
+          "sourceCodeFile": ".wing/function_c8ab799f.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1092,13 +1159,13 @@ async handle(message) {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -1132,14 +1199,6 @@ async handle(message) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1148,9 +1207,21 @@ async handle(message) {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1165,25 +1236,38 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
+            "Consumer0": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "Consumer",
+              },
+              "id": "Consumer0",
+              "path": "root/my_queue/Consumer0",
+            },
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_queue/Policy",
+            },
             "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -1191,23 +1275,10 @@ async handle(message) {
               "id": "QueueEventMapping0",
               "path": "root/my_queue/QueueEventMapping0",
             },
-            "SetConsumer0": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
-              },
-              "id": "SetConsumer0",
-              "path": "root/my_queue/SetConsumer0",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -1221,7 +1292,7 @@ async handle(message) {
             "Function": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -1234,7 +1305,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "Run code during the app's deployment.",
@@ -1246,8 +1317,9 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1258,59 +1330,71 @@ async handle(message) {
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 {
-  ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
+  ".wing/consumer0_c87f5b09.cjs": ""use strict";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-  if (message === \\"BAD MESSAGE\\") {
-    throw new Error(\\"ERROR\\");
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            const batchItemFailures = [];
+            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
+            if (!parsed.messages)
+                throw new Error('No "messages" field in event.');
+            for (const $message of parsed.messages) {
+                try {
+                    await ctx.handler($message.payload);
+                }
+                catch (error) {
+                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
+                    batchItemFailures.push($message);
+                }
+            }
+            return batchItemFailures.length > 0
+                ? JSON.stringify(batchItemFailures)
+                : undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
+  if (message === "BAD MESSAGE") {
+    throw new Error("ERROR");
   }
 }
-};
-})())({
-
-}), args: {} })).handle(event);
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/my_queue",
-        "target": "root/my_queue/SetConsumer0",
+        "sourceOp": "push",
+        "target": "root/my_queue/Consumer0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_queue/SetConsumer0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "attrs": {},
+    "resources": {
+      "root/my_queue": {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
@@ -1318,19 +1402,55 @@ async handle(message) {
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
-      {
-        "attrs": {},
+      "root/my_queue/Consumer0": {
+        "addr": "c87f5b093f4d7a68e031a80df92e521a0631f02a44",
+        "path": "root/my_queue/Consumer0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/consumer0_c87f5b09.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_queue/Policy": {
+        "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
+        "path": "root/my_queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_queue#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
+            },
+            {
+              "operation": "hasAvailableWorkers",
+              "resourceHandle": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+      "root/my_queue/QueueEventMapping0": {
+        "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
+        "deps": [
+          "root/my_queue/Consumer0",
+          "root/my_queue",
+          "root/my_queue/Policy",
+        ],
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_queue#attrs.handle}",
-          "subscriber": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1341,13 +1461,13 @@ async handle(message) {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -1381,14 +1501,6 @@ async handle(message) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1397,9 +1509,21 @@ async handle(message) {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1414,25 +1538,38 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
+            "Consumer0": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "Consumer",
+              },
+              "id": "Consumer0",
+              "path": "root/my_queue/Consumer0",
+            },
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_queue/Policy",
+            },
             "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -1440,23 +1577,10 @@ async handle(message) {
               "id": "QueueEventMapping0",
               "path": "root/my_queue/QueueEventMapping0",
             },
-            "SetConsumer0": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
-              },
-              "id": "SetConsumer0",
-              "path": "root/my_queue/SetConsumer0",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -1468,8 +1592,9 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

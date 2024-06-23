@@ -25,7 +25,7 @@ test "length" {
 assert(["hello"].at(0) == "hello");
 assert(MutArray<str>["hello", "world"].at(1) == "world");
 
-assert(buckets.at(0).node.id == "myBucket");
+assert(nodeof(buckets.at(0)).id == "myBucket");
 
 test "at()" {
   assert(["hello"].at(0) == "hello");
@@ -73,6 +73,12 @@ let item = a.pop();
 assert(item == "world");
 assert(a.length == 1);
 assert(a.at(0) == "hello");
+let pushMultipleItems: MutArray<str> = MutArray<str> ["element1"];
+pushMultipleItems.push("element2", "element3");
+assert(pushMultipleItems.length == 3);
+assert(pushMultipleItems.at(0) == "element1");
+assert(pushMultipleItems.at(1) == "element2");
+assert(pushMultipleItems.at(2) == "element3");
 
 test "pushAndPop()" {
   let a = MutArray<str>["hello"];
@@ -85,6 +91,12 @@ test "pushAndPop()" {
   assert(item == "world");
   assert(a.length == 1);
   assert(a.at(0) == "hello");
+  let pushMultipleItems: MutArray<str> = MutArray<str> ["element1"];
+  pushMultipleItems.push("element2", "element3");
+  assert(pushMultipleItems.length == 3);
+  assert(pushMultipleItems.at(0) == "element1");
+  assert(pushMultipleItems.at(1) == "element2");
+  assert(pushMultipleItems.at(2) == "element3");
 }
 
 //-----------------------------------------------------------------------------
@@ -138,8 +150,8 @@ assert(d.at(1) == "wing");
 
 let mergedBuckets = buckets.concat(anotherBuckets);
 assert(mergedBuckets.length == 2);
-assert(mergedBuckets.at(0).node.id == "myBucket");
-assert(mergedBuckets.at(1).node.id == "mySecondBucket");
+assert(nodeof(mergedBuckets.at(0)).id == "myBucket");
+assert(nodeof(mergedBuckets.at(1)).id == "mySecondBucket");
 
 test "concatMutArray()" {
   let b = MutArray<str>["hello"];
@@ -253,7 +265,7 @@ assert(o.at(0) == p.at(0));
 
 let copiedBuckets = buckets.copyMut();
 assert(copiedBuckets.length == 1);
-assert(copiedBuckets.at(0).node.id == "myBucket");
+assert(nodeof(copiedBuckets.at(0)).id == "myBucket");
 
 test "copy()" {
   let o = MutArray<str>["hello", "wing"];
@@ -386,4 +398,41 @@ test "removeFirst()" {
 
   assert(r2 == false);
   assert(mutArr.length == 3);
+}
+
+//-----------------------------------------------------------------------------
+// slice()
+
+test "slice()" {
+  let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  let slice1 = arr.slice(2, 5);
+  assert(slice1 == [3, 4, 5]);
+
+  let slice2 = arr.slice(5);
+  assert(slice2 == [6, 7, 8, 9, 10]);
+
+  let slice3 = arr.slice(0, 3);
+  assert(slice3 == [1, 2, 3]);
+
+  let slice4 = arr.slice(0);
+  assert(slice4 == arr);
+
+  let slice5 = arr.slice(0, 0);
+  assert(slice5 == []);
+
+  let mutarr = MutArray<num>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  let mutSlice1 = mutarr.slice(2, 5);
+  assert(mutSlice1 == MutArray<num>[3, 4, 5]);
+
+  let mutSlice2 = mutarr.slice(5);
+  assert(mutSlice2 == MutArray<num>[6, 7, 8, 9, 10]);
+
+  let mutSlice3 = mutarr.slice(0, 3);
+  assert(mutSlice3 == MutArray<num>[1, 2, 3]);
+
+  let mutSlice4 = mutarr.slice(0);
+  assert(mutSlice4 == mutarr);
+
+  let mutSlice5 = mutarr.slice(0, 0);
+  assert(mutSlice5 == MutArray<num>[]);
 }

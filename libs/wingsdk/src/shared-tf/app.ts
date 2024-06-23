@@ -15,7 +15,6 @@ import {
   App,
   AppProps,
   Connections,
-  SynthHooks,
   preSynthesizeAllConstructs,
 } from "../core";
 import { registerTokenResolver } from "../core/tokens";
@@ -33,15 +32,12 @@ export abstract class CdktfApp extends App {
    */
   public readonly terraformManifestPath: string;
   public readonly outdir: string;
-  public readonly isTestEnvironment: boolean;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
-
-  protected synthHooks?: SynthHooks;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -61,9 +57,8 @@ export abstract class CdktfApp extends App {
     });
 
     this.outdir = outdir;
-    this.isTestEnvironment = props.isTestEnvironment ?? false;
     registerTokenResolver(new CdkTfTokens());
-    this.synthHooks = props.synthHooks;
+    this._synthHooks = props.synthHooks;
 
     // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.
@@ -105,8 +100,8 @@ export abstract class CdktfApp extends App {
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
-    if (this.synthHooks?.preSynthesize) {
-      this.synthHooks.preSynthesize.forEach((hook) => hook(this));
+    if (this._synthHooks?.preSynthesize) {
+      this._synthHooks.preSynthesize.forEach((hook) => hook(this));
     }
 
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
@@ -134,8 +129,8 @@ export abstract class CdktfApp extends App {
     const tfConfig = this.cdktfStack.toTerraform();
     const cleaned = cleanTerraformConfig(tfConfig);
 
-    if (this.synthHooks?.postSynthesize) {
-      this.synthHooks.postSynthesize.forEach((hook) => {
+    if (this._synthHooks?.postSynthesize) {
+      this._synthHooks.postSynthesize.forEach((hook) => {
         writeFileSync(
           resolve(`${this.outdir}/main.tf.json`),
           JSON.stringify(hook(tfConfig), null, 2)
@@ -143,8 +138,8 @@ export abstract class CdktfApp extends App {
       });
     }
 
-    if (this.synthHooks?.validate) {
-      this.synthHooks.validate.forEach((hook) => hook(tfConfig));
+    if (this._synthHooks?.validate) {
+      this._synthHooks.validate.forEach((hook) => hook(tfConfig));
     }
 
     this.synthed = true;

@@ -3,8 +3,21 @@
 exports[`default website behaviour 1`] = `
 {
   "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
+    "WebsiteEndpointUrl0CC0343F": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "WebsiteDistribution0C86AB5B",
+                "DomainName",
+              ],
+            },
+          ],
+        ],
+      },
     },
   },
   "Parameters": {
@@ -361,8 +374,21 @@ exports[`default website behaviour 1`] = `
 exports[`website with addFile 1`] = `
 {
   "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
+    "WebsiteEndpointUrl0CC0343F": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "WebsiteDistribution0C86AB5B",
+                "DomainName",
+              ],
+            },
+          ],
+        ],
+      },
     },
   },
   "Parameters": {
@@ -766,8 +792,21 @@ exports[`website with addFile 1`] = `
 exports[`website with addJson 1`] = `
 {
   "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
+    "WebsiteEndpointUrl0CC0343F": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "WebsiteDistribution0C86AB5B",
+                "DomainName",
+              ],
+            },
+          ],
+        ],
+      },
     },
   },
   "Parameters": {

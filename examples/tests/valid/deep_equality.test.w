@@ -39,12 +39,17 @@ test "Json with different values" {
   assert(!(jsonA != jsonB));
 }
 
+test "Json.values equality" {
+  let j = Json { hello: 123, world: [1, 2, 3] };
+  assert(Json.values(j) == [Json 123, Json [1, 2, 3]]);
+}
+
 //-----------------------------------------------------------------------------
 // Set
 //-----------------------------------------------------------------------------
-let setA = { 1,2,3 };
-let setB = MutSet<num>{ 1,2,3 };
-let setC = { 4,5,6 };
+let setA = Set<num>[ 1,2,3 ];
+let setB = MutSet<num>[ 1,2,3 ];
+let setC = Set<num>[ 4,5,6 ];
 
 test "Set types with the same value" {
   assert(setA == setA);

@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -9,12 +8,22 @@ import { IamRolePolicyAttachment } from "../.gen/providers/aws/iam-role-policy-a
 import { LambdaFunction } from "../.gen/providers/aws/lambda-function";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import { S3Object } from "../.gen/providers/aws/s3-object";
+import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { IAwsFunction, PolicyStatement } from "../shared-aws";
+import {
+  AwsInflightHost,
+  Effect,
+  IAwsFunction,
+  NetworkConfig,
+  PolicyStatement,
+  externalLibraries,
+} from "../shared-aws";
+import { makeAwsLambdaHandler } from "../shared-aws/function-util";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 
@@ -26,18 +35,6 @@ const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 64,
   disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
 };
-
-/**
- * Function network configuration
- * used to hold data on subnets and security groups
- * that should be used when a function is deployed within a VPC.
- */
-export interface FunctionNetworkConfig {
-  /** List of subnets to attach on function */
-  readonly subnetIds: string[];
-  /** List of security groups to place function in */
-  readonly securityGroupIds: string[];
-}
 
 /**
  * Options for granting invoke permissions to the current function
@@ -59,6 +56,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   private readonly role: IamRole;
   private policyStatements?: any[];
   private subnets?: Set<string>;
+  private vpcPermissionsAdded = false;
   private securityGroups?: Set<string>;
 
   /**
@@ -71,6 +69,12 @@ export class Function extends cloud.Function implements IAwsFunction {
   /** Permissions  */
   public permissions!: LambdaPermission;
 
+  /** Name of the AWS Lambda function in the account/region */
+  public readonly name: string;
+
+  private assetPath: string | undefined; // posix path
+  private bundleHash: string | undefined;
+
   constructor(
     scope: Construct,
     id: string,
@@ -79,14 +83,11 @@ export class Function extends cloud.Function implements IAwsFunction {
   ) {
     super(scope, id, inflight, props);
 
-    // bundled code is guaranteed to be in a fresh directory
-    const bundle = createBundle(this.entrypoint);
-
-    // Create Lambda executable
-    const asset = new TerraformAsset(this, "Asset", {
-      path: resolve(bundle.directory),
-      type: AssetType.ARCHIVE,
-    });
+    if (props.concurrency != null) {
+      throw new NotImplementedError(
+        "Function concurrency isn't implemented yet on the current target."
+      );
+    }
 
     // Create unique S3 bucket for hosting Lambda code
     const app = App.of(this) as App;
@@ -96,13 +97,28 @@ export class Function extends cloud.Function implements IAwsFunction {
     // - whenever code changes, the object name changes
     // - even if two functions have the same code, they get different names
     //   (separation of concerns)
-    const objectKey = `asset.${this.node.addr}.${bundle.hash}.zip`;
+    let bundleHashToken = Lazy.stringValue({
+      produce: () => {
+        if (!this.bundleHash) {
+          throw new Error("bundleHash was not set");
+        }
+        return this.bundleHash;
+      },
+    });
+    const objectKey = `asset.${this.node.addr}.${bundleHashToken}.zip`;
 
     // Upload Lambda zip file to newly created S3 bucket
     const lambdaArchive = new S3Object(this, "S3Object", {
       bucket: bucket.bucket,
       key: objectKey,
-      source: asset.path, // returns a posix path
+      source: Lazy.stringValue({
+        produce: () => {
+          if (!this.assetPath) {
+            throw new Error("assetPath was not set");
+          }
+          return this.assetPath;
+        },
+      }),
     });
 
     // Create Lambda role
@@ -127,27 +143,15 @@ export class Function extends cloud.Function implements IAwsFunction {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
-          // If there are subnets to attach then the role needs to be able to
-          // create network interfaces
-          if ((this.subnets?.size ?? 0) !== 0) {
-            this.policyStatements?.push({
-              Effect: "Allow",
-              Action: [
-                "ec2:CreateNetworkInterface",
-                "ec2:DescribeNetworkInterfaces",
-                "ec2:DeleteNetworkInterface",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeSecurityGroups",
-              ],
-              Resource: "*",
-            });
-          }
-          if ((this.policyStatements ?? []).length !== 0) {
+          this.policyStatements = this.policyStatements ?? [];
+
+          if (this.policyStatements.length !== 0) {
             return JSON.stringify({
               Version: "2012-10-17",
               Statement: this.policyStatements,
             });
           }
+
           // policy must contain at least one statement, so include a no-op statement
           return JSON.stringify({
             Version: "2012-10-17",
@@ -170,7 +174,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       role: this.role.name,
     });
 
-    const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
+    this.name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
 
     // validate memory size
     if (props.memory && (props.memory < 128 || props.memory > 10240)) {
@@ -181,7 +185,7 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     if (!props.logRetentionDays || props.logRetentionDays >= 0) {
       new CloudwatchLogGroup(this, "CloudwatchLogGroup", {
-        name: `/aws/lambda/${name}`,
+        name: `/aws/lambda/${this.name}`,
         retentionInDays: props.logRetentionDays ?? 30,
       });
     } else {
@@ -190,11 +194,11 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
-      functionName: name,
+      functionName: this.name,
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
-      runtime: "nodejs18.x",
+      runtime: "nodejs20.x",
       role: this.role.arn,
       publish: true,
       vpcConfig: {
@@ -228,24 +232,70 @@ export class Function extends cloud.Function implements IAwsFunction {
       architectures: ["arm64"],
     });
 
+    if (app.parameters.value("tf-aws/vpc_lambda") === true) {
+      const sg = new SecurityGroup(this, `${id}SecurityGroup`, {
+        vpcId: app.vpc.id,
+        egress: [
+          {
+            cidrBlocks: ["0.0.0.0/0"],
+            fromPort: 0,
+            toPort: 0,
+            protocol: "-1",
+          },
+        ],
+      });
+      this.addNetwork({
+        subnetIds: [...app.subnets.private.map((s) => s.id)],
+        securityGroupIds: [sg.id],
+      });
+    }
+
     this.qualifiedArn = this.function.qualifiedArn;
     this.invokeArn = this.function.invokeArn;
 
     // terraform rejects templates with zero environment variables
-    this.addEnvironment("WING_FUNCTION_NAME", name);
+    this.addEnvironment("WING_FUNCTION_NAME", this.name);
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [cloud.FunctionInflightMethods.INVOKE];
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
+    // `require` resolves naturally.
+
+    const bundle = createBundle(this.entrypoint, externalLibraries);
+
+    // would prefer to create TerraformAsset in the constructor, but using a CDKTF token for
+    // the "path" argument isn't supported
+    const asset = new TerraformAsset(this, "Asset", {
+      path: bundle.directory,
+      type: AssetType.ARCHIVE,
+    });
+
+    this.bundleHash = bundle.hash;
+    this.assetPath = asset.path;
+  }
+
+  /** @internal */
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
+        [this.handler, ["handle"]],
+      ],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("functions can only be bound by tfaws.Function for now");
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
-    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+    if (
+      ops.includes(cloud.FunctionInflightMethods.INVOKE) ||
+      ops.includes(cloud.FunctionInflightMethods.INVOKE_ASYNC)
+    ) {
       host.addPolicyStatements({
         actions: ["lambda:InvokeFunction"],
         resources: [`${this.function.arn}`],
@@ -272,13 +322,29 @@ export class Function extends cloud.Function implements IAwsFunction {
   /**
    * Add VPC configurations to lambda function
    */
-  public addNetworkConfig(vpcConfig: FunctionNetworkConfig) {
+  public addNetwork(vpcConfig: NetworkConfig) {
     if (!this.subnets || !this.securityGroups) {
       this.subnets = new Set();
       this.securityGroups = new Set();
     }
     vpcConfig.subnetIds.forEach((subnet) => this.subnets!.add(subnet));
     vpcConfig.securityGroupIds.forEach((sg) => this.securityGroups!.add(sg));
+
+    if (!this.vpcPermissionsAdded) {
+      this.addPolicyStatements({
+        effect: Effect.ALLOW,
+        actions: [
+          "ec2:CreateNetworkInterface",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeSecurityGroups",
+        ],
+        resources: ["*"],
+      });
+
+      this.vpcPermissionsAdded = true;
+    }
   }
 
   /**
@@ -338,5 +404,12 @@ export class Function extends cloud.Function implements IAwsFunction {
 
   public get functionName(): string {
     return this.function.functionName;
+  }
+
+  /**
+   * @internal
+   */
+  protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
+    return makeAwsLambdaHandler(handler);
   }
 }

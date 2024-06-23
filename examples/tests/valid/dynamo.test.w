@@ -29,7 +29,7 @@ class DynamoTable {
     }
 
     this.table = new tfaws.dynamodbTable.DynamodbTable(
-      name: this.node.addr,
+      name: nodeof(this).addr,
       billingMode: "PAY_PER_REQUEST",
       hashKey: "Flavor",
       attribute: [
@@ -54,7 +54,8 @@ class DynamoTable {
     }
   }
 
-  extern "./dynamo.js" static inflight _putItem(tableName: str, item: Json): void;
+  extern "./dynamo.ts" static inflight _getItem(tableName: str, key: Json): Json;
+  extern "./dynamo.ts" static inflight _putItem(tableName: str, item: Json): void;
 
   pub inflight putItem(item: Map<Attribute>) {
     let json = this._itemToJson(item);

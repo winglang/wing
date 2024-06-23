@@ -50,6 +50,23 @@
       ],
       "outputs": ["**/__snapshots__/**", "**/*.snap"]
     },
+    "bench": {
+      "dependsOn": ["compile"],
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**/*.rs",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "test/**"
+      ]
+    },
     "test:playwright": {
       "dependsOn": ["compile"],
       "inputs": [
@@ -101,6 +118,7 @@
       "inputs": ["*.md", "LICENSE"]
     },
     "topo": {
+      "inputs": ["**", "!node_modules/**", "!**/target/**"],
       "dependsOn": ["^topo"]
     },
     "dev": {

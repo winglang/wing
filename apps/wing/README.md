@@ -4,7 +4,7 @@
   ▪︎
   <a href="https://www.winglang.io/docs/">Getting Started</a>
   ▪︎
-  <a href="http://t.winglang.io/slack">Join Slack</a>
+  <a href="http://t.winglang.io/discord">Join Discord</a>
   ▪︎
   <a href="https://www.winglang.io/docs/category/faq">FAQ</a>
   ▪︎
@@ -32,7 +32,7 @@ We also provide you with a set of tools that let you test your code locally, sig
   <img src="./logo/demo.gif" alt="Wing Demo" height="360px">
 </p>
 
-Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at the [Wing Cloud team](https://www.wing.cloud/) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
+Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at the [Wing Cloud team](https://www.wing.cloud/) and an amazing [community](https://t.winglang.io/discord) of contributors (also known as Wingnuts).
 
 Click [here](https://www.youtube.com/watch?v=5_RhWwgGue0) to watch a short video introduction to the Wing language.
 
@@ -83,8 +83,8 @@ Wing was built from the ground up to make it easy for building applications on a
 It includes an assembly of different features that serve that purpose:
 
 * [Cloud services](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-services) as first-class citizens, with [phase modifiers](https://www.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for describing infrastructure and runtime code ([`preflight` and `inflight`](https://www.winglang.io/docs/concepts/inflights)). 
-* [Wing Cloud Library](https://www.winglang.io/docs/category/cloud-library) provides a standard set of resources that lets you write cloud portable code.
-* [Compiler plugins](https://www.winglang.io/docs/tools/compiler-plugins) that keep you in control by allowing you to customize the infrastructure definitions and run policy checks.
+* [Wing Cloud Library](https://www.winglang.io/docs/category/cloud) provides a standard set of resources that lets you write cloud portable code.
+* [Custom platforms](https://www.winglang.io/docs/concepts/platforms) that keep you in control by allowing you to customize the infrastructure definitions and run policy checks.
 * Use any resource in the Terraform ecosystem as first-class citizen in your app.
 * [JavaScript interoperability](https://www.winglang.io/contributing/rfcs/language-spec#5-interoperability).
 * Automatic generation of IAM policies and other cloud mechanics based on source code.
@@ -120,7 +120,7 @@ Here are some questions we're commonly asked that are covered by our [FAQ](https
 
 ## Community 💬
 
-Join our flock in the [Wing Slack](https://t.winglang.io/slack) community.
+Join our flock in the [Wing Discord](https://t.winglang.io/discord) community.
 We're here to help each other, answer questions, and share our cloud adventures.
 Alternatively, post any questions on [GitHub Discussions](https://github.com/winglang/wing/discussions).
 
@@ -145,4 +145,4 @@ Contributions are made under our [contribution license](./CONTRIBUTION_LICENSE.m
 
 Happy coding, and remember: the sky's the limit with Wing (yes, another pun)! 🌤️🚀
 
-[wing slack]: https://t.winglang.io/slack
+[wing discord]: https://t.winglang.io/discord

@@ -3,8 +3,8 @@ import { OnDeploySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { BaseResourceSchema } from "../simulator";
-import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
+import { ToSimulatorOutput } from "../simulator";
+import { IInflight, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 export class OnDeploy extends cloud.OnDeploy {
   private readonly fn: cloud.Function;
@@ -16,7 +16,7 @@ export class OnDeploy extends cloud.OnDeploy {
   ) {
     super(scope, id, handler, props);
 
-    this.fn = new cloud.Function(this, "Function", handler, props);
+    this.fn = new cloud.Function(this, "Function", handler as IInflight, props);
     Node.of(this.fn).sourceModule = SDK_SOURCE_MODULE;
 
     this.node.addDependency(this.fn);
@@ -30,20 +30,18 @@ export class OnDeploy extends cloud.OnDeploy {
     }
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: OnDeploySchema = {
-      type: cloud.ON_DEPLOY_FQN,
-      path: this.node.path,
-      props: {
-        functionHandle: simulatorHandleToken(this.fn),
-      },
-      attrs: {},
+  public toSimulator(): ToSimulatorOutput {
+    const props: OnDeploySchema = {
+      functionHandle: simulatorHandleToken(this.fn),
     };
-    return schema;
+    return {
+      type: cloud.ON_DEPLOY_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

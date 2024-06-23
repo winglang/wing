@@ -7,22 +7,9 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -31,37 +18,37 @@
   },
   "resource": {
     "aws_s3_bucket": {
-      "cloudBucket": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       }
     },
     "aws_s3_object": {
-      "cloudBucket_S3Object-file1txt_2E641337": {
+      "Bucket_S3Object-file1txt_A14F86D6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/S3Object-file1.txt",
-            "uniqueId": "cloudBucket_S3Object-file1txt_2E641337"
+            "path": "root/Default/Default/Bucket/S3Object-file1.txt",
+            "uniqueId": "Bucket_S3Object-file1txt_A14F86D6"
           }
         },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
+        "bucket": "${aws_s3_bucket.Bucket.bucket}",
         "content": "test1",
         "key": "file1.txt"
       },
-      "cloudBucket_S3Object-file2txt_C6672D6C": {
+      "Bucket_S3Object-file2txt_2016A6BF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/S3Object-file2.txt",
-            "uniqueId": "cloudBucket_S3Object-file2txt_C6672D6C"
+            "path": "root/Default/Default/Bucket/S3Object-file2.txt",
+            "uniqueId": "Bucket_S3Object-file2txt_2016A6BF"
           }
         },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
+        "bucket": "${aws_s3_bucket.Bucket.bucket}",
         "content": "test2",
         "key": "file2.txt"
       }

@@ -1,8 +1,9 @@
 import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
+import { ParameterRegistrar } from "../platform";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
-import { IResource } from "../std/resource";
+import { type IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
 
 /**
@@ -20,13 +21,6 @@ export interface AppProps {
    * @default "app"
    */
   readonly name?: string;
-
-  /**
-   * The path to a state file which will track all synthesized files. If a
-   * statefile is not specified, we won't be able to remove extrenous files.
-   * @default - no state file
-   */
-  readonly stateFile?: string;
 
   /**
    * The root construct class that should be instantiated with a scope and id.
@@ -66,6 +60,12 @@ export interface AppProps {
    * @default - []
    */
   readonly newInstanceOverrides?: any[];
+
+  /**
+   * ParameterRegistrar of composed platforms
+   * @default - undefined
+   */
+  readonly platformParameterRegistrar?: ParameterRegistrar;
 }
 
 /**
@@ -97,27 +97,6 @@ export abstract class App extends Construct implements IApp {
    */
   public static of(scope: Construct): App {
     return Node.of(scope).app as App;
-  }
-
-  /**
-   * Loads the `App` class for the given target.
-   * @param target one of the supported targets
-   * @returns an `App` class constructor
-   */
-  public static for(target: string): any {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      return require(`../target-${target}/app`).App;
-    } catch (e: any) {
-      if (e.code === "MODULE_NOT_FOUND") {
-        const cannotFindModule = e.message.split("\n")[0];
-        throw new Error(
-          `${cannotFindModule}. The target "${target}" requires this module to be installed globally (using "npm i -g").`
-        );
-      }
-
-      throw new Error(`Unknown compilation target: "${target}": ${e.message}`);
-    }
   }
 
   /** @internal */
@@ -152,13 +131,31 @@ export abstract class App extends Construct implements IApp {
   /**
    * Whether or not this app is being synthesized into a test environment.
    */
-  public abstract readonly isTestEnvironment: boolean;
+  public readonly isTestEnvironment: boolean;
 
   /**
    * NewInstance hooks for defining resource implementations.
    * @internal
    */
   public readonly _newInstanceOverrides: any[];
+
+  /**
+   * The test runner for this app. Only created if `isTestEnvironment` is true.
+   * @internal
+   */
+  public _testRunner: TestRunner | undefined;
+
+  /**
+   * SynthHooks hooks of dependent platforms
+   * @internal
+   */
+  protected _synthHooks?: SynthHooks;
+
+  /**
+   * Parameter registrar of composed platforms
+   * @internal
+   */
+  protected _parameters?: ParameterRegistrar;
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
@@ -173,6 +170,8 @@ export abstract class App extends Construct implements IApp {
 
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
+    this._synthHooks = props.synthHooks;
+    this.isTestEnvironment = props.isTestEnvironment ?? false;
   }
 
   /**
@@ -182,6 +181,17 @@ export abstract class App extends Construct implements IApp {
    */
   public get workdir() {
     return `${this.outdir}/.wing`;
+  }
+
+  /**
+   * The parameter registrar for the app, can be used to find and register
+   * parameter values that were provided to the wing application.
+   */
+  public get parameters() {
+    if (!this._parameters) {
+      this._parameters = new ParameterRegistrar(this, "ParameterRegistrar");
+    }
+    return this._parameters!;
   }
 
   /**
@@ -229,8 +239,10 @@ export abstract class App extends Construct implements IApp {
     const instance = this.tryNew(fqn, scope, id, ...args);
     if (!instance) {
       const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
+      const typeNameParts = typeName.split(".");
       throw new NotImplementedError(
-        `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
+        `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`,
+        { resource: typeNameParts[typeNameParts.length - 1] }
       );
     }
 
@@ -283,35 +295,8 @@ export abstract class App extends Construct implements IApp {
     if (!type) {
       return undefined;
     }
+
     return new type(scope, id, ...args);
-  }
-
-  /**
-   * Synthesize the root construct if one was given. If this is a test environment, then
-   * we will synthesize one root construct per test. Otherwise, we will synthesize exactly
-   * one root construct.
-   *
-   * @param props The App props
-   * @param testRunner The test runner
-   */
-  protected synthRoots(props: AppProps, testRunner: TestRunner) {
-    if (props.rootConstruct) {
-      const Root = props.rootConstruct;
-
-      // mark the root type so that we can find it later through
-      // Node.of(root).root
-      Node._markRoot(Root);
-
-      if (this.isTestEnvironment) {
-        new Root(this, "env0");
-        const tests = testRunner.findTests();
-        for (let i = 1; i < tests.length; i++) {
-          new Root(this, "env" + i);
-        }
-      } else {
-        new Root(this, "Default");
-      }
-    }
   }
 }
 

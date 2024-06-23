@@ -1,10 +1,11 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { App } from "../core";
 import { NotImplementedError } from "../core/errors";
-import { getPlatformSpecificValues } from "../util/platform-specific";
 
 /**
  * AWS implementation of `cloud.Domain`.
+ * @inflight `@winglang/sdk.cloud.IDomainClient`
  */
 export class Domain extends cloud.Domain {
   /** @internal */
@@ -17,15 +18,44 @@ export class Domain extends cloud.Domain {
   constructor(scope: Construct, id: string, props: cloud.DomainProps) {
     super(scope, id, props);
 
-    const values = getPlatformSpecificValues(
-      this,
-      "iamCertificate||acmCertificateArn",
-      "hostedZoneId"
-    );
+    const parameters = App.of(scope).parameters;
 
-    this._iamCertificate = values.iamCertificate;
-    this._hostedZoneId = values.hostedZoneId;
-    this._acmCertificateArn = values.acmCertificateArn;
+    // Domain requires parameters from the user, so we need to add the parameter schemas to the registrar
+    let schema = {
+      type: "object",
+      oneOf: [
+        {
+          required: ["iamCertificate"],
+        },
+        {
+          required: ["acmCertificateArn"],
+        },
+      ],
+      required: ["hostedZoneId"],
+      properties: {
+        iamCertificate: {
+          type: "string",
+        },
+        acmCertificateArn: {
+          type: "string",
+        },
+        hostedZoneId: {
+          type: "string",
+        },
+      },
+    };
+
+    parameters.addSchemaAtPath(schema, this.node.path, true);
+
+    const iamCertificate = parameters.value(`${this.node.path}/iamCertificate`);
+    const acmCertificateArn = parameters.value(
+      `${this.node.path}/acmCertificateArn`
+    );
+    const hostedZoneId = parameters.value(`${this.node.path}/hostedZoneId`);
+
+    this._iamCertificate = iamCertificate;
+    this._hostedZoneId = hostedZoneId;
+    this._acmCertificateArn = acmCertificateArn;
   }
 
   /**

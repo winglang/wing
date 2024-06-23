@@ -1,5 +1,5 @@
 use crate::{
-	ast::{AssignmentKind, Reference, Stmt, StmtKind, Symbol},
+	ast::{AssignmentKind, FunctionDefinition, Reference, Stmt, StmtKind, Symbol},
 	visit::{self, Visit},
 };
 
@@ -38,5 +38,10 @@ impl Visit<'_> for VisitClassInit {
 			_ => (),
 		}
 		visit::visit_stmt(self, node);
+	}
+
+	fn visit_function_definition(&mut self, _node: &FunctionDefinition) {
+		// Skip visiting inner functions since any assignments inside them are
+		// (probably) not executed in the constructor.
 	}
 }

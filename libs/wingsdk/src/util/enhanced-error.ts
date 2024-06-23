@@ -1,7 +1,8 @@
 import { stat } from "node:fs/promises";
-import { relative, resolve, sep, join } from "node:path";
+import { join, dirname } from "node:path/posix";
 import type Chalk from "chalk";
 import type StackTracey from "stacktracey";
+import { normalPath } from "../shared/misc";
 
 export interface PrettyPrintErrorOptions {
   /**
@@ -15,6 +16,11 @@ export interface PrettyPrintErrorOptions {
    * If provided, ANSI color and format will be used.
    */
   chalk?: typeof Chalk;
+
+  /**
+   * If true, will force reload all sources.
+   */
+  resetCache?: boolean;
 }
 
 /**
@@ -34,6 +40,10 @@ export async function prettyPrintError(
   const fRed = (s: string) => (chalk ? chalk.red(s) : s);
   const fBold = (s: string) => (chalk ? chalk.bold(s) : s);
   const fDim = (s: string) => (chalk ? chalk.dim(s) : s);
+
+  if (options?.resetCache) {
+    StackTracey.resetCache();
+  }
 
   let st: StackTracey | undefined;
   let originalMessage = "";
@@ -63,35 +73,54 @@ export async function prettyPrintError(
     originalMessage = error.message;
   }
 
-  const message = fBold(fRed("runtime error: ")) + fRed(originalMessage);
+  const message = fBold(fRed("Error: ")) + fRed(originalMessage);
 
-  st = await st.clean().withSourcesAsync();
+  st = await st
+    .clean()
+    .filter((item) => !item.native)
+    // strip node internals
+    .filter((item) => !item.file.startsWith("node:"))
+    // strip wingsdk
+    .filter(
+      (item) =>
+        !normalPath(item.file).includes("/libs/wingsdk/src/") &&
+        !normalPath(item.file).includes("/@winglang/sdk/")
+    )
+    // special: remove the handler wrapper (See `cloud.Function` entrypoint for where this comes from)
+    .filter(
+      (item) => !normalPath(item.file).match(/\.wing\/\w+(\.sandbox)?\.cjs$/)
+    )
+    .withSourcesAsync();
 
-  let traceWithSources = st.items.filter((item) => !item.native);
+  let traceWithSources = st.items;
 
   if (traceWithSources.length === 0) {
     return message;
   }
 
   let interestingRoot = options?.sourceEntrypoint;
+  if (interestingRoot !== undefined) {
+    interestingRoot = normalPath(interestingRoot);
+  }
+
   if (
     interestingRoot !== undefined &&
     (await stat(interestingRoot)
       .then((s) => !s.isDirectory())
       .catch(() => true))
   ) {
-    interestingRoot = resolve(interestingRoot, "..");
+    interestingRoot = dirname(interestingRoot);
   }
 
   if (interestingRoot !== undefined) {
-    interestingRoot = interestingRoot + sep;
+    interestingRoot = join(interestingRoot, "/");
   }
 
   if (interestingRoot !== undefined) {
     traceWithSources = traceWithSources.filter((item) =>
       (item.sourceFile?.path ?? item.file).startsWith(interestingRoot!)
     );
-    const targetDir = join(interestingRoot, "target") + sep;
+    const targetDir = join(interestingRoot, "target", "/");
     traceWithSources = traceWithSources.filter(
       (item) => !(item.sourceFile?.path ?? item.file).startsWith(targetDir)
     );
@@ -121,9 +150,8 @@ export async function prettyPrintError(
     // print line and its surrounding lines
     output.push(
       " ".repeat(maxDigits + 1) +
-        `--> ${relative(
-          process.cwd(),
-          sourceFile.path
+        `--> ${normalPath(
+          firstGoodItem.fileRelative
         )}:${originLine}:${originColumn}`
     );
 
@@ -171,16 +199,28 @@ function printItem(item: StackTracey.Entry) {
   // These are typically useless
   // TODO These can possibly be removed when sourcemaps support "names" mappings
   if (
+    item.calleeShort === "$Root" ||
     item.calleeShort === "new $Root" ||
     item.calleeShort.includes("<anonymous>")
   ) {
     calleeShort = "";
   }
 
+  if (item.callee.match(/\$Closure\d+\.handle$/)) {
+    // inflight closures use "handle" as a way to represent calling the inflight itself
+    calleeShort = "";
+  }
+
+  if (item.fileName.endsWith(".w") && calleeShort.startsWith("async ")) {
+    // In userland wing traces, async = inflight and is currently redundant to mention
+    calleeShort = calleeShort.replace("async ", "");
+  }
+
   const file = item.file;
   const line = item.line;
   const column = item.column;
-  return `at ${calleeShort}(${file}:${line}:${column})`;
+
+  return `at ${calleeShort}${file}:${line}:${column}`;
 }
 
 export function rewriteCommonError(error: Error): Error {

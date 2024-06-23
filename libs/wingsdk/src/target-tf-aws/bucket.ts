@@ -1,8 +1,6 @@
-import { join } from "path";
 import { ITerraformDependable } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Function as AWSFunction } from "./function";
 import { Topic as AWSTopic } from "./topic";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import {
@@ -20,7 +18,8 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IAwsBucket } from "../shared-aws/bucket";
+import { AwsInflightHost } from "../shared-aws";
+import { BucketEventHandler, IAwsBucket } from "../shared-aws/bucket";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
 
@@ -49,7 +48,7 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
 /**
  * AWS implementation of `cloud.Bucket`.
  *
- * @inflight `@winglang/sdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.aws.IAwsBucketClient`
  */
 export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly bucket: S3Bucket;
@@ -74,27 +73,31 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.BucketInflightMethods.DELETE,
-      cloud.BucketInflightMethods.GET,
-      cloud.BucketInflightMethods.GET_JSON,
-      cloud.BucketInflightMethods.LIST,
-      cloud.BucketInflightMethods.PUT,
-      cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
-      cloud.BucketInflightMethods.EXISTS,
-      cloud.BucketInflightMethods.TRY_GET,
-      cloud.BucketInflightMethods.TRY_GET_JSON,
-      cloud.BucketInflightMethods.TRY_DELETE,
-      cloud.BucketInflightMethods.SIGNED_URL,
-      cloud.BucketInflightMethods.METADATA,
-      cloud.BucketInflightMethods.COPY,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.SIGNED_URL]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+    };
   }
 
-  protected eventHandlerLocation(): string {
-    return join(__dirname, "bucket.onevent.inflight.js");
+  protected createTopicHandler(
+    eventType: cloud.BucketEventType,
+    inflight: cloud.IBucketEventHandler
+  ): cloud.ITopicOnMessageHandler {
+    return BucketEventHandler.toTopicOnMessageHandler(inflight, eventType);
   }
 
   protected createTopic(actionType: cloud.BucketEventType): cloud.Topic {
@@ -130,8 +133,8 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof AWSFunction)) {
-      throw new Error("buckets can only be bound by tfaws.Function for now");
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     host.addPolicyStatements(
@@ -141,7 +144,6 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
-
     super.onLift(host, ops);
   }
 
@@ -164,7 +166,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   public get bucketName(): string {
-    return this.bucket.bucketDomainName;
+    return this.bucket.bucket;
   }
 }
 

@@ -2,52 +2,56 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c818e9be.js": "\\"use strict\\";
+  ".wing/handler_c86fc180.cjs": ""use strict";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => console.log("this test should pass!")
+  const $ctx = {
   
-async handle(event) {
-  console.log(\\"this test should pass!\\");
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-
-})).handle(event);
+)()));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/test:my_test/Handler",
+    "resources": {
+      "root/cloud.TestRunner": {
+        "addr": "c8647dd8d2adabe83cc081ebe0ccbefe4a068ef3bf",
+        "deps": [
+          "root/env0/test:my_test/Handler",
+        ],
+        "path": "root/cloud.TestRunner",
         "props": {
+          "tests": {
+            "root/env0/test:my_test": "\${wsim#root/env0/test:my_test/Handler#attrs.handle}",
+          },
+        },
+        "type": "@winglang/sdk.std.TestRunner",
+      },
+      "root/env0/test:my_test/Handler": {
+        "addr": "c86fc1804106bd848769cb0ddbcb872aa1e47943f4",
+        "path": "root/env0/test:my_test/Handler",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/handler_c818e9be.js",
+          "sourceCodeFile": ".wing/handler_c86fc180.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {
-            "root/test:my_test": "\${wsim#root/test:my_test/Handler#attrs.handle}",
-          },
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -58,13 +62,13 @@ async handle(event) {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -98,14 +102,6 @@ async handle(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -114,9 +110,21 @@ async handle(event) {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -134,7 +142,7 @@ async handle(event) {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -144,37 +152,49 @@ async handle(event) {
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "test:my_test": {
+        "env0": {
           "children": {
-            "Handler": {
+            "test:my_test": {
+              "children": {
+                "Handler": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A cloud function (FaaS)",
+                    "title": "Function",
+                  },
+                  "id": "Handler",
+                  "path": "root/env0/test:my_test/Handler",
+                },
+              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
-                "description": "A cloud function (FaaS)",
-                "title": "Function",
+                "description": "A cloud unit test.",
+                "title": "Test",
               },
-              "id": "Handler",
-              "path": "root/test:my_test/Handler",
+              "id": "test:my_test",
+              "path": "root/env0/test:my_test",
             },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
-          "display": {
-            "description": "A cloud unit test.",
-            "title": "Test",
-          },
-          "id": "test:my_test",
-          "path": "root/test:my_test",
+          "display": {},
+          "id": "env0",
+          "path": "root/env0",
         },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

@@ -7,24 +7,25 @@ exports[`create a schedule 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
+    "resources": {
+      "root/my_schedule": {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
         "path": "root/my_schedule",
         "props": {
-          "cronExpression": "*/1 * * * ?",
+          "cronExpression": "*/1 * * * *",
         },
         "type": "@winglang/sdk.cloud.Schedule",
       },
-    ],
+      "root/my_schedule/Policy": {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -35,13 +36,13 @@ exports[`create a schedule 1`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -75,14 +76,6 @@ exports[`create a schedule 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -91,9 +84,21 @@ exports[`create a schedule 1`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -108,23 +113,25 @@ exports[`create a schedule 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_schedule": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_schedule/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -136,8 +143,9 @@ exports[`create a schedule 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -148,65 +156,80 @@ exports[`create a schedule 1`] = `
 
 exports[`schedule with one task using rate of 3h 1`] = `
 {
-  ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
+  ".wing/ontick0_c83eddbe.cjs": ""use strict";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-console.log(\\"Hello from schedule!\\");
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+            await ctx.handler();
+            return undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
+  console.log("Hello from schedule!");
 }
-};
-})())({
-
-}), args: {} })).handle(event);
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "onTick()",
+        "name": "tick",
         "source": "root/my_schedule",
+        "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
+    "resources": {
+      "root/my_schedule": {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
+        "path": "root/my_schedule",
         "props": {
-          "tests": {},
+          "cronExpression": "* */3 * * *",
         },
-        "type": "@winglang/sdk.std.TestRunner",
+        "type": "@winglang/sdk.cloud.Schedule",
       },
-      {
-        "attrs": {},
+      "root/my_schedule/OnTick0": {
+        "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "path": "root/my_schedule/OnTick0",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
+          "sourceCodeFile": ".wing/ontick0_c83eddbe.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
-        "attrs": {},
-        "path": "root/my_schedule",
-        "props": {
-          "cronExpression": "* */3 * * ?",
-        },
-        "type": "@winglang/sdk.cloud.Schedule",
-      },
-      {
-        "attrs": {},
+      "root/my_schedule/OnTickMapping0": {
+        "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
+        "deps": [
+          "root/my_schedule/OnTick0",
+          "root/my_schedule",
+        ],
         "path": "root/my_schedule/OnTickMapping0",
         "props": {
           "publisher": "\${wsim#root/my_schedule#attrs.handle}",
@@ -215,7 +238,21 @@ console.log(\\"Hello from schedule!\\");
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_schedule/Policy": {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -226,13 +263,13 @@ console.log(\\"Hello from schedule!\\");
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -266,14 +303,6 @@ console.log(\\"Hello from schedule!\\");
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -282,9 +311,21 @@ console.log(\\"Hello from schedule!\\");
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -299,30 +340,17 @@ console.log(\\"Hello from schedule!\\");
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_schedule": {
           "children": {
             "OnTick0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "onTick()",
+                "title": "Tick",
               },
               "id": "OnTick0",
               "path": "root/my_schedule/OnTick0",
@@ -330,7 +358,7 @@ console.log(\\"Hello from schedule!\\");
             "OnTickMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -338,10 +366,23 @@ console.log(\\"Hello from schedule!\\");
               "id": "OnTickMapping0",
               "path": "root/my_schedule/OnTickMapping0",
             },
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_schedule/Policy",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -353,8 +394,9 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -365,65 +407,80 @@ console.log(\\"Hello from schedule!\\");
 
 exports[`schedule with one task using rate of 10m 1`] = `
 {
-  ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
+  ".wing/ontick0_c83eddbe.cjs": ""use strict";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-console.log(\\"Hello from schedule!\\");
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+            await ctx.handler();
+            return undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
+  console.log("Hello from schedule!");
 }
-};
-})())({
-
-}), args: {} })).handle(event);
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "onTick()",
+        "name": "tick",
         "source": "root/my_schedule",
+        "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
+    "resources": {
+      "root/my_schedule": {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
+        "path": "root/my_schedule",
         "props": {
-          "tests": {},
+          "cronExpression": "*/10 * * * *",
         },
-        "type": "@winglang/sdk.std.TestRunner",
+        "type": "@winglang/sdk.cloud.Schedule",
       },
-      {
-        "attrs": {},
+      "root/my_schedule/OnTick0": {
+        "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "path": "root/my_schedule/OnTick0",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
+          "sourceCodeFile": ".wing/ontick0_c83eddbe.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
-        "attrs": {},
-        "path": "root/my_schedule",
-        "props": {
-          "cronExpression": "*/10 * * * ?",
-        },
-        "type": "@winglang/sdk.cloud.Schedule",
-      },
-      {
-        "attrs": {},
+      "root/my_schedule/OnTickMapping0": {
+        "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
+        "deps": [
+          "root/my_schedule/OnTick0",
+          "root/my_schedule",
+        ],
         "path": "root/my_schedule/OnTickMapping0",
         "props": {
           "publisher": "\${wsim#root/my_schedule#attrs.handle}",
@@ -432,7 +489,21 @@ console.log(\\"Hello from schedule!\\");
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_schedule/Policy": {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -443,13 +514,13 @@ console.log(\\"Hello from schedule!\\");
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -483,14 +554,6 @@ console.log(\\"Hello from schedule!\\");
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -499,9 +562,21 @@ console.log(\\"Hello from schedule!\\");
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -516,30 +591,17 @@ console.log(\\"Hello from schedule!\\");
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_schedule": {
           "children": {
             "OnTick0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "onTick()",
+                "title": "Tick",
               },
               "id": "OnTick0",
               "path": "root/my_schedule/OnTick0",
@@ -547,7 +609,7 @@ console.log(\\"Hello from schedule!\\");
             "OnTickMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -555,10 +617,23 @@ console.log(\\"Hello from schedule!\\");
               "id": "OnTickMapping0",
               "path": "root/my_schedule/OnTickMapping0",
             },
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_schedule/Policy",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -570,8 +645,9 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -582,65 +658,80 @@ console.log(\\"Hello from schedule!\\");
 
 exports[`schedule with one task with cron 1`] = `
 {
-  ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
+  ".wing/ontick0_c83eddbe.cjs": ""use strict";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-console.log(\\"Hello from schedule!\\");
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+            await ctx.handler();
+            return undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
+  console.log("Hello from schedule!");
 }
-};
-})())({
-
-}), args: {} })).handle(event);
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "onTick()",
+        "name": "tick",
         "source": "root/my_schedule",
+        "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
+    "resources": {
+      "root/my_schedule": {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
+        "path": "root/my_schedule",
         "props": {
-          "tests": {},
+          "cronExpression": "* * * * *",
         },
-        "type": "@winglang/sdk.std.TestRunner",
+        "type": "@winglang/sdk.cloud.Schedule",
       },
-      {
-        "attrs": {},
+      "root/my_schedule/OnTick0": {
+        "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "path": "root/my_schedule/OnTick0",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
+          "sourceCodeFile": ".wing/ontick0_c83eddbe.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
-        "attrs": {},
-        "path": "root/my_schedule",
-        "props": {
-          "cronExpression": "* * * * ?",
-        },
-        "type": "@winglang/sdk.cloud.Schedule",
-      },
-      {
-        "attrs": {},
+      "root/my_schedule/OnTickMapping0": {
+        "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
+        "deps": [
+          "root/my_schedule/OnTick0",
+          "root/my_schedule",
+        ],
         "path": "root/my_schedule/OnTickMapping0",
         "props": {
           "publisher": "\${wsim#root/my_schedule#attrs.handle}",
@@ -649,7 +740,21 @@ console.log(\\"Hello from schedule!\\");
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_schedule/Policy": {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -660,13 +765,13 @@ console.log(\\"Hello from schedule!\\");
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -700,14 +805,6 @@ console.log(\\"Hello from schedule!\\");
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -716,9 +813,21 @@ console.log(\\"Hello from schedule!\\");
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -733,30 +842,17 @@ console.log(\\"Hello from schedule!\\");
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_schedule": {
           "children": {
             "OnTick0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "onTick()",
+                "title": "Tick",
               },
               "id": "OnTick0",
               "path": "root/my_schedule/OnTick0",
@@ -764,7 +860,7 @@ console.log(\\"Hello from schedule!\\");
             "OnTickMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -772,10 +868,23 @@ console.log(\\"Hello from schedule!\\");
               "id": "OnTickMapping0",
               "path": "root/my_schedule/OnTickMapping0",
             },
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_schedule/Policy",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -787,8 +896,9 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

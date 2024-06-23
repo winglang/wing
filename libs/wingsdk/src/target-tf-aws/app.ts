@@ -1,11 +1,10 @@
 import { Api } from "./api";
 import { BUCKET_PREFIX_OPTS, Bucket } from "./bucket";
 import { Counter } from "./counter";
-import { DynamodbTable } from "./dynamodb-table";
+import { Endpoint } from "./endpoint";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
-import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
@@ -15,6 +14,8 @@ import { Topic } from "./topic";
 import { Website } from "./website";
 import { DataAwsCallerIdentity } from "../.gen/providers/aws/data-aws-caller-identity";
 import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
+import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
+import { DataAwsVpc } from "../.gen/providers/aws/data-aws-vpc";
 import { Eip } from "../.gen/providers/aws/eip";
 import { InternetGateway } from "../.gen/providers/aws/internet-gateway";
 import { NatGateway } from "../.gen/providers/aws/nat-gateway";
@@ -29,6 +30,7 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   DOMAIN_FQN,
+  ENDPOINT_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -38,7 +40,7 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
-import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN, DYNAMODB_TABLE_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Domain } from "../shared-aws/domain";
 import { CdktfApp } from "../shared-tf/app";
@@ -49,29 +51,26 @@ import { TEST_RUNNER_FQN } from "../std";
  * for AWS resources.
  */
 export class App extends CdktfApp {
-  /**
-   * The test runner for this app.
-   */
-  protected readonly testRunner: TestRunner;
-
   public readonly _target = "tf-aws";
 
   private awsRegionProvider?: DataAwsRegion;
   private awsAccountIdProvider?: DataAwsCallerIdentity;
-  private _vpc?: Vpc;
+  private _vpc?: Vpc | DataAwsVpc;
   private _codeBucket?: S3Bucket;
 
   /** Subnets shared across app */
-  public subnets: { [key: string]: Subnet };
+  public subnets: { [key: string]: (Subnet | DataAwsSubnet)[] };
 
   constructor(props: AppProps) {
     super(props);
     new AwsProvider(this, "aws", {});
 
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
-    this.subnets = {};
+    this.subnets = {
+      private: [],
+      public: [],
+    };
 
-    this.synthRoots(props, this.testRunner);
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   protected typeForFqn(fqn: string): any {
@@ -121,11 +120,8 @@ export class App extends CdktfApp {
       case DOMAIN_FQN:
         return Domain;
 
-      case REACT_APP_FQN:
-        return ReactApp;
-
-      case DYNAMODB_TABLE_FQN:
-        return DynamodbTable;
+      case ENDPOINT_FQN:
+        return Endpoint;
     }
 
     return undefined;
@@ -165,16 +161,57 @@ export class App extends CdktfApp {
   /**
    * Returns the VPC for this app. Will create a new VPC if one does not exist.
    */
-  public get vpc(): Vpc {
+  public get vpc(): Vpc | DataAwsVpc {
     if (this._vpc) {
       return this._vpc;
     }
 
+    return this.parameters.value(`${this._target}/vpc`) === "existing"
+      ? this.importExistingVpc()
+      : this.createDefaultVpc();
+  }
+
+  private importExistingVpc(): DataAwsVpc {
+    const vpcId = this.parameters.value(`${this._target}/vpc_id`);
+    const privateSubnetIds = this.parameters.value(
+      `${this._target}/private_subnet_ids`
+    );
+    const publicSubnetIds = this.parameters.value(
+      `${this._target}/public_subnet_ids`
+    );
+
+    this._vpc = new DataAwsVpc(this, "ExistingVpc", {
+      id: vpcId,
+    });
+
+    for (const subnetId of privateSubnetIds) {
+      this.subnets.private.push(
+        new DataAwsSubnet(this, `PrivateSubnet${subnetId.slice(-8)}`, {
+          vpcId: vpcId,
+          id: subnetId,
+        })
+      );
+    }
+
+    if (publicSubnetIds) {
+      for (const subnetId of publicSubnetIds) {
+        this.subnets.public.push(
+          new DataAwsSubnet(this, `PublicSubnet${subnetId.slice(-8)}`, {
+            vpcId: vpcId,
+            id: subnetId,
+          })
+        );
+      }
+    }
+
+    return this._vpc;
+  }
+
+  private createDefaultVpc(): Vpc {
     const VPC_NAME_OPTS: NameOptions = {
       maxLen: 32,
       disallowedRegex: /[^a-zA-Z0-9-]/,
     };
-
     const identifier = ResourceNames.generateName(this, VPC_NAME_OPTS);
 
     // create the app wide VPC
@@ -213,6 +250,15 @@ export class App extends CdktfApp {
       availabilityZone: `${this.region}a`,
       tags: {
         Name: `${identifier}-private-subnet-1`,
+      },
+    });
+
+    const privateSubnet2 = new Subnet(this, "PrivateSubnet2", {
+      vpcId: this._vpc.id,
+      cidrBlock: "10.0.8.0/22", // 10.0.8.0 - 10.0.11.255
+      availabilityZone: `${this.region}b`,
+      tags: {
+        Name: `${identifier}-private-subnet-2`,
       },
     });
 
@@ -263,6 +309,20 @@ export class App extends CdktfApp {
       },
     });
 
+    const privateRouteTable2 = new RouteTable(this, "PrivateRouteTable2", {
+      vpcId: this._vpc.id,
+      route: [
+        {
+          // This will route all traffic to the NAT gateway
+          cidrBlock: "0.0.0.0/0",
+          natGatewayId: nat.id,
+        },
+      ],
+      tags: {
+        Name: `${identifier}-private-route-table-2`,
+      },
+    });
+
     // Associate route tables with subnets
     new RouteTableAssociation(this, "PublicRouteTableAssociation", {
       subnetId: publicSubnet.id,
@@ -274,8 +334,14 @@ export class App extends CdktfApp {
       routeTableId: privateRouteTable.id,
     });
 
-    this.subnets.public = publicSubnet;
-    this.subnets.private = privateSubnet;
+    new RouteTableAssociation(this, "PrivateRouteTableAssociation2", {
+      subnetId: privateSubnet2.id,
+      routeTableId: privateRouteTable2.id,
+    });
+
+    this.subnets.public.push(publicSubnet);
+    this.subnets.private.push(privateSubnet);
+    this.subnets.private.push(privateSubnet2);
     return this._vpc;
   }
 }

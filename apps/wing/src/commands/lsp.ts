@@ -80,20 +80,27 @@ export async function lsp() {
   };
 
   let connection = createConnection(process.stdin, process.stdout);
-  connection.onInitialize((_params: InitializeParams) => {
+  connection.onInitialize((params: InitializeParams) => {
+    // certain IDEs don't internally respect a `parameterHints` option, so we must check it ourselves
+    const signatureHelpProvider =
+      params.initializationOptions?.parameterHints ?? true
+        ? {
+            triggerCharacters: ["(", ",", ")"],
+          }
+        : undefined;
+
     const result: InitializeResult = {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Full,
         completionProvider: {
           triggerCharacters: [".", ":"],
         },
-        signatureHelpProvider: {
-          triggerCharacters: ["(", ",", ")"],
-        },
+        signatureHelpProvider,
         codeActionProvider: true,
         hoverProvider: true,
         documentSymbolProvider: true,
         definitionProvider: true,
+        renameProvider: { prepareProvider: true },
       },
     };
     return result;
@@ -130,9 +137,14 @@ export async function lsp() {
     for (const rd of raw_diagnostics) {
       if (rd.span) {
         const diagnosticUri = "file://" + rd.span.file_id;
+        let message = rd.message;
+        if (rd.hints.length > 0) {
+          message += `\n${rd.hints.map((hint) => `hint: ${hint}`).join("\n")}`;
+        }
+
         const diag = Diagnostic.create(
           Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
-          `${rd.message}\n${rd.hints.map((hint) => `hint: ${hint}`).join("\n")}`,
+          message,
           undefined,
           undefined,
           undefined,
@@ -178,14 +190,14 @@ export async function lsp() {
     }
   }
 
-  connection.onDidOpenTextDocument(async (params) => {
+  connection.onDidOpenTextDocument((params) => {
     void handle_event_and_update_diagnostics(
       "wingc_on_did_open_text_document",
       params,
       params.textDocument.uri
     );
   });
-  connection.onDidChangeTextDocument(async (params) => {
+  connection.onDidChangeTextDocument((params) => {
     void handle_event_and_update_diagnostics(
       "wingc_on_did_change_text_document",
       params,
@@ -203,6 +215,12 @@ export async function lsp() {
   });
   connection.onDocumentSymbol(async (params) => {
     return callWing("wingc_on_document_symbol", params);
+  });
+  connection.onRenameRequest(async (params) => {
+    return callWing("wingc_on_rename", params);
+  });
+  connection.onPrepareRename(async (params) => {
+    return callWing("wingc_on_prepare_rename", params);
   });
   connection.onHover(async (params) => {
     return callWing("wingc_on_hover", params);

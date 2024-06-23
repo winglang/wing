@@ -4,14 +4,17 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{CalleeKind, Expr, ExprKind, New, Symbol};
-use crate::docs::Documented;
+use crate::ast::{CalleeKind, Class, Expr, ExprKind, New, Stmt, StmtKind, Symbol};
+use crate::docs::{render_summary, Documented};
+use crate::jsify::codemaker::CodeMaker;
 use crate::lsp::sync::PROJECT_DATA;
 use crate::lsp::sync::WING_TYPES;
 
 use crate::type_check::symbol_env::SymbolEnvRef;
-use crate::type_check::{resolve_super_method, resolve_user_defined_type, Types, CLASS_INIT_NAME};
-use crate::visit::{visit_expr, visit_scope, Visit};
+use crate::type_check::{
+	resolve_super_method, resolve_user_defined_type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+};
+use crate::visit::{visit_expr, visit_scope, visit_stmt, Visit};
 use crate::wasm_util::extern_json_fn;
 
 use super::sync::check_utf8;
@@ -32,41 +35,65 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 
 			let mut scope_visitor = ScopeVisitor::new(&types, params.text_document_position_params.position);
 			scope_visitor.visit_scope(root_scope);
-			let expr = scope_visitor.call_expr?;
-			let env = scope_visitor.call_env?;
 
-			let sig_data: (
-				crate::type_check::UnsafeRef<crate::type_check::Type>,
-				&crate::ast::ArgList,
-			) = match &expr.kind {
-				ExprKind::New(new_expr) => {
-					let New { class, arg_list, .. } = new_expr;
+			let sig_data: (TypeRef, &crate::ast::ArgList) = if scope_visitor.call_stmt.is_some() {
+				let stmt = scope_visitor.call_stmt?;
+				let class = scope_visitor.class?;
 
-					let Some(t) = resolve_user_defined_type(class, &types.get_scope_env(&root_scope), 0).ok() else {
-						return None;
-					};
+				match &stmt.kind {
+					StmtKind::SuperConstructor { arg_list } => {
+						if let Some(p) = &class.parent {
+							let t = resolve_user_defined_type(&p, &types.get_scope_env(&root_scope), 0).ok()?;
+							let init_lookup = t.as_class()?.env.lookup(
+								&if t.is_preflight_class() {
+									CLASS_INIT_NAME
+								} else {
+									CLASS_INFLIGHT_INIT_NAME
+								}
+								.into(),
+								None,
+							);
 
-					let init_lookup = t.as_class()?.env.lookup(
-						&Symbol {
-							name: CLASS_INIT_NAME.into(),
-							span: Default::default(),
-						},
-						None,
-					);
-
-					(init_lookup?.as_variable()?.type_, arg_list)
+							(init_lookup?.as_variable()?.type_, arg_list)
+						} else {
+							return None;
+						}
+					}
+					_ => return None,
 				}
-				ExprKind::Call { callee, arg_list } => {
-					let t = match callee {
-						CalleeKind::Expr(expr) => types.get_expr_type(expr),
-						CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &types)
-							.ok()
-							.map_or(types.error(), |t| t.0),
-					};
+			} else {
+				let expr = scope_visitor.call_expr?;
+				let env = scope_visitor.call_env?;
+				match &expr.kind {
+					ExprKind::New(new_expr) => {
+						let New { class, arg_list, .. } = new_expr;
 
-					(t, arg_list)
+						let Some(t) = resolve_user_defined_type(class, &types.get_scope_env(&root_scope), 0).ok() else {
+							return None;
+						};
+
+						let init_lookup = t.as_class()?.env.lookup(
+							&Symbol {
+								name: CLASS_INIT_NAME.into(),
+								span: Default::default(),
+							},
+							None,
+						);
+
+						(init_lookup?.as_variable()?.type_, arg_list)
+					}
+					ExprKind::Call { callee, arg_list } => {
+						let t = match callee {
+							CalleeKind::Expr(expr) => types.get_expr_type(expr),
+							CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &types)
+								.ok()
+								.map_or(types.error(), |t| t.0),
+						};
+
+						(t, arg_list)
+					}
+					_ => return None,
 				}
-				_ => return None,
 			};
 
 			let sig = sig_data.0.as_function_sig()?;
@@ -108,11 +135,17 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			let param_text = param_data.join(", ");
 			let label = format!("({}): {}", param_text, sig.return_type);
 
+			let mut sig_docs = CodeMaker::default();
+			if let Some(d) = sig_data.0.docs() {
+				render_summary(&mut sig_docs, d);
+			}
+			let sig_docs = sig_docs.to_string();
+
 			let signature_info = SignatureInformation {
 				label,
 				documentation: Some(Documentation::MarkupContent(MarkupContent {
 					kind: MarkupKind::Markdown,
-					value: sig_data.0.render_docs(),
+					value: sig_docs.to_string(),
 				})),
 				parameters: Some(
 					sig
@@ -124,15 +157,21 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 							let p_type = p.1.typeref;
 							let structy = p_type.maybe_unwrap_option();
 							let structy = structy.as_struct();
-							let p_docs = p_type.render_docs();
-							let p_docs = if p_docs.is_empty() {
+
+							let docstring = p.1.docs.render();
+							let p_docs = if docstring.is_empty() {
 								None
 							} else {
 								Some(Documentation::MarkupContent(MarkupContent {
 									kind: MarkupKind::Markdown,
-									value: p_docs,
+									value: if sig_docs.is_empty() {
+										docstring
+									} else {
+										format!("{docstring}\n\n")
+									},
 								}))
 							};
+
 							ParameterInformation {
 								label: if last_arg && structy.is_some() {
 									ParameterLabel::Simple(format!("...{}", p.1.name))
@@ -144,7 +183,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 									if p.0 == sig.parameters.len() - 1 {
 										Some(Documentation::MarkupContent(MarkupContent {
 											kind: MarkupKind::Markdown,
-											value: p_type.render_docs(),
+											value: format!("```wing\n{}\n```\n", p_type.render_docs()),
 										}))
 									} else {
 										p_docs
@@ -177,10 +216,14 @@ pub struct ScopeVisitor<'a> {
 	pub location: Position,
 	/// The nearest expression before (or containing) the target location
 	pub call_expr: Option<&'a Expr>,
+	/// The nearest statement before (or containing) the target location - on a case we're on a super() call
+	pub call_stmt: Option<&'a Stmt>,
 	// The env of the found expression
 	pub call_env: Option<SymbolEnvRef>,
 	/// The current symbol env we're in
 	curr_env: Vec<SymbolEnvRef>,
+	/// the nearest class containing the call_stmt
+	pub class: Option<&'a Class>,
 }
 
 impl<'a> ScopeVisitor<'a> {
@@ -189,7 +232,9 @@ impl<'a> ScopeVisitor<'a> {
 			types,
 			location,
 			call_expr: None,
+			call_stmt: None,
 			call_env: None,
+			class: None,
 			curr_env: vec![],
 		}
 	}
@@ -199,7 +244,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_expr(&mut self, node: &'a Expr) {
 		visit_expr(self, node);
 
-		if self.call_expr.is_some() {
+		if self.call_expr.is_some() || self.call_stmt.is_some() {
 			return;
 		}
 
@@ -208,6 +253,26 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 				ExprKind::Call { .. } | ExprKind::New { .. } => {
 					self.call_expr = Some(node);
 					self.call_env = Some(*self.curr_env.last().unwrap());
+				}
+				_ => {}
+			}
+		}
+	}
+
+	fn visit_stmt(&mut self, node: &'a Stmt) {
+		visit_stmt(self, node);
+
+		if self.call_expr.is_some() || (self.call_stmt.is_some() && self.class.is_some()) {
+			return;
+		}
+
+		if node.span.contains_lsp_position(&self.location) {
+			match &node.kind {
+				StmtKind::SuperConstructor { .. } => {
+					self.call_stmt = Some(node);
+				}
+				StmtKind::Class(c) => {
+					self.class = Some(c);
 				}
 				_ => {}
 			}
@@ -320,6 +385,58 @@ class T {
     handler("123");
   }
 }
+"#,
+	);
+
+	test_signature!(
+		class_super,
+		r#"
+    class Base {
+      new(hello: num) {}
+    }
+    
+    class Derived extends Base {
+      new() {
+        super( );
+            //^
+      }
+    }
+    
+    new Derived();
+"#,
+	);
+
+	test_signature!(
+		inflight_class_super,
+		r#"
+    inflight class A {
+      pub sound: str;
+    
+      inflight new(sound: str) {
+        this.sound = sound;
+      }
+    }
+    
+    inflight class B extends A {
+      inflight new(sound: str) {
+        super( );
+            //^
+      }
+    }
+"#,
+	);
+
+	test_signature!(
+		empty_super,
+		r#"
+    class A {}
+    
+    class B extends A {
+      new() {
+        super( );
+            //^
+      }
+    }
 "#,
 	);
 }

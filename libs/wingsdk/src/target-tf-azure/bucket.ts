@@ -99,9 +99,20 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public get _liftMap(): core.LiftMap {
     // TODO: After fixing the tests we realized that nothing is working-https://github.com/winglang/wing/issues/5123
-    return [];
+    return {
+      // [cloud.BucketInflightMethods.DELETE]: [],
+      // [cloud.BucketInflightMethods.GET]: [],
+      // [cloud.BucketInflightMethods.GET_JSON]: [],
+      // [cloud.BucketInflightMethods.LIST]: [],
+      // [cloud.BucketInflightMethods.PUT]: [],
+      // [cloud.BucketInflightMethods.PUT_JSON]: [],
+      // [cloud.BucketInflightMethods.EXISTS]: [],
+      // [cloud.BucketInflightMethods.TRY_GET]: [],
+      // [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      // [cloud.BucketInflightMethods.TRY_DELETE]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
@@ -109,7 +120,7 @@ export class Bucket extends cloud.Bucket {
       throw new Error("buckets can only be bound by tfazure.Function for now");
     }
 
-    // TODO: investigate customized roles over builtin for finer grained access control
+    // TODO: investigate customized roles over builtin for finer grained access control: https://github.com/winglang/wing/issues/5598
     if (
       ops.includes(cloud.BucketInflightMethods.DELETE) ||
       ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
@@ -148,7 +159,11 @@ export class Bucket extends cloud.Bucket {
     opts;
     throw new NotImplementedError(
       "onCreate method isn't implemented yet on the current target.",
-      "https://github.com/winglang/wing/issues/1954"
+      {
+        issue: "https://github.com/winglang/wing/issues/1954",
+        resource: this.constructor.name,
+        operation: cloud.BucketEventType.CREATE,
+      }
     );
   }
 
@@ -160,7 +175,11 @@ export class Bucket extends cloud.Bucket {
     opts;
     throw new NotImplementedError(
       "onDelete method isn't implemented yet on the current target.",
-      "https://github.com/winglang/wing/issues/1954"
+      {
+        issue: "https://github.com/winglang/wing/issues/1954",
+        resource: this.constructor.name,
+        operation: cloud.BucketEventType.DELETE,
+      }
     );
   }
 
@@ -172,7 +191,11 @@ export class Bucket extends cloud.Bucket {
     opts;
     throw new NotImplementedError(
       "onUpdate method isn't implemented yet on the current target.",
-      "https://github.com/winglang/wing/issues/1954"
+      {
+        issue: "https://github.com/winglang/wing/issues/1954",
+        resource: this.constructor.name,
+        operation: cloud.BucketEventType.UPDATE,
+      }
     );
   }
 
@@ -184,16 +207,25 @@ export class Bucket extends cloud.Bucket {
     opts;
     throw new NotImplementedError(
       "onEvent method isn't implemented yet on the current target.",
-      "https://github.com/winglang/wing/issues/1954"
+      {
+        issue: "https://github.com/winglang/wing/issues/1954",
+        resource: this.constructor.name,
+        operation: "onEvent",
+      }
     );
   }
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "BucketClient", [
-      `process.env["${this.envName()}"]`,
-      `process.env["${this.envStorageAccountName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-azure", "shared-azure"),
+      __filename,
+      "BucketClient",
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.envStorageAccountName()}"]`,
+      ]
+    );
   }
 
   private envName(): string {

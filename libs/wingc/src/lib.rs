@@ -7,11 +7,13 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{AccessModifier, Scope, Symbol, UtilityFunctions};
+use ast::{Scope, Symbol};
 use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
+use const_format::formatcp;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
+use dtsify::extern_dtsify::{is_extern_file, ExternDTSifier};
 use file_graph::FileGraph;
 use files::Files;
 use fold::Fold;
@@ -19,19 +21,18 @@ use indexmap::IndexMap;
 use jsify::JSifier;
 
 use lifting::LiftVisitor;
-use parser::parse_wing_project;
+use parser::{is_entrypoint_file, parse_wing_project};
+use serde::Serialize;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
-use type_check::symbol_env::{StatementIdx, SymbolEnvKind};
+use type_check::symbol_env::SymbolEnvKind;
 use type_check::type_reference_transform::TypeReferenceTransformer;
-use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use valid_json_visitor::ValidJsonVisitor;
 use visit::Visit;
 use wasm_util::{ptr_to_str, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
-use crate::docs::Docs;
 use crate::parser::normalize_path;
 use std::alloc::{alloc, dealloc, Layout};
 
@@ -39,7 +40,7 @@ use std::mem;
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
-use crate::type_check::{FunctionParameter, TypeChecker, Types};
+use crate::type_check::{SymbolEnvOrNamespace, TypeChecker, Types};
 
 #[macro_use]
 #[cfg(test)]
@@ -51,6 +52,7 @@ mod comp_ctx;
 pub mod debug;
 pub mod diagnostic;
 mod docs;
+mod dtsify;
 mod file_graph;
 mod files;
 pub mod fold;
@@ -60,6 +62,7 @@ mod lifting;
 pub mod lsp;
 pub mod parser;
 pub mod struct_schema;
+mod ts_traversal;
 pub mod type_check;
 mod type_check_assert;
 mod valid_json_visitor;
@@ -111,11 +114,18 @@ const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "std.Resource";
+const WINGSDK_IRESOURCE: &'static str = "std.IResource";
+const WINGSDK_AUTOID_RESOURCE: &'static str = "std.AutoIdResource";
 const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
+const WINGSDK_NODE: &'static str = "std.Node";
+
+const WINGSDK_SIM_IRESOURCE: &'static str = "sim.IResource";
+const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_SIM_IRESOURCE);
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
+const CONSTRUCT_NODE_PROPERTY: &'static str = "node";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
@@ -123,7 +133,10 @@ const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
 pub const TRUSTED_LIBRARY_NPM_NAMESPACE: &'static str = "@winglibs";
 
-pub struct CompilerOutput {}
+#[derive(Serialize)]
+pub struct CompilerOutput {
+	imported_namespaces: Vec<String>,
+}
 
 /// Exposes an allocation function to the WASM host
 ///
@@ -199,10 +212,11 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 
 	let results = compile(project_dir, source_path, None, output_dir);
-	if results.is_err() {
-		WASM_RETURN_ERROR
+
+	if let Ok(results) = results {
+		string_to_combined_ptr(serde_json::to_string(&results).unwrap())
 	} else {
-		string_to_combined_ptr("".to_string())
+		WASM_RETURN_ERROR
 	}
 }
 
@@ -215,66 +229,8 @@ pub fn type_check(
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
 	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
-	types.set_scope_env(scope, env);
 
-	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
-	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
-	add_builtin(
-		UtilityFunctions::Log.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				name: "message".into(),
-				typeref: types.string(),
-				docs: Docs::with_summary("The message to log"),
-				variadic: false,
-			}],
-			return_type: types.void(),
-			phase: Phase::Independent,
-			js_override: Some("{console.log($args$)}".to_string()),
-			docs: Docs::with_summary("Logs a message"),
-		}),
-		scope,
-		types,
-	);
-	add_builtin(
-		UtilityFunctions::Assert.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				name: "condition".into(),
-				typeref: types.bool(),
-				docs: Docs::with_summary("The condition to assert"),
-				variadic: false,
-			}],
-			return_type: types.void(),
-			phase: Phase::Independent,
-			js_override: Some(
-				"{((cond) => {if (!cond) throw new Error(\"assertion failed: $args_text$\")})($args$)}".to_string(),
-			),
-			docs: Docs::with_summary("Asserts that a condition is true"),
-		}),
-		scope,
-		types,
-	);
-	add_builtin(
-		UtilityFunctions::UnsafeCast.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				name: "value".into(),
-				typeref: types.anything(),
-				docs: Docs::with_summary("The value to cast into a different type"),
-				variadic: false,
-			}],
-			return_type: types.anything(),
-			phase: Phase::Independent,
-			js_override: Some("$args$".to_string()),
-			docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
-		}),
-		scope,
-		types,
-	);
+	types.set_scope_env(scope, env);
 
 	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
 	tc.add_jsii_module_to_env(
@@ -284,22 +240,15 @@ pub fn type_check(
 		&Symbol::global(WINGSDK_STD_MODULE),
 		None,
 	);
+	tc.add_builtins(scope);
+	tc.patch_constructs();
+
+	// If the file is an entrypoint file, we add "this" to its symbol environment
+	if is_entrypoint_file(file_path) {
+		tc.add_this(&mut env);
+	}
 
 	tc.type_check_file_or_dir(file_path, scope);
-}
-
-// TODO: refactor this (why is scope needed?) (move to separate module?)
-fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
-	let sym = Symbol::global(name);
-	let mut scope_env = types.get_scope_env(&scope);
-	scope_env
-		.define(
-			&sym,
-			SymbolKind::make_free_variable(sym.clone(), types.add_type(typ), false, Phase::Independent),
-			AccessModifier::Private,
-			StatementIdx::Top,
-		)
-		.expect("Failed to add builtin");
 }
 
 pub fn compile(
@@ -348,7 +297,7 @@ pub fn compile(
 	// Type check all files in topological order (start with files that don't bring any other
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
-		let mut scope = asts.remove(file).expect("matching AST not found");
+		let mut scope = asts.swap_remove(file).expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,
@@ -384,7 +333,7 @@ pub fn compile(
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&mut types, &files, &file_graph, &source_path);
+	let mut jsifier = JSifier::new(&mut types, &files, &file_graph, &source_path, &out_dir);
 
 	// -- LIFTING PHASE --
 
@@ -407,7 +356,7 @@ pub fn compile(
 	asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
-			let mut reference_visitor = StructSchemaVisitor::new(&jsifier);
+			let mut reference_visitor = StructSchemaVisitor::new(&path, &jsifier);
 			reference_visitor.visit_scope(&scope);
 			(path, scope)
 		})
@@ -419,18 +368,57 @@ pub fn compile(
 		let scope = asts.get_mut(file).expect("matching AST not found");
 		jsifier.jsify(file, &scope);
 	}
+	if !found_errors() {
+		match jsifier.output_files.borrow().emit_files(out_dir) {
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
+	}
 
-	let files = jsifier.output_files.borrow_mut();
-	match files.emit_files(out_dir) {
-		Ok(()) => {}
-		Err(err) => report_diagnostic(err.into()),
+	// -- DTSIFICATION PHASE --
+	if source_path.is_dir() {
+		let preflight_file_map = jsifier.preflight_file_map.borrow();
+		let dtsifier = dtsify::DTSifier::new(&mut types, &preflight_file_map, &mut file_graph);
+		for file in &topo_sorted_files {
+			let scope = asts.get_mut(file).expect("matching AST not found");
+			dtsifier.dtsify(file, &scope);
+		}
+		if !found_errors() {
+			let output_files = dtsifier.output_files.borrow();
+			match output_files.emit_files(out_dir) {
+				Ok(()) => {}
+				Err(err) => report_diagnostic(err.into()),
+			}
+		}
+	}
+
+	// -- EXTERN DTSIFICATION PHASE --
+	for source_files_env in &types.source_file_envs {
+		if is_extern_file(source_files_env.0) {
+			let mut extern_dtsifier = ExternDTSifier::new(&types);
+			if !found_errors() {
+				match extern_dtsifier.dtsify(source_files_env.0, source_files_env.1) {
+					Ok(()) => {}
+					Err(err) => report_diagnostic(err.into()),
+				};
+			}
+		}
 	}
 
 	if found_errors() {
 		return Err(());
 	}
 
-	return Ok(CompilerOutput {});
+	let imported_namespaces = types
+		.source_file_envs
+		.iter()
+		.filter_map(|(k, v)| match v {
+			SymbolEnvOrNamespace::Namespace(_) => Some(k.to_string()),
+			_ => None,
+		})
+		.collect::<Vec<String>>();
+
+	Ok(CompilerOutput { imported_namespaces })
 }
 
 pub fn is_absolute_path(path: &Utf8Path) -> bool {

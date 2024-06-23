@@ -1,9 +1,13 @@
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import type { inferRouterInputs } from "@trpc/server";
-import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error.js";
 import Emittery from "emittery";
 import type { Express } from "express";
 
 import type { Config } from "./config.js";
+import type { LogSource } from "./consoleLogger.js";
 import { type ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
 import type { HostUtils } from "./hostUtils.js";
@@ -11,12 +15,15 @@ import type { Router } from "./router/index.js";
 import type { Trace } from "./types.js";
 import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
+import type { Analytics } from "./utils/analytics.js";
 import { createCompiler } from "./utils/compiler.js";
-import {
+import type {
+  FileLink,
   LayoutConfig,
   TestItem,
   TestsStateManager,
 } from "./utils/createRouter.js";
+import { formatTraceError } from "./utils/format-wing-error.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 
@@ -36,6 +43,7 @@ export type { Config } from "./config.js";
 export type { Router } from "./router/index.js";
 export type { HostUtils } from "./hostUtils.js";
 export type { RouterContext } from "./utils/createRouter.js";
+export type { RouterMeta } from "./utils/createRouter.js";
 export type { MapNode, MapEdge } from "./router/app.js";
 export type { InternalTestResult } from "./router/test.js";
 export type { Column } from "./router/table.js";
@@ -52,6 +60,10 @@ export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
 export { isTermsAccepted } from "./utils/terms-and-conditions.js";
 
+const enableSimUpdates =
+  process.env.WING_ENABLE_INPLACE_UPDATES === "true" ||
+  process.env.WING_ENABLE_INPLACE_UPDATES === "1";
+
 export interface CreateConsoleServerOptions {
   wingfile: string;
   log: LogInterface;
@@ -65,6 +77,12 @@ export interface CreateConsoleServerOptions {
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
   platform?: string[];
+  stateDir?: string;
+  analyticsAnonymousId?: string;
+  analytics?: Analytics;
+  requireSignIn?: () => Promise<boolean>;
+  notifySignedIn?: () => Promise<void>;
+  watchGlobs?: string[];
 }
 
 export const createConsoleServer = async ({
@@ -80,10 +98,17 @@ export const createConsoleServer = async ({
   requireAcceptTerms,
   layoutConfig,
   platform,
+  stateDir,
+  analyticsAnonymousId,
+  analytics,
+  requireSignIn,
+  notifySignedIn,
+  watchGlobs,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
     trace: Trace;
+    openFileInEditor: FileLink;
   }>();
 
   const invalidateQuery = async (query: RouteNames) => {
@@ -107,11 +132,20 @@ export const createConsoleServer = async ({
     log,
   });
 
-  const compiler = createCompiler({ wingfile, platform });
+  const compiler = createCompiler({
+    wingfile,
+    platform,
+    testing: false,
+    stateDir,
+    watchGlobs,
+  });
   let isStarting = false;
   let isStopping = false;
 
-  const simulator = createSimulator();
+  const simulator = createSimulator({
+    stateDir,
+    enableSimUpdates,
+  });
   if (onTrace) {
     simulator.on("trace", onTrace);
   }
@@ -120,6 +154,17 @@ export const createConsoleServer = async ({
       simulator.start(simfile);
       isStarting = true;
     }
+  });
+
+  const testCompiler = createCompiler({
+    wingfile,
+    platform,
+    testing: true,
+    watchGlobs,
+  });
+  const testSimulator = createSimulator({ enableSimUpdates });
+  testCompiler.on("compiled", ({ simfile }) => {
+    testSimulator.start(simfile);
   });
 
   let lastErrorMessage = "";
@@ -164,6 +209,9 @@ export const createConsoleServer = async ({
   });
   simulator.on("started", () => {
     appState = "success";
+
+    // Clear tests when simulator is restarted
+    testsStateManager().setTests([]);
     invalidateQuery(undefined);
     isStarting = false;
   });
@@ -178,30 +226,44 @@ export const createConsoleServer = async ({
     const message = `${
       trace.data.message ?? JSON.stringify(trace.data, undefined, 2)
     }`;
-    if (trace.type === "log") {
-      consoleLogger.log(message, "simulator", {
-        sourceType: trace.sourceType,
-        sourcePath: trace.sourcePath,
-      });
-    } else {
-      consoleLogger.verbose(message, "simulator", {
-        sourceType: trace.sourceType,
-        sourcePath: trace.sourcePath,
-      });
-    }
-    if (trace.data.status === "failure") {
-      let output = await prettyPrintError(trace.data.error);
 
-      // Remove ANSI color codes
-      const regex =
-        /[\u001B\u009B][#();?[]*(?:\d{1,4}(?:;\d{0,4})*)?[\d<=>A-ORZcf-nqry]/g;
+    const source = logSourceFromTraceType(trace);
 
-      output = output.replaceAll(regex, "");
+    switch (trace.level) {
+      case "verbose": {
+        consoleLogger.verbose(message, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+        break;
+      }
 
-      consoleLogger.error(output, "user", {
-        sourceType: trace.sourceType,
-        sourcePath: trace.sourcePath,
-      });
+      case "info": {
+        consoleLogger.log(message, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+        break;
+      }
+
+      case "warning": {
+        consoleLogger.warning(message, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+        break;
+      }
+
+      case "error": {
+        const output = trace.data.error
+          ? await formatTraceError(trace.data.error)
+          : message;
+
+        consoleLogger.error(output, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+      }
     }
 
     if (
@@ -221,8 +283,16 @@ export const createConsoleServer = async ({
 
   const { server, port } = await createExpressServer({
     consoleLogger,
+    testSimulatorInstance() {
+      // TODO: The test simulator instance isn't using the statedir anyway. Fix this later.
+      // const statedir = mkdtempSync(join(tmpdir(), "wing-console-test-"));
+      return testSimulator.waitForInstance();
+    },
     simulatorInstance() {
       return simulator.instance();
+    },
+    restartSimulator() {
+      return simulator.reload();
     },
     errorMessage() {
       return lastErrorMessage;
@@ -230,6 +300,7 @@ export const createConsoleServer = async ({
     emitter: emitter as Emittery<{
       invalidateQuery: string | undefined;
       trace: Trace;
+      openFileInEditor: FileLink;
     }>,
     log,
     updater,
@@ -251,6 +322,10 @@ export const createConsoleServer = async ({
       selectedNode = node;
     },
     testsStateManager,
+    analyticsAnonymousId,
+    analytics,
+    requireSignIn,
+    notifySignedIn,
   });
 
   const close = async (callback?: () => void) => {
@@ -266,6 +341,7 @@ export const createConsoleServer = async ({
         server.close(),
         compiler.stop(),
         simulator.stop(),
+        testSimulator.stop(),
       ]);
     } catch (error) {
       log.error(error);
@@ -279,3 +355,17 @@ export const createConsoleServer = async ({
     close,
   };
 };
+
+function logSourceFromTraceType(trace: Trace): LogSource {
+  switch (trace.type) {
+    case "simulator": {
+      return "simulator";
+    }
+
+    case "resource": {
+      return "compiler";
+    }
+  }
+
+  return "user";
+}

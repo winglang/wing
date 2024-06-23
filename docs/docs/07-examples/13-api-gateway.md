@@ -5,7 +5,7 @@ keywords: [Wing example]
 ---
 
 ### Creating routes
-```js playground
+```js playground example
 bring cloud;
 
 let api = new cloud.Api();
@@ -37,12 +37,12 @@ api.delete("/", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
 ```
 
 ### Path parameters 
-```js playground
+```js playground example
 bring cloud;
 
 let api = new cloud.Api();
 
-api.get("/items/{id}/{value}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+api.get("/items/:id/:value", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   let itemId = req.vars.get("id");
   let itemValue = req.vars.get("value");
   log("Received itemId:{itemId}, itemValue:{itemValue}");
@@ -55,12 +55,12 @@ api.get("/items/{id}/{value}", inflight (req: cloud.ApiRequest): cloud.ApiRespon
 ```
 
 ### Json body
-```js playground
+```js playground example
 bring cloud;
 
 let api = new cloud.Api();
 
-api.put("/items/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+api.put("/items/:id", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   let itemId = req.vars.get("id");
   if let itemBody = Json.tryParse(req.body ?? "") {    
     return cloud.ApiResponse {

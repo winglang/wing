@@ -1,6 +1,8 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -57,6 +59,8 @@ export interface TableProps {
  * @abstract
  */
 export class Table extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: ITableClient;
   /**
    * Table name
    */
@@ -94,6 +98,11 @@ export class Table extends Resource {
       throw new Error("No column is defined");
     }
     this.columns = props.columns;
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {};
   }
 
   /**

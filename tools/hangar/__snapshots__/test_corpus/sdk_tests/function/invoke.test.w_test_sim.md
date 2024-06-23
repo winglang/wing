@@ -3,13 +3,15 @@
 ## stdout.log
 ```log
 log preflight
-pass ┌ invoke.test.wsim » root/env0/test:invoke
-     │ log inside test
-     └ log inside function
-contains 2 lines
- 
- 
+[INFO] invoke | log inside test
+[INFO] invoke | log inside function
+[INFO] invoke | contains 2 lines
+[INFO] invoke | no event, no return!
+[INFO] invoke | bang!
+pass ─ invoke.test.wsim » root/env0/test:invoke
+
 Tests 1 passed (1)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

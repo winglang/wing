@@ -3,7 +3,7 @@ import { ISimulatorResource } from "./resource";
 import { TestRunnerSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator/simulator";
 import * as std from "../std";
 import { IInflightHost } from "../std";
 
@@ -17,21 +17,19 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
     super(scope, id, props);
   }
 
-  public toSimulator(): BaseResourceSchema {
+  public toSimulator(): ToSimulatorOutput {
     const tests = this.getTestFunctionHandles();
-    const schema: TestRunnerSchema = {
-      type: std.TEST_RUNNER_FQN,
-      path: this.node.path,
-      props: {
-        tests,
-      },
-      attrs: {} as any,
+    const props: TestRunnerSchema = {
+      tests,
     };
-    return schema;
+    return {
+      type: std.TEST_RUNNER_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource("test-runner", this, host);
+    bindSimulatorResource("test-runner", this, host, ops);
     super.onLift(host, ops);
   }
 

@@ -1,13 +1,15 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
+import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
-import { ApiSchema, ApiRoute } from "./schema-resources";
+import { ApiRoute, ApiSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { Function } from "../cloud";
 import * as cloud from "../cloud";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { lift } from "../core";
+import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
@@ -21,41 +23,70 @@ export class Api extends cloud.Api implements ISimulatorResource {
     { func: Function; mapping: EventMapping }
   > = {};
 
+  private readonly endpoint: cloud.Endpoint;
+  private readonly policy: Policy;
+
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
+
+    this.endpoint = new cloud.Endpoint(
+      this,
+      "Endpoint",
+      simulatorAttrToken(this, "url"),
+      { label: `Api ${this.node.path}` }
+    );
+
+    Node.of(this.endpoint).hidden = true;
+
+    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
-  public get url(): string {
-    return simulatorAttrToken(this, "url");
+  protected get _endpoint(): cloud.Endpoint {
+    return this.endpoint;
   }
 
   private createOrGetFunction(
     inflight: cloud.IApiEndpointHandler,
     props: cloud.FunctionProps,
-    path: string,
+    pathPattern: string,
     method: cloud.HttpMethod
   ): Function {
-    let handler = this.handlers[inflight._hash];
+    let handler = this.handlers[inflight._id];
 
     if (handler) {
       const routes = (handler.mapping.eventProps.subscriptionProps as any)
         .routes as ApiRoute[];
       routes.push({
-        path,
+        pathPattern,
         method,
       });
 
       return handler.func;
     }
 
+    const functionHandler = lift({ handler: inflight }).inflight(
+      async (ctx, event) => {
+        if (!event) {
+          throw new Error("invalid API request event");
+        }
+        let req = JSON.parse(event) as cloud.ApiRequest;
+        const response = await ctx.handler(req);
+        if (!response) {
+          return undefined;
+        } else {
+          return JSON.stringify(response);
+        }
+      }
+    );
+
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnRequestHandler"),
-      inflight,
+      functionHandler,
       props
     ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = `${method.toUpperCase()} ${path}`;
+    Node.of(fn).title = `${method.toUpperCase()} ${pathPattern}`;
 
     const eventMapping = new EventMapping(
       this,
@@ -66,14 +97,14 @@ export class Api extends cloud.Api implements ISimulatorResource {
         subscriptionProps: {
           routes: [
             {
-              path,
+              pathPattern,
               method,
             },
           ],
         },
       }
     );
-    this.handlers[inflight._hash] = {
+    this.handlers[inflight._id] = {
       func: fn,
       mapping: eventMapping,
     };
@@ -94,9 +125,12 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const fn = this.createOrGetFunction(inflight, props, path, method);
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ApiInflightMethods.REQUEST,
       target: fn,
-      name: `${method.toLowerCase()}()`,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
+      name: `${method.toLowerCase()} ${path}`,
     });
+    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
   }
 
   /**
@@ -211,21 +245,19 @@ export class Api extends cloud.Api implements ISimulatorResource {
     this.addEndpoint(path, cloud.HttpMethod.CONNECT, inflight, props);
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: ApiSchema = {
-      type: cloud.API_FQN,
-      path: this.node.path,
-      props: {
-        openApiSpec: this._getOpenApiSpec(),
-        corsHeaders: this._generateCorsHeaders(this.corsOptions),
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: ApiSchema = {
+      openApiSpec: this._getOpenApiSpec(),
+      corsHeaders: cloud.Api.renderCorsHeaders(this.corsOptions),
     };
-    return schema;
+    return {
+      type: cloud.API_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

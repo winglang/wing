@@ -13,7 +13,7 @@ chance you'll encounter missing pieces, rough edges, performance issues and even
 god forbid, bugs 🐞.
 
 Please don't hesitate to ping us at ${chalk.blueBright.bold.underline(
-  "https://t.winglang.io/slack"
+  "https://t.winglang.io/discord"
 )} or file an issue at
 ${chalk.blueBright.bold.underline(
   "https://github.com/winglang/wing"

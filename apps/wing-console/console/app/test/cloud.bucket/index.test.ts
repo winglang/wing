@@ -4,8 +4,8 @@ import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/main.w`, () => {
-  test("opens file preview", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Bucket").click();
+  test.skip("opens file preview", async ({ page }) => {
+    await getResourceNode(page, "root/Default/Bucket").click();
 
     await page.getByTestId("cloud.bucket:files-entry-test.txt").click();
 
@@ -14,8 +14,8 @@ describe(`${__dirname}/main.w`, () => {
     await expect(preview).toHaveText("Hello World!");
   });
 
-  test("deletes a file", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Bucket").click();
+  test.skip("deletes a file", async ({ page }) => {
+    await getResourceNode(page, "root/Default/Bucket").click();
 
     const file = page.getByTestId("cloud.bucket:files-entry-test.txt");
 

@@ -7,8 +7,6 @@ keywords: [platforms, targets, target, platform, aws, gcp, azure, sim, terraform
 
 When working with the Wing programming language, an integral part of the compilation process is the use of platform. In essence, platform specify how and where your application is deployed. They determine both the cloud environment and the provisioning engine that the code will be deployed with.
 
-## Platforms
-
 You can view the list of available builtin platform with the `wing compile --help` command. Here is an example of the output:
 
 ```sh
@@ -40,6 +38,29 @@ The order in which platforms are evaluated is important.
 
 The first platform in the list is the primary platform, it is responsible for providing the Wing compiler with the base App that will be used to determine how resources are created, as well it will also lay the ground work for what target the rest of the platforms will need to be compatible with.
 
+#### Implicit Platforms
+
+Additionally, you can use naming conventions to implicitly define platforms that should be used. These platform files can be located in the root of your project or in a library that your project uses. The naming convention is as follows:
+```sh
+wplatform.js
+*.wplatform.js
+```
+
+For example, if you have a file named `custom.wplatform.js` in the root of your project, it will automatically be added to the list of platforms to be used when compiling your application. Its also important to note that implicit platforms are always loaded after the platforms specified in the `--platform` option.
+
+The use of implicit platforms can be beneficial when writing a Wing library that requires a specific platform to be used. For example, if you are writing a library that requires a specific parameter to be passed to the platform, you can use an implicit platform to ensure that the parameter is always provided.
+
+For example, if your library structure looks like this:
+
+```sh
+my-library/
+  lib.w
+  custom.wplatform.js
+```
+
+Then the custom platform can define any required parameters that the library needs to function properly. (see [Defining Custom Platform Parameters](#defining-custom-platform-parameters) for more information on how to define custom platform parameters)
+
+
 ### Provisioning Engines
 
 Provisioning is the process of setting up and creating infrastructure, and the provisioning engine is the driver behind this deployment. Common engines used in the Wing compilation process include Terraform and AWS CDK, with support for more planned ([tracking issue](https://github.com/winglang/wing/issues/2066)).
@@ -54,13 +75,55 @@ It is worth noting that the platform names are not guaranteed to match their tar
 
 Though not currently implemented, the platform target system is designed with extensibility in mind, as it will be used to determine compatibility between different platforms ([tracking issue](https://github.com/winglang/wing/issues/1474))
 
+#### Platform Parameters
+
+Some platform targets may require additional parameters to be provided. These parameters can be used to pass configuration values to the platform. For example, the platform target `tf-aws` has an optional parameter that can be specified to determine if a new VPC 
+should be created or if an existing VPC should be used. In order to provide this parameter, you can use the `--value` option in the cli to specify a key-value pair. For example:
+
+```sh
+wing compile app.main.w --platform tf-aws --value tf-aws/vpc=existing
+```
+
+which will tell the `tf-aws` platform to use an existing VPC. However this will result in an parameter validation error, since when using an existing VPC, you will be required to add additional parameters such as `vpcId` and subnets. As shown in the error below:
+
+```sh
+Error: Parameter validation errors:
+- must have required property 'vpc_id'
+- must have required property 'private_subnet_ids'
+- must have required property 'public_subnet_ids'
+```
+
+it is possible to provide these additional parameters using the `--value` option as well. For example:
+
+```sh
+wing compile app.main.w --platform tf-aws --value tf-aws/vpc=existing --value tf-aws/vpcId=vpc-1234567890 --value tf-aws/privateSubnetId=subnet-1234567890 --value tf-aws/publicSubnetId=subnet-1234567890
+```
+
+Though this may be a bit verbose. As an alternative you can use a values file. Value files are a way to provide multiple config values in a single file. By default the compiler will look for a file named `wing` with any of the following extensions `.json`, `.yaml`, `.yml`, `.toml` Though you can also specify a custom file using the `--values` option.
+
+Here is an example of using a `wing.toml` file to provide the same parameters as above:
+
+```toml
+[ tf-aws ]
+# vpc can be set to "new" or "existing"
+vpc = "new"
+# vpc_lambda will ensure that lambda functions are created within the vpc on the private subnet
+vpc_lambda = true
+# vpc_api_gateway will ensure that the api gateway is created within the vpc on the private subnet
+vpc_api_gateway = true
+# The following parameters will be required if using "existing" vpc
+# vpc_id = "vpc-123xyz"
+# private_subnet_ids = ["subnet-123xyz"]
+# public_subnet_ids = ["subnet-123xyz"]
+```
+
 #### Target-specific code
 
 There might be times when you need to write code that is specific to a particular platform target. For example, you may want to activate a verbose logging service only when testing locally to save on cloud log storage costs.
 
 With the Wing `util` library, you can access environment variables. The `WING_TARGET` environment variable contains the current platform target as it's value, which you can use to conditionally run target-specific code. See the example below:
 
-```js playground
+```js playground example
 bring cloud;
 bring util;
 
@@ -127,7 +190,7 @@ export interface IPlatform {
 
 ### Using a custom platform
 
-When running the `wing compile` command, the `--platform` option is used to specify the platform provider(s) you wish to use. This option is accepts variadic arguments, which means you can specify any number of platforms. 
+When running the `wing compile` command, the `--platform` option is used to specify the platform provider(s) you wish to use. This option accepts variadic arguments, which means you can specify any number of platforms. 
 
 The specified platform can be a built-in platform, or a path to a custom platform. For example, if you have a custom platform named `my-platform`, you can specify it as follows:
 
@@ -235,4 +298,48 @@ exports.Platform = class MyPlatform {
 } 
 ```
 
-<!-- TODO: Create step by step guide for writing custom platforms and publishing them as node modules -->
+### Defining Custom Platform Parameters
+
+In addition to the hooks mentioned above, you can also define custom parameters for your platform. These parameters can be used to pass
+configuration to your platform and can be optional or required.
+
+Parameters are defined using the `parameters` property of the platform. These parameters are expected to be provided in the form of a 
+(JSON schema)[https://json-schema.org/]. 
+
+The following example shoes how to define three parameters `replicateAllBuckets`, `bucketsToReplicate` and `replicaRegion` for a custom platform.
+Our platform's logic will either replicate all buckets if `replicateAllBuckets` is set to `true` or replicate only the buckets specified in `bucketsToReplicate` to the region specified in `replicaRegion`.
+
+Its important to understand the relationship between these parameters, as in if `replicateAllBuckets` is set to `true` then `bucketsToReplicate` is not required.
+Whereas no matter the value of `replicateAllBuckets`, `replicaRegion` is always required.
+
+Luckily, JSON schema allows us to define these relationships and constraints like so:
+
+```js
+class MyPlatform {
+  parameters = {
+    type: "object",
+    required: ["replicateAllBuckets", "replicaRegion"],
+    properties: {
+      replicateAllBuckets: {
+        type: "boolean",
+      },
+      nameOfBucketsToReplicate: {
+        type: "array",
+        items: {
+          type: "string",
+        },
+      },
+      replicaRegion: {
+        type: "string",
+      },
+    },
+    "$comment": "Here in an allOf we can define multiple conditions that must be met for the schema to be valid",
+    allOf: [
+      {
+        if: { properties: { replicateAllBuckets: { const: false }} },
+        then: { required: ["nameOfBucketsToReplicate"] },
+      }
+    ]
+  }
+}
+```

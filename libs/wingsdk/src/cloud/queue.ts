@@ -2,12 +2,34 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Duration, IInflight, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Queue`.
  */
 export const QUEUE_FQN = fqnForType("cloud.Queue");
+
+/**
+ * Dead-letter queue default retries
+ */
+export const DEFAULT_DELIVERY_ATTEMPTS = 1;
+
+/**
+ * Dead letter queue options.
+ */
+export interface DeadLetterQueueProps {
+  /**
+   * Queue to receive messages that failed processing.
+   */
+  readonly queue: Queue;
+  /**
+   * Number of times a message will be processed before being
+   * sent to the dead-letter queue.
+   * @default 1
+   */
+  readonly maxDeliveryAttempts?: number;
+}
 
 /**
  * Options for `Queue`.
@@ -24,6 +46,12 @@ export interface QueueProps {
    * @default 1h
    */
   readonly retentionPeriod?: Duration;
+
+  /**
+   * A dead-letter queue.
+   * @default - no dead letter queue
+   */
+  readonly dlq?: DeadLetterQueueProps;
 }
 
 /**
@@ -33,6 +61,9 @@ export interface QueueProps {
  * @abstract
  */
 export class Queue extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IQueueClient;
+
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     if (new.target === Queue) {
       return Resource._newFromFactory(QUEUE_FQN, scope, id, props);
@@ -108,7 +139,10 @@ export interface IQueueClient {
  *
  * @inflight `@winglang/sdk.cloud.IQueueSetConsumerHandlerClient`
  */
-export interface IQueueSetConsumerHandler extends IInflight {}
+export interface IQueueSetConsumerHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IQueueSetConsumerHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IQueueSetConsumerHandler`.

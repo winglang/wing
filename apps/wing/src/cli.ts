@@ -1,10 +1,10 @@
-import { Command, Option } from "commander";
+import { Argument, Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
-import { loadEnvVariables } from "./env";
-import { currentPackage } from "./util";
+import { SNAPSHOTS_HELP } from "./commands/test/snapshots-help";
+import { currentPackage, projectTemplateNames, DEFAULT_PARALLEL_SIZE } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
 if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
@@ -17,24 +17,21 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 
 const DEFAULT_PLATFORM = ["sim"];
-let analyticsExportFile: Promise<string | undefined>;
+
+let analyticsExportFile: Promise<string | undefined> | undefined;
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
-  loadEnvVariables({
-    mode: subCommand,
-  });
-
   return async (...args: any[]) => {
     try {
       // paths other than the root path aren't working unless specified in the path arg
       const exitCode = await import(`./commands/${path}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
         await exportAnalyticsHook();
-        process.exit(1);
+        process.exitCode = 1;
       }
     } catch (err) {
       console.error((err as any)?.message ?? err);
-      process.exit(1);
+      process.exitCode = 1;
     }
   };
 }
@@ -147,6 +144,16 @@ async function main() {
     .argument("[entrypoint]", "program .w entrypoint")
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
+    .option(
+      "-w, --watch <globs...>",
+      "Watch additional paths for changes. Supports globs and '!' for negations."
+    )
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
+    )
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("run"));
 
@@ -167,11 +174,32 @@ async function main() {
       DEFAULT_PLATFORM
     )
     .option("-r, --rootId <rootId>", "App root id")
+    .option(
+      "-o, --output <output>",
+      'path to the output directory- default is "./target/<entrypoint>.<target>"'
+    )
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
-    .option("--values <file>", "Yaml file with Platform-specific values")
+    .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
+
+  program
+    .command("secrets")
+    .description("Manage secrets")
+    .argument("[entrypoint]", "program .w entrypoint")
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
+    )
+    .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
+    .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
+    .addOption(new Option("--list", "List required application secrets"))
+    .hook("preAction", progressHook)
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("secrets"));
 
   program
     .command("test")
@@ -185,12 +213,19 @@ async function main() {
       collectPlatformVariadic,
       DEFAULT_PLATFORM
     )
+    .addOption(
+      new Option("-s, --snapshots <mode>", "Capture snapshots of compiler output")
+        .choices(["auto", "never", "update", "deploy", "assert"])
+        .default("auto")
+    )
+    .addHelpText("afterAll", SNAPSHOTS_HELP)
     .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-f, --test-filter <regex>",
       "Run tests that match the provided regex pattern within the selected entrypoint files"
     )
     .option("--no-clean", "Keep build output")
+    .option("--no-stream", "Do not stream logs")
     .option(
       "-o, --output-file <outputFile>",
       "File name to write test results to (file extension is required, supports only .json at the moment)"
@@ -198,6 +233,14 @@ async function main() {
     .addOption(
       new Option("-R, --retry [retries]", "Number of times to retry failed tests")
         .preset(3)
+        .argParser(parseInt)
+    )
+    .addOption(
+      new Option(
+        "-p, --parallel [batch]",
+        `Number of tests to be executed on parallel- if not specified- ${DEFAULT_PARALLEL_SIZE} will run on parallel, 0 to run all at once`
+      )
+        .preset(DEFAULT_PARALLEL_SIZE)
         .argParser(parseInt)
     )
     .hook("preAction", progressHook)
@@ -210,6 +253,21 @@ async function main() {
     .addOption(new Option("-o --out-file <filename>", "Output filename"))
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("pack"));
+
+  program
+    .command("new")
+    .description("Create a new Wing project")
+    .addArgument(
+      new Argument("<template>", "Template name").choices(projectTemplateNames()).argOptional()
+    )
+    .addOption(
+      new Option("-l --language [language]", "Language")
+        .choices(["wing", "typescript"])
+        .argParser((value) => value ?? "wing")
+    )
+    .addOption(new Option("--list-templates", "List available templates"))
+    .hook("postAction", collectAnalyticsHook) // to catch the options that are added later
+    .action(runSubCommand("init"));
 
   program
     .command("docs")
@@ -234,5 +292,5 @@ function checkNodeVersion() {
 
 main().catch((err) => {
   console.error(err);
-  process.exit(1);
+  process.exitCode = 1;
 });
