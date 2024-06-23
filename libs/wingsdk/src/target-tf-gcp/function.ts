@@ -208,9 +208,8 @@ export class Function extends cloud.Function {
     lines.push("  res.set('Access-Control-Allow-Methods', 'GET, POST')");
 
     lines.push("  try {");
-    lines.push(
-      `  const result = await (${inflightClient}).handle(req.body ?? "")`
-    );
+    lines.push(`
+      const result = await (${inflightClient}).handle(req.body || undefined)`);
     lines.push(`  res.send(result);`);
     lines.push(`  } catch (error) {`);
     lines.push(`  res.status(500).send(error.message);`);
