@@ -45,9 +45,6 @@ const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_CORE_AUTOID_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_AUTOID_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
-const ENV_WING_IS_TEST: &str = "$wing_is_test";
-const OUTDIR_VAR: &str = "$outdir";
-const PLATFORMS_VAR: &str = "$platforms";
 const HELPERS_VAR: &str = "$helpers";
 const EXTERN_VAR: &str = "$extern";
 
@@ -175,18 +172,6 @@ impl<'a> JSifier<'a> {
 
 		output.line(format!("const {STDLIB} = require('{STDLIB_MODULE}');"));
 
-		if is_entrypoint {
-			output.line(format!(
-				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);",
-				PLATFORMS_VAR
-			));
-			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
-			output.line(format!(
-				"const {} = process.env.WING_IS_TEST === \"true\";",
-				ENV_WING_IS_TEST
-			));
-		}
-
 		// "std" is implicitly imported
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.line(format!("const {HELPERS_VAR} = {STDLIB}.helpers;"));
@@ -206,16 +191,17 @@ impl<'a> JSifier<'a> {
 			root_class.close("}");
 
 			output.add_code(root_class);
-			output.line(format!(
-				"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
-				PLATFORMS_VAR
-			));
-			let app_name = source_path.file_stem().unwrap();
-			output.line(format!(
-				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
-				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
-			));
-			output.line("$APP.synth();".to_string());
+			// output.line("const $PlatformManager = new $stdlib.platform.PlatformManager();");
+			// let app_name = source_path.file_stem().unwrap();
+			// output.line(format!(
+			// 	"const $APP = $PlatformManager.createApp({{ name: \"{}\", rootConstruct: {} }});",
+			// 	app_name, ROOT_CLASS
+			// ));
+			// output.line("$APP.synth();".to_string());
+
+			output.line("globalThis.$platform = $stdlib.platform.load();");
+			output.line(format!("globalThis.$platform.synth({});", ROOT_CLASS));
+
 		} else if is_directory {
 			let directory_children = self.source_file_graph.dependencies_of(source_path);
 			let preflight_file_map = self.preflight_file_map.borrow();

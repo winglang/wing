@@ -465,17 +465,6 @@ exports[`bucket with onCreate method 2`] = `
                 "id": "Code",
                 "path": "root/Default/Code",
               },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -851,17 +840,6 @@ exports[`bucket with onDelete method 2`] = `
                 "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {
@@ -1378,17 +1356,6 @@ exports[`bucket with onEvent method 2`] = `
                 "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {
@@ -2019,17 +1986,6 @@ exports[`bucket with onUpdate method 2`] = `
                 "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {

@@ -12,7 +12,7 @@ describe("compatibility spy", async () => {
   vi.spyOn(spyPlatform, "newInstance");
 
   const manager = new platform.PlatformManager({
-    platformPaths: ["sim", join(__dirname, "../lib")],
+    extensions: ["sim", join(__dirname, "../lib")],
   });
 
   vi.spyOn(manager, "loadPlatformPath").mockImplementation(
@@ -32,7 +32,7 @@ describe("compatibility spy", async () => {
     expect(app._synthHooks?.preSynthesize.length).toBe(1);
   });
 
-  const bucket = app.newAbstract(
+  const bucket = app.platform.newAbstract(
     cloud.BUCKET_FQN,
     app,
     "bucket"

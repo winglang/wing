@@ -30,7 +30,7 @@ export class TestRunner extends Resource {
    * on how many isolated environments are needed for testing.
    * @internal
    */
-  public static _createTree(app: App, Root: any) {
+  public static _createTree(app: App, Root: any, rootId: string) {
     if (app.isTestEnvironment) {
       app._testRunner = new TestRunner(app, "cloud.TestRunner");
     }
@@ -47,7 +47,7 @@ export class TestRunner extends Resource {
           new Root(app, "env" + i);
         }
       } else {
-        new Root(app, "Default");
+        new Root(app, rootId);
       }
     }
   }
@@ -68,7 +68,12 @@ export class TestRunner extends Resource {
 
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     if (new.target === TestRunner) {
-      return Resource._newFromFactory(TEST_RUNNER_FQN, scope, id, props);
+      return Node.of(scope).app.platform.newAbstract(
+        TEST_RUNNER_FQN,
+        scope,
+        id,
+        props
+      );
     }
 
     super(scope, id);

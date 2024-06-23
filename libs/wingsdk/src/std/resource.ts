@@ -149,32 +149,6 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
-   * Create an instance of this resource with the current App factory.
-   * This is commonly used in the constructor of a pseudo-abstract resource class before the super() call.
-   *
-   * @example
-   * ```ts
-   * export class MyResource extends Resource {
-   *   constructor(scope: Construct, id: string, props: MyResourceProps) {
-   *     if (new.target === MyResource) {
-   *      return MyResource._newFromFactory(MYRESOURCE_FQN, scope, id, props);
-   *     }
-   *     super(scope, id);
-   *     // ...
-   *  ```
-   *
-   * @internal
-   */
-  protected static _newFromFactory<TResource extends Resource>(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...props: any[]
-  ): TResource {
-    return App.of(scope).newAbstract(fqn, scope, id, ...props);
-  }
-
-  /**
    * Return a code snippet that can be used to reference this resource inflight.
    *
    * @internal

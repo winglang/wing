@@ -1,7 +1,9 @@
 import * as cdktf from "cdktf";
+import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { inflight } from "../../src/core";
+import { PlatformManager } from "../../src/platform";
 import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import {
@@ -13,9 +15,26 @@ import {
   treeJsonOf,
 } from "../util";
 
+class CdktfApp extends Construct {
+  constructor() {
+    super(undefined as any, undefined as any);
+  }
+}
+
 test("default topic behavior", () => {
   // GIVEN
+  const platform = PlatformManager.load("tf-aws");
+
+  class App extends Construct {
+    constructor() {
+      super(undefined as any, undefined as any);
+      new cloud.Topic(this, "Topic");
+    }
+  }
+
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  platform.synth(App);
+
   new cloud.Topic(app, "Topic");
   const output = app.synth();
 

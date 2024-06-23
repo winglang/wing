@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
-import { App } from "./app";
 import { Node } from "../std";
 import { VisualComponent } from "../ui/base";
 import { Colors, isOfTypeColors } from "../ui/colors";
@@ -198,7 +197,7 @@ function constructInfoFromConstruct(
   return undefined;
 }
 
-export function synthesizeTree(app: App, outdir: string) {
+export function synthesizeTree(app: IConstruct, outdir: string) {
   const visit = (construct: IConstruct): ConstructTreeNode => {
     const children = construct.node.children.map((c) => visit(c));
     const childrenMap = children

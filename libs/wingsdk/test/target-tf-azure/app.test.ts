@@ -3,6 +3,8 @@ import * as tfazure from "../../src/target-tf-azure";
 import { mkdtemp } from "../util";
 
 test("throw error when no location provided", () => {
+  delete process.env.AZURE_LOCATION;
+
   // GIVEN
   const props = {
     outdir: mkdtemp(),

@@ -35,7 +35,7 @@ export class Section extends VisualComponent {
     id: string,
     props: SectionProps = {}
   ): Section {
-    return App.of(scope).newAbstract(SECTION_FQN, scope, id, props);
+    return App.of(scope).platform.newAbstract(SECTION_FQN, scope, id, props);
   }
 
   private readonly label: string | undefined;

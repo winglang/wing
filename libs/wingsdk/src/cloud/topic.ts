@@ -25,7 +25,12 @@ export class Topic extends Resource {
 
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     if (new.target === Topic) {
-      return Resource._newFromFactory(TOPIC_FQN, scope, id, props);
+      return Node.of(scope).app.platform.newAbstract(
+        TOPIC_FQN,
+        scope,
+        id,
+        props
+      );
     }
 
     super(scope, id);

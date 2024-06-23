@@ -297,17 +297,6 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
-              },
               "QueueRef": {
                 "children": {
                   "AwsConsoleField": {
@@ -950,17 +939,6 @@ exports[`queue with a consumer function 3`] = `
                 "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
               },
               "Queue": {
                 "children": {

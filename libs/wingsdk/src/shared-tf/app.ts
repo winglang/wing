@@ -1,24 +1,10 @@
-import {
-  mkdirSync,
-  readdirSync,
-  renameSync,
-  rmSync,
-  existsSync,
-  writeFileSync,
-} from "fs";
-import { join, resolve } from "path";
+import { mkdirSync, readdirSync, renameSync, rmSync, existsSync } from "fs";
+import { join } from "path";
 import * as cdktf from "cdktf";
-import { Construct } from "constructs";
-import stringify from "safe-stable-stringify";
 import { CdkTfTokens } from "./tokens";
-import {
-  App,
-  AppProps,
-  Connections,
-  preSynthesizeAllConstructs,
-} from "../core";
+import { App, AppProps } from "../core";
 import { registerTokenResolver } from "../core/tokens";
-import { synthesizeTree } from "../core/tree";
+import { DEFAULT_ROOT_ID } from "../platform/platform-manager";
 
 const TERRAFORM_STACK_NAME = "root";
 
@@ -34,10 +20,6 @@ export abstract class CdktfApp extends App {
   public readonly outdir: string;
 
   private readonly cdktfApp: cdktf.App;
-  private readonly cdktfStack: cdktf.TerraformStack;
-
-  private synthed: boolean;
-  private synthedOutput: string | undefined;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -48,7 +30,7 @@ export abstract class CdktfApp extends App {
     const cdktfApp = new cdktf.App({ outdir: cdktfOutdir });
     const cdktfStack = new cdktf.TerraformStack(cdktfApp, TERRAFORM_STACK_NAME);
 
-    super(cdktfStack, props.rootId ?? "Default", props);
+    super(cdktfStack, props.rootId ?? DEFAULT_ROOT_ID, props);
 
     // TODO: allow the user to specify custom backends
     // https://github.com/winglang/wing/issues/2003
@@ -58,32 +40,10 @@ export abstract class CdktfApp extends App {
 
     this.outdir = outdir;
     registerTokenResolver(new CdkTfTokens());
-    this._synthHooks = props.synthHooks;
-
-    // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
-    // we can intercept the creation of resources and replace them with our own.
-    (cdktfApp as any).new = (
-      fqn: string,
-      ctor: any,
-      scope: Construct,
-      id: string,
-      ...args: any[]
-    ) => this.new(fqn, ctor, scope, id, ...args);
-
-    (cdktfApp as any).newAbstract = (
-      fqn: string,
-      scope: Construct,
-      id: string,
-      ...args: any[]
-    ) => this.newAbstract(fqn, scope, id, ...args);
-
-    (cdktfApp as any).typeForFqn = (fqn: string) => this.typeForFqn(fqn);
 
     this.outdir = outdir;
     this.cdktfApp = cdktfApp;
-    this.cdktfStack = cdktfStack;
     this.terraformManifestPath = join(this.outdir, "main.tf.json");
-    this.synthed = false;
   }
 
   /**
@@ -93,59 +53,21 @@ export abstract class CdktfApp extends App {
    * for unit testing.
    */
   public synth(): string {
-    if (this.synthed) {
-      return this.synthedOutput!;
-    }
-
-    // call preSynthesize() on every construct in the tree
-    preSynthesizeAllConstructs(this);
-
-    if (this._synthHooks?.preSynthesize) {
-      this._synthHooks.preSynthesize.forEach((hook) => hook(this));
-    }
-
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
     this.cdktfApp.synth();
 
     // move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
     this.moveCdktfArtifactsToOutdir();
 
+    const outfile = join(this.outdir, `main.tf.json`);
+
     // rename `outdir/cdk.tf.json` to `outdir/main.tf.json`
-    renameSync(
-      join(this.outdir, "cdk.tf.json"),
-      join(this.outdir, `main.tf.json`)
-    );
+    renameSync(join(this.outdir, "cdk.tf.json"), outfile);
 
     // delete `outdir/.tmp.cdktf.out`
     rmSync(this.cdktfApp.outdir, { recursive: true, force: true });
 
-    // write `outdir/tree.json`
-    synthesizeTree(this, this.outdir);
-
-    // write `outdir/connections.json`
-    Connections.of(this).synth(this.outdir);
-
-    // return a cleaned snapshot of the resulting Terraform manifest for unit testing
-    const tfConfig = this.cdktfStack.toTerraform();
-    const cleaned = cleanTerraformConfig(tfConfig);
-
-    if (this._synthHooks?.postSynthesize) {
-      this._synthHooks.postSynthesize.forEach((hook) => {
-        writeFileSync(
-          resolve(`${this.outdir}/main.tf.json`),
-          JSON.stringify(hook(tfConfig), null, 2)
-        );
-      });
-    }
-
-    if (this._synthHooks?.validate) {
-      this._synthHooks.validate.forEach((hook) => hook(tfConfig));
-    }
-
-    this.synthed = true;
-    this.synthedOutput = stringify(cleaned, null, 2) ?? "";
-
-    return this.synthedOutput;
+    return outfile;
   }
 
   /**
@@ -178,37 +100,37 @@ export abstract class CdktfApp extends App {
   }
 }
 
-/**
- * Return a cleaned Terraform template for unit testing
- * https://github.com/hashicorp/terraform-cdk/blob/55009f99f7503e5de2bacb1766ab51547821e6be/packages/cdktf/lib/testing/index.ts#L109
- */
-function cleanTerraformConfig(template: any): any {
-  function removeMetadata(item: any): any {
-    if (item !== null && typeof item === "object") {
-      if (Array.isArray(item)) {
-        return item.map(removeMetadata);
-      }
+// /**
+//  * Return a cleaned Terraform template for unit testing
+//  * https://github.com/hashicorp/terraform-cdk/blob/55009f99f7503e5de2bacb1766ab51547821e6be/packages/cdktf/lib/testing/index.ts#L109
+//  */
+// function cleanTerraformConfig(template: any): any {
+//   function removeMetadata(item: any): any {
+//     if (item !== null && typeof item === "object") {
+//       if (Array.isArray(item)) {
+//         return item.map(removeMetadata);
+//       }
 
-      const cleanedItem = Object.entries(item)
-        // order alphabetically
-        .sort(([a], [b]) => a.localeCompare(b))
-        .reduce(
-          (acc, [key, value]) => ({
-            ...acc,
-            [key]: removeMetadata(value),
-          }),
-          {}
-        );
+//       const cleanedItem = Object.entries(item)
+//         // order alphabetically
+//         .sort(([a], [b]) => a.localeCompare(b))
+//         .reduce(
+//           (acc, [key, value]) => ({
+//             ...acc,
+//             [key]: removeMetadata(value),
+//           }),
+//           {}
+//         );
 
-      // Remove metadata
-      delete (cleanedItem as any)["//"];
-      return cleanedItem;
-    }
+//       // Remove metadata
+//       delete (cleanedItem as any)["//"];
+//       return cleanedItem;
+//     }
 
-    return item;
-  }
-  const cleaned = removeMetadata(template);
-  cleaned.terraform = undefined;
-  cleaned.provider = undefined;
-  return cleaned;
-}
+//     return item;
+//   }
+//   const cleaned = removeMetadata(template);
+//   cleaned.terraform = undefined;
+//   cleaned.provider = undefined;
+//   return cleaned;
+// }
