@@ -24,7 +24,7 @@ import {
 import { IInflightHost } from "../std";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
-  maxLen: 32,
+  maxLen: 28,
   disallowedRegex: /[^a-z0-9]+/g,
   case: CaseConventions.LOWERCASE,
 };
