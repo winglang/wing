@@ -220,7 +220,7 @@ jobs:
             echo $COMPATIBILITY
           fi
           cd ${{ matrix.test.directory }}
-          $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} -p ${{ ((matrix.target == 'tf-azure' || matrix.target == 'tf-gcp') && 2 ) || 10 }} --retry 3 $COMPATIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
+          $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} -p ${{ (matrix.target == 'tf-azure' && 2 ) || (matrix.target == 'tf-gcp' && 5) || 10 }} --retry 3 $COMPATIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
 
       - name: Upload Artifacts
         if: ${{ env.LOCAL_BUILD ==  'true' }}
