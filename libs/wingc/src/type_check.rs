@@ -22,7 +22,9 @@ use crate::docs::Docs;
 use crate::file_graph::FileGraph;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
+use crate::visit::Visit;
 use crate::visit_context::{VisitContext, VisitorWithContext};
+use crate::visit_stmt_before_super::CheckValidBeforeSuperVisitor;
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, UTIL_CLASS_NAME,
@@ -4675,12 +4677,25 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					{
 						// Check if one of the statements before the super() call is invalid
 						for i in 0..idx {
-							if self.type_check_invalid_stmt_before_super(&ctor_body.statements[i]) {
-								self.spanned_error(
-									&ctor_body.statements[i],
-									"This command cannot be executed before calling super()",
-								);
-							}
+							self.type_check_valid_stmt_before_super(&ctor_body.statements[i]);
+							// let mut check = CheckValidBeforeSuperVisitor::new();
+							// check.visit_stmt(&ctor_body.statements[i]);
+							// println!(
+							// 	"scope {} inst_mem {} supercall {}",
+							// 	check.inner_scope_valid, check.instance_member_valid, check.supercall_valid
+							// );
+							// if !check.instance_member_valid {
+							// 	self.spanned_error(
+							// 		&ctor_body.statements[i],
+							// 		"'super()' must be called before accessing 'this' in the constructor of a derived class",
+							// 	)
+							// }
+							// if !check.supercall_valid {
+							// 	self.spanned_error(
+							// 		&ctor_body.statements[i],
+							// 		"'super()' must be called before calling a method of 'super' in the constructor of a derived class",
+							// 	)
+							// }
 						}
 					} else {
 						self.spanned_error(
@@ -4769,35 +4784,33 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		self.ctx.pop_class();
 	}
 
-	fn type_check_invalid_expr_before_super(&mut self, expr: &Expr) -> bool {
-		match &expr.kind {
-			ExprKind::Call { callee, .. } => {
-				// callee is SuperCall return true
-				if matches!(callee, CalleeKind::SuperCall(_)) {
-					return true;
-				}
-				// if callee is an expression checks if has an instante member
-				return match callee {
-					CalleeKind::Expr(e) => {
-						matches!(e.kind, ast::ExprKind::Reference(Reference::InstanceMember { .. }))
-					}
-					_ => false,
-				};
+	fn type_check_valid_stmt_before_super(&mut self, stmt: &Stmt) {
+		let mut check = CheckValidBeforeSuperVisitor::new();
+		check.visit_stmt(stmt);
+		let mut err_msg: Option<&str> = None;
+		if check.inner_scope_valid {
+			if !check.instance_member_valid {
+				err_msg = Some(
+					"'super()' must be called at the top scope before accessing 'this' in the constructor of a derived class",
+				);
 			}
-			_ => false,
-		}
-	}
-	fn type_check_invalid_stmt_before_super(&mut self, stmt: &Stmt) -> bool {
-		match &stmt.kind {
-			StmtKind::Let { initial_value, .. } => self.type_check_invalid_expr_before_super(&initial_value),
-			StmtKind::Expression(expr) => self.type_check_invalid_expr_before_super(expr),
-			StmtKind::Assignment { value, variable, .. } => {
-				if matches!(variable, Reference::InstanceMember { .. }) {
-					return true;
-				}
-				return self.type_check_invalid_expr_before_super(value);
+			if !check.supercall_valid {
+				err_msg = Some(
+					"'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class",
+				);
 			}
-			_ => false,
+		} else {
+			if !check.instance_member_valid {
+				err_msg = Some("'super()' must be called before accessing 'this' in the constructor of a derived class");
+			}
+			if !check.supercall_valid {
+				err_msg =
+					Some("'super()' must be called before calling a method of 'super' in the constructor of a derived class")
+			}
+
+			if let Some(message) = err_msg {
+				self.spanned_error(stmt, message)
+			}
 		}
 	}
 

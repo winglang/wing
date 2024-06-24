@@ -68,6 +68,7 @@ mod type_check_assert;
 mod valid_json_visitor;
 pub mod visit;
 mod visit_context;
+mod visit_stmt_before_super;
 mod visit_types;
 mod wasm_util;
 
