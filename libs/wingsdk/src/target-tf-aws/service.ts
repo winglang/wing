@@ -48,6 +48,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     // This forces the lazy loading of the properties (TODO: find a better way to do this)
     // app.ecrAuth;
     app.dockerProvider;
+    app.vpc;
 
     let image = new Image(this, "DockerImage", {
       name: `${app.ecr.repositoryUrl}:${this.assetName}`,
@@ -58,11 +59,9 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       },
     });
 
-    const registryImage = new RegistryImage(this, "RegistryImage", {
+    new RegistryImage(this, "RegistryImage", {
       name: image.name,
     });
-
-    registryImage;
 
     let executionRole = new IamRole(this, "ExecutionRole", {
       assumeRolePolicy: JSON.stringify({
@@ -90,7 +89,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
                   "logs:PutLogEvents",
                   "logs:CreateLogGroup",
                 ],
-                Resource: "*",
+                Resource: `arn:aws:ecr:::repository/${image.name}`,
               },
               {
                 Effect: "Allow",
@@ -99,7 +98,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
                   "ecr:GetDownloadUrlForLayer",
                   "ecr:GetAuthorizationToken",
                 ],
-                Resource: "*",
+                Resource: `arn:aws:ecr:::repository/${image.name}`, 
               },
             ],
           }),
