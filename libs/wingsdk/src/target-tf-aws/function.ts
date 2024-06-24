@@ -159,7 +159,7 @@ export class Function extends cloud.Function implements IAwsFunction {
               ],
             });
           }
-          
+
           return JSON.stringify({
             Version: "2012-10-17",
             Statement: this.policyStatements,

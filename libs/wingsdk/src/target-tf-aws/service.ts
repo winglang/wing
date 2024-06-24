@@ -24,7 +24,7 @@ import { IInflightHost } from "../std";
 
 /**
  * Represents an ECS service in AWS.
- * 
+ *
  * Converts the service handler into a DockerFile that is then built and published to an ECR repository,
  * on deployment. The service is then run as a Fargate task in an ECS cluster.
  */
@@ -103,7 +103,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
                   "ecr:GetDownloadUrlForLayer",
                   "ecr:GetAuthorizationToken",
                 ],
-                Resource: `arn:aws:ecr:::repository/${image.name}`, 
+                Resource: `arn:aws:ecr:::repository/${image.name}`,
               },
             ],
           }),
