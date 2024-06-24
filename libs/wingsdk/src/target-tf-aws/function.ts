@@ -146,23 +146,23 @@ export class Function extends cloud.Function implements IAwsFunction {
         produce: () => {
           this.policyStatements = this.policyStatements ?? [];
 
-          if (this.policyStatements.length !== 0) {
+          if (this.policyStatements.length === 0) {
+            // policy must contain at least one statement, so include a no-op statement
             return JSON.stringify({
               Version: "2012-10-17",
-              Statement: this.policyStatements,
+              Statement: [
+                {
+                  Effect: "Allow",
+                  Action: "none:null",
+                  Resource: "*",
+                },
+              ],
             });
           }
-
-          // policy must contain at least one statement, so include a no-op statement
+          
           return JSON.stringify({
             Version: "2012-10-17",
-            Statement: [
-              {
-                Effect: "Allow",
-                Action: "none:null",
-                Resource: "*",
-              },
-            ],
+            Statement: this.policyStatements,
           });
         },
       }),

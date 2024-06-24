@@ -22,6 +22,12 @@ import {
 } from "../shared-aws";
 import { IInflightHost } from "../std";
 
+/**
+ * Represents an ECS service in AWS.
+ * 
+ * Converts the service handler into a DockerFile that is then built and published to an ECR repository,
+ * on deployment. The service is then run as a Fargate task in an ECS cluster.
+ */
 export class Service extends cloud.Service implements IAwsInflightHost {
   private workdir: string;
   private wrapperEntrypoint: string;
@@ -43,14 +49,13 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     this.workdir = App.of(this).workdir;
     this.wrapperEntrypoint = join(this.workdir, `${this.assetName}_wrapper.js`);
     this.dockerFileName = `Dockerfile_${this.assetName}`;
-    let app = App.of(this) as App;
+    const app = App.of(this) as App;
 
-    // This forces the lazy loading of the properties (TODO: find a better way to do this)
-    // app.ecrAuth;
+    // Make sure the app has a docker provider and VPC
     app.dockerProvider;
     app.vpc;
 
-    let image = new Image(this, "DockerImage", {
+    const image = new Image(this, "DockerImage", {
       name: `${app.ecr.repositoryUrl}:${this.assetName}`,
       buildAttribute: {
         context: ".wing",
@@ -63,7 +68,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       name: image.name,
     });
 
-    let executionRole = new IamRole(this, "ExecutionRole", {
+    const executionRole = new IamRole(this, "ExecutionRole", {
       assumeRolePolicy: JSON.stringify({
         Version: "2012-10-17",
         Statement: [
@@ -106,7 +111,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       ],
     });
 
-    let taskRole = new IamRole(this, "TaskRole", {
+    const taskRole = new IamRole(this, "TaskRole", {
       assumeRolePolicy: JSON.stringify({
         Version: "2012-10-17",
         Statement: [
@@ -149,12 +154,12 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       ],
     });
 
-    let logGroup = new CloudwatchLogGroup(this, "LogGroup", {
+    const logGroup = new CloudwatchLogGroup(this, "LogGroup", {
       name: `/ecs/${this.assetName}`,
       retentionInDays: 7,
     });
 
-    let taskDef = new EcsTaskDefinition(this, "Task", {
+    const taskDef = new EcsTaskDefinition(this, "Task", {
       family: this.assetName,
       executionRoleArn: executionRole.arn,
       taskRoleArn: taskRole.arn,
@@ -187,9 +192,9 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       cpu: "256",
     });
 
-    let subnetIds = app.subnets.private.map((subnet) => subnet.id);
+    const subnetIds = app.subnets.private.map((subnet) => subnet.id);
 
-    let sg = new SecurityGroup(this, "SecurityGroup", {
+    const sg = new SecurityGroup(this, "SecurityGroup", {
       vpcId: app.vpc.id,
       egress: [
         {
@@ -247,7 +252,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
   /** @internal */
   public _preSynthesize(): void {
     super._preSynthesize();
-    let wrapper = `
+    const wrapper = `
 const service = require("${resolve(this.entrypoint)}");
 let isShuttingDown = false;
 
@@ -278,10 +283,10 @@ process.on('SIGINT', handleShutdown);
 })();
     `;
     writeFileSync(this.wrapperEntrypoint, wrapper);
-    let bundle = createBundle(this.wrapperEntrypoint);
+    const bundle = createBundle(this.wrapperEntrypoint);
     bundle;
 
-    let dockerFile = `FROM --platform=linux/amd64 node:20-slim
+    const dockerFile = `FROM --platform=linux/amd64 node:20-slim
     WORKDIR /app
     COPY ./${this.assetName}_wrapper.js.bundle .
     CMD [ "node", "index.cjs" ]`;
@@ -294,7 +299,7 @@ process.on('SIGINT', handleShutdown);
       throw new Error("Host is not an AWS inflight host");
     }
 
-    let clusterArn = (App.of(this) as App).ecsCluster.arn;
+    const clusterArn = (App.of(this) as App).ecsCluster.arn;
     if (
       ops.includes(cloud.ServiceInflightMethods.START) ||
       ops.includes(cloud.ServiceInflightMethods.STOP)
