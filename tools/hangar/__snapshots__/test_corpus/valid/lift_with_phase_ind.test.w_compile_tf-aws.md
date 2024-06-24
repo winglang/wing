@@ -33,8 +33,7 @@ module.exports = function({ $ar, $math_Util }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },

@@ -29,17 +29,18 @@ index 75fbc9583eb98336f94f3245cc656ba786021472..aee348079ebcffa71d12a412fe32766a
          }
          const fqn = this._getFQN(type, declaration, purpose, isThisType);
          if (fqn == null) {
-diff --git a/lib/compiler.js b/lib/compiler.js
-index 242bb9f2049ee58814e641109afa3e0942ae5fe2..447237ff4ca734a95b62e260ec8cfdfc8b10a37a 100644
---- a/lib/compiler.js
-+++ b/lib/compiler.js
-@@ -18,7 +18,8 @@ const BASE_COMPILER_OPTIONS = {
+diff --git a/lib/tsconfig/compiler-options.js b/lib/tsconfig/compiler-options.js
+index e97343ab6ec9cfccda4b5a0c3780796755eb2b0a..2c1eaad9288c2951cba6410fd344647ebce884b5 100644
+--- a/lib/tsconfig/compiler-options.js
++++ b/lib/tsconfig/compiler-options.js
+@@ -8,8 +8,9 @@ exports.BASE_COMPILER_OPTIONS = {
      declaration: true,
      experimentalDecorators: true,
      incremental: true,
 -    lib: ['lib.es2020.d.ts'],
 +    lib: ['lib.es2020.d.ts','lib.dom.d.ts'],
-+    esModuleInterop: true,
      module: ts.ModuleKind.CommonJS,
++    esModuleInterop: true,
      noEmitOnError: true,
      noFallthroughCasesInSwitch: true,
+     noImplicitAny: true,
