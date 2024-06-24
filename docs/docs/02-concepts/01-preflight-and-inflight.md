@@ -213,7 +213,7 @@ inflight () => {
       this.age = age;
     }
 
-    pub inflight greet() {
+    pub greet() {
       log("Hello, {this.name}!");
     }
   }
