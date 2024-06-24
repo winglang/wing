@@ -52,7 +52,13 @@ export class Service extends Resource implements IInflightHost {
    */
   protected readonly handler!: IServiceHandler;
 
-  private readonly _env: Record<string, string> = {};
+  /**
+   * The name of the asset.
+   */
+  protected readonly assetName!: string;
+
+  /** @internal */
+  protected readonly _env: Record<string, string> = {};
 
   constructor(
     scope: Construct,
@@ -73,7 +79,7 @@ export class Service extends Resource implements IInflightHost {
     Node.of(this).title = "Service";
     Node.of(this).description = "A cloud service";
 
-    const assetName = ResourceNames.generateName(this, {
+    this.assetName = ResourceNames.generateName(this, {
       disallowedRegex: /[><:"/\\|?*\s]/g, // avoid characters that may cause path issues
       case: CaseConventions.LOWERCASE,
       sep: "_",
@@ -81,7 +87,7 @@ export class Service extends Resource implements IInflightHost {
 
     const workdir = App.of(this).workdir;
     mkdirSync(workdir, { recursive: true });
-    const entrypoint = join(workdir, `${assetName}.cjs`);
+    const entrypoint = join(workdir, `${this.assetName}.cjs`);
     this.entrypoint = entrypoint;
 
     if (process.env.WING_TARGET) {
