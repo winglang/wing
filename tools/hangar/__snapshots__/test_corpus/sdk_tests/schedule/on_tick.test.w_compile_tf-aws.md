@@ -201,6 +201,9 @@
         },
         "function_name": "OnTick0-c82d2f1d",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.from_cron_OnTick0_IamRole_70AA37F2.arn}",
@@ -233,6 +236,9 @@
         },
         "function_name": "OnTick0-c82ff92a",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.from_rate_OnTick0_IamRole_A7066F91.arn}",

@@ -211,6 +211,9 @@ module.exports = function({  }) {
         },
         "function_name": "func1-c899062d",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.func1_IamRole_31EC29DC.arn}",

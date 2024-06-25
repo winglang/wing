@@ -241,6 +241,9 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_HttpMethod,
         },
         "function_name": "get_users0-c82bfbcd",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_users0_IamRole_950ACE40.arn}",

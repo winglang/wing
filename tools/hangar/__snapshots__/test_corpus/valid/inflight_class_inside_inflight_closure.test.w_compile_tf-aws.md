@@ -178,6 +178,9 @@ module.exports = function({  }) {
         },
         "function_name": "Function-c8565504",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.PreflightClass_Function_IamRole_A6FFCAE6.arn}",

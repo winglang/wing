@@ -144,6 +144,9 @@
         },
         "function_name": "env-fn-c8a226dd",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.envfn_IamRole_88E952E6.arn}",
@@ -176,6 +179,9 @@
         },
         "function_name": "memory-fn-c844bdf7",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 128,
         "publish": true,
         "role": "${aws_iam_role.memoryfn_IamRole_87751238.arn}",

@@ -167,6 +167,9 @@
         },
         "function_name": "put_path_-id_nn_-user0-c8982eb3",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_put_path_id_nn_user0_IamRole_1C9DE02F.arn}",

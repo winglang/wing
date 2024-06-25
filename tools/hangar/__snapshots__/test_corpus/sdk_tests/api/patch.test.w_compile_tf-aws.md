@@ -167,6 +167,9 @@
         },
         "function_name": "patch_path_-id0-c8d36c2c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_patch_path_id0_IamRole_E174D2FC.arn}",

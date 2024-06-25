@@ -354,6 +354,9 @@ module.exports = function({  }) {
         },
         "function_name": "get_endpoint10-c8e91512",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.A_Api_get_endpoint10_IamRole_656A5EFF.arn}",
@@ -386,6 +389,9 @@ module.exports = function({  }) {
         },
         "function_name": "get_hello_world0-c8808650",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_hello_world0_IamRole_BE6EA0B6.arn}",

@@ -299,6 +299,9 @@ module.exports = function({  }) {
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -330,6 +333,9 @@ module.exports = function({  }) {
         },
         "function_name": "fn2-c892a4c6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.fn2_IamRole_DE8D96D2.arn}",
@@ -361,6 +367,9 @@ module.exports = function({  }) {
         },
         "function_name": "fn3-c856234e",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.fn3_IamRole_B0C65815.arn}",
