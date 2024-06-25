@@ -10,7 +10,7 @@
     "@winglibs/testfixture": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.11.0",
     "winglang": "workspace:^"
   },
   "volta": {

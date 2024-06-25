@@ -20,15 +20,15 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "aws-cdk-lib": "^2.124.0",
-    "constructs": "^10.3",
-    "safe-stable-stringify": "^2.4.3",
-    "@winglang/sdk": "workspace:^"
+    "@winglang/sdk": "workspace:^",
+    "aws-cdk-lib": "^2.147.0",
+    "constructs": "^10.3.0",
+    "safe-stable-stringify": "^2.4.3"
   },
   "devDependencies": {
     "bump-pack": "workspace:^",
-    "typescript": "^5.3.3",
-    "tsup": "^8.0.2",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.2",
     "vitest": "^1.6.0"
   },
   "scripts": {
