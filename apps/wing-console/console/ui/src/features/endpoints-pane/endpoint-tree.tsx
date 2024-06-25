@@ -115,7 +115,7 @@ export const EndpointTree = ({
                           <>
                             {endpoint.exposeStatus === "disconnected" && (
                               <div
-                                className={classNames("size-4", theme.text1)}
+                                className={classNames("size-4", theme.text2)}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -165,36 +165,36 @@ export const EndpointTree = ({
                         )}
                       >
                         <span className="truncate">{endpoint.label}</span>
-                        <ArrowTopRightOnSquareIcon className="size-4 shrink-0 hidden group-hover:block" />
+                        <ArrowTopRightOnSquareIcon
+                          className={classNames(
+                            "size-4 shrink-0 hidden",
+                            !isLoading(endpoint) && "group-hover:block",
+                          )}
+                        />
                       </a>
                     }
                     secondaryLabel={
-                      <>
-                        {(endpoint.exposeStatus === "disconnected" ||
-                          endpoint.exposeStatus === "connecting") && (
-                          <Button
-                            small
-                            transparent
-                            disabled={isLoading(endpoint)}
-                            onClick={() => {
-                              exposeEndpoint(endpoint.id);
-                            }}
-                          >
-                            Expose
-                          </Button>
-                        )}
+                      <Button
+                        small
+                        disabled={isLoading(endpoint)}
+                        className="min-w-[5rem] justify-center"
+                        onClick={() => {
+                          if (endpoint.exposeStatus === "connected") {
+                            onHideEndpoint(endpoint.id);
+                          } else {
+                            exposeEndpoint(endpoint.id);
+                          }
+                        }}
+                      >
                         {endpoint.exposeStatus === "connected" && (
-                          <Button
-                            small
-                            disabled={isLoading(endpoint)}
-                            onClick={() => {
-                              onHideEndpoint(endpoint.id);
-                            }}
-                          >
-                            Close
-                          </Button>
+                          <>
+                            {isLoading(endpoint) && "Closing"}
+                            {!isLoading(endpoint) && "Close"}
+                          </>
                         )}
-                      </>
+                        {endpoint.exposeStatus === "disconnected" && "Expose"}
+                        {endpoint.exposeStatus === "connecting" && "Exposing"}
+                      </Button>
                     }
                   />
                 ))}
