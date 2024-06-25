@@ -4678,24 +4678,6 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 						// Check if one of the statements before the super() call is invalid
 						for i in 0..idx {
 							self.type_check_valid_stmt_before_super(&ctor_body.statements[i]);
-							// let mut check = CheckValidBeforeSuperVisitor::new();
-							// check.visit_stmt(&ctor_body.statements[i]);
-							// println!(
-							// 	"scope {} inst_mem {} supercall {}",
-							// 	check.inner_scope_valid, check.instance_member_valid, check.supercall_valid
-							// );
-							// if !check.instance_member_valid {
-							// 	self.spanned_error(
-							// 		&ctor_body.statements[i],
-							// 		"'super()' must be called before accessing 'this' in the constructor of a derived class",
-							// 	)
-							// }
-							// if !check.supercall_valid {
-							// 	self.spanned_error(
-							// 		&ctor_body.statements[i],
-							// 		"'super()' must be called before calling a method of 'super' in the constructor of a derived class",
-							// 	)
-							// }
 						}
 					} else {
 						self.spanned_error(
