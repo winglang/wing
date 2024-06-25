@@ -4787,29 +4787,32 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 	fn type_check_valid_stmt_before_super(&mut self, stmt: &Stmt) {
 		let mut check = CheckValidBeforeSuperVisitor::new();
 		check.visit_stmt(stmt);
-		let mut err_msg: Option<&str> = None;
+
 		if check.inner_scope_valid {
 			if !check.instance_member_valid {
-				err_msg = Some(
+				self.spanned_error(
+					stmt,
 					"'super()' must be called at the top scope before accessing 'this' in the constructor of a derived class",
 				);
 			}
 			if !check.supercall_valid {
-				err_msg = Some(
+				self.spanned_error(
+					stmt,
 					"'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class",
 				);
 			}
 		} else {
 			if !check.instance_member_valid {
-				err_msg = Some("'super()' must be called before accessing 'this' in the constructor of a derived class");
+				self.spanned_error(
+					stmt,
+					"'super()' must be called before accessing 'this' in the constructor of a derived class",
+				);
 			}
 			if !check.supercall_valid {
-				err_msg =
-					Some("'super()' must be called before calling a method of 'super' in the constructor of a derived class")
-			}
-
-			if let Some(message) = err_msg {
-				self.spanned_error(stmt, message)
+				self.spanned_error(
+					stmt,
+					"'super()' must be called before calling a method of 'super' in the constructor of a derived class",
+				);
 			}
 		}
 	}

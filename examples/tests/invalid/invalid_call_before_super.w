@@ -28,27 +28,34 @@ class C extends A {
   new(x: bool) {
     let var v = 0;
     for z in 0..super.get_five() {
-      v+=1;
+      v += 1;
     }
 //  ^ 'super()' must be called before calling a method of 'super' in the constructor of a derived class
 
     if v == 0 {
       for z in 0..super.get_five() {
-        v+=1;
+        v += 1;
       }
     }
-//  ^'super()' must be called at the top scope before accessing 'this' or 'super' in the constructor of a derived class
+//  ^ 'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class
 
     if x {
       v = super.get_five();
     }
-//  ^ 'super()' must be called at the top scope before accessing 'this' or 'super' in the constructor of a derived class
+//  ^ 'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class
+
+    if !x {
+      v = this.get_six();
+    }
+//  ^'super()' must be called at the top scope before accessing 'this' in the constructor of a derived class
 
     while v < 100 {
       v += super.get_five();
     }
-//  ^'super()' must be called at the top scope before accessing 'this' or 'super' in the constructor of a derived class
+//  ^ 'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class
 
    super(v);
   }
+
+  get_six(): num { return 6; }
 }

@@ -41,9 +41,7 @@ impl<'ast> Visit<'ast> for CheckValidBeforeSuperVisitor {
 				self.visit_expr(left);
 				self.visit_expr(right);
 			}
-			ExprKind::Unary { exp, .. } => {
-				self.visit_expr(exp);
-			}
+			ExprKind::Unary { exp, .. } => self.visit_expr(exp),
 			_ => self.supercall_valid = true,
 		}
 	}
@@ -56,9 +54,7 @@ impl<'ast> Visit<'ast> for CheckValidBeforeSuperVisitor {
 				};
 			}
 			Reference::InstanceMember { object, .. } => match &object.kind {
-				ExprKind::Reference(r) => {
-					self.visit_reference(r);
-				}
+				ExprKind::Reference(r) => self.visit_reference(r),
 				_ => self.instance_member_valid = true,
 			},
 			_ => self.instance_member_valid = true,
@@ -69,29 +65,9 @@ impl<'ast> Visit<'ast> for CheckValidBeforeSuperVisitor {
 		match &node.kind {
 			StmtKind::Let { initial_value, .. } => self.visit_expr(initial_value),
 			StmtKind::ForLoop { iterable, .. } => self.visit_expr(iterable),
-			StmtKind::If {
-				condition,
-				statements,
-				elif_statements,
-				else_statements,
-			} => {
-				self.visit_expr(condition);
-				self.visit_scope(statements);
-				for elif in elif_statements {
-					self.visit_expr(&elif.condition);
-					self.visit_scope(&elif.statements);
-				}
-				if let Some(statements) = else_statements {
-					self.visit_scope(statements);
-				}
-			}
 			StmtKind::While { condition, statements } => {
 				self.visit_expr(condition);
 				self.visit_scope(statements);
-			}
-			StmtKind::Assignment { variable, value, .. } => {
-				self.visit_reference(variable);
-				self.visit_expr(value);
 			}
 			StmtKind::IfLet(IfLet {
 				value,
@@ -117,6 +93,28 @@ impl<'ast> Visit<'ast> for CheckValidBeforeSuperVisitor {
 						self.visit_scope(statements);
 					}
 				}
+			}
+			StmtKind::If {
+				condition,
+				statements,
+				elif_statements,
+				else_statements,
+			} => {
+				self.visit_expr(condition);
+				self.visit_scope(statements);
+				for elif in elif_statements {
+					self.visit_expr(&elif.condition);
+					self.visit_scope(&elif.statements);
+				}
+				if let Some(statements) = else_statements {
+					self.visit_scope(statements);
+				}
+			}
+			StmtKind::Throw(e) => self.visit_expr(e),
+			StmtKind::Expression(e) => self.visit_expr(e),
+			StmtKind::Assignment { variable, value, .. } => {
+				self.visit_reference(variable);
+				self.visit_expr(value);
 			}
 			_ => {}
 		}

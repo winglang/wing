@@ -2979,12 +2979,64 @@ exports[`invalid_call_before_super.w 1`] = `
    |     ^^^^^^^^^^^
 
 
+error: 'super()' must be called before accessing 'this' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:17:5
+   |
+17 |     this.hello();
+   |     ^^^^^^^^^^^^^
+
+
+error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:19:5
+   |
+19 |     super.get_a();
+   |     ^^^^^^^^^^^^^^
+
+
 error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
    --> ../../../examples/tests/invalid/invalid_call_before_super.w:30:5
    |  
 30 | /     for z in 0..super.get_five() {
-31 | |       v+=1;
+31 | |       v += 1;
 32 | |     }
+   | \\-----^
+
+
+error: 'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:35:5
+   |  
+35 | /     if v == 0 {
+36 | |       for z in 0..super.get_five() {
+37 | |         v += 1;
+38 | |       }
+39 | |     }
+   | \\-----^
+
+
+error: 'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:42:5
+   |  
+42 | /     if x {
+43 | |       v = super.get_five();
+44 | |     }
+   | \\-----^
+
+
+error: 'super()' must be called at the top scope before accessing 'this' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:47:5
+   |  
+47 | /     if !x {
+48 | |       v = this.get_six();
+49 | |     }
+   | \\-----^
+
+
+error: 'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:52:5
+   |  
+52 | /     while v < 100 {
+53 | |       v += super.get_five();
+54 | |     }
    | \\-----^
 
 
