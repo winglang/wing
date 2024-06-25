@@ -180,7 +180,7 @@ export const EndpointTree = ({
                               exposeEndpoint(endpoint.id);
                             }}
                           >
-                            Open
+                            Expose
                           </Button>
                         )}
                         {endpoint.exposeStatus === "connected" && (
