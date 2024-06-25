@@ -28,7 +28,6 @@ export interface Simulator {
 
 export interface CreateSimulatorProps {
   stateDir?: string;
-  enableSimUpdates?: boolean;
 }
 
 const stopSilently = async (simulator: simulator.Simulator) => {
@@ -53,16 +52,10 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
     if (!instance) {
       return true;
     }
-    if (props?.enableSimUpdates) {
-      await events.emit("starting", { instance });
-      await instance.update(simfile);
-      await events.emit("started");
-      return false;
-    } else {
-      await events.emit("stopping");
-      await stopSilently(instance);
-      return true;
-    }
+    await events.emit("starting", { instance });
+    await instance.update(simfile);
+    await events.emit("started");
+    return false;
   };
   const start = async (simfile: string) => {
     try {
