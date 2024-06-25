@@ -1,6 +1,7 @@
 import type { ElkExtendedEdge, ElkNode } from "elkjs";
 import {
   memo,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -31,6 +32,7 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
   (props) => {
     const { elk, edges, edgeComponent, ...divProps } = props;
 
+    const [initialZoomToFit, setInititalZoomToFit] = useState<boolean>(true);
     const [graph, setGraph] = useState<ElkNode>();
 
     const zoomPaneRef = useRef<ZoomPaneRef>(null);
@@ -46,9 +48,16 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
       };
     }, [graph]);
 
+    // Zoom to fit the first time
     useEffect(() => {
-      zoomPaneRef.current?.zoomToFit();
-    }, [graph]);
+      if (!graph) {
+        return;
+      }
+      if (initialZoomToFit) {
+        zoomPaneRef.current?.zoomToFit();
+        setInititalZoomToFit(false);
+      }
+    }, [graph, initialZoomToFit]);
 
     const mapBackgroundRef = useRef<HTMLDivElement>(null);
 
