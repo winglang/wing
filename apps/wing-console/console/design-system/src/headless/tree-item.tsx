@@ -123,7 +123,9 @@ export const TreeItem = ({
 
   useEffect(() => {
     if (selected) {
-      ref.current?.scrollIntoView();
+      ref.current?.scrollIntoView({
+        block: "nearest",
+      });
     }
   }, [selected, ref]);
 
