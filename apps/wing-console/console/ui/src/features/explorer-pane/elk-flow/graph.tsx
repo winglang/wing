@@ -32,7 +32,7 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
   (props) => {
     const { elk, edges, edgeComponent, ...divProps } = props;
 
-    const [initialZoomToFit, setInititalZoomToFit] = useState<boolean>(true);
+    const [previousGraph, setPreviousGraph] = useState<ElkNode>();
     const [graph, setGraph] = useState<ElkNode>();
 
     const zoomPaneRef = useRef<ZoomPaneRef>(null);
@@ -48,16 +48,32 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
       };
     }, [graph]);
 
+    const countChildren = useCallback((node: ElkNode): number => {
+      if (!node.children) {
+        return 0;
+      }
+      return node.children.reduce(
+        (accumulator, child) => accumulator + countChildren(child),
+        1,
+      );
+    }, []);
+
     // Zoom to fit the first time
     useEffect(() => {
       if (!graph) {
         return;
       }
-      if (initialZoomToFit) {
+      if (!previousGraph) {
         zoomPaneRef.current?.zoomToFit();
-        setInititalZoomToFit(false);
+        setPreviousGraph(graph);
+        return;
       }
-    }, [graph, initialZoomToFit]);
+
+      if (countChildren(graph) !== countChildren(previousGraph)) {
+        zoomPaneRef.current?.zoomToFit();
+        setPreviousGraph(graph);
+      }
+    }, [graph, previousGraph, countChildren]);
 
     const mapBackgroundRef = useRef<HTMLDivElement>(null);
 
