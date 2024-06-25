@@ -8,7 +8,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3"
+      "version": "0.20.7"
     },
     "outputs": {
     }
