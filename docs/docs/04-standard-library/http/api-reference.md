@@ -22,6 +22,7 @@ The Http class is used for calling different HTTP methods and requesting and sen
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.http.Util.connect">connect</a></code> | Executes a CONNECT request to a specified URL and provides a formatted response. |
 | <code><a href="#@winglang/sdk.http.Util.delete">delete</a></code> | Executes a DELETE request to a specified URL and provides a formatted response. |
 | <code><a href="#@winglang/sdk.http.Util.fetch">fetch</a></code> | Executes a HTTP request to a specified URL and provides a formatted response. |
 | <code><a href="#@winglang/sdk.http.Util.formatUrl">formatUrl</a></code> | Serializes an URL Struct to a String. |
@@ -30,6 +31,33 @@ The Http class is used for calling different HTTP methods and requesting and sen
 | <code><a href="#@winglang/sdk.http.Util.patch">patch</a></code> | Executes a PATCH request to a specified URL and provides a formatted response. |
 | <code><a href="#@winglang/sdk.http.Util.post">post</a></code> | Executes a POST request to a specified URL and provides a formatted response. |
 | <code><a href="#@winglang/sdk.http.Util.put">put</a></code> | Executes a PUT request to a specified URL and provides a formatted response. |
+| <code><a href="#@winglang/sdk.http.Util.trace">trace</a></code> | Executes a TRACE request to a specified URL and provides a formatted response. |
+
+---
+
+##### `connect` <a name="connect" id="@winglang/sdk.http.Util.connect"></a>
+
+```wing
+bring http;
+
+inflight http.connect(url: str, options?: RequestOptions);
+```
+
+Executes a CONNECT request to a specified URL and provides a formatted response.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.connect.parameter.url"></a>
+
+- *Type:* str
+
+The target URL for the CONNECT request.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.connect.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+Optional parameters for customizing the CONNECT request.
 
 ---
 
@@ -230,6 +258,32 @@ The target URL for the PUT request.
 - *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
 
 ptional parameters for customizing the PUT request.
+
+---
+
+##### `trace` <a name="trace" id="@winglang/sdk.http.Util.trace"></a>
+
+```wing
+bring http;
+
+inflight http.trace(url: str, options?: RequestOptions);
+```
+
+Executes a TRACE request to a specified URL and provides a formatted response.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.trace.parameter.url"></a>
+
+- *Type:* str
+
+The target URL for the TRACE request.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.trace.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+Optional parameters for customizing the TRACE request.
 
 ---
 
@@ -681,6 +735,8 @@ The request's method.
 | <code><a href="#@winglang/sdk.http.HttpMethod.POST">POST</a></code> | POST. |
 | <code><a href="#@winglang/sdk.http.HttpMethod.OPTIONS">OPTIONS</a></code> | OPTIONS. |
 | <code><a href="#@winglang/sdk.http.HttpMethod.HEAD">HEAD</a></code> | HEAD. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.CONNECT">CONNECT</a></code> | CONNECT. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.TRACE">TRACE</a></code> | TRACE. |
 
 ---
 
@@ -729,6 +785,20 @@ OPTIONS.
 ##### `HEAD` <a name="HEAD" id="@winglang/sdk.http.HttpMethod.HEAD"></a>
 
 HEAD.
+
+---
+
+
+##### `CONNECT` <a name="CONNECT" id="@winglang/sdk.http.HttpMethod.CONNECT"></a>
+
+CONNECT.
+
+---
+
+
+##### `TRACE` <a name="TRACE" id="@winglang/sdk.http.HttpMethod.TRACE"></a>
+
+TRACE.
 
 ---
 

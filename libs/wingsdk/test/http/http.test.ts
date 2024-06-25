@@ -21,7 +21,7 @@ describe("fetch", () => {
     (global.fetch as Mock).mockClear();
   });
 
-  test("get, post, put, patch and delete return response when supplying a url", async () => {
+  test("get, post, put, patch, delete, connect and trace return response when supplying a url", async () => {
     (global.fetch as Mock).mockImplementation((url) => ({
       url,
       headers: new Headers([["content-type", "application/json"]]),
@@ -41,6 +41,8 @@ describe("fetch", () => {
     expectResponse(await Http.post("url"));
     expectResponse(await Http.patch("url"));
     expectResponse(await Http.delete("url"));
+    expectResponse(await Http.connect("url"));
+    expectResponse(await Http.trace("url"));
   });
 
   test("http.fetch is working with all methods", async () => {
