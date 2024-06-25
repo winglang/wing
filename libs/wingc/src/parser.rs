@@ -299,18 +299,11 @@ fn contains_non_symbolic(str: &str) -> bool {
 	!re.is_match(str)
 }
 
-fn check_valid_wing_dir_name(dir_path: &Utf8Path) {
+fn check_valid_wing_dir_name(dir_path: &Utf8Path) -> bool {
 	if contains_non_symbolic(dir_path.file_name().unwrap()) {
-		report_diagnostic(Diagnostic {
-			message: format!(
-				"Cannot bring Wing directories that contain invalid characters: \"{}\"",
-				dir_path.file_name().unwrap()
-			),
-			span: None,
-			annotations: vec![],
-			hints: vec![],
-		});
+		return false;
 	}
+	true
 }
 
 fn parse_wing_directory(
@@ -349,7 +342,15 @@ fn parse_wing_directory(
 		{
 			// before we add the path, we need to check that directory names are valid
 			if path.is_dir() {
-				check_valid_wing_dir_name(&path);
+				if !check_valid_wing_dir_name(&path) {
+					report_diagnostic(Diagnostic::new(
+						format!(
+							"Cannot bring Wing directories that contain sub-directories with invalid characters: \"{}\"",
+							path.file_name().unwrap()
+						),
+						source_ref,
+					));
+				}
 			}
 			files_and_dirs.push((path, source_ref.clone()));
 		}
