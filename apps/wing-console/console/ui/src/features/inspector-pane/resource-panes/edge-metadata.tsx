@@ -11,14 +11,22 @@ import {
   Tree,
   Attribute,
 } from "@wingconsole/design-system";
+import type { NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
 import { useCallback, useMemo, useState } from "react";
 
 import type { MetadataNode } from "./resource-metadata.js";
 
+interface EdgeMetadataNode {
+  id: string;
+  path: string;
+  type: string;
+  display?: NodeDisplay;
+}
+
 export interface EdgeMetadataProps {
-  source: MetadataNode;
-  target: MetadataNode;
+  source: EdgeMetadataNode;
+  target: EdgeMetadataNode;
   inflights: { name: string }[];
   onConnectionNodeClick?: (path: string) => void;
 }

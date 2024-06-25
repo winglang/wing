@@ -25,6 +25,7 @@ test("create a test", async () => {
   expect(s.getResourceConfig("/env0/test:my_test/Handler")).toEqual({
     attrs: {
       handle: expect.any(String),
+      runningState: expect.any(String),
     },
     path: "root/env0/test:my_test/Handler",
     addr: expect.any(String),

@@ -27,6 +27,7 @@ test("create a queue", async () => {
   expect(s.getResourceConfig("/my_queue")).toEqual({
     attrs: {
       handle: expect.any(String),
+      runningState: expect.any(String),
     },
     path: "root/my_queue",
     addr: expect.any(String),

@@ -1,4 +1,4 @@
-import type { ConstructTreeNode } from "@winglang/sdk/lib/core/tree.js";
+import type { MapItem } from "@wingconsole/server";
 import type { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
 import type { ElkExtendedEdge } from "elkjs";
 import uniqBy from "lodash.uniqby";
@@ -38,7 +38,7 @@ export type NodeV2 =
     };
 
 const getNodeType = (
-  node: ConstructTreeNode,
+  node: MapItem,
   hasInflightConnections: boolean,
 ): NodeV2["type"] => {
   if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Function") {
@@ -70,7 +70,7 @@ const getNodeType = (
 };
 
 const getNodeInflights = (
-  node: ConstructTreeNode,
+  node: MapItem,
   connections: {
     source: { id: string; operation: string | undefined };
     target: { id: string; operation: string | undefined };
@@ -123,7 +123,7 @@ export const useMap = ({ expandedItems }: UseMapOptions) => {
     }
 
     const nodeTypes = new Map<string, string | undefined>();
-    const processNode = (node: ConstructTreeNode) => {
+    const processNode = (node: MapItem) => {
       nodeTypes.set(node.path, node.constructInfo?.fqn);
       for (const child of Object.values(node.children ?? {})) {
         processNode(child);
@@ -139,7 +139,7 @@ export const useMap = ({ expandedItems }: UseMapOptions) => {
     }
 
     const nodeTypes = new Map<string, NodeV2["type"]>();
-    const processNode = (node: ConstructTreeNode) => {
+    const processNode = (node: MapItem) => {
       nodeTypes.set(
         node.path,
         getNodeType(
@@ -161,7 +161,7 @@ export const useMap = ({ expandedItems }: UseMapOptions) => {
 
   const hiddenMap = useMemo(() => {
     const hiddenMap = new Map<string, boolean>();
-    const traverse = (node: ConstructTreeNode, forceHidden?: boolean) => {
+    const traverse = (node: MapItem, forceHidden?: boolean) => {
       const hidden = forceHidden || node.display?.hidden || false;
 
       hiddenMap.set(node.path, hidden);
@@ -218,7 +218,7 @@ export const useMap = ({ expandedItems }: UseMapOptions) => {
     }
 
     const children = rawTree?.children?.["Default"]?.children;
-    return children ? (Object.values(children) as ConstructTreeNode[]) : [];
+    return children ? (Object.values(children) as MapItem[]) : [];
   }, [rawTree]);
 
   const connections = useMemo(() => {
@@ -339,7 +339,7 @@ export const useMap = ({ expandedItems }: UseMapOptions) => {
     }
 
     const nodeMap = new Map<string, NodeV2>();
-    const processNode = (node: ConstructTreeNode) => {
+    const processNode = (node: MapItem) => {
       const nodeType = getNodeType(
         node,
         connections?.some(
