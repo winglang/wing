@@ -1450,7 +1450,9 @@ impl Types {
 			append_empty_struct_to_arglist: HashSet::new(),
 			libraries: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
 			intrinsics: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0),
-			class_counter: 0,
+			// 1 based to avoid conflict with imported JSII classes. This isn't strictly needed since brought JSII classes are never accessed
+			// through their unique ID, but still good to avoid confusion.
+			class_counter: 1,
 		}
 	}
 
