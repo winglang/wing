@@ -109,8 +109,6 @@ new cloud.Function(inflight () => {
 
 The AWS implementation of `cloud.Function` uses [AWS Lambda](https://aws.amazon.com/lambda/).
 
-#### Adding IAM permissions
-
 To add extra IAM permissions to the function, you can use the `aws.Function` class as shown below.
 
 ```ts playground example
@@ -131,9 +129,7 @@ if let lambdaFn = aws.Function.from(f) {
 }
 ```
 
-#### Accessing the Lambda context
-
-To access the [AWS Lambda context object](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html), you can use the `aws.Function` class as shown below.
+To access the AWS Lambda context object, you can use the `aws.Function` class as shown below.
 
 ```ts playground example
 bring aws;
@@ -151,52 +147,6 @@ let f = new cloud.Function(inflight () => {
 ```
 
 The `context()` method returns `nil` when ran on non-AWS targets.
-
-#### Adding Lambda layers
-
-To add a Lambda layer to the function, you can use the `aws.Function` class as shown below.
-
-```ts playground example
-bring aws;
-bring cloud;
-
-let f = new cloud.Function(inflight () => {
-  log("Hello world!");
-});
-if let lambdaFn = aws.Function.from(f) {
-  lambdaFn.addLambdaLayer("arn:aws:lambda:us-west-2:123456789012:layer:my-layer:1");
-}
-```
-
-In some scenarios, you might want to a Lambda layer to be automatically added to all compute resources that use a class's inflight methods.
-You can achieve this by using the `onLift` or `onLiftType` hook.
-
-```ts playground example
-bring aws;
-bring cloud;
-
-class Datadog {
-  pub inflight fetchMetrics() {
-    // ...implementation...
-  }
-  pub onLift(host: std.IInflightHost, ops: Array<str>) {
-    // Note: `ops` is an array of inflight methods that are being used
-    // so you can conditionally add the layer based on the methods called
-    if let lambdaFn = aws.Function.from(host) {
-      lambdaFn.addLambdaLayer("arn:aws:lambda:us-west-2:123456789012:layer:datadog-layer:1");
-    }
-  }
-}
-
-let d = new Datadog();
-
-let api = new cloud.Api();
-api.get("/metrics", inflight () => {
-  d.fetchMetrics();
-});
-```
-
-In the previous example, a Lambda function is implicitly created for handling the "/metrics" endpoint, and the `datadog-layer` is automatically added to it.
 
 ### Azure (`tf-azure`)
 
