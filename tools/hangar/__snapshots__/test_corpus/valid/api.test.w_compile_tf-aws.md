@@ -85,8 +85,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {
       "root": {
@@ -350,7 +349,7 @@ module.exports = function({  }) {
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "get_endpoint10-c8e91512",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_33_EXECUTE_API_TFTOKEN_TOKEN_25_AMAZONAWS_COM_TFTOKEN_TOKEN_34": "${jsonencode(\"https://${aws_api_gateway_rest_api.A_Api_api_06466CBC.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.A_Api_api_stage_75CEFF9A.stage_name}\")}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_34_EXECUTE_API_TFTOKEN_TOKEN_26_AMAZONAWS_COM_TFTOKEN_TOKEN_35": "${jsonencode(\"https://${aws_api_gateway_rest_api.A_Api_api_06466CBC.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.A_Api_api_stage_75CEFF9A.stage_name}\")}"
           }
         },
         "function_name": "get_endpoint10-c8e91512",

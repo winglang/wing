@@ -29,8 +29,7 @@ module.exports = function({ $data, $queue, $res }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },

@@ -16,9 +16,7 @@ body:
   id: use-cases
   attributes:
     label: Use Case
-    placeholder: |
-      What problem are you trying to solve? Describe a *concrete* example of something you are trying to do and as many details as possible
-      about your motivation, the environment, etc.
+    placeholder: What problem are you trying to solve? Describe a *concrete* example of something you are trying to do and as many details as possible about your motivation, the environment, etc.
   validations:
     required: true
 

@@ -35,8 +35,7 @@ module.exports = function({ $A }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -161,7 +160,7 @@ class $Root extends $stdlib.std.Resource {
     const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket1");
     const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket2");
     const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket3");
-    (bucket3.node.addDependency(bucket1, bucket2));
+    ($helpers.nodeof(bucket3).addDependency(bucket1, bucket2));
     const funcBucket = ((...buckets) => {
       $helpers.assert($helpers.eq(buckets.length, 2), "buckets.length == 2");
     });

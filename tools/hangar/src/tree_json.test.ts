@@ -20,7 +20,9 @@ test("tree.json for an app with many resources", async () => {
   });
 
   const treeJson = JSON.parse(
-    await fs.readFile(path.join(targetDir, "tree.json"), "utf-8")
+    await fs.readFile(path.join(targetDir, "tree.json"), "utf-8"),
+    // reviver to remove any "version" fields
+    function (key, value){ return (key === "version" && ("fqn" in (this ?? {})) ? "0.0.0" : value)}
   );
   expect(treeJson).toMatchSnapshot();
 });

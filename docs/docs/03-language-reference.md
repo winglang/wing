@@ -213,6 +213,13 @@ The `Json` keyword can be omitted from `Json` object literals:
 let jsonObj = { boom: 123, bam: [4, 5, 6] };
 ```
 
+You may use "punning" to define the literals with implicit keys:
+```TS
+let boom = 123;
+let bam = [4,5,6];
+let jsonObj = { boom, bam };
+```
+
 Every value within a `Json` array or object also has a type of `Json`.
 
 ##### 1.1.4.2 JSON objects
@@ -1078,13 +1085,9 @@ The following features are not yet implemented, but we are planning to add them 
 
 * Default value: the default value notation (`= y`) may appear in declarations of struct fields, class fields or function arguments.
   See https://github.com/winglang/wing/issues/3121 to track.
-* Chaining `??` operations: the `x ?? y ?? z` notation will return the value in `x` if there is one, `y` otherwise or `z`. The last expression in a `??` chain (e.g. `z`) must be of type `T` (not `T?`).
-  See https://github.com/winglang/wing/issues/1875 to track.
-* The `x ??= y` notation returns `x` if it has a value or assigns `x` with `y` and returns the value of `y`.
-  See https://github.com/winglang/wing/issues/2103 to track.
 * `x ?? throw("message")` to unwrap `x` or throw if `x` is not defined.
   See https://github.com/winglang/wing/issues/2103 to track.
-* `x ??= value` returns `x` or assigns a value to it and returns it to support lazy
+* `x ??= value` assigns `value` to `x` if `x` is nil, and returns the resulting value of `x`, to support lazy
   evaluation/memoization (inspired by [Nullish coalescing
   assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)).
   See https://github.com/winglang/wing/issues/2103 to track.
@@ -1392,6 +1395,17 @@ Structs can inherit from multiple other structs.
 >   field4: false,
 >   field5: "sample"
 > };
+> ```
+
+A struct literal initialization may use "punning" syntax to initialize fields using variables of the same names:
+> ```TS
+> struct MyData {
+>   someNum: num;
+>   someStr: str;
+> }
+> let someNum = 1;
+> let someStr = "string cheese";
+> let myData = MyData {someNum, someStr};
 > ```
 
 [`▲ top`][top]

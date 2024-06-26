@@ -678,7 +678,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": false
@@ -695,7 +695,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": false,
@@ -822,6 +822,9 @@
         "implemented": true
       },
       "sim": {
+        "implemented": true
+      },
+      "tf-azure": {
         "implemented": true
       }
     }

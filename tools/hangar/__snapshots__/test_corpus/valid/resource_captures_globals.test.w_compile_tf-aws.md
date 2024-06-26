@@ -138,8 +138,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },

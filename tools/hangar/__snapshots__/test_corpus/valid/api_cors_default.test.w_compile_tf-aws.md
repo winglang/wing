@@ -80,8 +80,7 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_HttpMethod,
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {
       "root": {

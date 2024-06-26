@@ -24,7 +24,8 @@ import { getWingVersion } from "./utils/getWingVersion.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 
 export interface CreateExpressServerOptions {
-  simulatorInstance(): Promise<simulator.Simulator>;
+  simulatorInstance(): simulator.Simulator;
+  restartSimulator(): Promise<void>;
   testSimulatorInstance(): Promise<simulator.Simulator>;
   consoleLogger: ConsoleLogger;
   errorMessage(): string | undefined;
@@ -55,6 +56,7 @@ export interface CreateExpressServerOptions {
 
 export const createExpressServer = async ({
   simulatorInstance,
+  restartSimulator,
   testSimulatorInstance,
   consoleLogger,
   errorMessage,
@@ -86,6 +88,9 @@ export const createExpressServer = async ({
     return {
       async simulator() {
         return await simulatorInstance();
+      },
+      async restartSimulator() {
+        return await restartSimulator();
       },
       async testSimulator() {
         return await testSimulatorInstance();
@@ -120,7 +125,6 @@ export const createExpressServer = async ({
     "/trpc",
     trpcExpress.createExpressMiddleware({
       router,
-      batching: { enabled: false },
       createContext,
     }),
   );

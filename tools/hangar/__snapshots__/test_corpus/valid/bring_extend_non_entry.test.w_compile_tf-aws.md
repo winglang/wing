@@ -21,8 +21,7 @@ module.exports = function({ $cdk8s_Chart }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },

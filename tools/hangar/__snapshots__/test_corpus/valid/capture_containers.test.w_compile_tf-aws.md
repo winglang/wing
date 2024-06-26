@@ -34,8 +34,7 @@ module.exports = function({ $arr, $arrOfMap, $j, $myMap, $mySet }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },

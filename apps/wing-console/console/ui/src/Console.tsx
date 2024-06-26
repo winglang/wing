@@ -1,14 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
+import { httpBatchLink, wsLink, splitLink, createWSClient } from "@trpc/client";
 import type { Mode } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
 import { useEffect, useMemo, useState } from "react";
 
 import { App } from "./App.js";
 import { AppContext } from "./AppContext.js";
-import { LayoutType } from "./layout/layout-provider.js";
-import { trpc } from "./services/trpc.js";
-import { WebSocketProvider } from "./services/use-websocket.js";
+import { LayoutType } from "./features/layout/layout-provider.js";
+import { WebSocketProvider } from "./features/websocket-state/use-websocket.js";
+import { trpc } from "./trpc.js";
 
 export const Console = ({
   trpcUrl,
@@ -61,7 +61,7 @@ export const Console = ({
           true: wsLink({
             client: wsClient,
           }),
-          false: httpLink({
+          false: httpBatchLink({
             url: trpcUrl,
           }),
         }),
