@@ -59,3 +59,18 @@ class C extends A {
 
   get_six(): num { return 6; }
 }
+
+class D extends A {
+  new() {
+    super(5);
+    super(5); // Super can only be called once
+  }
+}
+
+class E extends A {
+  new() {
+    if true {
+      super(5); // Super can't be called from inner scope
+    }
+  }
+}
