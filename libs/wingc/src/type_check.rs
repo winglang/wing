@@ -335,8 +335,10 @@ pub struct Class {
 	// and instead the user will need to pass the relevant args to the class's init method.
 	pub std_construct_args: bool,
 
-	// Unique identifier for this class type, used to generate a unique type alias for this class so we can
-	// reference it regardless of type name shadowing or scoping.
+	// Unique identifier for this class type, used to get access to the type's generated preflight code even when
+	// the type name isn't available in scope or is shadowed.
+	// Ideally we should use the FQN and unify the implementation of JSII imported classes and Wing classes, currently
+	// uid is used for Wing classes and is always 0 for JSII classes to avoid snapshot noise.
 	pub uid: usize,
 }
 impl Class {
