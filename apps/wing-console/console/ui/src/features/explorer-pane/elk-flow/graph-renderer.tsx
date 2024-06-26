@@ -76,7 +76,7 @@ const NodeComponent = memo(
             width: node.width,
             height: node.height,
             zIndex: depth,
-            opacity: 0,
+            //opacity: 0,
           }}
           animate={{
             top: origin.y,
@@ -84,9 +84,9 @@ const NodeComponent = memo(
             width: node.width,
             height: node.height,
             zIndex: depth,
-            opacity: 1,
+            //opacity: 1,
           }}
-          exit={{ opacity: 0 }}
+          //exit={{ opacity: 0 }}
         >
           {node && (
             <DepthContext.Provider value={depth + 1}>

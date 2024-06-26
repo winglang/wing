@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import {
   ResourceIcon,
@@ -39,160 +40,6 @@ const baseLayoutOptions: LayoutOptions = {
   "elk.algorithm": "org.eclipse.elk.layered",
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
 };
-interface WrapperProps {
-  name: string;
-  fqn: string;
-  highlight?: boolean;
-  onClick?: () => void;
-  color?: string;
-  icon?: string;
-  collapsed?: boolean;
-  onCollapse?: (value: boolean) => void;
-  hierarchichalRunningState: ResourceRunningState;
-}
-
-const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
-  ({
-    name,
-    fqn,
-    highlight,
-    onClick,
-    collapsed = false,
-    onCollapse = (value: boolean) => {},
-    children,
-    color,
-    icon,
-    hierarchichalRunningState,
-  }) => {
-    /* eslint-disable jsx-a11y/no-static-element-interactions */
-    /* eslint-disable jsx-a11y/click-events-have-key-events */
-    return (
-      <div
-        className={clsx(
-          "w-full h-full",
-          "rounded-lg",
-          "bg-white dark:bg-slate-700",
-          highlight && "bg-sky-50 dark:bg-sky-900",
-          "border",
-          "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
-          !highlight && "border-slate-200 dark:border-slate-800",
-          highlight && "outline-4 border-sky-400 dark:border-sky-500",
-          "shadow",
-          "transition-all",
-          "cursor-pointer",
-        )}
-        onClick={(event) => {
-          event.stopPropagation();
-          onClick?.();
-        }}
-      >
-        <div className="relative">
-          <div
-            className={clsx(
-              "px-2.5 py-1 flex items-center gap-1.5",
-              "border-b border-slate-200 dark:border-slate-800",
-              "cursor-pointer",
-            )}
-          >
-            <ResourceIcon
-              className="size-4 -ml-0.5"
-              resourceType={fqn}
-              icon={icon}
-              color={color}
-            />
-
-            <span
-              className={clsx(
-                "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
-                !highlight && " text-slate-600 dark:text-slate-300",
-                highlight && "text-sky-600 dark:text-sky-300",
-              )}
-            >
-              {name}
-            </span>
-            <RunningStateIndicator runningState={hierarchichalRunningState} />
-            <div className="flex grow justify-end">
-              <div
-                className="pl-1"
-                onClick={() => {
-                  onCollapse(!collapsed);
-                }}
-              >
-                {collapsed && (
-                  <ChevronRightIcon
-                    className={clsx(
-                      "size-4",
-                      "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
-                    )}
-                  />
-                )}
-                {!collapsed && (
-                  <ChevronDownIcon
-                    className={clsx(
-                      "size-4",
-                      "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
-                    )}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        {!collapsed && children}
-      </div>
-    );
-  },
-);
-
-interface ContainerNodeProps {
-  id: string;
-  name: string;
-  pseudoContainer?: boolean;
-  resourceType?: string;
-  highlight?: boolean;
-  onClick?: () => void;
-  collapsed?: boolean;
-  onCollapse?: (value: boolean) => void;
-  color?: string;
-  icon?: string;
-  hierarchichalRunningState: ResourceRunningState;
-}
-
-const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
-  memo((props) => {
-    return (
-      <Node
-        elk={{
-          id: props.id,
-          layoutOptions: {
-            ...baseLayoutOptions,
-          },
-        }}
-        className={clsx("inline-block", "group")}
-        data-elk-id={props.id}
-      >
-        <div className={clsx("w-full h-full relative")}>
-          <Wrapper
-            name={props.name}
-            fqn={props.resourceType!}
-            highlight={props.highlight}
-            onClick={props.onClick}
-            onCollapse={props.onCollapse}
-            collapsed={props.collapsed}
-            color={props.color}
-            icon={props.icon}
-            hierarchichalRunningState={props.hierarchichalRunningState}
-          >
-            <div className="p-4">
-              <NodeChildren>
-                <div className="absolute">{props.children}</div>
-              </NodeChildren>
-            </div>
-          </Wrapper>
-        </div>
-      </Node>
-    );
-  });
 
 interface ConstructNodeProps {
   id: string;
@@ -241,7 +88,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       const renderedNode = (
         <Node
           elk={{
-            id,
+            id: hasChildNodes ? id : `${id}#container`,
             layoutOptions: {
               "elk.algorithm": "org.eclipse.elk.layered",
               "elk.aspectRatio": "0.1",
@@ -253,7 +100,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             "inline-block group/construct cursor-pointer",
             hasChildNodes && "pointer-events-none",
           )}
-          data-elk-id={id}
+          data-elk-id={hasChildNodes ? id : `${id}#container`}
         >
           {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
           <div
@@ -339,6 +186,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                   />
 
                   {collapsed && (
+                    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
                     <div
                       className="flex grow justify-end pl-1"
                       onClick={() => {
@@ -415,46 +263,123 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
 
       if (hasChildNodes) {
         return (
-          <ContainerNode
-            id={`${id}#container`}
-            // id={`${id}`}
-            name={name}
-            pseudoContainer
-            resourceType={fqn}
-            highlight={highlight}
-            onClick={select}
-            onCollapse={onCollapse}
-            collapsed={collapsed}
-            color={color}
-            icon={icon}
-            hierarchichalRunningState={hierarchichalRunningState}
+          <Node
+            elk={{
+              id: `${id}#container`,
+              layoutOptions: {
+                ...baseLayoutOptions,
+              },
+            }}
+            className={clsx("inline-block", "group")}
+            data-elk-id={`${id}#container`}
           >
-            <NodeChildren>
-              {inflights.length > 0 && renderedNode}
+            <div className={clsx("w-full h-full relative")}>
+              <div
+                className={clsx(
+                  "w-full h-full",
+                  "rounded-lg",
+                  "bg-white dark:bg-slate-700",
+                  highlight && "bg-sky-50 dark:bg-sky-900",
+                  "border",
+                  "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
+                  !highlight && "border-slate-200 dark:border-slate-800",
+                  highlight && "outline-4 border-sky-400 dark:border-sky-500",
+                  "shadow",
+                  "transition-all",
+                  "cursor-pointer",
+                )}
+              >
+                <div className="relative">
+                  <div
+                    className={clsx(
+                      "px-2.5 py-1 flex items-center gap-1.5",
+                      "border-b border-slate-200 dark:border-slate-800",
+                      "cursor-pointer",
+                    )}
+                  >
+                    <ResourceIcon
+                      className="size-4 -ml-0.5"
+                      resourceType={fqn}
+                      icon={icon}
+                      color={color}
+                    />
 
-              {children}
-            </NodeChildren>
+                    <span
+                      className={clsx(
+                        "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
+                        !highlight && " text-slate-600 dark:text-slate-300",
+                        highlight && "text-sky-600 dark:text-sky-300",
+                      )}
+                    >
+                      {name}
+                    </span>
+                    <RunningStateIndicator
+                      runningState={hierarchichalRunningState}
+                    />
+                    <div className="flex grow justify-end">
+                      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events*/}
+                      <div
+                        className="pl-1"
+                        onClick={() => {
+                          onCollapse(!collapsed);
+                        }}
+                      >
+                        {collapsed && (
+                          <ChevronRightIcon
+                            className={clsx(
+                              "size-4",
+                              "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                            )}
+                          />
+                        )}
+                        {!collapsed && (
+                          <ChevronDownIcon
+                            className={clsx(
+                              "size-4",
+                              "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                            )}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {!collapsed && (
+                  <div className="p-4">
+                    <NodeChildren>
+                      <div className="absolute">
+                        <NodeChildren>
+                          {inflights.length > 0 && renderedNode}
 
-            <Port
-              elk={{
-                id: `${id}##source`,
-                layoutOptions: {
-                  "elk.port.side": "EAST",
-                  "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                },
-              }}
-            />
+                          {children}
+                        </NodeChildren>
 
-            <Port
-              elk={{
-                id: `${id}##target`,
-                layoutOptions: {
-                  "elk.port.side": "WEST",
-                  "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                },
-              }}
-            />
-          </ContainerNode>
+                        <Port
+                          elk={{
+                            id: `${id}##source`,
+                            layoutOptions: {
+                              "elk.port.side": "EAST",
+                              "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                            },
+                          }}
+                        />
+
+                        <Port
+                          elk={{
+                            id: `${id}##target`,
+                            layoutOptions: {
+                              "elk.port.side": "WEST",
+                              "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                            },
+                          }}
+                        />
+                      </div>
+                    </NodeChildren>
+                  </div>
+                )}
+              </div>
+            </div>
+          </Node>
         );
       }
 
