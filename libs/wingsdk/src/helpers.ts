@@ -3,12 +3,12 @@
 import { notDeepStrictEqual } from "node:assert";
 import * as path from "node:path";
 import type { Construct } from "constructs";
+import { std } from ".";
 import type { Node } from "./std/node";
 // since we moved from node:18 to node:20 the deepStrictEqual doesn't work as expected.
 // https://github.com/winglang/wing/issues/4444
 // therefore we're using a local version of the comparison from node 18.
 import { deepStrictEqual } from "./util/equality";
-import { std } from ".";
 
 export function eq(a: any, b: any): boolean {
   try {
@@ -189,7 +189,8 @@ export function bringJs(
       if (k === preflightTypesObjectName) {
         // Verify no key collision (should never happen)
         Object.keys(v as object).forEach((key) => {
-          if (key in outPreflightTypesObject) throw new Error(`Key collision (${key}) in preflight types map`);
+          if (key in outPreflightTypesObject)
+            throw new Error(`Key collision (${key}) in preflight types map`);
         });
         Object.assign(outPreflightTypesObject, v);
         return false;
@@ -200,14 +201,17 @@ export function bringJs(
 }
 
 /**
- * Helper function to get a singleton instance of a class defined in preflight. 
+ * Helper function to get a singleton instance of a class defined in preflight.
  * In practice this is used to get the preflight instance of **inflight** classes defined **preflight**.
  * This instance is used for accessing the lift map of such classes.
  * @param scope - a scope in the construct tree that'll hold the instance (a singleton within that tree).
  * @param typeId - the unique id of the preflight class type we want.
  * @returns the instance of the class.
  */
-export function preflightClassSingleton(scope: Construct, typeId: number): std.Resource {
+export function preflightClassSingleton(
+  scope: Construct,
+  typeId: number
+): std.Resource {
   const root: any = nodeof(scope).root;
   const type: any = root.$preflightTypesMap[typeId];
   if (root.resourceSingletons === undefined) {
@@ -217,6 +221,9 @@ export function preflightClassSingleton(scope: Construct, typeId: number): std.R
   if (instance) {
     return instance;
   }
-  root.resourceSingletons[type] = new type(scope, `${type.name}_singleton_${typeId}`);
+  root.resourceSingletons[type] = new type(
+    scope,
+    `${type.name}_singleton_${typeId}`
+  );
   return root.resourceSingletons[type];
 }
