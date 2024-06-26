@@ -24,7 +24,7 @@ use crate::type_check::has_type_stmt::HasStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit::Visit;
 use crate::visit_context::{VisitContext, VisitorWithContext};
-use crate::visit_stmt_before_super::CheckValidBeforeSuperVisitor;
+use crate::visit_stmt_before_super::{CheckSuperCtorLocationVisitor, CheckValidBeforeSuperVisitor};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, UTIL_CLASS_NAME,
@@ -4685,6 +4685,25 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							format!("Missing super() call in {}'s constructor", ast_class.name),
 						);
 					}
+
+					// Check `super()` call occurs in valid location
+					let mut super_ctor_loc_check = CheckSuperCtorLocationVisitor::new();
+					super_ctor_loc_check.visit_scope(ctor_body);
+					// Redundant super() calls diagnostics
+					for span in super_ctor_loc_check.redundant_calls.iter() {
+						self.spanned_error_with_annotations(
+							span,
+							"super() should be called only once",
+							vec![DiagnosticAnnotation::new(
+								"First super call occurs here",
+								super_ctor_loc_check.first_call.as_ref().unwrap(),
+							)],
+						);
+					}
+					// Inner scope super() calls diagnostics
+					for span in super_ctor_loc_check.inner_calls.iter() {
+						self.spanned_error(span, "super() should be called at the top scope of the constructor");
+					}
 				}
 			}
 		}
@@ -4770,32 +4789,18 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		let mut check = CheckValidBeforeSuperVisitor::new();
 		check.visit_stmt(stmt);
 
-		if check.inner_scope_valid {
-			if !check.instance_member_valid {
-				self.spanned_error(
-					stmt,
-					"'super()' must be called at the top scope before accessing 'this' in the constructor of a derived class",
-				);
-			}
-			if !check.supercall_valid {
-				self.spanned_error(
-					stmt,
-					"'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class",
-				);
-			}
-		} else {
-			if !check.instance_member_valid {
-				self.spanned_error(
-					stmt,
-					"'super()' must be called before accessing 'this' in the constructor of a derived class",
-				);
-			}
-			if !check.supercall_valid {
-				self.spanned_error(
-					stmt,
-					"'super()' must be called before calling a method of 'super' in the constructor of a derived class",
-				);
-			}
+		for span in check.this_accesses.iter() {
+			self.spanned_error(
+				span,
+				"'super()' must be called before accessing 'this' in the constructor of a derived class",
+			);
+		}
+
+		for span in check.super_accesses.iter() {
+			self.spanned_error(
+				span,
+				"'super()' must be called before calling a method of 'super' in the constructor of a derived class",
+			);
 		}
 	}
 
