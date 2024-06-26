@@ -285,8 +285,8 @@ class InflightClass extends $stdlib.std.Resource {
     });
   }
 }
-if ($preflightTypesMap[4]) { throw new Error("InflightClass is already in type map"); }
-$preflightTypesMap[4] = InflightClass;
+if ($preflightTypesMap[5]) { throw new Error("InflightClass is already in type map"); }
+$preflightTypesMap[5] = InflightClass;
 module.exports = { $preflightTypesMap, InflightClass };
 //# sourceMappingURL=preflight.inflightclass-5.cjs.map
 ```

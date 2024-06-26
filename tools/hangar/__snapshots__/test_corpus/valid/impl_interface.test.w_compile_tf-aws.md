@@ -629,8 +629,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[10]) { throw new Error("ImplInflightIfaceInInflightClass is already in type map"); }
-    $preflightTypesMap[10] = ImplInflightIfaceInInflightClass;
+    if ($preflightTypesMap[11]) { throw new Error("ImplInflightIfaceInInflightClass is already in type map"); }
+    $preflightTypesMap[11] = ImplInflightIfaceInInflightClass;
     class ImplInflightIfaceInPreflightClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);

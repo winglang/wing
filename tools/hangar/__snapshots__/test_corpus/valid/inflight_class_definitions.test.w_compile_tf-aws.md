@@ -248,8 +248,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[1]) { throw new Error("B is already in type map"); }
-    $preflightTypesMap[1] = B;
+    if ($preflightTypesMap[2]) { throw new Error("B is already in type map"); }
+    $preflightTypesMap[2] = B;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -348,8 +348,8 @@ class $Root extends $stdlib.std.Resource {
             });
           }
         }
-        if ($preflightTypesMap[7]) { throw new Error("F is already in type map"); }
-        $preflightTypesMap[7] = F;
+        if ($preflightTypesMap[8]) { throw new Error("F is already in type map"); }
+        $preflightTypesMap[8] = F;
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
@@ -377,11 +377,11 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
-                [$helpers.nodeof(this).root.$preflightTypesMap[7]._singleton(this,"F_singleton_7"), ["foo"]],
+                [$helpers.preflightClassSingleton(this, 8), ["foo"]],
                 [F, ["foo"]],
               ],
               "$inflight_init": [
-                [$helpers.nodeof(this).root.$preflightTypesMap[7]._singleton(this,"F_singleton_7"), []],
+                [$helpers.preflightClassSingleton(this, 8), []],
                 [F, []],
               ],
             });
@@ -452,7 +452,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[1]._singleton(this,"B_singleton_1"), ["foo"]],
+            [$helpers.preflightClassSingleton(this, 2), ["foo"]],
             [B, []],
             [a, ["goo"]],
             [d, ["callInner"]],
@@ -460,7 +460,7 @@ class $Root extends $stdlib.std.Resource {
             [innerD, ["handle"]],
           ],
           "$inflight_init": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[1]._singleton(this,"B_singleton_1"), []],
+            [$helpers.preflightClassSingleton(this, 2), []],
             [B, []],
             [a, []],
             [d, []],

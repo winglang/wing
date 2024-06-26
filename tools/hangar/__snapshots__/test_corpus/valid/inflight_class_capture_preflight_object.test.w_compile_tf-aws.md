@@ -312,8 +312,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[5]) { throw new Error("Foo is already in type map"); }
-    $preflightTypesMap[5] = Foo;
+    if ($preflightTypesMap[6]) { throw new Error("Foo is already in type map"); }
+    $preflightTypesMap[6] = Foo;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -341,11 +341,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[5]._singleton(this,"Foo_singleton_5"), ["uploadToBucket"]],
+            [$helpers.preflightClassSingleton(this, 6), ["uploadToBucket"]],
             [Foo, []],
           ],
           "$inflight_init": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[5]._singleton(this,"Foo_singleton_5"), []],
+            [$helpers.preflightClassSingleton(this, 6), []],
             [Foo, []],
           ],
         });
@@ -448,11 +448,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[5]._singleton(this,"Foo_singleton_5"), ["uploadToBucket"]],
+            [$helpers.preflightClassSingleton(this, 6), ["uploadToBucket"]],
             [getFoo, ["handle"]],
           ],
           "$inflight_init": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[5]._singleton(this,"Foo_singleton_5"), []],
+            [$helpers.preflightClassSingleton(this, 6), []],
             [getFoo, []],
           ],
         });
@@ -520,11 +520,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[4]._singleton(this,"InflightClass_singleton_4"), ["method"]],
+            [$helpers.preflightClassSingleton(this, 5), ["method"]],
             [$stdlib.core.toLiftableModuleType(subdir.InflightClass, "", "InflightClass"), []],
           ],
           "$inflight_init": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[4]._singleton(this,"InflightClass_singleton_4"), []],
+            [$helpers.preflightClassSingleton(this, 5), []],
             [$stdlib.core.toLiftableModuleType(subdir.InflightClass, "", "InflightClass"), []],
           ],
         });
@@ -705,8 +705,8 @@ class InflightClass extends $stdlib.std.Resource {
     });
   }
 }
-if ($preflightTypesMap[4]) { throw new Error("InflightClass is already in type map"); }
-$preflightTypesMap[4] = InflightClass;
+if ($preflightTypesMap[5]) { throw new Error("InflightClass is already in type map"); }
+$preflightTypesMap[5] = InflightClass;
 module.exports = { $preflightTypesMap, InflightClass };
 //# sourceMappingURL=preflight.inflightclass-5.cjs.map
 ```

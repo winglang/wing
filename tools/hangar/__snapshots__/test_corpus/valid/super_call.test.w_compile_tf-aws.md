@@ -416,8 +416,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[5]) { throw new Error("InflightA is already in type map"); }
-    $preflightTypesMap[5] = InflightA;
+    if ($preflightTypesMap[6]) { throw new Error("InflightA is already in type map"); }
+    $preflightTypesMap[6] = InflightA;
     class InflightB extends InflightA {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -449,8 +449,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[6]) { throw new Error("InflightB is already in type map"); }
-    $preflightTypesMap[6] = InflightB;
+    if ($preflightTypesMap[7]) { throw new Error("InflightB is already in type map"); }
+    $preflightTypesMap[7] = InflightB;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -479,12 +479,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[6]._singleton(this,"InflightB_singleton_6"), ["description"]],
+            [$helpers.preflightClassSingleton(this, 7), ["description"]],
             [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [InflightB, []],
           ],
           "$inflight_init": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[6]._singleton(this,"InflightB_singleton_6"), []],
+            [$helpers.preflightClassSingleton(this, 7), []],
             [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
             [InflightB, []],
           ],

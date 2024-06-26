@@ -235,8 +235,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[0]) { throw new Error("Foo is already in type map"); }
-    $preflightTypesMap[0] = Foo;
+    if ($preflightTypesMap[1]) { throw new Error("Foo is already in type map"); }
+    $preflightTypesMap[1] = Foo;
     class FooChild extends Foo {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -269,8 +269,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[1]) { throw new Error("FooChild is already in type map"); }
-    $preflightTypesMap[1] = FooChild;
+    if ($preflightTypesMap[2]) { throw new Error("FooChild is already in type map"); }
+    $preflightTypesMap[2] = FooChild;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -298,11 +298,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[0]._singleton(this,"Foo_singleton_0"), [].concat(["field1"], ["field2"])],
+            [$helpers.preflightClassSingleton(this, 1), [].concat(["field1"], ["field2"])],
             [Foo, []],
           ],
           "$inflight_init": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[0]._singleton(this,"Foo_singleton_0"), []],
+            [$helpers.preflightClassSingleton(this, 1), []],
             [Foo, []],
           ],
         });
@@ -335,11 +335,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[1]._singleton(this,"FooChild_singleton_1"), [].concat(["field1"], ["field2"], ["field3"])],
+            [$helpers.preflightClassSingleton(this, 2), [].concat(["field1"], ["field2"], ["field3"])],
             [FooChild, []],
           ],
           "$inflight_init": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[1]._singleton(this,"FooChild_singleton_1"), []],
+            [$helpers.preflightClassSingleton(this, 2), []],
             [FooChild, []],
           ],
         });
