@@ -54,10 +54,10 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
         return;
       }
 
-      if (!initialZoomToFit) {
+      if (initialZoomToFit) {
         zoomPaneRef.current?.zoomToFit();
       }
-      setInitialZoomToFit(true);
+      setInitialZoomToFit(false);
     }, [graph, initialZoomToFit]);
 
     const mapBackgroundRef = useRef<HTMLDivElement>(null);
