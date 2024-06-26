@@ -866,7 +866,7 @@ error: 'super()' must be called before accessing 'this' in the constructor of a 
     |     ^^^^
 
 
-error: Call to super constructor can only be done from within a class initializer
+error: Call to super constructor can only be done from within a class constructor
     --> ../../../examples/tests/invalid/class.test.w:119:4
     |
 119 |    super();
@@ -953,7 +953,14 @@ error: Variable cannot be reassigned from inflight
    |     ^^^^^^
 
 
-error: Call to super constructor can only be done from within a class initializer
+error: Class "Student" does not have a parent class
+   --> ../../../examples/tests/invalid/class.test.w:97:5
+   |
+97 |     super();
+   |     ^^^^^^^^
+
+
+error: Call to super constructor can only be done from within a class constructor
     --> ../../../examples/tests/invalid/class.test.w:114:5
     |
 114 |     super("cool", "blue");
