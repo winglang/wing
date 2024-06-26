@@ -154,7 +154,7 @@ The `context()` method returns `nil` when ran on non-AWS targets.
 
 #### Adding Lambda layers
 
-To add a [Lambda layer](https://docs.aws.amazon.com/lambda/latest/dg/chapter-layers.html) to the function, you can use the `aws.Function` class as shown below.
+To add a Lambda layer to the function, you can use the `aws.Function` class as shown below.
 
 ```ts playground example
 bring aws;
