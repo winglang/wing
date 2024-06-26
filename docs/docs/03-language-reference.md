@@ -1085,13 +1085,9 @@ The following features are not yet implemented, but we are planning to add them 
 
 * Default value: the default value notation (`= y`) may appear in declarations of struct fields, class fields or function arguments.
   See https://github.com/winglang/wing/issues/3121 to track.
-* Chaining `??` operations: the `x ?? y ?? z` notation will return the value in `x` if there is one, `y` otherwise or `z`. The last expression in a `??` chain (e.g. `z`) must be of type `T` (not `T?`).
-  See https://github.com/winglang/wing/issues/1875 to track.
-* The `x ??= y` notation returns `x` if it has a value or assigns `x` with `y` and returns the value of `y`.
-  See https://github.com/winglang/wing/issues/2103 to track.
 * `x ?? throw("message")` to unwrap `x` or throw if `x` is not defined.
   See https://github.com/winglang/wing/issues/2103 to track.
-* `x ??= value` returns `x` or assigns a value to it and returns it to support lazy
+* `x ??= value` assigns `value` to `x` if `x` is nil, and returns the resulting value of `x`, to support lazy
   evaluation/memoization (inspired by [Nullish coalescing
   assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)).
   See https://github.com/winglang/wing/issues/2103 to track.

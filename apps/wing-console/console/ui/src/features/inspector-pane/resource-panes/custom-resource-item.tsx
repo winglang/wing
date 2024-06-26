@@ -3,19 +3,22 @@ import type {
   UIField,
   UIButton,
   UISection,
-} from "@winglang/sdk/lib/core";
-
-import type {
   UIFileBrowser,
   UIHttpClient,
-} from "../../../../../../libs/wingsdk/lib/core/index.js";
+} from "@winglang/sdk/lib/core";
 
 import { CustomResourceFileBrowser } from "./custom-resource-file-browser.js";
 import { CustomResourceHttpClientItem } from "./custom-resource-http-client.js";
 import { CustomResourceUiButtonItem } from "./custom-resource-ui-button.js";
 import { CustomResourceUiFieldItem } from "./custom-resource-ui-field.js";
 
-const getUiComponent = (item: UIComponent) => {
+export interface UIComponentLike {
+  readonly kind: string;
+  readonly label?: string | undefined;
+  readonly handler?: string | undefined;
+}
+
+const getUiComponent = (item: UIComponentLike) => {
   if (item.kind === "field") {
     return item as UIField;
   }
@@ -23,18 +26,18 @@ const getUiComponent = (item: UIComponent) => {
     return item as UIButton;
   }
   if (item.kind === "section") {
-    return item as UISection;
+    return item as unknown as UISection;
   }
   if (item.kind === "file-browser") {
-    return item as UIFileBrowser;
+    return item as unknown as UIFileBrowser;
   }
   if (item.kind === "http-client") {
-    return item as UIHttpClient;
+    return item as unknown as UIHttpClient;
   }
-  return item;
+  return item as UIComponent;
 };
 
-export const CustomResourceUiItem = ({ item }: { item: UIComponent }) => {
+export const CustomResourceUiItem = ({ item }: { item: UIComponentLike }) => {
   const uiComponent = getUiComponent(item);
   return (
     <>
@@ -42,7 +45,7 @@ export const CustomResourceUiItem = ({ item }: { item: UIComponent }) => {
         <CustomResourceUiFieldItem
           label={uiComponent.label}
           handlerPath={uiComponent.handler}
-          link={uiComponent.link}
+          link={uiComponent.link ?? false}
         />
       )}
       {uiComponent.kind === "button" && (

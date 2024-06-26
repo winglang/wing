@@ -1,5 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
+import type { UIComponent } from "@winglang/sdk/lib/core/tree.js";
+import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/simulator.js";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
@@ -16,6 +18,8 @@ import type { FileLink } from "../utils/createRouter.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
 import type { Simulator } from "../wingsdk.js";
 
+import { getHierarchichalRunningState } from "./app.get-hierarchichal-running-state.js";
+
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
 
@@ -29,6 +33,12 @@ export interface ExplorerItem {
   type?: string;
   childItems?: ExplorerItem[];
   display?: NodeDisplay;
+  hierarchichalRunningState: ResourceRunningState;
+}
+
+export interface MapItem extends ConstructTreeNode {
+  hierarchichalRunningState: ResourceRunningState;
+  children?: Record<string, MapItem>;
 }
 
 const shakeTree = (tree: ConstructTreeNode): ConstructTreeNode => {
@@ -159,9 +169,11 @@ export const createAppRouter = () => {
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = simulator.tree().rawData();
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree), simulator);
         return createExplorerItemFromConstructTreeNode(
           shakeTree(tree),
           simulator,
+          nodeMap,
           input?.showTests,
           input?.includeHiddens,
         );
@@ -177,9 +189,11 @@ export const createAppRouter = () => {
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = simulator.tree().rawData();
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree), simulator);
         const node = createExplorerItemFromConstructTreeNode(
           shakeTree(tree),
           simulator,
+          nodeMap,
           input?.showTests,
         );
 
@@ -202,7 +216,7 @@ export const createAppRouter = () => {
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = simulator.tree().rawData();
-        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree), simulator);
 
         let breadcrumbs: Array<{
           id: string;
@@ -230,7 +244,7 @@ export const createAppRouter = () => {
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = simulator.tree().rawData();
-        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree), simulator);
         const node = nodeMap.get(input.path);
         if (!node) {
           throw new TRPCError({
@@ -268,7 +282,7 @@ export const createAppRouter = () => {
         const simulator = await ctx.simulator();
 
         const { tree } = simulator.tree().rawData();
-        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree), simulator);
         const node = nodeMap.get(path);
         if (!node) {
           throw new TRPCError({
@@ -298,6 +312,10 @@ export const createAppRouter = () => {
             type: getResourceType(node, simulator),
             props: config?.props,
             attributes: config?.attrs,
+            hierarchichalRunningState: getHierarchichalRunningState(
+              node.path,
+              nodeMap,
+            ),
           },
           inbound: connections
             .filter(({ target }) => {
@@ -354,7 +372,7 @@ export const createAppRouter = () => {
         const simulator = await ctx.simulator();
 
         const { tree } = simulator.tree().rawData();
-        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree), simulator);
 
         let [, sourcePath, _sourceInflight, , targetPath, targetInflight] =
           edgeId.match(/^(.+?)#(.*?)#(.*?)#(.+?)#(.*?)#(.*?)$/i) ?? [];
@@ -422,9 +440,29 @@ export const createAppRouter = () => {
 
       const { tree } = simulator.tree().rawData();
       const connections = simulator.connections();
+      const nodeMap = buildConstructTreeNodeMap(shakeTree(tree), simulator);
+
+      const enrichTreeNode = (node: ConstructTreeNode): MapItem => {
+        const children: Record<string, MapItem> | undefined = node.children
+          ? {}
+          : undefined;
+        if (children) {
+          for (const [childId, child] of Object.entries(node.children ?? {})) {
+            children[childId] = enrichTreeNode(child);
+          }
+        }
+        return {
+          ...node,
+          hierarchichalRunningState: getHierarchichalRunningState(
+            node.path,
+            nodeMap,
+          ),
+          children,
+        } as MapItem;
+      };
 
       return {
-        tree,
+        tree: enrichTreeNode(tree),
         connections,
       };
     }),
@@ -470,11 +508,7 @@ export const createAppRouter = () => {
       .query(async ({ input, ctx }) => {
         const simulator = await ctx.simulator();
         const ui = simulator.getResourceUI(input.resourcePath);
-        return ui as Array<{
-          kind: string;
-          label: string;
-          handler: string | Record<string, string>;
-        }>;
+        return ui as Array<UIComponent>;
       }),
 
     "app.analytics": createProcedure.query(async ({ ctx }) => {
@@ -523,6 +557,7 @@ export const createAppRouter = () => {
 function createExplorerItemFromConstructTreeNode(
   node: ConstructTreeNode,
   simulator: Simulator,
+  nodeMap: ConstructTreeNodeMap,
   showTests = false,
   includeHiddens = false,
 ): ExplorerItem {
@@ -538,6 +573,7 @@ function createExplorerItemFromConstructTreeNode(
     label,
     type: getResourceType(node, simulator),
     display: node.display,
+    hierarchichalRunningState: getHierarchichalRunningState(node.path, nodeMap),
     childItems: node.children
       ? Object.values(node.children)
           .filter((node) => {
@@ -550,53 +586,10 @@ function createExplorerItemFromConstructTreeNode(
             createExplorerItemFromConstructTreeNode(
               node,
               simulator,
+              nodeMap,
               showTests,
               includeHiddens,
             ),
-          )
-      : undefined,
-  };
-}
-
-export interface MapNode {
-  id: string;
-  data: {
-    label?: string;
-    type?: string;
-    path?: string;
-    display?: NodeDisplay;
-  };
-  children?: MapNode[];
-}
-
-function createMapNodeFromConstructTreeNode(
-  node: ConstructTreeNode,
-  simulator: Simulator,
-  showTests = false,
-): MapNode {
-  return {
-    id: node.path,
-    data: {
-      label: node.id,
-      type: getResourceType(node, simulator),
-      path: node.path,
-      display: node.display,
-    },
-    children: node.children
-      ? Object.values(node.children)
-          .filter((node) => {
-            if (node.display?.hidden) {
-              return false;
-            }
-
-            if (!showTests && matchTest(node.path)) {
-              return false;
-            }
-
-            return true;
-          })
-          .map((node) =>
-            createMapNodeFromConstructTreeNode(node, simulator, showTests),
           )
       : undefined,
   };

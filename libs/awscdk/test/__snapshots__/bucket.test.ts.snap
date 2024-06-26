@@ -162,6 +162,8 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration,
         ids = [with_id(n) for n in old.get(t, [])]
         old_incoming_ids = [n['Id'] for n in ids]
         external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]
+    elif request_type == 'Delete':
+        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f"{stack_id}-")]
     elif request_type == 'Create':
         external_notifications[t] = [n for n in existing_notifications.get(t, [])]
   if EVENTBRIDGE_CONFIGURATION in existing_notifications:
@@ -213,7 +215,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             "Arn",
           ],
         },
-        "Runtime": "python3.9",
+        "Runtime": "python3.11",
         "Timeout": 300,
       },
       "Type": "AWS::Lambda::Function",
@@ -519,6 +521,8 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration,
         ids = [with_id(n) for n in old.get(t, [])]
         old_incoming_ids = [n['Id'] for n in ids]
         external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]
+    elif request_type == 'Delete':
+        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f"{stack_id}-")]
     elif request_type == 'Create':
         external_notifications[t] = [n for n in existing_notifications.get(t, [])]
   if EVENTBRIDGE_CONFIGURATION in existing_notifications:
@@ -570,7 +574,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             "Arn",
           ],
         },
-        "Runtime": "python3.9",
+        "Runtime": "python3.11",
         "Timeout": 300,
       },
       "Type": "AWS::Lambda::Function",
@@ -876,6 +880,8 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration,
         ids = [with_id(n) for n in old.get(t, [])]
         old_incoming_ids = [n['Id'] for n in ids]
         external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]
+    elif request_type == 'Delete':
+        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f"{stack_id}-")]
     elif request_type == 'Create':
         external_notifications[t] = [n for n in existing_notifications.get(t, [])]
   if EVENTBRIDGE_CONFIGURATION in existing_notifications:
@@ -927,7 +933,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             "Arn",
           ],
         },
-        "Runtime": "python3.9",
+        "Runtime": "python3.11",
         "Timeout": 300,
       },
       "Type": "AWS::Lambda::Function",
@@ -1453,6 +1459,8 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration,
         ids = [with_id(n) for n in old.get(t, [])]
         old_incoming_ids = [n['Id'] for n in ids]
         external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]
+    elif request_type == 'Delete':
+        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f"{stack_id}-")]
     elif request_type == 'Create':
         external_notifications[t] = [n for n in existing_notifications.get(t, [])]
   if EVENTBRIDGE_CONFIGURATION in existing_notifications:
@@ -1504,7 +1512,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             "Arn",
           ],
         },
-        "Runtime": "python3.9",
+        "Runtime": "python3.11",
         "Timeout": 300,
       },
       "Type": "AWS::Lambda::Function",
@@ -1765,7 +1773,7 @@ exports[`bucket with two preflight files 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "e976a796f036a5efbf44b99e44cfb5a961df08d8dbf7cd37e60bf216fb982a00.zip",
+          "S3Key": "2d56e153cac88d3e0c2f842e8e6f6783b8725bf91f95e0673b4725448a56e96d.zip",
         },
         "Environment": {
           "Variables": {

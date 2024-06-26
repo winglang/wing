@@ -213,7 +213,7 @@ inflight () => {
       this.age = age;
     }
 
-    pub inflight greet() {
+    pub greet() {
       log("Hello, {this.name}!");
     }
   }
@@ -279,7 +279,7 @@ inflight () => {
 ```
 
 During the lifting process the compiler tries to figure out in what way the lifted objects are being used. 
-This is how Winglang generats least privilage permissions. Consider the case of lifting a [`cloud.Bucket`](../04-standard-library/cloud/bucket.md) object:
+This is how Winglang generates least privilage permissions. Consider the case of lifting a [`cloud.Bucket`](../04-standard-library/cloud/bucket.md) object:
 
 ```js playground example
 bring cloud;
