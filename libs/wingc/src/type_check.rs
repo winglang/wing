@@ -4675,7 +4675,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 						.enumerate()
 						.find(|(_, s)| matches!(s.kind, StmtKind::SuperConstructor { .. }))
 					{
-						// Check if one of the statements before the super() call is invalid
+						// Check if any of the statements before the super() call are invalid
 						for i in 0..idx {
 							self.type_check_valid_stmt_before_super(&ctor_body.statements[i]);
 						}
