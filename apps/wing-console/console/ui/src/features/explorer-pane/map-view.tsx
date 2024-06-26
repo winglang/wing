@@ -417,6 +417,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
         return (
           <ContainerNode
             id={`${id}#container`}
+            // id={`${id}`}
             name={name}
             pseudoContainer
             resourceType={fqn}

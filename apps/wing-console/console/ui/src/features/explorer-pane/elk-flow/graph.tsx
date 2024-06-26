@@ -1,4 +1,5 @@
 import type { ElkExtendedEdge, ElkNode } from "elkjs";
+import { AnimatePresence } from "framer-motion";
 import {
   memo,
   useCallback,
@@ -75,23 +76,28 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
 
         <div ref={mapBackgroundRef}></div>
 
-        <ZoomPane
-          ref={zoomPaneRef}
-          boundingBox={mapSize}
-          className="w-full h-full"
-          data-testid="map-pane"
-        >
-          {mapBackgroundRef.current &&
-            createPortal(<MapBackground hideDots />, mapBackgroundRef.current)}
+        <AnimatePresence>
+          <ZoomPane
+            ref={zoomPaneRef}
+            boundingBox={mapSize}
+            className="w-full h-full"
+            data-testid="map-pane"
+          >
+            {mapBackgroundRef.current &&
+              createPortal(
+                <MapBackground hideDots />,
+                mapBackgroundRef.current,
+              )}
 
-          <div {...divProps}>
-            {graph && (
-              <GraphRenderer graph={graph} edgeComponent={edgeComponent}>
-                {props.children}
-              </GraphRenderer>
-            )}
-          </div>
-        </ZoomPane>
+            <div {...divProps}>
+              {graph && (
+                <GraphRenderer graph={graph} edgeComponent={edgeComponent}>
+                  {props.children}
+                </GraphRenderer>
+              )}
+            </div>
+          </ZoomPane>
+        </AnimatePresence>
       </>
     );
   },
