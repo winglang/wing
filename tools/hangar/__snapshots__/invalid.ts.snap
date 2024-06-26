@@ -719,28 +719,7 @@ Duration <DURATION>"
 `;
 
 exports[`class.test.w 1`] = `
-"error: Call to super constructor can only be made from derived classes
-   --> ../../../examples/tests/invalid/class.test.w:97:5
-   |
-97 |     super();
-   |     ^^^^^^^^
-
-
-error: Call to super constructor can only be done from within class constructor
-    --> ../../../examples/tests/invalid/class.test.w:114:5
-    |
-114 |     super("cool", "blue");
-    |     ^^^^^^^^^^^^^^^^^^^^^^
-
-
-error: Call to super constructor can only be done from within a class constructor
-    --> ../../../examples/tests/invalid/class.test.w:119:4
-    |
-119 |    super();
-    |    ^^^^^^^^
-
-
-error: Reserved method name. Constructors are declared with a method named "new"
+"error: Reserved method name. Constructors are declared with a method named "new"
     --> ../../../examples/tests/invalid/class.test.w:171:3
     |
 171 |   constructor() {
@@ -884,7 +863,14 @@ error: 'super()' must be called before accessing 'this' in the constructor of a 
     --> ../../../examples/tests/invalid/class.test.w:108:5
     |
 108 |     this.hrlyWage = hrlyWage;
-    |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ^^^^
+
+
+error: Call to super constructor can only be done from within a class initializer
+    --> ../../../examples/tests/invalid/class.test.w:119:4
+    |
+119 |    super();
+    |    ^^^^^^^^
 
 
 error: Cannot instantiate abstract class "Resource"
@@ -965,6 +951,13 @@ error: Variable cannot be reassigned from inflight
    |
 72 |     this.y = 1;
    |     ^^^^^^
+
+
+error: Call to super constructor can only be done from within a class initializer
+    --> ../../../examples/tests/invalid/class.test.w:114:5
+    |
+114 |     super("cool", "blue");
+    |     ^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be "num", but got "str" instead
@@ -2976,68 +2969,84 @@ exports[`invalid_call_before_super.w 1`] = `
    --> ../../../examples/tests/invalid/invalid_call_before_super.w:15:5
    |
 15 |     this.b = 3;
-   |     ^^^^^^^^^^^
+   |     ^^^^
 
 
 error: 'super()' must be called before accessing 'this' in the constructor of a derived class
    --> ../../../examples/tests/invalid/invalid_call_before_super.w:17:5
    |
 17 |     this.hello();
-   |     ^^^^^^^^^^^^^
+   |     ^^^^
 
 
 error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
    --> ../../../examples/tests/invalid/invalid_call_before_super.w:19:5
    |
 19 |     super.get_a();
-   |     ^^^^^^^^^^^^^^
+   |     ^^^^^^^^^^^^^
 
 
 error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
-   --> ../../../examples/tests/invalid/invalid_call_before_super.w:30:5
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:30:17
+   |
+30 |     for z in 0..super.get_five() {
+   |                 ^^^^^^^^^^^^^^^^
+
+
+error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:36:19
+   |
+36 |       for z in 0..super.get_five() {
+   |                   ^^^^^^^^^^^^^^^^
+
+
+error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:43:11
+   |
+43 |       v = super.get_five();
+   |           ^^^^^^^^^^^^^^^^
+
+
+error: 'super()' must be called before accessing 'this' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:48:11
+   |
+48 |       v = this.get_six();
+   |           ^^^^
+
+
+error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:53:12
+   |
+53 |       v += super.get_five();
+   |            ^^^^^^^^^^^^^^^^
+
+
+error: super() should be called only once
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:66:5
+   |
+65 |     super(5);
+   |     --------- First super call occurs here
+66 |     super(5); // Super can only be called once
+   |     ^^^^^^^^^
+
+
+error: Missing super() call in E's constructor
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:71:9
    |  
-30 | /     for z in 0..super.get_five() {
-31 | |       v += 1;
-32 | |     }
-   | \\-----^
+71 |     new() {
+   | /---------^
+72 | |     if true {
+73 | |       super(5); // Super can't be called from inner scope
+74 | |     }
+75 | |   }
+   | \\---^
 
 
-error: 'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class
-   --> ../../../examples/tests/invalid/invalid_call_before_super.w:35:5
-   |  
-35 | /     if v == 0 {
-36 | |       for z in 0..super.get_five() {
-37 | |         v += 1;
-38 | |       }
-39 | |     }
-   | \\-----^
-
-
-error: 'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class
-   --> ../../../examples/tests/invalid/invalid_call_before_super.w:42:5
-   |  
-42 | /     if x {
-43 | |       v = super.get_five();
-44 | |     }
-   | \\-----^
-
-
-error: 'super()' must be called at the top scope before accessing 'this' in the constructor of a derived class
-   --> ../../../examples/tests/invalid/invalid_call_before_super.w:47:5
-   |  
-47 | /     if !x {
-48 | |       v = this.get_six();
-49 | |     }
-   | \\-----^
-
-
-error: 'super()' must be called at the top scope before accessing 'super' in the constructor of a derived class
-   --> ../../../examples/tests/invalid/invalid_call_before_super.w:52:5
-   |  
-52 | /     while v < 100 {
-53 | |       v += super.get_five();
-54 | |     }
-   | \\-----^
+error: super() should be called at the top scope of the constructor
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:73:7
+   |
+73 |       super(5); // Super can't be called from inner scope
+   |       ^^^^^^^^^
 
 
 

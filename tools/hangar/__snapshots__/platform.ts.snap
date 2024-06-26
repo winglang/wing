@@ -6,7 +6,6 @@ exports[`Multiple platforms > only first platform app is used 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -170,7 +169,6 @@ exports[`Platform examples > AWS target platform > permission-boundary.js 1`] = 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -335,7 +333,6 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -687,7 +684,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -851,7 +847,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -1015,7 +1010,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },

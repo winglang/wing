@@ -16,6 +16,7 @@ test("create an OnDeploy", async () => {
   expect(s.getResourceConfig("/my_on_deploy")).toEqual({
     attrs: {
       handle: expect.any(String),
+      runningState: expect.any(String),
     },
     deps: ["root/my_on_deploy/Function"],
     path: "root/my_on_deploy",

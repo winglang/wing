@@ -92,7 +92,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
         sourceType: SIM_RESOURCE_FQN,
         timestamp: new Date().toISOString(),
       });
-      return {};
+      throw err;
     }
   }
 

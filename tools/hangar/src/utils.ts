@@ -99,6 +99,8 @@ export function sanitize_json_paths(path: string) {
     .replace(sourceHashRegex, '"${filemd5(<SOURCE>)}"');
   const finalObj = JSON.parse(sanitizedJsonText);
   delete finalObj.terraform;
+  // Remove cdktf version
+  delete finalObj["//"]["metadata"]["version"];
 
   return finalObj;
 }
