@@ -8,6 +8,7 @@ import type { Node } from "./std/node";
 // https://github.com/winglang/wing/issues/4444
 // therefore we're using a local version of the comparison from node 18.
 import { deepStrictEqual } from "./util/equality";
+import { std } from ".";
 
 export function eq(a: any, b: any): boolean {
   try {
@@ -192,4 +193,26 @@ export function bringJs(
       return true;
     })
   );
+}
+
+/**
+ * Helper function to get a singleton instance of a class defined in preflight. 
+ * In practice this is used to get the preflight instance of **inflight** classes defined **preflight**.
+ * This instance is used for accessing the lift map of such classes.
+ * @param scope - a scope in the construct tree that'll hold the instance (a singleton within that tree).
+ * @param typeId - the unique id of the preflight class type we want.
+ * @returns the instance of the class.
+ */
+export function preflightClassSingleton(scope: Construct, typeId: number): std.Resource {
+  const root: any = nodeof(scope).root;
+  const type: any = root.$preflightTypesMap[typeId];
+  if (root.resourceSingletons === undefined) {
+    root.resourceSingletons = {};
+  }
+  const instance = root.resourceSingletons[type];
+  if (instance) {
+    return instance;
+  }
+  root.resourceSingletons[type] = new type(scope, `${type.name}_singleton_${typeId}`);
+  return root.resourceSingletons[type];
 }

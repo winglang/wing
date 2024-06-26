@@ -149,29 +149,6 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
-   * Create a singleton of this resource. This uses `this` in a static context
-   * to create a singleton of any subclass of `Resource`.
-   * This helper function is used to create a single dummy instance of `inflight class`es
-   * defined in preflight code. This instances are needed to create a lift qualification
-   * map for such classes.
-   *
-   * @internal
-   */
-  public static _singleton(scope: Construct, id: string): Resource {
-    const root: any = Node.of(scope).root;
-    let t: any = this;
-    if (root.resourceSingletons === undefined) {
-      root.resourceSingletons = {};
-    }
-    const instance = root.resourceSingletons[t];
-    if (instance) {
-      return instance;
-    }
-    root.resourceSingletons[t] = new t(root, id);
-    return root.resourceSingletons[t];
-  }
-
-  /**
    * Create an instance of this resource with the current App factory.
    * This is commonly used in the constructor of a pseudo-abstract resource class before the super() call.
    *

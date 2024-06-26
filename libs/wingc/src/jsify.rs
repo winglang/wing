@@ -1880,10 +1880,7 @@ impl<'a> JSifier<'a> {
 
 	pub fn class_singleton(&self, type_: TypeRef) -> String {
 		let c = type_.as_class().unwrap();
-		format!(
-			"{PREFLIGHT_TYPES_MAP}[{}]._singleton(this,\"{}_singleton_{}\")",
-			c.uid, c.name, c.uid
-		)
+		format!("$helpers.preflightClassSingleton(this, {})", c.uid)
 	}
 
 	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
