@@ -3,7 +3,6 @@
 ## stdout.log
 ```log
 [INFO] container with entrypoint | hello
-[WARNING] container with entrypoint | Timeout waiting for container root/env0/with-entrypoint to shutdown, removing forcefully
 pass ─ entrypoint.test.wsim » root/env0/test:container with entrypoint
 
 Tests 1 passed (1)
