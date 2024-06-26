@@ -5,7 +5,11 @@ use crate::{
 };
 
 pub struct CheckValidBeforeSuperVisitor {
+	/// A list of locations where there's a `super.method_call()` within this statement.
+	/// These are illegal before a call to the `super()` constructor.
 	pub super_accesses: Vec<WingSpan>,
+	/// A list of locations where `this` is referenced within this statement.
+	/// These are illegal before a call to the `super()` constructor.
 	pub this_accesses: Vec<WingSpan>,
 }
 
