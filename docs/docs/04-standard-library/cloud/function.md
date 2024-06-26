@@ -168,7 +168,7 @@ if let lambdaFn = aws.Function.from(f) {
 }
 ```
 
-In some scenarios, you might want to a Lambda layer to be automatically added whenever methods on a particular class are called.
+In some scenarios, you might want to a Lambda layer to be automatically added to all compute resources that use a class's inflight methods.
 You can achieve this by using the `onLift` or `onLiftType` hook.
 
 ```ts playground example
@@ -176,7 +176,7 @@ bring aws;
 bring cloud;
 
 class Datadog {
-  pub inflight publishMetrics() {
+  pub inflight fetchMetrics() {
     // ...implementation...
   }
   pub onLift(host: std.IInflightHost, ops: Array<str>) {
@@ -190,11 +190,13 @@ class Datadog {
 
 let d = new Datadog();
 
-let f = new cloud.Function(inflight () => {
-  d.publishMetrics();
-  log("Hello world!");
-}) as "MyFunction";
+let api = new cloud.Api();
+api.get("/metrics", inflight () => {
+  d.fetchMetrics();
+});
 ```
+
+In the previous example, a Lambda function is implicitly created for handling the "/metrics" endpoint, and the `datadog-layer` is automatically added to it.
 
 ### Azure (`tf-azure`)
 
