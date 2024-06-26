@@ -214,6 +214,20 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.Bar-1.cjs.map
 ```
 
+## inflight.BaseClassWithCtorArg-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class BaseClassWithCtorArg {
+    constructor({  }) {
+    }
+  }
+  return BaseClassWithCtorArg;
+}
+//# sourceMappingURL=inflight.BaseClassWithCtorArg-1.cjs.map
+```
+
 ## inflight.Baz-1.cjs
 ```cjs
 "use strict";
@@ -410,6 +424,21 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.C5-1.cjs.map
 ```
 
+## inflight.DerivedClassWithInnerClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $BaseClassWithCtorArg }) {
+  class DerivedClassWithInnerClass extends $BaseClassWithCtorArg {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return DerivedClassWithInnerClass;
+}
+//# sourceMappingURL=inflight.DerivedClassWithInnerClass-1.cjs.map
+```
+
 ## inflight.DocClass-1.cjs
 ```cjs
 "use strict";
@@ -439,6 +468,35 @@ module.exports = function({ $Bar }) {
   return Foo;
 }
 //# sourceMappingURL=inflight.Foo-1.cjs.map
+```
+
+## inflight.InnerBaseClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class InnerBaseClass {
+    constructor({  }) {
+    }
+  }
+  return InnerBaseClass;
+}
+//# sourceMappingURL=inflight.InnerBaseClass-1.cjs.map
+```
+
+## inflight.InnerDerivedClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $InnerBaseClass }) {
+  class InnerDerivedClass extends $InnerBaseClass {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return InnerDerivedClass;
+}
+//# sourceMappingURL=inflight.InnerDerivedClass-1.cjs.map
 ```
 
 ## inflight.PaidStudent-1.cjs
@@ -1386,6 +1444,127 @@ class $Root extends $stdlib.std.Resource {
       }
       get _liftMap() {
         return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class BaseClassWithCtorArg extends $stdlib.std.Resource {
+      constructor($scope, $id, x) {
+        super($scope, $id);
+        this.x = x;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.BaseClassWithCtorArg-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const BaseClassWithCtorArgClient = ${BaseClassWithCtorArg._toInflightType()};
+            const client = new BaseClassWithCtorArgClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class DerivedClassWithInnerClass extends BaseClassWithCtorArg {
+      constructor($scope, $id, ) {
+        class InnerBaseClass extends $stdlib.std.Resource {
+          constructor($scope, $id, x) {
+            super($scope, $id);
+            this.x = x;
+          }
+          method() {
+          }
+          static _toInflightType() {
+            return `
+              require("${$helpers.normalPath(__dirname)}/inflight.InnerBaseClass-1.cjs")({
+              })
+            `;
+          }
+          _toInflight() {
+            return `
+              (await (async () => {
+                const InnerBaseClassClient = ${InnerBaseClass._toInflightType()};
+                const client = new InnerBaseClassClient({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `;
+          }
+          get _liftMap() {
+            return ({
+              "$inflight_init": [
+              ],
+            });
+          }
+        }
+        class InnerDerivedClass extends InnerBaseClass {
+          constructor($scope, $id, ) {
+            super($scope, $id, 1);
+            (this.method());
+            (super.method());
+            this.x;
+          }
+          static _toInflightType() {
+            return `
+              require("${$helpers.normalPath(__dirname)}/inflight.InnerDerivedClass-1.cjs")({
+                $InnerBaseClass: ${$stdlib.core.liftObject(InnerBaseClass)},
+              })
+            `;
+          }
+          _toInflight() {
+            return `
+              (await (async () => {
+                const InnerDerivedClassClient = ${InnerDerivedClass._toInflightType()};
+                const client = new InnerDerivedClassClient({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `;
+          }
+          get _liftMap() {
+            return $stdlib.core.mergeLiftDeps(super._liftMap, {
+              "$inflight_init": [
+              ],
+            });
+          }
+        }
+        super($scope, $id, 1);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.DerivedClassWithInnerClass-1.cjs")({
+            $BaseClassWithCtorArg: ${$stdlib.core.liftObject(BaseClassWithCtorArg)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const DerivedClassWithInnerClassClient = ${DerivedClassWithInnerClass._toInflightType()};
+            const client = new DerivedClassWithInnerClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "$inflight_init": [
           ],
         });
