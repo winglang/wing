@@ -5262,7 +5262,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		} else {
 			self.spanned_error(
 				super_constructor_call,
-				"Call to super constructor can only be done from within a class initializer",
+				"Call to super constructor can only be done from within a class constructor",
 			);
 			return;
 		};
@@ -5278,13 +5278,18 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		if method_name.name != init_name {
 			self.spanned_error(
 				super_constructor_call,
-				"Call to super constructor can only be done from within a class initializer",
+				"Call to super constructor can only be done from within a class constructor",
 			);
 			return;
 		}
 
 		// Verify the class has a parent class
-		let Some(parent_class) = &class_type.as_class().expect("class type to be a class").parent else {
+		let Some(parent_class) = &class_type
+			.as_class()
+			.expect("class type to be a class")
+			.parent
+			.filter(|p| !p.is_same_type_as(&self.types.resource_base_type()))
+		else {
 			self.spanned_error(
 				super_constructor_call,
 				format!("Class \"{class_type}\" does not have a parent class"),
