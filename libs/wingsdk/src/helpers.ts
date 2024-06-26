@@ -187,6 +187,10 @@ export function bringJs(
     Object.entries(require(moduleFile)).filter(([k, v]) => {
       // If this is the preflight types array then update the input object and skip it
       if (k === preflightTypesObjectName) {
+        // Verify no key collision (should never happen)
+        Object.keys(v as object).forEach((key) => {
+          if (key in outPreflightTypesObject) throw new Error(`Key collision (${key}) in preflight types map`);
+        });
         Object.assign(outPreflightTypesObject, v);
         return false;
       }
