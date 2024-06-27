@@ -28,11 +28,14 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cdk8s = require("cdk8s");
-const kplus = require("cdk8s-plus-27");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cdk8s = require("cdk8s");
+    const kplus = require("cdk8s-plus-27");
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const app = this.node.root.new("cdk8s.App", cdk8s.App, );
     const chart = this.node.root.new("cdk8s.Chart", cdk8s.Chart, this, "Chart");
     const deploy = ($scope => $scope.node.root.new("cdk8s-plus-27.Deployment", kplus.Deployment, $scope, "Deployment"))(chart);
