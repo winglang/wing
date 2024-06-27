@@ -105,8 +105,8 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-let $preflightTypesMap = {};
-Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.lib-1.cjs`, "$preflightTypesMap", $preflightTypesMap));
+const $preflightTypesMap = {};
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.lib-1.cjs`, $preflightTypesMap));
 module.exports = { ...module.exports, $preflightTypesMap };
 //# sourceMappingURL=preflight.cjs.map
 ```
