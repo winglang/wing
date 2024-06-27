@@ -464,12 +464,28 @@ Duration <DURATION>"
 
 exports[`bring_invalid_dir.w 1`] = `
 "error: Cannot explicitly bring directory with no Wing files "no_wing_files"
+  --> ../../../examples/tests/invalid/bring_invalid_dir.w:4:7
+  |
+4 | bring "./subdir3/no_wing_files" as whatchaGonnaBring;
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-error: Cannot bring Wing directories that contain invalid characters: "in.valid"
+error: Cannot bring Wing directories that contain sub-directories with invalid characters: "in.valid"
+  --> ../../../examples/tests/invalid/bring_invalid_dir.w:1:7
+  |
+1 | bring "./subdir3" as wontWork;
+  |       ^^^^^^^^^^^
+  |
+  = hint: Directory names must start with a letter or underscore and contain only letters, numbers, and underscores.
 
 
-error: Cannot bring Wing directories that contain invalid characters: "not-valid"
+error: Cannot bring Wing directories that contain sub-directories with invalid characters: "not-valid"
+  --> ../../../examples/tests/invalid/bring_invalid_dir.w:1:7
+  |
+1 | bring "./subdir3" as wontWork;
+  |       ^^^^^^^^^^^
+  |
+  = hint: Directory names must start with a letter or underscore and contain only letters, numbers, and underscores.
 
 
 
@@ -719,28 +735,7 @@ Duration <DURATION>"
 `;
 
 exports[`class.test.w 1`] = `
-"error: Call to super constructor can only be made from derived classes
-   --> ../../../examples/tests/invalid/class.test.w:97:5
-   |
-97 |     super();
-   |     ^^^^^^^^
-
-
-error: Call to super constructor can only be done from within class constructor
-    --> ../../../examples/tests/invalid/class.test.w:114:5
-    |
-114 |     super("cool", "blue");
-    |     ^^^^^^^^^^^^^^^^^^^^^^
-
-
-error: Call to super constructor can only be done from within a class constructor
-    --> ../../../examples/tests/invalid/class.test.w:119:4
-    |
-119 |    super();
-    |    ^^^^^^^^
-
-
-error: Reserved method name. Constructors are declared with a method named "new"
+"error: Reserved method name. Constructors are declared with a method named "new"
     --> ../../../examples/tests/invalid/class.test.w:171:3
     |
 171 |   constructor() {
@@ -880,11 +875,18 @@ error: Unknown symbol "C11"
    |                   ^^^
 
 
-error: super() call must be the first statement of PaidStudent's constructor
-    --> ../../../examples/tests/invalid/class.test.w:109:5
+error: 'super()' must be called before accessing 'this' in the constructor of a derived class
+    --> ../../../examples/tests/invalid/class.test.w:108:5
     |
-109 |     super(name, major);
-    |     ^^^^^^^^^^^^^^^^^^^
+108 |     this.hrlyWage = hrlyWage;
+    |     ^^^^
+
+
+error: Call to super constructor can only be done from within a class constructor
+    --> ../../../examples/tests/invalid/class.test.w:119:4
+    |
+119 |    super();
+    |    ^^^^^^^^
 
 
 error: Cannot instantiate abstract class "Resource"
@@ -965,6 +967,20 @@ error: Variable cannot be reassigned from inflight
    |
 72 |     this.y = 1;
    |     ^^^^^^
+
+
+error: Class "Student" does not have a parent class
+   --> ../../../examples/tests/invalid/class.test.w:97:5
+   |
+97 |     super();
+   |     ^^^^^^^^
+
+
+error: Call to super constructor can only be done from within a class constructor
+    --> ../../../examples/tests/invalid/class.test.w:114:5
+    |
+114 |     super("cool", "blue");
+    |     ^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be "num", but got "str" instead
@@ -1306,35 +1322,35 @@ Duration <DURATION>"
 `;
 
 exports[`ctor_super.test.w 1`] = `
-"error: Missing super() call as first statement of PreflighChild1's constructor
+"error: Missing super() call in PreflighChild1's constructor
   --> ../../../examples/tests/invalid/ctor_super.test.w:9:7
   |
 9 | class PreflighChild1 extends PreflightBaseWithCtorParam {}
   |       ^^^^^^^^^^^^^^
 
 
-error: Missing super() call as first statement of PreflighChild2's constructor
+error: Missing super() call in PreflighChild2's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:13:15
    |
 13 |   new(a: num) {}
    |               ^^
 
 
-error: Missing super() call as first statement of InflightChild1's constructor
+error: Missing super() call in InflightChild1's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:29:16
    |
 29 | inflight class InflightChild1 extends InflightBaseWithCtorParam {}
    |                ^^^^^^^^^^^^^^
 
 
-error: Missing super() call as first statement of InflightChild2's constructor
+error: Missing super() call in InflightChild2's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:33:15
    |
 33 |   new(a: num) {}
    |               ^^
 
 
-error: Missing super() call as first statement of InflightChild4's constructor
+error: Missing super() call in InflightChild4's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:45:9
    |
 45 |   new() {}
@@ -1355,21 +1371,21 @@ error: Expected 1 positional argument(s) but got 0
    |     ^^^^^^^^
 
 
-error: Missing super() call as first statement of InflightChild1's constructor
+error: Missing super() call in InflightChild1's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:55:9
    |
 55 |   class InflightChild1 extends InflightBaseWithCtorParam {}
    |         ^^^^^^^^^^^^^^
 
 
-error: Missing super() call as first statement of InflightChild2's constructor
+error: Missing super() call in InflightChild2's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:59:17
    |
 59 |     new(a: num) {}
    |                 ^^
 
 
-error: Missing super() call as first statement of InflightChild4's constructor
+error: Missing super() call in InflightChild4's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:71:11
    |
 71 |     new() {}
@@ -2962,6 +2978,98 @@ exports[`invalid compile directory 1`] = `
   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "
+`;
+
+exports[`invalid_call_before_super.w 1`] = `
+"error: 'super()' must be called before accessing 'this' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:15:5
+   |
+15 |     this.b = 3;
+   |     ^^^^
+
+
+error: 'super()' must be called before accessing 'this' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:17:5
+   |
+17 |     this.hello();
+   |     ^^^^
+
+
+error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:19:5
+   |
+19 |     super.get_a();
+   |     ^^^^^^^^^^^^^
+
+
+error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:30:17
+   |
+30 |     for z in 0..super.get_five() {
+   |                 ^^^^^^^^^^^^^^^^
+
+
+error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:36:19
+   |
+36 |       for z in 0..super.get_five() {
+   |                   ^^^^^^^^^^^^^^^^
+
+
+error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:43:11
+   |
+43 |       v = super.get_five();
+   |           ^^^^^^^^^^^^^^^^
+
+
+error: 'super()' must be called before accessing 'this' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:48:11
+   |
+48 |       v = this.get_six();
+   |           ^^^^
+
+
+error: 'super()' must be called before calling a method of 'super' in the constructor of a derived class
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:53:12
+   |
+53 |       v += super.get_five();
+   |            ^^^^^^^^^^^^^^^^
+
+
+error: super() should be called only once
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:66:5
+   |
+65 |     super(5);
+   |     --------- First super call occurs here
+66 |     super(5); // Super can only be called once
+   |     ^^^^^^^^^
+
+
+error: Missing super() call in E's constructor
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:71:9
+   |  
+71 |     new() {
+   | /---------^
+72 | |     if true {
+73 | |       super(5); // Super can't be called from inner scope
+74 | |     }
+75 | |   }
+   | \\---^
+
+
+error: super() should be called at the top scope of the constructor
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:73:7
+   |
+73 |       super(5); // Super can't be called from inner scope
+   |       ^^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`issue_2767.test.w 1`] = `
