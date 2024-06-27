@@ -475,6 +475,8 @@ error: Cannot bring Wing directories that contain sub-directories with invalid c
   |
 1 | bring "./subdir3" as wontWork;
   |       ^^^^^^^^^^^
+  |
+  = hint: Directory names must start with a letter or underscore and contain only letters, numbers, and underscores.
 
 
 error: Cannot bring Wing directories that contain sub-directories with invalid characters: "not-valid"
@@ -482,6 +484,8 @@ error: Cannot bring Wing directories that contain sub-directories with invalid c
   |
 1 | bring "./subdir3" as wontWork;
   |       ^^^^^^^^^^^
+  |
+  = hint: Directory names must start with a letter or underscore and contain only letters, numbers, and underscores.
 
 
 
