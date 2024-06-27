@@ -112,9 +112,9 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const fixture = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`,"$preflightTypesMap", $preflightTypesMap);
-    const testfixture = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`,"$preflightTypesMap", $preflightTypesMap);
-    const testfixture2 = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`,"$preflightTypesMap", $preflightTypesMap);
+    const fixture = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`, $preflightTypesMap);
+    const testfixture = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`, $preflightTypesMap);
+    const testfixture2 = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`, $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
@@ -193,7 +193,7 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
 const cloud = $stdlib.cloud;
-const myutil = $helpers.bringJs(`${__dirname}/preflight.util-2.cjs`,"$preflightTypesMap", $preflightTypesMap);
+const myutil = $helpers.bringJs(`${__dirname}/preflight.util-2.cjs`, $preflightTypesMap);
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, options) {
     super($scope, $id);
@@ -258,8 +258,8 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-let $preflightTypesMap = {};
-Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.util-2.cjs`, "$preflightTypesMap", $preflightTypesMap));
+const $preflightTypesMap = {};
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.util-2.cjs`, $preflightTypesMap));
 module.exports = { ...module.exports, $preflightTypesMap };
 //# sourceMappingURL=preflight.subdir-4.cjs.map
 ```
@@ -271,10 +271,10 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-let $preflightTypesMap = {};
-Object.assign(module.exports, { get subdir() { return $helpers.bringJs(`${__dirname}/preflight.subdir-4.cjs`, "$preflightTypesMap", $preflightTypesMap); } });
-Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.store-3.cjs`, "$preflightTypesMap", $preflightTypesMap));
-Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.enums-1.cjs`, "$preflightTypesMap", $preflightTypesMap));
+const $preflightTypesMap = {};
+Object.assign(module.exports, { get subdir() { return $helpers.bringJs(`${__dirname}/preflight.subdir-4.cjs`, $preflightTypesMap); } });
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.store-3.cjs`, $preflightTypesMap));
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.enums-1.cjs`, $preflightTypesMap));
 module.exports = { ...module.exports, $preflightTypesMap };
 //# sourceMappingURL=preflight.testfixture-5.cjs.map
 ```

@@ -302,9 +302,9 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const file1 = $helpers.bringJs(`${__dirname}/preflight.store-2.cjs`,"$preflightTypesMap", $preflightTypesMap);
-    const file2 = $helpers.bringJs(`${__dirname}/preflight.subfile-3.cjs`,"$preflightTypesMap", $preflightTypesMap);
-    const file3 = $helpers.bringJs(`${__dirname}/preflight.empty-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
+    const file1 = $helpers.bringJs(`${__dirname}/preflight.store-2.cjs`, $preflightTypesMap);
+    const file2 = $helpers.bringJs(`${__dirname}/preflight.subfile-3.cjs`, $preflightTypesMap);
+    const file3 = $helpers.bringJs(`${__dirname}/preflight.empty-1.cjs`, $preflightTypesMap);
     const math = $stdlib.math;
     const expect = $stdlib.expect;
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
@@ -477,7 +477,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
-const file3 = $helpers.bringJs(`${__dirname}/preflight.empty-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
+const file3 = $helpers.bringJs(`${__dirname}/preflight.empty-1.cjs`, $preflightTypesMap);
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
 const Color =
