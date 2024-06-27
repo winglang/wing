@@ -238,7 +238,7 @@ impl<'a> JSifier<'a> {
 			// ```
 
 			// This module's preflight type map
-			output.line(format!("let {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
+			output.line(format!("const {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
 
 			for file in directory_children {
 				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
