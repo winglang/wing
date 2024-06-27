@@ -302,7 +302,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			return;
 		}
 
-		self.ctx.push_expr(&node);
+		self.ctx.push_expr(node.id);
 
 		match &node.kind {
 			ExprKind::New(new_expr) => 'new_expr: {

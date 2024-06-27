@@ -36,7 +36,6 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-let $preflightTypesMap = {};
 class A extends $stdlib.std.Resource {
   constructor($scope, $id, a) {
     super($scope, $id);
@@ -96,7 +95,7 @@ class B extends A {
     });
   }
 }
-module.exports = { $preflightTypesMap,  };
+module.exports = {  };
 //# sourceMappingURL=preflight.cjs.map
 ```
 
