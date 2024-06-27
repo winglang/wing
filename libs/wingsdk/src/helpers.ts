@@ -178,17 +178,18 @@ export function resolveDirname(
  */
 export function bringJs(
   moduleFile: string,
-  outPreflightTypesObject: Object
+  outPreflightTypesObject: any
 ): Object {
   /* eslint-disable @typescript-eslint/no-require-imports */
   return Object.fromEntries(
-    Object.entries(require(moduleFile)).filter(([k, v]) => {
+    Object.entries<object>(require(moduleFile)).filter(([k, v]) => {
       // If this is the preflight types array then update the input object and skip it
       if (k === "$preflightTypesMap") {
         // Verify no key collision (should never happen)
-        Object.keys(v as object).forEach((key) => {
-          if (key in outPreflightTypesObject) {
-            throw new Error(`Key collision (${key}) in preflight types map`);
+        Object.entries(v).forEach(([key, value]) => {
+          const otherValue = outPreflightTypesObject[key];
+          if (key in outPreflightTypesObject && otherValue !== value) {
+            throw new Error(`Key collision (${key} is both ${value.name} and ${otherValue.name}) in preflight types map`);
           }
         });
         Object.assign(outPreflightTypesObject, v);
