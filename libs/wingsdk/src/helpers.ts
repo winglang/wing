@@ -189,8 +189,9 @@ export function bringJs(
       if (k === preflightTypesObjectName) {
         // Verify no key collision (should never happen)
         Object.keys(v as object).forEach((key) => {
-          if (key in outPreflightTypesObject)
+          if (key in outPreflightTypesObject) {
             throw new Error(`Key collision (${key}) in preflight types map`);
+          }
         });
         Object.assign(outPreflightTypesObject, v);
         return false;
