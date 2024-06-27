@@ -3,7 +3,7 @@
 import { notDeepStrictEqual } from "node:assert";
 import * as path from "node:path";
 import type { Construct } from "constructs";
-import { std } from ".";
+import type { Resource } from "./std";
 import type { Node } from "./std/node";
 // since we moved from node:18 to node:20 the deepStrictEqual doesn't work as expected.
 // https://github.com/winglang/wing/issues/4444
@@ -212,7 +212,7 @@ export function bringJs(
 export function preflightClassSingleton(
   scope: Construct,
   typeId: number
-): std.Resource {
+): Resource {
   const root: any = nodeof(scope).root;
   const type: any = root.$preflightTypesMap[typeId];
   if (root.resourceSingletons === undefined) {
