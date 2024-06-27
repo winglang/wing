@@ -737,7 +737,7 @@ impl<'a> JsiiImporter<'a> {
 			std_construct_args: false, // Temporary value, will be updated once we parse the initializer args
 			lifts: None,
 
-			// uid is used to create unique names class types so we can access the correct type regradless of type name shadowing,
+			// uid is used to create unique names class types so we can access the correct type regardless of type name shadowing,
 			// this isn't relevant for imported types (that aren't code generated), so we can default to 0
 			uid: 0,
 		};
