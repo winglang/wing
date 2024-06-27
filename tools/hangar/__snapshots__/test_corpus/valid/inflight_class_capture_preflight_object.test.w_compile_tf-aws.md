@@ -269,7 +269,7 @@ class $Root extends $stdlib.std.Resource {
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
     const cloud = $stdlib.cloud;
-    const subdir = $helpers.bringJs(`${__dirname}/preflight.subdir2-6.cjs`,"$preflightTypesMap", $preflightTypesMap);
+    const subdir = $helpers.bringJs(`${__dirname}/preflight.subdir2-6.cjs`, $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -552,7 +552,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
-const blah = $helpers.bringJs(`${__dirname}/preflight.inner-2.cjs`,"$preflightTypesMap", $preflightTypesMap);
+const blah = $helpers.bringJs(`${__dirname}/preflight.inner-2.cjs`, $preflightTypesMap);
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 class Foo extends $stdlib.std.Resource {
@@ -717,8 +717,8 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-let $preflightTypesMap = {};
-Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.widget-1.cjs`, "$preflightTypesMap", $preflightTypesMap));
+const $preflightTypesMap = {};
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.widget-1.cjs`, $preflightTypesMap));
 module.exports = { ...module.exports, $preflightTypesMap };
 //# sourceMappingURL=preflight.inner-2.cjs.map
 ```
@@ -730,11 +730,11 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-let $preflightTypesMap = {};
-Object.assign(module.exports, { get inner() { return $helpers.bringJs(`${__dirname}/preflight.inner-2.cjs`, "$preflightTypesMap", $preflightTypesMap); } });
-Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.inflightclass-5.cjs`, "$preflightTypesMap", $preflightTypesMap));
-Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.file2-4.cjs`, "$preflightTypesMap", $preflightTypesMap));
-Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.file1-3.cjs`, "$preflightTypesMap", $preflightTypesMap));
+const $preflightTypesMap = {};
+Object.assign(module.exports, { get inner() { return $helpers.bringJs(`${__dirname}/preflight.inner-2.cjs`, $preflightTypesMap); } });
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.inflightclass-5.cjs`, $preflightTypesMap));
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.file2-4.cjs`, $preflightTypesMap));
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.file1-3.cjs`, $preflightTypesMap));
 module.exports = { ...module.exports, $preflightTypesMap };
 //# sourceMappingURL=preflight.subdir2-6.cjs.map
 ```

@@ -164,9 +164,9 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const foo = $helpers.bringJs(`${__dirname}/preflight.foo-3.cjs`,"$preflightTypesMap", $preflightTypesMap);
-    const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
-    const baz = $helpers.bringJs(`${__dirname}/preflight.baz-2.cjs`,"$preflightTypesMap", $preflightTypesMap);
+    const foo = $helpers.bringJs(`${__dirname}/preflight.foo-3.cjs`, $preflightTypesMap);
+    const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`, $preflightTypesMap);
+    const baz = $helpers.bringJs(`${__dirname}/preflight.baz-2.cjs`, $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     $helpers.assert($helpers.eq((foo.Foo.foo(this)), "foo"), "foo.Foo.foo() == \"foo\"");
     $helpers.assert($helpers.eq((foo.Foo.bar(this)), "bar"), "foo.Foo.bar() == \"bar\"");
@@ -189,8 +189,8 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
-const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
-const baz = $helpers.bringJs(`${__dirname}/preflight.baz-2.cjs`,"$preflightTypesMap", $preflightTypesMap);
+const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`, $preflightTypesMap);
+const baz = $helpers.bringJs(`${__dirname}/preflight.baz-2.cjs`, $preflightTypesMap);
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
