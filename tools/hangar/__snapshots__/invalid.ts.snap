@@ -464,12 +464,28 @@ Duration <DURATION>"
 
 exports[`bring_invalid_dir.w 1`] = `
 "error: Cannot explicitly bring directory with no Wing files "no_wing_files"
+  --> ../../../examples/tests/invalid/bring_invalid_dir.w:4:7
+  |
+4 | bring "./subdir3/no_wing_files" as whatchaGonnaBring;
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-error: Cannot bring Wing directories that contain invalid characters: "in.valid"
+error: Cannot bring Wing directories that contain sub-directories with invalid characters: "in.valid"
+  --> ../../../examples/tests/invalid/bring_invalid_dir.w:1:7
+  |
+1 | bring "./subdir3" as wontWork;
+  |       ^^^^^^^^^^^
+  |
+  = hint: Directory names must start with a letter or underscore and contain only letters, numbers, and underscores.
 
 
-error: Cannot bring Wing directories that contain invalid characters: "not-valid"
+error: Cannot bring Wing directories that contain sub-directories with invalid characters: "not-valid"
+  --> ../../../examples/tests/invalid/bring_invalid_dir.w:1:7
+  |
+1 | bring "./subdir3" as wontWork;
+  |       ^^^^^^^^^^^
+  |
+  = hint: Directory names must start with a letter or underscore and contain only letters, numbers, and underscores.
 
 
 

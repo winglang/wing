@@ -164,7 +164,14 @@ pub fn parse_wing_project(
 ) -> Vec<Utf8PathBuf> {
 	// Parse the initial path (even if we have already seen it before)
 	let dependent_wing_paths = match init_path.is_dir() {
-		true => parse_wing_directory(&init_path, files, file_graph, tree_sitter_trees, asts),
+		true => parse_wing_directory(
+			&init_path,
+			&WingSpan::for_file(init_path.to_string()),
+			files,
+			file_graph,
+			tree_sitter_trees,
+			asts,
+		),
 		false => parse_wing_file(&init_path, init_text, files, file_graph, tree_sitter_trees, asts),
 	};
 
@@ -172,7 +179,7 @@ pub fn parse_wing_project(
 	let mut unparsed_files = dependent_wing_paths;
 
 	// Parse all remaining files in the project
-	while let Some(file_or_dir_path) = unparsed_files.pop() {
+	while let Some((file_or_dir_path, source_ref)) = unparsed_files.pop() {
 		// Skip files that we have already seen before (they should already be parsed)
 		if files.contains_file(&file_or_dir_path) {
 			assert!(
@@ -189,7 +196,14 @@ pub fn parse_wing_project(
 
 		// Parse the file or directory
 		let dependent_wing_paths = match file_or_dir_path.is_dir() {
-			true => parse_wing_directory(&file_or_dir_path, files, file_graph, tree_sitter_trees, asts),
+			true => parse_wing_directory(
+				&file_or_dir_path,
+				&source_ref,
+				files,
+				file_graph,
+				tree_sitter_trees,
+				asts,
+			),
 			false => parse_wing_file(&file_or_dir_path, None, files, file_graph, tree_sitter_trees, asts),
 		};
 
@@ -227,7 +241,7 @@ fn parse_wing_file(
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
-) -> Vec<Utf8PathBuf> {
+) -> Vec<(Utf8PathBuf, WingSpan)> {
 	let source_text = match source_text {
 		Some(text) => text,
 		None => fs::read_to_string(source_path).expect("read_to_string call failed"),
@@ -258,7 +272,7 @@ fn parse_wing_file(
 	// Update our collections of trees and ASTs and our file graph
 	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
 	asts.insert(source_path.to_owned(), scope);
-	file_graph.update_file(source_path, &dependent_wing_paths);
+	file_graph.update_file(source_path, dependent_wing_paths.iter().map(|(path, _)| path));
 
 	dependent_wing_paths
 }
@@ -285,40 +299,32 @@ fn contains_non_symbolic(str: &str) -> bool {
 	!re.is_match(str)
 }
 
-fn check_valid_wing_dir_name(dir_path: &Utf8Path) {
+fn check_valid_wing_dir_name(dir_path: &Utf8Path) -> bool {
 	if contains_non_symbolic(dir_path.file_name().unwrap()) {
-		report_diagnostic(Diagnostic {
-			message: format!(
-				"Cannot bring Wing directories that contain invalid characters: \"{}\"",
-				dir_path.file_name().unwrap()
-			),
-			span: None,
-			annotations: vec![],
-			hints: vec![],
-		});
+		return false;
 	}
+	true
 }
 
 fn parse_wing_directory(
 	source_path: &Utf8Path,
+	source_ref: &WingSpan,
 	files: &mut Files,
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
-) -> Vec<Utf8PathBuf> {
+) -> Vec<(Utf8PathBuf, WingSpan)> {
 	// Collect a list of all files and subdirectories in the directory
 	let mut files_and_dirs = Vec::new();
 
 	if source_path.is_dir() && !dir_contains_wing_file(&source_path) {
-		report_diagnostic(Diagnostic {
-			message: format!(
+		report_diagnostic(Diagnostic::new(
+			format!(
 				"Cannot explicitly bring directory with no Wing files \"{}\"",
 				source_path.file_name().unwrap()
 			),
-			span: None,
-			annotations: vec![],
-			hints: vec![],
-		})
+			source_ref,
+		))
 	}
 
 	for entry in fs::read_dir(&source_path).expect("read_dir call failed") {
@@ -336,9 +342,17 @@ fn parse_wing_directory(
 		{
 			// before we add the path, we need to check that directory names are valid
 			if path.is_dir() {
-				check_valid_wing_dir_name(&path);
+				if !check_valid_wing_dir_name(&path) {
+					report_diagnostic(Diagnostic::new(
+						format!(
+							"Cannot bring Wing directories that contain sub-directories with invalid characters: \"{}\"",
+							path.file_name().unwrap()
+						),
+						source_ref,
+					).hint("Directory names must start with a letter or underscore and contain only letters, numbers, and underscores."));
+				}
 			}
-			files_and_dirs.push(path);
+			files_and_dirs.push((path, source_ref.clone()));
 		}
 	}
 
@@ -356,7 +370,7 @@ fn parse_wing_directory(
 	files.update_file(&source_path, "".to_string());
 	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
 	asts.insert(source_path.to_owned(), scope);
-	file_graph.update_file(source_path, &dependent_wing_paths);
+	file_graph.update_file(source_path, dependent_wing_paths.iter().map(|(path, _)| path));
 
 	dependent_wing_paths
 }
@@ -371,9 +385,9 @@ pub struct Parser<'a> {
 	in_json: RefCell<u64>,
 	is_in_mut_json: RefCell<bool>,
 	is_in_loop: RefCell<bool>,
-	/// Track all file paths that have been found while parsing the current file
+	/// Track all file paths (and where they appear in the source) that have been found while parsing the current file
 	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
-	referenced_wing_paths: RefCell<Vec<Utf8PathBuf>>,
+	referenced_wing_paths: RefCell<Vec<(Utf8PathBuf, WingSpan)>>,
 }
 
 struct ParseErrorBuilder<'s> {
@@ -419,7 +433,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	pub fn parse(self, root: &Node) -> (Scope, Vec<Utf8PathBuf>) {
+	pub fn parse(self, root: &Node) -> (Scope, Vec<(Utf8PathBuf, WingSpan)>) {
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root, Phase::Preflight),
 			_ => Scope::empty(),
@@ -1017,7 +1031,10 @@ impl<'s> Parser<'s> {
 					);
 				}
 
-				self.referenced_wing_paths.borrow_mut().push(source_path.clone());
+				self
+					.referenced_wing_paths
+					.borrow_mut()
+					.push((source_path.clone(), module_name.span()));
 
 				// parse error if no alias is provided
 				let module = if let Some(alias) = alias {
@@ -1039,7 +1056,10 @@ impl<'s> Parser<'s> {
 
 			// case: directory
 			if source_path.is_dir() {
-				self.referenced_wing_paths.borrow_mut().push(source_path.clone());
+				self
+					.referenced_wing_paths
+					.borrow_mut()
+					.push((source_path.clone(), module_name.span()));
 
 				// parse error if no alias is provided
 				let module = if let Some(alias) = alias {
@@ -1088,7 +1108,10 @@ impl<'s> Parser<'s> {
 			if is_wing_library(&Utf8Path::new(&module_dir)) {
 				return if let Some(alias) = alias {
 					// make sure the Wing library is also parsed
-					self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+					self
+						.referenced_wing_paths
+						.borrow_mut()
+						.push((module_dir.clone(), module_name.span()));
 
 					Ok(StmtKind::Bring {
 						source: BringSource::WingLibrary(
@@ -1156,9 +1179,11 @@ impl<'s> Parser<'s> {
 				.err();
 		})?;
 
-		self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
 		// make sure the trusted library is also parsed
-		self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+		self
+			.referenced_wing_paths
+			.borrow_mut()
+			.push((module_dir.clone(), module_name.span()));
 
 		Ok(StmtKind::Bring {
 			source: BringSource::TrustedModule(
