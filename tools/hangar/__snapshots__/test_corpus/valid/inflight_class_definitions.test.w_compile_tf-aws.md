@@ -181,9 +181,6 @@ const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.nodeof(this).root.$preflightTypesMap = { };
-    let $preflightTypesMap = {};
-    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class A extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -247,8 +244,6 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[2]) { throw new Error("B is already in type map"); }
-    $preflightTypesMap[2] = B;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -347,8 +342,6 @@ class $Root extends $stdlib.std.Resource {
             });
           }
         }
-        if ($preflightTypesMap[8]) { throw new Error("F is already in type map"); }
-        $preflightTypesMap[8] = F;
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
@@ -376,12 +369,8 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
-                [$helpers.preflightClassSingleton(this, 8), ["foo"]],
-                [F, ["foo"]],
               ],
               "$inflight_init": [
-                [$helpers.preflightClassSingleton(this, 8), []],
-                [F, []],
               ],
             });
           }
@@ -451,16 +440,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$helpers.preflightClassSingleton(this, 2), ["foo"]],
-            [B, []],
             [a, ["goo"]],
             [d, ["callInner"]],
             [fn, ["handle"]],
             [innerD, ["handle"]],
           ],
           "$inflight_init": [
-            [$helpers.preflightClassSingleton(this, 2), []],
-            [B, []],
             [a, []],
             [d, []],
             [fn, []],
