@@ -173,20 +173,18 @@ export function resolveDirname(
  * We need this instead of simply calling `require` because in addition to returning the imported module's exports,
  * we also need to update the current module's preflight types map with the brought module's preflight types map.
  * @param moduleFile - the file to `require`
- * @param preflightTypesObjectName - this should always be $preflightTypesMap (based on the wingc jsify rust code)
  * @param outPreflightTypesObject - the current module's $preflightTypesMap
  * @returns all symbols exported by the `moduleFile` except `$preflightTypesMap`
  */
 export function bringJs(
   moduleFile: string,
-  preflightTypesObjectName: string,
   outPreflightTypesObject: Object
 ): Object {
   /* eslint-disable @typescript-eslint/no-require-imports */
   return Object.fromEntries(
     Object.entries(require(moduleFile)).filter(([k, v]) => {
       // If this is the preflight types array then update the input object and skip it
-      if (k === preflightTypesObjectName) {
+      if (k === "$preflightTypesMap") {
         // Verify no key collision (should never happen)
         Object.keys(v as object).forEach((key) => {
           if (key in outPreflightTypesObject) {

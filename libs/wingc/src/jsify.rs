@@ -232,8 +232,8 @@ impl<'a> JSifier<'a> {
 			// we generate code like this:
 			// ```
 			// let $preflightTypesMap = {};
-			// Object.assign(module.exports, $helpers.bringJs("./preflight.inner-file1.js", "$preflightTypesMap", $preflightTypesMap));
-			// Object.assign(module.exports, { get inner_directory1() { $helpers.bringJs("./preflight.inner-directory1.js", "$preflightTypesMap", $preflightTypesMap); } });
+			// Object.assign(module.exports, $helpers.bringJs("./preflight.inner-file1.js", $preflightTypesMap));
+			// Object.assign(module.exports, { get inner_directory1() { $helpers.bringJs("./preflight.inner-directory1.js", $preflightTypesMap); } });
 			// module.exports = { ...module.exports, $preflightTypesMap };
 			// ```
 
@@ -245,11 +245,11 @@ impl<'a> JSifier<'a> {
 				if file.is_dir() {
 					let directory_name = file.file_stem().unwrap();
 					output.line(format!(
-						"Object.assign(module.exports, {{ get {directory_name}() {{ return $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, \"{MODULE_PREFLIGHT_TYPES_MAP}\", {MODULE_PREFLIGHT_TYPES_MAP}); }} }});"
+						"Object.assign(module.exports, {{ get {directory_name}() {{ return $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP}); }} }});"
 					));
 				} else {
 					output.line(format!(
-						"Object.assign(module.exports, $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, \"{MODULE_PREFLIGHT_TYPES_MAP}\", {MODULE_PREFLIGHT_TYPES_MAP}));"
+						"Object.assign(module.exports, $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP}));"
 					));
 				}
 			}
@@ -1502,7 +1502,9 @@ impl<'a> JSifier<'a> {
 		let var_name = identifier.as_ref().expect("bring wing module requires an alias");
 		let preflight_file_map = self.preflight_file_map.borrow();
 		let preflight_file_name = preflight_file_map.get(path).unwrap();
-		code.line(format!("const {var_name} = $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`,\"{MODULE_PREFLIGHT_TYPES_MAP}\", {MODULE_PREFLIGHT_TYPES_MAP});"));
+		code.line(format!(
+			"const {var_name} = $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP});"
+		));
 		code
 	}
 
