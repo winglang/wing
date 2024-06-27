@@ -22,7 +22,9 @@ use crate::docs::Docs;
 use crate::file_graph::FileGraph;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
+use crate::visit::Visit;
 use crate::visit_context::{VisitContext, VisitorWithContext};
+use crate::visit_stmt_before_super::{CheckSuperCtorLocationVisitor, CheckValidBeforeSuperVisitor};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, UTIL_CLASS_NAME,
@@ -4672,35 +4674,40 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				// Make sure there's a `super()` call to the parent ctor
 				if parent_ctor_sig.min_parameters() > 0 {
 					// Find the `super()` call
-					if let Some((idx, super_call)) = ctor_body
+					if let Some((idx, _super_call)) = ctor_body
 						.statements
 						.iter()
 						.enumerate()
 						.find(|(_, s)| matches!(s.kind, StmtKind::SuperConstructor { .. }))
 					{
-						// We have a super call, make sure it's the first statement (after any type defs)
-						let expected_idx = ctor_body
-							.statements
-							.iter()
-							.position(|s| !s.kind.is_type_def())
-							.expect("at least the super call stmt");
-						if idx != expected_idx {
-							self.spanned_error(
-								super_call,
-								format!(
-									"super() call must be the first statement of {}'s constructor",
-									ast_class.name
-								),
-							);
+						// Check if any of the statements before the super() call are invalid
+						for i in 0..idx {
+							self.type_check_valid_stmt_before_super(&ctor_body.statements[i]);
 						}
 					} else {
 						self.spanned_error(
 							ctor_body,
-							format!(
-								"Missing super() call as first statement of {}'s constructor",
-								ast_class.name
-							),
+							format!("Missing super() call in {}'s constructor", ast_class.name),
 						);
+					}
+
+					// Check `super()` call occurs in valid location
+					let mut super_ctor_loc_check = CheckSuperCtorLocationVisitor::new();
+					super_ctor_loc_check.visit_scope(ctor_body);
+					// Redundant super() calls diagnostics
+					for span in super_ctor_loc_check.redundant_calls.iter() {
+						self.spanned_error_with_annotations(
+							span,
+							"super() should be called only once",
+							vec![DiagnosticAnnotation::new(
+								"First super call occurs here",
+								super_ctor_loc_check.first_call.as_ref().unwrap(),
+							)],
+						);
+					}
+					// Inner scope super() calls diagnostics
+					for span in super_ctor_loc_check.inner_calls.iter() {
+						self.spanned_error(span, "super() should be called at the top scope of the constructor");
 					}
 				}
 			}
@@ -4782,6 +4789,25 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		self.ctx.pop_class();
+	}
+
+	fn type_check_valid_stmt_before_super(&mut self, stmt: &Stmt) {
+		let mut check = CheckValidBeforeSuperVisitor::new();
+		check.visit_stmt(stmt);
+
+		for span in check.this_accesses.iter() {
+			self.spanned_error(
+				span,
+				"'super()' must be called before accessing 'this' in the constructor of a derived class",
+			);
+		}
+
+		for span in check.super_accesses.iter() {
+			self.spanned_error(
+				span,
+				"'super()' must be called before calling a method of 'super' in the constructor of a derived class",
+			);
+		}
 	}
 
 	fn check_method_is_resource_compatible(&mut self, method_type: TypeRef, method_def: &FunctionDefinition) {
@@ -5242,7 +5268,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		} else {
 			self.spanned_error(
 				super_constructor_call,
-				"Call to super constructor can only be done from within a class initializer",
+				"Call to super constructor can only be done from within a class constructor",
 			);
 			return;
 		};
@@ -5258,13 +5284,18 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		if method_name.name != init_name {
 			self.spanned_error(
 				super_constructor_call,
-				"Call to super constructor can only be done from within a class initializer",
+				"Call to super constructor can only be done from within a class constructor",
 			);
 			return;
 		}
 
 		// Verify the class has a parent class
-		let Some(parent_class) = &class_type.as_class().expect("class type to be a class").parent else {
+		let Some(parent_class) = &class_type
+			.as_class()
+			.expect("class type to be a class")
+			.parent
+			.filter(|p| !p.is_same_type_as(&self.types.resource_base_type()))
+		else {
 			self.spanned_error(
 				super_constructor_call,
 				format!("Class \"{class_type}\" does not have a parent class"),

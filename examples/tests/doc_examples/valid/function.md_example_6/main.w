@@ -8,8 +8,8 @@ class Datadog {
     // ...implementation...
   }
   pub onLift(host: std.IInflightHost, ops: Array<str>) {
-    // Note: `ops` is an array of inflight methods that are being used
-    // so you can conditionally add the layer based on the methods called
+    // Note: the "ops" argument is an array of inflight methods that were used
+    // so you could conditionally add the layer based on the methods called
     if let lambdaFn = aws.Function.from(host) {
       lambdaFn.addLambdaLayer("arn:aws:lambda:us-west-2:123456789012:layer:datadog-layer:1");
     }

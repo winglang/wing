@@ -1900,12 +1900,12 @@ impl<'a> JSifier<'a> {
 			FunctionBody::External(_) => panic!("'init' cannot be 'extern'"),
 		};
 
-		// Check if the first statement is a super constructor call, if not we need to add one
-		let super_called = if let Some(s) = init_statements.statements.iter().find(|s| !s.kind.is_type_def()) {
-			matches!(s.kind, StmtKind::SuperConstructor { .. })
-		} else {
-			false
-		};
+		// Check if some of the statements is the super constructor call, if not we need to add one
+		// as the first statement.
+		let super_called = init_statements
+			.statements
+			.iter()
+			.any(|s| matches!(s.kind, StmtKind::SuperConstructor { .. }));
 
 		let mut body_code = CodeMaker::with_source(&class.name.span);
 
