@@ -349,7 +349,7 @@ fn parse_wing_directory(
 							path.file_name().unwrap()
 						),
 						source_ref,
-					));
+					).hint("Directory names must start with a letter or underscore and contain only letters, numbers, and underscores."));
 				}
 			}
 			files_and_dirs.push((path, source_ref.clone()));
