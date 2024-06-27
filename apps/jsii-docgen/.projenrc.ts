@@ -17,7 +17,7 @@ const project = new typescript.TypeScriptProject({
   devDeps: [
     "vitest",
     "tsx",
-    "jsii@~5.3.11",
+    "jsii@~5.3.39",
     "@types/fs-extra",
     "@types/semver",
     "@types/yargs@^16",

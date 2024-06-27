@@ -2668,46 +2668,6 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_super_constructor_statement(&self, statement_node: &Node, phase: Phase) -> Result<StmtKind, ()> {
-		// Calls to super constructor can only occur in specific scenario:
-		// We are in a derived class' constructor
-		let parent_block = statement_node.parent();
-		if let Some(p) = parent_block {
-			let parent_block_context = p.parent();
-
-			if let Some(context) = parent_block_context {
-				match context.kind() {
-					"initializer" | "inflight_initializer" => {
-						// Check that the class has a parent
-						let class_node = context.parent().unwrap().parent().unwrap();
-						let parent_class = class_node.child_by_field_name("parent");
-
-						if let None = parent_class {
-							self.with_error(
-								"Call to super constructor can only be made from derived classes",
-								statement_node,
-							)?;
-						}
-					}
-					_ => {
-						// super constructor used outside of an initializer IE:
-						// class B extends A {
-						//   someMethod() {super()};
-						// }
-						self.with_error(
-							"Call to super constructor can only be done from within class constructor",
-							statement_node,
-						)?;
-					}
-				}
-			} else {
-				// No parent block found this probably means super() call was found in top level statements
-				self.with_error(
-					"Call to super constructor can only be done from within a class constructor",
-					statement_node,
-				)?;
-			}
-		}
-
 		let arg_node = statement_node.child_by_field_name("args").unwrap();
 		let arg_list = self.build_arg_list(&arg_node, phase)?;
 

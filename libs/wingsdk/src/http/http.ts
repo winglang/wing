@@ -91,6 +91,14 @@ export enum HttpMethod {
    * HEAD
    */
   HEAD = "HEAD",
+  /**
+   * CONNECT
+   */
+  CONNECT = "CONNECT",
+  /**
+   * TRACE
+   */
+  TRACE = "TRACE",
 }
 
 /**
@@ -325,6 +333,40 @@ export class Util {
     return this.fetch(url, {
       ...options,
       method: HttpMethod.DELETE,
+    });
+  }
+
+  /**
+   * Executes a CONNECT request to a specified URL and provides a formatted response.
+   * @param url The target URL for the CONNECT request.
+   * @param options Optional parameters for customizing the CONNECT request.
+   * @inflight
+   * @returns the formatted response of the call
+   */
+  public static async connect(
+    url: string,
+    options?: RequestOptions
+  ): Promise<Response> {
+    return this.fetch(url, {
+      ...options,
+      method: HttpMethod.CONNECT,
+    });
+  }
+
+  /**
+   * Executes a TRACE request to a specified URL and provides a formatted response.
+   * @param url The target URL for the TRACE request.
+   * @param options Optional parameters for customizing the TRACE request.
+   * @inflight
+   * @returns the formatted response of the call
+   */
+  public static async trace(
+    url: string,
+    options?: RequestOptions
+  ): Promise<Response> {
+    return this.fetch(url, {
+      ...options,
+      method: HttpMethod.TRACE,
     });
   }
 

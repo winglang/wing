@@ -11,8 +11,7 @@
           "bucket_prefix"
         ]
       },
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
