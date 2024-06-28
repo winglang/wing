@@ -16,10 +16,10 @@ let s2: str? = nil; // type str? (optional), value nil
 let s1: str? = "Hello"; // type str? (optional), value "Hello"
 let s2: str? = nil; // type str? (optional), value nil
 
-if s1? {
+if s1 != nil {
   log("x1 is not nil");
 }
-if !s2? {
+if s2 == nil {
   log("x2 is nil");
 }
 ```
@@ -80,10 +80,6 @@ if let value = j.tryGet("broken")?.tryGet("a")?.tryGet("b")?.tryAsStr() {
 ```ts playground example
 let b3: bool? = false; 
 
-if b3? {
-  log("although b3 is false, the if statement here checks for existence of value");
-}
-
 if let b3 = b3  { // unboxing b3 and shadowing original b3 
   if b3 {
     log("b3 is true");
@@ -96,7 +92,6 @@ if let b3 = b3  { // unboxing b3 and shadowing original b3
 
 /**
  * prints:
-  although b3 is false, the if statement here checks for existence of value
   b3 is false
 **/
 ```

@@ -3506,7 +3506,14 @@ Duration <DURATION>"
 `;
 
 exports[`nil.test.w 1`] = `
-"error: Expected type to be "str", but got "nil" instead
+"error: Unknown parser error
+   --> ../../../examples/tests/invalid/nil.test.w:24:7
+   |
+24 | if nil? {
+   |       ^
+
+
+error: Expected type to be "str", but got "nil" instead
   --> ../../../examples/tests/invalid/nil.test.w:3:14
   |
 3 | let x: str = nil;
@@ -3515,11 +3522,13 @@ exports[`nil.test.w 1`] = `
   = hint: to allow "nil" assignment use optional type: "str?"
 
 
-error: Expected optional type, found "nil"
+error: Expected type to be "bool", but got "nil" instead
    --> ../../../examples/tests/invalid/nil.test.w:24:4
    |
 24 | if nil? {
    |    ^^^
+   |
+   = hint: to allow "nil" assignment use optional type: "bool?"
 
 
 error: Cannot assign nil value to variables without explicit optional type
@@ -3553,7 +3562,14 @@ Duration <DURATION>"
 `;
 
 exports[`optionals.test.w 1`] = `
-"error: Unexpected 'parameter_type_list'
+"error: Unknown parser error
+   --> ../../../examples/tests/invalid/optionals.test.w:18:5
+   |
+18 | if y? {
+   |     ^
+
+
+error: Unexpected 'parameter_type_list'
    --> ../../../examples/tests/invalid/optionals.test.w:98:36
    |
 98 | let optionalFunctionWithNoRetType: ()? = () => {};
@@ -3572,13 +3588,6 @@ error: Expected type to be "num?", but got "str" instead
    |
 14 | fOptional("");
    |           ^^
-
-
-error: Expected optional type, found "bool"
-   --> ../../../examples/tests/invalid/optionals.test.w:18:4
-   |
-18 | if y? {
-   |    ^
 
 
 error: Expected optional type, found "bool"
