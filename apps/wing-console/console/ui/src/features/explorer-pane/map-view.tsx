@@ -144,8 +144,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               <div
                 className={clsx(
                   "px-2.5 py-1 flex items-center gap-1.5",
-                  (inflights.length > 0 || hasChildNodes) &&
-                    "border-b border-slate-200 dark:border-slate-800",
+                  "transition-all",
                 )}
               >
                 <ResourceIcon
@@ -196,6 +195,16 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                     </div>
                   </>
                 )}
+              </div>
+
+              <div className="flex justify-center">
+                <div
+                  className={clsx(
+                    "border-b border-slate-200 dark:border-slate-800",
+                    "transition-all",
+                    inflights.length > 0 || hasChildNodes ? "w-full" : "w-0",
+                  )}
+                />
               </div>
             </div>
 
