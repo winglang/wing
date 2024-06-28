@@ -7,6 +7,7 @@ import {
 import type { MapItem } from "@wingconsole/server";
 import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/index.js";
 import clsx from "classnames";
+import type { ElkExtendedEdge } from "elkjs";
 import { type ElkPoint, type LayoutOptions } from "elkjs";
 import { motion } from "framer-motion";
 import type { FunctionComponent, PropsWithChildren } from "react";
@@ -143,7 +144,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               <div
                 className={clsx(
                   "px-2.5 py-1 flex items-center gap-1.5",
-                  inflights.length > 0 &&
+                  (inflights.length > 0 || hasChildNodes) &&
                     "border-b border-slate-200 dark:border-slate-800",
                 )}
               >
@@ -199,7 +200,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             </div>
 
             {(hasChildNodes || inflights.length > 0) && (
-              <div className={clsx("grow", hasChildNodes && "p-4")}>
+              <div className={clsx(hasChildNodes && "p-4 text-xs")}>
                 <NodeChildren>
                   <div className="absolute">
                     <Node
@@ -209,14 +210,15 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                           "elk.algorithm": "org.eclipse.elk.layered",
                           "elk.aspectRatio": "0.1",
                           "elk.layered.spacing.baseValue": "1",
+                          "elk.portConstraints": "FIXED_SIDE",
                         },
                       }}
-                      className="inline-flex flex-col pointer-events-none"
+                      className="inline-flex flex-col"
                     >
                       {inflights.map((inflight) => (
                         <Node
                           key={inflight.id}
-                          className="w-full pointer-events-none"
+                          className="inline-block pointer-events-none"
                           elk={{
                             id: inflight.id,
                             layoutOptions: {
@@ -224,17 +226,16 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                             },
                           }}
                         >
-                          <div>
-                            <div
-                              className={clsx(
-                                "px-2.5 py-1.5 text-xs whitespace-nowrap",
-                                "text-slate-600 dark:text-slate-300",
-                                "font-mono",
-                              )}
-                            >
-                              <span>{inflight.name}</span>
-                            </div>
+                          <div
+                            className={clsx(
+                              "px-2.5 py-1.5 text-xs whitespace-nowrap",
+                              "text-slate-600 dark:text-slate-300",
+                              "font-mono",
+                            )}
+                          >
+                            <span>{inflight.name}</span>
                           </div>
+
                           <Port
                             elk={{
                               id: `${inflight.id}#source`,
@@ -257,6 +258,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                         </Node>
                       ))}
                     </Node>
+
                     {children}
                   </div>
                 </NodeChildren>
@@ -564,6 +566,37 @@ const RenderNode = ({
   );
 };
 
+const RenderEdge = ({
+  selectedEdgeId,
+  selectedNodeId,
+  onSelectedEdgeIdChange,
+  ...props
+}: {
+  selectedEdgeId?: string;
+  selectedNodeId: string | undefined;
+  onSelectedEdgeIdChange?: (id: string | undefined) => void;
+} & EdgeComponentProps) => {
+  const isSelected = selectedEdgeId === props.edge.id;
+  const isHighlighted =
+    props.edge.sources.some(
+      (path) => getNodePathFromEdge(path) === selectedNodeId,
+    ) ||
+    props.edge.targets.some(
+      (path) => getNodePathFromEdge(path) === selectedNodeId,
+    );
+
+  return (
+    <RoundedEdge
+      key={props.edge.id}
+      {...props}
+      edge={props.edge}
+      selected={isSelected}
+      highlighted={isHighlighted}
+      onClick={() => onSelectedEdgeIdChange?.(props.edge.id)}
+    />
+  );
+};
+
 export const MapView = memo(
   ({
     selectedNodeId,
@@ -577,27 +610,6 @@ export const MapView = memo(
     const { nodeInfo, isNodeHidden, rootNodes, edges } = useMap({
       expandedItems,
     });
-
-    const RenderEdge = useCallback<EdgeComponent>(
-      (props) => {
-        return (
-          <RoundedEdge
-            {...props}
-            selected={selectedEdgeId === props.edge.id}
-            highlighted={
-              props.edge.sources.some(
-                (path) => getNodePathFromEdge(path) === selectedNodeId,
-              ) ||
-              props.edge.targets.some(
-                (path) => getNodePathFromEdge(path) === selectedNodeId,
-              )
-            }
-            onClick={() => onSelectedEdgeIdChange?.(props.edge.id)}
-          />
-        );
-      },
-      [selectedEdgeId, selectedNodeId, onSelectedEdgeIdChange],
-    );
 
     const { theme } = useTheme();
 
@@ -638,7 +650,14 @@ export const MapView = memo(
                   },
                 }}
                 edges={edges}
-                edgeComponent={RenderEdge}
+                edgeComponent={(props) =>
+                  RenderEdge({
+                    ...props,
+                    selectedEdgeId,
+                    selectedNodeId,
+                    onSelectedEdgeIdChange,
+                  })
+                }
               >
                 {rootNodes.map((node) => (
                   <RenderNode
