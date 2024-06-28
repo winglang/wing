@@ -21,6 +21,7 @@ import { NodeChildren } from "./elk-flow/node-children.js";
 import { Node } from "./elk-flow/node.js";
 import { Port } from "./elk-flow/port.js";
 import type { EdgeComponent, EdgeComponentProps } from "./elk-flow/types.js";
+import type { NodeV2 } from "./use-map.js";
 import { useMap } from "./use-map.js";
 
 const Z_INDICES = {
@@ -563,6 +564,90 @@ export interface MapViewV2Props {
   expandedItems: string[];
 }
 
+const RenderNode = ({
+  isNodeHidden,
+  nodeInfo,
+  expandedItems,
+  onExpand,
+  onCollapse,
+  selectedNodeId,
+  onSelectedNodeIdChange,
+  node,
+}: {
+  isNodeHidden: (path: string) => boolean;
+  nodeInfo?: Map<string, NodeV2>;
+  expandedItems: string[];
+  onExpand: (path: string) => void;
+  onCollapse: (path: string) => void;
+  node: MapItem;
+  selectedNodeId: string | undefined;
+  onSelectedNodeIdChange: (id: string | undefined) => void;
+}) => {
+  if (isNodeHidden(node.path)) {
+    return <></>;
+  }
+
+  const info = nodeInfo?.get(node.path);
+  if (!info) {
+    return <></>;
+  }
+
+  const childNodes = Object.values(node.children ?? {}).filter(
+    (node) => !isNodeHidden(node.path),
+  );
+
+  const fqn = node.constructInfo?.fqn;
+
+  const cloudResourceType = fqn?.split(".").at(-1);
+
+  const name =
+    node.display?.title === cloudResourceType
+      ? node.id
+      : node.display?.title ?? node.id;
+
+  const children = Object.values(node.children ?? {});
+  const canBeExpanded =
+    !!node.children && children.some((child) => !child.display?.hidden);
+  const collapsed = canBeExpanded && !expandedItems.includes(node.path);
+
+  return (
+    <ConstructNode
+      id={node.path}
+      name={name ?? ""}
+      fqn={fqn ?? ""}
+      color={node.display?.color}
+      icon={node.display?.icon}
+      inflights={info.type === "construct" ? info.inflights : []}
+      onSelectedNodeIdChange={onSelectedNodeIdChange}
+      highlight={selectedNodeId === node.path}
+      hasChildNodes={childNodes.length > 0}
+      collapsed={collapsed}
+      onCollapse={(collapse) => {
+        if (collapse) {
+          onCollapse(node.path);
+        } else {
+          onExpand(node.path);
+        }
+      }}
+      hierarchichalRunningState={node.hierarchichalRunningState}
+    >
+      {childNodes.map((child) => (
+        <RenderNode
+          key={child.id}
+          node={child}
+          selectedNodeId={selectedNodeId}
+          onSelectedNodeIdChange={onSelectedNodeIdChange}
+          isNodeHidden={isNodeHidden}
+          nodeInfo={nodeInfo}
+          expandedItems={expandedItems}
+          onExpand={onExpand}
+          onCollapse={onCollapse}
+        />
+      ))}
+    </ConstructNode>
+  );
+};
+
 export const MapView = memo(
   ({
     selectedNodeId,
@@ -596,79 +681,6 @@ export const MapView = memo(
         );
       },
       [selectedEdgeId, selectedNodeId, onSelectedEdgeIdChange],
-    );
-
-    const RenderNode = useCallback<
-      FunctionComponent<{
-        constructTreeNode: MapItem;
-        selectedNodeId: string | undefined;
-        onSelectedNodeIdChange: (id: string | undefined) => void;
-      }>
-    >(
-      (props) => {
-        const node = props.constructTreeNode;
-        if (isNodeHidden(node.path)) {
-          return <></>;
-        }
-
-        const info = nodeInfo?.get(node.path);
-        if (!info) {
-          return <></>;
-        }
-
-        const childNodes = Object.values(node.children ?? {}).filter(
-          (node) => !isNodeHidden(node.path),
-        );
-
-        const fqn = node.constructInfo?.fqn;
-
-        const cloudResourceType = fqn?.split(".").at(-1);
-
-        const name =
-          node.display?.title === cloudResourceType
-            ? node.id
-            : node.display?.title ?? node.id;
-
-        const children = Object.values(node.children ?? {});
-        const canBeExpanded =
-          !!node.children && children.some((child) => !child.display?.hidden);
-        const collapsed = canBeExpanded && !expandedItems.includes(node.path);
-
-        return (
-          <ConstructNode
-            id={node.path}
-            name={name ?? ""}
-            fqn={fqn ?? ""}
-            color={node.display?.color}
-            icon={node.display?.icon}
-            inflights={info.type === "construct" ? info.inflights : []}
-            onSelectedNodeIdChange={props.onSelectedNodeIdChange}
-            highlight={props.selectedNodeId === node.path}
-            hasChildNodes={childNodes.length > 0}
-            collapsed={collapsed}
-            onCollapse={(collapse) => {
-              if (collapse) {
-                onCollapse(node.path);
-              } else {
-                onExpand(node.path);
-              }
-            }}
-            hierarchichalRunningState={
-              props.constructTreeNode.hierarchichalRunningState
-            }
-          >
-            {childNodes.map((child) => (
-              <RenderNode
-                key={child.id}
-                constructTreeNode={child}
-                selectedNodeId={props.selectedNodeId}
-                onSelectedNodeIdChange={props.onSelectedNodeIdChange}
-              />
-            ))}
-          </ConstructNode>
-        );
-      },
-      [isNodeHidden, nodeInfo, onCollapse, onExpand, expandedItems],
     );
 
     const { theme } = useTheme();
@@ -715,9 +727,14 @@ export const MapView = memo(
                 {rootNodes.map((node) => (
                   <RenderNode
                     key={node.id}
-                    constructTreeNode={node}
+                    node={node}
                     selectedNodeId={selectedNodeId}
                     onSelectedNodeIdChange={onSelectedNodeIdChange}
+                    isNodeHidden={isNodeHidden}
+                    nodeInfo={nodeInfo}
+                    expandedItems={expandedItems}
+                    onExpand={onExpand}
+                    onCollapse={onCollapse}
                   />
                 ))}
               </Graph>
