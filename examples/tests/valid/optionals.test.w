@@ -1,10 +1,7 @@
 let x: num? = 4;
-assert(x? == true);
-assert(!x? == false);
-// TODO: add a `x? == false` case when we implement some way to null initialize an optional (https://github.com/winglang/wing/pull/1495)
+assert(x != nil);
 
 assert(x ?? 5 == 4);
-// TODO: add test for optional is nothing case (see https://github.com/winglang/wing/pull/1495)
 
 let y: num = x ?? 5;
 assert(y == 4);
@@ -54,8 +51,8 @@ let tryParseName = (fullName: str): Name? => {
     return nil;
   }
   return Name {
-    first: parts.tryAt(0)??"",
-    last: parts.tryAt(1)??"",
+    first: parts.tryAt(0) ?? "",
+    last: parts.tryAt(1) ?? "",
   };
 };
 
@@ -190,9 +187,9 @@ let payloadWithoutOptions = Payload {a: "a"};
 let payloadWithBucket = Payload {a: "a", c: new cloud.Bucket() as "orange bucket"};
 
 test "t" {
-  assert(payloadWithoutOptions.b? == false);
+  assert(payloadWithoutOptions.b == nil);
 
-  if (payloadWithBucket.c?) {
+  if (payloadWithBucket.c != nil) {
     payloadWithBucket.c?.put("x.txt", "something");
   }
 }

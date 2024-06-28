@@ -2301,14 +2301,14 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 						self.spanned_error(
 							exp,
 							format!(
-														"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
-														ltype,
-														rtype,
-														self.types.number(),
-														self.types.number(),
-														self.types.string(),
-														self.types.string(),
-													),
+								"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
+								ltype,
+								rtype,
+								self.types.number(),
+								self.types.number(),
+								self.types.string(),
+								self.types.string(),
+							),
 						);
 					}
 					self.resolved_error()
@@ -2354,12 +2354,6 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		match op {
 			UnaryOperator::Not => (self.validate_type(type_, self.types.bool(), unary_exp), phase),
 			UnaryOperator::Minus => (self.validate_type(type_, self.types.number(), unary_exp), phase),
-			UnaryOperator::OptionalTest => {
-				if !type_.is_option() {
-					self.spanned_error(unary_exp, format!("Expected optional type, found \"{}\"", type_));
-				}
-				(self.types.bool(), phase)
-			}
 			UnaryOperator::OptionalUnwrap => {
 				if !type_.is_option() {
 					self.spanned_error(unary_exp, format!("'!' expects an optional type, found \"{}\"", type_));
