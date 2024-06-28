@@ -3506,14 +3506,7 @@ Duration <DURATION>"
 `;
 
 exports[`nil.test.w 1`] = `
-"error: Unknown parser error
-   --> ../../../examples/tests/invalid/nil.test.w:24:7
-   |
-24 | if nil? {
-   |       ^
-
-
-error: Expected type to be "str", but got "nil" instead
+"error: Expected type to be "str", but got "nil" instead
   --> ../../../examples/tests/invalid/nil.test.w:3:14
   |
 3 | let x: str = nil;
@@ -3522,26 +3515,17 @@ error: Expected type to be "str", but got "nil" instead
   = hint: to allow "nil" assignment use optional type: "str?"
 
 
-error: Expected type to be "bool", but got "nil" instead
-   --> ../../../examples/tests/invalid/nil.test.w:24:4
-   |
-24 | if nil? {
-   |    ^^^
-   |
-   = hint: to allow "nil" assignment use optional type: "bool?"
-
-
 error: Cannot assign nil value to variables without explicit optional type
-   --> ../../../examples/tests/invalid/nil.test.w:28:18
+   --> ../../../examples/tests/invalid/nil.test.w:24:18
    |
-28 | let nilWannabe = nil;
+24 | let nilWannabe = nil;
    |                  ^^^
 
 
 error: Cannot assign nil value to variables without explicit optional type
-   --> ../../../examples/tests/invalid/nil.test.w:31:17
+   --> ../../../examples/tests/invalid/nil.test.w:27:17
    |
-31 | let nilGaggle = [nil, nil, nil];
+27 | let nilGaggle = [nil, nil, nil];
    |                 ^^^^^^^^^^^^^^^
 
 
@@ -3562,17 +3546,10 @@ Duration <DURATION>"
 `;
 
 exports[`optionals.test.w 1`] = `
-"error: Unknown parser error
-   --> ../../../examples/tests/invalid/optionals.test.w:18:5
+"error: Unexpected 'parameter_type_list'
+   --> ../../../examples/tests/invalid/optionals.test.w:95:36
    |
-18 | if y? {
-   |     ^
-
-
-error: Unexpected 'parameter_type_list'
-   --> ../../../examples/tests/invalid/optionals.test.w:98:36
-   |
-98 | let optionalFunctionWithNoRetType: ()? = () => {};
+95 | let optionalFunctionWithNoRetType: ()? = () => {};
    |                                    ^^
 
 
@@ -3591,103 +3568,103 @@ error: Expected type to be "num?", but got "str" instead
 
 
 error: Expected optional type, found "bool"
-   --> ../../../examples/tests/invalid/optionals.test.w:22:9
+   --> ../../../examples/tests/invalid/optionals.test.w:19:9
    |
-22 | let z = y ?? 1;
+19 | let z = y ?? 1;
    |         ^
 
 
 error: Expected type to be "str", but got "num" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:25:14
+   --> ../../../examples/tests/invalid/optionals.test.w:22:14
    |
-25 | let w: str = x ?? 3;
+22 | let w: str = x ?? 3;
    |              ^^^^^^
 
 
 error: Expected type to be "num", but got "str" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:28:6
+   --> ../../../examples/tests/invalid/optionals.test.w:25:6
    |
-28 | x ?? "hello";
+25 | x ?? "hello";
    |      ^^^^^^^
 
 
 error: Expected type to be "Sub1", but got "Sub2" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:39:17
+   --> ../../../examples/tests/invalid/optionals.test.w:36:17
    |
-39 | optionalSub1 ?? new Sub2();
+36 | optionalSub1 ?? new Sub2();
    |                 ^^^^^^^^^^
 
 
 error: Expected type to be "Sub1", but got "Super" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:41:17
+   --> ../../../examples/tests/invalid/optionals.test.w:38:17
    |
-41 | optionalSub1 ?? new Super();
+38 | optionalSub1 ?? new Super();
    |                 ^^^^^^^^^^^
 
 
 error: Expected type to be optional, but got "bool" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:45:12
+   --> ../../../examples/tests/invalid/optionals.test.w:42:12
    |
-45 | if let x = true {
+42 | if let x = true {
    |            ^^^^
 
 
 error: Property access on optional type "A?" requires optional accessor: "?."
-   --> ../../../examples/tests/invalid/optionals.test.w:68:9
+   --> ../../../examples/tests/invalid/optionals.test.w:65:9
    |
-68 | let c = b.a.val;
+65 | let c = b.a.val;
    |         ^^^
 
 
 error: Expected type to be "str", but got "str?" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:91:16
+   --> ../../../examples/tests/invalid/optionals.test.w:88:16
    |
-91 | let val: str = baz?.bar?.foo?.val;
+88 | let val: str = baz?.bar?.foo?.val;
    |                ^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot call an optional function
-   --> ../../../examples/tests/invalid/optionals.test.w:95:1
+   --> ../../../examples/tests/invalid/optionals.test.w:92:1
    |
-95 | optionalFunction();
+92 | optionalFunction();
    | ^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be "(preflight (num): void)?", but got "preflight (x: str): void" instead
-    --> ../../../examples/tests/invalid/optionals.test.w:102:53
-    |
-102 | let functionWithOptionalFuncParam1: ((num):void)? = (x: str):void => {};
-    |                                                     ^^^^^^^^^^^^^^^^^^^
+   --> ../../../examples/tests/invalid/optionals.test.w:99:53
+   |
+99 | let functionWithOptionalFuncParam1: ((num):void)? = (x: str):void => {};
+   |                                                     ^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be "(preflight (): num)?", but got "preflight (): str" instead
-    --> ../../../examples/tests/invalid/optionals.test.w:104:49
+    --> ../../../examples/tests/invalid/optionals.test.w:101:49
     |
-104 | let functionWithOptionalFuncParam2: (():num)? = ():str => { return "s"; };
+101 | let functionWithOptionalFuncParam2: (():num)? = ():str => { return "s"; };
     |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: '!' expects an optional type, found "num"
-    --> ../../../examples/tests/invalid/optionals.test.w:110:19
+    --> ../../../examples/tests/invalid/optionals.test.w:107:19
     |
-110 | let unwrapValue = nonOptional!;
+107 | let unwrapValue = nonOptional!;
     |                   ^^^^^^^^^^^
 
 
 error: '!' expects an optional type, found "num"
-    --> ../../../examples/tests/invalid/optionals.test.w:116:21
+    --> ../../../examples/tests/invalid/optionals.test.w:113:21
     |
-116 | let unwrapValueFn = nonOptionalFn()!;
+113 | let unwrapValueFn = nonOptionalFn()!;
     |                     ^^^^^^^^^^^^^^^
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/optionals.test.w:53:3
+   --> ../../../examples/tests/invalid/optionals.test.w:50:3
    |
-50 | if let hi = hi {
+47 | if let hi = hi {
    |        -- defined here (try adding "var" in front)
    .
-53 |   hi = "bye";
+50 |   hi = "bye";
    |   ^^
 
 
