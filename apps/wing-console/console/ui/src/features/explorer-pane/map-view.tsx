@@ -200,7 +200,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             </div>
 
             {(hasChildNodes || inflights.length > 0) && (
-              <div className={clsx(hasChildNodes && "p-4 text-xs")}>
+              <div className={clsx(hasChildNodes && "p-4")}>
                 <NodeChildren>
                   <div className="absolute">
                     <Node
@@ -213,52 +213,56 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                           "elk.portConstraints": "FIXED_SIDE",
                         },
                       }}
-                      className="inline-flex flex-col"
+                      className={clsx("inline-block", "pointer-events-none")}
                     >
-                      {inflights.map((inflight) => (
-                        <Node
-                          key={inflight.id}
-                          className="inline-block pointer-events-none"
-                          elk={{
-                            id: inflight.id,
-                            layoutOptions: {
-                              "elk.portConstraints": "FIXED_SIDE",
-                            },
-                          }}
-                        >
-                          <div
+                      <NodeChildren>
+                        {inflights.map((inflight) => (
+                          <Node
+                            key={inflight.id}
                             className={clsx(
-                              "px-2.5 py-1.5 text-xs whitespace-nowrap",
-                              "text-slate-600 dark:text-slate-300",
-                              "font-mono",
+                              "inline-flex",
+                              "pointer-events-none",
                             )}
+                            elk={{
+                              id: inflight.id,
+                              layoutOptions: {
+                                "elk.portConstraints": "FIXED_SIDE",
+                              },
+                            }}
                           >
-                            <span>{inflight.name}</span>
-                          </div>
+                            <div
+                              className={clsx(
+                                "px-2.5 py-1.5 text-xs whitespace-nowrap",
+                                "text-slate-600 dark:text-slate-300",
+                                "font-mono",
+                              )}
+                            >
+                              <span>{inflight.name}</span>
+                            </div>
 
-                          <Port
-                            elk={{
-                              id: `${inflight.id}#source`,
-                              layoutOptions: {
-                                "elk.port.side": "EAST",
-                                "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                              },
-                            }}
-                          />
+                            <Port
+                              elk={{
+                                id: `${inflight.id}#source`,
+                                layoutOptions: {
+                                  "elk.port.side": "EAST",
+                                  "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                                },
+                              }}
+                            />
 
-                          <Port
-                            elk={{
-                              id: `${inflight.id}#target`,
-                              layoutOptions: {
-                                "elk.port.side": "WEST",
-                                "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                              },
-                            }}
-                          />
-                        </Node>
-                      ))}
+                            <Port
+                              elk={{
+                                id: `${inflight.id}#target`,
+                                layoutOptions: {
+                                  "elk.port.side": "WEST",
+                                  "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                                },
+                              }}
+                            />
+                          </Node>
+                        ))}
+                      </NodeChildren>
                     </Node>
-
                     {children}
                   </div>
                 </NodeChildren>
@@ -366,16 +370,7 @@ const RoundedEdge: FunctionComponent<
     const lastPoint = additionalPoints.at(-1);
 
     return (
-      <motion.svg
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-        }}
-        exit={{
-          opacity: 0,
-        }}
+      <svg
         width={graphWidth}
         height={graphHeight}
         className={clsx(
@@ -461,7 +456,7 @@ const RoundedEdge: FunctionComponent<
             }}
           />
         </motion.g>
-      </motion.svg>
+      </svg>
     );
   },
 );

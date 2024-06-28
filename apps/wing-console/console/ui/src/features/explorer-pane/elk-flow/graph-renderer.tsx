@@ -71,7 +71,7 @@ const NodeComponent = memo(
             position: "absolute",
           }}
           initial={{
-            top: origin.y - 50,
+            top: origin.y,
             left: origin.x,
             width: node.width,
             height: node.height,
@@ -86,7 +86,7 @@ const NodeComponent = memo(
             zIndex: depth,
             opacity: 1,
           }}
-          exit={{ top: origin.y - 50, opacity: 0 }}
+          exit={{ top: origin.y, opacity: 0 }}
         >
           {node && (
             <DepthContext.Provider value={depth + 1}>
