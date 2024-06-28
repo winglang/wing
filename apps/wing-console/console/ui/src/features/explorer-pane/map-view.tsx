@@ -222,7 +222,11 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                           "elk.portConstraints": "FIXED_SIDE",
                         },
                       }}
-                      className={clsx("inline-block", "pointer-events-none")}
+                      className={clsx(
+                        "inline-block",
+                        "pointer-events-none",
+                        "pl-2",
+                      )}
                     >
                       <NodeChildren>
                         {inflights.map((inflight) => (
