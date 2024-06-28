@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import {
   ResourceIcon,
@@ -41,6 +40,160 @@ const baseLayoutOptions: LayoutOptions = {
   "elk.algorithm": "org.eclipse.elk.layered",
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
 };
+interface WrapperProps {
+  name: string;
+  fqn: string;
+  highlight?: boolean;
+  onClick?: () => void;
+  color?: string;
+  icon?: string;
+  collapsed?: boolean;
+  onCollapse?: (value: boolean) => void;
+  hierarchichalRunningState: ResourceRunningState;
+}
+
+const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
+  ({
+    name,
+    fqn,
+    highlight,
+    onClick,
+    collapsed = false,
+    onCollapse = (value: boolean) => {},
+    children,
+    color,
+    icon,
+    hierarchichalRunningState,
+  }) => {
+    /* eslint-disable jsx-a11y/no-static-element-interactions */
+    /* eslint-disable jsx-a11y/click-events-have-key-events */
+    return (
+      <div
+        className={clsx(
+          "w-full h-full",
+          "rounded-lg",
+          "bg-white dark:bg-slate-700",
+          highlight && "bg-sky-50 dark:bg-sky-900",
+          "border",
+          "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
+          !highlight && "border-slate-200 dark:border-slate-800",
+          highlight && "outline-4 border-sky-400 dark:border-sky-500",
+          "shadow",
+          "transition-all",
+          "cursor-pointer",
+        )}
+        onClick={(event) => {
+          event.stopPropagation();
+          onClick?.();
+        }}
+      >
+        <div className="relative">
+          <div
+            className={clsx(
+              "px-2.5 py-1 flex items-center gap-1.5",
+              "border-b border-slate-200 dark:border-slate-800",
+              "cursor-pointer",
+            )}
+          >
+            <ResourceIcon
+              className="size-4 -ml-0.5"
+              resourceType={fqn}
+              icon={icon}
+              color={color}
+            />
+
+            <span
+              className={clsx(
+                "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
+                !highlight && " text-slate-600 dark:text-slate-300",
+                highlight && "text-sky-600 dark:text-sky-300",
+              )}
+            >
+              {name}
+            </span>
+            <RunningStateIndicator runningState={hierarchichalRunningState} />
+            <div className="flex grow justify-end">
+              <div
+                className="pl-1"
+                onClick={() => {
+                  onCollapse(!collapsed);
+                }}
+              >
+                {collapsed && (
+                  <ChevronRightIcon
+                    className={clsx(
+                      "size-4",
+                      "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                    )}
+                  />
+                )}
+                {!collapsed && (
+                  <ChevronDownIcon
+                    className={clsx(
+                      "size-4",
+                      "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                    )}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        {!collapsed && children}
+      </div>
+    );
+  },
+);
+
+interface ContainerNodeProps {
+  id: string;
+  name: string;
+  pseudoContainer?: boolean;
+  resourceType?: string;
+  highlight?: boolean;
+  onClick?: () => void;
+  collapsed?: boolean;
+  onCollapse?: (value: boolean) => void;
+  color?: string;
+  icon?: string;
+  hierarchichalRunningState: ResourceRunningState;
+}
+
+const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
+  memo((props) => {
+    return (
+      <Node
+        elk={{
+          id: props.id,
+          layoutOptions: {
+            ...baseLayoutOptions,
+          },
+        }}
+        className={clsx("inline-block", "group")}
+        data-elk-id={props.id}
+      >
+        <div className={clsx("w-full h-full relative")}>
+          <Wrapper
+            name={props.name}
+            fqn={props.resourceType!}
+            highlight={props.highlight}
+            onClick={props.onClick}
+            onCollapse={props.onCollapse}
+            collapsed={props.collapsed}
+            color={props.color}
+            icon={props.icon}
+            hierarchichalRunningState={props.hierarchichalRunningState}
+          >
+            <div className="p-4">
+              <NodeChildren>
+                <div className="absolute">{props.children}</div>
+              </NodeChildren>
+            </div>
+          </Wrapper>
+        </div>
+      </Node>
+    );
+  });
 
 interface ConstructNodeProps {
   id: string;
@@ -86,305 +239,403 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
 
       const hasError = hierarchichalRunningState === "error";
 
-      const renderedNode = (
+      // const renderedNode = (
+      //   <Node
+      //     elk={{
+      //       id,
+      //       layoutOptions: {
+      //         "elk.algorithm": "org.eclipse.elk.layered",
+      //         "elk.aspectRatio": "0.1",
+      //         "elk.layered.spacing.baseValue": "1",
+      //         "elk.portConstraints": "FIXED_SIDE",
+      //       },
+      //     }}
+      //     className={clsx(
+      //       "inline-block group/construct cursor-pointer",
+      //       hasChildNodes && "pointer-events-none",
+      //     )}
+      //     data-elk-id={id}
+      //   >
+      //     {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+      //     <div
+      //       className={clsx(
+      //         "w-full h-full",
+      //         !hasChildNodes && [
+      //           "rounded-lg",
+      //           "bg-white dark:bg-slate-700",
+      //           highlight && "bg-sky-50 dark:bg-sky-900",
+      //           "border",
+      //           "outline outline-0",
+      //           !highlight &&
+      //             !hasError &&
+      //             "border-slate-200 dark:border-slate-800",
+      //           highlight && !hasError && "border-sky-400 dark:border-sky-500",
+      //           highlight && "outline-4",
+      //           !hasError && "outline-sky-200/50 dark:outline-sky-500/50",
+      //           hasError &&
+      //             "border-red-500 dark:border-red-500 outline-red-200/50 dark:outline-red-500/50",
+      //           "shadow",
+      //           "transition-all",
+      //         ],
+      //       )}
+      //       onClick={(event) => {
+      //         event.stopPropagation();
+      //         select();
+      //       }}
+      //     >
+      //       <Port
+      //         elk={{
+      //           id: `${id}##source`,
+      //           layoutOptions: {
+      //             "elk.port.side": "EAST",
+      //             "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+      //           },
+      //         }}
+      //       />
+
+      //       <Port
+      //         elk={{
+      //           id: `${id}##target`,
+      //           layoutOptions: {
+      //             "elk.port.side": "WEST",
+      //             "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+      //           },
+      //         }}
+      //       />
+
+      //       {!hasChildNodes && (
+      //         // eslint-disable-next-line react/jsx-no-comment-textnodes
+      //         <div className="relative">
+      //           <div
+      //             className={clsx(
+      //               "px-2.5 py-1 flex items-center gap-1.5",
+      //               inflights.length > 0 &&
+      //                 "border-b border-slate-200 dark:border-slate-800",
+      //             )}
+      //           >
+      //             <ResourceIcon
+      //               className="size-4 -ml-0.5"
+      //               resourceType={fqn}
+      //               color={color}
+      //               icon={icon}
+      //             />
+
+      //             <span
+      //               className={clsx(
+      //                 "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
+      //                 !highlight &&
+      //                   !hasError &&
+      //                   "text-slate-600 dark:text-slate-300",
+      //                 hasError && "text-red-600 dark:text-red-500",
+      //                 highlight &&
+      //                   !hasError &&
+      //                   "text-sky-600 dark:text-sky-300",
+      //               )}
+      //             >
+      //               {name}
+      //             </span>
+
+      //             <RunningStateIndicator
+      //               runningState={hierarchichalRunningState}
+      //             />
+
+      //             {collapsed && (
+      //               <div
+      //                 className="flex grow justify-end pl-1"
+      //                 onClick={() => {
+      //                   if (collapsed) {
+      //                     onCollapse(false);
+      //                   }
+      //                 }}
+      //               >
+      //                 <ChevronRightIcon
+      //                   className={clsx(
+      //                     "size-4",
+      //                     "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+      //                   )}
+      //                 />
+      //               </div>
+      //             )}
+      //           </div>
+      //         </div>
+      //       )}
+
+      //       <div className="pl-2">
+      //         <NodeChildren className="text-xs">
+      //           <div className="absolute">
+      //             {inflights.map((inflight) => (
+      //               <Node
+      //                 key={inflight.id}
+      //                 elk={{
+      //                   id: inflight.id,
+      //                   layoutOptions: {
+      //                     "elk.portConstraints": "FIXED_SIDE",
+      //                   },
+      //                 }}
+      //                 className={clsx("inline-block pointer-events-none")}
+      //               >
+      //                 <div>
+      //                   <div
+      //                     className={clsx(
+      //                       "px-2.5 py-1.5 text-xs whitespace-nowrap",
+      //                       "text-slate-600 dark:text-slate-300",
+      //                       "font-mono",
+      //                     )}
+      //                   >
+      //                     <span>{inflight.name}</span>
+      //                   </div>
+      //                 </div>
+
+      //                 <Port
+      //                   elk={{
+      //                     id: `${inflight.id}#source`,
+      //                     layoutOptions: {
+      //                       "elk.port.side": "EAST",
+      //                       "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+      //                     },
+      //                   }}
+      //                 />
+
+      //                 <Port
+      //                   elk={{
+      //                     id: `${inflight.id}#target`,
+      //                     layoutOptions: {
+      //                       "elk.port.side": "WEST",
+      //                       "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+      //                     },
+      //                   }}
+      //                 />
+      //               </Node>
+      //             ))}
+      //           </div>
+      //         </NodeChildren>
+      //       </div>
+      //     </div>
+      //   </Node>
+      // );
+
+      // if (hasChildNodes) {
+      //   return (
+      //     <ContainerNode
+      //       id={`${id}#container`}
+      //       name={name}
+      //       pseudoContainer
+      //       resourceType={fqn}
+      //       highlight={highlight}
+      //       onClick={select}
+      //       onCollapse={onCollapse}
+      //       collapsed={collapsed}
+      //       color={color}
+      //       icon={icon}
+      //       hierarchichalRunningState={hierarchichalRunningState}
+      //     >
+      //       <NodeChildren>
+      //         {inflights.length > 0 && renderedNode}
+
+      //         {children}
+      //       </NodeChildren>
+
+      //       <Port
+      //         elk={{
+      //           id: `${id}##source`,
+      //           layoutOptions: {
+      //             "elk.port.side": "EAST",
+      //             "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+      //           },
+      //         }}
+      //       />
+
+      //       <Port
+      //         elk={{
+      //           id: `${id}##target`,
+      //           layoutOptions: {
+      //             "elk.port.side": "WEST",
+      //             "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+      //           },
+      //         }}
+      //       />
+      //     </ContainerNode>
+      //   );
+      // }
+
+      // return renderedNode;
+
+      return (
         <Node
           elk={{
-            id: hasChildNodes ? id : `${id}#container`,
+            id,
             layoutOptions: {
               "elk.algorithm": "org.eclipse.elk.layered",
-              "elk.aspectRatio": "0.1",
-              "elk.layered.spacing.baseValue": "1",
               "elk.portConstraints": "FIXED_SIDE",
             },
           }}
-          className={clsx(
-            "inline-block group/construct cursor-pointer",
-            hasChildNodes && "pointer-events-none",
-          )}
-          data-elk-id={hasChildNodes ? id : `${id}#container`}
+          className={clsx("inline-flex flex-col cursor-pointer")}
         >
-          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+          <Port
+            elk={{
+              id: `${id}#source`,
+              layoutOptions: {
+                "elk.port.side": "EAST",
+                "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+              },
+            }}
+          />
+          <Port
+            elk={{
+              id: `${id}#target`,
+              layoutOptions: {
+                "elk.port.side": "WEST",
+                "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+              },
+            }}
+          />
           <div
             className={clsx(
               "w-full h-full",
-              !hasChildNodes && [
-                "rounded-lg",
-                "bg-white dark:bg-slate-700",
-                highlight && "bg-sky-50 dark:bg-sky-900",
-                "border",
-                "outline outline-0",
-                !highlight &&
-                  !hasError &&
-                  "border-slate-200 dark:border-slate-800",
-                highlight && !hasError && "border-sky-400 dark:border-sky-500",
-                highlight && "outline-4",
-                !hasError && "outline-sky-200/50 dark:outline-sky-500/50",
-                hasError &&
-                  "border-red-500 dark:border-red-500 outline-red-200/50 dark:outline-red-500/50",
-                "shadow",
-                "transition-all",
-              ],
+              "rounded-lg",
+              "bg-white dark:bg-slate-700",
+              highlight && "bg-sky-50 dark:bg-sky-900",
+              "border",
+              "outline outline-0",
+              !highlight &&
+                !hasError &&
+                "border-slate-200 dark:border-slate-800",
+              highlight && !hasError && "border-sky-400 dark:border-sky-500",
+              highlight && "outline-4",
+              !hasError && "outline-sky-200/50 dark:outline-sky-500/50",
+              hasError &&
+                "border-red-500 dark:border-red-500 outline-red-200/50 dark:outline-red-500/50",
+              "shadow",
+              "transition-all",
             )}
             onClick={(event) => {
               event.stopPropagation();
               select();
             }}
           >
-            <Port
-              elk={{
-                id: `${id}##source`,
-                layoutOptions: {
-                  "elk.port.side": "EAST",
-                  "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                },
-              }}
-            />
+            <div className="relative">
+              <div
+                className={clsx(
+                  "px-2.5 py-1 flex items-center gap-1.5",
+                  inflights.length > 0 &&
+                    "border-b border-slate-200 dark:border-slate-800",
+                )}
+              >
+                <ResourceIcon
+                  className="size-4 -ml-0.5"
+                  resourceType={fqn}
+                  color={color}
+                  icon={icon}
+                />
 
-            <Port
-              elk={{
-                id: `${id}##target`,
-                layoutOptions: {
-                  "elk.port.side": "WEST",
-                  "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                },
-              }}
-            />
-
-            {!hasChildNodes && (
-              // eslint-disable-next-line react/jsx-no-comment-textnodes
-              <div className="relative">
-                <div
+                <span
                   className={clsx(
-                    "px-2.5 py-1 flex items-center gap-1.5",
-                    inflights.length > 0 &&
-                      "border-b border-slate-200 dark:border-slate-800",
+                    "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
+                    !highlight &&
+                      !hasError &&
+                      "text-slate-600 dark:text-slate-300",
+                    hasError && "text-red-600 dark:text-red-500",
+                    highlight && !hasError && "text-sky-600 dark:text-sky-300",
                   )}
                 >
-                  <ResourceIcon
-                    className="size-4 -ml-0.5"
-                    resourceType={fqn}
-                    color={color}
-                    icon={icon}
-                  />
+                  {name}
+                </span>
 
-                  <span
-                    className={clsx(
-                      "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
-                      !highlight &&
-                        !hasError &&
-                        "text-slate-600 dark:text-slate-300",
-                      hasError && "text-red-600 dark:text-red-500",
-                      highlight &&
-                        !hasError &&
-                        "text-sky-600 dark:text-sky-300",
-                    )}
+                <RunningStateIndicator
+                  runningState={hierarchichalRunningState}
+                />
+
+                {(hasChildNodes || collapsed) && (
+                  <div
+                    className="flex grow justify-end"
+                    onClick={() => {
+                      if (collapsed) {
+                        onCollapse(false);
+                      } else {
+                        onCollapse(true);
+                      }
+                    }}
                   >
-                    {name}
-                  </span>
-
-                  <RunningStateIndicator
-                    runningState={hierarchichalRunningState}
-                  />
-
-                  {collapsed && (
-                    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-                    <div
-                      className="flex grow justify-end pl-1"
-                      onClick={() => {
-                        if (collapsed) {
-                          onCollapse(false);
-                        }
-                      }}
-                    >
-                      <ChevronRightIcon
-                        className={clsx(
-                          "size-4",
-                          "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
-                        )}
-                      />
-                    </div>
-                  )}
-                </div>
+                    <ChevronDownIcon
+                      className={clsx(
+                        collapsed && "-rotate-90",
+                        "size-4",
+                        "transition-all",
+                        "hover:text-sky-600 dark:hover:text-sky-300",
+                      )}
+                    />
+                  </div>
+                )}
               </div>
-            )}
+            </div>
 
-            <div className="pl-2">
-              <NodeChildren className="text-xs">
-                <div className="absolute">
-                  {inflights.map((inflight) => (
+            {(hasChildNodes || inflights.length > 0) && (
+              <div className={clsx("grow", hasChildNodes && "p-4")}>
+                <NodeChildren>
+                  <div className="absolute">
                     <Node
-                      key={inflight.id}
                       elk={{
-                        id: inflight.id,
+                        id: `${id}#inflights`,
                         layoutOptions: {
-                          "elk.portConstraints": "FIXED_SIDE",
+                          "elk.algorithm": "org.eclipse.elk.layered",
+                          "elk.aspectRatio": "0.1",
+                          "elk.layered.spacing.baseValue": "1",
                         },
                       }}
-                      className={clsx("inline-block pointer-events-none")}
+                      className="inline-flex flex-col pointer-events-none"
                     >
-                      <div>
-                        <div
-                          className={clsx(
-                            "px-2.5 py-1.5 text-xs whitespace-nowrap",
-                            "text-slate-600 dark:text-slate-300",
-                            "font-mono",
-                          )}
+                      {inflights.map((inflight) => (
+                        <Node
+                          key={inflight.id}
+                          className="w-full pointer-events-none"
+                          elk={{
+                            id: inflight.id,
+                            layoutOptions: {
+                              "elk.portConstraints": "FIXED_SIDE",
+                            },
+                          }}
                         >
-                          <span>{inflight.name}</span>
-                        </div>
-                      </div>
+                          <div>
+                            <div
+                              className={clsx(
+                                "px-2.5 py-1.5 text-xs whitespace-nowrap",
+                                "text-slate-600 dark:text-slate-300",
+                                "font-mono",
+                              )}
+                            >
+                              <span>{inflight.name}</span>
+                            </div>
+                          </div>
+                          <Port
+                            elk={{
+                              id: `${inflight.id}#source`,
+                              layoutOptions: {
+                                "elk.port.side": "EAST",
+                                "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                              },
+                            }}
+                          />
 
-                      <Port
-                        elk={{
-                          id: `${inflight.id}#source`,
-                          layoutOptions: {
-                            "elk.port.side": "EAST",
-                            "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                          },
-                        }}
-                      />
-
-                      <Port
-                        elk={{
-                          id: `${inflight.id}#target`,
-                          layoutOptions: {
-                            "elk.port.side": "WEST",
-                            "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                          },
-                        }}
-                      />
+                          <Port
+                            elk={{
+                              id: `${inflight.id}#target`,
+                              layoutOptions: {
+                                "elk.port.side": "WEST",
+                                "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                              },
+                            }}
+                          />
+                        </Node>
+                      ))}
                     </Node>
-                  ))}
-                </div>
-              </NodeChildren>
-            </div>
+                    {children}
+                  </div>
+                </NodeChildren>
+              </div>
+            )}
           </div>
         </Node>
       );
-
-      if (hasChildNodes) {
-        return (
-          <Node
-            elk={{
-              id: `${id}#container`,
-              layoutOptions: {
-                ...baseLayoutOptions,
-              },
-            }}
-            className={clsx("inline-block", "group")}
-            data-elk-id={`${id}#container`}
-          >
-            <div className={clsx("w-full h-full relative")}>
-              <div
-                className={clsx(
-                  "w-full h-full",
-                  "rounded-lg",
-                  "bg-white dark:bg-slate-700",
-                  highlight && "bg-sky-50 dark:bg-sky-900",
-                  "border",
-                  "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
-                  !highlight && "border-slate-200 dark:border-slate-800",
-                  highlight && "outline-4 border-sky-400 dark:border-sky-500",
-                  "shadow",
-                  "transition-all",
-                  "cursor-pointer",
-                )}
-              >
-                <div className="relative">
-                  <div
-                    className={clsx(
-                      "px-2.5 py-1 flex items-center gap-1.5",
-                      "border-b border-slate-200 dark:border-slate-800",
-                      "cursor-pointer",
-                    )}
-                  >
-                    <ResourceIcon
-                      className="size-4 -ml-0.5"
-                      resourceType={fqn}
-                      icon={icon}
-                      color={color}
-                    />
-
-                    <span
-                      className={clsx(
-                        "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
-                        !highlight && " text-slate-600 dark:text-slate-300",
-                        highlight && "text-sky-600 dark:text-sky-300",
-                      )}
-                    >
-                      {name}
-                    </span>
-                    <RunningStateIndicator
-                      runningState={hierarchichalRunningState}
-                    />
-                    <div className="flex grow justify-end">
-                      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events*/}
-                      <div
-                        className="pl-1"
-                        onClick={() => {
-                          onCollapse(!collapsed);
-                        }}
-                      >
-                        {collapsed && (
-                          <ChevronRightIcon
-                            className={clsx(
-                              "size-4",
-                              "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
-                            )}
-                          />
-                        )}
-                        {!collapsed && (
-                          <ChevronDownIcon
-                            className={clsx(
-                              "size-4",
-                              "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
-                            )}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {!collapsed && (
-                  <div className="p-4">
-                    <NodeChildren>
-                      <div className="absolute">
-                        <NodeChildren>
-                          {inflights.length > 0 && renderedNode}
-
-                          {children}
-                        </NodeChildren>
-
-                        <Port
-                          elk={{
-                            id: `${id}##source`,
-                            layoutOptions: {
-                              "elk.port.side": "EAST",
-                              "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                            },
-                          }}
-                        />
-
-                        <Port
-                          elk={{
-                            id: `${id}##target`,
-                            layoutOptions: {
-                              "elk.port.side": "WEST",
-                              "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                            },
-                          }}
-                        />
-                      </div>
-                    </NodeChildren>
-                  </div>
-                )}
-              </div>
-            </div>
-          </Node>
-        );
-      }
-
-      return renderedNode;
     },
   );
 
@@ -565,24 +816,25 @@ export interface MapViewV2Props {
 }
 
 const RenderNode = ({
+  constructTreeNode,
+  selectedNodeId,
+  onSelectedNodeIdChange,
   isNodeHidden,
   nodeInfo,
   expandedItems,
-  onExpand,
   onCollapse,
-  selectedNodeId,
-  onSelectedNodeIdChange,
-  node,
+  onExpand,
 }: {
+  constructTreeNode: MapItem;
+  selectedNodeId: string | undefined;
+  onSelectedNodeIdChange: (id: string | undefined) => void;
   isNodeHidden: (path: string) => boolean;
   nodeInfo?: Map<string, NodeV2>;
   expandedItems: string[];
-  onExpand: (path: string) => void;
   onCollapse: (path: string) => void;
-  node: MapItem;
-  selectedNodeId: string | undefined;
-  onSelectedNodeIdChange: (id: string | undefined) => void;
+  onExpand: (path: string) => void;
 }) => {
+  const node = constructTreeNode;
   if (isNodeHidden(node.path)) {
     return <></>;
   }
@@ -629,19 +881,19 @@ const RenderNode = ({
           onExpand(node.path);
         }
       }}
-      hierarchichalRunningState={node.hierarchichalRunningState}
+      hierarchichalRunningState={constructTreeNode.hierarchichalRunningState}
     >
       {childNodes.map((child) => (
         <RenderNode
           key={child.id}
-          node={child}
+          constructTreeNode={child}
           selectedNodeId={selectedNodeId}
           onSelectedNodeIdChange={onSelectedNodeIdChange}
           isNodeHidden={isNodeHidden}
           nodeInfo={nodeInfo}
           expandedItems={expandedItems}
-          onExpand={onExpand}
           onCollapse={onCollapse}
+          onExpand={onExpand}
         />
       ))}
     </ConstructNode>
@@ -727,14 +979,14 @@ export const MapView = memo(
                 {rootNodes.map((node) => (
                   <RenderNode
                     key={node.id}
-                    node={node}
+                    constructTreeNode={node}
                     selectedNodeId={selectedNodeId}
                     onSelectedNodeIdChange={onSelectedNodeIdChange}
                     isNodeHidden={isNodeHidden}
-                    nodeInfo={nodeInfo}
                     expandedItems={expandedItems}
-                    onExpand={onExpand}
+                    nodeInfo={nodeInfo}
                     onCollapse={onCollapse}
+                    onExpand={onExpand}
                   />
                 ))}
               </Graph>
