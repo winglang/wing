@@ -86,8 +86,7 @@ const NodeComponent = memo(
             zIndex: depth,
             opacity: 1,
           }}
-          exit={{ opacity: 0 }}
-          //transition={{ duration: 2 }}
+          exit={{ top: origin.y - 50, opacity: 0 }}
         >
           {node && (
             <DepthContext.Provider value={depth + 1}>
