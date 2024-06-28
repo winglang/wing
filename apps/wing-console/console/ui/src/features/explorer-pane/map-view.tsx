@@ -172,25 +172,28 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 />
 
                 {(hasChildNodes || collapsed) && (
-                  <div
-                    className="flex grow justify-end"
-                    onClick={() => {
-                      if (collapsed) {
-                        onCollapse(false);
-                      } else {
-                        onCollapse(true);
-                      }
-                    }}
-                  >
-                    <ChevronDownIcon
-                      className={clsx(
-                        collapsed && "-rotate-90",
-                        "size-4",
-                        "transition-all",
-                        "hover:text-sky-600 dark:hover:text-sky-300",
-                      )}
-                    />
-                  </div>
+                  <>
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                    <div
+                      className="flex grow justify-end"
+                      onClick={() => {
+                        if (collapsed) {
+                          onCollapse(false);
+                        } else {
+                          onCollapse(true);
+                        }
+                      }}
+                    >
+                      <ChevronDownIcon
+                        className={clsx(
+                          collapsed && "-rotate-90",
+                          "size-4",
+                          "transition-all",
+                          "hover:text-sky-600 dark:hover:text-sky-300",
+                        )}
+                      />
+                    </div>
+                  </>
                 )}
               </div>
             </div>
