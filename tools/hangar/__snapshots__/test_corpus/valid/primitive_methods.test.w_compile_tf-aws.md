@@ -31,9 +31,6 @@ const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.nodeof(this).root.$preflightTypesMap = { };
-    let $preflightTypesMap = {};
-    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const dur = (std.Duration.fromSeconds(60));
     const dur2 = (std.Duration.fromSeconds(600));
     const f = ((d) => {

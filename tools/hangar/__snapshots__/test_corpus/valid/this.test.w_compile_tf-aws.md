@@ -28,13 +28,10 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.nodeof(this).root.$preflightTypesMap = { };
-    let $preflightTypesMap = {};
-    const expect = $stdlib.expect;
-    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const path = $helpers.nodeof(this).path;
     for (const c of $helpers.nodeof(this).children) {
       console.log($helpers.nodeof(c).path);

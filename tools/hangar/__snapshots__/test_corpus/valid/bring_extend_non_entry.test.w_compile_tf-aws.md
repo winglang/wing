@@ -43,13 +43,10 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const lib = require("./preflight.extendnonentrypoint-1.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.nodeof(this).root.$preflightTypesMap = { };
-    let $preflightTypesMap = {};
-    const lib = $helpers.bringJs(`${__dirname}/preflight.extendnonentrypoint-1.cjs`, $preflightTypesMap);
-    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const f = new lib.Foo(this, "Foo");
   }
 }
@@ -66,7 +63,6 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-let $preflightTypesMap = {};
 const cdk8s = require("cdk8s");
 class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
   constructor($scope, $id, ) {
@@ -97,7 +93,7 @@ class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
     });
   }
 }
-module.exports = { $preflightTypesMap, Foo };
+module.exports = { Foo };
 //# sourceMappingURL=preflight.extendnonentrypoint-1.cjs.map
 ```
 

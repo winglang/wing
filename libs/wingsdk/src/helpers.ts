@@ -3,7 +3,6 @@
 import { notDeepStrictEqual } from "node:assert";
 import * as path from "node:path";
 import type { Construct } from "constructs";
-import type { Resource } from "./std";
 import type { Node } from "./std/node";
 // since we moved from node:18 to node:20 the deepStrictEqual doesn't work as expected.
 // https://github.com/winglang/wing/issues/4444
@@ -166,64 +165,4 @@ export function resolveDirname(
   relativeSourceDir: string
 ): string {
   return normalPath(path.resolve(outdir, relativeSourceDir));
-}
-
-/**
- * Helper function to `require` a compiled preflight wing file (js) into another compiled (js) wing file.
- * We need this instead of simply calling `require` because in addition to returning the imported module's exports,
- * we also need to update the current module's preflight types map with the brought module's preflight types map.
- * @param moduleFile - the file to `require`
- * @param outPreflightTypesObject - the current module's $preflightTypesMap
- * @returns all symbols exported by the `moduleFile` except `$preflightTypesMap`
- */
-export function bringJs(
-  moduleFile: string,
-  outPreflightTypesObject: any
-): Object {
-  /* eslint-disable @typescript-eslint/no-require-imports */
-  return Object.fromEntries(
-    Object.entries<object>(require(moduleFile)).filter(([k, v]) => {
-      // If this is the preflight types array then update the input object and skip it
-      if (k === "$preflightTypesMap") {
-        // Verify no key collision (should never happen)
-        Object.entries(v).forEach(([key, value]) => {
-          const otherValue = outPreflightTypesObject[key];
-          if (key in outPreflightTypesObject && otherValue !== value) {
-            throw new Error(`Key collision (${key} is both ${value.name} and ${otherValue.name}) in preflight types map`);
-          }
-        });
-        Object.assign(outPreflightTypesObject, v);
-        return false;
-      }
-      return true;
-    })
-  );
-}
-
-/**
- * Helper function to get a singleton instance of a class defined in preflight.
- * In practice this is used to get the preflight instance of **inflight** classes defined **preflight**.
- * This instance is used for accessing the lift map of such classes.
- * @param scope - a scope in the construct tree that'll hold the instance (a singleton within that tree).
- * @param typeId - the unique id of the preflight class type we want.
- * @returns the instance of the class.
- */
-export function preflightClassSingleton(
-  scope: Construct,
-  typeId: number
-): Resource {
-  const root: any = nodeof(scope).root;
-  const type: any = root.$preflightTypesMap[typeId];
-  if (root.resourceSingletons === undefined) {
-    root.resourceSingletons = {};
-  }
-  const instance = root.resourceSingletons[type];
-  if (instance) {
-    return instance;
-  }
-  root.resourceSingletons[type] = new type(
-    scope,
-    `${type.name}_singleton_${typeId}`
-  );
-  return root.resourceSingletons[type];
 }
