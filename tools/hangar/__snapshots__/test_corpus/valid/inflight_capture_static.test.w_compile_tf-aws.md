@@ -154,13 +154,10 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.nodeof(this).root.$preflightTypesMap = { };
-    let $preflightTypesMap = {};
-    const util = $stdlib.util;
-    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Preflight extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -229,8 +226,6 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[2]) { throw new Error("OuterInflight is already in type map"); }
-    $preflightTypesMap[2] = OuterInflight;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -293,10 +288,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [OuterInflight, ["staticMethod"]],
           ],
           "$inflight_init": [
-            [OuterInflight, []],
           ],
         });
       }
@@ -360,10 +353,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["tryEnv"]],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
           ],
         });
       }

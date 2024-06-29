@@ -102,9 +102,6 @@ const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.nodeof(this).root.$preflightTypesMap = { };
-    let $preflightTypesMap = {};
-    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -170,10 +167,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "callThis": [
-            [Bar, ["bar"]],
           ],
           "$inflight_init": [
-            [Bar, []],
           ],
         });
       }
@@ -184,8 +179,6 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[2]) { throw new Error("Bar is already in type map"); }
-    $preflightTypesMap[2] = Bar;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -215,14 +208,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$helpers.preflightClassSingleton(this, 2), ["callThis"]],
-            [Bar, ["bar"]],
             [Foo, ["foo"]],
             [foo, ["callThis"]],
           ],
           "$inflight_init": [
-            [$helpers.preflightClassSingleton(this, 2), []],
-            [Bar, []],
             [Foo, []],
             [foo, []],
           ],

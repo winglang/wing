@@ -42,18 +42,6 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.Foo-3.cjs.map
 ```
 
-## inflight.InflightBar-1.cjs
-```cjs
-"use strict";
-const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({  }) {
-  class InflightBar {
-  }
-  return InflightBar;
-}
-//# sourceMappingURL=inflight.InflightBar-1.cjs.map
-```
-
 ## main.tf.json
 ```json
 {
@@ -79,7 +67,6 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-let $preflightTypesMap = {};
 class Bar extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -114,37 +101,7 @@ class Bar extends $stdlib.std.Resource {
     });
   }
 }
-class InflightBar extends $stdlib.std.Resource {
-  constructor($scope, $id, ) {
-    super($scope, $id);
-  }
-  static _toInflightType() {
-    return `
-      require("${$helpers.normalPath(__dirname)}/inflight.InflightBar-1.cjs")({
-      })
-    `;
-  }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const InflightBarClient = ${InflightBar._toInflightType()};
-        const client = new InflightBarClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
-  }
-  get _liftMap() {
-    return ({
-      "$inflight_init": [
-      ],
-    });
-  }
-}
-if ($preflightTypesMap[2]) { throw new Error("InflightBar is already in type map"); }
-$preflightTypesMap[2] = InflightBar;
-module.exports = { $preflightTypesMap, Bar, InflightBar };
+module.exports = { Bar };
 //# sourceMappingURL=preflight.bar-1.cjs.map
 ```
 
@@ -155,7 +112,6 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-let $preflightTypesMap = {};
 class Baz extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -187,7 +143,7 @@ class Baz extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { $preflightTypesMap, Baz };
+module.exports = { Baz };
 //# sourceMappingURL=preflight.baz-2.cjs.map
 ```
 
@@ -201,15 +157,12 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const foo = require("./preflight.foo-3.cjs");
+const bar = require("./preflight.bar-1.cjs");
+const baz = require("./preflight.baz-2.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.nodeof(this).root.$preflightTypesMap = { };
-    let $preflightTypesMap = {};
-    const foo = $helpers.bringJs(`${__dirname}/preflight.foo-3.cjs`, $preflightTypesMap);
-    const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`, $preflightTypesMap);
-    const baz = $helpers.bringJs(`${__dirname}/preflight.baz-2.cjs`, $preflightTypesMap);
-    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     $helpers.assert($helpers.eq((foo.Foo.foo(this)), "foo"), "foo.Foo.foo() == \"foo\"");
     $helpers.assert($helpers.eq((foo.Foo.bar(this)), "bar"), "foo.Foo.bar() == \"bar\"");
     $helpers.assert($helpers.eq((foo.Foo.baz(this)), "baz"), "foo.Foo.baz() == \"baz\"");
@@ -230,9 +183,8 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-let $preflightTypesMap = {};
-const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`, $preflightTypesMap);
-const baz = $helpers.bringJs(`${__dirname}/preflight.baz-2.cjs`, $preflightTypesMap);
+const bar = require("./preflight.bar-1.cjs");
+const baz = require("./preflight.baz-2.cjs");
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -270,7 +222,7 @@ class Foo extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { $preflightTypesMap, Foo };
+module.exports = { Foo };
 //# sourceMappingURL=preflight.foo-3.cjs.map
 ```
 

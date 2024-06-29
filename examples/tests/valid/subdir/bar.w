@@ -8,5 +8,3 @@ pub class Bar {
     return @dirname;
   }
 }
-
-pub inflight class InflightBar {}

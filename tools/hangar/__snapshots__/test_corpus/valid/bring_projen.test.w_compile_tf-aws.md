@@ -28,13 +28,10 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const projen = require("projen");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.nodeof(this).root.$preflightTypesMap = { };
-    let $preflightTypesMap = {};
-    const projen = require("projen");
-    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     $helpers.assert($helpers.neq(projen.LogLevel.OFF, projen.LogLevel.VERBOSE), "projen.LogLevel.OFF != projen.LogLevel.VERBOSE");
   }
 }
