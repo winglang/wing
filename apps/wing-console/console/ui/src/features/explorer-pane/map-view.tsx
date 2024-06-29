@@ -212,70 +212,72 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               <div className={clsx(hasChildNodes && "p-4")}>
                 <NodeChildren>
                   <div className="absolute">
-                    <Node
-                      elk={{
-                        id: `${id}#inflights`,
-                        layoutOptions: {
-                          "elk.algorithm": "org.eclipse.elk.layered",
-                          "elk.aspectRatio": "0.1",
-                          "elk.layered.spacing.baseValue": "1",
-                          "elk.portConstraints": "FIXED_SIDE",
-                        },
-                      }}
-                      className={clsx(
-                        "inline-block",
-                        "pointer-events-none",
-                        "pl-2",
-                      )}
-                    >
-                      <NodeChildren>
-                        {inflights.map((inflight) => (
-                          <Node
-                            key={inflight.id}
-                            className={clsx(
-                              "inline-flex",
-                              "pointer-events-none",
-                            )}
-                            elk={{
-                              id: inflight.id,
-                              layoutOptions: {
-                                "elk.portConstraints": "FIXED_SIDE",
-                              },
-                            }}
-                          >
-                            <div
+                    {inflights.length > 0 && (
+                      <Node
+                        elk={{
+                          id: `${id}#inflights`,
+                          layoutOptions: {
+                            "elk.algorithm": "org.eclipse.elk.layered",
+                            "elk.aspectRatio": "0.1",
+                            "elk.layered.spacing.baseValue": "1",
+                            "elk.portConstraints": "FIXED_SIDE",
+                          },
+                        }}
+                        className={clsx(
+                          "inline-block",
+                          "pointer-events-none",
+                          "pl-2",
+                        )}
+                      >
+                        <NodeChildren>
+                          {inflights.map((inflight) => (
+                            <Node
+                              key={inflight.id}
                               className={clsx(
-                                "px-2.5 py-1.5 text-xs whitespace-nowrap",
-                                "text-slate-600 dark:text-slate-300",
-                                "font-mono",
+                                "inline-flex",
+                                "pointer-events-none",
                               )}
+                              elk={{
+                                id: inflight.id,
+                                layoutOptions: {
+                                  "elk.portConstraints": "FIXED_SIDE",
+                                },
+                              }}
                             >
-                              <span>{inflight.name}</span>
-                            </div>
+                              <div
+                                className={clsx(
+                                  "px-2.5 py-1.5 text-xs whitespace-nowrap",
+                                  "text-slate-600 dark:text-slate-300",
+                                  "font-mono",
+                                )}
+                              >
+                                <span>{inflight.name}</span>
+                              </div>
 
-                            <Port
-                              elk={{
-                                id: `${inflight.id}#source`,
-                                layoutOptions: {
-                                  "elk.port.side": "EAST",
-                                  "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                                },
-                              }}
-                            />
+                              <Port
+                                elk={{
+                                  id: `${inflight.id}#source`,
+                                  layoutOptions: {
+                                    "elk.port.side": "EAST",
+                                    "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                                  },
+                                }}
+                              />
 
-                            <Port
-                              elk={{
-                                id: `${inflight.id}#target`,
-                                layoutOptions: {
-                                  "elk.port.side": "WEST",
-                                  "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                                },
-                              }}
-                            />
-                          </Node>
-                        ))}
-                      </NodeChildren>
-                    </Node>
+                              <Port
+                                elk={{
+                                  id: `${inflight.id}#target`,
+                                  layoutOptions: {
+                                    "elk.port.side": "WEST",
+                                    "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                                  },
+                                }}
+                              />
+                            </Node>
+                          ))}
+                        </NodeChildren>
+                      </Node>
+                    )}
                     {children}
                   </div>
                 </NodeChildren>
