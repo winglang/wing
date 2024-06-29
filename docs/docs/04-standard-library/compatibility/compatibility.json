@@ -729,6 +729,11 @@
       "tf-aws": {
         "implemented": true
       }
+    },
+    "layers": {
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
   "Counter": {
