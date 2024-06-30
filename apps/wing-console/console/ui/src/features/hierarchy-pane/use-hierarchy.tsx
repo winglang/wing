@@ -1,16 +1,18 @@
 import { ResourceIcon } from "@wingconsole/design-system";
 import type { ExplorerItem } from "@wingconsole/server";
-import { useCallback, useEffect, useState } from "react";
+import uniqBy from "lodash.uniqby";
 import type { ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { trpc } from "../../trpc.js";
+import { RunningStateIndicator } from "../running-state-indicator/running-state-indicator.js";
 import { useSelectionContext } from "../selection-context/selection-context.js";
 
 export interface TreeMenuItem {
   id: string;
   icon?: React.ReactNode;
   label: string;
-  secondaryLabel?: string | ReactNode | ((item: TreeMenuItem) => ReactNode);
+  secondaryLabel?: string | ReactNode | (() => ReactNode);
   children?: TreeMenuItem[];
   expanded?: boolean;
 }
@@ -31,6 +33,9 @@ const createTreeMenuItemFromExplorerTreeItem = (
       />
     ) : undefined,
     expanded: item.display?.expanded,
+    secondaryLabel: (
+      <RunningStateIndicator runningState={item.hierarchichalRunningState} />
+    ),
     children: item.childItems?.map((item) =>
       createTreeMenuItemFromExplorerTreeItem(item),
     ),
@@ -79,30 +84,44 @@ export const useHierarchy = () => {
     setSelectedItems([selectedNode]);
   }, [selectedNode, setSelectedItems]);
 
+  // Expand items that are marked as expanded in the source code (only the first time they appear here).
+  // The rest of the time, the user's interaction with the tree menu will be handled by the useTreeMenuItems hook.
+  const processedItems = useRef(new Array<string>());
   useEffect(() => {
-    // Expand automatically if there is only one item and it is not explicitly set to be collapsed.
-    if (items?.length === 1 && items[0] && items[0].expanded !== false) {
-      setExpandedItems([items[0].id]);
-      return;
-    }
-    const getExpandedNodes = (items: TreeMenuItem[]): string[] => {
+    const getDefaultExpandedItems = (items: TreeMenuItem[]): string[] => {
       let expandedNodes: string[] = [];
       for (const item of items) {
-        if (item.expanded === true) {
+        // Expand if explicitely set to be expanded, or if there is only one item and it is not explicitly set to be collapsed.
+        if (
+          item.expanded === true ||
+          (items.length === 1 && item.expanded !== false)
+        ) {
           expandedNodes.push(item.id);
         }
         if (item.children && item.children.length > 0) {
           expandedNodes = [
             ...expandedNodes,
-            ...getExpandedNodes(item.children),
+            ...getDefaultExpandedItems(item.children),
           ];
         }
       }
       return expandedNodes;
     };
+    const defaultExpandedItems = getDefaultExpandedItems(items ?? []);
 
-    setExpandedItems(getExpandedNodes(items ?? []));
-  }, [items, setExpandedItems]);
+    const shouldExpandItems = defaultExpandedItems.filter(
+      (id) => !processedItems.current.includes(id),
+    );
+
+    setExpandedItems((expandedItems) =>
+      uniqBy([...expandedItems, ...shouldExpandItems], (id) => id),
+    );
+
+    processedItems.current = uniqBy(
+      [...processedItems.current, ...shouldExpandItems],
+      (id) => id,
+    );
+  }, [items, processedItems, setExpandedItems]);
 
   return {
     items,

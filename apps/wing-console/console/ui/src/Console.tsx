@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
+import { httpBatchLink, wsLink, splitLink, createWSClient } from "@trpc/client";
 import type { Mode } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
 import { useEffect, useMemo, useState } from "react";
@@ -61,7 +61,7 @@ export const Console = ({
           true: wsLink({
             client: wsClient,
           }),
-          false: httpLink({
+          false: httpBatchLink({
             url: trpcUrl,
           }),
         }),

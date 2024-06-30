@@ -125,7 +125,6 @@ export const createExpressServer = async ({
     "/trpc",
     trpcExpress.createExpressMiddleware({
       router,
-      batching: { enabled: false },
       createContext,
     }),
   );

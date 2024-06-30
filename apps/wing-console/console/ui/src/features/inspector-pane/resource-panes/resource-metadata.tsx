@@ -14,10 +14,13 @@ import {
   ScrollableArea,
 } from "@wingconsole/design-system";
 import type { NodeDisplay } from "@wingconsole/server";
+import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/simulator.js";
 import classNames from "classnames";
+import type { FunctionComponent } from "react";
 import { memo, useCallback, useMemo, useState } from "react";
 
 import { trpc } from "../../../trpc.js";
+import { RunningStateIndicator } from "../../running-state-indicator/running-state-indicator.js";
 
 import { BucketMetadata } from "./bucket-metadata.js";
 import { CounterMetadata } from "./counter-metadata.js";
@@ -26,6 +29,26 @@ import { FunctionMetadata } from "./function-metadata.js";
 import { QueueMetadataView } from "./queue-metadata-view.js";
 import { ResourceInteractionView } from "./resource-interaction-view.js";
 import { ScheduleMetadata } from "./schedule-metadata.js";
+
+const runningStateToText = (runningState: ResourceRunningState) => {
+  switch (runningState) {
+    case "error": {
+      return "Error";
+    }
+    case "started": {
+      return "Started";
+    }
+    case "starting": {
+      return "Starting";
+    }
+    case "stopped": {
+      return "Stopped";
+    }
+    case "stopping": {
+      return "Stopping";
+    }
+  }
+};
 
 interface AttributeGroup {
   groupName: string;
@@ -60,6 +83,7 @@ export interface MetadataNode {
         [key: string]: any;
       }
     | undefined;
+  hierarchichalRunningState: ResourceRunningState;
 }
 
 export interface MetadataProps {
@@ -239,131 +263,54 @@ export const ResourceMetadata = memo(
     return (
       <ScrollableArea
         overflowY
-        className={classNames("h-full text-sm", theme.bg3, theme.text1)}
+        className={classNames(
+          "h-full text-sm flex flex-col",
+          theme.bg3,
+          theme.text1,
+        )}
         dataTestid={`resource-metadata:${node.path}`}
       >
-        <div className="flex items-center gap-2 px-2 py-2">
-          <div className="flex-shrink-0">
-            <ResourceIcon
-              className="w-6 h-6"
-              resourceType={node.type}
-              resourcePath={node.path}
-              color={node.display?.color}
-              icon={node.display?.icon}
-            />
+        <div className="flex flex-col gap-2 py-2">
+          <div className="flex items-center gap-2 px-2 ">
+            <div className="flex-shrink-0">
+              <ResourceIcon
+                className="w-6 h-6"
+                resourceType={node.type}
+                resourcePath={node.path}
+                color={node.display?.color}
+                icon={node.display?.icon}
+              />
+            </div>
+
+            <div className="flex flex-col min-w-0">
+              <div className="text-sm font-medium truncate">{nodeLabel}</div>
+              <div className="flex">
+                <Pill>{node.type}</Pill>
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate">{nodeLabel}</div>
-            <div className="flex">
-              <Pill>{node.type}</Pill>
-            </div>
+          <div className="flex items-center gap-2 px-2">
+            <Attribute className="grow" name="Running Status">
+              <div className="flex gap-2 items-center">
+                <span>
+                  {runningStateToText(node.hierarchichalRunningState)}
+                </span>
+                <RunningStateIndicator
+                  runningState={node.hierarchichalRunningState}
+                />
+              </div>
+            </Attribute>
           </div>
         </div>
-        {resourceUI.data && resourceUI.data.length > 0 && (
-          <InspectorSection
-            icon={icon ?? CubeIcon}
-            text={nodeLabel ?? "Properties"}
-            open={openInspectorSections.includes("resourceUI")}
-            onClick={() => toggleInspectorSection("resourceUI")}
-            headingClassName="pl-2"
-          >
-            <div className={classNames("border-t", theme.border4)}>
-              <div
-                className={classNames(
-                  "px-2 py-1.5 flex flex-col gap-y-1 gap-x-4",
-                  theme.bg3,
-                  theme.text1,
-                )}
-              >
-                {resourceUI.data.map((item, index) => (
-                  <CustomResourceUiItem key={index} item={item} />
-                ))}
-              </div>
-            </div>
-          </InspectorSection>
-        )}
 
-        {(node.type.startsWith("@winglang/sdk.cloud") ||
-          node.type.startsWith("@winglang/sdk.redis") ||
-          node.type.startsWith("@winglang/sdk.ex")) && (
-          <>
+        <div className="grow relative">
+          {resourceUI.data && resourceUI.data.length > 0 && (
             <InspectorSection
-              text={resourceGroup?.groupName || "Interact"}
-              icon={resourceGroup?.icon || CursorArrowRaysIcon}
-              open={openInspectorSections.includes("interact")}
-              onClick={() => toggleInspectorSection("interact")}
-              headingClassName="pl-2"
-            >
-              <div
-                className={classNames(
-                  "border-t",
-                  theme.border4,
-                  theme.bg3,
-                  theme.text1,
-                )}
-              >
-                {resourceGroup?.groupName && (
-                  <>
-                    {node.type === "@winglang/sdk.cloud.Function" && (
-                      <FunctionMetadata node={node} />
-                    )}
-                    {node.type === "@winglang/sdk.cloud.Queue" && (
-                      <QueueMetadataView node={node} />
-                    )}
-                    {node.type === "@winglang/sdk.cloud.Bucket" && (
-                      <BucketMetadata node={node} />
-                    )}
-                    {node.type === "@winglang/sdk.cloud.Counter" && (
-                      <CounterMetadata node={node} />
-                    )}
-                    {node.type === "@winglang/sdk.cloud.Schedule" && (
-                      <ScheduleMetadata node={node} />
-                    )}
-                    {resourceGroup?.actionName && (
-                      <InspectorSection
-                        text={resourceGroup.actionName}
-                        open={openInspectorSections.includes(
-                          "interact-actions",
-                        )}
-                        onClick={() =>
-                          toggleInspectorSection("interact-actions")
-                        }
-                        subection
-                        headingClassName="pl-2"
-                      >
-                        <div className="pl-6 pr-2 pb-2 h-full relative">
-                          <ResourceInteractionView
-                            key={node.path}
-                            resourceType={node.type}
-                            resourcePath={node.path}
-                          />
-                        </div>
-                      </InspectorSection>
-                    )}
-                  </>
-                )}
-                {(!resourceGroup?.groupName || !resourceGroup?.actionName) && (
-                  <div className="pl-6 pr-2 py-1 relative">
-                    <ResourceInteractionView
-                      key={node.path}
-                      resourceType={node.type}
-                      resourcePath={node.path}
-                    />
-                  </div>
-                )}
-              </div>
-            </InspectorSection>
-          </>
-        )}
-
-        {node && (
-          <>
-            <InspectorSection
-              text="Node"
-              icon={CubeTransparentIcon}
-              open={openInspectorSections.includes("node")}
-              onClick={() => toggleInspectorSection("node")}
+              icon={icon ?? CubeIcon}
+              text={nodeLabel ?? "Properties"}
+              open={openInspectorSections.includes("resourceUI")}
+              onClick={() => toggleInspectorSection("resourceUI")}
               headingClassName="pl-2"
             >
               <div className={classNames("border-t", theme.border4)}>
@@ -374,21 +321,120 @@ export const ResourceMetadata = memo(
                     theme.text1,
                   )}
                 >
-                  <Attribute name="ID" value={node.id} />
-                  <Attribute name="Path" value={node.path} />
-                  <Attribute name="Type" value={node.type} />
-                  {node.display?.description && (
-                    <Attribute
-                      name="Description"
-                      value={node.display.description}
-                    />
-                  )}
+                  {resourceUI.data.map((item, index) => (
+                    <CustomResourceUiItem key={index} item={item} />
+                  ))}
                 </div>
               </div>
             </InspectorSection>
+          )}
 
-            {/* Need to fix the relationships data. */}
-            {/* {connectionsGroups && connectionsGroups.length > 0 && (
+          {(node.type.startsWith("@winglang/sdk.cloud") ||
+            node.type.startsWith("@winglang/sdk.redis") ||
+            node.type.startsWith("@winglang/sdk.ex")) && (
+            <>
+              <InspectorSection
+                text={resourceGroup?.groupName || "Interact"}
+                icon={resourceGroup?.icon || CursorArrowRaysIcon}
+                open={openInspectorSections.includes("interact")}
+                onClick={() => toggleInspectorSection("interact")}
+                headingClassName="pl-2"
+              >
+                <div
+                  className={classNames(
+                    "border-t",
+                    theme.border4,
+                    theme.bg3,
+                    theme.text1,
+                  )}
+                >
+                  {resourceGroup?.groupName && (
+                    <>
+                      {node.type === "@winglang/sdk.cloud.Function" && (
+                        <FunctionMetadata node={node} />
+                      )}
+                      {node.type === "@winglang/sdk.cloud.Queue" && (
+                        <QueueMetadataView node={node} />
+                      )}
+                      {node.type === "@winglang/sdk.cloud.Bucket" && (
+                        <BucketMetadata node={node} />
+                      )}
+                      {node.type === "@winglang/sdk.cloud.Counter" && (
+                        <CounterMetadata node={node} />
+                      )}
+                      {node.type === "@winglang/sdk.cloud.Schedule" && (
+                        <ScheduleMetadata node={node} />
+                      )}
+                      {resourceGroup?.actionName && (
+                        <InspectorSection
+                          text={resourceGroup.actionName}
+                          open={openInspectorSections.includes(
+                            "interact-actions",
+                          )}
+                          onClick={() =>
+                            toggleInspectorSection("interact-actions")
+                          }
+                          subection
+                          headingClassName="pl-2"
+                        >
+                          <div className="pl-6 pr-2 pb-2 h-full relative">
+                            <ResourceInteractionView
+                              key={node.path}
+                              resourceType={node.type}
+                              resourcePath={node.path}
+                            />
+                          </div>
+                        </InspectorSection>
+                      )}
+                    </>
+                  )}
+                  {(!resourceGroup?.groupName ||
+                    !resourceGroup?.actionName) && (
+                    <div className="pl-6 pr-2 py-1 relative">
+                      <ResourceInteractionView
+                        key={node.path}
+                        resourceType={node.type}
+                        resourcePath={node.path}
+                      />
+                    </div>
+                  )}
+                </div>
+              </InspectorSection>
+            </>
+          )}
+
+          {node && (
+            <>
+              <InspectorSection
+                text="Node"
+                icon={CubeTransparentIcon}
+                open={openInspectorSections.includes("node")}
+                onClick={() => toggleInspectorSection("node")}
+                headingClassName="pl-2"
+              >
+                <div className={classNames("border-t", theme.border4)}>
+                  <div
+                    className={classNames(
+                      "px-2 py-1.5 flex flex-col gap-y-1 gap-x-4",
+                      theme.bg3,
+                      theme.text1,
+                    )}
+                  >
+                    <Attribute name="ID" value={node.id} />
+                    <Attribute name="Path" value={node.path} />
+                    <Attribute name="Type" value={node.type} />
+                    {node.display?.description && (
+                      <Attribute
+                        name="Description"
+                        value={node.display.description}
+                      />
+                    )}
+                  </div>
+                </div>
+              </InspectorSection>
+
+              {/* Need to fix the relationships data. */}
+              {/* {connectionsGroups && connectionsGroups.length > 0 && (
               <InspectorSection
                 text="Relationships"
                 open={openInspectorSections.includes("relationships")}
@@ -468,9 +514,10 @@ export const ResourceMetadata = memo(
               </InspectorSection>
             )} */}
 
-            <div className={classNames(theme.border3, "border-t")}></div>
-          </>
-        )}
+              <div className={classNames(theme.border3, "border-t")}></div>
+            </>
+          )}
+        </div>
       </ScrollableArea>
     );
   },

@@ -28,13 +28,8 @@ pull_request_rules:
       - "#review-threads-unresolved=0"
       - -approved-reviews-by~=author
       - check-success=Validate PR title
+      - check-success=Quality Gate
       - base=main
-      - or:
-          - check-success=Quality Gate
-          - and:
-              - -files~=^(?!docs/|logo/)
-              # These files must be generated via wingsdk build
-              - -files~=^docs/docs/04-standard-library/[^/]+/[^/]+\.md$
 
   - name: requires manual merge
     conditions:

@@ -2,7 +2,7 @@
 // to a bug in `v8-to-istanbul` that causes it to
 // exit with a non-zero code when trying to generate
 // coverage reports. See https://github.com/istanbuljs/v8-to-istanbul/issues/198
-import { AssertionError } from "node:assert/strict";
+import nodeAssert from "node:assert/strict";
 import { test, describe, expect } from "vitest";
 import { Util as Assert } from "../../src/expect";
 
@@ -195,7 +195,7 @@ describe("match", () => {
     expect(() => {
       Assert.match("abc", "def");
     }).toThrow(
-      new AssertionError({
+      new nodeAssert.AssertionError({
         message: "The input did not match the regular expression def",
       })
     );
@@ -207,7 +207,7 @@ describe("does not match", () => {
     expect(() => {
       Assert.doesNotMatch("abc", "abc");
     }).toThrow(
-      new AssertionError({
+      new nodeAssert.AssertionError({
         message: "The input should not match the regular expression abc",
       })
     );
