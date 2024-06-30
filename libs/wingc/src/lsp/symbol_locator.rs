@@ -105,7 +105,7 @@ impl<'a> SymbolLocator<'a> {
 		property: &'a Symbol,
 	) -> Option<LookupResult<'a>> {
 		let current_env = self.result_ctx.current_env()?;
-		let type_ = resolve_user_defined_type_ref(type_name, current_env, self.result_ctx.current_stmt_idx()).ok()?;
+		let type_ = resolve_user_defined_type_ref(type_name, current_env, Some(self.result_ctx.current_stmt_idx())).ok()?;
 
 		match &**type_ {
 			// enum variants are not really properties, so just return the enum info

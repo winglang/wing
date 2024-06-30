@@ -337,6 +337,12 @@ pub struct Class {
 	pub auto_id: bool,
 }
 
+impl Spanned for Class {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
 impl Class {
 	/// Returns all methods, including the initializer and inflight initializer.
 	pub fn all_methods(&self, include_initializers: bool) -> Vec<&FunctionDefinition> {

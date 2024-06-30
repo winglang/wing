@@ -2262,7 +2262,7 @@ fn parent_class_type(ctx: &JSifyContext<'_>) -> TypeRef {
 	let current_class_type = resolve_user_defined_type(
 		ctx.visit_ctx.current_class().expect("a class"),
 		ctx.visit_ctx.current_env().expect("an env"),
-		ctx.visit_ctx.current_stmt_idx(),
+		None,
 	)
 	.expect("a class type");
 	// Return the parent class type

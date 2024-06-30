@@ -2893,7 +2893,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		} = new_expr;
 		// Type check everything
 		let class_type = self
-			.resolve_user_defined_type(class, env, self.ctx.current_stmt_idx())
+			.resolve_user_defined_type(class, env, Some(self.ctx.current_stmt_idx()))
 			.unwrap_or_else(|e| self.type_error(e));
 		let obj_scope_type = obj_scope.as_ref().map(|x| self.type_check_exp(x, env).0);
 		let obj_id_type = obj_id.as_ref().map(|x| self.type_check_exp(x, env).0);
@@ -3744,13 +3744,14 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 	/// type declarations, even if they come before the type declaration.
 	fn hoist_type_definitions(&mut self, scope: &Scope, env: &mut SymbolEnv) {
 		for statement in scope.statements.iter() {
-			match &statement.kind {
-				StmtKind::Bring { source, identifier } => self.hoist_bring_statement(source, identifier, statement, env),
-				StmtKind::Struct(st) => self.hoist_struct_definition(st, env, &statement.doc),
-				StmtKind::Interface(iface) => self.hoist_interface_definition(iface, env, &statement.doc),
-				StmtKind::Enum(enu) => self.hoist_enum_definition(enu, env, &statement.doc),
+			self.with_stmt(statement, |tc| match &statement.kind {
+				StmtKind::Bring { source, identifier } => tc.hoist_bring_statement(source, identifier, statement, env),
+				StmtKind::Struct(st) => tc.hoist_struct_definition(st, env, &statement.doc),
+				StmtKind::Interface(iface) => tc.hoist_interface_definition(iface, env, &statement.doc),
+				StmtKind::Enum(enu) => tc.hoist_enum_definition(enu, env, &statement.doc),
+				StmtKind::Class(class) => tc.hoist_class_definition(class, env, &statement.doc),
 				_ => {}
-			}
+			});
 		}
 	}
 
@@ -3905,14 +3906,19 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		// Create environment representing this struct, for now it'll be empty just so we can support referencing it
-		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(self.types.void()), env.phase, 0);
+		let dummy_env = SymbolEnv::new(
+			None,
+			SymbolEnvKind::Type(self.types.void()),
+			env.phase,
+			self.ctx.current_stmt_idx(),
+		);
 
 		// Collect types this struct extends
 		let extends_types = extends
 			.iter()
 			.filter_map(|ext| {
 				let t = self
-					.resolve_user_defined_type(ext, &env, self.ctx.current_stmt_idx())
+					.resolve_user_defined_type(ext, &env, None)
 					.unwrap_or_else(|e| self.type_error(e));
 				if t.as_struct().is_some() {
 					Some(t)
@@ -3932,7 +3938,12 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 		}));
 
-		match env.define(name, SymbolKind::Type(struct_type), *access, StatementIdx::Top) {
+		match env.define(
+			name,
+			SymbolKind::Type(struct_type),
+			*access,
+			StatementIdx::Index(self.ctx.current_stmt_idx()),
+		) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
@@ -3956,7 +3967,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			.iter()
 			.filter_map(|i| {
 				let t = self
-					.resolve_user_defined_type(i, env, self.ctx.current_stmt_idx())
+					.resolve_user_defined_type(i, env, None)
 					.unwrap_or_else(|e| self.type_error(e));
 				if t.as_interface().is_some() {
 					Some(t)
@@ -4006,6 +4017,83 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			SymbolKind::Type(enum_type_ref),
 			enu.access,
 			StatementIdx::Top,
+		) {
+			Err(type_error) => {
+				self.type_error(type_error);
+			}
+			_ => {}
+		};
+	}
+
+	fn hoist_class_definition(&mut self, ast_class: &AstClass, env: &mut SymbolEnv, doc: &Option<String>) {
+		// preflight classes cannot be declared inside an inflight scope
+		// (the other way is okay)
+		if env.phase == Phase::Inflight && ast_class.phase == Phase::Preflight {
+			self.spanned_error(
+				ast_class,
+				format!("Cannot declare a {} class in {} scope", ast_class.phase, env.phase),
+			);
+		}
+		// Verify parent is a known class and get their env
+		let (parent_class, _parent_class_env) = // TODO: remove tuple output (env) of extract_parent_class
+			self.extract_parent_class(ast_class.parent.as_ref(), ast_class.phase, &ast_class.name, env);
+
+		// Create environment representing this class
+		let dummy_env = SymbolEnv::new(
+			None,
+			SymbolEnvKind::Type(self.types.void()),
+			env.phase,
+			self.ctx.current_stmt_idx(),
+		);
+
+		let impl_interfaces = ast_class
+			.implements
+			.iter()
+			.filter_map(|i| {
+				let t = self
+					.resolve_user_defined_type(i, env, None)
+					.unwrap_or_else(|e| self.type_error(e));
+				if t.as_interface().is_some() {
+					Some(t)
+				} else {
+					self.spanned_error(i, format!("Expected an interface, instead found type \"{}\"", t));
+					None
+				}
+			})
+			.collect::<Vec<_>>();
+
+		// Verify implemented interfaces are of valid phase for this class
+		for interface in impl_interfaces.iter().map(|t| t.as_interface().unwrap()) {
+			if ast_class.phase == Phase::Inflight && interface.phase == Phase::Preflight {
+				self.spanned_error(
+					ast_class,
+					format!(
+						"Inflight class {} cannot implement a preflight interface {}",
+						ast_class.name, interface.name
+					),
+				);
+			}
+		}
+
+		// Create the class type and add it to the current environment
+		let class_spec = Class {
+			name: ast_class.name.clone(),
+			fqn: None,
+			env: dummy_env,
+			parent: parent_class,
+			implements: impl_interfaces.clone(),
+			is_abstract: false,
+			phase: ast_class.phase,
+			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
+			std_construct_args: ast_class.phase == Phase::Preflight,
+			lifts: None,
+		};
+		let class_type = self.types.add_type(Type::Class(class_spec));
+		match env.define(
+			&ast_class.name,
+			SymbolKind::Type(class_type),
+			ast_class.access,
+			StatementIdx::Index(self.ctx.current_stmt_idx()),
 		) {
 			Err(type_error) => {
 				self.type_error(type_error);
@@ -4085,7 +4173,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				self.types.add_type(Type::Function(sig))
 			}
 			TypeAnnotationKind::UserDefined(user_defined_type) => self
-				.resolve_user_defined_type(user_defined_type, env, self.ctx.current_stmt_idx())
+				.resolve_user_defined_type(user_defined_type, env, None)
 				.unwrap_or_else(|e| self.type_error(e)),
 			TypeAnnotationKind::Array(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
@@ -4220,7 +4308,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				tc.type_check_return(stmt, exp, env);
 			}
 			StmtKind::Class(ast_class) => {
-				tc.type_check_class(stmt, ast_class, env);
+				tc.type_check_class(ast_class, env);
 			}
 			StmtKind::Interface(ast_iface) => {
 				tc.type_check_interface(ast_iface, env);
@@ -4464,81 +4552,30 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 	}
 
-	fn type_check_class(&mut self, stmt: &Stmt, ast_class: &AstClass, env: &mut SymbolEnv) {
+	fn type_check_class(&mut self, ast_class: &AstClass, env: &mut SymbolEnv) {
 		self.ctx.push_class(ast_class);
 
-		// preflight classes cannot be declared inside an inflight scope
-		// (the other way is okay)
-		if env.phase == Phase::Inflight && ast_class.phase == Phase::Preflight {
-			self.spanned_error(
-				stmt,
-				format!("Cannot declare a {} class in {} scope", ast_class.phase, env.phase),
-			);
-		}
-		// Verify parent is a known class and get their env
-		let (parent_class, parent_class_env) =
-			self.extract_parent_class(ast_class.parent.as_ref(), ast_class.phase, &ast_class.name, env);
+		// Note: to support mutually recursive type definitions (types that refer to each other), class types
+		// are initialized during `type_check_scope`. The class type is created with a dummy environment and
+		// then replaced with the real environment after the class's content is type checked.
+		// In this method, we are filling in the class's environment with the fields, methods, ctors and parent members
+		// and updating the class's Type with the new environment.
+		let mut class_type = env
+			.lookup(&ast_class.name, Some(self.ctx.current_stmt_idx()))
+			.expect("class type should have been defined in the environment")
+			.as_type()
+			.unwrap();
 
-		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(self.types.void()), env.phase, stmt.idx);
-
-		let impl_interfaces = ast_class
-			.implements
-			.iter()
-			.filter_map(|i| {
-				let t = self
-					.resolve_user_defined_type(i, env, stmt.idx)
-					.unwrap_or_else(|e| self.type_error(e));
-				if t.as_interface().is_some() {
-					Some(t)
-				} else {
-					self.spanned_error(i, format!("Expected an interface, instead found type \"{}\"", t));
-					None
-				}
-			})
-			.collect::<Vec<_>>();
-
-		// Verify implemented interfaces are of valid phase for this class
-		for interface in impl_interfaces.iter().map(|t| t.as_interface().unwrap()) {
-			if ast_class.phase == Phase::Inflight && interface.phase == Phase::Preflight {
-				self.spanned_error(
-					stmt,
-					format!(
-						"Inflight class {} cannot implement a preflight interface {}",
-						ast_class.name, interface.name
-					),
-				);
-			}
-		}
-
-		// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
-		let class_spec = Class {
-			name: ast_class.name.clone(),
-			fqn: None,
-			env: dummy_env,
-			parent: parent_class,
-			implements: impl_interfaces.clone(),
-			is_abstract: false,
-			phase: ast_class.phase,
-			docs: stmt.doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
-			std_construct_args: ast_class.phase == Phase::Preflight,
-			lifts: None,
-		};
-		let mut class_type = self.types.add_type(Type::Class(class_spec));
-		match env.define(
-			&ast_class.name,
-			SymbolKind::Type(class_type),
-			ast_class.access,
-			StatementIdx::Top,
-		) {
-			Err(type_error) => {
-				self.type_error(type_error);
-			}
-			_ => {}
-		};
+		let parent_class = class_type.as_class().expect("a class").parent;
+		let parent_class_env = parent_class.map(|p| p.as_class().unwrap().env.get_ref());
 
 		// Create a the real class environment to be filled with the class AST types
-		let mut class_env = SymbolEnv::new(parent_class_env, SymbolEnvKind::Type(class_type), env.phase, stmt.idx);
+		let mut class_env = SymbolEnv::new(
+			parent_class_env,
+			SymbolEnvKind::Type(class_type),
+			env.phase,
+			self.ctx.current_stmt_idx(),
+		);
 
 		// Add fields to the class env
 		for field in ast_class.fields.iter() {
@@ -4631,7 +4668,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			&init_symb,
 			&mut init_func_type,
 			env,
-			stmt.idx,
+			self.ctx.current_stmt_idx(),
 			&ast_class.initializer,
 		);
 
@@ -4714,7 +4751,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			&inflight_init_symb,
 			&mut inflight_init_func_type,
 			env,
-			stmt.idx,
+			self.ctx.current_stmt_idx(),
 			&ast_class.inflight_initializer,
 		);
 
@@ -4724,8 +4761,17 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		// Type check methods
 		for (method_name, method_def) in ast_class.methods.iter() {
 			let mut method_type = *method_types.get(&method_name).unwrap();
-			self.type_check_method(class_type, method_name, &mut method_type, env, stmt.idx, method_def);
+			self.type_check_method(
+				class_type,
+				method_name,
+				&mut method_type,
+				env,
+				self.ctx.current_stmt_idx(),
+				method_def,
+			);
 		}
+
+		let impl_interfaces = &class_type.as_class().unwrap().implements;
 
 		// Check that the class satisfies all of its interfaces
 		for interface_type in impl_interfaces.iter() {
@@ -4739,8 +4785,8 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 
 			// Check all methods are implemented
 			for (method_name, method_type) in interface_type.methods(true) {
-				if let Some(symbol) = &mut class_type
-					.as_class_mut()
+				if let Some(symbol) = class_type
+					.as_class()
 					.unwrap()
 					.env
 					.lookup(&method_name.as_str().into(), None)
@@ -5255,9 +5301,9 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		let arg_list_types = self.type_check_arg_list(arg_list, env);
 
 		// Verify we're inside a class
-		let class_type = if let Some(current_clas) = self.ctx.current_class().cloned() {
+		let class_type = if let Some(current_class) = self.ctx.current_class().cloned() {
 			self
-				.resolve_user_defined_type(&current_clas, env, self.ctx.current_stmt_idx())
+				.resolve_user_defined_type(&current_class, env, None)
 				.expect("current class type to be defined")
 		} else {
 			self.spanned_error(
@@ -6076,7 +6122,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					});
 
 					return self
-						.resolve_user_defined_type(&new_udt, env, self.ctx.current_stmt_idx())
+						.resolve_user_defined_type(&new_udt, env, Some(self.ctx.current_stmt_idx()))
 						.ok()
 						.map(|_| new_udt);
 				}
@@ -6084,7 +6130,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		self
-			.resolve_user_defined_type(&base_udt, env, self.ctx.current_stmt_idx())
+			.resolve_user_defined_type(&base_udt, env, Some(self.ctx.current_stmt_idx()))
 			.ok()
 			.map(|_| base_udt)
 	}
@@ -6249,7 +6295,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			}
 			Reference::TypeMember { type_name, property } => {
 				let type_ = self
-					.resolve_user_defined_type(type_name, env, self.ctx.current_stmt_idx())
+					.resolve_user_defined_type(type_name, env, Some(self.ctx.current_stmt_idx()))
 					.unwrap_or_else(|e| self.type_error(e));
 				match *type_ {
 					Type::Enum(ref e) => {
@@ -6501,9 +6547,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			let mut private_access = false;
 			let mut protected_access = false;
 			for current_class in self.ctx.current_class_nesting() {
-				let current_class_type = self
-					.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
-					.unwrap();
+				let current_class_type = self.resolve_user_defined_type(&current_class, env, None).unwrap();
 				private_access = private_access || current_class_type.is_same_type_as(&property_defined_in);
 				protected_access =
 					protected_access || private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
@@ -6569,11 +6613,14 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 
 	/// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference
 	/// If needed, this method can also resolve types from jsii libraries that have yet to be imported
+	/// A `statement_idx` can optionaly be provided if we want the resolution to fail in case the type
+	/// is defined after the given statement. This is generally the case when the type is being referenced
+	/// as part of an expression and not as part of a type annotation (`A.static()` and not `let x: A =`).
 	fn resolve_user_defined_type(
 		&mut self,
 		user_defined_type: &UserDefinedType,
 		env: &SymbolEnv,
-		statement_idx: usize,
+		statement_idx: Option<usize>,
 	) -> Result<TypeRef, TypeError> {
 		// Attempt to resolve the type from the current environment
 		let res = resolve_user_defined_type(user_defined_type, env, statement_idx);
@@ -6605,7 +6652,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		};
 
 		let parent_type = self
-			.resolve_user_defined_type(parent, env, self.ctx.current_stmt_idx())
+			.resolve_user_defined_type(parent, env, Some(self.ctx.current_stmt_idx()))
 			.unwrap_or_else(|e| {
 				self.type_error(e);
 				self.types.error()
@@ -6949,7 +6996,7 @@ where
 pub fn resolve_user_defined_type(
 	user_defined_type: &UserDefinedType,
 	env: &SymbolEnv,
-	statement_idx: usize,
+	statement_idx: Option<usize>,
 ) -> Result<TypeRef, TypeError> {
 	resolve_user_defined_type_ref(user_defined_type, env, statement_idx).map(|t| *t)
 }
@@ -6957,13 +7004,13 @@ pub fn resolve_user_defined_type(
 pub fn resolve_user_defined_type_ref<'a>(
 	user_defined_type: &'a UserDefinedType,
 	env: &'a SymbolEnv,
-	statement_idx: usize,
+	statement_idx: Option<usize>,
 ) -> Result<&'a TypeRef, TypeError> {
 	// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
 	let mut nested_name = vec![&user_defined_type.root];
 	nested_name.extend(user_defined_type.fields.iter().collect_vec());
 
-	let lookup_result = env.lookup_nested(&nested_name, Some(statement_idx));
+	let lookup_result = env.lookup_nested(&nested_name, statement_idx);
 
 	if let LookupResult::Found(symb_kind, _) = lookup_result {
 		if let SymbolKind::Type(t) = symb_kind {
@@ -6983,7 +7030,7 @@ pub fn resolve_user_defined_type_ref<'a>(
 }
 
 pub fn is_udt_struct_type(udt: &UserDefinedType, env: &SymbolEnv) -> bool {
-	if let Ok(type_) = resolve_user_defined_type(udt, env, 0) {
+	if let Ok(type_) = resolve_user_defined_type(udt, env, None) {
 		type_.as_struct().is_some()
 	} else {
 		false

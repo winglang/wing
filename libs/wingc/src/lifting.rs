@@ -293,12 +293,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		}
 
 		// Get the type of the udt
-		let udt_type = resolve_user_defined_type(
-			node,
-			self.ctx.current_env().expect("an env"),
-			self.ctx.current_stmt_idx(),
-		)
-		.unwrap_or(self.jsify.types.error());
+		let udt_type = resolve_user_defined_type(node, self.ctx.current_env().expect("an env"), None)
+			.unwrap_or(self.jsify.types.error());
 
 		// Since our target languages is isn't statically typed, we don't need to capture interfaces
 		if udt_type.as_interface().is_some() {
@@ -404,7 +400,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			let lifts = self.lifts_stack.pop().expect("Unable to pop class tokens");
 
 			if let Some(env) = self.ctx.current_env() {
-				if let Some(mut t) = resolve_user_defined_type(&UserDefinedType::for_class(node), env, 0).ok() {
+				if let Some(mut t) = resolve_user_defined_type(&UserDefinedType::for_class(node), env, None).ok() {
 					let mut_class = t.as_class_mut().unwrap();
 					mut_class.set_lifts(lifts);
 				}
