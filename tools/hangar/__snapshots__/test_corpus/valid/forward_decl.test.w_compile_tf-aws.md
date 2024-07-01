@@ -84,8 +84,9 @@ class $Root extends $stdlib.std.Resource {
     const x = "hi";
     if (true) {
       console.log(String.raw({ raw: ["", ""] }, x));
-      const y = new R(this, "R");
+      const y = undefined;
     }
+    const z = undefined;
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
