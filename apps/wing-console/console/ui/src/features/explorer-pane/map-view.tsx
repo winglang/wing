@@ -92,6 +92,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           elk={{
             id,
             layoutOptions: {
+              ...baseLayoutOptions,
               "elk.portConstraints": "FIXED_SIDE",
             },
           }}
@@ -217,10 +218,10 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                         elk={{
                           id: `${id}#inflights`,
                           layoutOptions: {
+                            ...baseLayoutOptions,
                             "elk.algorithm": "org.eclipse.elk.layered",
                             "elk.aspectRatio": "0.1",
                             "elk.layered.spacing.baseValue": "1",
-                            "elk.portConstraints": "FIXED_SIDE",
                           },
                         }}
                         className={clsx(
@@ -244,16 +245,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                                 },
                               }}
                             >
-                              <div
-                                className={clsx(
-                                  "px-2.5 py-1.5 text-xs whitespace-nowrap",
-                                  "text-slate-600 dark:text-slate-300",
-                                  "font-mono",
-                                )}
-                              >
-                                <span>{inflight.name}</span>
-                              </div>
-
                               <Port
                                 elk={{
                                   id: `${inflight.id}#source`,
@@ -273,6 +264,15 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                                   },
                                 }}
                               />
+                              <div
+                                className={clsx(
+                                  "px-2.5 py-1.5 text-xs whitespace-nowrap",
+                                  "text-slate-600 dark:text-slate-300",
+                                  "font-mono",
+                                )}
+                              >
+                                <span>{inflight.name}</span>
+                              </div>
                             </Node>
                           ))}
                         </NodeChildren>
@@ -282,6 +282,9 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                       <Node
                         elk={{
                           id: `${id}#children`,
+                          layoutOptions: {
+                            ...baseLayoutOptions,
+                          },
                         }}
                       >
                         {children}
