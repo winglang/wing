@@ -93,7 +93,8 @@ queue.setConsumer(inflight (message: str) => {
 
 :::info
 
-<details><summary>Experimental TypeScript Support</summary>
+<details>
+<summary>Experimental TypeScript Support</summary>
 
 If you'd like to use TypeScript instead of winglang, you can add the `--language ts` flag when creating a new project:
 

@@ -991,10 +991,6 @@ impl<'a> JSifier<'a> {
 				match op {
 					UnaryOperator::Minus => new_code!(expr_span, "(-", js_exp, ")"),
 					UnaryOperator::Not => new_code!(expr_span, "(!", js_exp, ")"),
-					UnaryOperator::OptionalTest => {
-						// We use the abstract inequality operator here because we want to check for null or undefined
-						new_code!(expr_span, "((", js_exp, ") != null)")
-					}
 					UnaryOperator::OptionalUnwrap => {
 						new_code!(expr_span, "$helpers.unwrap(", js_exp, ")")
 					}

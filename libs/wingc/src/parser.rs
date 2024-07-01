@@ -2482,16 +2482,6 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
-			"optional_test" => {
-				let expression = self.build_expression(&expression_node.named_child(0).unwrap(), phase);
-				Ok(Expr::new(
-					ExprKind::Unary {
-						op: UnaryOperator::OptionalTest,
-						exp: Box::new(expression?),
-					},
-					expression_span,
-				))
-			}
 			"optional_unwrap" => {
 				let expression = self.build_expression(&expression_node.named_child(0).unwrap(), phase);
 				Ok(Expr::new(
