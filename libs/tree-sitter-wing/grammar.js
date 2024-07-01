@@ -11,7 +11,6 @@ const PREC = {
   ADD: 100,
   MULTIPLY: 110,
   UNARY: 120,
-  OPTIONAL_TEST: 130,
   POWER: 140,
   STRUCTURED_ACCESS: 150, // x[y]
   MEMBER: 160,
@@ -384,7 +383,6 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.json_literal,
         $.struct_literal,
-        $.optional_test,
         $.compiler_dbg_panic,
         $.optional_unwrap,
         $.intrinsic
@@ -470,9 +468,6 @@ module.exports = grammar({
           )
         )
       ),
-
-    optional_test: ($) =>
-      prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
 
     compiler_dbg_panic: ($) => "😱",
     compiler_dbg_env: ($) => seq("🗺️", optional(";")),
