@@ -2,10 +2,6 @@
 // Example metadata: {"valid":true}
 let b3: bool? = false; 
 
-if b3? {
-  log("although b3 is false, the if statement here checks for existence of value");
-}
-
 if let b3 = b3  { // unboxing b3 and shadowing original b3 
   if b3 {
     log("b3 is true");
@@ -18,6 +14,5 @@ if let b3 = b3  { // unboxing b3 and shadowing original b3
 
 /**
  * prints:
-  although b3 is false, the if statement here checks for existence of value
   b3 is false
 **/

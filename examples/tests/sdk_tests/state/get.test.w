@@ -12,7 +12,7 @@ if util.env("WING_TARGET") == "sim" {
 
   test "state.tryGet() return nil if there is no value" {
     let v = svc.state.tryGet("foo_bar");
-    assert(!v?);
+    assert(v == nil);
   }
 
 }
