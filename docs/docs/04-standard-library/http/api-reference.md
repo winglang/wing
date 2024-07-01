@@ -384,6 +384,7 @@ let RequestOptions = http.RequestOptions{ ... };
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.method">method</a></code> | <code><a href="#@winglang/sdk.http.HttpMethod">HttpMethod</a></code> | The request method, e.g., GET, POST. The default is GET. |
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.redirect">redirect</a></code> | <code><a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a></code> | An enum specifying the redirect mode to use: follow, error or manual. |
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.referrer">referrer</a></code> | <code>str</code> | A string specifying "no-referrer", client, or a URL. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | Timeout for terminating a pending request. |
 
 ---
 
@@ -466,6 +467,21 @@ referrer: str;
 A string specifying "no-referrer", client, or a URL.
 
 The default is "about:client".
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.http.RequestOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* undefined
+
+Timeout for terminating a pending request.
+
+None if undefined.
 
 ---
 
