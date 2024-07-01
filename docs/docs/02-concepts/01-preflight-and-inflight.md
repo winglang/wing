@@ -358,6 +358,7 @@ pub class Model {
 
   pub inflight invoke(body: Json): Json {
     // call the AWS SDK to invoke the model...
+    return "success";
   }
 
   pub inflight printModelId() {
@@ -377,9 +378,9 @@ pub class Model {
       } else {
         throw "Unsupported inflight host type";
       }
+    } else {
+      // no requirements for other operations
     }
-  } else {
-    // no requirements for other operations
   }
 }
 ```
