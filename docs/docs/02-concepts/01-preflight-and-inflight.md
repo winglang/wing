@@ -336,11 +336,11 @@ If an inflight method is directly or indirectly called within a `lift` block wit
 
 ## Building liftable abstractions
 
-Inflight hosts are the compute environments where inflight code is executed.
-For example, AWS Lambda, Fly.io machines, Fargate containers, etc.
+Compute environments where inflight code is executed are called **inflight hosts**.
+For example, AWS Lambda, Fly.io machines, and Fargate containers are all examples of compute environments that can run inflight code.
 
-In order to run a piece of inflight code, the infrastructure running the code oftentimes needs to be set up in a certain way.
-For example, to run a function that reads from a storage bucket, the inflight host may require permissions to read from the bucket, or may require certain environment variables to be set, or may require network policies must be configured.
+In order to run a piece of inflight code, the inflight host may need to be set up in a certain way.
+For example, to run an inflight function that reads from a storage bucket, the inflight host may require permissions to read from the bucket, or may require certain environment variables to be set, or may require network policies must be configured.
 
 Preflight classes can be used to encapsulate these requirements.
 Any preflight class can implement a method named `onLift` that is called when the class is used in inflight code, where requirements can be added to the inflight host.
