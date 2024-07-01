@@ -312,11 +312,15 @@ export const useMap = ({ expandedItems }: UseMapOptions) => {
   const edges = useMemo<ElkExtendedEdge[]>(() => {
     return (
       connections?.map((connection) => {
+        const isSourceParent =
+          connection.source.operation === undefined &&
+          connection.target.id.startsWith(`${connection.source.id}/`);
+
         const source = getConnectionId(
           connection.source.id,
           connection.source.nodeFqn,
           connection.source.operation,
-          "source",
+          isSourceParent ? "target" : "source",
         );
         const target = getConnectionId(
           connection.target.id,
