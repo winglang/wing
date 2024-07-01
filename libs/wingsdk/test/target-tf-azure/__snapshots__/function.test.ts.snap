@@ -106,7 +106,7 @@ exports[`basic function 2`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "ApplicationInsights",
@@ -117,7 +117,7 @@ exports[`basic function 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Asset",
@@ -126,7 +126,7 @@ exports[`basic function 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "CodeBlob",
@@ -135,7 +135,7 @@ exports[`basic function 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Function",
@@ -146,7 +146,7 @@ exports[`basic function 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Bucket",
@@ -167,7 +167,7 @@ exports[`basic function 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "ReadLambdaCodeAssignment",
@@ -188,7 +188,7 @@ exports[`basic function 2`] = `
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "LogAnalyticsWorkspace",
@@ -197,7 +197,7 @@ exports[`basic function 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "ResourceGroup",
@@ -206,7 +206,7 @@ exports[`basic function 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "ServicePlan",
@@ -215,7 +215,7 @@ exports[`basic function 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "StorageAccount",
@@ -224,7 +224,7 @@ exports[`basic function 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "azure",
@@ -242,7 +242,7 @@ exports[`basic function 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -251,7 +251,7 @@ exports[`basic function 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -260,7 +260,7 @@ exports[`basic function 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -378,7 +378,7 @@ exports[`basic function with environment variables 2`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "ApplicationInsights",
@@ -389,7 +389,7 @@ exports[`basic function with environment variables 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Asset",
@@ -398,7 +398,7 @@ exports[`basic function with environment variables 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "CodeBlob",
@@ -407,7 +407,7 @@ exports[`basic function with environment variables 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Function",
@@ -418,7 +418,7 @@ exports[`basic function with environment variables 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Bucket",
@@ -439,7 +439,7 @@ exports[`basic function with environment variables 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "ReadLambdaCodeAssignment",
@@ -460,7 +460,7 @@ exports[`basic function with environment variables 2`] = `
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "LogAnalyticsWorkspace",
@@ -469,7 +469,7 @@ exports[`basic function with environment variables 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "ResourceGroup",
@@ -478,7 +478,7 @@ exports[`basic function with environment variables 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "ServicePlan",
@@ -487,7 +487,7 @@ exports[`basic function with environment variables 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "StorageAccount",
@@ -496,7 +496,7 @@ exports[`basic function with environment variables 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "azure",
@@ -514,7 +514,7 @@ exports[`basic function with environment variables 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -523,7 +523,7 @@ exports[`basic function with environment variables 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -532,7 +532,7 @@ exports[`basic function with environment variables 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -648,7 +648,7 @@ exports[`replace invalid character from function name 2`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "ApplicationInsights",
@@ -657,7 +657,7 @@ exports[`replace invalid character from function name 2`] = `
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "LogAnalyticsWorkspace",
@@ -666,7 +666,7 @@ exports[`replace invalid character from function name 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "ResourceGroup",
@@ -675,7 +675,7 @@ exports[`replace invalid character from function name 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "ServicePlan",
@@ -684,7 +684,7 @@ exports[`replace invalid character from function name 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "StorageAccount",
@@ -693,7 +693,7 @@ exports[`replace invalid character from function name 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "azure",
@@ -704,7 +704,7 @@ exports[`replace invalid character from function name 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Asset",
@@ -713,7 +713,7 @@ exports[`replace invalid character from function name 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "CodeBlob",
@@ -722,7 +722,7 @@ exports[`replace invalid character from function name 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Function",
@@ -733,7 +733,7 @@ exports[`replace invalid character from function name 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Bucket",
@@ -754,7 +754,7 @@ exports[`replace invalid character from function name 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "ReadLambdaCodeAssignment",
@@ -784,7 +784,7 @@ exports[`replace invalid character from function name 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -793,7 +793,7 @@ exports[`replace invalid character from function name 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -802,7 +802,7 @@ exports[`replace invalid character from function name 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",

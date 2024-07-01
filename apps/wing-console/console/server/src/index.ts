@@ -36,7 +36,7 @@ export type {
 export type { Trace, State } from "./types.js";
 export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
-export type { ExplorerItem } from "./router/app.js";
+export type { ExplorerItem, MapItem } from "./router/app.js";
 export type { WingSimulatorSchema, BaseResourceSchema } from "./wingsdk.js";
 export type { Updater, UpdaterStatus } from "./updater.js";
 export type { Config } from "./config.js";
@@ -44,7 +44,7 @@ export type { Router } from "./router/index.js";
 export type { HostUtils } from "./hostUtils.js";
 export type { RouterContext } from "./utils/createRouter.js";
 export type { RouterMeta } from "./utils/createRouter.js";
-export type { MapNode, MapEdge } from "./router/app.js";
+export type { MapEdge } from "./router/app.js";
 export type { InternalTestResult } from "./router/test.js";
 export type { Column } from "./router/table.js";
 export type { NodeDisplay } from "./utils/constructTreeNodeMap.js";
@@ -59,10 +59,6 @@ export * from "@winglang/sdk/lib/ex/index.js";
 export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
 export { isTermsAccepted } from "./utils/terms-and-conditions.js";
-
-const enableSimUpdates =
-  process.env.WING_ENABLE_INPLACE_UPDATES === "true" ||
-  process.env.WING_ENABLE_INPLACE_UPDATES === "1";
 
 export interface CreateConsoleServerOptions {
   wingfile: string;
@@ -144,11 +140,17 @@ export const createConsoleServer = async ({
 
   const simulator = createSimulator({
     stateDir,
-    enableSimUpdates,
   });
   if (onTrace) {
     simulator.on("trace", onTrace);
   }
+  simulator.on("resourceLifecycleEvent", async (event) => {
+    await Promise.all([
+      invalidateQuery("app.map"),
+      invalidateQuery("app.explorerTree"),
+      invalidateQuery("app.nodeMetadata"),
+    ]);
+  });
   compiler.on("compiled", ({ simfile }) => {
     if (!isStarting) {
       simulator.start(simfile);
@@ -162,7 +164,7 @@ export const createConsoleServer = async ({
     testing: true,
     watchGlobs,
   });
-  const testSimulator = createSimulator({ enableSimUpdates });
+  const testSimulator = createSimulator();
   testCompiler.on("compiled", ({ simfile }) => {
     testSimulator.start(simfile);
   });
@@ -284,11 +286,15 @@ export const createConsoleServer = async ({
   const { server, port } = await createExpressServer({
     consoleLogger,
     testSimulatorInstance() {
-      const statedir = mkdtempSync(join(tmpdir(), "wing-console-test-"));
-      return testSimulator.instance(statedir);
+      // TODO: The test simulator instance isn't using the statedir anyway. Fix this later.
+      // const statedir = mkdtempSync(join(tmpdir(), "wing-console-test-"));
+      return testSimulator.waitForInstance();
     },
     simulatorInstance() {
       return simulator.instance();
+    },
+    restartSimulator() {
+      return simulator.reload();
     },
     errorMessage() {
       return lastErrorMessage;

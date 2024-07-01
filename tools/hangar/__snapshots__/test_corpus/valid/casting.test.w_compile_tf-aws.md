@@ -11,8 +11,7 @@
           "bucket_prefix"
         ]
       },
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -56,9 +55,9 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     if ($helpers.eq((util.Util.env("WING_TARGET")), "tf-aws")) {
-      const s3Bucket = (b.node.findChild("Default"));
+      const s3Bucket = ($helpers.nodeof(b).findChild("Default"));
       (s3Bucket.addOverride("bucket_prefix", "my-prefix-"));
-      console.log(s3Bucket.node.path);
+      console.log($helpers.nodeof(s3Bucket).path);
     }
   }
 }

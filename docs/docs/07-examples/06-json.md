@@ -6,7 +6,7 @@ keywords: [Wing example]
 ## Create Json values
 
 ### Using Json literal
-```js playground
+```js playground example
 let j = Json {
   k1: 1,
   k2: "hello",
@@ -32,7 +32,7 @@ log("{jsonHomogeneousArrayValue}");
 
 ### From existing variables
 
-```js playground
+```js playground example
 let x: num = 42;
 let jsonNum = Json x;
 log("{jsonNum}"); // 42
@@ -59,7 +59,7 @@ if let jsonFromTryParse = Json.tryParse("{\"k1\":\"v\"}") {
 
 ## Enumerating 
 ### Over keys
-```js playground
+```js playground example
 let j = Json {
     k1: "v1",
     k2: "v2"
@@ -70,7 +70,7 @@ for k in Json.keys(j) {
 }
 ```
 ### Over values
-```js playground
+```js playground example
 let j = Json {
     k1: "v1",
     k2: "v2"
@@ -81,7 +81,7 @@ for value in Json.values(j) {
 ```
 
 ### Over a json array
-```js playground
+```js playground example
 let arrayValue = Json ["a", "b", "c"];
 for v in Json.values(arrayValue) {
   log(str.fromJson(v));
@@ -90,7 +90,7 @@ for v in Json.values(arrayValue) {
 
 ## Safely convert to primitives
 ### To `str`
-```js playground
+```js playground example
 let j = Json {
     k: "hello"
 };
@@ -99,24 +99,24 @@ log(j.get("k").asStr());
 ```
 
 ### To `num`
-```js playground
+```js playground example
 let j = Json {
-    k: 12
+  k: 12
 };
-log(j.get("k").asNum());
+log("{j.get("k").asNum()}");
 ```
 
 ### To `bool`
 
-```js playground
+```js playground example
 let j = Json {
-    k:true
+  k:true
 };
-log(j.get("k").asBool());
+log("{j.get("k").asBool()}");
 ```
 
 ## Safely convert to structs
-```js playground
+```js playground example
 struct Foo {
   val1: str;
   val2: num;

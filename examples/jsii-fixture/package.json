@@ -30,7 +30,7 @@
   "private": true,
   "homepage": "https://github.com/winglang/wing",
   "devDependencies": {
-    "jsii": "~5.3.11"
+    "jsii": "~5.3.39"
   },
   "volta": {
     "extends": "../../package.json"

@@ -79,6 +79,9 @@ export const getResourceIconComponent = (
     case "@winglang/sdk.cloud.Secret": {
       return iconSet.KeyIcon;
     }
+    case "@winglang/sdk.cloud.Endpoint": {
+      return iconSet.LinkIcon;
+    }
     default: {
       return iconSet.CubeIcon;
     }

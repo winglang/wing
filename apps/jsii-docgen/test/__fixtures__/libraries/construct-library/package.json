@@ -40,11 +40,11 @@
     "@aws-cdk/aws-s3": "1.204.0",
     "@aws-cdk/cloud-assembly-schema": "1.204.0",
     "@aws-cdk/core": "1.204.0",
-    "constructs": "3.4.344",
     "@types/node": "^20.11.0",
     "@types/prettier": "2.6.0",
-    "jsii": "~5.3.11",
-    "typescript": "^5.3.3"
+    "constructs": "3.4.344",
+    "jsii": "~5.3.39",
+    "typescript": "^5.5.2"
   },
   "license": "Apache-2.0",
   "version": "0.0.0"

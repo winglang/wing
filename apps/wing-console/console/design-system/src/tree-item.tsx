@@ -83,7 +83,7 @@ export const TreeItem = memo(
 
             {icon && <div className="shrink-0">{icon}</div>}
 
-            <div className="grow flex items-center gap-1 justify-around min-w-0">
+            <div className="grow flex items-center gap-1.5 justify-around min-w-0">
               <span className={classNames(theme.text1, "grow truncate")}>
                 {typeof label === "function" ? label() : label}
               </span>

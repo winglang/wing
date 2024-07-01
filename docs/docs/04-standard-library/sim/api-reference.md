@@ -726,7 +726,9 @@ let ContainerProps = sim.ContainerProps{ ... };
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.name">name</a></code> | <code>str</code> | A name for the container. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.args">args</a></code> | <code>MutArray&lt;str&gt;</code> | Container arguments. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.containerPort">containerPort</a></code> | <code>num</code> | Internal container port to expose. |
+| <code><a href="#@winglang/sdk.sim.ContainerProps.property.entrypoint">entrypoint</a></code> | <code>str</code> | Container entrypoint. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to set in the container. |
+| <code><a href="#@winglang/sdk.sim.ContainerProps.property.network">network</a></code> | <code>str</code> | Docker network to use for the container - such as 'host', 'bridge', etc. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.sourceHash">sourceHash</a></code> | <code>str</code> | An explicit source hash that represents the container source. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.sourcePattern">sourcePattern</a></code> | <code>str</code> | A glob of local files to consider as input sources for the container, relative to the build context directory. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.volumes">volumes</a></code> | <code>MutArray&lt;str&gt;</code> | Volume mount points. |
@@ -783,6 +785,19 @@ Internal container port to expose.
 
 ---
 
+##### `entrypoint`<sup>Optional</sup> <a name="entrypoint" id="@winglang/sdk.sim.ContainerProps.property.entrypoint"></a>
+
+```wing
+entrypoint: str;
+```
+
+- *Type:* str
+- *Default:* default image entrypoint
+
+Container entrypoint.
+
+---
+
 ##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.sim.ContainerProps.property.env"></a>
 
 ```wing
@@ -795,6 +810,28 @@ env: MutMap<str>;
 Environment variables to set in the container.
 
 ---
+
+##### `network`<sup>Optional</sup> <a name="network" id="@winglang/sdk.sim.ContainerProps.property.network"></a>
+
+```wing
+network: str;
+```
+
+- *Type:* str
+- *Default:* default docker network
+
+Docker network to use for the container - such as 'host', 'bridge', etc.
+
+> [https://docs.docker.com/network.](https://docs.docker.com/network.)
+
+---
+
+*Example*
+
+```wing
+'host'
+```
+
 
 ##### `sourceHash`<sup>Optional</sup> <a name="sourceHash" id="@winglang/sdk.sim.ContainerProps.property.sourceHash"></a>
 
@@ -1002,17 +1039,19 @@ A resource with an inflight "handle" method that can be passed to the `sim.Resou
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.sim.IResourceFactoryClient.handle">handle</a></code> | Function that will be called to create the resource. |
+| <code><a href="#@winglang/sdk.sim.IResourceFactoryClient.handle">handle</a></code> | Function that will be called to initialize the simulator resource. |
 
 ---
 
 ##### `handle` <a name="handle" id="@winglang/sdk.sim.IResourceFactoryClient.handle"></a>
 
 ```wing
-inflight handle(context: IResourceContext): IResource
+inflight handle(context: IResourceContext): IResource?
 ```
 
-Function that will be called to create the resource.
+Function that will be called to initialize the simulator resource.
+
+To implement a shutdown sequence, return an object that implements the `IResource` inflight interface with an `onStop()` method.
 
 ###### `context`<sup>Required</sup> <a name="context" id="@winglang/sdk.sim.IResourceFactoryClient.handle.parameter.context"></a>
 

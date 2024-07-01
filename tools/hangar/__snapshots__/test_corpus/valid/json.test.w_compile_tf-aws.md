@@ -20,8 +20,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -230,6 +229,17 @@ class $Root extends $stdlib.std.Resource {
     const notJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
     let mutableJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
     const hasBucket = ({"a": ({"a": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket")})});
+    const numVar = 1;
+    const strVar = "s";
+    const punnedJson1 = ({"numVar": numVar, "strVar": strVar});
+    $helpers.assert($helpers.eq($helpers.lookup(punnedJson1, "numVar"), 1), "punnedJson1[\"numVar\"] == 1");
+    $helpers.assert($helpers.eq($helpers.lookup(punnedJson1, "strVar"), "s"), "punnedJson1[\"strVar\"] == \"s\"");
+    const punnedMutJson1 = ({"numVar": numVar});
+    ((obj, key, value) => { obj[key] = value; })(punnedMutJson1, "numVar", (((arg) => { if (typeof arg !== "number") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a number")}; return JSON.parse(JSON.stringify(arg)) })($helpers.lookup(punnedMutJson1, "numVar")) + 1));
+    $helpers.assert($helpers.eq($helpers.lookup(punnedMutJson1, "numVar"), 2), "punnedMutJson1[\"numVar\"] == 2");
+    const structToPunFromJson = ({"numVar": numVar, "strVar": strVar});
+    $helpers.assert($helpers.eq(structToPunFromJson.numVar, 1), "structToPunFromJson.numVar == 1");
+    $helpers.assert($helpers.eq(structToPunFromJson.strVar, "s"), "structToPunFromJson.strVar == \"s\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

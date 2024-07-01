@@ -678,7 +678,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": false
@@ -695,7 +695,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": false,
@@ -726,6 +726,11 @@
       "sim": {
         "implemented": true
       },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "layers": {
       "tf-aws": {
         "implemented": true
       }
@@ -822,6 +827,9 @@
         "implemented": true
       },
       "sim": {
+        "implemented": true
+      },
+      "tf-azure": {
         "implemented": true
       }
     }
