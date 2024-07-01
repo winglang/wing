@@ -298,7 +298,26 @@ Duration <DURATION>"
 `;
 
 exports[`access_private_apis.test.w 1`] = `
-"error: Class "subdir2.MyPrivateClass" is private
+"error: Interface "subdir2.MyPrivateInterface" is private
+   --> ../../../examples/tests/invalid/access_private_apis.test.w:11:14
+   |
+11 | class A impl subdir2.MyPrivateInterface {}
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   --> ../../../examples/tests/invalid/subdir2/file.w:7:11
+   |
+ 7 | interface MyPrivateInterface {}
+   |           ------------------ defined here
+
+
+error: Expected an interface, instead found type "unresolved"
+   --> ../../../examples/tests/invalid/access_private_apis.test.w:11:14
+   |
+11 | class A impl subdir2.MyPrivateInterface {}
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Class "subdir2.MyPrivateClass" is private
   --> ../../../examples/tests/invalid/access_private_apis.test.w:3:5
   |
 3 | new subdir2.MyPrivateClass();
@@ -320,25 +339,6 @@ error: Class "subdir2.inner.MyOtherPrivateClass" is private
   |
 1 | class MyOtherPrivateClass {}
   |       ------------------- defined here
-
-
-error: Interface "subdir2.MyPrivateInterface" is private
-   --> ../../../examples/tests/invalid/access_private_apis.test.w:11:14
-   |
-11 | class A impl subdir2.MyPrivateInterface {}
-   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   --> ../../../examples/tests/invalid/subdir2/file.w:7:11
-   |
- 7 | interface MyPrivateInterface {}
-   |           ------------------ defined here
-
-
-error: Expected an interface, instead found type "unresolved"
-   --> ../../../examples/tests/invalid/access_private_apis.test.w:11:14
-   |
-11 | class A impl subdir2.MyPrivateInterface {}
-   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Struct "subdir2.MyPrivateStruct" is private
@@ -749,6 +749,27 @@ error: Expected block
    |                ^
 
 
+error: Unknown symbol "x"
+   --> ../../../examples/tests/invalid/class.test.w:79:18
+   |
+79 | class C7 extends x {
+   |                  ^
+
+
+error: Expected "S1" to be a class
+   --> ../../../examples/tests/invalid/class.test.w:85:18
+   |
+85 | class C8 extends S1 {
+   |                  ^^
+
+
+error: Unknown symbol "C11"
+   --> ../../../examples/tests/invalid/class.test.w:89:19
+   |
+89 | class C11 extends C11 {
+   |                   ^^^
+
+
 error: Preflight field "x" is not initialized
   --> ../../../examples/tests/invalid/class.test.w:4:4
   |
@@ -852,27 +873,6 @@ error: Preflight field "y" is not initialized
    |
 63 |   y: num;
    |   ^
-
-
-error: Expected "x" to be a type but it's a variable
-   --> ../../../examples/tests/invalid/class.test.w:79:18
-   |
-79 | class C7 extends x {
-   |                  ^
-
-
-error: Expected "S1" to be a class
-   --> ../../../examples/tests/invalid/class.test.w:85:18
-   |
-85 | class C8 extends S1 {
-   |                  ^^
-
-
-error: Unknown symbol "C11"
-   --> ../../../examples/tests/invalid/class.test.w:89:19
-   |
-89 | class C11 extends C11 {
-   |                   ^^^
 
 
 error: 'super()' must be called before accessing 'this' in the constructor of a derived class
@@ -2264,7 +2264,14 @@ Duration <DURATION>"
 `;
 
 exports[`impl_interface.test.w 1`] = `
-"error: Class "A" does not implement method "handle" of interface "IQueueSetConsumerHandler"
+"error: Expected an interface, instead found type "Bucket"
+   --> ../../../examples/tests/invalid/impl_interface.test.w:14:14
+   |
+14 | class C impl cloud.Bucket {
+   |              ^^^^^^^^^^^^
+
+
+error: Class "A" does not implement method "handle" of interface "IQueueSetConsumerHandler"
   --> ../../../examples/tests/invalid/impl_interface.test.w:3:7
   |
 3 | class A impl cloud.IQueueSetConsumerHandler {
@@ -2276,13 +2283,6 @@ error: Expected type to be "inflight (message: str): void", but got "inflight (x
   |
 8 |   pub inflight handle(x: num) {
   |                ^^^^^^
-
-
-error: Expected an interface, instead found type "Bucket"
-   --> ../../../examples/tests/invalid/impl_interface.test.w:14:14
-   |
-14 | class C impl cloud.Bucket {
-   |              ^^^^^^^^^^^^
 
 
 error: Class "r" does not implement method "method1" of interface "I3"
@@ -2865,11 +2865,29 @@ error: Unknown symbol "IDontExist"
    |                          ^^^^^^^^^^
 
 
-error: Unknown symbol "ISomeClass"
+error: Expected an interface, instead found type "ISomeClass"
    --> ../../../examples/tests/invalid/interface.test.w:18:34
    |
 18 | interface ISomeInterface extends ISomeClass {
    |                                  ^^^^^^^^^^
+
+
+error: Inflight class CImplPreflightIface cannot implement a preflight interface IPreflight
+   --> ../../../examples/tests/invalid/interface.test.w:52:1
+   |  
+52 | / inflight class CImplPreflightIface impl IPreflight {
+53 | |   pub method1(): void {}
+54 | | }
+   | \\-^
+
+
+error: Inflight class CInflightImplJsii cannot implement a preflight interface ISomeInterface
+   --> ../../../examples/tests/invalid/interface.test.w:67:1
+   |  
+67 | / inflight class CInflightImplJsii impl jsii_fixture.ISomeInterface {
+68 | |   pub method(): void {}
+69 | | }
+   | \\-^
 
 
 error: Symbol "foo" already defined in this scope
@@ -2889,15 +2907,6 @@ error: Symbol "foo" already defined in this scope
    .
 27 |     foo(): num;
    |     ^^^
-
-
-error: Inflight class CImplPreflightIface cannot implement a preflight interface IPreflight
-   --> ../../../examples/tests/invalid/interface.test.w:52:1
-   |  
-52 | / inflight class CImplPreflightIface impl IPreflight {
-53 | |   pub method1(): void {}
-54 | | }
-   | \\-^
 
 
 error: Expected type to be "preflight (): void", but got "inflight (): void" instead
@@ -2928,15 +2937,6 @@ error: Interface "IInflightExtendsJsii" extends "ISomeInterface" but has a confl
    |
 62 | inflight interface IInflightExtendsJsii extends jsii_fixture.ISomeInterface {
    |                    ^^^^^^^^^^^^^^^^^^^^
-
-
-error: Inflight class CInflightImplJsii cannot implement a preflight interface ISomeInterface
-   --> ../../../examples/tests/invalid/interface.test.w:67:1
-   |  
-67 | / inflight class CInflightImplJsii impl jsii_fixture.ISomeInterface {
-68 | |   pub method(): void {}
-69 | | }
-   | \\-^
 
 
 error: Expected type to be "preflight (): void", but got "inflight (): void" instead
@@ -4569,18 +4569,25 @@ Duration <DURATION>"
 `;
 
 exports[`sorted_errors_no_span.test.w 1`] = `
-"error: Expected type to be "num", but got "str" instead
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:1:14
-  |
-1 | let a: num = "s";
-  |              ^^^
-
-
-error: Expected "b" to be a type but it's a variable
+"error: Unknown symbol "b"
   --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:3:26
   |
 3 | inflight class c extends b {}
   |                          ^
+
+
+error: Unknown symbol "b"
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:5:26
+  |
+5 | inflight class e extends b {}
+  |                          ^
+
+
+error: Expected type to be "num", but got "str" instead
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:1:14
+  |
+1 | let a: num = "s";
+  |              ^^^
 
 
 error: Expected type to be "num", but got "str" instead
@@ -4588,13 +4595,6 @@ error: Expected type to be "num", but got "str" instead
   |
 4 | let d: num = "s";
   |              ^^^
-
-
-error: Expected "b" to be a type but it's a variable
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:5:26
-  |
-5 | inflight class e extends b {}
-  |                          ^
 
 
 
@@ -5244,6 +5244,13 @@ exports[`unknown_symbol.test.w 1`] = `
    |     ^^^
 
 
+error: Unknown symbol "B"
+   --> ../../../examples/tests/invalid/unknown_symbol.test.w:28:17
+   |
+28 | class A extends B {
+   |                 ^
+
+
 error: Unknown symbol "clod"
   --> ../../../examples/tests/invalid/unknown_symbol.test.w:3:18
   |
@@ -5263,13 +5270,6 @@ error: Unknown symbol "y"
   |
 9 | let x = 2 + y;
   |             ^
-
-
-error: Unknown symbol "B"
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:28:17
-   |
-28 | class A extends B {
-   |                 ^
 
 
 error: Member "dodo" does not exist in "SomeResourceChild"
