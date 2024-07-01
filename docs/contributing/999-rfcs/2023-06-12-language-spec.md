@@ -788,6 +788,8 @@ lambda functions, docker, virtual machines etc.
 
 #### 1.3.1 Phase-independent code
 
+> **Note**: Phase-independent functions are not yet implemented. Subscribe to [issue #435](https://github.com/winglang/wing/issues/435) for updates.
+
 Code that is not dependent on the phase of execution can be designated as phase-independent using the `unphased` modifier.
 
 Using this modifier means that the function can be called from either preflight or inflight contexts.
