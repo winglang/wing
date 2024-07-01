@@ -885,7 +885,8 @@ native class Array<T> {
 }
 ```
 
-This way, when you call `Array<T>.map` with in preflight, it's possible to pass a preflight function to it, and when you call it in inflight, it's possible to pass an inflight function to it.
+Notice how "f" is automatically converted to the appropriate phase. This is possible because the function is unphased.
+This way, when you call `Array<T>.map` with in preflight, it's possible to pass a preflight function to it, and when you call it in inflight, it's possible to pass an inflight function to it. (If you're calling `Array<T>.map` within another unphased function, then the unphased version of `Array<T>.map` is used.)
 
 [`▲ top`][top]
 
