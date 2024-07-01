@@ -329,11 +329,20 @@ pub struct Class {
 	pub docs: Docs,
 	pub lifts: Option<Lifts>,
 
+	// The phase in which this class was defined (this should be the same as the env.phase where the class name is defined)
+	pub defined_in_phase: Phase,
+
 	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
 	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
 	// to have a construct which does not have these arguments, in which case we can't use the `as` `in` keywords
 	// and instead the user will need to pass the relevant args to the class's init method.
 	pub std_construct_args: bool,
+
+	// Unique identifier for this class type, used to get access to the type's generated preflight code even when
+	// the type name isn't available in scope or is shadowed.
+	// Ideally we should use the FQN and unify the implementation of JSII imported classes and Wing classes, currently
+	// uid is used for Wing classes and is always 0 for JSII classes to avoid snapshot noise.
+	pub uid: usize,
 }
 impl Class {
 	pub(crate) fn set_lifts(&mut self, lifts: Lifts) {
@@ -345,8 +354,8 @@ impl Class {
 	pub fn get_closure_method(&self) -> Option<TypeRef> {
 		self
 			.methods(true)
-			.find(|(name, type_)| name == CLOSURE_CLASS_HANDLE_METHOD && type_.is_inflight_function())
-			.map(|(_, t)| t)
+			.find(|(name, v)| name == CLOSURE_CLASS_HANDLE_METHOD && v.type_.is_inflight_function())
+			.map(|(_, v)| v.type_)
 	}
 }
 
@@ -378,15 +387,15 @@ impl Display for Interface {
 }
 
 type ClassLikeIterator<'a> =
-	FilterMap<SymbolEnvIter<'a>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>>;
+	FilterMap<SymbolEnvIter<'a>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, VariableInfo)>>;
 
 pub trait ClassLike: Display {
 	fn get_env(&self) -> &SymbolEnv;
 
 	fn methods(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
-		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
-			if t.as_variable()?.type_.as_function_sig().is_some() {
-				Some((s, t.as_variable()?.type_))
+		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
+			if sym_kind.as_variable()?.type_.as_function_sig().is_some() {
+				Some((s, sym_kind.as_variable()?.clone()))
 			} else {
 				None
 			}
@@ -394,9 +403,9 @@ pub trait ClassLike: Display {
 	}
 
 	fn fields(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
-		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
-			if t.as_variable()?.type_.as_function_sig().is_none() {
-				Some((s, t.as_variable()?.type_))
+		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
+			if sym_kind.as_variable()?.type_.as_function_sig().is_none() {
+				Some((s, sym_kind.as_variable()?.clone()))
 			} else {
 				None
 			}
@@ -638,16 +647,14 @@ impl Subtype for Type {
 				// method type (aka "closure classes").
 
 				// First, check if there is exactly one inflight method in the interface
-				let mut inflight_methods = iface
-					.methods(true)
-					.filter(|(_name, type_)| type_.is_inflight_function());
+				let mut inflight_methods = iface.methods(true).filter(|(_name, v)| v.type_.is_inflight_function());
 				let handler_method = inflight_methods.next();
 				if handler_method.is_none() || inflight_methods.next().is_some() {
 					return false;
 				}
 
 				// Next, check that the method's name is "handle"
-				let (handler_method_name, handler_method_type) = handler_method.unwrap();
+				let (handler_method_name, handler_method_var) = handler_method.unwrap();
 				if handler_method_name != CLOSURE_CLASS_HANDLE_METHOD {
 					return false;
 				}
@@ -660,7 +667,7 @@ impl Subtype for Type {
 				};
 
 				// Finally check if they're subtypes
-				res_handle_type.is_subtype_of(&handler_method_type)
+				res_handle_type.is_subtype_of(&handler_method_var.type_)
 			}
 			(Self::Class(res), Self::Function(_)) => {
 				// To support flexible inflight closures, we say that any
@@ -1085,12 +1092,13 @@ impl TypeRef {
 
 	/// Returns whether type represents a closure (either a function or a closure class).
 	pub fn is_closure(&self) -> bool {
-		if self.as_function_sig().is_some() {
-			return true;
-		}
+		self.as_function_sig().is_some() || self.is_closure_class()
+	}
 
-		if let Some(ref class) = self.as_preflight_class() {
-			return class.get_closure_method().is_some();
+	/// Returns whether type represents a class representing an inflight closure.
+	pub fn is_closure_class(&self) -> bool {
+		if let Some(ref class) = self.as_class() {
+			return class.get_closure_method().is_some() && class.defined_in_phase == Phase::Preflight;
 		}
 		false
 	}
@@ -1220,7 +1228,7 @@ impl TypeRef {
 			Type::MutArray(t) => t.is_serializable(),
 			Type::Map(t) => t.is_serializable(),
 			Type::MutMap(t) => t.is_serializable(),
-			Type::Struct(s) => s.fields(true).map(|(_, t)| t).all(|t| t.is_serializable()),
+			Type::Struct(s) => s.fields(true).map(|(_, v)| v.type_).all(|t| t.is_serializable()),
 			Type::Enum(_) => true,
 			// not serializable
 			Type::Duration => false,
@@ -1258,7 +1266,7 @@ impl TypeRef {
 			Type::Map(v) => v.is_json_legal_value(),
 			Type::Optional(v) => v.is_json_legal_value(),
 			Type::Struct(ref s) => {
-				for (_, t) in s.fields(true) {
+				for t in s.fields(true).map(|(_, v)| v.type_) {
 					if !t.is_json_legal_value() {
 						return false;
 					}
@@ -1295,8 +1303,8 @@ impl TypeRef {
 		match &**self {
 			Type::Struct(s) => {
 				// check all its fields are json compatible
-				for (_, field) in s.fields(true) {
-					if !field.has_json_representation() {
+				for t in s.fields(true).map(|(_, v)| v.type_) {
+					if !t.has_json_representation() {
 						return false;
 					}
 				}
@@ -1391,6 +1399,8 @@ pub struct Types {
 	type_expressions: IndexMap<ExprId, Reference>,
 	/// Append empty struct to end of arg list
 	pub append_empty_struct_to_arglist: HashSet<ArgListId>,
+	/// Class counter, used to generate unique ids for class types
+	pub class_counter: usize,
 }
 
 impl Types {
@@ -1443,6 +1453,9 @@ impl Types {
 			append_empty_struct_to_arglist: HashSet::new(),
 			libraries: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
 			intrinsics: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0),
+			// 1 based to avoid conflict with imported JSII classes. This isn't strictly needed since brought JSII classes are never accessed
+			// through their unique ID, but still good to avoid confusion.
+			class_counter: 1,
 		}
 	}
 
@@ -2301,14 +2314,14 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 						self.spanned_error(
 							exp,
 							format!(
-								"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
-								ltype,
-								rtype,
-								self.types.number(),
-								self.types.number(),
-								self.types.string(),
-								self.types.string(),
-							),
+														"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
+														ltype,
+														rtype,
+														self.types.number(),
+														self.types.number(),
+														self.types.string(),
+														self.types.string(),
+													),
 						);
 					}
 					self.resolved_error()
@@ -2493,7 +2506,8 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 		// Verify that all expected fields are present and are the right type
-		for (name, field_type) in st.fields(true) {
+		for (name, v) in st.fields(true) {
+			let field_type = v.type_;
 			match fields.get(name.as_str()) {
 				Some(field_exp) => {
 					let t = field_types.get(name.as_str()).unwrap();
@@ -2749,21 +2763,9 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		// Make sure this is a function signature type
 		let func_sig = if let Some(func_sig) = func_type.as_deep_function_sig() {
 			func_sig.clone()
-		} else if let Some(class) = func_type.as_preflight_class() {
-			// return the signature of the "handle" method
-			let lookup_res = class.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into());
-			let handle_type = if let Some(method) = lookup_res {
-				method.type_
-			} else {
-				self.spanned_error(callee, "Expected a function or method");
-				return self.resolved_error();
-			};
-			if let Some(sig_type) = handle_type.as_function_sig() {
-				sig_type.clone()
-			} else {
-				self.spanned_error(callee, "Expected a function or method");
-				return self.resolved_error();
-			}
+		} else if func_type.is_closure_class() {
+			let handle_type = func_type.as_class().unwrap().get_closure_method().unwrap();
+			handle_type.as_function_sig().unwrap().clone()
 		} else {
 			self.spanned_error(
 				callee,
@@ -3056,7 +3058,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 
 	pub fn all_optional_struct(t: TypeRef) -> bool {
 		match &*t {
-			Type::Struct(s) => s.fields(true).all(|(_, t)| t.is_option()),
+			Type::Struct(s) => s.fields(true).all(|(_, v)| v.type_.is_option()),
 			_ => false,
 		}
 	}
@@ -4514,10 +4516,13 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			implements: impl_interfaces.clone(),
 			is_abstract: false,
 			phase: ast_class.phase,
+			defined_in_phase: env.phase,
 			docs: stmt.doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 			std_construct_args: ast_class.phase == Phase::Preflight,
 			lifts: None,
+			uid: self.types.class_counter,
 		};
+		self.types.class_counter += 1;
 		let mut class_type = self.types.add_type(Type::Class(class_spec));
 		match env.define(
 			&ast_class.name,
@@ -4732,7 +4737,8 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			};
 
 			// Check all methods are implemented
-			for (method_name, method_type) in interface_type.methods(true) {
+			for (method_name, v) in interface_type.methods(true) {
+				let method_type = v.type_;
 				if let Some(symbol) = &mut class_type
 					.as_class_mut()
 					.unwrap()
@@ -5291,7 +5297,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			return;
 		};
 
-		// If the parent class is phase independent than its constructor name is just "new" regardless of
+		// If the parent class is phase independent then its constructor name is just "new" regardless of
 		// whether we're inflight or not.
 		let parent_init_name = if parent_class.as_class().unwrap().phase == Phase::Independent {
 			CLASS_INIT_NAME
@@ -5303,13 +5309,13 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			.as_class()
 			.unwrap()
 			.methods(false)
-			.filter(|(name, _type)| name == parent_init_name)
-			.collect_vec()[0]
+			.find(|(name, ..)| name == parent_init_name)
+			.unwrap()
 			.1;
 
 		self.type_check_arg_list_against_function_sig(
 			&arg_list,
-			parent_initializer.as_function_sig().unwrap(),
+			parent_initializer.type_.as_function_sig().unwrap(),
 			super_constructor_call,
 			arg_list_types,
 		);
@@ -5749,6 +5755,8 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				docs: c.docs.clone(),
 				std_construct_args: c.std_construct_args,
 				lifts: None,
+				defined_in_phase: env.phase,
+				uid: c.uid,
 			}),
 			Type::Interface(iface) => Type::Interface(Interface {
 				name: iface.name.clone(),
@@ -6275,7 +6283,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 						if property.name == FROM_JSON || property.name == TRY_FROM_JSON {
 							// we need to validate that only structs with all valid json fields can have a fromJson method
 							for (name, field) in s.fields(true) {
-								if !field.has_json_representation() {
+								if !field.type_.has_json_representation() {
 									self.spanned_error_with_var(
 										property,
 										format!(
@@ -6973,6 +6981,19 @@ pub fn resolve_user_defined_type_ref<'a>(
 		}
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
+	}
+}
+
+pub fn get_udt_definition_phase(user_defined_type: &UserDefinedType, env: &SymbolEnv) -> Option<Phase> {
+	let mut nested_name = vec![&user_defined_type.root];
+	nested_name.extend(user_defined_type.fields.iter().collect_vec());
+
+	let lookup_result = env.lookup_nested(&nested_name, None);
+
+	if let LookupResult::Found(_, lookup_info) = lookup_result {
+		Some(lookup_info.env.phase)
+	} else {
+		None
 	}
 }
 
