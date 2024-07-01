@@ -287,7 +287,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                           },
                         }}
                       >
-                        {children}
+                        <NodeChildren>{children}</NodeChildren>
                       </Node>
                     )}
                   </div>
