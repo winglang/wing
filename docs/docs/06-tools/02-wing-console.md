@@ -17,7 +17,7 @@ Unlike traditional cloud development iterations that involve time-consuming depl
 
 ## Installation
 
-The Wing Console is installed as part of the [Wing CLI installation](../01-start-here/02-installation.md).
+The Wing Console is installed as part of the [Wing CLI installation](../01-start-here/02-getting-started.md).
 
 ## View And Explore your Wing application 
 The Console offers two primary views to provide a comprehensive understanding of your Wing application: the Explorer view and the Map view.
