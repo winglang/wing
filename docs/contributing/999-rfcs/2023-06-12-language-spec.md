@@ -788,8 +788,7 @@ lambda functions, docker, virtual machines etc.
 
 #### 1.3.1 Phase-independent code
 
-Code that is not dependent on the phase of execution can be designated as phase-independent using the `?inflight` modifier.
-This keyword can be read as "maybe-inflight."
+Code that is not dependent on the phase of execution can be designated as phase-independent using the `unphased` modifier.
 
 Using this modifier means that it is safe to call the function from
 either a preflight or inflight context.
@@ -797,7 +796,7 @@ either a preflight or inflight context.
 <!-- TODO: is it also safe to pass the maybe-flight function by value, or to capture it? -->
 
 ```TS
-let odd_numbers = ?inflight (arr: Array<num>): Array<num> => {
+let odd_numbers = unphased (arr: Array<num>): Array<num> => {
   let result = MutArray<num>[];
   for num in nums {
     if num % 2 == 1 {
@@ -838,7 +837,7 @@ resource AwsBucket {
     // initialize `name`
   }
 
-  ?inflight object_url(key: str): str {
+  unphased object_url(key: str): str {
     // This method references a preflight field (this.name) -- that is
     // possible in both phases so it is OK!
     return `s3://${this.name}/${key}`;
@@ -857,7 +856,7 @@ resource Bucket {
     // initialize `name`
   }
 
-  ?inflight set_name(name: str): void {
+  unphased set_name(name: str): void {
     // ERROR: cannot mutate a preflight field from a phase-independent context
     this.name = name;
   }
