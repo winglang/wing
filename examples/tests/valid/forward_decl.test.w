@@ -1,11 +1,10 @@
 let x = "hi";
 if true {
   log("{x}"); // we can access x because it was defined in an outer scope before this statement
-  let y = new R(); // we can reference R because it was defined in an outer (regardless of order)
+  let y: R? = nil; // we can reference R defined in an outer (regardless of order)
 }
 
-// TODO:
-// let x = new R(); // forward reference a type in the same scope where it is defined
+let z: R? = nil; // forward reference a type in the same scope where it is defined
 
 class R {
   /**
