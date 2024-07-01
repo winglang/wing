@@ -9,7 +9,7 @@ We see Winglang as the ideal language to create Wing apps, but using TypeScript 
 
 ## Getting Started
 
-Follow the [installation guide](../01-start-here/02-installation.md) to install Wing and get started with a new project. Make sure to create a new project with the `--language ts` flag in that guide.
+Follow the [installation guide](../01-start-here/02-getting-started.md) to install Wing and get started with a new project. Make sure to create a new project with the `--language ts` flag in that guide.
 
 ```sh
 wing new empty --language ts
