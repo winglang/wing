@@ -278,7 +278,15 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                         </NodeChildren>
                       </Node>
                     )}
-                    {children}
+                    {hasChildNodes && (
+                      <Node
+                        elk={{
+                          id: `${id}#children`,
+                        }}
+                      >
+                        {children}
+                      </Node>
+                    )}
                   </div>
                 </NodeChildren>
               </div>
