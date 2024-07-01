@@ -1,6 +1,8 @@
 import type { ElkExtendedEdge, ElkNode } from "elkjs";
+import { AnimatePresence } from "framer-motion";
 import {
   memo,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -31,6 +33,7 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
   (props) => {
     const { elk, edges, edgeComponent, ...divProps } = props;
 
+    const [initialZoomToFit, setInitialZoomToFit] = useState(true);
     const [graph, setGraph] = useState<ElkNode>();
 
     const zoomPaneRef = useRef<ZoomPaneRef>(null);
@@ -46,9 +49,17 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
       };
     }, [graph]);
 
+    // Zoom to fit the first time
     useEffect(() => {
-      zoomPaneRef.current?.zoomToFit();
-    }, [graph]);
+      if (!graph) {
+        return;
+      }
+
+      if (initialZoomToFit) {
+        zoomPaneRef.current?.zoomToFit();
+      }
+      setInitialZoomToFit(false);
+    }, [graph, initialZoomToFit]);
 
     const mapBackgroundRef = useRef<HTMLDivElement>(null);
 
@@ -65,23 +76,28 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
 
         <div ref={mapBackgroundRef}></div>
 
-        <ZoomPane
-          ref={zoomPaneRef}
-          boundingBox={mapSize}
-          className="w-full h-full"
-          data-testid="map-pane"
-        >
-          {mapBackgroundRef.current &&
-            createPortal(<MapBackground hideDots />, mapBackgroundRef.current)}
+        <AnimatePresence>
+          <ZoomPane
+            ref={zoomPaneRef}
+            boundingBox={mapSize}
+            className="w-full h-full"
+            data-testid="map-pane"
+          >
+            {mapBackgroundRef.current &&
+              createPortal(
+                <MapBackground hideDots />,
+                mapBackgroundRef.current,
+              )}
 
-          <div {...divProps}>
-            {graph && (
-              <GraphRenderer graph={graph} edgeComponent={edgeComponent}>
-                {props.children}
-              </GraphRenderer>
-            )}
-          </div>
-        </ZoomPane>
+            <div {...divProps}>
+              {graph && (
+                <GraphRenderer graph={graph} edgeComponent={edgeComponent}>
+                  {props.children}
+                </GraphRenderer>
+              )}
+            </div>
+          </ZoomPane>
+        </AnimatePresence>
       </>
     );
   },
