@@ -17,9 +17,8 @@ import {
 import classNames from "classnames";
 import { useMemo } from "react";
 
-import type { TestItem } from "../shared/test-item.js";
-
 import { NoTests } from "./no-tests.js";
+import type { TestItem } from "./test-item.js";
 
 export interface TestTreeProps {
   testList: TestItem[];
