@@ -46,8 +46,6 @@ test("basic function", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "google_cloudfunctions_function",
-    "google_project_iam_custom_role",
-    "google_project_iam_member",
     "google_project_service",
     "google_service_account",
     "google_storage_bucket",
