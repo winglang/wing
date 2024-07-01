@@ -208,7 +208,7 @@
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Handler-c89bc30b",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_15": "${jsonencode(aws_lambda_function.Function.arn)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_16": "${jsonencode(aws_lambda_function.Function.arn)}"
           }
         },
         "function_name": "Handler-c89bc30b",
@@ -240,7 +240,7 @@
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Handler-c8f37d21",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_15": "${jsonencode(aws_lambda_function.Function.arn)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_16": "${jsonencode(aws_lambda_function.Function.arn)}"
           }
         },
         "function_name": "Handler-c8f37d21",
