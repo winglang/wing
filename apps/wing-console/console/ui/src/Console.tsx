@@ -68,7 +68,7 @@ export const Console = ({
           true: wsLink({
             client: wsClient,
           }),
-          // For the `test.list` query, use a single HTTP link. This is necessary
+          // For the `test.*` operations, use a single HTTP link. This is necessary
           // to avoid a bug where the Console would not display the data until
           // the app starts correctly. For example, starting a new application
           // with compilation errors, the Console will be stuck.
@@ -76,11 +76,11 @@ export const Console = ({
           // For the rest of the operations, use the batch HTTP link.
           //
           // We should be able to use batch HTTP links everywhere if we refactor
-          // the `test.list` operation so it doesn't wait until the Simulator
+          // the `test.*` operations so they don't wait until the Simulator
           // instance is ready.
           false: splitLink({
             condition(op) {
-              return op.path === "test.list";
+              return op.path.startsWith("test.");
             },
             true: httpLink({
               url: trpcUrl,
