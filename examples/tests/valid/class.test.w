@@ -259,3 +259,34 @@ class DerivedClassWithInnerClass extends BaseClassWithCtorArg {
     super(1);
   }
 }
+
+// Classes can reference each other and themselves
+class C6 {
+  fc6: C6;
+  fc7: C7;
+  getC6(): C6 {
+    return new C6();
+  }
+  getC7(): C7 {
+    return new C7();
+  }
+  new() {
+    this.fc6 = new C6();
+    this.fc7 = new C7();
+  }
+}
+
+class C7 {
+  fc6: C6;
+  fc7: C7;
+  getC6(): C6 {
+    return new C6();
+  }
+  getC7(): C7 {
+    return new C7();
+  }
+  new() {
+    this.fc6 = new C6();
+    this.fc7 = new C7();
+  }
+}

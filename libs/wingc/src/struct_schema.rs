@@ -34,7 +34,7 @@ impl<'a> Visit<'a> for StructSchemaVisitor<'a> {
 			}
 			Reference::TypeMember { type_name, .. } => {
 				if is_udt_struct_type(type_name, self.ctx.current_env().unwrap()) {
-					let type_ = resolve_user_defined_type(type_name, self.ctx.current_env().unwrap(), 0);
+					let type_ = resolve_user_defined_type(type_name, self.ctx.current_env().unwrap(), None);
 					let schema_generator = JsonSchemaGenerator::new();
 					let struct_code = schema_generator.create_from_struct(type_.unwrap().as_struct().unwrap());
 

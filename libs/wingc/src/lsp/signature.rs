@@ -43,7 +43,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				match &stmt.kind {
 					StmtKind::SuperConstructor { arg_list } => {
 						if let Some(p) = &class.parent {
-							let t = resolve_user_defined_type(&p, &types.get_scope_env(&root_scope), 0).ok()?;
+							let t = resolve_user_defined_type(&p, &types.get_scope_env(&root_scope), None).ok()?;
 							let init_lookup = t.as_class()?.env.lookup(
 								&if t.is_preflight_class() {
 									CLASS_INIT_NAME
@@ -68,7 +68,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 					ExprKind::New(new_expr) => {
 						let New { class, arg_list, .. } = new_expr;
 
-						let Some(t) = resolve_user_defined_type(class, &types.get_scope_env(&root_scope), 0).ok() else {
+						let Some(t) = resolve_user_defined_type(class, &types.get_scope_env(&root_scope), None).ok() else {
 							return None;
 						};
 
