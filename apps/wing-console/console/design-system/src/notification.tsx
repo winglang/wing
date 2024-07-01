@@ -15,12 +15,13 @@ import {
   useMemo,
   useState,
 } from "react";
+import { R } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 import { useTheme } from "./theme-provider.js";
 
 interface Notification {
   title: string;
-  body?: string;
+  body?: string | React.ReactNode;
   id: string;
   show: boolean;
   type?: "success" | "error";
@@ -32,7 +33,7 @@ interface NotificationsContext {
   showNotification(
     title: string,
     options?: {
-      body?: string;
+      body?: string | React.ReactNode;
       autoCloseDelayMs?: number;
       type?: "success" | "error";
     },
@@ -122,9 +123,11 @@ function NotificationsContainer() {
                         {notification.title}
                       </p>
                       {notification.body && (
-                        <p className={classNames("mt-1 text-sm", theme.text2)}>
+                        <div
+                          className={classNames("mt-1 text-sm", theme.text2)}
+                        >
                           {notification.body}
-                        </p>
+                        </div>
                       )}
                     </div>
                     <div className="ml-4 flex-shrink-0 flex">
@@ -190,7 +193,7 @@ export function NotificationsProvider(props: PropsWithChildren) {
       const showNotification = (
         title: string,
         options?: {
-          body?: string;
+          body?: string | React.ReactNode;
           autoCloseDelayMs?: number;
           type?: "success" | "error";
         },

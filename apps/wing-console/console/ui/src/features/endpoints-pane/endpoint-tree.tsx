@@ -162,19 +162,18 @@ export const EndpointTree = () => {
 
   useEffect(() => {
     if (!initialNotification) {
-      return false;
+      return;
     }
     if (endpointList.data) {
-      const endpointIds: string[] = [];
-      for (const endpoint of endpointList.data) {
-        if (endpoint.exposeStatus === "connected") {
-          showNotification(`Endpoint "${endpoint.label}" is exposed`);
-          endpointIds.push(endpoint.id);
-        }
-      }
+      const exposedEndpoints = endpointList.data
+        .filter((endpoint) => endpoint.exposeStatus === "connected")
+        .map((endpoint) => endpoint.label);
+      showNotification("The following endpoints are exposed", {
+        body: exposedEndpoints.map((label) => <div key={label}>{label}</div>),
+      });
       setInitialNotification(false);
     }
-  }, [endpointList.data, showNotification]);
+  }, [endpointList.data, showNotification, initialNotification]);
 
   const { theme } = useTheme();
 
