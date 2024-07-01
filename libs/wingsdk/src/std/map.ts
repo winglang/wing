@@ -208,7 +208,7 @@ export class MutMap {
   /**
    * Optionally returns a specified element from the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ($self$)?.[$args$]
    *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
