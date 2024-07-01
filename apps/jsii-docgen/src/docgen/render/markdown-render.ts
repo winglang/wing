@@ -18,6 +18,7 @@ import {
   TypeSchema,
 } from "../schema";
 import { Language } from "../transpile/transpile";
+import { HEADLESS_SUBMODULES } from "../view/wing-filters";
 
 export interface MarkdownFormattingOptions {
   /**
@@ -127,7 +128,14 @@ export class MarkdownRenderer {
         language: Language.fromString(schema.language),
         ...schema.metadata,
       });
-      documentation.section(renderer.visitApiReference(schema.apiReference));
+
+      documentation.section(
+        renderer.visitApiReference(
+          schema.apiReference,
+          !!schema.metadata.submodule &&
+            HEADLESS_SUBMODULES.includes(schema.metadata.submodule)
+        )
+      );
     }
 
     return documentation;
@@ -157,25 +165,33 @@ export class MarkdownRenderer {
     };
   }
 
-  public visitApiReference(apiRef: ApiReferenceSchema): MarkdownDocument {
+  public visitApiReference(
+    apiRef: ApiReferenceSchema,
+    headless: boolean
+  ): MarkdownDocument {
     const md = new MarkdownDocument({
-      header: { title: "API Reference" },
+      ...(!headless && { header: { title: "API Reference" } }),
       id: "api-reference",
     });
-    md.section(this.visitConstructs(apiRef.constructs));
-    md.section(this.visitStructs(apiRef.structs));
+    md.section(this.visitConstructs(apiRef.constructs, headless));
     md.section(this.visitClasses(apiRef.classes));
+    md.section(this.visitStructs(apiRef.structs));
     md.section(this.visitInterfaces(apiRef.interfaces));
     md.section(this.visitEnums(apiRef.enums));
     return md;
   }
 
-  public visitConstructs(constructs: ConstructSchema[]): MarkdownDocument {
+  public visitConstructs(
+    constructs: ConstructSchema[],
+    headless: boolean
+  ): MarkdownDocument {
     if (constructs.length === 0) {
       return MarkdownDocument.EMPTY;
     }
 
-    const md = new MarkdownDocument({ header: { title: "Resources" } });
+    const md = new MarkdownDocument({
+      header: { title: headless ? "API Reference" : "Resources" },
+    });
     for (const construct of constructs) {
       md.section(this.visitConstruct(construct));
     }
@@ -291,14 +307,26 @@ export class MarkdownRenderer {
     }
 
     if (klass.docs) {
-      md.docs(klass.docs, this.language);
+      md.docs(
+        {
+          ...klass.docs,
+          // removes the inflight client link when inflight interface is united with preflight's
+          inflight: klass.inflight ? undefined : klass.docs.inflight,
+        },
+        this.language
+      );
     }
 
     if (klass.initializer) {
       md.section(this.visitInitializer(klass.initializer));
     }
 
-    md.section(this.visitInstanceMethods(klass.instanceMethods));
+    md.section(
+      this.visitInstanceMethods(
+        klass.instanceMethods,
+        klass.inflight?.instanceMethods
+      )
+    );
     md.section(this.visitStaticFunctions(klass.staticMethods));
     md.section(this.visitProperties(klass.properties));
     md.section(this.visitConstants(klass.constants));
@@ -425,17 +453,32 @@ export class MarkdownRenderer {
     return md;
   }
 
-  public visitInstanceMethods(methods: MethodSchema[]): MarkdownDocument {
-    if (methods.length === 0) {
+  public visitInstanceMethods(
+    methods: MethodSchema[],
+    inflightMethods?: MethodSchema[]
+  ): MarkdownDocument {
+    if (!methods.length && !inflightMethods?.length) {
       return MarkdownDocument.EMPTY;
     }
 
-    const md = new MarkdownDocument({ header: { title: "Methods" } });
+    const md = new MarkdownDocument({
+      header: { title: "Methods" },
+    });
 
-    md.table(this.createTable(methods));
+    if (methods.length) {
+      if (inflightMethods) {
+        md.title("Preflight Methods", 5);
+      }
+      md.table(this.createTable(methods));
+    }
+
+    if (inflightMethods?.length) {
+      md.title("Inflight Methods", 5);
+      md.table(this.createTable(inflightMethods));
+    }
     md.split();
 
-    for (const method of methods) {
+    for (const method of [...methods, ...(inflightMethods ?? [])]) {
       md.section(this.visitInstanceMethod(method));
     }
     return md;

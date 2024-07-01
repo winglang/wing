@@ -1,0 +1,12 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "compile": {
+      "outputs": ["lib/**"]
+    },
+    "test": {
+      "outputs": ["test/**/*.snap"]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "my-wing-app",
+  "version": "0.0.0",
+  "description": "A description of my Wing application",
+  "author": "Your Name",
+  "license": "MIT",
+  "scripts": {
+    "dev": "wing run main.ts",
+    "compile": "wing compile main.ts",
+    "test": "wing test main.ts"
+  },
+  "dependencies": {
+    "@wingcloud/framework": "^#WING_VERSION#"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "winglang": "^#WING_VERSION#"
+  }
+}

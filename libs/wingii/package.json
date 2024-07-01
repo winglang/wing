@@ -1,0 +1,13 @@
+{
+  "name": "@winglang/wingii",
+  "private": true,
+  "scripts": {
+    "compile": "cargo build --target wasm32-wasi --release",
+    "dev": "cargo run --example compile --release",
+    "test": "cargo test",
+    "lint": "cargo fmt && cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi --release"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

@@ -1,7 +1,0 @@
-cdktf.out/
-local.out/
-sim.out/
-*.tfstate
-*.tfstate.backup
-*.wsim
-tree.json

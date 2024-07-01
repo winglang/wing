@@ -1,54 +1,55 @@
-; Variables
+(identifier) @variable
 
-(variable_definition_statement 
-  name: (identifier) @variable
-)
-(reference (identifier)) @variable
-(reference (nested_identifier property: (identifier))) @property
+(reference_identifier) @variable
+
+(member_identifier) @variable.member
 
 ; Classes
-
 (custom_type) @type
-(class_field 
-  name: (identifier) @member
-) 
-(class_definition 
-  name: (identifier) @type
-)
+
+(class_field
+  name: (identifier) @variable.member)
+
+(class_definition
+  name: (identifier) @type)
+
 (method_definition
-  name: (identifier) @function
-)
-(inflight_method_definition
-  name: (identifier) @function
-)
+  name: (identifier) @function.method)
 
 ; Functions
-
 (keyword_argument_key) @variable.parameter
-(call 
-  caller: (reference) @function.method
-)
+
+(call
+  caller: (reference
+    (nested_identifier
+      property: (member_identifier) @function.method.call)))
+
+(call
+  caller: (reference
+    (reference_identifier) @function.method.call))
 
 ; Primitives
+(number) @number
 
-[
- (number)
- (duration)
-] @constant.builtin
+(duration) @constant
+
 (string) @string
-(bool) @constant.builtin
+
+(bool) @boolean
+
 (builtin_type) @type.builtin
 
-; Special
+(json_container_type) @type.builtin
 
-(comment) @comment
+; Special
+(comment) @comment @spell
 
 [
   "("
   ")"
   "{"
   "}"
-]  @punctuation.bracket
+] @punctuation.bracket
 
 [
   "-"
@@ -65,6 +66,7 @@
   ">"
   ">="
   "&&"
+  "??"
   "||"
 ] @operator
 
@@ -78,13 +80,25 @@
   "as"
   "bring"
   "class"
-  "else"
-  "for"
-  "if"
-  "in"
-  "init"
-  "inflight"
   "let"
   "new"
-  "return"
+  (inflight_specifier)
 ] @keyword
+
+[
+  "for"
+  "in"
+] @keyword.repeat
+
+[
+  "if"
+  "else"
+] @keyword.conditional
+
+[
+  "pub"
+  "protected"
+  "internal"
+] @keyword.modifier
+
+"return" @keyword.return

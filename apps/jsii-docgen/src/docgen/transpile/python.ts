@@ -1,7 +1,7 @@
 import * as Case from "case";
 import * as reflect from "jsii-reflect";
-import { submodulePath } from "../schema";
 import * as transpile from "./transpile";
+import { submodulePath } from "../schema";
 
 // Helpers
 const toSnakeCase = (text?: string) => {

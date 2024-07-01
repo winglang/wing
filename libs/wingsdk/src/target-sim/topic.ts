@@ -1,13 +1,15 @@
-import { join } from "path";
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { App } from "./app";
+import { EventMapping } from "./event-mapping";
+import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
-import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
+import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { Function } from "../cloud";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
-import * as core from "../core";
+import { lift, LiftMap } from "../core";
+import { ToSimulatorOutput } from "../simulator";
+import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
  * Simulator implementation of `cloud.Topic`
@@ -15,71 +17,120 @@ import * as core from "../core";
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.Topic implements ISimulatorResource {
-  private readonly subscribers: TopicSubscriber[];
+  public readonly policy: Policy;
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
-
-    this.subscribers = [];
+    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
   public onMessage(
-    inflight: core.Inflight, // cloud.ITopicOnMessageHandler
-    props: cloud.TopicOnMessageProps = {}
+    inflight: cloud.ITopicOnMessageHandler,
+    props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
-    const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessageHandler-${hash}`,
-      inflight,
-      join(__dirname, "topic.onmessage.inflight.js"),
-      "TopicOnMessageHandlerClient"
-    );
-
-    const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${hash}`,
+    const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
+    const fn = new Function(
+      this,
+      App.of(this).makeId(this, "OnMessage"),
       functionHandler,
       props
     );
+    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
+    Node.of(fn).title = "Subscriber";
 
-    this.node.addDependency(fn);
-
-    const functionHandle = `\${${fn.node.path}#attrs.handle}`;
-    this.subscribers.push({
-      functionHandle,
+    new EventMapping(this, App.of(this).makeId(this, "TopicEventMapping"), {
+      subscriber: fn,
+      publisher: this,
+      subscriptionProps: {},
     });
 
-    core.Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_message",
+    Node.of(this).addConnection({
+      source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
+      target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
+      name: "subscriber",
     });
+
+    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE_ASYNC);
 
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("topic", this, host);
-    super._bind(host, ops);
+  public subscribeQueue(queue: cloud.Queue): void {
+    const fn = new Function(
+      this,
+      App.of(this).makeId(this, "subscribeQueue"),
+      lift({ queue })
+        .grant({ queue: ["push"] })
+        .inflight(async (ctx, event) => {
+          await ctx.queue.push(event as string);
+          return undefined;
+        }),
+      {}
+    );
+    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
+    Node.of(fn).title = "QueueSubscriber";
+    Node.of(fn).hidden = true;
+
+    new EventMapping(this, App.of(this).makeId(this, "TopicEventMapping"), {
+      subscriber: fn,
+      publisher: this,
+      subscriptionProps: {},
+    });
+
+    Node.of(this).addConnection({
+      source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
+      target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE_ASYNC,
+      name: "push",
+    });
+
+    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE_ASYNC);
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    bindSimulatorResource(__filename, this, host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
-    return makeSimulatorJsClient("topic", this);
+  public _toInflight(): string {
+    return makeSimulatorJsClient(__filename, this);
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: TopicSchema = {
-      type: TOPIC_TYPE,
-      path: this.node.path,
-      props: {
-        subscribers: this.subscribers,
-      },
-      attrs: {} as any,
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.TopicInflightMethods.PUBLISH]: [],
     };
-    return schema;
+  }
+
+  public toSimulator(): ToSimulatorOutput {
+    const props: TopicSchema = {};
+    return {
+      type: cloud.TOPIC_FQN,
+      props,
+    };
   }
 }
 
-Topic._annotateInflight("publish", {});
+/**
+ * Utility class to work with topic message handlers.
+ */
+export class TopicOnMessageHandler {
+  /**
+   * Converts a `cloud.ITopicOnMessageHandler` to a `cloud.IFunctionHandler`
+   * @param handler the handler to convert
+   * @returns the function handler
+   */
+  public static toFunctionHandler(
+    handler: cloud.ITopicOnMessageHandler
+  ): cloud.IFunctionHandler {
+    return lift({ handler }).inflight(async (ctx, event) => {
+      await ctx.handler(event as string);
+      return undefined;
+    });
+  }
+}

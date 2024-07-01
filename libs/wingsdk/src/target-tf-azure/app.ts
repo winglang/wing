@@ -1,19 +1,23 @@
-import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
-import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
-import { ServicePlan } from "@cdktf/provider-azurerm/lib/service-plan";
-import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
-import { Construct } from "constructs";
 import { Bucket } from "./bucket";
+import { Counter } from "./counter";
 import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
-import { Logger } from "./logger";
-import { BUCKET_FQN, FUNCTION_FQN, LOGGER_FQN } from "../cloud";
-import { CdktfApp, AppProps } from "../core";
+import { TestRunner } from "./test-runner";
+import { ApplicationInsights } from "../.gen/providers/azurerm/application-insights";
+import { LogAnalyticsWorkspace } from "../.gen/providers/azurerm/log-analytics-workspace";
+import { AzurermProvider } from "../.gen/providers/azurerm/provider";
+import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
+import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
+import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
+import { BUCKET_FQN, FUNCTION_FQN, COUNTER_FQN } from "../cloud";
+import { AppProps } from "../core";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../utils/resource-names";
+} from "../shared/resource-names";
+import { CdktfApp } from "../shared-tf/app";
+import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * Azure app props
@@ -31,6 +35,18 @@ export interface AzureAppProps extends AppProps {
 const RESOURCEGROUP_NAME_OPTS: NameOptions = {
   maxLen: 90,
   disallowedRegex: /([^a-zA-Z0-9\-\_\(\)\.]+)/g,
+};
+
+/**
+ * Configuration options for generating a name for Azure Log Analytics Workspace.
+ *
+ * - The workspace name must be between 4 and 63 characters.
+ * - The workspace name can contain only letters, numbers, and hyphens (`"-"`).
+ * - The hyphen (`"-"`) should not be the first or the last character in the name.
+ */
+const LOG_ANALYTICS_WORKSPACE_NAME_OPTS: NameOptions = {
+  maxLen: 63,
+  disallowedRegex: /([^a-zA-Z0-9\-]+)/g,
 };
 
 /**
@@ -59,14 +75,17 @@ export class App extends CdktfApp {
    * @link https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group#location
    * */
   public readonly location: string;
-  private _resourceGroupValue?: ResourceGroup;
-  private _storageAccountValue?: StorageAccount;
-  private _servicePlanValue?: ServicePlan;
+  public readonly _target = "tf-azure";
+  private _resourceGroup?: ResourceGroup;
+  private _storageAccount?: StorageAccount;
+  private _servicePlan?: ServicePlan;
+  private _applicationInsights?: ApplicationInsights;
+  private _logAnalyticsWorkspace?: LogAnalyticsWorkspace;
 
   constructor(props: AzureAppProps) {
     super(props);
-
     this.location = props.location ?? process.env.AZURE_LOCATION;
+    TestRunner._createTree(this, props.rootConstruct);
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.location === undefined) {
@@ -75,7 +94,12 @@ export class App extends CdktfApp {
       );
     }
 
-    new AzurermProvider(this, "azure", { features: {} });
+    new AzurermProvider(this, "azure", {
+      features: {
+        // To be able to run terraform destroy during tests, and in a reasonable time
+        resourceGroup: { preventDeletionIfContainsResources: false },
+      },
+    });
 
     Object.defineProperty(this, APP_AZURE_TF_SYMBOL, {
       value: this,
@@ -84,71 +108,101 @@ export class App extends CdktfApp {
     });
   }
 
+  public get logAnalyticsWorkspace() {
+    if (!this._logAnalyticsWorkspace) {
+      this._logAnalyticsWorkspace = new LogAnalyticsWorkspace(
+        this,
+        "LogAnalyticsWorkspace",
+        {
+          location: this.location,
+          resourceGroupName: this.resourceGroup.name,
+          name: ResourceNames.generateName(
+            this,
+            LOG_ANALYTICS_WORKSPACE_NAME_OPTS
+          ),
+        }
+      );
+    }
+    return this._logAnalyticsWorkspace;
+  }
+
+  public get applicationInsights() {
+    if (!this._applicationInsights) {
+      this._applicationInsights = new ApplicationInsights(
+        this,
+        `ApplicationInsights`,
+        {
+          name: `application-insights`,
+          resourceGroupName: this.resourceGroup.name,
+          location: this.resourceGroup.location,
+          applicationType: "web",
+          workspaceId: this.logAnalyticsWorkspace.id,
+        }
+      );
+    }
+    return this._applicationInsights;
+  }
+
   /**
    * Get resource group using lazy initialization
-   * @internal
    */
-  public get _resourceGroup() {
-    if (!this._resourceGroupValue) {
-      this._resourceGroupValue = new ResourceGroup(this, "ResourceGroup", {
+  public get resourceGroup() {
+    if (!this._resourceGroup) {
+      this._resourceGroup = new ResourceGroup(this, "ResourceGroup", {
         location: this.location,
         name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
       });
     }
-    return this._resourceGroupValue;
+    return this._resourceGroup;
   }
 
   /**
    * Get storage account using lazy initialization
-   * @internal
    */
-  public get _storageAccount() {
-    if (!this._storageAccountValue) {
-      this._storageAccountValue = new StorageAccount(this, "StorageAccount", {
+  public get storageAccount() {
+    if (!this._storageAccount) {
+      this._storageAccount = new StorageAccount(this, "StorageAccount", {
         name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
-        resourceGroupName: this._resourceGroup.name,
-        location: this._resourceGroup.location,
+        resourceGroupName: this.resourceGroup.name,
+        location: this.resourceGroup.location,
         accountTier: "Standard",
         accountReplicationType: "LRS",
       });
     }
-    return this._storageAccountValue;
+    return this._storageAccount;
   }
 
   /**
    * Get service plan using lazy initialization
-   * @internal
    */
-  public get _servicePlan() {
-    if (!this._servicePlanValue) {
-      this._servicePlanValue = new ServicePlan(this, "ServicePlan", {
+  public get servicePlan() {
+    if (!this._servicePlan) {
+      this._servicePlan = new ServicePlan(this, "ServicePlan", {
         name: ResourceNames.generateName(this, SERVICEPLAN_NAME_OPTS),
-        resourceGroupName: this._resourceGroup.name,
-        location: this._resourceGroup.location,
+        resourceGroupName: this.resourceGroup.name,
+        location: this.resourceGroup.location,
         osType: "Linux",
         // Dynamic Stock Keeping Unit (SKU)
         // https://learn.microsoft.com/en-us/partner-center/developer/product-resources#sku
         skuName: "Y1",
       });
     }
-    return this._servicePlanValue;
+    return this._servicePlan;
   }
 
-  protected tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
+      case TEST_RUNNER_FQN:
+        return TestRunner;
+
       case FUNCTION_FQN:
-        return new Function(scope, id, args[0], args[1]);
+        return Function;
 
       case BUCKET_FQN:
-        return new Bucket(scope, id, args[0]);
+        return Bucket;
 
-      case LOGGER_FQN:
-        return new Logger(scope, id);
+      case COUNTER_FQN:
+        return Counter;
     }
 
     return undefined;

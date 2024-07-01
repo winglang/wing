@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.dev.json",
+  "compilerOptions": {
+    "declaration": false,
+    "inlineSources": false,
+    "noEmitOnError": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/.gen/**"]
+}

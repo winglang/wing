@@ -1,60 +1,65 @@
-import { ISimulatorResourceInstance } from "./resource";
-import { CounterSchema } from "./schema-resources";
+import * as fs from "fs";
+import { join } from "path";
+import { CounterBackendProps } from "./counter";
+import { IResource, IResourceContext } from "./resource";
+import { exists } from "./util";
 import { ICounterClient } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
 
-export class Counter implements ICounterClient, ISimulatorResourceInstance {
-  private value: number;
-  private readonly context: ISimulatorContext;
+const VALUES_FILENAME = "values.json";
 
-  public constructor(
-    props: CounterSchema["props"],
-    context: ISimulatorContext
-  ) {
-    this.value = props.initial;
-    this.context = context;
+export class CounterBackend implements ICounterClient, IResource {
+  private values: Map<string, number>;
+  private initial: number;
+  private ctx: IResourceContext;
+
+  public constructor(ctx: IResourceContext, props: CounterBackendProps) {
+    this.ctx = ctx;
+    this.initial = props.initial ?? 0;
+    this.values = new Map().set("default", this.initial);
   }
 
-  public async init(): Promise<void> {}
-  public async cleanup(): Promise<void> {}
-
-  public async inc(amount: number = 1): Promise<number> {
-    return this.context.withTrace({
-      message: `Inc (amount=${amount}).`,
-      activity: async () => {
-        const prev = this.value;
-        this.value += amount;
-        return prev;
-      },
-    });
+  public async onStart(): Promise<void> {
+    // Load the values from disk
+    const valuesFile = join(await this.ctx.statedir(), VALUES_FILENAME);
+    const valueFilesExists = await exists(valuesFile);
+    if (valueFilesExists) {
+      const valuesContents = await fs.promises.readFile(valuesFile, "utf-8");
+      const values = JSON.parse(valuesContents);
+      this.values = new Map(values);
+    }
   }
 
-  public async dec(amount: number = 1): Promise<number> {
-    return this.context.withTrace({
-      message: `Dec (amount=${amount}).`,
-      activity: async () => {
-        const prev = this.value;
-        this.value -= amount;
-        return prev;
-      },
-    });
+  public async onStop(): Promise<void> {
+    // Save the values to disk
+    fs.writeFileSync(
+      join(await this.ctx.statedir(), VALUES_FILENAME),
+      JSON.stringify(Array.from(this.values.entries()))
+    );
   }
 
-  public async peek(): Promise<number> {
-    return this.context.withTrace({
-      message: `Peek (value=${this.value}).`,
-      activity: async () => {
-        return this.value;
-      },
-    });
+  public async inc(
+    amount: number = 1,
+    key: string = "default"
+  ): Promise<number> {
+    const prev = this.values.get(key) ?? this.initial;
+    this.values.set(key, prev + amount);
+    return prev;
   }
 
-  public async reset(reset_value: number = 0): Promise<void> {
-    return this.context.withTrace({
-      message: `Reset (value=${this.value}).`,
-      activity: async () => {
-        this.value = reset_value;
-      },
-    });
+  public async dec(
+    amount: number = 1,
+    key: string = "default"
+  ): Promise<number> {
+    const prev = this.values.get(key) ?? this.initial;
+    this.values.set(key, prev - amount);
+    return prev;
+  }
+
+  public async peek(key: string = "default"): Promise<number> {
+    return this.values.get(key) ?? this.initial;
+  }
+
+  public async set(value: number, key: string = "default"): Promise<void> {
+    this.values.set(key, value);
   }
 }

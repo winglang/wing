@@ -1,0 +1,7 @@
+{
+  "name": "docs",
+  "private": true,
+  "volta": {
+    "extends": "../../../package.json"
+  }
+}

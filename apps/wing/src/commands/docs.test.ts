@@ -1,10 +1,10 @@
-import * as open from "open";
+import open from "open";
+import { vi, test, expect } from "vitest";
 import { docs } from "./docs";
 
-jest.mock("open");
+vi.mock("open");
 
-test("wing docs opens the docs website", async () => {  
+test("wing docs opens the docs website", async () => {
   await docs();
-  expect(open).toBeCalledWith("https://docs.winglang.io");
+  expect(open).toBeCalledWith("https://www.winglang.io/docs/");
 });
-

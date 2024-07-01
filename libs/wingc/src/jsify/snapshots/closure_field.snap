@@ -1,0 +1,230 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    bring cloud;
+    let globalBucket = new cloud.Bucket();
+
+    class MyResource {
+      closure: inflight (str): str;
+    
+      new() {
+        this.closure = inflight (s: str): str => {
+          globalBucket.list();
+          return "hello";
+        };
+      }
+    
+      pub inflight foo(): str {
+        return this.closure("anything");
+      }
+    }
+    
+    let x = new MyResource();
+    
+    test "variable can be an inflight closure" {
+      let val = x.foo();
+      assert(val == "hello");
+    }
+    
+```
+
+## inflight.$Closure1-1.cjs
+
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $globalBucket }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle(s) {
+      (await $globalBucket.list());
+      return "hello";
+    }
+  }
+  return $Closure1;
+}
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
+```
+
+## inflight.$Closure2-1.cjs
+
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $x }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const val = (await $x.foo());
+      $helpers.assert($helpers.eq(val, "hello"), "val == \"hello\"");
+    }
+  }
+  return $Closure2;
+}
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
+```
+
+## inflight.MyResource-1.cjs
+
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class MyResource {
+    constructor({ $this_closure }) {
+      this.$this_closure = $this_closure;
+    }
+    async foo() {
+      return (await this.$this_closure("anything"));
+    }
+  }
+  return MyResource;
+}
+//# sourceMappingURL=inflight.MyResource-1.cjs.map
+```
+
+## preflight.cjs
+
+```js
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+class $Root extends $stdlib.std.Resource {
+  constructor($scope, $id) {
+    super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
+    class MyResource extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        class $Closure1 extends $stdlib.std.AutoIdResource {
+          _id = $stdlib.core.closureId();
+          constructor($scope, $id, ) {
+            super($scope, $id);
+            $helpers.nodeof(this).hidden = true;
+          }
+          static _toInflightType() {
+            return `
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+                $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
+              })
+            `;
+          }
+          _toInflight() {
+            return `
+              (await (async () => {
+                const $Closure1Client = ${$Closure1._toInflightType()};
+                const client = new $Closure1Client({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `;
+          }
+          get _liftMap() {
+            return ({
+              "handle": [
+                [globalBucket, ["list"]],
+              ],
+              "$inflight_init": [
+                [globalBucket, []],
+              ],
+            });
+          }
+        }
+        this.closure = new $Closure1(this, "$Closure1");
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const MyResourceClient = ${MyResource._toInflightType()};
+            const client = new MyResourceClient({
+              $this_closure: ${$stdlib.core.liftObject(this.closure)},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "foo": [
+            [this.closure, ["handle"]],
+          ],
+          "$inflight_init": [
+            [this.closure, []],
+          ],
+        });
+      }
+    }
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
+            $x: ${$stdlib.core.liftObject(x)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType()};
+            const client = new $Closure2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [x, ["foo"]],
+          ],
+          "$inflight_init": [
+            [x, []],
+          ],
+        });
+      }
+    }
+    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const x = new MyResource(this, "MyResource");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:variable can be an inflight closure", new $Closure2(this, "$Closure2"));
+  }
+}
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.cjs.map
+```
+

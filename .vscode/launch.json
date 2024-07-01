@@ -3,20 +3,55 @@
 // Hover to view descriptions of existing attributes.
 // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 {
-	"version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Debug Extension",
-            "type": "extensionHost",
-            "request": "launch",
-            "outFiles": ["${workspaceFolder}/apps/vscode-wing/lib/**/*.js"],
-            "env": {
-                "WING_BIN": "${workspaceFolder}/apps/wing/bin/wing",
-                "RUST_BACKTRACE": "1",
-            },
-            "args": [
-                "--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/apps/vscode-wing"
-            ]
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "command": "./apps/wing/bin/wing compile -t tf-aws ${file}",
+      "name": "wing compile tf-aws",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "./apps/wing/bin/wing compile -t tf-azure ${file}",
+      "name": "wing compile tf-azure",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "./apps/wing/bin/wing compile -t sim ${file}",
+      "name": "wing compile sim",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "./apps/wing/bin/wing test ${file}",
+      "name": "wing test sim",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "./apps/wing/bin/wing test -t tf-aws ${file}",
+      "name": "wing test tf-aws",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "name": "Debug Extension",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/apps/vscode-wing/scripts/dev.mjs"],
+      "outFiles": ["${workspaceFolder}/apps/vscode-wing/lib/**/*.js"]
+    },
+    {
+      "name": "Debug Wing Compiler",
+      "type": "lldb",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/libs/wingc",
+      "cargo": {
+        "args": ["build", "--example", "compile"]
+      },
+      "args": ["${file}"],
+      "sourceLanguages": ["rust"]
+    }
+  ]
 }

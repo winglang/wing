@@ -1,0 +1,13 @@
+packages:
+  - "apps/*"
+  - "libs/*"
+  - "libs/@wingcloud/*"
+  - "tools/*"
+  - "docs"
+  - "docs/docs"
+  - "apps/wing-console/packages/*"
+  - "apps/wing-console/console/*"
+  - "apps/wing-console/tools/*"
+  - "examples/tests/*"
+  - "examples/*"
+  - "apps/jsii-docgen/test/__fixtures__/**"

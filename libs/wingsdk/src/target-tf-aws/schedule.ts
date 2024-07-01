@@ -1,11 +1,15 @@
-import { join } from "path";
-import { CloudwatchEventRule } from "@cdktf/provider-aws/lib/cloudwatch-event-rule";
-import { CloudwatchEventTarget } from "@cdktf/provider-aws/lib/cloudwatch-event-target";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function } from "./function";
+import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule";
+import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
+import {
+  ScheduleOnTickHandler,
+  convertUnixCronToAWSCron,
+} from "../shared-aws/schedule";
+import { Node } from "../std";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -15,65 +19,41 @@ import * as core from "../core";
 export class Schedule extends cloud.Schedule {
   private readonly scheduleExpression: string;
   private readonly rule: CloudwatchEventRule;
+  private readonly handlers: Record<string, Function> = {};
 
   constructor(scope: Construct, id: string, props: cloud.ScheduleProps = {}) {
     super(scope, id, props);
 
     const { rate, cron } = props;
 
-    if (rate && cron) {
-      throw new Error("rate and cron cannot be configured simultaneously.");
-    }
-    if (!rate && !cron) {
-      throw new Error("rate or cron need to be filled.");
-    }
-    if (rate && rate.seconds < 60) {
-      throw new Error("rate can not be set to less than 1 minute.");
-    }
-    if (cron && cron.split(" ").length > 5) {
-      throw new Error(
-        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
-      );
-    }
-
-    /*
-     * The schedule cron string is Unix cron format: [minute] [hour] [day of month] [month] [day of week]
-     * AWS EventBridge Schedule uses a 6 field format which includes year: [minute] [hour] [day of month] [month] [day of week] [year]
-     * https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html#cron-based
-     *
-     * We append * to the cron string for year field.
-     */
     this.scheduleExpression = rate
       ? rate.minutes === 1
         ? `rate(${rate.minutes} minute)`
         : `rate(${rate.minutes} minutes)`
-      : `cron(${cron} *)`;
+      : `cron(${convertUnixCronToAWSCron(cron!)})`;
 
     this.rule = new CloudwatchEventRule(this, "Schedule", {
-      isEnabled: true,
       scheduleExpression: this.scheduleExpression,
     });
   }
 
   public onTick(
-    inflight: core.Inflight,
-    props: cloud.ScheduleOnTickProps = {}
+    inflight: cloud.IScheduleOnTickHandler,
+    props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
-    const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnTickHandler-${hash}`,
-      inflight,
-      join(__dirname, "schedule.ontick.inflight.js"),
-      "ScheduleOnTickHandlerClient"
-    );
+    const functionHandler = ScheduleOnTickHandler.toFunctionHandler(inflight);
+    let fn = this.handlers[inflight._id];
+    if (fn) {
+      return fn;
+    }
 
-    const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnTick-${hash}`,
+    fn = new Function(
+      this,
+      App.of(this).makeId(this, "OnTick"),
       functionHandler,
       props
     );
+    this.handlers[inflight._id] = fn;
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
@@ -84,25 +64,34 @@ export class Schedule extends cloud.Schedule {
 
     fn.addPermissionToInvoke(this, "events.amazonaws.com", this.rule.arn);
 
-    new CloudwatchEventTarget(this, `ScheduleTarget-${hash}`, {
-      arn: fn.qualifiedArn,
-      rule: this.rule.name,
-    });
+    new CloudwatchEventTarget(
+      this,
+      App.of(this).makeId(this, "ScheduleTarget"),
+      {
+        arn: fn.qualifiedArn,
+        rule: this.rule.name,
+      }
+    );
 
-    core.Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_tick",
+    Node.of(this).addConnection({
+      source: this,
+      sourceOp: cloud.ScheduleInflightMethods.TICK,
+      target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
+      name: "tick",
     });
 
     return fn;
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "ScheduleClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _toInflight(): string {
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "ScheduleClient",
+      [`process.env["${this.envName()}"]`]
+    );
   }
 
   private envName(): string {

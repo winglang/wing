@@ -1,223 +1,151 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`create a function 1`] = `
-Object {
-  "app.wsim/simulator.json": Object {
-    "resources": Array [
-      Object {
-        "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      Object {
-        "attrs": Object {},
+{
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
+  event = JSON.parse(event);
+  let msg;
+  if (event.name[0] !== event.name[0].toUpperCase()) {
+    throw new Error("Name must start with uppercase letter");
+  }
+  if (process.env.PIG_LATIN) {
+    msg = "Ellohay, " + event.name + "!";
+  } else {
+    msg = "Hello, " + event.name + "!";
+  }
+  return JSON.stringify({ msg });
+}
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/my_function": {
+        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
         "path": "root/my_function",
-        "props": Object {
-          "environmentVariables": Object {
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {
             "ENV_VAR1": "true",
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_function",
-          "path": "root/my_function",
-        },
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
       },
-      "constructInfo": Object {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "id": "root",
-      "path": "root",
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
     },
-    "version": "tree-0.1",
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(event2) {
-        event2 = JSON.parse(event2);
-        let msg;
-        if (event2.name[0] !== event2.name[0].toUpperCase()) {
-          throw new Error(\\"Name must start with uppercase letter\\");
-        }
-        if (process.env.PIG_LATIN) {
-          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
-        } else {
-          msg = \\"Hello, \\" + event2.name + \\"!\\";
-        }
-        return JSON.stringify({ msg });
-      }
-    };
-  }())({}).handle(event);
-};
-",
-  "tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
+  "tree.json": {
+    "tree": {
+      "children": {
+        "my_function": {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.3.0",
           },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
+          "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
@@ -225,248 +153,11 @@ exports.handler = async function(event) {
           "path": "root/my_function",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.3.0",
       },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
-exports[`invoke function exceeds timeout 1`] = `
-Array [
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"\\"{}\\"\\").",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
-]
-`;
-
-exports[`invoke function exceeds timeout 2`] = `
-Object {
-  "app.wsim/simulator.json": Object {
-    "resources": Array [
-      Object {
-        "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      Object {
-        "attrs": Object {},
-        "path": "root/my_function",
-        "props": Object {
-          "environmentVariables": Object {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 1000,
-        },
-        "type": "wingsdk.cloud.Function",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_function",
-          "path": "root/my_function",
-        },
-      },
-      "constructInfo": Object {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        while (true) {
-        }
-        ;
-      }
-    };
-  }())({}).handle(event);
-};
-",
-  "tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_function",
-          "path": "root/my_function",
-        },
-      },
-      "constructInfo": Object {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -476,232 +167,157 @@ exports.handler = async function(event) {
 `;
 
 exports[`invoke function fails 1`] = `
-Array [
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"\\"{\\\\\\"name\\\\\\":\\\\\\"alice\\\\\\"}\\"\\").",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
+[
+  "root/my_function started",
+  "Error: Name must start with uppercase letter (Invoke (payload="{\\"name\\":\\"alice\\"}").)",
+  "root/my_function stopped",
 ]
 `;
 
 exports[`invoke function fails 2`] = `
-Object {
-  "app.wsim/simulator.json": Object {
-    "resources": Array [
-      Object {
-        "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      Object {
-        "attrs": Object {},
+{
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
+  event = JSON.parse(event);
+  let msg;
+  if (event.name[0] !== event.name[0].toUpperCase()) {
+    throw new Error("Name must start with uppercase letter");
+  }
+  if (process.env.PIG_LATIN) {
+    msg = "Ellohay, " + event.name + "!";
+  } else {
+    msg = "Hello, " + event.name + "!";
+  }
+  return JSON.stringify({ msg });
+}
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/my_function": {
+        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
         "path": "root/my_function",
-        "props": Object {
-          "environmentVariables": Object {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_function",
-          "path": "root/my_function",
-        },
-      },
-      "constructInfo": Object {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
     },
-    "version": "tree-0.1",
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(event2) {
-        event2 = JSON.parse(event2);
-        let msg;
-        if (event2.name[0] !== event2.name[0].toUpperCase()) {
-          throw new Error(\\"Name must start with uppercase letter\\");
-        }
-        if (process.env.PIG_LATIN) {
-          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
-        } else {
-          msg = \\"Hello, \\" + event2.name + \\"!\\";
-        }
-        return JSON.stringify({ msg });
-      }
-    };
-  }())({}).handle(event);
-};
-",
-  "tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
+  "tree.json": {
+    "tree": {
+      "children": {
+        "my_function": {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.3.0",
           },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
+          "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
@@ -709,10 +325,11 @@ exports.handler = async function(event) {
           "path": "root/my_function",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -722,232 +339,157 @@ exports.handler = async function(event) {
 `;
 
 exports[`invoke function succeeds 1`] = `
-Array [
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\"\\").",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
+[
+  "root/my_function started",
+  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
+  "root/my_function stopped",
 ]
 `;
 
 exports[`invoke function succeeds 2`] = `
-Object {
-  "app.wsim/simulator.json": Object {
-    "resources": Array [
-      Object {
-        "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      Object {
-        "attrs": Object {},
+{
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
+  event = JSON.parse(event);
+  let msg;
+  if (event.name[0] !== event.name[0].toUpperCase()) {
+    throw new Error("Name must start with uppercase letter");
+  }
+  if (process.env.PIG_LATIN) {
+    msg = "Ellohay, " + event.name + "!";
+  } else {
+    msg = "Hello, " + event.name + "!";
+  }
+  return JSON.stringify({ msg });
+}
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/my_function": {
+        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
         "path": "root/my_function",
-        "props": Object {
-          "environmentVariables": Object {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_function",
-          "path": "root/my_function",
-        },
-      },
-      "constructInfo": Object {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
     },
-    "version": "tree-0.1",
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(event2) {
-        event2 = JSON.parse(event2);
-        let msg;
-        if (event2.name[0] !== event2.name[0].toUpperCase()) {
-          throw new Error(\\"Name must start with uppercase letter\\");
-        }
-        if (process.env.PIG_LATIN) {
-          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
-        } else {
-          msg = \\"Hello, \\" + event2.name + \\"!\\";
-        }
-        return JSON.stringify({ msg });
-      }
-    };
-  }())({}).handle(event);
-};
-",
-  "tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
+  "tree.json": {
+    "tree": {
+      "children": {
+        "my_function": {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.3.0",
           },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
+          "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
@@ -955,10 +497,11 @@ exports.handler = async function(event) {
           "path": "root/my_function",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -968,233 +511,159 @@ exports.handler = async function(event) {
 `;
 
 exports[`invoke function with environment variables 1`] = `
-Array [
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\"\\").",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
+[
+  "root/my_function started",
+  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
+  "root/my_function stopped",
 ]
 `;
 
 exports[`invoke function with environment variables 2`] = `
-Object {
-  "app.wsim/simulator.json": Object {
-    "resources": Array [
-      Object {
-        "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      Object {
-        "attrs": Object {},
+{
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
+  event = JSON.parse(event);
+  let msg;
+  if (event.name[0] !== event.name[0].toUpperCase()) {
+    throw new Error("Name must start with uppercase letter");
+  }
+  if (process.env.PIG_LATIN) {
+    msg = "Ellohay, " + event.name + "!";
+  } else {
+    msg = "Hello, " + event.name + "!";
+  }
+  return JSON.stringify({ msg });
+}
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/my_function": {
+        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
         "path": "root/my_function",
-        "props": Object {
-          "environmentVariables": Object {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {
             "PIG_LATIN": "true",
           },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_function",
-          "path": "root/my_function",
-        },
-      },
-      "constructInfo": Object {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
     },
-    "version": "tree-0.1",
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(event2) {
-        event2 = JSON.parse(event2);
-        let msg;
-        if (event2.name[0] !== event2.name[0].toUpperCase()) {
-          throw new Error(\\"Name must start with uppercase letter\\");
-        }
-        if (process.env.PIG_LATIN) {
-          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
-        } else {
-          msg = \\"Hello, \\" + event2.name + \\"!\\";
-        }
-        return JSON.stringify({ msg });
-      }
-    };
-  }())({}).handle(event);
-};
-",
-  "tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
+  "tree.json": {
+    "tree": {
+      "children": {
+        "my_function": {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.3.0",
           },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
+          "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
@@ -1202,10 +671,11 @@ exports.handler = async function(event) {
           "path": "root/my_function",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1215,112 +685,147 @@ exports.handler = async function(event) {
 `;
 
 exports[`invoke function with process.exit(1) 1`] = `
-Array [
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"\\"{}\\"\\").",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
+[
+  "root/my_function started",
+  "Error: Process exited with code 1, signal null (Invoke (payload="{}").)",
+  "root/my_function stopped",
 ]
 `;
 
 exports[`invoke function with process.exit(1) 2`] = `
-Object {
-  "app.wsim/simulator.json": Object {
-    "resources": Array [
-      Object {
-        "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      Object {
-        "attrs": Object {},
+{
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+  process.exit(1);
+}
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/my_function": {
+        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
         "path": "root/my_function",
-        "props": Object {
-          "environmentVariables": Object {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
-  "app.wsim/tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
+  "tree.json": {
+    "tree": {
+      "children": {
+        "my_function": {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.3.0",
           },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
+          "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
@@ -1328,120 +833,303 @@ Object {
           "path": "root/my_function",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
     "version": "tree-0.1",
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+}
+`;
+
+exports[`runtime environment tests 1`] = `
+{
+  ".wing/function.0_c8d5fca2.cjs": ""use strict";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const query = "q=URLUtils.searchParams&topic=api";
+      const p = new URLSearchParams(query);
+      const value = p.get("topic");
+      if (!value) {
+        throw new Error("URLSearchParams failed");
       }
-      async handle() {
-        process.exit(1);
-      }
-    };
-  }())({}).handle(event);
-};
-",
-  "tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
+      return value;
+    }
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  ".wing/function.1_c89ed254.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => typeof fetch
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  ".wing/function.2_c8cd6c39.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const c = require("crypto");
+      return typeof c.createHash;
+    }
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  ".wing/function.3_c8badafa.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const { nanoid } = require("nanoid");
+      return nanoid();
+    }
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function.0": {
+        "addr": "c8d5fca2ff1b96bd65cc21384259b53ae9f3d4971c",
+        "path": "root/Function.0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function.0_c8d5fca2.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
         },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/Function.1": {
+        "addr": "c89ed254f66166d83153cc0a4952a15be63d47b0d2",
+        "path": "root/Function.1",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function.1_c89ed254.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
         },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
-          "constructInfo": Object {
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/Function.2": {
+        "addr": "c8cd6c39da22910102d0cfeb2cb96f2160fa79e517",
+        "path": "root/Function.2",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function.2_c8cd6c39.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/Function.3": {
+        "addr": "c8badafa75a67ff66740e0c5fbbb392ab574b52b3c",
+        "path": "root/Function.3",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function.3_c8badafa.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function.0": {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.3.0",
           },
-          "display": Object {
+          "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_function",
-          "path": "root/my_function",
+          "id": "Function.0",
+          "path": "root/Function.0",
+        },
+        "Function.1": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function.1",
+          "path": "root/Function.1",
+        },
+        "Function.2": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function.2",
+          "path": "root/Function.2",
+        },
+        "Function.3": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function.3",
+          "path": "root/Function.3",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

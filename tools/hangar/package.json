@@ -3,19 +3,35 @@
   "version": "0.0.0",
   "description": "wing test suite",
   "scripts": {
-    "test": "vitest run",
-    "test:watch": "vitest watch --reporter=verbose",
-    "test:update": "vitest run --update --reporter=verbose"
+    "vitest": "vitest run",
+    "test": "vitest run --update",
+    "test:generate": "tsx src/generate_tests.ts",
+    "test:doc_examples": "vitest run src/test_corpus/doc_examples",
+    "test:watch": "vitest watch",
+    "bench": "vitest bench --run && tsx src/benchmarking/compare_script.ts"
   },
-  "author": "Monada",
+  "author": "Wing Cloud",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/fs-extra": "^11.0.1",
-    "execa": "^6.1.0",
-    "fs-extra": "^11.1.0",
-    "jest-serializer-ansi-escapes": "^2.0.1",
-    "npm": "^8.19.3",
-    "vitest": "^0.28.4",
-    "walkdir": "^0.4.1"
+    "@wingconsole/app": "workspace:^",
+    "@wingconsole/design-system": "workspace:^",
+    "@wingconsole/server": "workspace:^",
+    "@wingconsole/ui": "workspace:^",
+    "@winglang/compatibility-spy": "workspace:^",
+    "@winglang/compiler": "workspace:^",
+    "@winglang/platform-awscdk": "workspace:^",
+    "@winglang/sdk": "workspace:^",
+    "cdktf": "^0.20.7",
+    "execa": "^7.2.0",
+    "fflate": "^0.8.2",
+    "npm": "^9.9.3",
+    "octokit": "^3.2.1",
+    "tsx": "^4.15.7",
+    "vitest": "^1.6.0",
+    "winglang": "workspace:^",
+    "yaml": "^2.4.5"
+  },
+  "volta": {
+    "extends": "../../package.json"
   }
 }

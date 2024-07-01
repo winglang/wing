@@ -1,15 +1,10 @@
 import * as reflect from "jsii-reflect";
 import * as transpile from "./transpile";
 import { TranspiledTypeReferenceToStringOptions } from "./transpile";
-import { submodulePath } from "../schema";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const Case = require("case");
+import { getWingType, isInflightMethod, submodulePath } from "../schema";
+import { BUILTIN_IMPORTS } from "../view/wing-filters";
 
 // Helpers
-const toSnakeCase = (text?: string) => {
-  return Case.snake(text ?? "");
-};
-
 const formatArguments = (inputs: string[]) => {
   return inputs.join(", ");
 };
@@ -21,16 +16,22 @@ const typeToString: TranspiledTypeReferenceToStringOptions = {
 };
 
 const formatStructInitialization = (type: transpile.TranspiledType) => {
-  const target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
-  return `let ${toSnakeCase(type.name)} = ${target}{ ... }`;
+  const target =
+    type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
+      ? `${type.namespace}.${type.name}`
+      : type.name;
+  return `let ${type.name} = ${target}{ ... };`;
 };
 
 const formatClassInitialization = (
   type: transpile.TranspiledType,
   inputs: string[]
 ) => {
-  const target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
-  return `new ${target}(${formatArguments(inputs)})`;
+  const target =
+    type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
+      ? `${type.namespace}.${type.name}`
+      : type.name;
+  return `new ${target}(${formatArguments(inputs)});`;
 };
 
 const formatInvocation = (
@@ -38,27 +39,44 @@ const formatInvocation = (
   inputs: string[],
   method: string
 ) => {
-  let target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
+  let target =
+    type.name === "Util"
+      ? type.namespace
+      : type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
+      ? `${type.namespace}.${type.name}`
+      : type.name;
   if (method) {
     target = `${target}.${method}`;
   }
-  return `${target}(${formatArguments(inputs)})`;
+  return `${
+    isInflightMethod(type.source.docs) ? "inflight " : ""
+  }${target}(${formatArguments(inputs)});`;
 };
 
 const formatImport = (type: transpile.TranspiledType) => {
   // TODO idk
   if (type.module.endsWith("/sdk")) {
-    return `bring ${type.submodule};`;
+    return type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
+      ? `bring ${type.submodule};`
+      : "";
   }
   if (type.submodule) {
-    return `bring { ${type.submodule} } from "${type.module}"`;
+    return `bring { ${type.submodule} } from "${type.module}";`;
   } else {
-    return `bring { ${type.name} } from "${type.module}"`;
+    return `bring { ${type.name} } from "${type.module}";`;
   }
 };
 
-const formatSignature = (name: string, inputs: string[], returns?: string) => {
-  return `${name}(${formatArguments(inputs)})${returns ? ": " + returns : ""}`;
+const formatSignature = (
+  name: string,
+  inputs: string[],
+  returns?: string,
+  isInflight?: boolean,
+  isOptionalReturn?: boolean
+) => {
+  return `${isInflight ? "inflight " : ""}${name}(${formatArguments(inputs)})${
+    returns ? ": " + `${returns}${isOptionalReturn ? "?" : ""}` : ""
+  }`;
 };
 
 /**
@@ -129,7 +147,7 @@ export class WingTranspile extends transpile.TranspileBase {
   }
 
   public property(property: reflect.Property): transpile.TranspiledProperty {
-    const name = property.const ? property.name : toSnakeCase(property.name);
+    const name = property.name;
     const typeRef = this.typeReference(property.type);
     return {
       name,
@@ -150,13 +168,14 @@ export class WingTranspile extends transpile.TranspileBase {
   public parameter(
     parameter: reflect.Parameter
   ): transpile.TranspiledParameter {
-    const name = toSnakeCase(parameter.name);
+    const name = parameter.name;
     const typeRef = this.typeReference(parameter.type);
     return {
       name,
       parentType: this.type(parameter.parentType),
       typeReference: typeRef,
       optional: parameter.optional,
+      variadic: parameter.spec.variadic,
       declaration: this.formatProperty(name, typeRef),
     };
   }
@@ -178,7 +197,8 @@ export class WingTranspile extends transpile.TranspileBase {
         return p.name !== "scope" && p.name !== "id";
       })
       .sort(this.optionalityCompare);
-    const name = toSnakeCase(callable.name);
+
+    const name = callable.name;
     const inputs = parameters.map((p) =>
       this.formatParameters(this.parameter(p))
     );
@@ -188,9 +208,11 @@ export class WingTranspile extends transpile.TranspileBase {
       : formatInvocation(type, inputs, name);
 
     let returnType: transpile.TranspiledTypeReference | undefined;
+    let isReturnOptional: boolean = false;
     if (reflect.Initializer.isInitializer(callable)) {
       returnType = this.typeReference(callable.parentType.reference);
     } else if (reflect.Method.isMethod(callable)) {
+      isReturnOptional = callable.returns.optional;
       returnType = this.typeReference(callable.returns.type);
     }
     const returns = returnType?.toString(typeToString);
@@ -200,7 +222,15 @@ export class WingTranspile extends transpile.TranspileBase {
       parentType: type,
       import: formatImport(type),
       parameters,
-      signatures: [formatSignature(name, inputs, returns)],
+      signatures: [
+        formatSignature(
+          name,
+          inputs,
+          returns,
+          isInflightMethod(callable.docs),
+          isReturnOptional
+        ),
+      ],
       invocations: [invocation],
       returnType,
     };
@@ -226,7 +256,7 @@ export class WingTranspile extends transpile.TranspileBase {
     }
     fqn.push(type.name);
 
-    let typeName = type.name;
+    let typeName = getWingType(type.docs) ?? type.name;
     if (typeName === "inflight") {
       typeName = "~inflight";
     }
@@ -260,7 +290,14 @@ export class WingTranspile extends transpile.TranspileBase {
     if (tf === "Inflight") {
       tf = "~Inflight";
     }
-    return `${transpiled.name}${transpiled.optional ? "?" : ""}: ${tf}`;
+    if (transpiled.variadic) {
+      tf = `Array<${tf}>`;
+    }
+    const name = transpiled.variadic
+      ? `...${transpiled.name}`
+      : transpiled.name;
+
+    return `${name}${transpiled.optional ? "?" : ""}: ${tf}`;
   }
 
   private formatProperty(
@@ -271,6 +308,6 @@ export class WingTranspile extends transpile.TranspileBase {
     if (tf === "Inflight") {
       tf = "~Inflight";
     }
-    return `${toSnakeCase(name)}: ${tf};`;
+    return `${name}: ${tf};`;
   }
 }

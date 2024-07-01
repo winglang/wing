@@ -1,23 +1,26 @@
 import * as fs from "fs";
-import { resolve } from "path";
-import { LinuxFunctionApp } from "@cdktf/provider-azurerm/lib/linux-function-app";
-import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
-import { RoleAssignment } from "@cdktf/provider-azurerm/lib/role-assignment";
-import { ServicePlan } from "@cdktf/provider-azurerm/lib/service-plan";
-import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
-import { StorageBlob } from "@cdktf/provider-azurerm/lib/storage-blob";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket, StorageAccountPermissions } from "./bucket";
+import { core } from "..";
+import { ApplicationInsights } from "../.gen/providers/azurerm/application-insights";
+import { LinuxFunctionApp } from "../.gen/providers/azurerm/linux-function-app";
+import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
+import { RoleAssignment } from "../.gen/providers/azurerm/role-assignment";
+import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
+import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
+import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
-import * as core from "../core";
-import { IResource } from "../core";
+import { LiftMap } from "../core";
+import { NotImplementedError } from "../core/errors";
+import { createBundle } from "../shared/bundling";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../utils/resource-names";
+} from "../shared/resource-names";
+import { IInflightHost } from "../std";
 
 /**
  * Function names are limited to 32 characters.
@@ -43,14 +46,17 @@ export interface ScopedRoleAssignment {
 /**
  * Azure implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.Function {
   private readonly function: LinuxFunctionApp;
   private readonly servicePlan: ServicePlan;
   private readonly storageAccount: StorageAccount;
   private readonly resourceGroup: ResourceGroup;
-  private permissions?: Map<string, Set<ScopedRoleAssignment>>;
+  private readonly applicationInsights: ApplicationInsights;
+  private permissions: Map<string, ScopedRoleAssignment> = new Map();
+  private readonly functionName: string;
+  private assetPath: string | undefined;
 
   constructor(
     scope: Construct,
@@ -61,88 +67,65 @@ export class Function extends cloud.Function {
     super(scope, id, inflight, props);
 
     const app = App.of(this) as App;
-    this.storageAccount = app._storageAccount;
-    this.resourceGroup = app._resourceGroup;
-    this.servicePlan = app._servicePlan;
+    this.storageAccount = app.storageAccount;
+    this.resourceGroup = app.resourceGroup;
+    this.servicePlan = app.servicePlan;
+    this.applicationInsights = app.applicationInsights;
 
-    const functionName = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
+    this.functionName = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
     const functionIdentityType = "SystemAssigned";
     const functionRuntime = "node";
-    const functionNodeVersion = "16";
+    const functionNodeVersion = "20"; // support fetch
 
     // Create Bucket to store function code
-    // TODO: can we share a bucket for all functions?  https://github.com/winglang/wing/issues/178
     const functionCodeBucket = new Bucket(this, "FunctionBucket");
 
-    // Package up code in azure expected format
-    const codeDir = resolve(this.assetPath, "..");
-    const outDir = `${codeDir}/${functionName}`;
-
-    // Move index.js to function name directory. Every Azure function in a function app
-    // must be in its own folder containing an index.js and function.json files
-    fs.mkdirSync(`${codeDir}/${functionName}`);
-    fs.renameSync(`${codeDir}/index.js`, `${outDir}/index.js`);
-
-    // throw an error if props.memory is defined for an Azure function
-    if (props.memory) {
-      throw new Error("memory is an invalid parameter on Azure");
-    }
-
-    // As per documentation "a function must have exactly one trigger" so for now
-    // by default a function will support http get requests
-    // when we bind other resources like queues or topics this function.json will need to
-    // be overwritten with the correct trigger
-    // https://learn.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=csharp
-    fs.writeFileSync(
-      `${outDir}/function.json`,
-      JSON.stringify({
-        bindings: [
-          {
-            authLevel: "anonymous", // TODO: this auth level will be changed with https://github.com/winglang/wing/issues/1371
-            type: "httpTrigger",
-            direction: "in",
-            name: "req",
-            methods: ["get"],
-          },
-          {
-            type: "http",
-            direction: "out",
-            name: "res",
-          },
-        ],
-      })
-    );
-
-    if (props.timeout) {
-      // Write host.json file to set function timeout (must be set in root of function app)
-      // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
-      // this means that timeout is set for all functions in the function app
-      fs.writeFileSync(
-        `${codeDir}/host.json`,
-        JSON.stringify({
-          functionTimeout: `${props.timeout.hours}:${props.timeout.minutes}:${props.timeout.seconds}`,
-        })
+    if (props.concurrency != null) {
+      throw new NotImplementedError(
+        "Function concurrency isn't implemented yet on the current target."
       );
     }
 
-    // Create zip asset from function code
-    const asset = new TerraformAsset(this, "Asset", {
-      path: `${codeDir}`,
-      type: AssetType.ARCHIVE,
-    });
+    // throw an error if props.memory is defined for an Azure function
+    if (props.memory) {
+      throw new NotImplementedError("memory is an invalid parameter on Azure", {
+        resource: this.constructor.name,
+        operation: "memory",
+      });
+    }
+
+    // TODO: will be uncommented when fixing https://github.com/winglang/wing/issues/4494
+    // const timeout = props.timeout ?? Duration.fromMinutes(1);
+    if (props.timeout) {
+      throw new NotImplementedError(
+        "Function.timeout is not implemented yet on tf-azure target.",
+        {
+          issue: "https://github.com/winglang/wing/issues/4494",
+          resource: this.constructor.name,
+          operation: "timeout",
+        }
+      );
+    }
 
     // Upload zip asset to storage account
     const functionCodeBlob = new StorageBlob(this, "CodeBlob", {
-      name: `${functionName}.zip`,
+      name: `${this.functionName}.zip`,
       storageAccountName: this.storageAccount.name,
-      storageContainerName: functionCodeBucket._storageContainer.name,
+      storageContainerName: functionCodeBucket.storageContainer.name,
       type: "Block",
-      source: asset.path,
+      source: Lazy.stringValue({
+        produce: () => {
+          if (!this.assetPath) {
+            throw new Error("assetPath was not set");
+          }
+          return this.assetPath;
+        },
+      }),
     });
 
     // Create the function
     this.function = new LinuxFunctionApp(this, "Function", {
-      name: functionName,
+      name: this.functionName,
       resourceGroupName: this.resourceGroup.name,
       location: this.resourceGroup.location,
       servicePlanId: this.servicePlan.id,
@@ -155,38 +138,115 @@ export class Function extends cloud.Function {
         applicationStack: {
           nodeVersion: functionNodeVersion,
         },
+        applicationInsightsConnectionString:
+          this.applicationInsights.connectionString,
+        applicationInsightsKey: this.applicationInsights.instrumentationKey,
       },
       httpsOnly: true,
       appSettings: Lazy.anyValue({
         produce: () => ({
           ...this.env,
-          WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket._storageContainer.name}/${functionCodeBlob.name}`,
+          WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket.storageContainer.name}/${functionCodeBlob.name}`,
           FUNCTIONS_WORKER_RUNTIME: functionRuntime,
         }),
       }) as any,
     });
 
-    // Add permissions to read function code
-    new RoleAssignment(this, `ReadLambdaCodeAssignment`, {
+    // Apply permissions from bound resources
+    for (const key of this.permissions.keys() || []) {
+      const scopedRoleAssignment = this.permissions?.get(
+        key
+      ) as ScopedRoleAssignment;
+      new RoleAssignment(this, `RoleAssignment${key}`, {
+        scope: scopedRoleAssignment.scope,
+        roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
+        principalId: this.function.identity.principalId,
+      });
+    }
+
+    const roleAssignment = {
       principalId: this.function.identity.principalId,
       roleDefinitionName: StorageAccountPermissions.READ,
       scope: this.storageAccount.id,
+    };
+    // Add permissions to read function code
+    new RoleAssignment(this, `ReadLambdaCodeAssignment`, roleAssignment);
+
+    this.permissions.set(
+      `${this.storageAccount.node.addr.substring(-8)}_${
+        StorageAccountPermissions.READ
+      }`,
+      roleAssignment
+    );
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    const bundle = createBundle(this.entrypoint);
+    const codeDir = bundle.directory;
+
+    // Package up code in azure expected format
+    const outDir = `${codeDir}/${this.functionName}`;
+
+    // Move index.js to function name directory. Every Azure function in a function app
+    // must be in its own folder containing an index.js and function.json files
+    fs.mkdirSync(`${codeDir}/${this.functionName}`);
+    fs.renameSync(bundle.outfilePath, `${outDir}/index.js`);
+
+    // As per documentation "a function must have exactly one trigger" so for now
+    // by default a function will support http get requests
+    // when we lift other resources like queues or topics this function.json will need to
+    // be overwritten with the correct trigger
+    // https://learn.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=csharp
+    fs.writeFileSync(
+      `${outDir}/function.json`,
+      JSON.stringify({
+        bindings: [
+          {
+            authLevel: "anonymous", // TODO: this auth level will be changed with https://github.com/winglang/wing/issues/4497
+            type: "httpTrigger",
+            direction: "in",
+            name: "req",
+            methods: ["get", "post"],
+          },
+          {
+            type: "http",
+            direction: "out",
+            name: "res",
+          },
+        ],
+      })
+    );
+
+    // Write host.json file to set function timeout (must be set in root of function app)
+    // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
+    // this means that timeout is set for all functions in the function app
+    fs.writeFileSync(
+      `${codeDir}/host.json`,
+      JSON.stringify({
+        version: "2.0",
+        //TODO: need to read the documentation and parse the number in the right way,
+        // while not surpassing the limits, since it will be resulted in a hard to detect error
+        functionTimeout: `00:01:00`,
+      })
+    );
+
+    // Create zip asset from function code
+    const asset = new TerraformAsset(this, "Asset", {
+      path: `${codeDir}`,
+      type: AssetType.ARCHIVE,
     });
 
-    // Apply permissions from bound resources
-    for (const key of this.permissions?.keys() || []) {
-      for (const scopedRoleAssignment of this.permissions?.get(key) ?? []) {
-        new RoleAssignment(
-          this,
-          `RoleAssignment${key}${scopedRoleAssignment.roleDefinitionName}`,
-          {
-            scope: scopedRoleAssignment.scope,
-            roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
-            principalId: this.function.identity.principalId,
-          }
-        );
-      }
-    }
+    this.assetPath = asset.path;
+  }
+
+  /**
+   * Function name, used for invocation
+   */
+  get name(): string {
+    return this.function.name;
   }
 
   /**
@@ -196,42 +256,70 @@ export class Function extends cloud.Function {
    * @param scopedRoleAssignment - The mapping of azure scope to role definition name.
    */
   public addPermission(
-    scopedResource: IResource,
+    scopedResource: Construct,
     scopedRoleAssignment: ScopedRoleAssignment
   ) {
-    if (!this.permissions) {
-      this.permissions = new Map();
-    }
     const uniqueId = scopedResource.node.addr.substring(-8);
+    const permissionsKey = `${uniqueId}_${scopedRoleAssignment.roleDefinitionName}`;
     // If the function has already been initialized attach the role assignment directly
     if (this.function) {
-      if (
-        this.permissions.has(uniqueId) &&
-        this.permissions.get(uniqueId)?.has(scopedRoleAssignment)
-      ) {
+      if (this.permissions.has(permissionsKey)) {
         return; // already exists
       }
 
-      new RoleAssignment(
-        this,
-        `RoleAssignment${uniqueId}${scopedRoleAssignment.roleDefinitionName}`,
-        {
-          scope: scopedRoleAssignment.scope,
-          roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
-          principalId: this.function.identity.principalId,
-        }
-      );
+      new RoleAssignment(this, `RoleAssignment${permissionsKey}`, {
+        scope: scopedRoleAssignment.scope,
+        roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
+        principalId: this.function.identity.principalId,
+      });
     }
-    const roleDefinitions = this.permissions.get(uniqueId) ?? new Set();
-    roleDefinitions.add(scopedRoleAssignment);
-    this.permissions.set(uniqueId, roleDefinitions);
+    this.permissions.set(permissionsKey, scopedRoleAssignment);
+  }
+
+  protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
+    const inflightClient = handler._toInflight();
+    const lines = new Array<string>();
+
+    lines.push('"use strict";');
+    lines.push("module.exports = async function(context, req) {");
+    lines.push(
+      `try {  
+        const body = await (${inflightClient}).handle(context.req.body);
+        context.res = { body };
+     } catch (error) {
+        context.res = { body: error.message, status: 500 };
+    }`
+    );
+    lines.push(`};`);
+
+    return lines;
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
-    // TODO: support inflight https://github.com/winglang/wing/issues/1371
-    throw new Error(
-      "cloud.Function cannot be used as an Inflight resource on Azure yet"
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
+    };
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    //TODO: add permissions here when changing auth level: https://github.com/winglang/wing/issues/4497
+    host.addEnvironment(this.envName(), this.function.name);
+
+    super.onLift(host, ops);
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-azure", "shared-azure"),
+      __filename,
+      "FunctionClient",
+      [`process.env["${this.envName()}"]`]
     );
+  }
+
+  private envName(): string {
+    return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 }

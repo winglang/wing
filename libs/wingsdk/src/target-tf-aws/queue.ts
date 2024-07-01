@@ -1,12 +1,18 @@
-import { join } from "path";
-import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
-import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function } from "./function";
+import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-source-mapping";
+import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { AwsInflightHost, IAwsQueue } from "../shared-aws";
+import { calculateQueuePermissions } from "../shared-aws/permissions";
+import {
+  Queue as AwsQueue,
+  QueueSetConsumerHandler,
+} from "../shared-aws/queue";
+import { Duration, IInflightHost, Node } from "../std";
 
 /**
  * Queue names are limited to 80 characters.
@@ -20,127 +26,142 @@ const NAME_OPTS: NameOptions = {
 /**
  * AWS implementation of `cloud.Queue`.
  *
- * @inflight `@winglang/sdk.cloud.IQueueClient`
+ * @inflight `@winglang/sdk.aws.IAwsQueueClient`
  */
-export class Queue extends cloud.Queue {
+export class Queue extends cloud.Queue implements IAwsQueue {
   private readonly queue: SqsQueue;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.queue = new SqsQueue(this, "Default", {
-      visibilityTimeoutSeconds: props.timeout?.seconds,
-      name: ResourceNames.generateName(this, NAME_OPTS),
-    });
+    const queueOpt = props.dlq
+      ? {
+          visibilityTimeoutSeconds: props.timeout
+            ? props.timeout.seconds
+            : Duration.fromSeconds(30).seconds,
+          messageRetentionSeconds: props.retentionPeriod
+            ? props.retentionPeriod.seconds
+            : Duration.fromHours(1).seconds,
+          name: ResourceNames.generateName(this, NAME_OPTS),
+          redrivePolicy: JSON.stringify({
+            deadLetterTargetArn: AwsQueue.from(props.dlq.queue)?.queueArn,
+            maxReceiveCount:
+              props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
+          }),
+        }
+      : {
+          visibilityTimeoutSeconds: props.timeout
+            ? props.timeout.seconds
+            : Duration.fromSeconds(30).seconds,
+          messageRetentionSeconds: props.retentionPeriod
+            ? props.retentionPeriod.seconds
+            : Duration.fromHours(1).seconds,
+          name: ResourceNames.generateName(this, NAME_OPTS),
+        };
 
-    if ((props.initialMessages ?? []).length) {
-      throw new Error(
-        "initialMessages not supported yet for AWS target - https://github.com/winglang/wing/issues/281"
-      );
-    }
+    this.queue = new SqsQueue(this, "Default", queueOpt);
   }
 
-  public onMessage(
-    inflight: core.Inflight, // cloud.IQueueOnMessageHandler
-    props: cloud.QueueOnMessageProps = {}
+  /** @internal */
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.QueueInflightMethods.PURGE]: [],
+      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
+      [cloud.QueueInflightMethods.POP]: [],
+    };
+  }
+
+  public setConsumer(
+    inflight: cloud.IQueueSetConsumerHandler,
+    props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
-    const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessageHandler-${hash}`,
-      inflight,
-      join(__dirname, "queue.onmessage.inflight.js"),
-      "QueueOnMessageHandlerClient"
-    );
-
-    const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${hash}`,
+    const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
+    const fn = new Function(
+      // ok since we're not a tree root
+      this.node.scope!,
+      App.of(this).makeId(this, `${this.node.id}-SetConsumer`),
       functionHandler,
-      props
+      {
+        ...props,
+        timeout: Duration.fromSeconds(
+          this.queue.visibilityTimeoutSeconds ?? 30
+        ),
+      }
     );
 
-    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
-    if (!(fn instanceof Function)) {
-      throw new Error("Queue only supports creating tfaws.Function right now");
+    if (!AwsInflightHost.isAwsInflightHost(fn)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     fn.addPolicyStatements({
-      effect: "Allow",
-      action: [
+      actions: [
         "sqs:ReceiveMessage",
         "sqs:ChangeMessageVisibility",
         "sqs:GetQueueUrl",
         "sqs:DeleteMessage",
         "sqs:GetQueueAttributes",
       ],
-      resource: this.queue.arn,
+      resources: [this.queue.arn],
     });
 
     new LambdaEventSourceMapping(this, "EventSourceMapping", {
-      functionName: fn._functionName,
+      functionName: fn.functionName,
       eventSourceArn: this.queue.arn,
       batchSize: props.batchSize ?? 1,
+      functionResponseTypes: ["ReportBatchItemFailures"], // It allows the function to return the messages that failed to the queue
     });
 
-    core.Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_message",
+    Node.of(this).addConnection({
+      source: this,
+      sourceOp: cloud.QueueInflightMethods.PUSH,
+      target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
+      name: "consumer",
     });
 
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("queues can only be bound by tfaws.Function for now");
-    }
-
+  public onLift(host: IInflightHost, ops: string[]): void {
     const env = this.envName();
 
-    if (ops.includes(cloud.QueueInflightMethods.PUSH)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["sqs:SendMessage"],
-        resource: this.queue.arn,
-      });
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
-    if (ops.includes(cloud.QueueInflightMethods.PURGE)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["sqs:PurgeQueue"],
-        resource: this.queue.arn,
-      });
-    }
-    if (ops.includes(cloud.QueueInflightMethods.APPROX_SIZE)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["sqs:GetQueueAttributes"],
-        resource: this.queue.arn,
-      });
-    }
+
+    host.addPolicyStatements(...calculateQueuePermissions(this.queue.arn, ops));
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.url);
 
-    super._bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "QueueClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _toInflight(): string {
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "QueueClient",
+      [`process.env["${this.envName()}"]`]
+    );
   }
 
   private envName(): string {
     return `QUEUE_URL_${this.node.addr.slice(-8)}`;
   }
-}
 
-Queue._annotateInflight("push", {});
-Queue._annotateInflight("purge", {});
-Queue._annotateInflight("approx_size", {});
+  public get queueArn(): string {
+    return this.queue.arn;
+  }
+
+  public get queueName(): string {
+    return this.queue.name;
+  }
+
+  public get queueUrl(): string {
+    return this.queue.url;
+  }
+}

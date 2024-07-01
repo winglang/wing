@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
 scriptdir=$(cd $(dirname $0) && pwd)
 workdir="$HOME/.winglang-docsite"
 docsdir=$(cd $scriptdir/../docs && pwd)
@@ -11,7 +12,13 @@ if [ ! -d $workdir ]; then
   mkdir -p $workdir
   cd $workdir
   echo "🍄 Cloning winglang/docsite into ${workdir}..."
-  git clone --depth=1 git@github.com:winglang/docsite.git .
+  git clone --depth=1 https://github.com/winglang/docsite.git .
+  if [ $? != 0 ]; then
+    rm -rf $workdir
+    echo "🍄 Removed ${workdir} because git clone failed."
+    echo "❗ Failed to setup winglang documentation site locally!"
+    exit 1
+  fi
 else
   echo "🍄 Updating winglang/docsite in ${workdir}..."
   cd $workdir

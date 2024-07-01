@@ -1,180 +1,156 @@
-![](./logo/banner.png)
 
+
+
+<div align="center">
+  <img src="./apps/wing/logo/banner.gif" alt="Wing Banner" >
+</div>
+
+<h1 align="center">Welcome to the Wing Language! :wave:</h1>
 <p align="center">
-  &nbsp;
-  <a href="https://docs.winglang.io/getting-started">Quick Start</a>
-  ▪︎
-  <a href="http://t.winglang.io/slack">Slack</a>
-  ▪︎
-  <a href="https://docs.winglang.io">Docs</a>
-  ▪︎
-  <a href="https://docs.winglang.io/status#roadmap">Roadmap</a>
-  ▪︎
-  <a href="https://docs.winglang.io/getting-started">Getting Started</a>
-  ▪︎
-  <a href="https://github.com/winglang/wing/issues">Issues</a>
-  ▪︎
-  <a href="https://github.com/winglang/wing/discussions">Discussions</a>
-  ▪︎
-  <a href="https://stackoverflow.com/questions/tagged/winglang">Stack Overflow</a>
-  ▪︎
-  <a href="https://docs.winglang.io/contributors/">Contribute</a>
+<a href="https://www.winglang.io/learn/">Take a Tour</a>
+▪︎
+<a href="https://www.winglang.io/docs/">Getting Started</a>
+▪︎
+<a href="http://t.winglang.io/discord">Join Discord</a>
+▪︎
+<a href="https://www.winglang.io/docs/category/faq">FAQ</a>
+▪︎
+<a href="https://www.winglang.io/contributing/status#roadmap">Roadmap</a>
+▪︎
+<a href="https://github.com/winglang/wing/issues">Issues</a>
+▪︎
+<a href="https://github.com/winglang/wing/discussions">Discussions</a>
+▪︎
+<a href="https://www.winglang.io/contributing/">Contribute</a>
+
 </p>
 
-# Welcome! :wave:
+**Winglang** is a new open-source programming language designed for the cloud (aka "_cloud-oriented_").
+Wing enables developers to build distributed systems that leverage cloud services as first-class citizens by combining infrastructure **_and_** application code in a safe and unified programming model (aka "_cloud-oriented_").
+Wing programs can be executed locally (_yes, no internet required_) using a fully-functional simulator, or deployed to any cloud provider (_yes, Wing programs are portable across providers_).
 
-**Wing** is a [cloud-oriented programming language]. It is a modern,
-object-oriented, and strongly-typed language. Most programming languages think
-about computers as machines. In Wing, **_the cloud is the computer_**.
+The mission of Winglang is to bring back your creative flow and close the gap between imagination and creation.
 
-Wing applications compile to Terraform and JavaScript that are ready to deploy
-to your favorite cloud provider, and can also be tested in your local
-environment using the [Wing Console](https://docs.winglang.io/getting-started/console).
+Developing for the cloud today requires mastering various layers of the cloud stack, IAM roles, networking, and numerous tools, along with finding creative ways to test and debug code. In addition, long deployment times hinder iteration cycles and take developers out of their creative flow.
 
-[cloud-oriented programming language]: https://docs.winglang.io/#what-is-a-cloud-oriented-language
+Winglang addresses these pains by letting you work at a higher level of abstraction and allowing you to focus on business logic instead of cloud mechanics, only surfacing low-level details when it's needed.
+We also provide you with a set of tools that let you test your code locally, significantly faster than before.
+
+<div align="center">
+  <img src="./apps/wing/logo/demo.gif" alt="Wing Demo" height="400px">
+</div>
+
+Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at the [Wing Cloud team](https://www.wing.cloud/) and an amazing [community](https://t.winglang.io/discord) of contributors (also known as Wingnuts).
+
+Click [here](https://www.youtube.com/watch?v=5_RhWwgGue0) to watch a short video introduction to the Wing language.
+
+## Why do we think the cloud needs a programming language? 🤔
+
+Cloud applications are fundamentally different from applications that run on a single machine -
+they are distributed systems that rely on cloud infrastructure to achieve their goals.
+
+In order to be able to express both infrastructure and application logic in a safe and unified programming model,
+Winglang has two execution phases: _preflight_ for infrastructure definitions and _inflight_ for runtime code.
+
+Preflight code is executed _during compilation_ and produces the infrastructure configuration for your app (e.g. **Terraform**, **CloudFormation**, etc).
+Inflight code is compiled into **JavaScript** and executed within cloud compute platforms in Node.js environments.
+
+Let's look at a simple example:
 
 ```js
 bring cloud;
 
+let queue = new cloud.Queue();
+let counter = new cloud.Counter();
 let bucket = new cloud.Bucket();
 
-new cloud.Function(inflight (event: str): str => {
-  bucket.put("greeting.txt", "hello, world!");
+queue.setConsumer(inflight (message) => {
+  let i = counter.inc();
+  bucket.put("file-{i}.txt", message);
 });
 ```
 
-## This is Alpha
+`cloud.Queue`, `cloud.Counter` and `cloud.Bucket` are _preflight objects_.
+They represent cloud infrastructure resources.
+When compiled to a specific cloud provider, such as AWS, a Terraform file will be produced with the provider's implementation
+of these resources. The `queue.setConsumer()` method is a _preflight method_ that configures the infrastructure to
+invoke a particular _inflight function_ for each message in the queue.
 
-Wing is in its very early stages of development and not recommended for
-production use. Many features are still missing, and APIs will dramatically
-evolve in the coming months. We are excited for anyone to take part in
-influencing the direction of every part of this project.
+**Now comes the cool part:** the code that runs inside the inflight function interacts with the `counter` and the `bucket` objects
+through their _inflight methods_ (`counter.inc()` and `bucket.put()`). These methods can only be
+called from inflight scopes.
 
-Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
-more information about stability and roadmap 👷‍♀️
+### Very cool, but what here cannot be done by a library or compiler extension?
 
-## Installation
+In existing languages, where there is no way to distinguish between multiple execution phases, it is impossible to naturally represent this idea that an object has methods that can only be executed from within a specific execution phase (or within certain scopes of the program).
+You are welcome to read more about it [here](https://www.winglang.io/docs/faq/why-a-language) (including code samples that show the same app built in Wing vs. other solutions).
 
-- [Prerequisites](https://docs.winglang.io/getting-started/installation#prerequisites)
-- [Wing CLI](https://docs.winglang.io/getting-started/installation#wing-cli)
-- [Wing IDE Extension](https://docs.winglang.io/getting-started/installation#wing-ide-extension)
-- [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console)
+## What makes Wing a good fit for cloud development? 🌟
 
-## Getting Started
+Wing was built from scratch to make it easy for building applications on any cloud.
+It includes an assembly of different features that serve that purpose:
 
-The [Getting Started](https://docs.winglang.io/getting-started) guide is a
-once-in-a-lifetime adventure into the Wing rabbit hole.
+- [Cloud services](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-services) as first-class citizens, with [phase modifiers](https://www.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for describing infrastructure and runtime code ([`preflight` and `inflight`](https://www.winglang.io/docs/concepts/inflights)).
+- [Wing Cloud Library](https://www.winglang.io/docs/category/cloud) provides a standard set of resources that lets you write cloud portable code.
+- [Custom platforms](https://www.winglang.io/docs/concepts/platforms) that keep you in control by allowing you to customize the infrastructure definitions and run policy checks.
+- Use any resource in the Terraform ecosystem as first-class citizen in your app.
+- [JavaScript interoperability](https://www.winglang.io/contributing/rfcs/language-spec#5-interoperability).
+- Automatic generation of IAM policies and other cloud mechanics based on source code.
+- [Wing Console](https://www.winglang.io/docs/start-here/installation#wing-console) - a visual application-centric operations and management console, that lets you interact with...
+- A [simulator](https://www.winglang.io/docs/concepts/simulator) that can used for testing and debugging in milliseconds.
+- JSON as a [primitive data type](https://www.winglang.io/docs/language-reference#114-json-type) with schema validation support for each conversion to and from structs.
+- [Immutability by default](https://www.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default), [implicit async code](https://www.winglang.io/contributing/rfcs/language-spec#113-asynchronous-model), and [safety from nulls and undefined](https://www.winglang.io/docs/language-reference#16-optionality).
 
-To learn more about Wing concepts such as
-[resources](https://docs.winglang.io/concepts/resources) and
-[inflights](https://docs.winglang.io/concepts/inflights), jump over to the
-[Concepts](https://docs.winglang.io/category/concepts) section in our docs.
+For a more in-depth look at Wing's features and benefits, check out our [documentation](https://www.winglang.io/docs/).
 
-For a comprehensive reference of the language, check out the [Wing Language
-Specification](https://docs.winglang.io/reference/spec) and the [API
-Reference](https://docs.winglang.io/reference/sdk).
+## Getting started 🛠️
 
-## Community
+> 🚧 This is a pre-release, please see our [project status](https://www.winglang.io/contributing/status) for more details.
 
-We all hang out on [Wing Slack]. Come as you are, say hi, ask questions, help
-friends, geek out! Alternatively, post any question you have on [GitHub
-Discussions](https://github.com/winglang/wing/discussions).
+If you'd just like to dip your feet in the water and see what Wing is all about, you can try it out in our [online playground](https://www.winglang.io/play/) or walk through the [interactive tour](https://www.winglang.io/learn/).
 
-## Contributing
+When you're ready to start building your own Wing apps, you'll need to:
 
-We welcome and celebrate contributions from the community! Please see our [contribution
-guide](https://github.com/winglang/wing/blob/main/CONTRIBUTING.md) for more information about
-setting up a development environment, what we are working on, where we need help and other
-guidelines for contributing to the project.
+1. Install the [Wing CLI](https://www.winglang.io/docs/start-here/installation).
+2. Get the [Wing IDE Extension](https://www.winglang.io/docs/start-here/installation#wing-ide-extension) for your favorite editor.
+3. Launch the [Wing Console](https://www.winglang.io/docs/start-here/installation#wing-console) and take it for a spin!
 
-We are also actively tracking planned features in our roadmap:
+For a step-by-step guide, head over to our [Getting Started](https://www.winglang.io/docs/) guide.
+It's a once-in-a-lifetime adventure into the Wing rabbit hole!
 
-- [Wing Language Roadmap](https://github.com/orgs/winglang/projects/1/views/1)
-- [Wing SDK Roadmap](https://github.com/orgs/winglang/projects/3/views/1)
+## FAQs ❓
 
-## Contributors
+Here are some questions we're commonly asked that are covered by our [FAQ](https://www.winglang.io/docs/category/faq):
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/mark-mcculloh/"><img src="https://avatars.githubusercontent.com/u/1237390?v=4?s=100" width="100px;" alt="Mark McCulloh"/><br /><sub><b>Mark McCulloh</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=MarkMcCulloh" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://rybicki.io/"><img src="https://avatars.githubusercontent.com/u/5008987?v=4?s=100" width="100px;" alt="Chris Rybicki"/><br /><sub><b>Chris Rybicki</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Chriscbr" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/eladb"><img src="https://avatars.githubusercontent.com/u/598796?v=4?s=100" width="100px;" alt="Elad Ben-Israel"/><br /><sub><b>Elad Ben-Israel</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=eladb" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/staycoolcall911"><img src="https://avatars.githubusercontent.com/u/106860404?v=4?s=100" width="100px;" alt="Uri Bar"/><br /><sub><b>Uri Bar</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=staycoolcall911" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/yoav-steinberg"><img src="https://avatars.githubusercontent.com/u/1160578?v=4?s=100" width="100px;" alt="yoav-steinberg"/><br /><sub><b>yoav-steinberg</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=yoav-steinberg" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://sepehrlaal.com/"><img src="https://avatars.githubusercontent.com/u/5657848?v=4?s=100" width="100px;" alt="Sepehr Laal"/><br /><sub><b>Sepehr Laal</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=3p3r" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://winglang.io/"><img src="https://avatars.githubusercontent.com/u/1727147?v=4?s=100" width="100px;" alt="Eyal Keren"/><br /><sub><b>Eyal Keren</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=ekeren" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://pallares.io/"><img src="https://avatars.githubusercontent.com/u/1077520?v=4?s=100" width="100px;" alt="Cristian Pallarés"/><br /><sub><b>Cristian Pallarés</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=skyrpex" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ainvoner"><img src="https://avatars.githubusercontent.com/u/2538825?v=4?s=100" width="100px;" alt="Ainvoner"/><br /><sub><b>Ainvoner</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=ainvoner" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hasanaburayyan"><img src="https://avatars.githubusercontent.com/u/45375125?v=4?s=100" width="100px;" alt="Hasan"/><br /><sub><b>Hasan</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=hasanaburayyan" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/shaiber01"><img src="https://avatars.githubusercontent.com/u/40353334?v=4?s=100" width="100px;" alt="shaiber01"/><br /><sub><b>shaiber01</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=shaiber01" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.matthewbonig.com/"><img src="https://avatars.githubusercontent.com/u/1559437?v=4?s=100" width="100px;" alt="Matthew Bonig"/><br /><sub><b>Matthew Bonig</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=mbonig" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/eladb2"><img src="https://avatars.githubusercontent.com/u/117929697?v=4?s=100" width="100px;" alt="eladb2"/><br /><sub><b>eladb2</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=eladb2" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/joao-zanutto"><img src="https://avatars.githubusercontent.com/u/11475695?v=4?s=100" width="100px;" alt="Joao Pedro Zanutto"/><br /><sub><b>Joao Pedro Zanutto</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=joao-zanutto" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/yamatatsu"><img src="https://avatars.githubusercontent.com/u/11013683?v=4?s=100" width="100px;" alt="Tatsuya Yamamoto"/><br /><sub><b>Tatsuya Yamamoto</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=yamatatsu" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/polamoros"><img src="https://avatars.githubusercontent.com/u/5547636?v=4?s=100" width="100px;" alt="polamoros"/><br /><sub><b>polamoros</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=polamoros" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/revitalbarletz"><img src="https://avatars.githubusercontent.com/u/2212620?v=4?s=100" width="100px;" alt="Revital Barletz"/><br /><sub><b>Revital Barletz</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=revitalbarletz" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://winglang.io/"><img src="https://avatars.githubusercontent.com/u/1729376?v=4?s=100" width="100px;" alt="Shai Ber"/><br /><sub><b>Shai Ber</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=ShaiBer" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://endoflineblog.com/"><img src="https://avatars.githubusercontent.com/u/460937?v=4?s=100" width="100px;" alt="Adam Ruka"/><br /><sub><b>Adam Ruka</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=skinny85" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/WeepingClown13"><img src="https://avatars.githubusercontent.com/u/95921427?v=4?s=100" width="100px;" alt="Ananthu C V"/><br /><sub><b>Ananthu C V</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=WeepingClown13" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Oreoxmt"><img src="https://avatars.githubusercontent.com/u/60599231?v=4?s=100" width="100px;" alt="Aolin"/><br /><sub><b>Aolin</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Oreoxmt" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/schosterbarak"><img src="https://avatars.githubusercontent.com/u/6033501?v=4?s=100" width="100px;" alt="Barak Schoster Goihman"/><br /><sub><b>Barak Schoster Goihman</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=schosterbarak" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/flyingImer"><img src="https://avatars.githubusercontent.com/u/1973868?v=4?s=100" width="100px;" alt="EJ Wang"/><br /><sub><b>EJ Wang</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=flyingImer" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Eitansl"><img src="https://avatars.githubusercontent.com/u/83213808?v=4?s=100" width="100px;" alt="Eitan Segel-Lion"/><br /><sub><b>Eitan Segel-Lion</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Eitansl" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://linkedin.com/singledigit"><img src="https://avatars.githubusercontent.com/u/897170?v=4?s=100" width="100px;" alt="Eric Johnson"/><br /><sub><b>Eric Johnson</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=singledigit" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jogold"><img src="https://avatars.githubusercontent.com/u/12623249?v=4?s=100" width="100px;" alt="Jonathan Goldwasser"/><br /><sub><b>Jonathan Goldwasser</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=jogold" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/raywonkari"><img src="https://avatars.githubusercontent.com/u/47321885?v=4?s=100" width="100px;" alt="Raywon Kari"/><br /><sub><b>Raywon Kari</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=raywonkari" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://rjourdan.com/"><img src="https://avatars.githubusercontent.com/u/23378066?v=4?s=100" width="100px;" alt="Romain Jourdan"/><br /><sub><b>Romain Jourdan</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=rjourdan" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/VictorEB"><img src="https://avatars.githubusercontent.com/u/45363415?v=4?s=100" width="100px;" alt="Victor"/><br /><sub><b>Victor</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=VictorEB" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://godspeed.run/"><img src="https://avatars.githubusercontent.com/u/97474956?v=4?s=100" width="100px;" alt="perpil"/><br /><sub><b>perpil</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=perpil" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://blog.sebbel.net/"><img src="https://avatars.githubusercontent.com/u/1940568?v=4?s=100" width="100px;" alt="sebbel"/><br /><sub><b>sebbel</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=sebbel" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/tsuf239"><img src="https://avatars.githubusercontent.com/u/39455181?v=4?s=100" width="100px;" alt="tsuf239"/><br /><sub><b>tsuf239</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=tsuf239" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Warkanlock"><img src="https://avatars.githubusercontent.com/u/13340320?v=4?s=100" width="100px;" alt="txxnano"/><br /><sub><b>txxnano</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Warkanlock" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Joshswooft"><img src="https://avatars.githubusercontent.com/u/60711758?v=4?s=100" width="100px;" alt="Josh"/><br /><sub><b>Josh</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Joshswooft" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/marciocadev"><img src="https://avatars.githubusercontent.com/u/67694075?v=4?s=100" width="100px;" alt="Marcio Cruz de Almeida"/><br /><sub><b>Marcio Cruz de Almeida</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=marciocadev" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="http://itaikeren.com"><img src="https://avatars.githubusercontent.com/u/16226013?v=4?s=100" width="100px;" alt="Itai Keren"/><br /><sub><b>Itai Keren</b></sub></a><br /><a href="#tool-itaikeren" title="Tools">🔧</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kaseyaburayyan"><img src="https://avatars.githubusercontent.com/u/123706066?v=4?s=100" width="100px;" alt="Kasey Abu-Rayyan"/><br /><sub><b>Kasey Abu-Rayyan</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=kaseyaburayyan" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ogre14t"><img src="https://avatars.githubusercontent.com/u/24970799?v=4?s=100" width="100px;" alt="Owen Watkins"/><br /><sub><b>Owen Watkins</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=ogre14t" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/RaphaelManke"><img src="https://avatars.githubusercontent.com/u/15867688?v=4?s=100" width="100px;" alt="Raphael Manke"/><br /><sub><b>Raphael Manke</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=RaphaelManke" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/msalman-abid"><img src="https://avatars.githubusercontent.com/u/49055716?v=4?s=100" width="100px;" alt="Salman Abid"/><br /><sub><b>Salman Abid</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=msalman-abid" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/vanjaoljaca"><img src="https://avatars.githubusercontent.com/u/31779?v=4?s=100" width="100px;" alt="Vanja Oljaca"/><br /><sub><b>Vanja Oljaca</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=vanjaoljaca" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/attias"><img src="https://avatars.githubusercontent.com/u/4300416?v=4?s=100" width="100px;" alt="attias"/><br /><sub><b>attias</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=attias" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mortax"><img src="https://avatars.githubusercontent.com/u/788303?v=4?s=100" width="100px;" alt="john r. durand"/><br /><sub><b>john r. durand</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=mortax" title="Code">💻</a></td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td align="center" size="13px" colspan="7">
-        <img src="https://raw.githubusercontent.com/all-contributors/all-contributors-cli/1b8533af435da9854653492b1327a23a4dbd0a10/assets/logo-small.svg">
-          <a href="https://all-contributors.js.org/docs/en/bot/usage">Add your contributions</a>
-        </img>
-      </td>
-    </tr>
-  </tfoot>
-</table>
+- [Who is behind this project?](https://www.winglang.io/docs/faq/who-is-behind-wing)
+- [Which clouds are supported by Wing?](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-clouds)
+- [Which provisioning engines are supported by Wing?](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-provisioning-engines)
 
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
+## Community 💬
 
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+Join our flock in the [Wing Discord](https://t.winglang.io/discord) community.
+We're here to help each other, answer questions, and share our cloud adventures.
+Alternatively, post any questions on [GitHub Discussions](https://github.com/winglang/wing/discussions).
 
-## License
+## Contributing 🤝
 
-This project is licensed under the [MIT License](./LICENSE.md). Contributions are made under our [contribution license](https://docs.winglang.io/terms-and-policies/contribution-license.html).
+Want to help Wing take flight?
+Check out our [contribution guide](https://github.com/winglang/wing/blob/main/CONTRIBUTING.md) to learn how to set up a development environment and contribute to the project.
+You can also get started by opening the project in GitHub Codespaces.
 
-[wing slack]: https://t.winglang.io/slack
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
+
+We are incredibly grateful to our entire community for contributing bug fixes and improvements:
+
+<a href="https://github.com/winglang/wing/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=winglang/wing" />
+</a>
+
+## License 📜
+
+Wing is licensed under the [MIT License](./LICENSE.md).
+Contributions are made under our [contribution license](./CONTRIBUTION_LICENSE.md).
+
+Happy coding, and remember: the sky's the limit with Wing (yes, another pun)! 🌤️🚀
+
+[wing discord]: https://t.winglang.io/discord

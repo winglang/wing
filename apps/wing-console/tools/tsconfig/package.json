@@ -1,0 +1,19 @@
+{
+  "name": "@wingconsole/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "exports": "./tsconfig.json",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "typescript": "^4.9.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.2"
+  },
+  "volta": {
+    "extends": "../../../../package.json"
+  }
+}

@@ -1,9 +1,14 @@
 import { Construct } from "constructs";
+import { test, expect, describe } from "vitest";
 import { App } from "../../src/core/app";
+import { App as SimApp } from "../../src/target-sim/app";
+import { App as TfAwsApp } from "../../src/target-tf-aws/app";
+import { App as TfAzureApp } from "../../src/target-tf-azure/app";
+import { App as TfGcpApp } from "../../src/target-tf-gcp/app";
 
-const FOO_FQN = "@lib/foo.Foo";
-const BAR_FQN = "@lib/foo.Bar";
-const ANOTHER_FQN = "@lib/another.Another";
+const FOO_FQN = "@winglang/sdk.foo.Foo";
+const BAR_FQN = "@winglang/sdk.foo.Bar";
+const ANOTHER_FQN = "@winglang/sdk.another.Another";
 
 test("new() allows derived classes to inject a different implementation", () => {
   const app = new MyApp();
@@ -27,27 +32,29 @@ test("new() defaults to just creating an instance", () => {
 test("newAbstract() throws if there is no implementation", () => {
   const app = new MyApp();
   expect(() => app.newAbstract(ANOTHER_FQN, app, "bar")).toThrow(
-    /Unable to create an instance of abstract type \"@lib\/another.Another\" for this target/
+    /Resource \"@winglang\/sdk\.another.Another\" is not yet implemented for "awscdk" target\. Please refer to the roadmap https:\/\/github\.com\/orgs\/winglang\/projects\/3\/views\/1\?filterQuery=another\.Another/
   );
 });
 
 class MyApp extends App {
   public outdir: string = "outdir";
+  public isTestEnvironment: boolean = true;
+  public readonly _target = "awscdk";
 
   constructor() {
-    super(undefined as any, "MyApp");
+    super(undefined as any, "MyApp", { entrypointDir: __dirname });
   }
 
   public synth(): string {
     throw new Error("Method not implemented.");
   }
 
-  protected tryNew(fqn: string, scope: Construct, id: string, ...args: any[]) {
+  protected typeForFqn(fqn: string) {
     switch (fqn) {
       case FOO_FQN:
-        return new MyFoo(scope, id, args[0]);
+        return MyFoo;
       case BAR_FQN:
-        return new Bar(scope, id);
+        return Bar;
     }
 
     return undefined;

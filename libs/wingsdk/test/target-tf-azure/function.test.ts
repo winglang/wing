@@ -1,24 +1,31 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
+import { inflight } from "../../src/core";
 import * as tfazure from "../../src/target-tf-azure";
-import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
-const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
+const INFLIGHT_CODE = inflight(async (_, name) => {
+  console.log("Hello, " + name);
+});
 
 test("basic function", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
 
   // WHEN
-  Function._newFunction(app, "Function", inflight);
+  new Function(app, "Function", INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "azurerm_application_insights",
     "azurerm_linux_function_app", // function app
+    "azurerm_log_analytics_workspace",
     "azurerm_resource_group", // resource group
     "azurerm_role_assignment", // role assignment for function app
     "azurerm_service_plan", // service plan for function app
@@ -32,11 +39,14 @@ test("basic function", () => {
 
 test("basic function with environment variables", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
 
   // WHEN
-  Function._newFunction(app, "Function", inflight, {
+  new Function(app, "Function", INFLIGHT_CODE, {
     env: {
       FOO: "BAR",
       BOOM: "BAM",
@@ -63,9 +73,13 @@ test("basic function with environment variables", () => {
 
 test("permissions resources are added to function after constructor has been initialized", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const func = new tfazure.Function(app, "Function", inflight, {});
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
+
+  const func = new tfazure.Function(app, "Function", INFLIGHT_CODE, {});
 
   // WHEN
   func.addPermission(func, {
@@ -88,11 +102,14 @@ test("permissions resources are added to function after constructor has been ini
 
 test("replace invalid character from function name", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
 
   // WHEN
-  const func = Function._newFunction(app, "someFunction01", inflight);
+  const func = new Function(app, "someFunction01", INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN

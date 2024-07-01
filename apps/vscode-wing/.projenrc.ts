@@ -1,32 +1,43 @@
-import { IgnoreFile } from "projen";
+import { IgnoreFile, DependencyType } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptAppProject } from "projen/lib/typescript";
 import { VSCodeExtensionContributions } from "./src/project/vscode_types";
-import rootPackageJson from "../../package.json";
 
 const VSCODE_BASE_VERSION = "1.70.0";
 
 const project = new TypeScriptAppProject({
   defaultReleaseBranch: "main",
   name: "vscode-wing",
-  authorName: "Monada",
-  authorEmail: "ping@monada.co",
+  authorName: "Wing Cloud",
+  authorEmail: "ping@wing.cloud",
   authorOrganization: true,
-  authorUrl: "https://monada.co",
+  authorUrl: "https://winglang.io",
   repository: "https://github.com/winglang/wing.git",
   bugsUrl: "https://github.com/winglang/wing/issues",
   homepage: "https://winglang.io",
   description: "Wing language support for VSCode",
-  keywords: ["wing", "language", "cloud", "cdk", "infrastructure"],
+  projenCommand: "pnpm exec projen",
+  keywords: [
+    "cdk",
+    "cdktf",
+    "cloud",
+    "infrastructure",
+    "language",
+    "terraform",
+    "wing",
+    "winglang",
+  ],
+  license: "MIT",
 
-  packageManager: NodePackageManager.NPM,
+  packageManager: NodePackageManager.PNPM,
   projenrcTs: true,
   package: false,
   buildWorkflow: false,
   jest: false,
   github: false,
+  depsUpgrade: false,
   npmignoreEnabled: false,
-  entrypoint: "lib/index.js",
+  entrypoint: "lib/extension.js",
   eslintOptions: {
     dirs: ["src"],
     prettier: true,
@@ -38,16 +49,33 @@ const project = new TypeScriptAppProject({
   tsconfig: {
     compilerOptions: {
       noUncheckedIndexedAccess: true,
+      lib: ["es2021"],
     },
   },
 
-  deps: [
+  deps: [],
+  devDeps: [
     `@types/vscode@^${VSCODE_BASE_VERSION}`,
     "vscode-languageclient",
     "which",
+    "@trpc/client",
+    "ws",
+    "open",
+    "tsx",
+    "node-fetch@^2.6.7",
+    "@types/which",
+    "@vscode/vsce",
+    "@types/node-fetch",
+    "@types/ws",
+    "winglang@workspace:^",
   ],
-  devDeps: ["@types/node", "@types/which", "esbuild", "@vscode/vsce"],
 });
+
+project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
+project.deps.removeDependency("ts-node");
+
+// because we're bundling, allow dev deps in src
+project.eslint?.allowDevDeps("src/**");
 
 project.addGitIgnore("*.vsix");
 
@@ -67,6 +95,7 @@ vscodeIgnore.addPatterns(
 );
 
 const contributes: VSCodeExtensionContributions = {
+  breakpoints: [{ language: "wing" }],
   languages: [
     {
       id: "wing",
@@ -77,6 +106,50 @@ const contributes: VSCodeExtensionContributions = {
         light: "resources/icon-light.png",
         dark: "resources/icon-dark.png",
       },
+    },
+  ],
+  debuggers: [
+    {
+      type: "wing",
+      label: "Wing Debug",
+      program: "",
+      languages: ["wing"],
+      configurationAttributes: {
+        launch: {
+          entrypoint: {
+            type: "string",
+            description: "The entrypoint to run",
+            default: "${file}",
+          },
+          arguments: {
+            type: "string",
+            description: "Wing CLI arguments",
+            default: "test",
+          },
+        },
+      },
+      initialConfigurations: [
+        {
+          label: "Wing Debug: Launch",
+          description: "Launch a Wing program",
+          body: {
+            type: "wing",
+            request: "launch",
+            name: "Launch",
+          },
+        },
+      ],
+      configurationSnippets: [
+        {
+          label: "Wing Debug: Launch",
+          description: "Launch a Wing program",
+          body: {
+            type: "wing",
+            request: "launch",
+            name: "Launch",
+          },
+        },
+      ],
     },
   ],
   grammars: [
@@ -95,15 +168,33 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   ],
+  commands: [
+    {
+      command: "wing.openConsole",
+      title: "Open in Wing Console",
+      icon: {
+        light: "resources/icon-light.svg",
+        dark: "resources/icon-dark.svg",
+      },
+    },
+  ],
+  menus: {
+    "editor/title": [
+      {
+        when: "resourceLangId == wing",
+        command: "wing.openConsole",
+        group: "navigation",
+      },
+    ],
+  },
   configuration: [
     {
       title: "Wing",
       properties: {
         "wing.bin": {
           type: "string",
-          default: "wing",
           description:
-            "Path to the Wing binary. Will be `wing` from PATH by default.\nSet to `npx` to automatically retrieve the version that matches this extension",
+            "Path to the Wing binary. Will be `wing` from PATH by default.",
         },
       },
     },
@@ -114,29 +205,40 @@ project.addFields({
   publisher: "Monada",
   preview: true,
   private: true,
-  displayName: "Wing [Alpha]",
+  displayName: "Wing",
   icon: "resources/logo.png",
   engines: {
     vscode: `^${VSCODE_BASE_VERSION}`,
   },
   categories: ["Programming Languages"],
-  activationEvents: ["onLanguage:wing"],
+  activationEvents: ["onLanguage:wing", "onDebug"],
   contributes,
 });
 
-const esbuildComment =
-  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle";
+project.addDevDeps("tsup");
+
 project.compileTask.reset();
-project.compileTask.exec(esbuildComment);
-project.watchTask.reset(`${esbuildComment} --watch`);
+project.compileTask.exec("tsup");
+project.watchTask.reset("tsup --watch");
 
 project.packageTask.reset(
-  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+  "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
-project.packageTask.exec("vsce package -o vscode-wing.vsix");
+project.packageTask.exec(
+  "vsce package --no-dependencies -o ../../dist/vscode-wing.vsix"
+);
 
 project.addFields({
-  volta: rootPackageJson.volta,
+  volta: {
+    extends: "../../package.json",
+  },
 });
+
+project.package.file.addDeletionOverride("pnpm");
+project.tryRemoveFile(".npmrc");
+
+project.addTask("dev").exec("node scripts/dev.mjs");
+
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

@@ -1,0 +1,127 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`provides raw tree data 1`] = `
+{
+  "tree": {
+    "children": {
+      "test": {
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.3.0",
+        },
+        "display": {
+          "description": "A cloud unit test.",
+          "hidden": true,
+          "title": "Test",
+        },
+        "id": "test",
+        "path": "root/test",
+      },
+    },
+    "constructInfo": {
+      "fqn": "constructs.Construct",
+      "version": "10.3.0",
+    },
+    "display": {},
+    "id": "root",
+    "path": "root",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`run all tests > single test 1`] = `
+[
+  {
+    "error": undefined,
+    "pass": true,
+    "path": "root/test",
+    "traces": [
+      {
+        "data": {
+          "message": "hi",
+        },
+        "level": "info",
+        "sourcePath": "root/test/Handler",
+        "sourceType": "@winglang/sdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "log",
+      },
+      {
+        "data": {
+          "message": "Invoke (payload=undefined).",
+          "status": "success",
+        },
+        "level": "verbose",
+        "sourcePath": "root/test/Handler",
+        "sourceType": "@winglang/sdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "resource",
+      },
+    ],
+  },
+]
+`;
+
+exports[`run single test > happy path 1`] = `
+{
+  "error": undefined,
+  "pass": true,
+  "path": "root/test",
+  "traces": [
+    {
+      "data": {
+        "message": "hi",
+      },
+      "level": "info",
+      "sourcePath": "root/test/Handler",
+      "sourceType": "@winglang/sdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "log",
+    },
+    {
+      "data": {
+        "message": "Invoke (payload=undefined).",
+        "status": "success",
+      },
+      "level": "verbose",
+      "sourcePath": "root/test/Handler",
+      "sourceType": "@winglang/sdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+  ],
+}
+`;
+
+exports[`run single test > test failure 1`] = `
+{
+  "error": "Error: test failed",
+  "pass": false,
+  "path": "root/test",
+  "traces": [
+    {
+      "data": {
+        "message": "I am about to fail",
+      },
+      "level": "info",
+      "sourcePath": "root/test/Handler",
+      "sourceType": "@winglang/sdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "log",
+    },
+    {
+      "data": {
+        "error": {},
+        "message": "Error: test failed (Invoke (payload=undefined).)",
+        "status": "failure",
+      },
+      "level": "verbose",
+      "sourcePath": "root/test/Handler",
+      "sourceType": "@winglang/sdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+  ],
+}
+`;

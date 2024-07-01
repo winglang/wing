@@ -33,3 +33,7 @@ working LLDB installation as well. The extension should guide you through setup
 of your environment.
 
 Put a breakpoint in any of the tests and run the debugger.
+
+## license
+
+Licensed under the MIT license.

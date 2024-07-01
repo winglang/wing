@@ -13,5 +13,6 @@ jobs:
       - uses: apexskier/github-release-commenter@v1
         with:
           GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          skip-label: pr/backport
           comment-template: |
             Congrats! :rocket: This was released in {release_link}.

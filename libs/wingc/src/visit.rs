@@ -1,6 +1,10 @@
-use crate::ast::{
-	ArgList, Class, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Reference, Scope,
-	Stmt, StmtKind, Symbol, TypeAnnotation,
+use crate::{
+	ast::{
+		ArgList, BringSource, CalleeKind, Class, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope,
+		Stmt, StmtKind, Struct, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+	},
+	dbg_panic,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -16,7 +20,7 @@ use crate::ast::{
 ///
 /// ```ignore
 /// impl<'ast> Visit<'ast> for ExprVisitor {
-///   fn visit_item_fn(&mut self, exp: &'ast Expr) {
+///   fn visit_expr(&mut self, exp: &'ast Expr) {
 ///     println!("Expr with span={}", exp.span);
 ///
 ///     // Delegate to the default impl to visit any nested expressions.
@@ -38,11 +42,20 @@ pub trait Visit<'ast> {
 	fn visit_class(&mut self, node: &'ast Class) {
 		visit_class(self, node);
 	}
-	fn visit_constructor(&mut self, node: &'ast Constructor) {
-		visit_constructor(self, node);
+	fn visit_struct(&mut self, node: &'ast Struct) {
+		visit_struct(self, node);
+	}
+	fn visit_interface(&mut self, node: &'ast Interface) {
+		visit_interface(self, node);
+	}
+	fn visit_enum(&mut self, node: &'ast Enum) {
+		visit_enum(self, node);
 	}
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		visit_expr(self, node);
+	}
+	fn visit_new_expr(&mut self, node: &'ast New) {
+		visit_new_expr(self, node);
 	}
 	fn visit_literal(&mut self, node: &'ast Literal) {
 		visit_literal(self, node);
@@ -53,13 +66,24 @@ pub trait Visit<'ast> {
 	fn visit_function_definition(&mut self, node: &'ast FunctionDefinition) {
 		visit_function_definition(self, node);
 	}
+	fn visit_function_signature(&mut self, node: &'ast FunctionSignature) {
+		visit_function_signature(self, node);
+	}
+	fn visit_function_parameter(&mut self, node: &'ast FunctionParameter) {
+		visit_function_parameter(self, node);
+	}
 	fn visit_args(&mut self, node: &'ast ArgList) {
 		visit_args(self, node);
+	}
+	fn visit_user_defined_type(&mut self, node: &'ast UserDefinedType) {
+		visit_user_defined_type(self, node);
 	}
 	fn visit_type_annotation(&mut self, node: &'ast TypeAnnotation) {
 		visit_type_annotation(self, node)
 	}
-	fn visit_symbol(&mut self, _node: &'ast Symbol) {}
+	fn visit_symbol(&mut self, node: &'ast Symbol) {
+		visit_symbol(self, node);
+	}
 }
 
 pub fn visit_scope<'ast, V>(v: &mut V, node: &'ast Scope)
@@ -76,16 +100,20 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-		StmtKind::Bring {
-			module_name,
-			identifier,
-		} => {
-			v.visit_symbol(module_name);
+		StmtKind::Bring { source, identifier } => {
+			match &source {
+				BringSource::BuiltinModule(name) => v.visit_symbol(name),
+				BringSource::TrustedModule(name, _module_dir) => v.visit_symbol(name),
+				BringSource::WingLibrary(name, _module_dir) => v.visit_symbol(name),
+				BringSource::JsiiModule(name) => v.visit_symbol(name),
+				BringSource::WingFile(_) | BringSource::Directory(_) => {}
+			}
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);
 			}
 		}
-		StmtKind::VariableDef {
+		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
+		StmtKind::Let {
 			reassignable: _,
 			var_name,
 			initial_value,
@@ -110,6 +138,35 @@ where
 			v.visit_expr(condition);
 			v.visit_scope(statements);
 		}
+		StmtKind::Break | StmtKind::Continue => {}
+		StmtKind::IfLet(IfLet {
+			value,
+			statements,
+			reassignable: _,
+			var_name,
+			elif_statements,
+			else_statements,
+		}) => {
+			v.visit_symbol(var_name);
+			v.visit_expr(value);
+			v.visit_scope(statements);
+			for elif in elif_statements {
+				match elif {
+					Elifs::ElifBlock(elif_block) => {
+						v.visit_expr(&elif_block.condition);
+						v.visit_scope(&elif_block.statements);
+					}
+					Elifs::ElifLetBlock(elif_let_block) => {
+						v.visit_symbol(&elif_let_block.var_name);
+						v.visit_expr(&elif_let_block.value);
+						v.visit_scope(&elif_let_block.statements);
+					}
+				}
+			}
+			if let Some(statements) = else_statements {
+				v.visit_scope(statements);
+			}
+		}
 		StmtKind::If {
 			condition,
 			statements,
@@ -126,10 +183,12 @@ where
 				v.visit_scope(statements);
 			}
 		}
-		StmtKind::Expression(expr) => {
-			v.visit_expr(&expr);
-		}
-		StmtKind::Assignment { variable, value } => {
+		StmtKind::Expression(expr) => v.visit_expr(&expr),
+		StmtKind::Assignment {
+			kind: _,
+			variable,
+			value,
+		} => {
 			v.visit_reference(variable);
 			v.visit_expr(value);
 		}
@@ -138,28 +197,12 @@ where
 				v.visit_expr(expr);
 			}
 		}
-		StmtKind::Scope(scope) => {
-			v.visit_scope(scope);
-		}
-		StmtKind::Class(class) => {
-			v.visit_class(class);
-		}
-		StmtKind::Struct { name, extends, members } => {
-			v.visit_symbol(name);
-			for extend in extends {
-				v.visit_symbol(extend);
-			}
-			for member in members {
-				v.visit_symbol(&member.name);
-				v.visit_type_annotation(&member.member_type);
-			}
-		}
-		StmtKind::Enum { name, values } => {
-			v.visit_symbol(name);
-			for value in values {
-				v.visit_symbol(value);
-			}
-		}
+		StmtKind::Throw(expr) => v.visit_expr(expr),
+		StmtKind::Scope(scope) => v.visit_scope(scope),
+		StmtKind::Class(class) => v.visit_class(class),
+		StmtKind::Interface(interface) => v.visit_interface(interface),
+		StmtKind::Struct(st) => v.visit_struct(st),
+		StmtKind::Enum(enu) => v.visit_enum(enu),
 		StmtKind::TryCatch {
 			try_statements,
 			catch_block,
@@ -176,6 +219,16 @@ where
 				v.visit_scope(finally_statements);
 			}
 		}
+		StmtKind::CompilerDebugEnv => {}
+		StmtKind::ExplicitLift(explict_lift) => {
+			for q in explict_lift.qualifications.iter() {
+				v.visit_expr(&q.obj);
+				for op in q.ops.iter() {
+					v.visit_symbol(op);
+				}
+			}
+			v.visit_scope(&explict_lift.statements);
+		}
 	}
 }
 
@@ -185,7 +238,8 @@ where
 {
 	v.visit_symbol(&node.name);
 
-	v.visit_constructor(&node.constructor);
+	v.visit_function_definition(&node.initializer);
+	v.visit_function_definition(&node.inflight_initializer);
 
 	for field in &node.fields {
 		v.visit_symbol(&field.name);
@@ -196,23 +250,69 @@ where
 		v.visit_symbol(&method.0);
 		v.visit_function_definition(&method.1);
 	}
+
+	if let Some(extend) = &node.parent {
+		v.visit_user_defined_type(extend);
+	}
+
+	for implement in &node.implements {
+		v.visit_user_defined_type(&implement);
+	}
 }
 
-pub fn visit_constructor<'ast, V>(v: &mut V, node: &'ast Constructor)
+pub fn visit_struct<'ast, V>(v: &mut V, node: &'ast Struct)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	for param in &node.parameters {
-		v.visit_symbol(&param.0);
+	v.visit_symbol(&node.name);
+	for extend in &node.extends {
+		v.visit_user_defined_type(&extend);
 	}
-	for param_type in &node.signature.parameters {
-		v.visit_type_annotation(param_type);
+	for member in &node.fields {
+		v.visit_symbol(&member.name);
+		v.visit_type_annotation(&member.member_type);
 	}
-	if let Some(return_type) = &node.signature.return_type {
-		v.visit_type_annotation(return_type);
+}
+
+pub fn visit_interface<'ast, V>(v: &mut V, node: &'ast Interface)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+
+	for method in &node.methods {
+		v.visit_symbol(&method.0);
+		v.visit_function_signature(&method.1);
 	}
 
-	v.visit_scope(&node.statements);
+	for extend in &node.extends {
+		v.visit_user_defined_type(extend);
+	}
+}
+
+pub fn visit_enum<'ast, V>(v: &mut V, node: &'ast Enum)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+	for (value, _doc) in &node.values {
+		v.visit_symbol(value);
+		// TODO: Visit _doc
+	}
+}
+
+pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast New)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_user_defined_type(&node.class);
+	v.visit_args(&node.arg_list);
+	if let Some(id) = &node.obj_id {
+		v.visit_expr(&id);
+	}
+	if let Some(scope) = &node.obj_scope {
+		v.visit_expr(&scope);
+	}
 }
 
 pub fn visit_expr<'ast, V>(v: &mut V, node: &'ast Expr)
@@ -220,26 +320,34 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-		ExprKind::New {
-			class,
-			obj_id: _,
-			obj_scope,
-			arg_list,
-		} => {
-			v.visit_type_annotation(class);
-			if let Some(scope) = obj_scope {
-				v.visit_expr(scope);
-			}
-			v.visit_args(arg_list);
+		ExprKind::New(new_expr) => {
+			v.visit_new_expr(new_expr);
 		}
 		ExprKind::Literal(lit) => {
 			v.visit_literal(lit);
 		}
+		ExprKind::Range {
+			start,
+			inclusive: _,
+			end,
+		} => {
+			v.visit_expr(start);
+			v.visit_expr(end);
+		}
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
 		}
-		ExprKind::Call { function, arg_list } => {
-			v.visit_expr(function);
+		ExprKind::Intrinsic(instrinsic) => {
+			v.visit_symbol(&instrinsic.name);
+			if let Some(arg_list) = &instrinsic.arg_list {
+				v.visit_args(arg_list);
+			}
+		}
+		ExprKind::Call { callee, arg_list } => {
+			match callee {
+				CalleeKind::Expr(expr) => v.visit_expr(expr),
+				CalleeKind::SuperCall(method) => v.visit_symbol(method),
+			}
 			v.visit_args(arg_list);
 		}
 		ExprKind::Unary { op: _, exp } => {
@@ -262,7 +370,14 @@ where
 		}
 		ExprKind::StructLiteral { type_, fields } => {
 			v.visit_type_annotation(type_);
-			for val in fields.values() {
+			for (sym, val) in fields.iter() {
+				v.visit_symbol(sym);
+				v.visit_expr(val);
+			}
+		}
+		ExprKind::JsonMapLiteral { fields } => {
+			for (name, val) in fields.iter() {
+				v.visit_symbol(name);
 				v.visit_expr(val);
 			}
 		}
@@ -270,7 +385,8 @@ where
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);
 			}
-			for val in fields.values() {
+			for (key, val) in fields.iter() {
+				v.visit_expr(key);
 				v.visit_expr(val);
 			}
 		}
@@ -284,6 +400,10 @@ where
 		}
 		ExprKind::FunctionClosure(def) => {
 			v.visit_function_definition(def);
+		}
+		ExprKind::CompilerDebugPanic => {
+			// Handle the debug panic expression (during visiting)
+			dbg_panic!();
 		}
 	}
 }
@@ -300,10 +420,11 @@ where
 				}
 			}
 		}
+		Literal::Nil => {}
 		Literal::Boolean(_) => {}
 		Literal::Number(_) => {}
-		Literal::Duration(_) => {}
 		Literal::String(_) => {}
+		Literal::NonInterpolatedString(_) => {}
 	}
 }
 
@@ -312,15 +433,24 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match node {
-		Reference::InstanceMember { property, object } => {
-			v.visit_expr(object);
-			v.visit_symbol(property);
-		}
 		Reference::Identifier(s) => {
 			v.visit_symbol(s);
 		}
-		Reference::TypeMember { type_: _, property } => {
+		Reference::InstanceMember {
+			property,
+			object,
+			optional_accessor: _,
+		} => {
+			v.visit_expr(object);
 			v.visit_symbol(property);
+		}
+		Reference::TypeMember { type_name, property } => {
+			v.visit_user_defined_type(type_name);
+			v.visit_symbol(property);
+		}
+		Reference::ElementAccess { object, index } => {
+			v.visit_expr(object);
+			v.visit_expr(index);
 		}
 	}
 }
@@ -329,17 +459,29 @@ pub fn visit_function_definition<'ast, V>(v: &mut V, node: &'ast FunctionDefinit
 where
 	V: Visit<'ast> + ?Sized,
 {
+	v.visit_function_signature(&node.signature);
+	if let FunctionBody::Statements(scope) = &node.body {
+		v.visit_scope(scope);
+	};
+}
+
+pub fn visit_function_signature<'ast, V>(v: &mut V, node: &'ast FunctionSignature)
+where
+	V: Visit<'ast> + ?Sized,
+{
 	for param in &node.parameters {
-		v.visit_symbol(&param.0);
-	}
-	for param_type in &node.signature.parameters {
-		v.visit_type_annotation(param_type);
-	}
-	if let Some(return_type) = &node.signature.return_type {
-		v.visit_type_annotation(return_type);
+		v.visit_function_parameter(param);
 	}
 
-	v.visit_scope(&node.statements);
+	v.visit_type_annotation(&node.return_type);
+}
+
+pub fn visit_function_parameter<'ast, V>(v: &mut V, node: &'ast FunctionParameter)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+	v.visit_type_annotation(&node.type_annotation);
 }
 
 pub fn visit_args<'ast, V>(v: &mut V, node: &'ast ArgList)
@@ -359,33 +501,45 @@ pub fn visit_type_annotation<'ast, V>(v: &mut V, node: &'ast TypeAnnotation)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	match node {
-		TypeAnnotation::Number => {}
-		TypeAnnotation::String => {}
-		TypeAnnotation::Bool => {}
-		TypeAnnotation::Duration => {}
-		TypeAnnotation::Json => {}
-		TypeAnnotation::MutJson => {}
-		TypeAnnotation::Optional(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Array(t) => v.visit_type_annotation(t),
-		TypeAnnotation::MutArray(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Map(t) => v.visit_type_annotation(t),
-		TypeAnnotation::MutMap(t) => v.visit_type_annotation(t),
-		TypeAnnotation::Set(t) => v.visit_type_annotation(t),
-		TypeAnnotation::MutSet(t) => v.visit_type_annotation(t),
-		TypeAnnotation::FunctionSignature(f) => {
-			for arg_type in &f.parameters {
-				v.visit_type_annotation(&arg_type);
+	match &node.kind {
+		TypeAnnotationKind::Number => {}
+		TypeAnnotationKind::String => {}
+		TypeAnnotationKind::Bool => {}
+		TypeAnnotationKind::Duration => {}
+		TypeAnnotationKind::Void => {}
+		TypeAnnotationKind::Json => {}
+		TypeAnnotationKind::MutJson => {}
+		TypeAnnotationKind::Inferred => {}
+		TypeAnnotationKind::Optional(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Array(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::MutArray(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Map(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::MutMap(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Set(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::MutSet(t) => v.visit_type_annotation(t),
+		TypeAnnotationKind::Function(f) => {
+			for param in &f.parameters {
+				v.visit_symbol(&param.name);
+				v.visit_type_annotation(&param.type_annotation);
 			}
-			if let Some(return_type) = &f.return_type {
-				v.visit_type_annotation(return_type);
-			}
+			v.visit_type_annotation(&f.return_type);
 		}
-		TypeAnnotation::UserDefined(t) => {
-			v.visit_symbol(&t.root);
-			for field in &t.fields {
-				v.visit_symbol(field);
-			}
-		}
+		TypeAnnotationKind::UserDefined(t) => v.visit_user_defined_type(t),
 	}
+}
+
+pub fn visit_user_defined_type<'ast, V>(v: &mut V, node: &'ast UserDefinedType)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.root);
+	for field in &node.fields {
+		v.visit_symbol(field);
+	}
+}
+
+pub fn visit_symbol<'ast, V>(_v: &mut V, _node: &'ast Symbol)
+where
+	V: Visit<'ast> + ?Sized,
+{
 }

@@ -1,0 +1,43 @@
+name: Incident 🚒
+description: Respond to a production incident - checklist
+labels: ["🚒 incident"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Incident description"
+      placeholder: "Please describe the issue in a few clear words"
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: "Is there a workaround?"
+      placeholder: "What's the workaround to avoid this issue?"
+  - type: markdown
+    attributes:
+      value: |
+        A production incident started. Please stay cool, no need to call 911. Follow the checklist below - you've got this :muscle: <br/>
+        You may refer to the [Wing maintainers operational guide](https://www.winglang.io/contributing/maintainers/operations) for more details.
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Incident Response Checklist
+      description:
+      options:
+        - label: CREATE this issue (fill up the title, description and submit), then follow the next steps.
+        - label: PIN the incident issue.
+        - label: ACKNOWLEDGE the incident on [PagerDuty](https://monada.pagerduty.com/incidents).
+        - label: ACKNOWLEDGE the incident on [BetterStack](https://uptime.betterstack.com/team/48207/incidents).
+        - label: WORKAROUND - if there is one, make sure it is documented in the section above.
+        - label: PRIORITIZE (P0/P1/P2 - see the definitions [here](https://www.winglang.io/contributing/maintainers/operations#severity-levels)).
+        - label: (optional) CONTACT a relevant person who has more information about the incident.
+        - label: (optional) ANNOUNCE major incidents on Discord \#dev or \#general channels. "NOTICE - P0 incident started. {incident-description}. Track on {link to issue}".
+        - label: HANDLE by reverting or forward fixing.
+        - label: UPDATE the team on your actions in the created \#alert Slack thread throughout the incident.
+        - label: RESOLVE the incident on [PagerDuty](https://monada.pagerduty.com/incidents) (BetterStack resolves automatically).
+        - label: UPDATE the team on the issue closure.
+        - label: (optional) ANNOUNCE closure of major incidents on Discord \#dev or \#general channels. "NOTICE - P0 incident ended. {incident-resolution-description}. Track on {link to issue}".
+        - label: UNPIN the incident issue.
+        - label: LESSONS LEARNED should be shared via the "post-mortem" workflow on \#dev Discord channel.
+        - label: CLOSE the incident issue.

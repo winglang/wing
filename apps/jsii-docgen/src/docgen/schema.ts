@@ -190,6 +190,11 @@ export interface ClassSchema extends Documentable {
    * Constants.
    */
   readonly constants: PropertySchema[];
+
+  /**
+   * inflight interface.
+   */
+  readonly inflight?: InterfaceSchema;
 }
 
 /**
@@ -463,6 +468,16 @@ export interface DocsSchema {
    * Inflight client
    */
   readonly inflight?: string;
+
+  /**
+   * Skipping documentation
+   */
+  readonly skipDocs?: boolean;
+
+  /**
+   * Showing the wingType instead of the written type
+   */
+  readonly wingType?: string;
 }
 
 /**
@@ -511,8 +526,25 @@ export function extractDocs(docs: reflect.Docs): DocsSchema {
     links: links.length > 0 ? links : undefined,
     deprecated: docs.deprecated === true ? true : undefined,
     deprecationReason: docs.deprecationReason,
+    skipDocs: docs.customTag("skipDocs") === "true" ? true : undefined,
     inflight: docs.customTag("inflight"),
   });
+}
+
+export function isInflightMethod(docs: reflect.Docs): boolean {
+  return docs.customTag("inflight") === "true";
+}
+
+export function isSkipped(docs: reflect.Docs): boolean {
+  return docs.customTag("skipDocs") === "true";
+}
+
+export function getWingType(docs: reflect.Docs): string | undefined {
+  return docs.customTag("wingType");
+}
+
+export function getInflight(docs: reflect.Docs): string | undefined {
+  return docs.customTag("inflight");
 }
 
 /**

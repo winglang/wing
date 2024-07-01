@@ -1,275 +1,268 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`basic function 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_linux_function_app\\": {
-      \\"root_Function_9E43762E\\": {
-        \\"app_settings\\": {
-          \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}/\${azurerm_storage_blob.root_Function_CodeBlob_5AAEAFFA.name}\\"
+{
+  "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
+      },
+    },
+    "azurerm_linux_function_app": {
+      "Function_042596DC": {
+        "app_settings": {
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
         },
-        \\"https_only\\": true,
-        \\"identity\\": {
-          \\"type\\": \\"SystemAssigned\\"
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
         },
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"function-c852aba6\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_ServicePlan_14459C66.id}\\",
-        \\"site_config\\": {
-          \\"application_stack\\": {
-            \\"node_version\\": \\"16\\"
-          }
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "function-c852aba6",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
+          "application_stack": {
+            "node_version": "20",
+          },
         },
-        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.primary_access_key}\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
-      }
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
     },
-    \\"azurerm_resource_group\\": {
-      \\"root_ResourceGroup_72A9AFB6\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_role_assignment\\": {
-      \\"root_Function_ReadLambdaCodeAssignment_01DCF214\\": {
-        \\"principal_id\\": \\"\${azurerm_linux_function_app.root_Function_9E43762E.identity[0].principal_id}\\",
-        \\"role_definition_name\\": \\"Storage Blob Data Reader\\",
-        \\"scope\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.id}\\"
-      }
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
     },
-    \\"azurerm_service_plan\\": {
-      \\"root_ServicePlan_14459C66\\": {
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"Default-c82bf964\\",
-        \\"os_type\\": \\"Linux\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
-        \\"sku_name\\": \\"Y1\\"
-      }
+    "azurerm_role_assignment": {
+      "Function_ReadLambdaCodeAssignment_75049D5E": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
     },
-    \\"azurerm_storage_account\\": {
-      \\"root_StorageAccount_3B92EC74\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
-      }
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
     },
-    \\"azurerm_storage_blob\\": {
-      \\"root_Function_CodeBlob_5AAEAFFA\\": {
-        \\"name\\": \\"function-c852aba6.zip\\",
-        \\"source\\": \\"<source>\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}\\",
-        \\"type\\": \\"Block\\"
-      }
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_storage_container\\": {
-      \\"root_Function_FunctionBucket_B5F263FB\\": {
-        \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"functionbucket-c8ccf7e8\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
-      }
-    }
-  }
-}"
+    "azurerm_storage_blob": {
+      "Function_CodeBlob_8A9705C9": {
+        "name": "function-c852aba6.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}",
+        "type": "Block",
+      },
+    },
+    "azurerm_storage_container": {
+      "Function_FunctionBucket_0F705EF9": {
+        "container_access_type": "private",
+        "name": "functionbucket-c8ccf7e8",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`basic function 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Function": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "print",
-                      "resource": "root/Default/WingLogger",
-                    },
-                  ],
-                  "wing:resource:stateful": false,
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "display": {},
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.15.2",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "CodeBlob": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
-                      "version": "5.0.2",
+                  "CodeBlob": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
                   },
-                  "Function": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.linuxFunctionApp.LinuxFunctionApp",
-                      "version": "5.0.2",
+                  "Function": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Function",
                     "path": "root/Default/Function/Function",
                   },
-                  "FunctionBucket": Object {
-                    "attributes": Object {
-                      "wing:resource:connections": Array [],
-                      "wing:resource:stateful": true,
-                    },
-                    "children": Object {
-                      "Bucket": Object {
-                        "constructInfo": Object {
-                          "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                          "version": "5.0.2",
+                  "FunctionBucket": {
+                    "children": {
+                      "Bucket": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
                       },
                     },
-                    "constructInfo": Object {
+                    "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.245",
+                      "version": "10.3.0",
                     },
-                    "display": Object {
+                    "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
                   },
-                  "ReadLambdaCodeAssignment": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.roleAssignment.RoleAssignment",
-                      "version": "5.0.2",
+                  "ReadLambdaCodeAssignment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.3.0",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
-                  "wing:resource:stateful": false,
+              "LogAnalyticsWorkspace": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
-                "constructInfo": Object {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": Object {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
+                "display": {},
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
               },
-              "ResourceGroup": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
-                  "version": "5.0.2",
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
               },
-              "ServicePlan": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                  "version": "5.0.2",
+              "ServicePlan": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
               },
-              "StorageAccount": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.2",
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "print",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
                 },
-                "constructInfo": Object {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": Object {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
-              "azure": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-                  "version": "5.0.2",
-                },
+                "display": {},
                 "id": "azure",
                 "path": "root/Default/azure",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -278,277 +271,270 @@ Object {
 `;
 
 exports[`basic function with environment variables 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_linux_function_app\\": {
-      \\"root_Function_9E43762E\\": {
-        \\"app_settings\\": {
-          \\"BOOM\\": \\"BAM\\",
-          \\"FOO\\": \\"BAR\\",
-          \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}/\${azurerm_storage_blob.root_Function_CodeBlob_5AAEAFFA.name}\\"
+{
+  "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
+      },
+    },
+    "azurerm_linux_function_app": {
+      "Function_042596DC": {
+        "app_settings": {
+          "BOOM": "BAM",
+          "FOO": "BAR",
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
         },
-        \\"https_only\\": true,
-        \\"identity\\": {
-          \\"type\\": \\"SystemAssigned\\"
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
         },
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"function-c852aba6\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_ServicePlan_14459C66.id}\\",
-        \\"site_config\\": {
-          \\"application_stack\\": {
-            \\"node_version\\": \\"16\\"
-          }
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "function-c852aba6",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
+          "application_stack": {
+            "node_version": "20",
+          },
         },
-        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.primary_access_key}\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
-      }
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
     },
-    \\"azurerm_resource_group\\": {
-      \\"root_ResourceGroup_72A9AFB6\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_role_assignment\\": {
-      \\"root_Function_ReadLambdaCodeAssignment_01DCF214\\": {
-        \\"principal_id\\": \\"\${azurerm_linux_function_app.root_Function_9E43762E.identity[0].principal_id}\\",
-        \\"role_definition_name\\": \\"Storage Blob Data Reader\\",
-        \\"scope\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.id}\\"
-      }
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
     },
-    \\"azurerm_service_plan\\": {
-      \\"root_ServicePlan_14459C66\\": {
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"Default-c82bf964\\",
-        \\"os_type\\": \\"Linux\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
-        \\"sku_name\\": \\"Y1\\"
-      }
+    "azurerm_role_assignment": {
+      "Function_ReadLambdaCodeAssignment_75049D5E": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
     },
-    \\"azurerm_storage_account\\": {
-      \\"root_StorageAccount_3B92EC74\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
-      }
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
     },
-    \\"azurerm_storage_blob\\": {
-      \\"root_Function_CodeBlob_5AAEAFFA\\": {
-        \\"name\\": \\"function-c852aba6.zip\\",
-        \\"source\\": \\"<source>\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}\\",
-        \\"type\\": \\"Block\\"
-      }
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_storage_container\\": {
-      \\"root_Function_FunctionBucket_B5F263FB\\": {
-        \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"functionbucket-c8ccf7e8\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
-      }
-    }
-  }
-}"
+    "azurerm_storage_blob": {
+      "Function_CodeBlob_8A9705C9": {
+        "name": "function-c852aba6.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}",
+        "type": "Block",
+      },
+    },
+    "azurerm_storage_container": {
+      "Function_FunctionBucket_0F705EF9": {
+        "container_access_type": "private",
+        "name": "functionbucket-c8ccf7e8",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`basic function with environment variables 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Function": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "print",
-                      "resource": "root/Default/WingLogger",
-                    },
-                  ],
-                  "wing:resource:stateful": false,
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "display": {},
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.15.2",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "CodeBlob": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
-                      "version": "5.0.2",
+                  "CodeBlob": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
                   },
-                  "Function": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.linuxFunctionApp.LinuxFunctionApp",
-                      "version": "5.0.2",
+                  "Function": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Function",
                     "path": "root/Default/Function/Function",
                   },
-                  "FunctionBucket": Object {
-                    "attributes": Object {
-                      "wing:resource:connections": Array [],
-                      "wing:resource:stateful": true,
-                    },
-                    "children": Object {
-                      "Bucket": Object {
-                        "constructInfo": Object {
-                          "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                          "version": "5.0.2",
+                  "FunctionBucket": {
+                    "children": {
+                      "Bucket": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
                       },
                     },
-                    "constructInfo": Object {
+                    "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.245",
+                      "version": "10.3.0",
                     },
-                    "display": Object {
+                    "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
                   },
-                  "ReadLambdaCodeAssignment": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.roleAssignment.RoleAssignment",
-                      "version": "5.0.2",
+                  "ReadLambdaCodeAssignment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.3.0",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
-                  "wing:resource:stateful": false,
+              "LogAnalyticsWorkspace": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
-                "constructInfo": Object {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": Object {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
+                "display": {},
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
               },
-              "ResourceGroup": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
-                  "version": "5.0.2",
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
               },
-              "ServicePlan": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                  "version": "5.0.2",
+              "ServicePlan": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
               },
-              "StorageAccount": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.2",
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "print",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
                 },
-                "constructInfo": Object {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": Object {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
-              "azure": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-                  "version": "5.0.2",
-                },
+                "display": {},
                 "id": "azure",
                 "path": "root/Default/azure",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -557,240 +543,229 @@ Object {
 `;
 
 exports[`replace invalid character from function name 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_linux_function_app\\": {
-      \\"root_someFunction01_Function_2D89D048\\": {
-        \\"app_settings\\": {
-          \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_someFunction01_FunctionBucket_E40551AF.name}/\${azurerm_storage_blob.root_someFunction01_CodeBlob_971120BF.name}\\"
+{
+  "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
+      },
+    },
+    "azurerm_linux_function_app": {
+      "someFunction01_Function_83CF4008": {
+        "app_settings": {
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.someFunction01_FunctionBucket_BDC04946.name}/\${azurerm_storage_blob.someFunction01_CodeBlob_D6CD3DCE.name}",
         },
-        \\"https_only\\": true,
-        \\"identity\\": {
-          \\"type\\": \\"SystemAssigned\\"
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
         },
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"somefunction01-c8eb4882\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_ServicePlan_14459C66.id}\\",
-        \\"site_config\\": {
-          \\"application_stack\\": {
-            \\"node_version\\": \\"16\\"
-          }
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "somefunction01-c8eb4882",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
+          "application_stack": {
+            "node_version": "20",
+          },
         },
-        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.primary_access_key}\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
-      }
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
     },
-    \\"azurerm_resource_group\\": {
-      \\"root_ResourceGroup_72A9AFB6\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_role_assignment\\": {
-      \\"root_someFunction01_ReadLambdaCodeAssignment_B72939BB\\": {
-        \\"principal_id\\": \\"\${azurerm_linux_function_app.root_someFunction01_Function_2D89D048.identity[0].principal_id}\\",
-        \\"role_definition_name\\": \\"Storage Blob Data Reader\\",
-        \\"scope\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.id}\\"
-      }
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
     },
-    \\"azurerm_service_plan\\": {
-      \\"root_ServicePlan_14459C66\\": {
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"Default-c82bf964\\",
-        \\"os_type\\": \\"Linux\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
-        \\"sku_name\\": \\"Y1\\"
-      }
+    "azurerm_role_assignment": {
+      "someFunction01_ReadLambdaCodeAssignment_639B8FD1": {
+        "principal_id": "\${azurerm_linux_function_app.someFunction01_Function_83CF4008.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
     },
-    \\"azurerm_storage_account\\": {
-      \\"root_StorageAccount_3B92EC74\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
-      }
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
     },
-    \\"azurerm_storage_blob\\": {
-      \\"root_someFunction01_CodeBlob_971120BF\\": {
-        \\"name\\": \\"somefunction01-c8eb4882.zip\\",
-        \\"source\\": \\"<source>\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.root_someFunction01_FunctionBucket_E40551AF.name}\\",
-        \\"type\\": \\"Block\\"
-      }
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_storage_container\\": {
-      \\"root_someFunction01_FunctionBucket_E40551AF\\": {
-        \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"functionbucket-c84280f4\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
-      }
-    }
-  }
-}"
+    "azurerm_storage_blob": {
+      "someFunction01_CodeBlob_D6CD3DCE": {
+        "name": "somefunction01-c8eb4882.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.someFunction01_FunctionBucket_BDC04946.name}",
+        "type": "Block",
+      },
+    },
+    "azurerm_storage_container": {
+      "someFunction01_FunctionBucket_BDC04946": {
+        "container_access_type": "private",
+        "name": "functionbucket-c84280f4",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`replace invalid character from function name 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Handler": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
-                  "wing:resource:stateful": false,
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
-                "constructInfo": Object {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": Object {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
+                "display": {},
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
               },
-              "ResourceGroup": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
-                  "version": "5.0.2",
+              "LogAnalyticsWorkspace": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
+                "display": {},
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
+              },
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
               },
-              "ServicePlan": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                  "version": "5.0.2",
+              "ServicePlan": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
               },
-              "StorageAccount": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.2",
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "print",
-                      "resource": "root/Default/someFunction01",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
                 },
-                "constructInfo": Object {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": Object {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
-              "azure": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-                  "version": "5.0.2",
-                },
+                "display": {},
                 "id": "azure",
                 "path": "root/Default/azure",
               },
-              "someFunction01": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "print",
-                      "resource": "root/Default/WingLogger",
-                    },
-                  ],
-                  "wing:resource:stateful": false,
-                },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+              "someFunction01": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.15.2",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/someFunction01/Asset",
                   },
-                  "CodeBlob": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
-                      "version": "5.0.2",
+                  "CodeBlob": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CodeBlob",
                     "path": "root/Default/someFunction01/CodeBlob",
                   },
-                  "Function": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.linuxFunctionApp.LinuxFunctionApp",
-                      "version": "5.0.2",
+                  "Function": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Function",
                     "path": "root/Default/someFunction01/Function",
                   },
-                  "FunctionBucket": Object {
-                    "attributes": Object {
-                      "wing:resource:connections": Array [],
-                      "wing:resource:stateful": true,
-                    },
-                    "children": Object {
-                      "Bucket": Object {
-                        "constructInfo": Object {
-                          "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                          "version": "5.0.2",
+                  "FunctionBucket": {
+                    "children": {
+                      "Bucket": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Bucket",
                         "path": "root/Default/someFunction01/FunctionBucket/Bucket",
                       },
                     },
-                    "constructInfo": Object {
+                    "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.245",
+                      "version": "10.3.0",
                     },
-                    "display": Object {
+                    "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/someFunction01/FunctionBucket",
                   },
-                  "ReadLambdaCodeAssignment": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.roleAssignment.RoleAssignment",
-                      "version": "5.0.2",
+                  "ReadLambdaCodeAssignment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/someFunction01/ReadLambdaCodeAssignment",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.245",
+                  "version": "10.3.0",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
@@ -798,34 +773,38 @@ Object {
                 "path": "root/Default/someFunction01",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.245",
+              "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },

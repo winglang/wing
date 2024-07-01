@@ -1,0 +1,172 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: connect
+  kind: 2
+  detail: "inflight (url: str, options: RequestOptions?): Response"
+  documentation:
+    kind: markdown
+    value: "Executes a CONNECT request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
+  sortText: ff|connect
+  insertText: connect($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: delete
+  kind: 2
+  detail: "inflight (url: str, options: RequestOptions?): Response"
+  documentation:
+    kind: markdown
+    value: "Executes a DELETE request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
+  sortText: ff|delete
+  insertText: delete($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: fetch
+  kind: 2
+  detail: "inflight (url: str, options: RequestOptions?): Response"
+  documentation:
+    kind: markdown
+    value: "Executes a HTTP request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call\n\n#### Remarks\nThis method allows various HTTP methods based on the provided options.\n\n*@throws* *Only throws if there is a networking error*"
+  sortText: ff|fetch
+  insertText: fetch($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: formatUrl
+  kind: 2
+  detail: "inflight (url: Url, options: FormatUrlOptions?): str"
+  documentation:
+    kind: markdown
+    value: "Serializes an URL Struct to a String.\n\n#### Returns\nA formatted URL String.\n\n*@throws* *Will throw an error if the input URL has invalid fields.*"
+  sortText: ff|formatUrl
+  insertText: formatUrl($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: get
+  kind: 2
+  detail: "inflight (url: str, options: RequestOptions?): Response"
+  documentation:
+    kind: markdown
+    value: "Executes a GET request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
+  sortText: ff|get
+  insertText: get($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: parseUrl
+  kind: 2
+  detail: "inflight (urlString: str): Url"
+  documentation:
+    kind: markdown
+    value: "Parses the input URL String using WHATWG URL API and returns an URL Struct.\n\n#### Returns\nAn URL Struct.\n\n*@throws* *Will throw an error if the input String is not a valid URL.*"
+  sortText: ff|parseUrl
+  insertText: parseUrl($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: patch
+  kind: 2
+  detail: "inflight (url: str, options: RequestOptions?): Response"
+  documentation:
+    kind: markdown
+    value: "Executes a PATCH request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
+  sortText: ff|patch
+  insertText: patch($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: post
+  kind: 2
+  detail: "inflight (url: str, options: RequestOptions?): Response"
+  documentation:
+    kind: markdown
+    value: "Executes a POST request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
+  sortText: ff|post
+  insertText: post($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: put
+  kind: 2
+  detail: "inflight (url: str, options: RequestOptions?): Response"
+  documentation:
+    kind: markdown
+    value: "Executes a PUT request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
+  sortText: ff|put
+  insertText: put($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: trace
+  kind: 2
+  detail: "inflight (url: str, options: RequestOptions?): Response"
+  documentation:
+    kind: markdown
+    value: "Executes a TRACE request to a specified URL and provides a formatted response.\n\n#### Returns\nthe formatted response of the call"
+  sortText: ff|trace
+  insertText: trace($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: Util
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Util {\n  static inflight connect(): Response;\n  static inflight delete(): Response;\n  static inflight fetch(): Response;\n  static inflight formatUrl(): str;\n  static inflight get(): Response;\n  static inflight parseUrl(): Url;\n  /* ... */\n}\n```\n---\nThe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources."
+  sortText: gg|Util
+- label: FormatUrlOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct FormatUrlOptions {\n  auth?: bool;\n  fragment?: bool;\n  search?: bool;\n  unicode?: bool;\n}\n```\n---\nOptions for serializing a WHATWG URL to a String."
+  sortText: hh|FormatUrlOptions
+- label: RequestOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct RequestOptions {\n  body?: str;\n  cache?: RequestCache;\n  headers?: Map<str>;\n  method?: HttpMethod;\n  redirect?: RequestRedirect;\n  referrer?: str;\n}\n```\n---\nAn object containing any custom settings that you want to apply to the request."
+  sortText: hh|RequestOptions
+- label: Response
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct Response {\n  body: str;\n  headers: Map<str>;\n  ok: bool;\n  status: num;\n  url: str;\n}\n```\n---\nThe response to a HTTP request."
+  sortText: hh|Response
+- label: Url
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct Url {\n  hash: str;\n  host: str;\n  hostname: str;\n  href: str;\n  origin: str;\n  password: str;\n  /* ... */\n}\n```\n---\nAn URL following WHATWG URL Standard."
+  sortText: hh|Url
+- label: HttpMethod
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum HttpMethod {\n  GET,\n  PUT,\n  DELETE,\n  PATCH,\n  POST,\n  OPTIONS,\n  HEAD,\n  CONNECT,\n  TRACE,\n}\n```\n---\nThe request's method."
+  sortText: jj|HttpMethod
+- label: RequestCache
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum RequestCache {\n  DEFAULT,\n  NO_STORE,\n  RELOAD,\n  NO_CACHE,\n  FORCE_CACHE,\n}\n```\n---\nThe cache mode of the request.\n\n#### Remarks\nIt controls how a request will interact with the system's HTTP cache."
+  sortText: jj|RequestCache
+- label: RequestRedirect
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum RequestRedirect {\n  MANUAL,\n  FOLLOW,\n  ERROR,\n}\n```\n---\nThe redirect read-only property that contains the mode for how redirects are handled."
+  sortText: jj|RequestRedirect
+

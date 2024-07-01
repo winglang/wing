@@ -1,0 +1,38 @@
+{
+  "name": "jsii-fixture",
+  "version": "0.0.0",
+  "description": "JSII sample library to be used in Wing tests",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "compile": "jsii -vvv",
+    "build:watch": "jsii -w"
+  },
+  "jsii": {
+    "outdir": "dist",
+    "targets": {},
+    "tsc": {
+      "outDir": "lib",
+      "rootDir": "src"
+    }
+  },
+  "author": {
+    "name": "Wing Cloud",
+    "email": "ping@monada.co",
+    "url": "https://wing.cloud",
+    "organization": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winglang/wing.git"
+  },
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://github.com/winglang/wing",
+  "devDependencies": {
+    "jsii": "~5.3.39"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

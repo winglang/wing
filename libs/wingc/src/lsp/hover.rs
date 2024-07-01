@@ -1,320 +1,650 @@
-use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
-
-use crate::ast::{Class, Constructor, Expr, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol};
-use crate::diagnostic::WingSpan;
-use crate::lsp::sync::FILES;
-use crate::type_check::symbol_env::SymbolLookupInfo;
-use crate::type_check::SymbolKind;
+use crate::docs::Documented;
+use crate::lsp::sync::PROJECT_DATA;
+use crate::type_check::symbol_env::LookupResult;
 use crate::visit::Visit;
-use crate::wasm_util::WASM_RETURN_ERROR;
-use crate::{
-	ast::ExprKind,
-	wasm_util::{ptr_to_string, string_to_combined_ptr},
-};
+use crate::wasm_util::extern_json_fn;
+use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind};
 
-pub struct HoverVisitor<'a> {
-	pub position: Position,
-	pub current_scope: Option<&'a Scope>,
-	pub current_expr: Option<&'a Expr>,
-	pub found_symbol: Option<&'a Symbol>,
-}
-
-impl<'a> HoverVisitor<'a> {
-	pub fn new(position: Position) -> Self {
-		Self {
-			position,
-			current_scope: None,
-			current_expr: None,
-			found_symbol: None,
-		}
-	}
-
-	fn is_found(&self) -> bool {
-		self.found_symbol.is_some()
-	}
-
-	fn should_check_span(&self, span: &'a WingSpan) -> bool {
-		span.contains(&self.position)
-	}
-
-	fn with_scope(&mut self, scope: &'a Scope, mut f: impl FnMut(&mut Self)) {
-		let last_scope = self.current_scope;
-		self.current_scope = Some(scope);
-		f(self);
-		if !self.is_found() {
-			self.current_scope = last_scope;
-		}
-	}
-}
-
-impl<'a> Visit<'a> for HoverVisitor<'a> {
-	fn visit_scope(&mut self, node: &'a Scope) {
-		if self.is_found() {
-			return;
-		}
-
-		self.with_scope(node, |v| {
-			for stmt in &node.statements {
-				v.visit_stmt(stmt);
-			}
-		});
-	}
-
-	fn visit_stmt(&mut self, node: &'a Stmt) {
-		if self.is_found() || !self.should_check_span(&node.span) {
-			return;
-		}
-
-		// Handle situations where symbols are actually defined in inner scopes
-		match &node.kind {
-			StmtKind::ForLoop {
-				iterator,
-				iterable,
-				statements,
-			} => {
-				self.with_scope(statements, |v| {
-					v.visit_symbol(iterator);
-				});
-				self.visit_expr(iterable);
-				self.visit_scope(statements);
-			}
-			StmtKind::TryCatch {
-				try_statements,
-				catch_block,
-				finally_statements,
-			} => {
-				self.visit_scope(try_statements);
-				if let Some(catch_block) = catch_block {
-					if let Some(exception_var) = &catch_block.exception_var {
-						self.with_scope(&catch_block.statements, |v| {
-							v.visit_symbol(exception_var);
-						});
-					}
-					self.visit_scope(&catch_block.statements);
-				}
-				if let Some(finally_statements) = finally_statements {
-					self.visit_scope(finally_statements);
-				}
-			}
-			_ => crate::visit::visit_stmt(self, node),
-		}
-	}
-
-	fn visit_expr(&mut self, node: &'a Expr) {
-		if self.is_found() || !self.should_check_span(&node.span) {
-			return;
-		}
-
-		let last_expr = self.current_expr;
-		self.current_expr = Some(node);
-
-		crate::visit::visit_expr(self, node);
-
-		if !self.is_found() {
-			self.current_expr = last_expr;
-		}
-	}
-
-	fn visit_function_definition(&mut self, node: &'a FunctionDefinition) {
-		if self.is_found() {
-			return;
-		}
-
-		self.with_scope(&node.statements, |v| {
-			for param in &node.parameters {
-				v.visit_symbol(&param.0);
-			}
-		});
-		for param_type in &node.signature.parameters {
-			self.visit_type_annotation(param_type);
-		}
-		if let Some(return_type) = &node.signature.return_type {
-			self.visit_type_annotation(return_type);
-		}
-
-		self.visit_scope(&node.statements);
-	}
-
-	fn visit_class(&mut self, node: &'a Class) {
-		if self.is_found() {
-			return;
-		}
-		self.visit_symbol(&node.name);
-
-		self.visit_constructor(&node.constructor);
-
-		self.with_scope(&node.constructor.statements, |v| {
-			for field in &node.fields {
-				v.visit_symbol(&field.name);
-				v.visit_type_annotation(&field.member_type);
-			}
-
-			for method in &node.methods {
-				v.visit_symbol(&method.0);
-				v.visit_function_definition(&method.1);
-			}
-		});
-	}
-
-	fn visit_constructor(&mut self, node: &'a Constructor) {
-		if self.is_found() {
-			return;
-		}
-
-		for param_type in &node.signature.parameters {
-			self.visit_type_annotation(param_type);
-		}
-		if let Some(return_type) = &node.signature.return_type {
-			self.visit_type_annotation(return_type);
-		}
-
-		self.with_scope(&node.statements, |v| {
-			for param in &node.parameters {
-				v.visit_symbol(&param.0);
-			}
-		});
-
-		self.visit_scope(&node.statements);
-	}
-
-	fn visit_symbol(&mut self, node: &'a Symbol) {
-		if self.is_found() || !self.should_check_span(&node.span) {
-			return;
-		}
-
-		self.found_symbol = Some(node);
-	}
-}
+use super::symbol_locator::{SymbolLocator, SymbolLocatorResult};
+use super::sync::{check_utf8, WING_TYPES};
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		if let Some(token_result) = on_hover(parsed) {
-			let result = serde_json::to_string(&token_result).expect("Failed to serialize Hover response");
-
-			string_to_combined_ptr(result)
-		} else {
-			WASM_RETURN_ERROR
-		}
-	} else {
-		eprintln!("Failed to parse 'onHover' text document: {}", parse_string);
-		WASM_RETURN_ERROR
-	}
+	extern_json_fn(ptr, len, on_hover)
 }
-pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
-	FILES.with(|files| {
-		let files = files.borrow();
-		let parse_result = files.get(&params.text_document_position_params.text_document.uri.clone());
-		let parse_result = parse_result.expect(
-			format!(
-				"Compiled data not found for \"{}\"",
-				params.text_document_position_params.text_document.uri
-			)
-			.as_str(),
-		);
+pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
+	WING_TYPES.with(|types| {
+		let types = types.borrow_mut();
+		PROJECT_DATA.with(|project_data| {
+			let project_data = project_data.borrow();
+			let uri = params.text_document_position_params.text_document.uri.clone();
+			let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
+			let root_scope = &project_data.asts.get(&file).unwrap();
 
-		let root_scope = &parse_result.scope;
-		let root_env = root_scope.env.borrow();
-		let root_env = root_env.as_ref().expect("All scopes should have a symbol environment");
+			let mut symbol_finder = SymbolLocator::new(&types, params.text_document_position_params.position.into());
+			symbol_finder.visit_scope(root_scope);
 
-		let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position);
-		hover_visitor.visit_scope(root_scope);
-
-		if let Some(symbol) = hover_visitor.found_symbol {
-			// If the given symbol is in a nested identifier, we can skip looking it up in the symbol environment
-			if let Some(expr) = hover_visitor.current_expr {
-				if let ExprKind::Reference(Reference::InstanceMember { property, .. }) = &expr.kind {
-					return build_nested_identifier_hover(&property, &expr);
+			if let Some(lookup) = symbol_finder.lookup_located_symbol() {
+				if let LookupResult::Found(symbol_info, ..) = &lookup {
+					let docs = symbol_info.render_docs();
+					let span = symbol_finder.located_span()?;
+					return Some(Hover {
+						contents: HoverContents::Markup(MarkupContent {
+							kind: MarkupKind::Markdown,
+							value: docs,
+						}),
+						range: Some(span.into()),
+					});
 				}
+			} else {
+				return match &symbol_finder.result {
+					SymbolLocatorResult::LooseField { field_type, field, .. } => {
+						let span = symbol_finder.located_span().unwrap();
+						let value = format!("```wing\n{}: {field_type}\n```", field.name);
+
+						Some(Hover {
+							contents: HoverContents::Markup(MarkupContent {
+								kind: MarkupKind::Markdown,
+								value,
+							}),
+							range: Some(span.into()),
+						})
+					}
+					_ => None,
+				};
 			}
 
-			let env = hover_visitor
-				.current_scope
-				.expect("All symbols must be in a scope")
-				.env
-				.borrow();
-
-			let symbol_lookup = root_env.lookup_ext(symbol, None).or_else(|_| {
-				// If the symbol is not found in the root scope, try the given scope
-
-				// NOTE: We lookup in the root scope first because failing to lookup there is much faster than failing to lookup in an inner scope.
-				// The reason for this is due to a current bug in SymbolEnv where the .parent ref gets lost when referencing the root, and becomes bad data.
-				// This bad data sometimes causes the lookup to take a long time (lots of entries), or even panic.
-				// This should not cause incorrect lookups because we do not generally have variable shadowing in Wing.
-				// https://github.com/winglang/wing/issues/1644
-				let env = env.as_ref().expect("All scopes should have a symbol environment");
-				env.lookup_ext(symbol, None)
-			});
-
-			let hover_string = if let Ok(symbol_lookup) = symbol_lookup {
-				format_symbol_with_lookup(&symbol.name, symbol_lookup)
-			} else {
-				format_unknown_symbol(&symbol.name)
-			};
-
-			return Some(Hover {
-				contents: HoverContents::Markup(MarkupContent {
-					kind: MarkupKind::Markdown,
-					value: hover_string,
-				}),
-				range: Some(symbol.span.range()),
-			});
-		}
-
-		None
+			None
+		})
 	})
 }
 
-/// Formats a hover string for a symbol that has been found in the symbol environment
-fn format_symbol_with_lookup(symbol_name: &str, symbol_lookup: (&SymbolKind, SymbolLookupInfo)) -> String {
-	let symbol_kind = symbol_lookup.0;
-	let lookup_info = symbol_lookup.1;
+#[cfg(test)]
+mod tests {
+	use crate::lsp::hover::*;
+	use crate::lsp::sync::test_utils::*;
+	use lsp_types::*;
 
-	match symbol_kind {
-		SymbolKind::Type(t) => {
-			format!("**{}**", t)
-		}
-		SymbolKind::Variable(variable_info) => {
-			let flight = match lookup_info.flight {
-				Phase::Inflight => "inflight ",
-				Phase::Preflight => "preflight ",
-				Phase::Independent => "",
-			};
-			let reassignable = if variable_info.reassignable { "var " } else { "" };
-			let _type = &variable_info.type_;
+	/// Creates a snapshot test for a given wing program's hover at a given position
+	/// In the wing program, place a comment "//^" into the text where the "^" is pointing to the desired character position
+	///
+	/// First parameter will be the name of the tests, as well as the identifier to use for the list of completion in the asserts (see last parameter)
+	/// Second parameter is the wing code block as a string literal
+	/// After the first two parameters, any additional are optional statements that should be used for asserting on the given hover data.
+	///
+	/// Result is a [Hover] object
+	macro_rules! test_hover_list {
+		($name:ident, $code:literal) => {
+			test_hover_list!($name, $code,);
+		};
+		($name:ident, $code:literal, $($assertion:stmt)*) => {
+			#[test]
+			fn $name() {
+				// NOTE: this is needed for debugging to work regardless of where you run the test
+				std::env::set_current_dir(env!("CARGO_MANIFEST_DIR")).unwrap();
 
-			format!("```wing\n{flight}{reassignable}{symbol_name}: {_type}\n```")
-		}
-		SymbolKind::Namespace(namespace) => {
-			let namespace_name = &namespace.name;
+				let text_document_position_params = load_file_with_contents($code);
+				let hover = on_hover(HoverParams {
+					text_document_position_params,
+					work_done_progress_params: Default::default(),
+				});
 
-			format!("```wing\nbring {namespace_name}\n```")
-		}
+				if let Some($name) = hover {
+					insta::with_settings!(
+						{
+							prepend_module_to_snapshot => false,
+							omit_expression => true,
+							snapshot_path => "./snapshots/hovers",
+						}, {
+							insta::assert_yaml_snapshot!($name);
+						}
+					);
+					$($assertion)*
+				} else {
+					panic!("Expected hover data");
+				}
+			}
+		};
+	}
+
+	test_hover_list!(
+		just_variable,
+		r#"
+		let myString = "hello";
+        //^
+		"#,
+	);
+
+	test_hover_list!(
+		new_expression_nested,
+		r#"
+bring cloud;
+new cloud. 
+    //^
+"#,
+	);
+
+	test_hover_list!(
+		class_symbol,
+		r#"
+		bring cloud;
+
+		let bucket = new cloud.Bucket();
+        //^
+"#,
+	);
+
+	test_hover_list!(
+		class_symbol_in_closure,
+		r#"
+inflight class MyClass { }
+
+inflight () => {
+  let myClass = new MyClass();
+    //^
+
+}
+"#,
+	);
+
+	test_hover_list!(
+		class_property,
+		r#"
+bring cloud;
+
+let bucket = new cloud.Bucket();
+bucket.addObject
+      //^
+"#,
+	);
+
+	test_hover_list!(
+		static_stdtype_method,
+		r#"
+Json.stringify(123);
+      //^
+"#,
+	);
+
+	test_hover_list!(
+		inside_inflight_test,
+		r#"
+test "hello" {
+  let a = 1;
+    //^
+}
+"#,
+	);
+
+	test_hover_list!(
+		inside_class_method,
+		r#"
+class Foo {
+  bar() {
+    let hello = 1;
+        //^
+  }
+}
+"#,
+	);
+
+	test_hover_list!(
+		inside_class_field,
+		r#"
+bring cloud;
+class Foo {
+  my_bucket: cloud.Bucket;
+    //^
+}
+"#,
+	);
+
+	test_hover_list!(
+		new_statement,
+		r#"
+bring cloud;
+new cloud.Bucket();
+          //^
+"#
+	);
+
+	test_hover_list!(
+		user_defined_types,
+		r#"
+class Foo { }
+     //^
+"#
+	);
+
+	test_hover_list!(
+		user_defined_type_annotation,
+		r#"
+class Foo { }
+let a: Foo = new Foo();
+      //^
+"#
+	);
+
+	test_hover_list!(
+		user_defined_type_reference_property,
+		r#"
+class Foo { 
+	static static_method() { }
+}
+Foo.static_method();
+   //^
+"#
+	);
+
+	test_hover_list!(
+		user_defined_type_reference_type,
+		r#"
+class Foo { 
+	static static_method() { }
+}
+Foo.static_method();
+//^
+"#
+	);
+
+	test_hover_list!(
+		static_method,
+		r#"
+class Foo {
+  static my(a: str, b: bool): str { return "str"; }
+}
+
+Foo.my();
+  //^
+"#
+	);
+
+	test_hover_list!(
+		builtin_in_preflight,
+		r#"
+assert(true);
+//^
+"#
+	);
+
+	test_hover_list!(
+		builtin_in_inflight,
+		r#"
+class Foo {
+  inflight bar() {
+    assert(true);
+    //^
+  }
+}
+"#
+	);
+
+	test_hover_list!(
+		test_bring_sdk,
+		r#"
+bring cloud;
+      //^
+"#
+	);
+
+	test_hover_list!(
+		test_var,
+		r#"
+let var xoo = "hello";
+log(xoo);
+    //^
+"#
+	);
+
+	test_hover_list!(
+		test_var_inside_preflight_closure,
+		r#"
+() => {
+  let var goooo = "gar";
+          //^
+}"#
+	);
+
+	test_hover_list!(
+		test_var_inside_inflight_closure,
+		r#"
+inflight () => {
+  let var goooo = "gar";
+          //^
+}"#
+	);
+
+	test_hover_list!(
+		test_builtin_instance_method,
+		r#"
+"hello".startsWith("h");
+           //^
+"#
+	);
+
+	test_hover_list!(
+		multipart_reference_hover_middle,
+		r#"
+let j = Json {};
+j.get("hello").get("world");
+ //^
+"#
+	);
+
+	test_hover_list!(
+		map_element,
+		r#"
+let k = "hi";
+{ k => "" }
+//^
+"#
+	);
+
+	test_hover_list!(
+		json_element,
+		r#"
+{ hi: "cool" }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element_nested_top,
+		r#"
+{ hi: { inner: [1, 2, 3] } }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element_nested_inner,
+		r#"
+{ hi: { inner: [1, 2, 3] } }
+        //^
+"#
+	);
+
+	test_hover_list!(
+		inflight_init,
+		r#"
+struct Data {
+	field: str;
+}
+
+class T {
+	new() {
+		Data { field: "" };
+	}
+
+	inflight new() {
+		Data { field: "" };
+		//^
 	}
 }
+"#
+	);
 
-/// Formats a hover string for a symbol that we don't yet know how to handle yet
-fn format_unknown_symbol(symbol_name: &str) -> String {
-	format!("```wing\n{symbol_name}\n```")
+	test_hover_list!(
+		class_init_this_field,
+		r#"
+class T {
+  stuff: num;
+
+  new() {
+    this.stuff = 1;
+         //^
+  }
 }
+"#
+	);
 
-/// Builds the entire Hover response for a nested identifier, which are handled differently than other "loose" symbols
-fn build_nested_identifier_hover(property: &Symbol, expr: &Expr) -> Option<Hover> {
-	let symbol_name = &property.name;
+	test_hover_list!(
+		struct_decl_field,
+		r#"
+struct S {
+  field: str;
+  //^
+}
+"#
+	);
 
-	let expression_type = expr
-		.evaluated_type
-		.borrow()
-		.expect("All expressions should have a type");
+	test_hover_list!(
+		static_method_root,
+		r#"
+Json.stringify({});
+//^
+"#
+	);
 
-	return Some(Hover {
-		contents: HoverContents::Markup(MarkupContent {
-			kind: MarkupKind::Markdown,
-			value: format!("```wing\n{symbol_name}: {expression_type}\n```"),
-		}),
-		// When hovering over a reference, we want to highlight the entire relevant expression
-		// e.g. Hovering over `b` in `a.b.c` will highlight `a.b`
-		range: Some(expr.span.range()),
-	});
+	test_hover_list!(
+		variadic_args,
+		r#"
+  class Arr {
+    pub addMany(...items: Array<str>) {
+  
+    }
+  }
+  
+  let arr = new Arr();
+  arr.addMany("a","b","c");
+      //^
+  "#,
+	);
+
+	test_hover_list!(
+		class_doc,
+		r#"
+  /// Class doc
+  class Foo {
+      //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		enum_doc,
+		r#"
+  /// Enum doc
+  enum Foo {
+     //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		struct_doc,
+		r#"
+  /// Struct doc
+  struct Foo {
+       //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		interface_doc,
+		r#"
+  /// Interface doc
+  interface Foo {
+          //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		class_field_doc,
+		r#"
+  class Foo {
+    /// Class field doc
+    field: num;
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		class_method_doc,
+		r#"
+  class Foo {
+    /// Class method doc
+    do() { }
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		interface_method_doc,
+		r#"
+  interface Foo {
+    /// Interface method doc
+    do(): void;
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		enum_variant_doc,
+		r#"
+  enum Foo {
+    /// Enum variant doc
+    A
+  }
+	Foo.A;
+    //^		
+  "#,
+	);
+
+	test_hover_list!(
+		struct_field_doc,
+		r#"
+  struct Foo {
+    /// Struct field doc
+    field: num;
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		inherited_struct_field_doc,
+		r#"
+  struct Foo {
+    /// Parent struct field doc
+    field: num;
+  }
+  struct ChildFoo extends Foo {
+	    child_field: num;
+  }
+  let child = ChildFoo { field: 1, child_field: 2 };
+  child.field;
+      //^
+ 	"#,
+	);
+
+	test_hover_list!(
+		inherited_interface_method_doc,
+		r#"
+  interface Foo {
+    /// Parent interface method doc
+    do(): void;
+  }
+  interface ChildFoo extends Foo {
+    child_do(): void;
+  }		
+  (x: ChildFoo) => {
+    x.do();
+    //^
+  };
+ 	"#,
+	);
+
+	test_hover_list!(
+		ignoe_empty_lines_in_doc,
+		r#"
+  /// Class doc with empty lines after it
+
+  class Foo {
+      //^
+  
+	"#,
+	);
+
+	test_hover_list!(
+		class_doc_with_multiline_and_markdown,
+		r#"
+  /// Class doc
+  /// With multiline
+  /// ## And markdown
+  class Foo {
+      //^
+    pub a: num;
+  }
+	"#,
+	);
+
+	test_hover_list!(
+		member_doc_on_same_line_as_something_else,
+		r#"
+  class Foo { /// Member doc in unexpected place
+    field: num;
+  //^
+  }
+	"#,
+	);
+
+	test_hover_list!(
+		ctor_doc,
+		r#"
+  class Bob {
+    /// I'm bob the constructor
+    new() {}
+  //^
+  }
+	"#
+	);
+
+	test_hover_list!(
+		inflight_ctor_doc,
+		r#"
+  class Bob {
+    /// I'm bob the constructor (inflight)
+    inflight new() {}
+           //^
+  }
+	"#
+	);
+
+	test_hover_list!(
+		ctor_doc_from_new_expr,
+		r#"
+  class Bob {
+    /// I'm bob the constructor
+    new() {}
+  }
+  new Bob();
+    //^	
+	"#
+	);
+
+	test_hover_list!(
+		inflight_ctor_doc_from_new_expr,
+		r#"
+  inflight class Bob {
+    /// I'm bob the constructor (inflight)
+    new() {}
+  }
+  inflight () => { new Bob(); };
+                     //^
+	"#
+	);
+
+	test_hover_list!(
+		intrinsics,
+		r#"
+@dirname
+  //^
+  "#,
+	);
 }

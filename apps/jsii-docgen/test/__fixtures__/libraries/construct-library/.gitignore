@@ -5,3 +5,4 @@ API.md
 node_modules/
 tsconfig.json
 tsconfig.tsbuildinfo
+dist/

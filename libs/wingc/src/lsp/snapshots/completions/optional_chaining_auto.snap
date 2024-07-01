@@ -1,0 +1,211 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: asBool
+  kind: 2
+  detail: "(): bool"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to boolean if possible.\n\n#### Returns\na boolean."
+  sortText: ff|asBool
+  insertText: asBool()
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+- label: asNum
+  kind: 2
+  detail: "(): num"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to number if possible.\n\n#### Returns\na number."
+  sortText: ff|asNum
+  insertText: asNum()
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+- label: asStr
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to string if possible.\n\n#### Returns\na string."
+  sortText: ff|asStr
+  insertText: asStr()
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+- label: get
+  kind: 2
+  detail: "(key: str): Json"
+  documentation:
+    kind: markdown
+    value: "Returns the value associated with the specified Json key.\n\n#### Returns\nThe value associated with the specified Json key\n\n*@throws* *Json property does not exist if the given key is not part of an existing property*"
+  sortText: ff|get
+  insertText: get($1)
+  insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: getAt
+  kind: 2
+  detail: "(index: num): Json"
+  documentation:
+    kind: markdown
+    value: "Returns a specified element at a given index from Json Array.\n\n#### Returns\nThe element at given index in Json Array\n\n*@throws* *index out of bounds error if the given index does not exist for the Json Array*"
+  sortText: ff|getAt
+  insertText: getAt($1)
+  insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: has
+  kind: 2
+  detail: "(key: str): bool"
+  documentation:
+    kind: markdown
+    value: "Checks if a Json object has a given key.\n\n#### Returns\nBoolean value corresponding to whether the key exists"
+  sortText: ff|has
+  insertText: has($1)
+  insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryAsBool
+  kind: 2
+  detail: "(): bool?"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to boolean if possible.\n\n#### Returns\na boolean."
+  sortText: ff|tryAsBool
+  insertText: tryAsBool()
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+- label: tryAsNum
+  kind: 2
+  detail: "(): num?"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to number if possible.\n\n#### Returns\na number."
+  sortText: ff|tryAsNum
+  insertText: tryAsNum()
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+- label: tryAsStr
+  kind: 2
+  detail: "(): str?"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to string if possible.\n\n#### Returns\na string."
+  sortText: ff|tryAsStr
+  insertText: tryAsStr()
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+- label: tryGet
+  kind: 2
+  detail: "(key: str): Json?"
+  documentation:
+    kind: markdown
+    value: "Optionally returns an specified element from the Json.\n\n#### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+  sortText: ff|tryGet
+  insertText: tryGet($1)
+  insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryGetAt
+  kind: 2
+  detail: "(index: num): Json?"
+  documentation:
+    kind: markdown
+    value: "Optionally returns a specified element at a given index from Json Array.\n\n#### Returns\nThe element at given index in Json Array, or undefined if index is not valid"
+  sortText: ff|tryGetAt
+  insertText: tryGetAt($1)
+  insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+

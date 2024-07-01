@@ -1,130 +1,179 @@
-import { exec } from "child_process";
-import { env } from "process";
-import { ExtensionContext, ProgressLocation, window, workspace } from "vscode";
+import { FSWatcher, watch } from "fs";
+import { readFile } from "fs/promises";
+import { join } from "path";
 import {
-  Executable,
-  LanguageClient,
-  LanguageClientOptions,
-  ServerOptions,
-} from "vscode-languageclient/node";
-import which from "which";
+  commands,
+  ExtensionContext,
+  languages,
+  workspace,
+  window,
+  debug,
+  DebugConfiguration,
+} from "vscode";
+import { getWingBin, updateStatusBar } from "./bin-helper";
+import { CFG_WING, CFG_WING_BIN, COMMAND_OPEN_CONSOLE } from "./constants";
+import { Loggers } from "./logging";
+import { LanguageServerManager } from "./lsp";
 
-const LANGUAGE_SERVER_NAME = "Wing Language Server";
-const LANGUAGE_SERVER_ID = "wing-language-server";
+let wingBinWatcher: FSWatcher | undefined;
+let languageServerManager: LanguageServerManager | undefined;
 
-const CFG_WING = "wing";
-const CFG_WING_BIN = `${CFG_WING}.bin`;
-
-let client: LanguageClient;
-
-export function deactivate() {
-  return client?.stop();
+export async function deactivate() {
+  wingBinWatcher?.close();
+  await languageServerManager?.stop();
 }
 
 export async function activate(context: ExtensionContext) {
-  await startLanguageServer(context);
-}
+  // For some reason, the word pattern is not set correctly by the language config file
+  // https://github.com/microsoft/vscode/issues/42649
+  const languageConfig = JSON.parse(
+    await readFile(join(__dirname, "..", "language-configuration.json"), "utf8")
+  );
+  languages.setLanguageConfiguration("wing", {
+    brackets: languageConfig.brackets,
+    comments: languageConfig.comments,
+    autoClosingPairs: languageConfig.autoClosingPairs,
+    wordPattern: new RegExp(languageConfig.wordPattern, "g"),
+    indentationRules: {
+      increaseIndentPattern: new RegExp(
+        languageConfig.indentationRules.increaseIndentPattern
+      ),
+      decreaseIndentPattern: new RegExp(
+        languageConfig.indentationRules.decreaseIndentPattern
+      ),
+    },
+  });
 
-async function startLanguageServer(context: ExtensionContext) {
-  const extVersion = context.extension.packageJSON.version;
-  const configuredWingBin = workspace
-    .getConfiguration(CFG_WING)
-    .get<string>(CFG_WING_BIN, "wing");
-  let wingBin = env.WING_BIN ?? configuredWingBin;
+  languageServerManager = new LanguageServerManager();
 
-  if (wingBin !== "npx") {
-    const result = wingBinaryLocation(wingBin);
-    if (!result) {
-      const npmInstallOption = `Install globally with npm`;
-      const choice = await window.showWarningMessage(
-        `"${wingBin}" is not in PATH, please choose one of the following options to use the Wing language server`,
-        npmInstallOption
+  debug.registerDebugConfigurationProvider("wing", {
+    async resolveDebugConfiguration(_, _config: DebugConfiguration) {
+      Loggers.default.appendLine(
+        `Resolving debug configuration... ${JSON.stringify(_config)}`
       );
+      const editor = window.activeTextEditor;
 
-      if (choice === npmInstallOption) {
-        wingBin = await guidedWingInstallation(extVersion);
+      const currentFilename = editor?.document.fileName;
+      let chosenFile;
+      if (
+        currentFilename?.endsWith("main.w") ||
+        currentFilename?.endsWith(".test.w")
+      ) {
+        chosenFile = currentFilename;
       } else {
-        // User decided to ignore the warning
+        let uriOptions = await workspace.findFiles(
+          `**/*.{main,test}.w`,
+          "**/{node_modules,target}/**"
+        );
+        uriOptions.concat(
+          await workspace.findFiles(`**/main.w`, "**/{node_modules,target}/**")
+        );
+
+        const entrypoint = await window.showQuickPick(
+          uriOptions.map((f) => f.fsPath),
+          {
+            placeHolder: "Choose entrypoint to debug",
+          }
+        );
+
+        if (!entrypoint) {
+          return;
+        }
+
+        chosenFile = entrypoint;
+      }
+
+      const command = await window.showInputBox({
+        title: `Debugging ${chosenFile}`,
+        prompt: "Wing CLI arguments",
+        value: "test",
+      });
+
+      if (!command) {
         return;
       }
-    }
-  }
 
-  const args =
-    wingBin === "npx" ? ["-y", "-q", `winglang@${extVersion}`, "lsp"] : ["lsp"];
+      const currentWingBin = await getWingBin();
 
-  const run: Executable = {
-    command: wingBin,
-    args,
-    options: {
-      env: {
-        ...process.env,
-      },
+      // Use builtin node debugger
+      return {
+        name: `Debug ${chosenFile}`,
+        request: "launch",
+        type: "node",
+        args: [currentWingBin, command, chosenFile],
+        runtimeSourcemapPausePatterns: [
+          "${workspaceFolder}/**/target/**/*.cjs",
+        ],
+        autoAttachChildProcesses: true,
+        pauseForSourceMap: true,
+      };
     },
-  };
-  const serverOptions: ServerOptions = {
-    run,
-    debug: run,
-  };
-  let clientOptions: LanguageClientOptions = {
-    documentSelector: [{ scheme: "file", language: "wing", pattern: "**/*.w" }],
+  });
+
+  const wingBinChanged = async () => {
+    Loggers.default.appendLine(`Setting up wing bin...`);
+    const currentWingBin = await getWingBin();
+    if (currentWingBin) {
+      const hasWingBin = await updateStatusBar(currentWingBin);
+
+      wingBinWatcher?.close();
+      wingBinWatcher = watch(
+        currentWingBin,
+        {
+          persistent: false,
+        },
+        async () => {
+          // wait for a second to make sure the file is done moving or being written
+          await new Promise((resolve) => setTimeout(resolve, 1000, undefined));
+
+          await wingBinChanged();
+        }
+      );
+
+      if (hasWingBin) {
+        Loggers.default.appendLine(`Using wing from "${currentWingBin}"`);
+
+        languageServerManager?.setWingBin(currentWingBin);
+
+        await languageServerManager?.start();
+      } else {
+        void window.showErrorMessage(`wing not found at "${currentWingBin}"`);
+      }
+    } else {
+      Loggers.default.appendLine(`wing not found`);
+    }
   };
 
-  // Create the language client and start the client.
-  client = new LanguageClient(
-    LANGUAGE_SERVER_ID,
-    LANGUAGE_SERVER_NAME,
-    serverOptions,
-    clientOptions
+  const wingIt = async () => {
+    const filePath = window.activeTextEditor?.document.fileName;
+    if (!filePath) {
+      return;
+    }
+    const terminalName = `Wing it: ${filePath.split("/").pop()}`;
+
+    const existingTerminal = window.terminals.find(
+      (t) => t.name === terminalName
+    );
+    if (existingTerminal) {
+      existingTerminal.dispose();
+    }
+    const terminal = window.createTerminal(terminalName);
+    terminal.show();
+    terminal.sendText(`wing it "${filePath}"`);
+  };
+
+  //watch for config changes
+  workspace.onDidChangeConfiguration(async (e) => {
+    // see if WING_BIN has changed
+    if (e.affectsConfiguration(`${CFG_WING}.${CFG_WING_BIN}`)) {
+      await wingBinChanged();
+    }
+  });
+
+  // add command to preview wing files
+  context.subscriptions.push(
+    commands.registerCommand(COMMAND_OPEN_CONSOLE, wingIt)
   );
 
-  await client.start();
-}
-
-/**
- * Install wing globally using npm if desired by the user
- *
- * @returns "wing" if wing is successfully installed, "npx" otherwise
- */
-async function guidedWingInstallation(version: string) {
-  return window.withProgress(
-    {
-      location: ProgressLocation.Notification,
-      cancellable: false,
-    },
-    async (progress) => {
-      progress.report({ message: `Installing Wing v${version}...` });
-      return new Promise((resolve, reject) => {
-        exec(`npm install -g winglang@${version}`, (error, stdout) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(stdout);
-          }
-        });
-      })
-        .then(() => {
-          void window.showInformationMessage(
-            `Wing v${version} has been installed!`
-          );
-          return "wing";
-        })
-        .catch((e) => {
-          void window.showErrorMessage(
-            `Failed to install Wing v${version}: ${e}`
-          );
-          return "npx";
-        });
-    }
-  );
-}
-
-/**
- * Get the absolute location of the wing executable
- *
- * @param command The command to search for, defaults to "wing"
- * @returns The absolute path to the wing executable, or null if not found/installed
- */
-function wingBinaryLocation(command?: string) {
-  return which.sync(command ?? "wing", { nothrow: true });
+  await wingBinChanged();
 }

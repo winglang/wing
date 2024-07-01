@@ -1,0 +1,192 @@
+name: "Pull Request Mutation"
+
+run-name: "Pull Request Mutation: ${{ github.event.workflow_run.head_branch }}"
+
+on:
+  workflow_run:
+    workflows:
+      - Build
+    types:
+      - completed
+
+concurrency:
+  group: "mutation-${{ github.event.workflow_run.head_branch }}"
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: read
+  statuses: write
+
+jobs:
+  mutate:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'failure' && (!contains(fromJSON('["main", "dev"]'), github.event.workflow_run.head_branch) || github.event.workflow_run.head_repository.fork)
+    steps:
+      - name: Download artifacts
+        id: download-artifacts
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: .+\.diff$
+          name_is_regexp: true
+          if_no_artifact_found: ignore
+          path: patches
+
+      - uses: marocchino/action-workflow_run-status@54b6e87d6cb552fc5f36dbe9a722a6048725917a
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Token check
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        run: |
+          if ${{ secrets.MUTATION_TOKEN && 'true' || 'false' }}; then
+            echo "Token available, enabling self mutation"
+            exit 0
+          else
+            echo "Add a MUTATION_TOKEN repository secret with a personal access token to enable self mutation.
+            It requires private repo read/write permissions." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+      
+      - name: Find associated pull request
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const mainRepo = context.payload.workflow_run.repository.full_name;
+            const headBranch = context.payload.workflow_run.head_branch;
+            console.log(`Searching for pull request in ${mainRepo} with head branch ${headBranch}`);
+
+            const response = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${mainRepo} is:pr is:open head:${headBranch}`,
+              per_page: 1,
+            });
+            const prs = response.data.items;
+            if (prs.length < 1) {
+              throw new Error('No pull request found for the commit');
+            }
+            const prNumber = prs[0].number;
+            console.log(`Pull request number is ${prNumber}`);
+            return prNumber;
+
+      - name: Unstable mutation comment
+        if: steps.download-artifacts.outputs.found_artifact == 'true' && startsWith(github.event.workflow_run.head_commit.message, format('chore{0} self mutation', ':'))
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          pr_number: ${{ steps.pr.outputs.result }}
+          mode: recreate
+          message: |
+            ### :x: Unstable Self-Mutation :x:
+            Self-mutation has run twice in a row. There may be a something non-deterministic in the build or test process.
+            Check the last mutation commit (${{ github.event.workflow_run.head_sha }}) for suspicious changes.
+            This is typically caused by:
+            - Absolute paths
+            - Timestamps
+            - Random values
+            - Flakey tests (relying on one of the above)
+          comment_tag: UnstableMutation
+          GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - name: Unstable mutation fail
+        if: steps.download-artifacts.outputs.found_artifact == 'true' && startsWith(github.event.workflow_run.head_commit.message, format('chore{0} self mutation', ':'))
+        run: exit 1
+
+      - name: Disable Git Hooks
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        run: git config --global core.hooksPath /dev/null
+
+      - name: Update PR Branch
+        uses: actions/github-script@v7
+        id: branch-update
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        with:
+          github-token: ${{ secrets.MUTATION_TOKEN }}
+          script: |
+            const prContextData = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: ${{ steps.pr.outputs.result }}
+            });
+            const prNumber = prContextData.data.number;
+            const originalSha = prContextData.data.head.sha;
+
+            try {
+              console.log("Updating PR branch");
+              await github.rest.pulls.updateBranch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+              console.log("PR branch updated");
+
+              let updatedSha = originalSha;
+              let retries = 0;
+              const MAX_RETRIES = 10;
+              while (updatedSha == originalSha && retries++ < MAX_RETRIES) {
+                console.log(`Waiting for PR branch to update (attempt ${retries}/${MAX_RETRIES})`);
+                
+                await new Promise(r => setTimeout(r, 500));
+                const updatedPR = await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber
+                });
+                updatedSha = updatedPR.data.head.sha;
+              }
+            } catch (error) {
+              // The branch is already up to date or can't otherwise be updated
+              // That's fine, we tried our best
+              console.warn(error);
+            }
+
+      - name: Checkout Workflow Branch
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MUTATION_TOKEN }}
+          ref: ${{ github.event.workflow_run.head_branch }}
+          repository: ${{ github.event.workflow_run.head_repository.full_name }}
+          path: repo
+
+      - id: self_mutation
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        name: Apply downloaded patches
+        working-directory: repo
+        env:
+          HEAD_REF: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          git config user.name "monada-bot[bot]"
+          git config user.email "monabot@monada.co"
+
+          for f in $(find ../patches/*.diff/*.diff); do
+            echo "Applying $f"
+            git apply --binary $f
+            if [ $? -eq 0 ]; then
+              git add --all
+              git commit -s -m "chore: self mutation ($(basename $f))"
+              echo "Patch applied successfully"
+              rm $f
+            else
+              echo "Patch failed to apply"
+              cat $f
+              exit 1
+            fi
+          done
+
+          git push origin HEAD:$HEAD_REF
+
+      - name: Add label to block auto merge
+        uses: actions/github-script@v7
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        with:
+          github-token: ${{ secrets.MUTATION_TOKEN }}
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ steps.pr.outputs.result }},
+              labels: ["⚠️ pr/review-mutation"]
+            });

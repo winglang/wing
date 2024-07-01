@@ -1,0 +1,18 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "test": {
+      "dependsOn": ["^compile", "examples-valid#topo"]
+    },
+    "eslint": {
+      "dependsOn": ["^compile"]
+    },
+    "compile": {
+      "outputs": ["dist/**"]
+    },
+    "package": {
+      "outputs": ["../../dist/winglang-*.tgz"]
+    }
+  }
+}

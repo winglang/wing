@@ -1,10 +1,16 @@
-import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
-import { RandomProvider } from "@cdktf/provider-random/lib/provider";
-import { Construct } from "constructs";
 import { Bucket } from "./bucket";
-import { Logger } from "./logger";
-import { BUCKET_FQN, LOGGER_FQN } from "../cloud";
-import { AppProps as CdktfAppProps, CdktfApp } from "../core";
+import { Counter } from "./counter";
+import { Function } from "./function";
+import { Schedule } from "./schedule";
+import { Table } from "./table";
+import { TestRunner } from "./test-runner";
+import { GoogleProvider } from "../.gen/providers/google/provider";
+import { RandomProvider } from "../.gen/providers/random/provider";
+import { BUCKET_FQN, COUNTER_FQN, FUNCTION_FQN, SCHEDULE_FQN } from "../cloud";
+import { AppProps as CdktfAppProps } from "../core";
+import { TABLE_FQN } from "../ex";
+import { CdktfApp } from "../shared-tf/app";
+import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * GCP App props.
@@ -16,10 +22,16 @@ export interface AppProps extends CdktfAppProps {
   readonly projectId: string;
 
   /**
-   * The Google Cloud storage location, used for all storage resources.
-   * @see https://cloud.google.com/storage/docs/locations
+   * The Google Cloud region, used for all resources.
+   * @see https://cloud.google.com/functions/docs/locations
    */
-  readonly storageLocation: string;
+  readonly region: string;
+
+  /**
+   * The Google Cloud zone, used for all resources.
+   * @see https://cloud.google.com/functions/docs/locations
+   */
+  readonly zone?: string;
 }
 
 /**
@@ -33,50 +45,59 @@ export class App extends CdktfApp {
   public readonly projectId: string;
 
   /**
-   * The Google Cloud storage location, used for all storage resources.
+   * The Google Cloud region, used for all resources.
    */
-  public readonly storageLocation: string;
+  public readonly region: string;
+
+  /**
+   * The Google Cloud zone.
+   */
+  public readonly zone: string;
+
+  public readonly _target = "tf-gcp";
 
   constructor(props: AppProps) {
     super(props);
 
     this.projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
-    // Using env variable for location is work around until we are
-    // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.projectId === undefined) {
       throw new Error(
         "A Google Cloud project ID must be specified through the GOOGLE_PROJECT_ID environment variable."
       );
     }
 
-    this.storageLocation =
-      props.storageLocation ?? process.env.GOOGLE_STORAGE_LOCATION;
-    // Using env variable for location is work around until we are
-    // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
-    if (this.storageLocation === undefined) {
+    this.region = props.region ?? process.env.GOOGLE_REGION;
+    if (this.region === undefined) {
       throw new Error(
-        "A Google Cloud storage location must be specified through the GOOGLE_STORAGE_LOCATION environment variable."
+        "A Google Cloud region must be specified through the GOOGLE_REGION environment variable."
       );
     }
 
+    this.zone = props.zone ?? `${this.region}-a`;
+
     new GoogleProvider(this, "google", {
       project: this.projectId,
+      region: this.region,
     });
     new RandomProvider(this, "random");
+
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
-  protected tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
+      case TEST_RUNNER_FQN:
+        return TestRunner;
       case BUCKET_FQN:
-        return new Bucket(scope, id, args[0]);
-
-      case LOGGER_FQN:
-        return new Logger(scope, id);
+        return Bucket;
+      case FUNCTION_FQN:
+        return Function;
+      case TABLE_FQN:
+        return Table;
+      case COUNTER_FQN:
+        return Counter;
+      case SCHEDULE_FQN:
+        return Schedule;
     }
 
     return undefined;

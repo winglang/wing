@@ -1,10 +1,9 @@
 import * as os from "os";
 import * as path from "path";
-import { loadAssemblyFromFile, SPEC_FILE_NAME } from "@jsii/spec";
+import { SPEC_FILE_NAME } from "@jsii/spec";
 import * as fs from "fs-extra";
 import * as glob from "glob-promise";
 import * as reflect from "jsii-reflect";
-import { TargetLanguage } from "jsii-rosetta";
 import { Npm } from "./_npm";
 import { ApiReference } from "./api-reference";
 import { Readme } from "./readme";
@@ -113,6 +112,8 @@ export interface ForPackageDocumentationOptions {
    */
   readonly name?: string;
 }
+
+export type TargetLanguage = "python" | "csharp" | "java" | "go" | "wing";
 
 /**
  * Render documentation pages for a jsii library.
@@ -230,7 +231,7 @@ export class Documentation {
 
     if (!isSupported) {
       throw new LanguageNotSupportedError(
-        `Laguage ${language} is not supported for package ${this.assemblyFqn}`
+        `Language ${language} is not supported for package ${this.assemblyFqn}`
       );
     }
 
@@ -324,9 +325,51 @@ export class Documentation {
   ): Promise<{ assembly: reflect.Assembly; transpile: Transpile }> {
     const { rosettaTarget, transpile } = LANGUAGE_SPECIFIC[lang.toString()];
     return {
-      assembly: await this.createAssembly(rosettaTarget, options),
+      assembly: await this.createAssembly(
+        rosettaTarget as TargetLanguage,
+        options
+      ),
       transpile,
     };
+  }
+
+  /**
+   * an hack for getting partial submodule, like for cloud/api or cloud/bucket
+   */
+  private findPartialSubmodule(
+    assembly: reflect.Assembly,
+    submodule: string
+  ): reflect.Submodule {
+    const parent = submodule.split("/")[0];
+    const submodules = assembly.submodules.filter((s) => s.name === parent);
+    if (submodules.length === 0) {
+      throw new Error(
+        `Submodule ${parent} not found in assembly ${assembly.name}@${assembly.version}`
+      );
+    }
+    if (submodules.length > 1) {
+      throw new Error(
+        `Found multiple submodules with name: ${parent} in assembly ${assembly.name}@${assembly.version}`
+      );
+    }
+
+    let typeMap: Map<string, reflect.Type> = new Map();
+
+    //@ts-expect-error typeMap is protected
+    submodules[0].typeMap.forEach((type: reflect.Type, key: string) => {
+      if (type?.spec.locationInModule?.filename.includes(submodule)) {
+        typeMap.set(key, type);
+      }
+    });
+
+    return new reflect.Submodule(
+      submodules[0].system,
+      submodules[0].spec,
+      submodules[0].fqn,
+      //@ts-expect-error submoduleMap is protected
+      submodules[0].submoduleMap,
+      typeMap
+    );
   }
 
   /**
@@ -336,6 +379,9 @@ export class Documentation {
     assembly: reflect.Assembly,
     submodule: string
   ): reflect.Submodule {
+    if (submodule.includes("/")) {
+      return this.findPartialSubmodule(assembly, submodule);
+    }
     const submodules = assembly.submodules.filter((s) => s.name === submodule);
 
     if (submodules.length === 0) {
@@ -365,42 +411,13 @@ export class Documentation {
       return cached;
     }
 
-    const created = await withTempDir(async (workdir: string) => {
-      // HACK - skip copying assemblies because we are not transliterating them
-      // copying node_modules from one place to another adds a lot of time to the build process
-
-      // await fs.copy(this.assembliesDir, workdir);
-      workdir = this.assembliesDir;
-
-      const ts = new reflect.TypeSystem();
-      for (let dotJsii of await glob.promise(
-        `${workdir}/**/${SPEC_FILE_NAME}`
-      )) {
-        // we only transliterate the top level assembly and not the entire type-system.
-        // note that the only reason to translate dependant assemblies is to show code examples
-        // for expanded python arguments - which we don't to right now anyway.
-        // we don't want to make any assumption of the directory structure, so this is the most
-        // robuse way to detect the root assembly.
-        const spec = loadAssemblyFromFile(dotJsii);
-        if (language && spec.name === this.assemblyName) {
-          const packageDir = path.dirname(dotJsii);
-
-          // try {
-          //   await transliterateAssembly([packageDir], [language], {
-          //     loose: options.loose,
-          //     unknownSnippets: UnknownSnippetMode.FAIL,
-          //   });
-          //   dotJsii = path.join(packageDir, `${SPEC_FILE_NAME}.${language}`);
-          // } catch (e: any) {
-          //   dotJsii = path.join(packageDir, SPEC_FILE_NAME);
-          //   // throw new LanguageNotSupportedError(`Laguage ${language} is not supported for package ${this.assemblyFqn} (cause: ${e.message})`);
-          // }
-          dotJsii = path.join(packageDir, SPEC_FILE_NAME);
-        }
-        await ts.load(dotJsii, { validate: options.validate });
-      }
-      return ts.findAssembly(this.assemblyName);
-    });
+    const ts = new reflect.TypeSystem();
+    for (let dotJsii of await glob.promise(
+      `${this.assembliesDir}/**/${SPEC_FILE_NAME}`
+    )) {
+      await ts.load(dotJsii, { validate: options.validate });
+    }
+    const created = ts.findAssembly(this.assemblyName);
 
     this.assembliesCache.set(cacheKey, created);
     return created;
@@ -410,7 +427,7 @@ export class Documentation {
 export const LANGUAGE_SPECIFIC = {
   [Language.PYTHON.toString()]: {
     transpile: new PythonTranspile(),
-    rosettaTarget: TargetLanguage.PYTHON,
+    rosettaTarget: "python",
   },
   [Language.TYPESCRIPT.toString()]: {
     transpile: new TypeScriptTranspile(),
@@ -418,38 +435,22 @@ export const LANGUAGE_SPECIFIC = {
   },
   [Language.JAVA.toString()]: {
     transpile: new JavaTranspile(),
-    rosettaTarget: TargetLanguage.JAVA,
+    rosettaTarget: "java",
   },
   [Language.CSHARP.toString()]: {
     transpile: new CSharpTranspile(),
-    rosettaTarget: TargetLanguage.CSHARP,
+    rosettaTarget: "csharp",
   },
   [Language.GO.toString()]: {
     transpile: new GoTranspile(),
-    rosettaTarget: TargetLanguage.GO,
+    rosettaTarget: "go",
   },
   [Language.WING.toString()]: {
     transpile: new WingTranspile(),
     // TODO WING HACK
-    rosettaTarget: "wing" as TargetLanguage,
+    rosettaTarget: "wing",
   },
 };
-
-async function withTempDir<T>(
-  work: (workdir: string) => Promise<T>
-): Promise<T> {
-  const workdir = await fs.mkdtemp(path.join(os.tmpdir(), path.sep));
-  const cwd = process.cwd();
-  try {
-    process.chdir(workdir);
-    // wait for the work to be completed before
-    // we cleanup the work environment.
-    return await work(workdir);
-  } finally {
-    process.chdir(cwd);
-    await fs.remove(workdir);
-  }
-}
 
 export function extractPackageName(spec: string) {
   const firstAt = spec.indexOf("@");

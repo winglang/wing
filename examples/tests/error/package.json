@@ -1,0 +1,6 @@
+{
+  "name": "examples-error",
+  "volta": {
+    "extends": "../../../package.json"
+  }
+}

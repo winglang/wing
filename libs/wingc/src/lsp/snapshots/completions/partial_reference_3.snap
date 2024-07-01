@@ -1,0 +1,8 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: durationThing
+  kind: 5
+  detail: duration
+  sortText: ab|durationThing
+

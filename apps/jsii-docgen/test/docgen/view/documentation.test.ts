@@ -1,7 +1,5 @@
-import { Documentation, Language } from "../../../src";
 import * as path from "path";
-
-jest.setTimeout(30 * 1000);
+import { Documentation, Language } from "../../../src";
 
 describe("wing", () => {
   test("single package", async () => {

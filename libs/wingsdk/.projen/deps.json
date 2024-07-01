@@ -1,11 +1,16 @@
 {
   "dependencies": [
     {
+      "name": "@cdktf/provider-aws",
+      "version": "^19",
+      "type": "build"
+    },
+    {
       "name": "@types/aws-lambda",
       "type": "build"
     },
     {
-      "name": "@types/debug",
+      "name": "@types/express",
       "type": "build"
     },
     {
@@ -13,45 +18,62 @@
       "type": "build"
     },
     {
-      "name": "@types/jest",
-      "version": "^27",
+      "name": "@types/glob",
+      "type": "build"
+    },
+    {
+      "name": "@types/mime-types",
       "type": "build"
     },
     {
       "name": "@types/node",
-      "version": "^16",
+      "version": "^20",
       "type": "build"
     },
     {
-      "name": "@types/tar",
+      "name": "@types/uuid",
       "type": "build"
     },
     {
       "name": "@typescript-eslint/eslint-plugin",
-      "version": "^5",
+      "version": "^7",
       "type": "build"
     },
     {
       "name": "@typescript-eslint/parser",
-      "version": "^5",
+      "version": "^7",
       "type": "build"
     },
     {
       "name": "@winglang/jsii-docgen",
-      "version": "file:../../apps/jsii-docgen",
-      "type": "build"
-    },
-    {
-      "name": "@winglang/wing-api-checker",
-      "version": "file:../../apps/wing-api-checker",
-      "type": "build"
-    },
-    {
-      "name": "aws-sdk-client-mock",
       "type": "build"
     },
     {
       "name": "aws-sdk-client-mock-jest",
+      "version": "3.0.0",
+      "type": "build"
+    },
+    {
+      "name": "aws-sdk-client-mock",
+      "version": "3.0.0",
+      "type": "build"
+    },
+    {
+      "name": "bump-pack",
+      "type": "build"
+    },
+    {
+      "name": "cdktf-cli",
+      "version": "0.20.7",
+      "type": "build"
+    },
+    {
+      "name": "chalk",
+      "type": "build"
+    },
+    {
+      "name": "constructs",
+      "version": "^10.3",
       "type": "build"
     },
     {
@@ -80,21 +102,11 @@
     },
     {
       "name": "eslint",
-      "version": "^8",
+      "version": "^8.56.0",
       "type": "build"
     },
     {
-      "name": "jest-junit",
-      "version": "^13",
-      "type": "build"
-    },
-    {
-      "name": "jest",
-      "version": "^27",
-      "type": "build"
-    },
-    {
-      "name": "jsii",
+      "name": "fs-extra",
       "type": "build"
     },
     {
@@ -106,12 +118,17 @@
       "type": "build"
     },
     {
-      "name": "npm-check-updates",
-      "version": "^16",
+      "name": "jsii",
+      "version": "~5.3.39",
       "type": "build"
     },
     {
-      "name": "patch-package",
+      "name": "mock-gcs",
+      "version": "^1.2.0",
+      "type": "build"
+    },
+    {
+      "name": "nanoid",
       "type": "build"
     },
     {
@@ -128,15 +145,6 @@
       "type": "build"
     },
     {
-      "name": "ts-jest",
-      "version": "^27",
-      "type": "build"
-    },
-    {
-      "name": "ts-node",
-      "type": "build"
-    },
-    {
       "name": "tsx",
       "type": "build"
     },
@@ -145,48 +153,65 @@
       "type": "build"
     },
     {
+      "name": "vitest",
+      "type": "build"
+    },
+    {
+      "name": "wing-api-checker",
+      "type": "build"
+    },
+    {
       "name": "@aws-sdk/client-cloudwatch-logs",
-      "version": "3.256.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-dynamodb",
-      "version": "3.256.0",
+      "version": "3.577.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/client-elasticache",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-lambda",
-      "version": "3.256.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-s3",
-      "version": "3.256.0",
+      "version": "3.577.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/client-secrets-manager",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sns",
-      "version": "3.256.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sqs",
-      "version": "3.256.0",
+      "version": "3.577.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/s3-request-presigner",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/types",
-      "version": "3.254.0",
       "type": "bundled"
     },
     {
-      "name": "@aws-sdk/util-stream-node",
-      "version": "3.254.0",
-      "type": "bundled"
-    },
-    {
-      "name": "@aws-sdk/util-utf8-node",
-      "version": "3.208.0",
+      "name": "@aws-sdk/util-dynamodb",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
@@ -194,21 +219,103 @@
       "type": "bundled"
     },
     {
+      "name": "@azure/data-tables",
+      "version": "13.2.2",
+      "type": "bundled"
+    },
+    {
       "name": "@azure/identity",
-      "version": "3.1.3",
+      "version": "4.3.0",
       "type": "bundled"
     },
     {
       "name": "@azure/storage-blob",
-      "version": "12.12.0",
+      "version": "12.14.0",
       "type": "bundled"
     },
     {
-      "name": "debug",
+      "name": "@google-cloud/datastore",
+      "version": "8.4.0",
       "type": "bundled"
     },
     {
-      "name": "esbuild-wasm",
+      "name": "@google-cloud/storage",
+      "version": "6.9.5",
+      "type": "bundled"
+    },
+    {
+      "name": "@smithy/util-stream",
+      "version": "2.0.17",
+      "type": "bundled"
+    },
+    {
+      "name": "@smithy/util-utf8",
+      "version": "2.0.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@types/aws-lambda",
+      "type": "bundled"
+    },
+    {
+      "name": "@winglang/wingtunnels",
+      "version": "workspace:^",
+      "type": "bundled"
+    },
+    {
+      "name": "ajv",
+      "type": "bundled"
+    },
+    {
+      "name": "cdktf",
+      "version": "0.20.7",
+      "type": "bundled"
+    },
+    {
+      "name": "cron-parser",
+      "type": "bundled"
+    },
+    {
+      "name": "cron-validator",
+      "type": "bundled"
+    },
+    {
+      "name": "express",
+      "type": "bundled"
+    },
+    {
+      "name": "glob",
+      "type": "bundled"
+    },
+    {
+      "name": "google-auth-library",
+      "type": "bundled"
+    },
+    {
+      "name": "ioredis",
+      "type": "bundled"
+    },
+    {
+      "name": "jiti",
+      "type": "bundled"
+    },
+    {
+      "name": "mime-types",
+      "type": "bundled"
+    },
+    {
+      "name": "mime",
+      "version": "^3.0.0",
+      "type": "bundled"
+    },
+    {
+      "name": "nanoid",
+      "version": "^3.3.7",
+      "type": "bundled"
+    },
+    {
+      "name": "protobufjs",
+      "version": "7.2.5",
       "type": "bundled"
     },
     {
@@ -216,54 +323,44 @@
       "type": "bundled"
     },
     {
-      "name": "tar",
+      "name": "stacktracey",
       "type": "bundled"
     },
     {
-      "name": "@types/babel__traverse",
-      "version": "7.18.2",
-      "type": "override"
+      "name": "toml",
+      "type": "bundled"
     },
     {
-      "name": "@types/prettier",
-      "version": "2.6.0",
-      "type": "override"
+      "name": "ulid",
+      "type": "bundled"
+    },
+    {
+      "name": "uuid",
+      "type": "bundled"
+    },
+    {
+      "name": "vlq",
+      "type": "bundled"
+    },
+    {
+      "name": "yaml",
+      "type": "bundled"
+    },
+    {
+      "name": "@types/node",
+      "version": "^20.11.0",
+      "type": "devenv"
     },
     {
       "name": "constructs",
-      "version": "~10.1.228",
+      "version": "^10.3",
       "type": "peer"
     },
     {
-      "name": "@cdktf/provider-aws",
-      "version": "^12.0.1",
-      "type": "runtime"
-    },
-    {
-      "name": "@cdktf/provider-azurerm",
-      "version": "^5.0.1",
-      "type": "runtime"
-    },
-    {
-      "name": "@cdktf/provider-google",
-      "version": "^5.0.2",
-      "type": "runtime"
-    },
-    {
-      "name": "@cdktf/provider-random",
-      "version": "^5.0.0",
-      "type": "runtime"
-    },
-    {
-      "name": "cdktf",
-      "version": "0.15.2",
-      "type": "runtime"
-    },
-    {
       "name": "constructs",
-      "version": "~10.1.228",
+      "version": "^10.3",
       "type": "runtime"
     }
   ],
-  "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \"npx projen\"."
+  "//": "~~ Generated by projen. To modify, edit .projenrc.ts and run \"npx projen\"."
 }

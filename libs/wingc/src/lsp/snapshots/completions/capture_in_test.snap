@@ -1,0 +1,184 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: copy
+  kind: 2
+  detail: "inflight (srcKey: str, dstKey: str): void"
+  documentation:
+    kind: markdown
+    value: "Copy an object to a new location in the bucket.\n\n#### Remarks\nIf the destination object\nalready exists, it will be overwritten.\n\n*@throws* *if `srcKey` object doesn't exist.*"
+  sortText: ff|copy
+  insertText: copy($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: delete
+  kind: 2
+  detail: "inflight (key: str, opts: BucketDeleteOptions?): void"
+  documentation:
+    kind: markdown
+    value: Delete an existing object using a key from the bucket.
+  sortText: ff|delete
+  insertText: delete($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: exists
+  kind: 2
+  detail: "inflight (key: str): bool"
+  documentation:
+    kind: markdown
+    value: Check if an object exists in the bucket.
+  sortText: ff|exists
+  insertText: exists($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: get
+  kind: 2
+  detail: "inflight (key: str, options: BucketGetOptions?): str"
+  documentation:
+    kind: markdown
+    value: "Retrieve an object from the bucket.\n\n#### Remarks\nIf the bytes returned are not a valid UTF-8 string, an error is thrown.\n\n*@Returns* *the object's body.*\n*@Throws* *if no object with the given key exists.*"
+  sortText: ff|get
+  insertText: get($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: getJson
+  kind: 2
+  detail: "inflight (key: str): Json"
+  documentation:
+    kind: markdown
+    value: "Retrieve a Json object from the bucket.\n\n*@Returns* *the object's parsed Json.*\n*@Throws* *if no object with the given key exists.*"
+  sortText: ff|getJson
+  insertText: getJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: list
+  kind: 2
+  detail: "inflight (prefix: str?): Array<str>"
+  documentation:
+    kind: markdown
+    value: "Retrieve existing objects keys from the bucket.\n\n#### Returns\na list of keys or an empty array if the bucket is empty."
+  sortText: ff|list
+  insertText: list($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: metadata
+  kind: 2
+  detail: "inflight (key: str): ObjectMetadata"
+  documentation:
+    kind: markdown
+    value: "Get the metadata of an object in the bucket.\n\n*@Throws* *if there is no object with the given key.*"
+  sortText: ff|metadata
+  insertText: metadata($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: publicUrl
+  kind: 2
+  detail: "inflight (key: str): str"
+  documentation:
+    kind: markdown
+    value: "Returns a url to the given file.\n\n*@Throws* *if the file is not public or if object does not exist.*"
+  sortText: ff|publicUrl
+  insertText: publicUrl($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: put
+  kind: 2
+  detail: "inflight (key: str, body: str, options: BucketPutOptions?): void"
+  documentation:
+    kind: markdown
+    value: Put an object in the bucket.
+  sortText: ff|put
+  insertText: put($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: putJson
+  kind: 2
+  detail: "inflight (key: str, body: Json): void"
+  documentation:
+    kind: markdown
+    value: Put a Json object in the bucket.
+  sortText: ff|putJson
+  insertText: putJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: rename
+  kind: 2
+  detail: "inflight (srcKey: str, dstKey: str): void"
+  documentation:
+    kind: markdown
+    value: "Move an object to a new location in the bucket.\n\n#### Remarks\nIf the destination object\nalready exists, it will be overwritten. Returns once the renaming is finished.\n\n*@throws* *if `srcKey` object doesn't exist or if it matches `dstKey`.*"
+  sortText: ff|rename
+  insertText: rename($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: signedUrl
+  kind: 2
+  detail: "inflight (key: str, options: BucketSignedUrlOptions?): str"
+  documentation:
+    kind: markdown
+    value: "Returns a signed url to the given file.\n\n#### Returns\nA string representing the signed url of the object which can be used to download in any downstream system\n\n*@Throws* *if object does not exist.*"
+  sortText: ff|signedUrl
+  insertText: signedUrl($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryDelete
+  kind: 2
+  detail: "inflight (key: str): bool"
+  documentation:
+    kind: markdown
+    value: "Delete an object from the bucket if it exists.\n\n#### Returns\nthe result of the delete operation"
+  sortText: ff|tryDelete
+  insertText: tryDelete($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryGet
+  kind: 2
+  detail: "inflight (key: str, options: BucketTryGetOptions?): str?"
+  documentation:
+    kind: markdown
+    value: "Get an object from the bucket if it exists If the bytes returned are not a valid UTF-8 string, an error is thrown.\n\n#### Returns\nthe contents of the object as a string if it exists, nil otherwise"
+  sortText: ff|tryGet
+  insertText: tryGet($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryGetJson
+  kind: 2
+  detail: "inflight (key: str): Json?"
+  documentation:
+    kind: markdown
+    value: "Gets an object from the bucket if it exists, parsing it as Json.\n\n#### Returns\nthe contents of the object as Json if it exists, nil otherwise"
+  sortText: ff|tryGetJson
+  insertText: tryGetJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+

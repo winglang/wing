@@ -1,11 +1,14 @@
-import { Function } from "../../src/cloud";
-import { SimApp, Testing } from "../../src/testing";
+import { test, expect } from "vitest";
+import { Bucket, Function } from "../../src/cloud";
+import { Lifting, inflight } from "../../src/core";
+import { SimApp } from "../sim-app";
 
 test("binding throws if a method is unsupported", () => {
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", "async handle() {}");
-  const host = Function._newFunction(app, "Function", handler);
-  expect(() => handler._registerBind(host, ["foo", "bar"])).toThrow(
-    /Resource root\/Handler does not support operation foo/
+  const bucket = new Bucket(app, "Bucket");
+  const handler = inflight(async () => {});
+  const host = new Function(app, "Function", handler);
+  expect(() => Lifting.lift(bucket, host, ["foo", "bar"])).toThrow(
+    /Resource root\/Bucket does not support inflight operation foo/
   );
 });

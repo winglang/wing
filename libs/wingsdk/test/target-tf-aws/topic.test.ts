@@ -1,9 +1,12 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { inflight } from "../../src/core";
+import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../../src/util";
 import {
+  mkdtemp,
+  sanitizeCode,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,
@@ -12,8 +15,8 @@ import {
 
 test("default topic behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  cloud.Topic._newTopic(app, "Topic");
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  new cloud.Topic(app, "Topic");
   const output = app.synth();
 
   // THEN
@@ -24,13 +27,11 @@ test("default topic behavior", () => {
 
 test("topic with subscriber function", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const topic = cloud.Topic._newTopic(app, "Topic");
-  const subscriber = Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle(event) { console.log("Received: ", event); }`
-  );
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const topic = new cloud.Topic(app, "Topic");
+  const subscriber = inflight(async (_, event) => {
+    console.log("Received: ", event);
+  });
 
   topic.onMessage(subscriber);
   const output = app.synth();
@@ -38,6 +39,7 @@ test("topic with subscriber function", () => {
   // THEN
   expect(sanitizeCode(subscriber._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for subscriber function
     "aws_iam_role", // role for subscriber function
     "aws_iam_role_policy", // policy for subscriber function role
     "aws_iam_role_policy_attachment", // execution policy for subscriber role
@@ -54,22 +56,16 @@ test("topic with subscriber function", () => {
 
 test("topic with multiple subscribers", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const topic = cloud.Topic._newTopic(app, "Topic");
-  const subOne = Testing.makeHandler(
-    app,
-    "Handler1",
-    `async handle(event) { console.log("Got Event: ", event); }`
-  );
-  const subTwo = Testing.makeHandler(
-    app,
-    "Handler2",
-    `async handle(event) { console.log("Ohh yea!! ", event); }`
-  );
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const topic = new cloud.Topic(app, "Topic");
 
   // WHEN
-  topic.onMessage(subOne);
-  topic.onMessage(subTwo);
+  topic.onMessage(
+    inflight(async (_, event) => console.log("Got Event: ", event))
+  );
+  topic.onMessage(
+    inflight(async (_, event) => console.log("Ohh yea!! ", event))
+  );
 
   const output = app.synth();
 
@@ -83,15 +79,15 @@ test("topic with multiple subscribers", () => {
   );
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_lambda_permission")).toEqual(2);
-  expect(tfResourcesOfCount(output, "aws_s3_bucket")).toEqual(2);
+  expect(tfResourcesOfCount(output, "aws_s3_bucket")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_sns_topic_subscription")).toEqual(2);
 });
 
 test("topic name valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const topic = cloud.Topic._newTopic(app, "The-Spectacular_Topic-01");
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const topic = new cloud.Topic(app, "The-Spectacular_Topic-01");
   const output = app.synth();
 
   // THEN
@@ -106,8 +102,8 @@ test("topic name valid", () => {
 
 test("replace invalid character from queue name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const topic = cloud.Topic._newTopic(app, "The%Spectacular@Topic");
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const topic = new cloud.Topic(app, "The%Spectacular@Topic");
   const output = app.synth();
 
   // THEN
@@ -118,4 +114,23 @@ test("replace invalid character from queue name", () => {
   );
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("topic with subscriber function timeout", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const topic = new cloud.Topic(app, "Topic");
+  const subscriber = inflight(async (_, event) => {
+    console.log("Received: ", event);
+  });
+
+  topic.onMessage(subscriber, { timeout: Duration.fromSeconds(30) });
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
+      timeout: 30,
+    })
+  ).toEqual(true);
 });

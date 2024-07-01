@@ -1,0 +1,28 @@
+---
+source: libs/wingc/src/lsp/code_actions.rs
+---
+- title: "Insert ';'"
+  kind: quickfix
+  diagnostics:
+    - range:
+        start:
+          line: 0
+          character: 11
+        end:
+          line: 0
+          character: 11
+      severity: 1
+      message: "Expected ';'"
+  edit:
+    changes:
+      file0:
+        - range:
+            start:
+              line: 0
+              character: 11
+            end:
+              line: 0
+              character: 11
+          newText: ;
+  isPreferred: true
+

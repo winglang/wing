@@ -1,6 +1,13 @@
 [workspace]
 members = [
+  "apps/wingcli-v2",
   "libs/tree-sitter-wing",
   "libs/wingc",
   "libs/wingii",
 ]
+resolver = "2"
+
+# For use with `cargo flamegraph --profile flamegraph`
+[profile.flamegraph]
+inherits = "release"
+debug = true

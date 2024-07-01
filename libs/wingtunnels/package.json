@@ -1,0 +1,47 @@
+{
+  "name": "@winglang/wingtunnels",
+  "version": "0.0.0",
+  "author": {
+    "name": "Wing Cloud",
+    "email": "ping@wing.cloud",
+    "organization": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/winglang/wing.git",
+    "directory": "libs/wingtunnels"
+  },
+  "description": "Tunnels Library for Wing",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org",
+    "tag": "latest"
+  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@types/debug": "^4.1.12",
+    "@types/node": "^20.11.0",
+    "@types/ws": "^8.5.10",
+    "debug": "^4.3.5",
+    "ws": "^8.17.1"
+  },
+  "devDependencies": {
+    "bump-pack": "workspace:^",
+    "tsup": "^6.7.0",
+    "typescript": "^5.5.2",
+    "vitest": "^1.6.0"
+  },
+  "scripts": {
+    "compile": "tsup",
+    "package": "bump-pack -b",
+    "test": "vitest run --update"
+  },
+  "files": [
+    "lib"
+  ],
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

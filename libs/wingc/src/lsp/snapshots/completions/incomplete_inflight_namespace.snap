@@ -1,0 +1,574 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: Api
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Api {\n  url: str;\n  connect(): void;\n  delete(): void;\n  get(): void;\n  head(): void;\n  options(): void;\n  /* ... */\n}\n```\n---\nFunctionality shared between all `Api` implementations."
+  sortText: gg|Api
+- label: Bucket
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Bucket {\n  addFile(): void;\n  addObject(): void;\n  onCreate(): void;\n  onDelete(): void;\n  onEvent(): void;\n  onUpdate(): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
+  sortText: gg|Bucket
+- label: Counter
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Counter {\n  initial: num;\n  inflight dec(): num;\n  inflight inc(): num;\n  inflight peek(): num;\n  inflight set(): void;\n}\n```\n---\nA distributed atomic counter."
+  sortText: gg|Counter
+- label: Domain
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Domain {\n  domainName: str;\n}\n```\n---\nA cloud Domain."
+  sortText: gg|Domain
+- label: Endpoint
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Endpoint {\n  url: str;\n}\n```\n---\nA cloud Endpoint."
+  sortText: gg|Endpoint
+- label: Function
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Function impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(): void;\n  inflight invoke(): str?;\n  inflight invokeAsync(): void;\n}\n```\n---\nA function."
+  sortText: gg|Function
+- label: OnDeploy
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass OnDeploy {\n  // No public members\n}\n```\n---\nRun code every time the app is deployed."
+  sortText: gg|OnDeploy
+- label: Queue
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Queue {\n  setConsumer(): Function;\n  inflight approxSize(): num;\n  inflight pop(): str?;\n  inflight purge(): void;\n  inflight push(): void;\n}\n```\n---\nA queue."
+  sortText: gg|Queue
+- label: Schedule
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Schedule {\n  onTick(): Function;\n}\n```\n---\nA schedule."
+  sortText: gg|Schedule
+- label: Secret
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Secret {\n  name?: str;\n  inflight value(): str;\n  inflight valueJson(): Json;\n}\n```\n---\nA cloud secret."
+  sortText: gg|Secret
+- label: Service
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Service impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(): void;\n  inflight start(): void;\n  inflight started(): bool;\n  inflight stop(): void;\n}\n```\n---\nA long-running service."
+  sortText: gg|Service
+- label: Topic
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Topic {\n  onMessage(): Function;\n  subscribeQueue(): void;\n  inflight publish(): void;\n}\n```\n---\nA topic."
+  sortText: gg|Topic
+- label: Website
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Website impl IWebsite {\n  path: str;\n  url: str;\n  addFile(): str;\n  addJson(): str;\n}\n```\n---\nA cloud static website."
+  sortText: gg|Website
+- label: AddFileOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct AddFileOptions {\n  contentType?: str;\n}\n```\n---\nOptions for adding a file with custom value during the website's deployment."
+  sortText: hh|AddFileOptions
+- label: ApiConnectOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiConnectOptions extends ApiEndpointOptions {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Api patch endpoint."
+  sortText: hh|ApiConnectOptions
+- label: ApiCorsOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiCorsOptions {\n  allowCredentials?: bool;\n  allowHeaders?: Array<str>;\n  allowMethods?: Array<HttpMethod>;\n  allowOrigin?: str;\n  exposeHeaders?: Array<str>;\n  maxAge?: duration;\n}\n```\n---\nCors Options for `Api`."
+  sortText: hh|ApiCorsOptions
+- label: ApiDeleteOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiDeleteOptions extends ApiEndpointOptions {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Api put endpoint."
+  sortText: hh|ApiDeleteOptions
+- label: ApiEndpointOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiEndpointOptions extends FunctionProps {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nBase options for Api endpoints."
+  sortText: hh|ApiEndpointOptions
+- label: ApiGetOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiGetOptions extends ApiEndpointOptions {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Api get endpoint."
+  sortText: hh|ApiGetOptions
+- label: ApiHeadOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiHeadOptions extends ApiEndpointOptions {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Api patch endpoint."
+  sortText: hh|ApiHeadOptions
+- label: ApiOptionsOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiOptionsOptions extends ApiEndpointOptions {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Api patch endpoint."
+  sortText: hh|ApiOptionsOptions
+- label: ApiPatchOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiPatchOptions extends ApiEndpointOptions {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Api patch endpoint."
+  sortText: hh|ApiPatchOptions
+- label: ApiPostOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiPostOptions extends ApiEndpointOptions {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Api post endpoint."
+  sortText: hh|ApiPostOptions
+- label: ApiProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiProps {\n  cors?: bool;\n  corsOptions?: ApiCorsOptions;\n}\n```\n---\nOptions for `Api`."
+  sortText: hh|ApiProps
+- label: ApiPutOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiPutOptions extends ApiEndpointOptions {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Api put endpoint."
+  sortText: hh|ApiPutOptions
+- label: ApiRequest
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiRequest {\n  body?: str;\n  headers?: Map<str>;\n  method: HttpMethod;\n  path: str;\n  query: Map<str>;\n  vars: Map<str>;\n}\n```\n---\nShape of a request to an inflight handler."
+  sortText: hh|ApiRequest
+- label: ApiResponse
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ApiResponse {\n  body?: str;\n  headers?: Map<str>;\n  status?: num;\n}\n```\n---\nShape of a response from a inflight handler."
+  sortText: hh|ApiResponse
+- label: BucketDeleteOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketDeleteOptions {\n  mustExist?: bool;\n}\n```\n---\nOptions for `Bucket.delete()`."
+  sortText: hh|BucketDeleteOptions
+- label: BucketEvent
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketEvent {\n  key: str;\n  type: BucketEventType;\n}\n```\n---\nOn_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927."
+  sortText: hh|BucketEvent
+- label: BucketGetOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketGetOptions {\n  endByte?: num;\n  startByte?: num;\n}\n```\n---\nOptions for `Bucket.get()`."
+  sortText: hh|BucketGetOptions
+- label: BucketOnCreateOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketOnCreateOptions {\n  // No public members\n}\n```\n---\n`onCreate` event options."
+  sortText: hh|BucketOnCreateOptions
+- label: BucketOnDeleteOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketOnDeleteOptions {\n  // No public members\n}\n```\n---\n`onDelete` event options."
+  sortText: hh|BucketOnDeleteOptions
+- label: BucketOnEventOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketOnEventOptions {\n  // No public members\n}\n```\n---\n`onEvent` options."
+  sortText: hh|BucketOnEventOptions
+- label: BucketOnUpdateOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketOnUpdateOptions {\n  // No public members\n}\n```\n---\n`onUpdate` event options."
+  sortText: hh|BucketOnUpdateOptions
+- label: BucketProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketProps {\n  public?: bool;\n}\n```\n---\nOptions for `Bucket`."
+  sortText: hh|BucketProps
+- label: BucketPutOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketPutOptions {\n  contentType: str;\n}\n```\n---\nOptions for `Bucket.put()`."
+  sortText: hh|BucketPutOptions
+- label: BucketSignedUrlOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketSignedUrlOptions {\n  action?: BucketSignedUrlAction;\n  duration?: duration;\n}\n```\n---\nOptions for `Bucket.signedUrl()`."
+  sortText: hh|BucketSignedUrlOptions
+- label: BucketTryGetOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketTryGetOptions extends BucketGetOptions {\n  endByte?: num;\n  startByte?: num;\n}\n```\n---\nOptions for `Bucket.tryGet()`."
+  sortText: hh|BucketTryGetOptions
+- label: CorsHeaders
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct CorsHeaders {\n  defaultResponse: Map<str>;\n  optionsResponse: Map<str>;\n}\n```\n---\nType definition for CORS headers which includes default and options headers."
+  sortText: hh|CorsHeaders
+- label: CounterProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct CounterProps {\n  initial?: num;\n}\n```\n---\nOptions for `Counter`."
+  sortText: hh|CounterProps
+- label: DeadLetterQueueProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct DeadLetterQueueProps {\n  maxDeliveryAttempts?: num;\n  queue: Queue;\n}\n```\n---\nDead letter queue options."
+  sortText: hh|DeadLetterQueueProps
+- label: DomainProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct DomainProps {\n  domainName: str;\n}\n```\n---\nOptions for `Domain`."
+  sortText: hh|DomainProps
+- label: EndpointProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct EndpointProps {\n  browserSupport?: bool;\n  label?: str;\n}\n```\n---\nOptions for `Endpoint`."
+  sortText: hh|EndpointProps
+- label: FunctionProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct FunctionProps {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for `Function`."
+  sortText: hh|FunctionProps
+- label: GetSecretValueOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct GetSecretValueOptions {\n  cache?: bool;\n}\n```\n---\nOptions when getting a secret value."
+  sortText: hh|GetSecretValueOptions
+- label: ObjectMetadata
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ObjectMetadata {\n  contentType?: str;\n  lastModified: Datetime;\n  size: num;\n}\n```\n---\nMetadata of a bucket object."
+  sortText: hh|ObjectMetadata
+- label: OnDeployProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct OnDeployProps extends FunctionProps {\n  concurrency?: num;\n  env?: Map<str>;\n  executeAfter?: Array<Construct>;\n  executeBefore?: Array<Construct>;\n  logRetentionDays?: num;\n  memory?: num;\n  /* ... */\n}\n```\n---\nOptions for `OnDeploy`."
+  sortText: hh|OnDeployProps
+- label: QueueProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct QueueProps {\n  dlq?: DeadLetterQueueProps;\n  retentionPeriod?: duration;\n  timeout?: duration;\n}\n```\n---\nOptions for `Queue`."
+  sortText: hh|QueueProps
+- label: QueueSetConsumerOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct QueueSetConsumerOptions extends FunctionProps {\n  batchSize?: num;\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Queue.setConsumer."
+  sortText: hh|QueueSetConsumerOptions
+- label: ScheduleOnTickOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ScheduleOnTickOptions extends FunctionProps {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Schedule.onTick."
+  sortText: hh|ScheduleOnTickOptions
+- label: ScheduleProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ScheduleProps {\n  cron?: str;\n  rate?: duration;\n}\n```\n---\nOptions for `Schedule`."
+  sortText: hh|ScheduleProps
+- label: SecretProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct SecretProps {\n  name?: str;\n}\n```\n---\nOptions for `Secret`."
+  sortText: hh|SecretProps
+- label: ServiceOnStartOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ServiceOnStartOptions extends FunctionProps {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for Service.onStart."
+  sortText: hh|ServiceOnStartOptions
+- label: ServiceProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ServiceProps {\n  autoStart?: bool;\n  env?: Map<str>;\n}\n```\n---\nOptions for `Service`."
+  sortText: hh|ServiceProps
+- label: TopicOnMessageOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct TopicOnMessageOptions extends FunctionProps {\n  concurrency?: num;\n  env?: Map<str>;\n  logRetentionDays?: num;\n  memory?: num;\n  timeout?: duration;\n}\n```\n---\nOptions for `Topic.onMessage`."
+  sortText: hh|TopicOnMessageOptions
+- label: TopicProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct TopicProps {\n  // No public members\n}\n```\n---\nOptions for `Topic`."
+  sortText: hh|TopicProps
+- label: TopicSubscribeQueueOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct TopicSubscribeQueueOptions extends QueueProps {\n  dlq?: DeadLetterQueueProps;\n  retentionPeriod?: duration;\n  timeout?: duration;\n}\n```\n---\nOptions for `Topic.subscribeQueue`."
+  sortText: hh|TopicSubscribeQueueOptions
+- label: WebsiteDomainOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct WebsiteDomainOptions {\n  domain?: Domain;\n}\n```\n---\nOptions for `Website`."
+  sortText: hh|WebsiteDomainOptions
+- label: WebsiteOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct WebsiteOptions {\n  errorDocument?: str;\n  path: str;\n}\n```\n---\nBasic options for `Website`."
+  sortText: hh|WebsiteOptions
+- label: WebsiteProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct WebsiteProps extends WebsiteOptions, WebsiteDomainOptions {\n  domain?: Domain;\n  errorDocument?: str;\n  path: str;\n}\n```\n---\nOptions for `Website`."
+  sortText: hh|WebsiteProps
+- label: IApiClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IApiClient {\n  // No public members\n}\n```\n---\nInflight methods and members of `cloud.Api`."
+  sortText: ii|IApiClient
+- label: IApiEndpointHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (...request: ApiRequest): ApiResponse?\n```\n---\nA resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods."
+  sortText: ii|IApiEndpointHandler
+- label: IApiEndpointHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (...request: ApiRequest): ApiResponse?\n```\n---\nInflight client for `IApiEndpointHandler`."
+  sortText: ii|IApiEndpointHandlerClient
+- label: IBucketClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IBucketClient {\n  inflight copy(): void;\n  inflight delete(): void;\n  inflight exists(): bool;\n  inflight get(): str;\n  inflight getJson(): Json;\n  inflight list(): Array<str>;\n  /* ... */\n}\n```\n---\nInflight interface for `Bucket`."
+  sortText: ii|IBucketClient
+- label: IBucketEventHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (key: str, type: BucketEventType): void\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events."
+  sortText: ii|IBucketEventHandler
+- label: IBucketEventHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (key: str, type: BucketEventType): void\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events."
+  sortText: ii|IBucketEventHandlerClient
+- label: ICounterClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface ICounterClient {\n  inflight dec(): num;\n  inflight inc(): num;\n  inflight peek(): num;\n  inflight set(): void;\n}\n```\n---\nInflight interface for `Counter`."
+  sortText: ii|ICounterClient
+- label: IDomainClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IDomainClient {\n  // No public members\n}\n```\n---\nInflight interface for `Domain`."
+  sortText: ii|IDomainClient
+- label: IEndpointClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IEndpointClient {\n  // No public members\n}\n```\n---\nInflight interface for `Endpoint`."
+  sortText: ii|IEndpointClient
+- label: IFunctionClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IFunctionClient {\n  inflight invoke(): str?;\n  inflight invokeAsync(): void;\n}\n```\n---\nInflight interface for `Function`."
+  sortText: ii|IFunctionClient
+- label: IFunctionHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (event: str?): str?\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`."
+  sortText: ii|IFunctionHandler
+- label: IFunctionHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (event: str?): str?\n```\n---\nInflight client for `IFunctionHandler`."
+  sortText: ii|IFunctionHandlerClient
+- label: IOnDeployClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IOnDeployClient {\n  // No public members\n}\n```\n---\nInflight interface for `OnDeploy`."
+  sortText: ii|IOnDeployClient
+- label: IOnDeployHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (): void\n```\n---\nA resource with an inflight \"handle\" method that can be used by `cloud.OnDeploy`."
+  sortText: ii|IOnDeployHandler
+- label: IOnDeployHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (): void\n```\n---\nInflight client for `IOnDeployHandler`."
+  sortText: ii|IOnDeployHandlerClient
+- label: IQueueClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IQueueClient {\n  inflight approxSize(): num;\n  inflight pop(): str?;\n  inflight purge(): void;\n  inflight push(): void;\n}\n```\n---\nInflight interface for `Queue`."
+  sortText: ii|IQueueClient
+- label: IQueueSetConsumerHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (message: str): void\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`."
+  sortText: ii|IQueueSetConsumerHandler
+- label: IQueueSetConsumerHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (message: str): void\n```\n---\nInflight client for `IQueueSetConsumerHandler`."
+  sortText: ii|IQueueSetConsumerHandlerClient
+- label: IScheduleClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IScheduleClient {\n  // No public members\n}\n```\n---\nInflight interface for `Schedule`."
+  sortText: ii|IScheduleClient
+- label: IScheduleOnTickHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (): void\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`."
+  sortText: ii|IScheduleOnTickHandler
+- label: IScheduleOnTickHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (): void\n```\n---\nInflight client for `IScheduleOnTickHandler`."
+  sortText: ii|IScheduleOnTickHandlerClient
+- label: ISecretClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface ISecretClient {\n  inflight value(): str;\n  inflight valueJson(): Json;\n}\n```\n---\nInflight interface for `Secret`."
+  sortText: ii|ISecretClient
+- label: IServiceClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IServiceClient {\n  inflight start(): void;\n  inflight started(): bool;\n  inflight stop(): void;\n}\n```\n---\nInflight interface for `Service`."
+  sortText: ii|IServiceClient
+- label: IServiceHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (): inflight (): void?\n```\n---\nExecuted when a `cloud.Service` is started."
+  sortText: ii|IServiceHandler
+- label: IServiceHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (): inflight (): void?\n```\n---\nInflight client for `IServiceHandler`."
+  sortText: ii|IServiceHandlerClient
+- label: IServiceStopHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (): void\n```\n---\nExecuted when a `cloud.Service` is stopped."
+  sortText: ii|IServiceStopHandler
+- label: IServiceStopHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (): void\n```\n---\nInflight client for `IServiceStopHandler`."
+  sortText: ii|IServiceStopHandlerClient
+- label: ITopicClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface ITopicClient {\n  inflight publish(): void;\n}\n```\n---\nInflight interface for `Topic`."
+  sortText: ii|ITopicClient
+- label: ITopicOnMessageHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (event: str): void\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`."
+  sortText: ii|ITopicOnMessageHandler
+- label: ITopicOnMessageHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (event: str): void\n```\n---\nInflight client for `ITopicOnMessageHandler`."
+  sortText: ii|ITopicOnMessageHandlerClient
+- label: IWebsite
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IWebsite {\n  url: str;\n}\n```\n---\nBase interface for a website."
+  sortText: ii|IWebsite
+- label: IWebsiteClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IWebsiteClient {\n  // No public members\n}\n```\n---\nInflight methods and members of `cloud.Website`."
+  sortText: ii|IWebsiteClient
+- label: BucketEventType
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum BucketEventType {\n  CREATE,\n  DELETE,\n  UPDATE,\n}\n```\n---\nBucket events to subscribe to."
+  sortText: jj|BucketEventType
+- label: BucketSignedUrlAction
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum BucketSignedUrlAction {\n  DOWNLOAD,\n  UPLOAD,\n}\n```\n---\nSpecifies the action permitted by a presigned URL for a bucket."
+  sortText: jj|BucketSignedUrlAction
+- label: HttpMethod
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum HttpMethod {\n  GET,\n  HEAD,\n  POST,\n  PUT,\n  DELETE,\n  CONNECT,\n  OPTIONS,\n  PATCH,\n}\n```\n---\nAllowed HTTP methods for a endpoint."
+  sortText: jj|HttpMethod
+

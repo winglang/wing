@@ -1,0 +1,218 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: base64Decode
+  kind: 2
+  detail: "(stringToDecode: str, url: bool?): str"
+  documentation:
+    kind: markdown
+    value: "Converts a string from base64 to UTF-8.\n\n#### Returns\nThe UTF-8 string."
+  sortText: ff|base64Decode
+  insertText: base64Decode($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: base64Encode
+  kind: 2
+  detail: "(stringToEncode: str, url: bool?): str"
+  documentation:
+    kind: markdown
+    value: "Converts a string from UTF-8 to base64.\n\n#### Returns\nThe base64 string."
+  sortText: ff|base64Encode
+  insertText: base64Encode($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: env
+  kind: 2
+  detail: "(name: str): str"
+  documentation:
+    kind: markdown
+    value: "Returns the value of an environment variable.\n\n#### Remarks\nThrows if not found or empty."
+  sortText: ff|env
+  insertText: env($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: exec
+  kind: 2
+  detail: "(program: str, args: Array<str>, opts: ExecOptions?): Output"
+  documentation:
+    kind: markdown
+    value: "Execute a program with the given arguments, wait for it to finish, and return its outputs.\n\n#### Returns\nA struct containing `stdout`, `stderr` and exit `status` of the executed program."
+  sortText: ff|exec
+  insertText: exec($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: nanoid
+  kind: 2
+  detail: "(options: NanoidOptions?): str"
+  documentation:
+    kind: markdown
+    value: "Generates a unique ID using the nanoid library.\n\n#### Remarks\n#\n\n*@link* *https://github.com/ai/nanoid*"
+  sortText: ff|nanoid
+  insertText: nanoid($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: os
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "Returns a string identifying the operating system platform.\n\n#### Returns\nThe operating system platform\n\n#### Example\n```ts\n\"linux\", \"darwin\", \"win32\"\n```"
+  sortText: ff|os
+  insertText: os()
+- label: setEnv
+  kind: 2
+  detail: "(name: str, value: str): void"
+  documentation:
+    kind: markdown
+    value: Sets the given name and value as an environment variable.
+  sortText: ff|setEnv
+  insertText: setEnv($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: sha256
+  kind: 2
+  detail: "(data: str): str"
+  documentation:
+    kind: markdown
+    value: Computes the SHA256 hash of the given data.
+  sortText: ff|sha256
+  insertText: sha256($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: shell
+  kind: 2
+  detail: "(command: str, opts: ShellOptions?): str"
+  documentation:
+    kind: markdown
+    value: "Executes a command in the shell and returns its standard output.\n\n#### Returns\nThe standard output of the shell command.\n\n*@throws* *An error if the shell command execution fails or returns a non-zero exit code.*"
+  sortText: ff|shell
+  insertText: shell($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryEnv
+  kind: 2
+  detail: "(name: str): str?"
+  documentation:
+    kind: markdown
+    value: "Returns the value of an environment variable.\n\n#### Returns\nThe value of the environment variable or `nil`.\n\n#### Remarks\nReturns `nil` if not found or empty."
+  sortText: ff|tryEnv
+  insertText: tryEnv($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: ulid
+  kind: 2
+  detail: "(options: UlidOptions?): str"
+  documentation:
+    kind: markdown
+    value: "Generates universally unique lexicographically sortable identifier.\n\n#### Remarks\n#\n\n*@link* *https://github.com/ulid/javascript*"
+  sortText: ff|ulid
+  insertText: ulid($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: uuidv4
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: Generates a version 4 UUID.
+  sortText: ff|uuidv4
+  insertText: uuidv4()
+- label: ChildProcess
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass ChildProcess {\n  pid?: num;\n  kill(): void;\n  wait(): Output;\n}\n```\n---\nHandle to a running child process."
+  sortText: gg|ChildProcess
+- label: Util
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Util {\n  static base64Decode(): str;\n  static base64Encode(): str;\n  static env(): str;\n  static exec(): Output;\n  static nanoid(): str;\n  static os(): str;\n  /* ... */\n}\n```\n---\nUtility functions."
+  sortText: gg|Util
+- label: CommandOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct CommandOptions {\n  cwd?: str;\n  env?: Map<str>;\n  inheritEnv?: bool;\n}\n```\n---\nBase command options."
+  sortText: hh|CommandOptions
+- label: ExecOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ExecOptions extends CommandOptions {\n  cwd?: str;\n  env?: Map<str>;\n  inheritEnv?: bool;\n}\n```\n---\nAdditional options for `util.exec()`."
+  sortText: hh|ExecOptions
+- label: NanoidOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct NanoidOptions {\n  alphabet?: str;\n  size?: num;\n}\n```\n---\nOptions to generating a unique ID."
+  sortText: hh|NanoidOptions
+- label: Output
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct Output {\n  status: num;\n  stderr: str;\n  stdout: str;\n}\n```\n---\nOutput of a finished process."
+  sortText: hh|Output
+- label: ShellOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct ShellOptions extends CommandOptions {\n  cwd?: str;\n  env?: Map<str>;\n  inheritEnv?: bool;\n  throw?: bool;\n}\n```\n---\nAdditional options for `util.shell()`."
+  sortText: hh|ShellOptions
+- label: SpawnOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct SpawnOptions extends CommandOptions {\n  cwd?: str;\n  env?: Map<str>;\n  inheritEnv?: bool;\n  stderr?: Stdio;\n  stdin?: Stdio;\n  stdout?: Stdio;\n}\n```\n---\nAdditional options for `util.spawn()`."
+  sortText: hh|SpawnOptions
+- label: UlidOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct UlidOptions {\n  seed?: num;\n}\n```\n---\nOptions to generate universally unique lexicographically sortable identifiers."
+  sortText: hh|UlidOptions
+- label: WaitUntilProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct WaitUntilProps {\n  interval?: duration;\n  throws?: bool;\n  timeout?: duration;\n}\n```\n---\nProperties for `util.waitUntil`."
+  sortText: hh|WaitUntilProps
+- label: IPredicateHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (): bool\n```\n---\nA predicate with an inflight \"handle\" method that can be passed to `util.busyWait`."
+  sortText: ii|IPredicateHandler
+- label: IPredicateHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight (): bool\n```\n---\nInflight client for `IPredicateHandler`."
+  sortText: ii|IPredicateHandlerClient
+- label: Stdio
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum Stdio {\n  INHERIT,\n  PIPED,\n  NULL,\n}\n```\n---\nDescribes what to do with a standard I/O stream for a child process."
+  sortText: jj|Stdio
+

@@ -1,0 +1,39 @@
+{
+  "name": "bump-pack",
+  "version": "0.0.0",
+  "private": true,
+  "bin": {
+    "bump-pack": "./bin/bump-pack.cjs",
+    "link-bundles": "./bin/link-bundles.cjs",
+    "turbo-diff": "./bin/turbo-diff.cjs"
+  },
+  "exports": null,
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.11.0",
+    "@types/semver": "^7.5.8",
+    "typescript": "^5.5.2",
+    "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@pnpm/find-workspace-dir": "^6.0.3",
+    "@pnpm/reviewing.dependencies-hierarchy": "^2.1.11",
+    "@pnpm/workspace.find-packages": "^1.1.12",
+    "changelogen": "^0.5.5",
+    "fs-extra": "^11.2.0",
+    "minimatch": "^9.0.4",
+    "npm-which": "^3.0.1",
+    "semver": "^7.6.2",
+    "tsx": "^4.15.7"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

@@ -2,6 +2,7 @@ import { ChildProcess, spawn } from "child_process";
 import { EventEmitter } from "events";
 import { tmpdir } from "os";
 import { Readable, Writable } from "stream";
+import { vi } from "vitest";
 import {
   NoSpaceLeftOnDevice,
   NpmError,
@@ -11,11 +12,8 @@ import { Npm } from "../../../src/docgen/view/_npm";
 
 const TMPDIR = tmpdir();
 
-jest.mock("child_process");
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const mockSpawn = require("child_process").spawn as jest.MockedFunction<
-  typeof spawn
->;
+vi.mock("child_process");
+const mockSpawn = vi.mocked(spawn);
 
 test("NoSpaceLeftOnDevice error", () => {
   // GIVEN
@@ -184,6 +182,8 @@ class MockChildProcess extends EventEmitter implements ChildProcess {
   public unref(): never {
     throw new UnsupportedCallError();
   }
+
+  [Symbol.dispose](): void {}
 }
 
 export class UnsupportedCallError extends Error {

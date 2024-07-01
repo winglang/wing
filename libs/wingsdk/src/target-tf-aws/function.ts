@@ -1,20 +1,31 @@
-import * as crypto from "crypto";
-import { readFileSync } from "fs";
-import { resolve } from "path";
-import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
-import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
-import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
-import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
-import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
-import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
-import { BUCKET_PREFIX_OPTS } from "./bucket";
+import { App } from "./app";
+import { CloudwatchLogGroup } from "../.gen/providers/aws/cloudwatch-log-group";
+import { IamRole } from "../.gen/providers/aws/iam-role";
+import { IamRolePolicy } from "../.gen/providers/aws/iam-role-policy";
+import { IamRolePolicyAttachment } from "../.gen/providers/aws/iam-role-policy-attachment";
+import { LambdaFunction } from "../.gen/providers/aws/lambda-function";
+import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
+import { S3Object } from "../.gen/providers/aws/s3-object";
+import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { NotImplementedError } from "../core/errors";
+import { createBundle } from "../shared/bundling";
+import { DEFAULT_MEMORY_SIZE } from "../shared/function";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
+import {
+  AwsInflightHost,
+  Effect,
+  IAwsFunction,
+  NetworkConfig,
+  PolicyStatement,
+  externalLibraries,
+} from "../shared-aws";
+import { makeAwsLambdaHandler } from "../shared-aws/function-util";
+import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
  * Function names are limited to 64 characters.
@@ -26,24 +37,44 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 };
 
 /**
+ * Options for granting invoke permissions to the current function
+ */
+export interface FunctionPermissionsOptions {
+  /**
+   * Used for keeping function's versioning.
+   */
+  readonly qualifier?: string;
+}
+
+/**
  * AWS implementation of `cloud.Function`.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.Function {
+export class Function extends cloud.Function implements IAwsFunction {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
-  /**
-   * Unqualified Function ARN
-   * @returns Unqualified ARN of the function
-   */
-  public readonly arn: string;
+  private subnets?: Set<string>;
+  private vpcPermissionsAdded = false;
+  private securityGroups?: Set<string>;
+  private layers?: Set<string>;
+
   /**
    * Qualified Function ARN
    * @returns Qualified ARN of the function
    */
   public readonly qualifiedArn: string;
+  /** Function INVOKE_ARN */
+  public readonly invokeArn: string;
+  /** Permissions  */
+  public permissions!: LambdaPermission;
+
+  /** Name of the AWS Lambda function in the account/region */
+  public readonly name: string;
+
+  private assetPath: string | undefined; // posix path
+  private bundleHash: string | undefined;
 
   constructor(
     scope: Construct,
@@ -53,37 +84,42 @@ export class Function extends cloud.Function {
   ) {
     super(scope, id, inflight, props);
 
-    // bundled code is guaranteed to be in a fresh directory
-    const codeDir = resolve(this.assetPath, "..");
-
-    // calculate a md5 hash of the contents of asset.path
-    const codeHash = crypto
-      .createHash("md5")
-      .update(readFileSync(this.assetPath))
-      .digest("hex");
-
-    // Create Lambda executable
-    const asset = new TerraformAsset(this, "Asset", {
-      path: codeDir,
-      type: AssetType.ARCHIVE,
-    });
+    if (props.concurrency != null) {
+      throw new NotImplementedError(
+        "Function concurrency isn't implemented yet on the current target."
+      );
+    }
 
     // Create unique S3 bucket for hosting Lambda code
-    const bucket = new S3Bucket(this, "Code");
-    const bucketPrefix = ResourceNames.generateName(bucket, BUCKET_PREFIX_OPTS);
-    bucket.bucketPrefix = bucketPrefix;
+    const app = App.of(this) as App;
+    const bucket = app.codeBucket;
 
     // Choose an object name so that:
     // - whenever code changes, the object name changes
     // - even if two functions have the same code, they get different names
     //   (separation of concerns)
-    const objectKey = `asset.${this.node.addr}.${codeHash}.zip`;
+    let bundleHashToken = Lazy.stringValue({
+      produce: () => {
+        if (!this.bundleHash) {
+          throw new Error("bundleHash was not set");
+        }
+        return this.bundleHash;
+      },
+    });
+    const objectKey = `asset.${this.node.addr}.${bundleHashToken}.zip`;
 
     // Upload Lambda zip file to newly created S3 bucket
     const lambdaArchive = new S3Object(this, "S3Object", {
       bucket: bucket.bucket,
       key: objectKey,
-      source: asset.path, // returns a posix path
+      source: Lazy.stringValue({
+        produce: () => {
+          if (!this.assetPath) {
+            throw new Error("assetPath was not set");
+          }
+          return this.assetPath;
+        },
+      }),
     });
 
     // Create Lambda role
@@ -108,24 +144,26 @@ export class Function extends cloud.Function {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
-          if ((this.policyStatements ?? []).length > 0) {
+          this.policyStatements = this.policyStatements ?? [];
+
+          if (this.policyStatements.length !== 0) {
             return JSON.stringify({
               Version: "2012-10-17",
               Statement: this.policyStatements,
             });
-          } else {
-            // policy must contain at least one statement, so include a no-op statement
-            return JSON.stringify({
-              Version: "2012-10-17",
-              Statement: [
-                {
-                  Effect: "Allow",
-                  Action: "none:null",
-                  Resource: "*",
-                },
-              ],
-            });
           }
+
+          // policy must contain at least one statement, so include a no-op statement
+          return JSON.stringify({
+            Version: "2012-10-17",
+            Statement: [
+              {
+                Effect: "Allow",
+                Action: "none:null",
+                Resource: "*",
+              },
+            ],
+          });
         },
       }),
     });
@@ -137,7 +175,7 @@ export class Function extends cloud.Function {
       role: this.role.name,
     });
 
-    const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
+    this.name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
 
     // validate memory size
     if (props.memory && (props.memory < 128 || props.memory > 10240)) {
@@ -146,42 +184,126 @@ export class Function extends cloud.Function {
       );
     }
 
+    if (!props.logRetentionDays || props.logRetentionDays >= 0) {
+      new CloudwatchLogGroup(this, "CloudwatchLogGroup", {
+        name: `/aws/lambda/${this.name}`,
+        retentionInDays: props.logRetentionDays ?? 30,
+      });
+    } else {
+      // Negative value means Infinite retention
+    }
+
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
-      functionName: name,
+      functionName: this.name,
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
-      runtime: "nodejs16.x",
+      runtime: "nodejs20.x",
       role: this.role.arn,
       publish: true,
+      layers: Lazy.listValue({
+        produce: () =>
+          this.layers ? Array.from(this.layers.values()) : undefined,
+      }),
+      vpcConfig: {
+        subnetIds: Lazy.listValue({
+          produce: () =>
+            this.subnets ? Array.from(this.subnets.values()) : [],
+        }),
+        securityGroupIds: Lazy.listValue({
+          produce: () =>
+            this.securityGroups ? Array.from(this.securityGroups.values()) : [],
+        }),
+      },
       environment: {
-        variables: Lazy.anyValue({ produce: () => this.env }) as any,
+        variables: Lazy.anyValue({
+          produce: () => ({
+            ...this.env,
+            // enable source maps
+            NODE_OPTIONS: [
+              ...(this.env.NODE_OPTIONS === undefined
+                ? []
+                : this.env.NODE_OPTIONS.split(" ")),
+              "--enable-source-maps",
+            ].join(" "),
+          }),
+        }) as any,
       },
       timeout: props.timeout
         ? props.timeout.seconds
-        : Duration.fromMinutes(0.5).seconds,
-      memorySize: props.memory ? props.memory : undefined,
+        : Duration.fromMinutes(1).seconds,
+      memorySize: props.memory ?? DEFAULT_MEMORY_SIZE,
+      architectures: ["arm64"],
     });
 
-    this.arn = this.function.arn;
+    if (app.parameters.value("tf-aws/vpc_lambda") === true) {
+      const sg = new SecurityGroup(this, `${id}SecurityGroup`, {
+        vpcId: app.vpc.id,
+        egress: [
+          {
+            cidrBlocks: ["0.0.0.0/0"],
+            fromPort: 0,
+            toPort: 0,
+            protocol: "-1",
+          },
+        ],
+      });
+      this.addNetwork({
+        subnetIds: [...app.subnets.private.map((s) => s.id)],
+        securityGroupIds: [sg.id],
+      });
+    }
+
     this.qualifiedArn = this.function.qualifiedArn;
+    this.invokeArn = this.function.invokeArn;
 
     // terraform rejects templates with zero environment variables
-    this.addEnvironment("WING_FUNCTION_NAME", name);
+    this.addEnvironment("WING_FUNCTION_NAME", this.name);
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("functions can only be bound by tfaws.Function for now");
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
+    // `require` resolves naturally.
+
+    const bundle = createBundle(this.entrypoint, externalLibraries);
+
+    // would prefer to create TerraformAsset in the constructor, but using a CDKTF token for
+    // the "path" argument isn't supported
+    const asset = new TerraformAsset(this, "Asset", {
+      path: bundle.directory,
+      type: AssetType.ARCHIVE,
+    });
+
+    this.bundleHash = bundle.hash;
+    this.assetPath = asset.path;
+  }
+
+  /** @internal */
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
+        [this.handler, ["handle"]],
+      ],
+    };
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
-    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+    if (
+      ops.includes(cloud.FunctionInflightMethods.INVOKE) ||
+      ops.includes(cloud.FunctionInflightMethods.INVOKE_ASYNC)
+    ) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["lambda:InvokeFunction"],
-        resource: [`${this.function.arn}`],
+        actions: ["lambda:InvokeFunction"],
+        resources: [`${this.function.arn}`],
       });
     }
 
@@ -189,14 +311,55 @@ export class Function extends cloud.Function {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.arn);
 
-    super._bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "FunctionClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _toInflight(): string {
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "FunctionClient",
+      [`process.env["${this.envName()}"], "${this.node.path}"`]
+    );
+  }
+
+  /**
+   * Add a Lambda Layer to the function
+   */
+  public addLambdaLayer(layerArn: string): void {
+    if (!this.layers) {
+      this.layers = new Set();
+    }
+    this.layers.add(layerArn);
+  }
+
+  /**
+   * Add VPC configurations to lambda function
+   */
+  public addNetwork(vpcConfig: NetworkConfig) {
+    if (!this.subnets || !this.securityGroups) {
+      this.subnets = new Set();
+      this.securityGroups = new Set();
+    }
+    vpcConfig.subnetIds.forEach((subnet) => this.subnets!.add(subnet));
+    vpcConfig.securityGroupIds.forEach((sg) => this.securityGroups!.add(sg));
+
+    if (!this.vpcPermissionsAdded) {
+      this.addPolicyStatements({
+        effect: Effect.ALLOW,
+        actions: [
+          "ec2:CreateNetworkInterface",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeSecurityGroups",
+        ],
+        resources: ["*"],
+      });
+
+      this.vpcPermissionsAdded = true;
+    }
   }
 
   /**
@@ -210,13 +373,13 @@ export class Function extends cloud.Function {
       this.policyStatements = [];
     }
 
-    this.policyStatements.push(
-      ...statements.map((s) => ({
-        Action: s.action,
-        Resource: s.resource,
-        Effect: s.effect ?? "Allow",
-      }))
-    );
+    for (const statement of statements) {
+      this.policyStatements.push({
+        Action: statement.actions,
+        Resource: statement.resources,
+        Effect: statement.effect ?? "Allow",
+      });
+    }
   }
 
   /**
@@ -224,39 +387,44 @@ export class Function extends cloud.Function {
    * @param principal The AWS principal to grant invoke permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
    */
   public addPermissionToInvoke(
-    source: core.Resource,
+    source: Resource,
     principal: string,
-    sourceArn: string
-  ) {
-    new LambdaPermission(this, `InvokePermission-${source.node.addr}`, {
-      functionName: this._functionName,
-      qualifier: this.function.version,
-      action: "lambda:InvokeFunction",
-      principal: principal,
-      sourceArn: sourceArn,
-    });
-  }
-
-  /** @internal */
-  public get _functionName(): string {
-    return this.function.functionName;
+    sourceArn: string,
+    options: FunctionPermissionsOptions = { qualifier: this.function.version }
+  ): void {
+    this.permissions = new LambdaPermission(
+      this,
+      `InvokePermission-${source.node.addr}`,
+      {
+        functionName: this.functionName,
+        action: "lambda:InvokeFunction",
+        principal: principal,
+        sourceArn: sourceArn,
+        ...options,
+      }
+    );
   }
 
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
-}
 
-/**
- * AWS IAM Policy Statement.
- */
-export interface PolicyStatement {
-  /** Actions */
-  readonly action?: string[];
-  /** Resources */
-  readonly resource?: string[] | string;
-  /** Effect ("Allow" or "Deny") */
-  readonly effect?: string;
-}
+  /**
+   * Unqualified Function ARN
+   * @returns Unqualified ARN of the function
+   */
+  public get functionArn(): string {
+    return this.function.arn;
+  }
 
-Function._annotateInflight("invoke", {});
+  public get functionName(): string {
+    return this.function.functionName;
+  }
+
+  /**
+   * @internal
+   */
+  protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
+    return makeAwsLambdaHandler(handler);
+  }
+}

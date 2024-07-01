@@ -1,0 +1,4 @@
+{
+  "extends": "@wingconsole/tsconfig",
+  "include": ["src/**/*", "test/**/*"]
+}

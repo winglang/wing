@@ -1,14 +1,17 @@
-import { join } from "path";
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { App } from "./app";
+import { EventMapping } from "./event-mapping";
+import { FunctionInflightMethods as SimFunctionInflightMethods } from "./function";
+import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
-import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
+import { QueueSchema } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
-import * as core from "../core";
-import * as std from "../std";
+import { lift, LiftMap } from "../core";
+import { NotImplementedError } from "../core/errors";
+import { ToSimulatorOutput } from "../simulator";
+import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -16,105 +19,162 @@ import * as std from "../std";
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.Queue implements ISimulatorResource {
-  private readonly timeout: std.Duration;
-  private readonly subscribers: QueueSubscriber[];
-  private readonly initialMessages: string[] = [];
+  private readonly timeout: Duration;
+  private readonly retentionPeriod: Duration;
+  private readonly dlq?: cloud.DeadLetterQueueProps;
+  private readonly policy: Policy;
+
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.timeout = props.timeout ?? std.Duration.fromSeconds(30);
-    this.subscribers = [];
-    this.initialMessages.push(...(props.initialMessages ?? []));
+    if (props.timeout) {
+      throw new NotImplementedError(
+        "Queue.timeout is not supported on the sim platform yet.",
+        {
+          issue: "https://github.com/winglang/wing/issues/1980",
+          resource: this.constructor.name,
+          operation: "timeout",
+        }
+      );
+    }
+
+    this.timeout = props.timeout ?? Duration.fromSeconds(30);
+    this.retentionPeriod = props.retentionPeriod ?? Duration.fromHours(1);
+
+    if (this.retentionPeriod.seconds < this.timeout.seconds) {
+      throw new Error(
+        "Retention period must be greater than or equal to timeout"
+      );
+    }
+
+    this.policy = new Policy(this, "Policy", { principal: this });
+
+    if (props.dlq && props.dlq.queue) {
+      this.dlq = props.dlq;
+
+      this.policy.addStatement(this.dlq.queue, cloud.QueueInflightMethods.PUSH);
+
+      Node.of(this).addConnection({
+        source: this,
+        sourceOp: cloud.QueueInflightMethods.POP,
+        target: this.dlq.queue,
+        targetOp: cloud.QueueInflightMethods.PUSH,
+        name: "dead-letter queue",
+      });
+    }
   }
 
-  public onMessage(
-    inflight: core.Inflight, // cloud.IQueueOnMessageHandler
-    props: cloud.QueueOnMessageProps = {}
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.QueueInflightMethods.PURGE]: [],
+      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
+      [cloud.QueueInflightMethods.POP]: [],
+    };
+  }
+
+  public setConsumer(
+    inflight: cloud.IQueueSetConsumerHandler,
+    props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
-
-    /**
-     * The handle method the user provided (via the `inflight` parameter) needs
-     * to be wrapped in some extra logic to handle batching.
-     * `convertBetweenHandlers` creates a dummy resource that provides the
-     * wrapper code. In Wing psuedocode, this looks like:
-     *
-     * resource Handler impl cloud.IFunctionHandler {
-     *   init(handler: cloud.IQueueOnMessageHandler) {
-     *     this.handler = handler;
-     *   }
-     *   inflight handle(event: string) {
-     *     for (const message of JSON.parse(event).messages) {
-     *       this.handler.handle(message);
-     *     }
-     *   }
-     * }
-     *
-     * It's possible we could optimize this and create one less construct in the
-     * user's tree by creating a single `Handler` resource that subclasses from
-     * `cloud.Function` and overrides the `invoke` inflight method with the
-     * wrapper code directly.
-     */
-    const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessageHandler-${hash}`,
-      inflight,
-      join(__dirname, "queue.onmessage.inflight.js"),
-      "QueueOnMessageHandlerClient"
-    );
-
-    const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${hash}`,
+    const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
+    const fn = new cloud.Function(
+      this,
+      App.of(this).makeId(this, "Consumer"),
       functionHandler,
       props
     );
+    const fnNode = Node.of(fn);
+    fnNode.sourceModule = SDK_SOURCE_MODULE;
+    fnNode.title = "Consumer";
 
-    // At the time the queue is created in the simulator, it needs to be able to
-    // call subscribed functions.
-    this.node.addDependency(fn);
+    const mapping = new EventMapping(
+      this,
+      App.of(this).makeId(this, "QueueEventMapping"),
+      {
+        subscriber: fn,
+        publisher: this,
+        subscriptionProps: {
+          batchSize: props.batchSize ?? 1,
+        },
+      }
+    );
 
-    const functionHandle = `\${${fn.node.path}#attrs.handle}`; // TODO: proper token mechanism
-    this.subscribers.push({
-      functionHandle,
-      batchSize: props.batchSize ?? 1,
-    });
+    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
+    this.policy.addStatement(
+      fn,
+      SimFunctionInflightMethods.HAS_AVAILABLE_WORKERS
+    );
+    mapping.node.addDependency(this.policy);
 
-    core.Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "on_message",
+    Node.of(this).addConnection({
+      source: this,
+      sourceOp: cloud.QueueInflightMethods.PUSH,
+      target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
+      name: "consumer",
     });
 
     return fn;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: QueueSchema = {
-      type: QUEUE_TYPE,
-      path: this.node.path,
-      props: {
-        timeout: this.timeout.seconds,
-        subscribers: this.subscribers,
-        initialMessages: this.initialMessages,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: QueueSchema = {
+      timeout: this.timeout.seconds,
+      retentionPeriod: this.retentionPeriod.seconds,
+      dlq: this.dlq
+        ? {
+            dlqHandler: simulatorHandleToken(this.dlq.queue),
+            maxDeliveryAttempts:
+              this.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
+          }
+        : undefined,
     };
-    return schema;
+    return {
+      type: cloud.QUEUE_FQN,
+      props,
+    };
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    bindSimulatorResource(__filename, this, host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("queue", this, host);
-    super._bind(host, ops);
-  }
-
-  /** @internal */
-  public _toInflight(): core.Code {
-    return makeSimulatorJsClient("queue", this);
+  public _toInflight(): string {
+    return makeSimulatorJsClient(__filename, this);
   }
 }
 
-Queue._annotateInflight("push", {});
-Queue._annotateInflight("purge", {});
-Queue._annotateInflight("approx_size", {});
+/**
+ * Utility class to work with queue set consumer handlers.
+ */
+export class QueueSetConsumerHandler {
+  /**
+   * Converts from a `cloud.IQueueSetConsumerHandler` to a `cloud.IFunctionHandler`.
+   * @param handler The handler to convert.
+   * @returns The function handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.IQueueSetConsumerHandler
+  ): cloud.IFunctionHandler {
+    return lift({ handler }).inflight(async (ctx, event) => {
+      const batchItemFailures = [];
+      let parsed = JSON.parse(event ?? "{}");
+      if (!parsed.messages) throw new Error('No "messages" field in event.');
+      for (const $message of parsed.messages) {
+        try {
+          await ctx.handler($message.payload);
+        } catch (error) {
+          // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
+          batchItemFailures.push($message);
+        }
+      }
+      return batchItemFailures.length > 0
+        ? JSON.stringify(batchItemFailures)
+        : undefined;
+    });
+  }
+}

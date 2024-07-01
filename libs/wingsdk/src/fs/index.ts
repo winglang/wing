@@ -1,2 +1,1 @@
-export * from "./json-file";
-export * from "./text-file";
+export * from "./fs";

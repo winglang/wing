@@ -1,17 +1,33 @@
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
-import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
-import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
-import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
-import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
+import { ITerraformDependable } from "cdktf";
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { App } from "./app";
+import { Topic as AWSTopic } from "./topic";
+import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
+import {
+  S3BucketNotification,
+  S3BucketNotificationTopic,
+} from "../.gen/providers/aws/s3-bucket-notification";
+
+import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
+import { S3BucketPublicAccessBlock } from "../.gen/providers/aws/s3-bucket-public-access-block";
+import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
-} from "../utils/resource-names";
+} from "../shared/resource-names";
+import { AwsInflightHost } from "../shared-aws";
+import { BucketEventHandler, IAwsBucket } from "../shared-aws/bucket";
+import { calculateBucketPermissions } from "../shared-aws/permissions";
+import { IInflightHost } from "../std";
+
+const EVENTS = {
+  [cloud.BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
+  [cloud.BucketEventType.CREATE]: ["s3:ObjectCreated:Put"],
+  [cloud.BucketEventType.UPDATE]: ["s3:ObjectCreated:Post"],
+};
 
 /**
  * Bucket prefix provided to Terraform must be between 3 and 37 characters.
@@ -32,76 +48,20 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
 /**
  * AWS implementation of `cloud.Bucket`.
  *
- * @inflight `@winglang/sdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.aws.IAwsBucketClient`
  */
-export class Bucket extends cloud.Bucket {
+export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
+  private readonly notificationTopics: S3BucketNotificationTopic[] = [];
+  private readonly notificationDependencies: ITerraformDependable[] = [];
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
 
-    const bucketPrefix = ResourceNames.generateName(this, BUCKET_PREFIX_OPTS);
-
-    // names cannot begin with 'xn--'
-    if (bucketPrefix.startsWith("xn--")) {
-      throw new Error("AWS S3 bucket names cannot begin with 'xn--'.");
-    }
-
-    // names must begin with a letter or number
-    if (!/^[a-z0-9]/.test(bucketPrefix)) {
-      throw new Error(
-        "AWS S3 bucket names must begin with a letter or number."
-      );
-    }
-
-    // names cannot end with '-s3alias' and must end with a letter or number,
-    // but we do not need to handle these cases since we are generating the
-    // prefix only
-
-    this.bucket = new S3Bucket(this, "Default", {
-      bucketPrefix,
-    });
-
-    // best practice: (at-rest) data encryption with Amazon S3-managed keys
-    new S3BucketServerSideEncryptionConfigurationA(this, "Encryption", {
-      bucket: this.bucket.bucket,
-      rule: [
-        {
-          applyServerSideEncryptionByDefault: {
-            sseAlgorithm: "AES256",
-          },
-        },
-      ],
-    });
-
-    if (this.public) {
-      const policy = {
-        Version: "2012-10-17",
-        Statement: [
-          {
-            Effect: "Allow",
-            Principal: "*",
-            Action: ["s3:GetObject"],
-            Resource: [`${this.bucket.arn}/*`],
-          },
-        ],
-      };
-      new S3BucketPolicy(this, "PublicPolicy", {
-        bucket: this.bucket.bucket,
-        policy: JSON.stringify(policy),
-      });
-    } else {
-      new S3BucketPublicAccessBlock(this, "PublicAccessBlock", {
-        bucket: this.bucket.bucket,
-        blockPublicAcls: true,
-        blockPublicPolicy: true,
-        ignorePublicAcls: true,
-        restrictPublicBuckets: true,
-      });
-    }
+    this.bucket = createEncryptedBucket(this, this.public);
   }
 
   public addObject(key: string, body: string): void {
@@ -113,63 +73,160 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("buckets can only be bound by tfaws.Function for now");
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.SIGNED_URL]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+    };
+  }
+
+  protected createTopicHandler(
+    eventType: cloud.BucketEventType,
+    inflight: cloud.IBucketEventHandler
+  ): cloud.ITopicOnMessageHandler {
+    return BucketEventHandler.toTopicOnMessageHandler(inflight, eventType);
+  }
+
+  protected createTopic(actionType: cloud.BucketEventType): cloud.Topic {
+    const handler = super.createTopic(actionType);
+
+    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
+    if (!(handler instanceof AWSTopic)) {
+      throw new Error("Topic only supports creating tfaws.Function right now");
     }
 
-    if (ops.includes(cloud.BucketInflightMethods.PUT)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["s3:PutObject*", "s3:Abort*"],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
+    handler.addPermissionToPublish(this, "s3.amazonaws.com", this.bucket.arn);
+
+    this.notificationTopics.push({
+      id: `on-${actionType.toLowerCase()}-notification`,
+      events: EVENTS[actionType],
+      topicArn: handler.topicArn,
+    });
+
+    this.notificationDependencies.push(handler.permissions);
+
+    return handler;
+  }
+
+  public _preSynthesize() {
+    super._preSynthesize();
+    if (this.notificationTopics.length) {
+      new S3BucketNotification(this, `S3BucketNotification`, {
+        bucket: this.bucket.id,
+        topic: this.notificationTopics,
+        dependsOn: this.notificationDependencies,
       });
     }
-    if (ops.includes(cloud.BucketInflightMethods.GET)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
-    if (ops.includes(cloud.BucketInflightMethods.LIST)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
-    if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: [
-          "s3:DeleteObject*",
-          "s3:DeleteObjectVersion*",
-          "s3:PutLifecycleConfiguration*",
-        ],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
+
+    host.addPolicyStatements(
+      ...calculateBucketPermissions(this.bucket.arn, ops)
+    );
+
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
-
-    super._bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "BucketClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _toInflight(): string {
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "BucketClient",
+      [`process.env["${this.envName()}"]`]
+    );
   }
 
   private envName(): string {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
+
+  public get bucketArn(): string {
+    return this.bucket.arn;
+  }
+
+  public get bucketName(): string {
+    return this.bucket.bucket;
+  }
 }
 
-Bucket._annotateInflight("put", {});
-Bucket._annotateInflight("get", {});
-Bucket._annotateInflight("delete", {});
-Bucket._annotateInflight("list", {});
+export function createEncryptedBucket(
+  scope: Construct,
+  isPublic: boolean,
+  name: string = "Default"
+): S3Bucket {
+  const bucketPrefix = ResourceNames.generateName(scope, BUCKET_PREFIX_OPTS);
+
+  // names cannot begin with 'xn--'
+  if (bucketPrefix.startsWith("xn--")) {
+    throw new Error("AWS S3 bucket names cannot begin with 'xn--'.");
+  }
+
+  // names must begin with a letter or number
+  if (!/^[a-z0-9]/.test(bucketPrefix)) {
+    throw new Error("AWS S3 bucket names must begin with a letter or number.");
+  }
+
+  // names cannot end with '-s3alias' and must end with a letter or number,
+  // but we do not need to handle these cases since we are generating the
+  // prefix only
+
+  const isTestEnvironment = App.of(scope).isTestEnvironment;
+
+  const bucket = new S3Bucket(scope, name, {
+    bucketPrefix,
+    forceDestroy: !!isTestEnvironment,
+  });
+
+  if (isPublic) {
+    const publicAccessBlock = new S3BucketPublicAccessBlock(
+      scope,
+      "PublicAccessBlock",
+      {
+        bucket: bucket.bucket,
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      }
+    );
+    const policy = {
+      Version: "2012-10-17",
+      Statement: [
+        {
+          Effect: "Allow",
+          Principal: "*",
+          Action: ["s3:GetObject"],
+          Resource: [`${bucket.arn}/*`],
+        },
+      ],
+    };
+    new S3BucketPolicy(scope, "PublicPolicy", {
+      bucket: bucket.bucket,
+      policy: JSON.stringify(policy),
+      dependsOn: [publicAccessBlock],
+    });
+  }
+
+  return bucket;
+}

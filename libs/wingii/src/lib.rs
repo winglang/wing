@@ -1,3 +1,8 @@
+#![allow(clippy::all)]
+#![deny(clippy::correctness)]
+#![deny(clippy::suspicious)]
+#![deny(clippy::complexity)]
+
 use std::error::Error;
 
 extern crate serde;
@@ -10,24 +15,30 @@ pub mod fqn;
 // this is public temporarily until reflection API is finalized
 pub mod jsii;
 
-mod node_resolve;
-mod util;
+pub mod node_resolve;
+pub mod util;
 
 pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 pub mod spec {
-	use crate::jsii::Assembly;
-	use crate::Result;
+	use camino::{Utf8Path, Utf8PathBuf};
+	use flate2::read::GzDecoder;
+	use speedy::{Readable, Writable};
 	use std::fs;
-	use std::path::Path;
+	use std::io::Read;
+	use std::time::SystemTime;
+
+	use crate::jsii::{Assembly, JsiiFile};
+	use crate::Result;
 
 	pub const SPEC_FILE_NAME: &str = ".jsii";
 	pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
+	pub(crate) const CACHE_FILE_EXT: &str = ".jsii.speedy";
 
-	pub fn find_assembly_file(directory: &str) -> Result<String> {
-		let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
+	pub fn find_assembly_file(directory: &Utf8Path) -> Result<Utf8PathBuf> {
+		let dot_jsii_file = Utf8Path::new(directory).join(SPEC_FILE_NAME);
 		if dot_jsii_file.exists() {
-			Ok(dot_jsii_file.to_str().unwrap().to_string())
+			Ok(dot_jsii_file)
 		} else {
 			Err(
 				format!(
@@ -39,41 +50,119 @@ pub mod spec {
 		}
 	}
 
-	pub fn is_assembly_redirect(obj: &serde_json::Value) -> bool {
-		if let Some(schema) = obj.get("schema") {
-			schema.as_str().unwrap() == REDIRECT_FIELD
+	pub(crate) fn get_cache_file_path(manifest_path: &Utf8Path, hash: &str) -> Utf8PathBuf {
+		manifest_path
+			.parent()
+			.unwrap()
+			.to_path_buf()
+			.join(format!("{hash}{CACHE_FILE_EXT}"))
+	}
+
+	pub(crate) fn try_load_from_cache(manifest_path: &Utf8Path, hash: &str) -> Option<Assembly> {
+		let path = get_cache_file_path(manifest_path, hash);
+		let data = fs::read(path).ok()?;
+		let asm = Assembly::read_from_buffer(&data).ok()?;
+		Some(asm)
+	}
+
+	pub fn load_assembly_from_file(
+		name: &str,
+		assembly_path: &Utf8Path,
+		compression: Option<&str>,
+		module_version: &Option<String>,
+	) -> Result<Assembly> {
+		// First try loading the manifest from the cache
+		let fingerprint = get_manifest_fingerprint(name, assembly_path, module_version);
+		let maybe_manifest = fingerprint
+			.as_ref()
+			.and_then(|fingerprint| try_load_from_cache(assembly_path, &fingerprint))
+			.map(|assembly| JsiiFile::Assembly(assembly));
+
+		let manifest = if let Some(manifest) = maybe_manifest {
+			manifest
 		} else {
-			false
+			// Load the manifest from the file
+			let manifest = if Some("gzip") == compression {
+				let gz_data_reader = std::io::Cursor::new(fs::read(assembly_path)?);
+				let mut manifest_data_gz = GzDecoder::new(gz_data_reader);
+				let mut data = Vec::new();
+				manifest_data_gz.read_to_end(&mut data)?;
+				serde_json::from_slice(&data)?
+			} else {
+				serde_json::from_str(&fs::read_to_string(assembly_path)?)?
+			};
+			// Attempt to cache the manifest
+			if let JsiiFile::Assembly(assmbly) = &manifest {
+				if let Some(fingerprint) = &fingerprint {
+					let _ = cache_manifest(&assembly_path, assmbly, fingerprint);
+				}
+			}
+			manifest
+		};
+
+		match manifest {
+			JsiiFile::Assembly(asm) => Ok(asm),
+			JsiiFile::AssemblyRedirect(asm_redirect) => {
+				// new path is relative to the folder of the original assembly
+				let path = assembly_path
+					.parent()
+					.expect("Assembly path has no parent")
+					.join(&asm_redirect.filename);
+				load_assembly_from_file(name, &path, Some(&asm_redirect.compression), module_version)
+			}
 		}
 	}
 
-	pub fn load_assembly_from_file(path_to_file: &str) -> Result<Assembly> {
-		let path = Path::new(path_to_file);
-		let manifest = fs::read_to_string(path)?;
-		let manifest = serde_json::from_str(&manifest)?;
-		if is_assembly_redirect(&manifest) {
-			let redirect = manifest
-				.get("filename")
-				.expect("redirect assembly found but no filename is provided")
-				.as_str()
-				.unwrap();
-			let redirect_path = Path::new(redirect);
-			let redirect_manifest = fs::read_to_string(redirect_path)?;
-			let redirect_manifest = serde_json::from_str(&redirect_manifest)?;
-			Ok(serde_json::from_value(redirect_manifest)?)
-		} else {
-			Ok(serde_json::from_value(manifest)?)
-		}
+	pub(crate) fn get_manifest_fingerprint(
+		name: &str,
+		assembly_path: &Utf8Path,
+		module_version: &Option<String>,
+	) -> Option<String> {
+		let module_version = module_version.as_ref()?;
+		let metadata = fs::metadata(assembly_path).ok()?;
+		let fp_raw_str = format!(
+			"{name}-{}-{}-{module_version}",
+			metadata
+				.modified()
+				.ok()?
+				.duration_since(SystemTime::UNIX_EPOCH)
+				.ok()?
+				// Use micros and not nanos for better cross platform compatibility (WASM vs native don't produce the same nanos)
+				.as_micros(),
+			metadata.len(),
+		);
+		Some(blake3::hash(&fp_raw_str.as_bytes()).to_string())
 	}
 
-	pub fn load_assembly_from_path(path: &str) -> Result<Assembly> {
-		let file = find_assembly_file(path)?;
-		load_assembly_from_file(&file)
+	fn cache_manifest(manifest_path: &Utf8Path, manifest: &Assembly, hash: &str) -> Result<()> {
+		let cache_file_dir = manifest_path.parent().unwrap().to_path_buf();
+		let cache_file_name = format!("{hash}{CACHE_FILE_EXT}");
+
+		// Write the new cache file
+		manifest.write_to_file(&cache_file_dir.join(&cache_file_name))?;
+
+		// Remove all old cache files (except the new one)
+		// We remove after creating the new cache file to avoid a race with other processes
+		for old_file in fs::read_dir(cache_file_dir.clone()).unwrap().filter(|f| {
+			f.as_ref()
+				.map(|f| {
+					f.file_name().to_str().unwrap().ends_with(CACHE_FILE_EXT)
+						&& f.file_name().to_str().unwrap() != cache_file_name.as_str()
+				})
+				.unwrap_or(false)
+		}) {
+			_ = fs::remove_file(old_file.unwrap().path());
+		}
+
+		Ok(())
 	}
 }
 
 pub mod type_system {
 	type AssemblyName = String;
+
+	use camino::Utf8Path;
+	use serde_json::Value;
 
 	use crate::fqn::FQN;
 	use crate::jsii;
@@ -81,21 +170,10 @@ pub mod type_system {
 	use crate::spec;
 	use crate::util::package_json;
 	use crate::Result;
-	use std::collections::{HashMap, HashSet};
-	use std::hash::{Hash, Hasher};
-	use std::path::Path;
+	use std::collections::HashMap;
 
 	pub struct TypeSystem {
 		assemblies: HashMap<String, Assembly>,
-		roots: Vec<String>,
-	}
-
-	/// Options to pass to the assembly loader
-	pub struct AssemblyLoadOptions {
-		/// Is this a root assembly? If unsure, pass `true`.
-		pub root: bool,
-		/// Should we load dependencies recursively? If unsure, pass `true`.
-		pub deps: bool,
 	}
 
 	pub trait QueryableType {}
@@ -107,15 +185,11 @@ pub mod type_system {
 		pub fn new() -> TypeSystem {
 			TypeSystem {
 				assemblies: HashMap::new(),
-				roots: Vec::new(),
 			}
 		}
 
 		pub fn includes_assembly(&self, name: &str) -> bool {
 			self.assemblies.contains_key(name)
-		}
-		pub fn is_root(&self, name: &str) -> bool {
-			self.roots.contains(&name.to_string())
 		}
 		pub fn find_assembly(&self, name: &str) -> Option<&Assembly> {
 			self.assemblies.get(name)
@@ -151,191 +225,61 @@ pub mod type_system {
 			}
 		}
 
-		pub fn load(&mut self, file_or_directory: &str, opts: Option<AssemblyLoadOptions>) -> Result<AssemblyName> {
-			let opts = opts.unwrap_or(AssemblyLoadOptions { deps: true, root: true });
-			if Path::new(file_or_directory).is_dir() {
-				self.load_module(file_or_directory, &opts)
-			} else {
-				// load_file always loads a single manifest and never recurses into dependencies
-				self.load_file(file_or_directory, Some(true))
+		fn add_assembly(&mut self, assembly: Assembly) -> Result<AssemblyName> {
+			let name = assembly.name.clone();
+			if !self.assemblies.contains_key(&name) {
+				self.assemblies.insert(name.clone(), assembly);
 			}
+			Ok(name)
 		}
 
-		fn load_assembly(&mut self, path: &str) -> Result<Assembly> {
-			Ok(spec::load_assembly_from_file(path)?)
-		}
-
-		fn add_root(&mut self, assembly: &Assembly) -> Result<()> {
-			if !(self.roots.iter().any(|a| a == &assembly.name)) {
-				self.roots.push(assembly.name.clone());
-			}
-			Ok(())
-		}
-
-		fn add_assembly(&mut self, assembly: Assembly, is_root: bool) -> Result<AssemblyName> {
-			if !self.assemblies.contains_key(&assembly.name) {
-				self.assemblies.insert(assembly.name.clone(), assembly.clone());
-			}
-			if is_root {
-				self.add_root(&assembly)?;
-			}
-			Ok(assembly.name)
-		}
-
-		fn load_file(&mut self, file: &str, is_root: Option<bool>) -> Result<AssemblyName> {
-			let assembly = spec::load_assembly_from_path(file)?;
-			self.add_assembly(assembly, is_root.unwrap_or(false))
-		}
-
-		pub fn load_dep(&mut self, dep: &str, search_start: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
-			let is_root = opts.root;
+		pub fn load_dep(&mut self, dep: &str, search_start: &Utf8Path) -> Result<AssemblyName> {
 			let module_dir = package_json::find_dependency_directory(dep, search_start).ok_or(format!(
 				"Unable to load \"{}\": Module not found in \"{}\"",
-				dep, search_start
+				dep, search_start,
 			))?;
-			self.load_module(
-				&module_dir,
-				&AssemblyLoadOptions {
-					root: is_root,
-					deps: opts.deps,
-				},
-			)
+			self.load_module(&module_dir)
 		}
 
-		fn load_module(&mut self, module_directory: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
-			let is_root = opts.root;
-			let file_path = std::path::Path::new(module_directory).join("package.json");
+		pub fn load_module(&mut self, module_directory: &Utf8Path) -> Result<AssemblyName> {
+			let file_path = Utf8Path::new(module_directory).join("package.json");
 			let package_json = std::fs::read_to_string(file_path)?;
 			let package: serde_json::Value = serde_json::from_str(&package_json)?;
 			let _ = package
 				.get("jsii")
 				.ok_or(format!("not a jsii module: {}", module_directory))?;
 			let assembly_file = spec::find_assembly_file(module_directory)?;
-			let asm = self.load_assembly(&assembly_file)?;
-			if self.assemblies.contains_key(&asm.name) {
-				let existing = self.assemblies.get(&asm.name).unwrap();
-				if existing.version != asm.version {
-					return Err(
-						format!(
-							"Assembly {} already exists with version {}. Got {}",
-							asm.name, existing.version, asm.version
-						)
-						.into(),
-					);
-				}
-				if is_root {
-					self.add_root(&asm)?;
-				}
-				return Ok(asm.name);
+			// in JSII, the assembly name is the NPM package name, so we don't need to load the assembly
+			// in order to check if we've already loaded it. Also, JSII doesn't support multiple version
+			// of the same assembly in the closure, so it is safe to assume that there are no version
+			// conflicts (otherwise we are going to get into semantic versioning checks and stuff).
+			let name = package.get("name").unwrap().as_str().unwrap();
+			if self.assemblies.contains_key(name) {
+				return Ok(name.to_string());
 			}
-			let root = self.add_assembly(asm, is_root)?;
 
-			let bundled = self
-				.find_assembly(&root)
-				.expect("root assembly could not be found")
-				.bundled();
-			let deps = self
-				.find_assembly(&root)
-				.expect("root assembly could not be found")
-				.dependencies();
+			// Get the module version, this is used for fingerprinting the JSII manifest
+			// needed for comparing it to the JSII manifest cache
+			let module_version = if let Some(Value::String(ver_str)) = package.get("version") {
+				Some(ver_str.clone())
+			} else {
+				None
+			};
 
-			if opts.deps {
-				for dep in deps {
-					if !bundled.contains(&dep) {
-						let dep_dir = package_json::find_dependency_directory(&dep, &module_directory).ok_or(format!(
-							"Unable to load \"{}\": Module not found from \"{}\"",
-							dep, module_directory
-						))?;
-						self.load_module(&dep_dir, opts)?;
-					}
+			let asm = spec::load_assembly_from_file(name, &assembly_file, None, &module_version)?;
+			let root = self.add_assembly(asm)?;
+			let bundled = package_json::bundled_dependencies_of(&package);
+			let deps = package_json::dependencies_of(&package);
+			for dep in deps {
+				if !bundled.contains(&dep) {
+					let dep_dir = package_json::find_dependency_directory(&dep, &module_directory).ok_or(format!(
+						"Unable to load \"{}\": Module not found from \"{}\"",
+						dep, module_directory
+					))?;
+					self.load_module(&dep_dir).expect("unable to load assembly");
 				}
 			}
 			Ok(root)
-		}
-	}
-
-	impl Assembly {
-		fn dependencies(&self) -> Vec<String> {
-			self
-				.dependencies
-				.as_ref()
-				.map(|b| b.iter().map(|b| b.0).cloned().collect::<Vec<_>>())
-				.unwrap_or_default()
-		}
-
-		fn bundled(&self) -> Vec<String> {
-			self
-				.bundled
-				.as_ref()
-				.map(|b| b.iter().map(|b| b.0).cloned().collect::<Vec<_>>())
-				.unwrap_or_default()
-		}
-	}
-
-	// It would be preferable to customize the types in `jsii.rs` so that PartialEq is calculated based on the FQN and
-	// not any other fields, but we can't do that because the types are code-generated, so this will have to do.
-	impl Eq for jsii::InterfaceType {}
-	impl Hash for jsii::InterfaceType {
-		fn hash<H: Hasher>(&self, state: &mut H) {
-			self.fqn.hash(state);
-		}
-	}
-
-	impl jsii::ClassType {
-		// Returns all of the interfaces this class implements
-		pub fn all_interfaces(&self, inherited: bool, system: &TypeSystem) -> Vec<jsii::InterfaceType> {
-			let mut interfaces = HashSet::new();
-			if inherited {
-				if let Some(base) = &self.base {
-					let base_type = system
-						.find_class(&FQN::from(base.as_str()))
-						.expect(&format!("Unable to find base class {}", base));
-					for iface in base_type.all_interfaces(inherited, system) {
-						interfaces.insert(iface);
-					}
-				}
-			}
-
-			interfaces.extend(
-				JsiiTypeWithInterfaces::all_interfaces(self, inherited, system)
-					.iter()
-					.cloned(),
-			);
-			interfaces.into_iter().collect()
-		}
-	}
-
-	impl JsiiTypeWithInterfaces for jsii::ClassType {
-		fn interfaces(&self) -> Option<&Vec<String>> {
-			self.interfaces.as_ref()
-		}
-	}
-
-	impl JsiiTypeWithInterfaces for jsii::InterfaceType {
-		fn interfaces(&self) -> Option<&Vec<String>> {
-			self.interfaces.as_ref()
-		}
-	}
-
-	pub trait JsiiTypeWithInterfaces {
-		fn interfaces(&self) -> Option<&Vec<String>>;
-
-		fn all_interfaces(&self, inherited: bool, system: &TypeSystem) -> Vec<jsii::InterfaceType> {
-			let mut interfaces = HashSet::new();
-			if let Some(ifaces) = self.interfaces() {
-				for iface in ifaces {
-					let iface_type = system
-						.find_interface(&FQN::from(iface.as_str()))
-						.expect(&format!("Unable to find interface {}", iface));
-					if inherited {
-						for iface in iface_type.all_interfaces(inherited, system) {
-							interfaces.insert(iface);
-						}
-					}
-					interfaces.insert(iface_type.clone());
-				}
-			}
-			interfaces.into_iter().collect()
 		}
 	}
 }

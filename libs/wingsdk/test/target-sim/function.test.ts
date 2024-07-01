@@ -1,12 +1,13 @@
+import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
-import { Duration } from "../../src/std";
-import { SimApp, Testing } from "../../src/testing";
+import { inflight } from "../../src/core";
+import { Node } from "../../src/std";
+import { SimApp } from "../sim-app";
 
-const INFLIGHT_CODE = `
-async handle(event) {
+const INFLIGHT_CODE = inflight(async (_, event) => {
   event = JSON.parse(event);
-  let msg;
+  let msg: string;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
   }
@@ -16,24 +17,16 @@ async handle(event) {
     msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
-}`;
+});
 
-const INFLIGHT_PANIC = `
-async handle() {
+const INFLIGHT_PANIC = inflight(async () => {
   process.exit(1);
-}`;
-
-const INFLIGHT_TIMEOUT = `
-async handle() {
-  while (true) {
-  };
-}`;
+});
 
 test("create a function", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler, {
+  new cloud.Function(app, "my_function", INFLIGHT_CODE, {
     env: {
       ENV_VAR1: "true",
     },
@@ -44,18 +37,21 @@ test("create a function", async () => {
   expect(s.getResourceConfig("/my_function")).toEqual({
     attrs: {
       handle: expect.any(String),
+      runningState: expect.any(String),
     },
     path: "root/my_function",
+    addr: expect.any(String),
+    policy: [],
     props: {
       sourceCodeFile: expect.any(String),
       sourceCodeLanguage: "javascript",
       environmentVariables: {
         ENV_VAR1: "true",
-        LOGGER_HANDLE_76f7e65b: "${root/WingLogger#attrs.handle}",
       },
+      concurrency: 100,
       timeout: 60000,
     },
-    type: "wingsdk.cloud.Function",
+    type: cloud.FUNCTION_FQN,
   });
   await s.stop();
 
@@ -65,8 +61,7 @@ test("create a function", async () => {
 test("invoke function succeeds", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler);
+  new cloud.Function(app, "my_function", INFLIGHT_CODE);
 
   const s = await app.startSimulator();
 
@@ -84,11 +79,41 @@ test("invoke function succeeds", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("async invoke function cleanup while running", async () => {
+  // GIVEN
+  const app = new SimApp();
+
+  new cloud.Function(
+    app,
+    "my_function",
+    inflight(async (_, event) => {
+      // sleep forever
+      await new Promise(() => {});
+      return undefined;
+    })
+  );
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
+
+  // WHEN
+  await client.invokeAsync();
+
+  // THEN
+  await s.stop();
+
+  // wait for a small time to let the child process fail to exit
+  await new Promise((resolve) => setTimeout(resolve, 150));
+
+  expect(s.listTraces().every((t) => t.data.error === undefined)).toBe(true);
+}, 10000);
+
 test("invoke function with environment variables", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler, {
+
+  new cloud.Function(app, "my_function", INFLIGHT_CODE, {
     env: {
       PIG_LATIN: "true",
     },
@@ -117,8 +142,7 @@ test("invoke function with environment variables", async () => {
 test("invoke function fails", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler);
+  new cloud.Function(app, "my_function", INFLIGHT_CODE);
   const s = await app.startSimulator();
 
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
@@ -133,7 +157,7 @@ test("invoke function fails", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
+  expect(s.listTraces()[1].data.error).toMatchObject({
     message: "Name must start with uppercase letter",
   });
   expect(app.snapshot()).toMatchSnapshot();
@@ -142,14 +166,13 @@ test("invoke function fails", async () => {
 test("function has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler);
+  new cloud.Function(app, "my_function", INFLIGHT_CODE);
 
   const treeJson = treeJsonOf(app.synth());
   const func = app.node.tryFindChild("my_function") as cloud.Function;
 
   // THEN
-  expect(func.display.hidden).toBeUndefined();
+  expect(Node.of(func).hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).not.toMatchObject({
     my_function: {
@@ -163,16 +186,15 @@ test("function has no display hidden property", async () => {
 test("function has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler);
+  new cloud.Function(app, "my_function", INFLIGHT_CODE);
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
   const func = app.node.tryFindChild("my_function") as cloud.Function;
 
   // THEN
-  expect(func.display.title).toBeDefined();
-  expect(func.display.description).toBeDefined();
+  expect(Node.of(func).title).toBeDefined();
+  expect(Node.of(func).description).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     my_function: {
       display: {
@@ -186,43 +208,88 @@ test("function has display title and description properties", async () => {
 test("invoke function with process.exit(1)", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_PANIC);
-  cloud.Function._newFunction(app, "my_function", handler);
+  new cloud.Function(app, "my_function", INFLIGHT_PANIC);
   const s = await app.startSimulator();
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
   // WHEN
   const PAYLOAD = {};
   await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-    "process.exit() was called with exit code 1"
+    "Process exited with code 1, signal null"
   );
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
-    message: "process.exit() was called with exit code 1",
+  expect(s.listTraces()[1].data.error).toMatchObject({
+    message: "Process exited with code 1, signal null",
   });
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("invoke function exceeds timeout", async () => {
-  // GIVEN
+test("runtime environment tests", async () => {
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_TIMEOUT);
-  cloud.Function._newFunction(app, "my_function", handler, {
-    timeout: Duration.fromSeconds(1),
-  });
-  const s = await app.startSimulator();
-  const client = s.getResource("/my_function") as cloud.IFunctionClient;
-  // WHEN
-  const PAYLOAD = {};
-  await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-    "Script execution timed out after 1000ms"
+
+  const urlSearchParamsFn = app.newCloudFunction(
+    inflight(async () => {
+      const query = "q=URLUtils.searchParams&topic=api";
+      const p = new URLSearchParams(query);
+      const value = p.get("topic");
+      if (!value) {
+        throw new Error("URLSearchParams failed");
+      }
+      return value;
+    })
   );
+
+  // check that fetch is a function (we can't really make network calls here)
+  const fetchFn = app.newCloudFunction(inflight(async () => typeof fetch));
+
+  const cryptoFn = app.newCloudFunction(
+    inflight(async () => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const c = require("crypto");
+      return typeof c.createHash;
+    })
+  );
+
+  // check that we can import ESM modules
+  const esmModulesFn = app.newCloudFunction(
+    inflight(async () => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { nanoid } = require("nanoid");
+      return nanoid();
+    })
+  );
+
   // THEN
+  const s = await app.startSimulator();
+  expect(await cryptoFn(s)).toEqual("function");
+  expect(await urlSearchParamsFn(s)).toBe("api");
+  expect(await fetchFn(s)).toEqual("function");
+  expect(await esmModulesFn(s)).toHaveLength(21);
+
   await s.stop();
-  expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
-    message: "Script execution timed out after 1000ms",
-  });
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("__dirname and __filename cannot be used within inflight code", async () => {
+  const app = new SimApp();
+  const dirnameInvoker = app.newCloudFunction(inflight(async () => __dirname));
+  const filenameInvoker = app.newCloudFunction(
+    inflight(async () => __filename)
+  );
+
+  const s = await app.startSimulator();
+
+  await dirnameInvoker(s);
+  await filenameInvoker(s);
+
+  await s.stop();
+
+  expect(
+    listMessages(s).filter((m) =>
+      m.includes(
+        "Warning: __dirname and __filename cannot be used within bundled cloud functions."
+      )
+    )
+  ).toHaveLength(2);
 });

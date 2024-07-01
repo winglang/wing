@@ -1,0 +1,128 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: "a:"
+  kind: 5
+  detail: str
+  sortText: "ab|a|a:"
+  insertText: "a: $1"
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: this
+  kind: 6
+  detail: Construct
+  documentation:
+    kind: markdown
+    value: "Represents the building block of the construct graph.\n\n#### Remarks\nAll constructs besides the root construct must be created within the scope of\nanother construct."
+  sortText: bb|this
+- label: nodeof
+  kind: 3
+  detail: "preflight (construct: IConstruct): Node"
+  documentation:
+    kind: markdown
+    value: Obtain the tree node of a preflight resource.
+  sortText: cc|nodeof
+  insertText: nodeof($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: unsafeCast
+  kind: 3
+  detail: "(value: any): any"
+  documentation:
+    kind: markdown
+    value: Casts a value into a different type. This is unsafe and can cause runtime errors
+  sortText: cc|unsafeCast
+  insertText: unsafeCast($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: A
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct A {\n  a: str;\n}\n```"
+  sortText: hh|A
+- label: Json
+  kind: 14
+  sortText: kl|zyJson
+- label: MutJson
+  kind: 14
+  sortText: kl|zyMutJson
+- label: bool
+  kind: 14
+  sortText: kl|zybool
+- label: datetime
+  kind: 14
+  sortText: kl|zydatetime
+- label: duration
+  kind: 14
+  sortText: kl|zyduration
+- label: num
+  kind: 14
+  sortText: kl|zynum
+- label: regex
+  kind: 14
+  sortText: kl|zyregex
+- label: str
+  kind: 14
+  sortText: kl|zystr
+- label: Array<T>
+  kind: 14
+  sortText: kl|zzArray
+  insertText: Array<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: Map<T>
+  kind: 14
+  sortText: kl|zzMap
+  insertText: Map<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: MutArray<T>
+  kind: 14
+  sortText: kl|zzMutArray
+  insertText: MutArray<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: MutMap<T>
+  kind: 14
+  sortText: kl|zzMutMap
+  insertText: MutMap<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: MutSet<T>
+  kind: 14
+  sortText: kl|zzMutSet
+  insertText: MutSet<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: Set<T>
+  kind: 14
+  sortText: kl|zzSet
+  insertText: Set<$1>
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: "inflight () => {}"
+  kind: 15
+  sortText: ll|zzinflight
+  filterText: inflight
+  insertText: "inflight ($1) => {$0}"
+  insertTextFormat: 2
+

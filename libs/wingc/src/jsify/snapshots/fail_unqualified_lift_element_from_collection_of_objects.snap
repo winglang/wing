@@ -1,0 +1,5 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Errors
+Expression of type "Bucket" references an unknown preflight object, can't qualify its capabilities 6:6

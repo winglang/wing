@@ -118,7 +118,7 @@ export class MarkdownDocument {
    * Render a docs element into the markdown.
    */
   public docs(docs: DocsSchema, language?: Language) {
-    if (docs.inflight) {
+    if (docs.inflight && docs.inflight !== "true") {
       const sanitized = MarkdownDocument.sanitize(docs.inflight);
       this.lines(
         MarkdownDocument.bold("Inflight client:") +
@@ -175,6 +175,11 @@ export class MarkdownDocument {
 
   public quote(line: string) {
     this.lines(`> ${line}`);
+    this.lines("");
+  }
+
+  public title(line: string, headerSize: number) {
+    this.lines(`${"#".repeat(headerSize)} ${line}`);
     this.lines("");
   }
 

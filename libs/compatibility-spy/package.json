@@ -1,0 +1,43 @@
+{
+  "name": "@winglang/compatibility-spy",
+  "version": "0.0.0",
+  "author": {
+    "name": "Wing Cloud",
+    "email": "ping@wing.cloud",
+    "organization": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/winglang/wing.git",
+    "directory": "libs/compatibility-spy"
+  },
+  "description": "Wing Platform for spying the usage of cloud resources' methods and properties",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org",
+    "tag": "latest"
+  },
+  "main": "lib/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@winglang/sdk": "workspace:^",
+    "constructs": "^10.3.0"
+  },
+  "devDependencies": {
+    "bump-pack": "workspace:^",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.2",
+    "vitest": "^1.6.0"
+  },
+  "scripts": {
+    "compile": "tsup",
+    "package": "bump-pack -b",
+    "test": "vitest run --update"
+  },
+  "files": [
+    "lib"
+  ],
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

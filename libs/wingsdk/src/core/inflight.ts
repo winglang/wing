@@ -1,158 +1,22 @@
-import { createHash } from "crypto";
-import { mkdtempSync, readFileSync, writeFileSync } from "fs";
-import { tmpdir } from "os";
-import { basename, dirname, join } from "path";
-import { Construct } from "constructs";
-import { makeHandler } from "./internal";
-import { Connection, Display, IInflightHost, IResource } from "./resource";
-import { TreeInspector } from "./tree";
-import { normalPath } from "../util";
+import { basename } from "path";
+import { liftObject, LiftMap, INFLIGHT_INIT_METHOD_NAME } from "./lifting";
+import {
+  AsyncFunction,
+  INFLIGHT_SYMBOL,
+  Inflight,
+  OperationsOf,
+} from "./types";
+import { LiftableRecord, LiftedMap, PickNonFunctions } from "./utility-types";
+import { normalPath } from "../shared/misc";
+import type { IHostedLiftable, ImportInflightOptions } from "../std/resource";
 
-/**
- * Reference to a piece of code.
- */
-export abstract class Code {
-  /**
-   * The language of the code.
-   */
-  public abstract readonly language: Language;
+let closureCount = 0;
 
-  /**
-   * A path to the code in the user's file system that can be referenced
-   * for bundling purposes.
-   */
-  public abstract readonly path: string;
-
-  /**
-   * The code contents.
-   */
-  public get text(): string {
-    return readFileSync(this.path, "utf-8");
-  }
-
-  /**
-   * Generate a hash of the code contents.
-   */
-  public get hash(): string {
-    return createHash("sha512").update(this.text).digest("hex");
-  }
-}
-
-/**
- * The language of a piece of code.
- */
-export enum Language {
-  /** Node.js */
-  NODE_JS = "nodejs",
-}
-
-/**
- * Reference to a piece of Node.js code.
- */
-export class NodeJsCode extends Code {
-  /**
-   * Reference code from a file path.
-   */
-  public static fromFile(path: string) {
-    return new NodeJsCode(path);
-  }
-
-  /**
-   * Reference code directly from a string.
-   */
-  public static fromInline(text: string) {
-    // TODO: can we use a relative path here?
-    // TODO: can we avoid writing to file until actually necessary?
-    // TODO: can we share the temp dir between Code objects?
-    const tempdir = mkdtempSync(join(tmpdir(), "wingsdk."));
-    const file = join(tempdir, "index.js");
-    writeFileSync(file, text);
-    return new NodeJsCode(file);
-  }
-
-  public readonly language = Language.NODE_JS;
-  public readonly path: string;
-
-  private constructor(path: string) {
-    super();
-    this.path = path;
-  }
+export function closureId(): number {
+  return closureCount++;
 }
 
 export type InflightBindings = Record<string, InflightBinding>;
-
-/**
- * Props for `Inflight`.
- */
-export interface InflightProps {
-  /**
-   * Reference to the inflight code. Only JavaScript code is currently
-   * supported.
-   *
-   * The JavaScript code needs be in the form `async handle(event) { ... }`, and
-   * all references to resources must be made through `this.<resource>`.
-   */
-  readonly code: Code;
-
-  /**
-   * Data and resource binding information.
-   * @default - no bindings
-   */
-  readonly bindings?: InflightBindings;
-}
-
-/**
- * Represents a unit of application code that can be executed by a cloud
- * resource. In practice, it's a resource with one inflight method named
- * "handle".
- */
-export class Inflight extends Construct implements IResource {
-  /** @internal */
-  public _connections: Connection[] = []; // thrown away
-
-  /**
-   * Information on how to display a resource in the UI.
-   */
-  public readonly display = new Display();
-
-  constructor(scope: Construct, id: string, props: InflightProps) {
-    super(null as any, ""); // thrown away
-
-    this.display.hidden = true;
-    this.display.title = "Inflight";
-    this.display.description = "An inflight resource";
-
-    if (props.code.language !== Language.NODE_JS) {
-      throw new Error("Only Node.js code is supported");
-    }
-
-    return makeHandler(scope, id, props.code.text, props.bindings, {
-      hidden: this.display.hidden,
-      title: this.display.title,
-      description: this.display.description,
-    });
-  }
-  /** @internal */
-  public _bind(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
-  }
-  /** @internal */
-  public _registerBind(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
-  }
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
-  }
-  /** @internal */
-  public _preSynthesize(): void {
-    throw new Error("Method not implemented.");
-  }
-  /** @internal */
-  public _inspect(_inspector: TreeInspector): void {
-    throw new Error("Method not implemented.");
-  }
-}
 
 /**
  * An inflight binding.
@@ -174,20 +38,265 @@ export interface InflightBinding {
  */
 export class InflightClient {
   /**
-   * Creates a `Code` instance with code for creating an inflight client.
+   * Returns code for creating an inflight client.
    */
   public static for(
+    dirname: string,
     filename: string,
     clientClass: string,
     args: string[]
-  ): Code {
-    const inflightDir = dirname(filename);
+  ): string {
+    const inflightDir = dirname;
     const inflightFile = basename(filename).split(".")[0] + ".inflight";
-    return NodeJsCode.fromInline(
-      `new (require("${normalPath(
-        require.resolve(`${inflightDir}/${inflightFile}`)
-      )}")).${clientClass}(${args.join(", ")})`
+    return `new (require("${normalPath(
+      `${inflightDir}/${inflightFile}`
+    )}")).${clientClass}(${args.join(", ")})`;
+  }
+
+  /**
+   * Returns code for implementing `_toInflightType()`.
+   */
+  public static forType(filename: string, clientClass: string): string {
+    return `require("${normalPath(filename)}").${clientClass}`;
+  }
+
+  private constructor() {}
+}
+
+/**
+ * Prepares preflight objects for use in inflight functions.
+ *
+ * Conventionally, this is used by passing in a `const` object to bind it with the same name
+ *
+ * ```ts
+ * const bucket = new cloud.Bucket(app, "Bucket");
+ * const number = 5;
+ *
+ * lift({ bucket, number })
+ *   .inflight(({ bucket, number }) => { ... }))
+ * ```
+ *
+ * However, the name is not required to match the variable in the current scope.
+ *
+ * This is especially useful/necessary when lifting data via a reference or some other expression
+ *
+ * ```ts
+ * const bucket = new cloud.Bucket(app, "Bucket");
+ *
+ * lift({ bkt: bucket, sum: 2 + 2, field: bucket.field })
+ *   .inflight(({ bkt, sum, field }) => { ... }))
+ * ```
+ */
+export function lift<TToLift extends LiftableRecord>(
+  captures: TToLift
+): Lifter<LiftedMap<TToLift>, {}> {
+  return new Lifter().lift(captures);
+}
+
+/**
+ * Creates a inflight function.
+ *
+ * This function must not reference any variables outside of its scope.
+ * If needed, use `lift` to bind variables to the scope of the function.
+ *
+ * Built-in NodeJS globals are available, such as `console` and `process`.
+ * @wing inflight
+ */
+export function inflight<TFunction extends AsyncFunction>(
+  fn: (ctx: {}, ...args: Parameters<TFunction>) => ReturnType<TFunction>
+) {
+  return new Lifter().inflight(fn);
+}
+
+/**
+ * Create an inflight function from a string.
+ */
+export function importInflight(
+  /**
+   * Raw JavaScript to use as the inflight function.
+   */
+  inflightText: string,
+
+  /**
+   * The lifts the JS needs to be able to access.
+   */
+  lifts?: ImportInflightOptions["lifts"]
+) {
+  const newLifts: Record<string, any> = {};
+  const newGrants: Record<string, string[]> = {};
+
+  // convert the lifts to the correct format for the Lifter
+  for (const liftAnnotation of lifts ?? []) {
+    if (liftAnnotation.alias === undefined) {
+      throw new Error("The alias field is required for all lifts");
+    }
+
+    newLifts[liftAnnotation.alias] = liftAnnotation.obj;
+    if (liftAnnotation.ops) {
+      newGrants[liftAnnotation.alias] = liftAnnotation.ops;
+    }
+  }
+
+  return (
+    lift(newLifts)
+      .grant(newGrants)
+      // cast as any because the inflight has already been pre-serialized
+      .inflight(inflightText as any)
+  );
+}
+
+/**
+ * Manages the liftable objects and operations for an inflight function.
+ */
+class Lifter<
+  TLifted extends Record<string, any>,
+  TOperations extends Record<string, string[]>
+> {
+  constructor(
+    private lifts: LiftableRecord = {},
+    private grants: Record<string, string[]> = {}
+  ) {}
+
+  /**
+   * Add additional liftable objects to the scope of the inflight function.
+   * Any existing liftable objects with the same name will be overwritten.
+   *
+   * Conventionally, this is used by passing in a `const` object to bind it with the same name
+   *
+   * ```ts
+   * const bucket = new cloud.Bucket(app, "Bucket");
+   * const number = 5;
+   *
+   * lift({ bucket, number })
+   *   .inflight(({ bucket, number }) => { ... }))
+   * ```
+   *
+   * However, the name is not required to match the variable in the current scope.
+   *
+   * This is especially useful/necessary when lifting data via a reference or some other expression
+   *
+   * ```ts
+   * const bucket = new cloud.Bucket(app, "Bucket");
+   *
+   * lift({ bkt: bucket, sum: 2 + 2, field: bucket.field })
+   *   .inflight(({ bkt, sum, field }) => { ... }))
+   * ```
+   */
+  public lift<TWillLift extends LiftableRecord>(captures: TWillLift) {
+    return new Lifter<
+      Omit<TLifted, keyof TWillLift> & LiftedMap<TWillLift>,
+      TOperations
+    >(
+      {
+        ...this.lifts,
+        ...captures,
+      },
+      this.grants
     );
   }
-  private constructor() {}
+
+  /**
+   * Grant permissions for lifted resources.
+   *
+   * By default, all all possible methods are granted to lifted resources.
+   * This function restricts those:
+   *
+   * ```ts
+   * const bucket = new cloud.Bucket(app, "Bucket");
+   *
+   * lift({ bucket })
+   *   .grant({ bucket: ["get"] })
+   *   .inflight(({ bucket }) => {
+   *     await bucket.get("key");
+   *     await bucket.set("key", "value"); // Error: set is not granted
+   *   });
+   * ```
+   *
+   * fields are always accessible, even if not granted.
+   */
+  public grant<
+    TNewOps extends Partial<{
+      [K in keyof TLifted]: OperationsOf<TLifted[K]>;
+    }>
+  >(grants: TNewOps) {
+    return new Lifter<TLifted, Omit<TOperations, keyof TNewOps> & TNewOps>(
+      this.lifts,
+      {
+        ...this.grants,
+        ...grants,
+      }
+    );
+  }
+
+  /**
+   * Create an inflight function with the available lifted data.
+   *
+   * This function must not reference any variables outside of its scope.
+   * If needed, use `lift` again to bind variables to the scope of the function.
+   * Bound variables will be available as properties on the `ctx` object passed as the first argument to the function.
+   *
+   * Built-in NodeJS globals are available, such as `console` and `process`.
+   * @wing inflight
+   */
+  public inflight<TFunction extends AsyncFunction>(
+    fn: (
+      /** All lifted data available in this inflight */
+      ctx: // Get all the lifted types which were not explicitly granted
+      Omit<TLifted, keyof TOperations> & {
+        // For each of the granted types, get the lifted type with only the granted operations available (and any fields as well)
+        [K in keyof TOperations &
+          keyof TLifted]: TOperations[K] extends (infer TGrantedOps extends keyof TLifted[K])[]
+          ? PickNonFunctions<TLifted[K]> & Pick<TLifted[K], TGrantedOps>
+          : TLifted[K];
+      },
+      ...args: Parameters<TFunction>
+    ) => ReturnType<TFunction>
+  ): Inflight<TFunction> {
+    // This is a simplified version of the Wing compiler's _liftMap generation
+    // It specifies what transitive permissions need to be added based on what
+    // inflight methods are called on an object
+    // The SDK models inflight functions as objects with a "handle" property,
+    // so here we annotate that "handle" needs all of the required permissions
+    const _liftMap: LiftMap = { handle: [] };
+    for (const [key, obj] of Object.entries(this.lifts)) {
+      const knownOps =
+        this.grants[key] ??
+        Object.keys((obj as IHostedLiftable)._liftMap ?? {}).filter(
+          (x) => x !== INFLIGHT_INIT_METHOD_NAME // filter "$inflight_init"
+        );
+
+      _liftMap.handle.push([obj, knownOps]);
+    }
+
+    return {
+      _id: closureId(),
+      _toInflight: () => {
+        // Extremely advanced function serialization
+        const serializedFunction = fn.toString();
+
+        return `\
+(await (async () => {
+  const $func = ${serializedFunction}
+  const $ctx = {
+  ${Object.entries(this.lifts)
+    .map(([name, liftable]) => `${name}: ${liftObject(liftable)}`)
+    .join(",\n")}
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())`;
+      },
+      _liftMap,
+      // @ts-expect-error This function's type doesn't actually match, but it will just throw anyways
+      [INFLIGHT_SYMBOL]: () => {
+        throw new Error(
+          "This is a inflight function and can only be invoked while inflight"
+        );
+      },
+    };
+  }
 }

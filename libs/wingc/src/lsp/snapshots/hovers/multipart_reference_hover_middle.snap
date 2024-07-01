@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\nget(key: str): Json\n```\n---\nReturns the value associated with the specified Json key.\n\n#### Returns\nThe value associated with the specified Json key\n\n*@throws* *Json property does not exist if the given key is not part of an existing property*"
+range:
+  start:
+    line: 2
+    character: 2
+  end:
+    line: 2
+    character: 5
+

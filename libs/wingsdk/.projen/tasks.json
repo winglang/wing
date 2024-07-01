@@ -52,7 +52,7 @@
       },
       "steps": [
         {
-          "exec": "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+          "exec": "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
         }
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
@@ -104,12 +104,6 @@
       "steps": [
         {
           "exec": "jsii --silence-warnings=reserved-word"
-        },
-        {
-          "exec": "tsc -p tsconfig.nonjsii.json"
-        },
-        {
-          "exec": "node scripts/remove-peers.js"
         }
       ]
     },
@@ -118,7 +112,7 @@
       "description": "Synthesize project files",
       "steps": [
         {
-          "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
+          "exec": "tsx --tsconfig tsconfig.dev.json .projenrc.ts"
         }
       ]
     },
@@ -127,13 +121,7 @@
       "description": "Generate API.md from .jsii manifest",
       "steps": [
         {
-          "exec": "jsii-docgen -o API.md -l wing"
-        },
-        {
-          "exec": "echo '---\ntitle: API Reference\nid: sdk\ndescription: Wing SDK API Reference\nkeywords: [Wing sdk, sdk, Wing API Reference]\n---\n' > ../../docs/04-reference/wingsdk-api.md"
-        },
-        {
-          "exec": "cat API.md >> ../../docs/04-reference/wingsdk-api.md"
+          "exec": "tsx scripts/docgen.mts"
         }
       ]
     },
@@ -154,7 +142,25 @@
       "description": "Runs eslint against the codebase",
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools projenrc .projenrc.ts"
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test scripts projenrc .projenrc.ts"
+        }
+      ]
+    },
+    "install": {
+      "name": "install",
+      "description": "Install project dependencies and update lockfile (non-frozen)",
+      "steps": [
+        {
+          "exec": "pnpm i --no-frozen-lockfile"
+        }
+      ]
+    },
+    "install:ci": {
+      "name": "install:ci",
+      "description": "Install project dependencies using frozen lockfile",
+      "steps": [
+        {
+          "exec": "pnpm i --frozen-lockfile"
         }
       ]
     },
@@ -163,7 +169,7 @@
       "description": "Creates the distribution package",
       "steps": [
         {
-          "exec": "if [ ! -z ${CI} ]; then rsync -a . .repo --exclude .git --exclude node_modules && rm -rf dist && mv .repo dist; else npx projen package-all; fi"
+          "exec": "bump-pack -b"
         }
       ]
     },
@@ -197,16 +203,12 @@
         }
       ]
     },
-    "post-upgrade": {
-      "name": "post-upgrade",
-      "description": "Runs after upgrading dependencies"
-    },
     "pre-compile": {
       "name": "pre-compile",
       "description": "Prepare the project for compilation",
       "steps": [
         {
-          "exec": "patch-package"
+          "exec": "cdktf get"
         }
       ]
     },
@@ -234,45 +236,12 @@
         }
       ]
     },
-    "sandbox:deploy": {
-      "name": "sandbox:deploy",
-      "steps": [
-        {
-          "spawn": "sandbox:synth"
-        },
-        {
-          "exec": "terraform init"
-        },
-        {
-          "exec": "terraform apply"
-        }
-      ],
-      "cwd": "test/sandbox/target"
-    },
-    "sandbox:destroy": {
-      "name": "sandbox:destroy",
-      "steps": [
-        {
-          "exec": "terraform destroy"
-        }
-      ],
-      "cwd": "test/sandbox"
-    },
-    "sandbox:synth": {
-      "name": "sandbox:synth",
-      "steps": [
-        {
-          "exec": "tsx main.ts --tsconfig ../../tsconfig.dev.json"
-        }
-      ],
-      "cwd": "test/sandbox"
-    },
     "test": {
       "name": "test",
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
+          "exec": "vitest run --update"
         },
         {
           "spawn": "eslint"
@@ -281,10 +250,10 @@
     },
     "test:watch": {
       "name": "test:watch",
-      "description": "Run jest in watch mode",
+      "description": "Run vitest in watch mode",
       "steps": [
         {
-          "exec": "jest --watch"
+          "exec": "vitest"
         }
       ]
     },
@@ -300,46 +269,7 @@
       },
       "steps": [
         {
-          "exec": "npm version 0.0.0 --allow-same-version"
-        }
-      ]
-    },
-    "upgrade": {
-      "name": "upgrade",
-      "description": "upgrade dependencies",
-      "env": {
-        "CI": "0"
-      },
-      "steps": [
-        {
-          "exec": "npm update npm-check-updates"
-        },
-        {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,constructs,cdktf'"
-        },
-        {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,constructs,cdktf'"
-        },
-        {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,constructs,cdktf'"
-        },
-        {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,constructs,cdktf'"
-        },
-        {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,constructs,cdktf'"
-        },
-        {
-          "exec": "npm install"
-        },
-        {
-          "exec": "npm update"
-        },
-        {
-          "exec": "npx projen"
-        },
-        {
-          "spawn": "post-upgrade"
+          "exec": "pnpm version 0.0.0 --allow-same-version"
         }
       ]
     },
@@ -354,7 +284,7 @@
     }
   },
   "env": {
-    "PATH": "$(npx -c \"node -e \\\"console.log(process.env.PATH)\\\"\")"
+    "PATH": "$(pnpm -c exec \"node --print process.env.PATH\")"
   },
-  "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \"npx projen\"."
+  "//": "~~ Generated by projen. To modify, edit .projenrc.ts and run \"npx projen\"."
 }

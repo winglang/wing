@@ -1,0 +1,30 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "build:generate": {
+      "inputs": ["!*.wasm", "*", "grammar.js", "src/scanner.c"],
+      "outputs": ["src/**", "!src/scanner.c"]
+    },
+    "build:wasm": {
+      "dependsOn": ["build:generate"],
+      "outputs": ["tree-sitter-wing.wasm"]
+    },
+    "compile": {
+      "dependsOn": ["build:generate"],
+      "inputs": [""]
+    },
+    "test": {
+      "inputs": ["test/**"],
+      "dependsOn": ["build:generate"]
+    },
+    "playground": {
+      "dependsOn": ["build:wasm"],
+      "persistent": true
+    },
+    "playground:quiet": {
+      "dependsOn": ["build:wasm"],
+      "persistent": true
+    }
+  }
+}

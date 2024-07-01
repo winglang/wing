@@ -1,53 +1,53 @@
 import { Construct } from "constructs";
+import { test, expect } from "vitest";
+import { waitUntilTrace } from "./util";
 import * as cloud from "../../src/cloud";
-import { SimApp, Testing, TraceType } from "../../src/testing";
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+import { inflight, lift } from "../../src/core";
+import { TraceType } from "../../src/std";
+import { SimApp } from "../sim-app";
 
 test("pushing messages through a queue", async () => {
   // GIVEN
   class HelloWorld extends Construct {
+    public readonly consumerPath: string;
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
-      const queue = cloud.Queue._newQueue(this, "Queue");
-      const pusher = Testing.makeHandler(
-        app,
-        "Pusher",
-        `async handle(event) {
+      const queue = new cloud.Queue(this, "Queue");
+      const pusher = lift({ queue })
+        .grant({ queue: ["push"] })
+        .inflight(async (ctx, event) => {
           console.log("Hello, world!");
-          await this.queue.push(event);
-        }`,
-        {
-          queue: {
-            obj: queue,
-            ops: [cloud.QueueInflightMethods.PUSH],
-          },
-        }
-      );
-      cloud.Function._newFunction(this, "Function", pusher);
+          await ctx.queue.push(event);
+        });
 
-      const processor = Testing.makeHandler(
-        app,
-        "Processor",
-        `async handle(event) {
-          console.log("Received " + event);
-        }`
+      new cloud.Function(this, "Function", pusher);
+
+      const processor = inflight(async (_, event) =>
+        console.log("Received " + event)
       );
-      queue.onMessage(processor);
+
+      const consumer = queue.setConsumer(processor);
+      this.consumerPath = consumer.node.path;
     }
   }
 
   const app = new SimApp();
-  new HelloWorld(app, "HelloWorld");
+  const helloWorld = new HelloWorld(app, "HelloWorld");
 
   const s = await app.startSimulator();
 
   const pusher = s.getResource("/HelloWorld/Function") as cloud.IFunctionClient;
+  const consumer = s.getResource(
+    helloWorld.consumerPath
+  ) as cloud.IFunctionClient;
+
+  // warm up the consumer so timing is more predictable
+  await consumer.invoke(JSON.stringify({ messages: [] }));
 
   // WHEN
   await pusher.invoke("foo");
-  await sleep(200);
+  await waitUntilTrace(s, (t) => t.data.message === "Received foo");
 
   // THEN
   await s.stop();
@@ -55,15 +55,17 @@ test("pushing messages through a queue", async () => {
     {
       data: { message: "Hello, world!" },
       sourcePath: "root/HelloWorld/Function",
-      sourceType: "wingsdk.cloud.Function",
+      sourceType: "@winglang/sdk.cloud.Function",
       timestamp: expect.any(String),
+      level: "info",
       type: "log",
     },
     {
       data: { message: "Received foo" },
-      sourcePath: "root/HelloWorld/Queue-OnMessage-13c4eaf1",
-      sourceType: "wingsdk.cloud.Function",
+      sourcePath: helloWorld.consumerPath,
+      sourceType: "@winglang/sdk.cloud.Function",
       timestamp: expect.any(String),
+      level: "info",
       type: "log",
     },
   ]);

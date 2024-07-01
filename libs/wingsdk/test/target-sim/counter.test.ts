@@ -1,28 +1,21 @@
+import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
-import { SimApp } from "../../src/testing";
+import { Node } from "../../src/std";
+import { SimApp } from "../sim-app";
+import { mkdtemp } from "../util";
 
 test("create a counter", async () => {
   // GIVEN
   const app = new SimApp();
-  const c = cloud.Counter._newCounter(app, "my_counter", {
+  const c = new cloud.Counter(app, "my_counter", {
     initial: 123,
   });
 
   expect(c.initial).toBe(123);
 
   const s = await app.startSimulator();
-  expect(s.getResourceConfig("/my_counter")).toEqual({
-    attrs: {
-      handle: expect.any(String),
-    },
-    path: "root/my_counter",
-    props: {
-      initial: 123,
-    },
-    type: "wingsdk.cloud.Counter",
-  });
   await s.stop();
 
   expect(app.snapshot()).toMatchSnapshot();
@@ -31,7 +24,7 @@ test("create a counter", async () => {
 test("inc", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter", {
+  new cloud.Counter(app, "my_counter", {
     initial: 123,
   });
 
@@ -52,23 +45,40 @@ test("inc", async () => {
   expect(value3).toEqual(123 + 1 + 1 + 10);
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Counter created.",
-    "Inc (amount=1).",
-    "Inc (amount=1).",
-    "Inc (amount=10).",
-    "Inc (amount=10).",
-    "wingsdk.cloud.Counter deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("key inc", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  const value0 = await client.inc(1, "my-key");
+  expect(value0).toEqual(0); // always returns the value before inc (like "i++");
+
+  const value1 = await client.inc(undefined, "my-key");
+  expect(value1).toEqual(1);
+
+  const value2 = await client.inc(10, "my-key");
+  expect(value2).toEqual(1 + 1);
+
+  const value3 = await client.inc(10, "my-key");
+  expect(value3).toEqual(1 + 1 + 10);
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("dec", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter", {
+  new cloud.Counter(app, "my_counter", {
     initial: 123,
   });
 
@@ -89,23 +99,40 @@ test("dec", async () => {
   expect(value3).toEqual(123 - 1 - 1 - 10);
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Counter created.",
-    "Dec (amount=1).",
-    "Dec (amount=1).",
-    "Dec (amount=10).",
-    "Dec (amount=10).",
-    "wingsdk.cloud.Counter deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("key dec", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  const value0 = await client.dec(1, "my-key");
+  expect(value0).toEqual(0); // always returns the value before inc (like "i--");
+
+  const value1 = await client.dec(undefined, "my-key");
+  expect(value1).toEqual(-1);
+
+  const value2 = await client.dec(10, "my-key");
+  expect(value2).toEqual(-1 - 1);
+
+  const value3 = await client.dec(10, "my-key");
+  expect(value3).toEqual(-1 - 1 - 10);
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("peek without initial value", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   const s = await app.startSimulator();
 
@@ -118,7 +145,7 @@ test("peek without initial value", async () => {
 test("peek with initial value", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter", {
+  new cloud.Counter(app, "my_counter", {
     initial: 123,
   });
 
@@ -130,10 +157,37 @@ test("peek with initial value", async () => {
   expect(peek).toEqual(123);
 });
 
-test("reset with initial value", async () => {
+test("key peek without value", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter", {
+  new cloud.Counter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  const peek = await client.peek("my-key");
+  expect(peek).toEqual(0);
+});
+
+test("key peek with value", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  await client.inc(10, "my-key");
+  const peek = await client.peek("my-key");
+  expect(peek).toEqual(10);
+});
+
+test("set to new value", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter", {
     initial: 123,
   });
 
@@ -141,59 +195,45 @@ test("reset with initial value", async () => {
 
   const client = s.getResource("/my_counter") as ICounterClient;
 
-  await client.reset(0);
-  const peek = await client.peek();
-  expect(peek).toEqual(0);
-
-  await s.stop();
-
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Counter created.",
-    "Reset (value=123).",
-    "Peek (value=0).",
-    "wingsdk.cloud.Counter deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
-  expect(app.snapshot()).toMatchSnapshot();
-});
-
-test("reset without initial value", async () => {
-  // GIVEN
-  const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter", {});
-
-  const s = await app.startSimulator();
-
-  const client = s.getResource("/my_counter") as ICounterClient;
-
-  await client.reset(5);
+  await client.set(5);
   const peek = await client.peek();
   expect(peek).toEqual(5);
 
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Counter created.",
-    "Reset (value=0).",
-    "Peek (value=5).",
-    "wingsdk.cloud.Counter deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("key set to new value", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  await client.set(5, "my-key");
+  const peek = await client.peek("my-key");
+  expect(peek).toEqual(5);
+
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("counter has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   const treeJson = treeJsonOf(app.synth());
   const counter = app.node.tryFindChild("my_counter") as cloud.Counter;
 
   // THEN
-  expect(counter.display.hidden).toBeUndefined();
+  expect(Node.of(counter).hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).not.toMatchObject({
     my_counter: {
@@ -207,15 +247,15 @@ test("counter has no display hidden property", async () => {
 test("counter has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
   const counter = app.node.tryFindChild("my_counter") as cloud.Counter;
 
   // THEN
-  expect(counter.display.title).toBeDefined();
-  expect(counter.display.description).toBeDefined();
+  expect(Node.of(counter).title).toBeDefined();
+  expect(Node.of(counter).description).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     my_counter: {
       display: {
@@ -224,4 +264,33 @@ test("counter has display title and description properties", async () => {
       },
     },
   });
+});
+
+test("counter is stateful across simulations", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const counter = new cloud.Counter(app, "my_counter", { initial: 5 });
+
+  // WHEN
+  const stateDir = mkdtemp();
+  const s = await app.startSimulator(stateDir);
+
+  const client = s.getResource("/my_counter") as cloud.ICounterClient;
+  const value1 = await client.peek();
+  const value2 = await client.inc(1, "key");
+  await s.stop();
+
+  // restart the simulator
+
+  await s.start();
+  const client2 = s.getResource("/my_counter") as cloud.ICounterClient;
+  const value3 = await client2.peek();
+  const value4 = await client2.peek("key");
+
+  // THEN
+  await s.stop();
+  expect(value1).toEqual(5);
+  expect(value2).toEqual(5);
+  expect(value3).toEqual(5);
+  expect(value4).toEqual(6); // value from previous simulation
 });

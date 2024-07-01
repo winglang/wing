@@ -1,0 +1,324 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`create a schedule 1`] = `
+{
+  "resource": {
+    "google_cloud_scheduler_job": {
+      "Schedule_Scheduler_A529D9A8": {
+        "attempt_deadline": "300s",
+        "description": "Trigger \${google_cloudfunctions_function.Schedule_OnTick0_DefaultFunction_0D16428E.name}",
+        "http_target": {
+          "http_method": "GET",
+          "oidc_token": {
+            "service_account_email": "\${google_service_account.Schedule_SchedulerServiceAccount_C23742C8.email}",
+          },
+          "uri": "\${google_cloudfunctions_function.Schedule_OnTick0_DefaultFunction_0D16428E.https_trigger_url}",
+        },
+        "name": "scheduler-c8b3fc39",
+        "schedule": "*/2 * * * *",
+        "time_zone": "Etc/UTC",
+      },
+    },
+    "google_cloudfunctions_function": {
+      "Schedule_OnTick0_DefaultFunction_0D16428E": {
+        "available_memory_mb": 1024,
+        "description": "This function was created by Wing",
+        "entry_point": "handler",
+        "environment_variables": {},
+        "https_trigger_security_level": "SECURE_ALWAYS",
+        "name": "ontick0-c8e1d4a8",
+        "project": "my-project",
+        "region": "us-central1",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Schedule_OnTick0_ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a_904F6F8E.email}",
+        "source_archive_bucket": "\${google_storage_bucket.Schedule_OnTick0_FunctionBucket_49CAB579.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Schedule_OnTick0_FunctionObjectBucket_E7CE9CAB.name}",
+        "timeout": 120,
+        "trigger_http": true,
+      },
+    },
+    "google_cloudfunctions_function_iam_member": {
+      "Schedule_OnTick0_invoker-permission-KEN11_7990EE36": {
+        "cloud_function": "\${google_cloudfunctions_function.Schedule_OnTick0_DefaultFunction_0D16428E.name}",
+        "member": "serviceAccount:\${google_service_account.Schedule_SchedulerServiceAccount_C23742C8.email}",
+        "project": "\${google_cloudfunctions_function.Schedule_OnTick0_DefaultFunction_0D16428E.project}",
+        "region": "\${google_cloudfunctions_function.Schedule_OnTick0_DefaultFunction_0D16428E.region}",
+        "role": "roles/cloudfunctions.invoker",
+      },
+    },
+    "google_project_iam_custom_role": {
+      "Schedule_OnTick0_CustomRolec8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a_383A478B": {
+        "permissions": [
+          "cloudfunctions.functions.get",
+        ],
+        "role_id": "cloudfunctions.customc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
+        "title": "Custom Role for Cloud Function c8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
+      },
+    },
+    "google_project_iam_member": {
+      "Schedule_OnTick0_ProjectIamMember_5C834109": {
+        "member": "serviceAccount:\${google_service_account.Schedule_OnTick0_ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a_904F6F8E.email}",
+        "project": "my-project",
+        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Schedule_OnTick0_CustomRolec8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a_383A478B.role_id}",
+      },
+    },
+    "google_project_service": {
+      "Schedule_OnTick0_FunctionBucket_IamServiceAccountCredentialsApi_DF643D92": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
+    "google_service_account": {
+      "Schedule_OnTick0_ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a_904F6F8E": {
+        "account_id": "ontick0-c8e1d4a8",
+        "display_name": "Custom Service Account for Cloud Function c8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
+      },
+      "Schedule_SchedulerServiceAccount_C23742C8": {
+        "account_id": "scheduler-c8b3fc39-sa",
+        "display_name": "Service Account for scheduler-c8b3fc39",
+      },
+    },
+    "google_storage_bucket": {
+      "Schedule_OnTick0_FunctionBucket_49CAB579": {
+        "depends_on": [
+          "google_project_service.Schedule_OnTick0_FunctionBucket_IamServiceAccountCredentialsApi_DF643D92",
+        ],
+        "force_destroy": false,
+        "location": "us-central1",
+        "name": "functionbucket-\${random_id.Schedule_OnTick0_FunctionBucket_Id_79EDFDFF.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "Schedule_OnTick0_FunctionObjectBucket_E7CE9CAB": {
+        "bucket": "\${google_storage_bucket.Schedule_OnTick0_FunctionBucket_49CAB579.name}",
+        "name": "objects",
+        "source": "<source>",
+      },
+    },
+    "random_id": {
+      "Schedule_OnTick0_FunctionBucket_Id_79EDFDFF": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`create a schedule 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Schedule": {
+                "children": {
+                  "OnTick0": {
+                    "children": {
+                      "Asset": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformAsset",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Asset",
+                        "path": "root/Default/Schedule/OnTick0/Asset",
+                      },
+                      "CustomRolec8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "CustomRolec8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
+                        "path": "root/Default/Schedule/OnTick0/CustomRolec8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
+                      },
+                      "DefaultFunction": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "DefaultFunction",
+                        "path": "root/Default/Schedule/OnTick0/DefaultFunction",
+                      },
+                      "FunctionBucket": {
+                        "children": {
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.7",
+                            },
+                            "display": {},
+                            "id": "Default",
+                            "path": "root/Default/Schedule/OnTick0/FunctionBucket/Default",
+                          },
+                          "IamServiceAccountCredentialsApi": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.7",
+                            },
+                            "display": {},
+                            "id": "IamServiceAccountCredentialsApi",
+                            "path": "root/Default/Schedule/OnTick0/FunctionBucket/IamServiceAccountCredentialsApi",
+                          },
+                          "Id": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.7",
+                            },
+                            "display": {},
+                            "id": "Id",
+                            "path": "root/Default/Schedule/OnTick0/FunctionBucket/Id",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.3.0",
+                        },
+                        "display": {
+                          "description": "A cloud object store",
+                          "title": "Bucket",
+                        },
+                        "id": "FunctionBucket",
+                        "path": "root/Default/Schedule/OnTick0/FunctionBucket",
+                      },
+                      "FunctionObjectBucket": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "FunctionObjectBucket",
+                        "path": "root/Default/Schedule/OnTick0/FunctionObjectBucket",
+                      },
+                      "ProjectIamMember": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "ProjectIamMember",
+                        "path": "root/Default/Schedule/OnTick0/ProjectIamMember",
+                      },
+                      "ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
+                        "path": "root/Default/Schedule/OnTick0/ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
+                      },
+                      "invoker-permission-KEN.11]}": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "invoker-permission-KEN.11]}",
+                        "path": "root/Default/Schedule/OnTick0/invoker-permission-KEN.11]}",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud function (FaaS)",
+                      "title": "Function",
+                    },
+                    "id": "OnTick0",
+                    "path": "root/Default/Schedule/OnTick0",
+                  },
+                  "Scheduler": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Scheduler",
+                    "path": "root/Default/Schedule/Scheduler",
+                  },
+                  "SchedulerServiceAccount": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "SchedulerServiceAccount",
+                    "path": "root/Default/Schedule/SchedulerServiceAccount",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud schedule to trigger events at regular intervals",
+                  "title": "Schedule",
+                },
+                "id": "Schedule",
+                "path": "root/Default/Schedule",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;

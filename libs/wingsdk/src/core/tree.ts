@@ -2,10 +2,11 @@ import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
 import { App } from "./app";
-import { Inflight } from "./inflight";
-import { IResource, Resource } from "./resource";
+import { Node } from "../std";
+import { VisualComponent } from "../ui/base";
+import { Colors, isOfTypeColors } from "../ui/colors";
 
-const TREE_FILE_PATH = "tree.json";
+export const TREE_FILE_PATH = "tree.json";
 
 /**
  * A node in the construct tree.
@@ -63,6 +64,87 @@ export interface DisplayInfo {
    * @default false (visible)
    */
   readonly hidden?: boolean;
+
+  /**
+   * The source file or library where the construct was defined.
+   * @default - no source information
+   */
+  readonly sourceModule?: string;
+
+  /**
+   * UI components to display for this resource.
+   * @default - no UI components
+   */
+  readonly ui?: any[]; // UIComponent
+
+  /**
+   * The color of the resource in the UI.
+   */
+  readonly color?: Colors;
+
+  /**
+   * The icon of the resource in the UI.
+   */
+  readonly icon?: string;
+
+  /**
+   * Whether the node is expanded or collapsed by default in the UI.
+   * By default, nodes are collapsed. Set this to `true` if you want the node to be expanded by default.
+   *
+   * @default false
+   */
+  readonly expanded?: boolean;
+}
+
+/** @internal */
+export type UIComponent =
+  | UIField
+  | UISection
+  | UIButton
+  | UIHttpClient
+  | UIFileBrowser;
+
+/** @internal */
+export interface UIField {
+  readonly kind: "field";
+  readonly label: string;
+  /** The construct path to a cloud.Function */
+  readonly handler: string;
+  readonly refreshRate: number | undefined;
+  readonly link?: boolean;
+}
+
+/** @internal */
+export interface UIButton {
+  readonly kind: "button";
+  readonly label: string;
+  /** The construct path to a cloud.Function */
+  readonly handler: string;
+}
+
+/** @internal */
+export interface UISection {
+  readonly kind: "section";
+  readonly label?: string;
+  readonly children: UIComponent[];
+}
+
+/** @internal */
+export interface UIHttpClient {
+  readonly kind: "http-client";
+  readonly label: string;
+  readonly getUrlHandler: string;
+  readonly getApiSpecHandler: string;
+}
+
+/** @internal */
+export interface UIFileBrowser {
+  readonly kind: "file-browser";
+  readonly label: string;
+  readonly putHandler: string;
+  readonly deleteHandler: string;
+  readonly getHandler: string;
+  readonly listHandler: string;
 }
 
 /**
@@ -127,7 +209,6 @@ export function synthesizeTree(app: App, outdir: string) {
       id: construct.node.id || "App",
       path: construct.node.path,
       children: Object.keys(childrenMap).length === 0 ? undefined : childrenMap,
-      attributes: synthAttributes(construct),
       constructInfo: constructInfoFromConstruct(construct),
       display: synthDisplay(construct),
     };
@@ -147,69 +228,39 @@ export function synthesizeTree(app: App, outdir: string) {
   );
 }
 
-function synthAttributes(
-  construct: IConstruct
-): { [key: string]: any } | undefined {
-  // check if a construct implements IInspectable
-  function canInspect(inspectable: any): inspectable is IInspectable {
-    return inspectable._inspect !== undefined;
-  }
-
-  const inspector = new TreeInspector();
-
-  // get attributes from the inspector
-  if (canInspect(construct)) {
-    construct._inspect(inspector);
-    return inspector.attributes;
-  }
-  return undefined;
-}
-
-function isIResource(construct: IConstruct): construct is IResource {
-  return construct instanceof Resource || construct instanceof Inflight;
-}
-
 function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
-  if (!isIResource(construct)) {
-    return;
+  const display = Node.of(construct);
+
+  const ui: UIComponent[] = [];
+  // generate ui data only based on direct children
+  for (const child of construct.node.children) {
+    if (
+      VisualComponent.isVisualComponent(child) &&
+      child._newParent === undefined
+    ) {
+      ui.push(child._toUIComponent());
+    }
   }
-  const { display } = construct;
-  if (display.description || display.title || display.hidden) {
-    return display;
+
+  if (
+    display.description ||
+    display.title ||
+    display.hidden ||
+    ui ||
+    display.color ||
+    display.icon ||
+    display.expanded
+  ) {
+    return {
+      title: display.title,
+      description: display.description,
+      hidden: display.hidden,
+      sourceModule: display.sourceModule,
+      ui: ui.length > 0 ? ui : undefined,
+      color: isOfTypeColors(display.color) ? display.color : undefined,
+      icon: display.icon,
+      expanded: display.expanded,
+    };
   }
   return;
-}
-
-/**
- * Inspector that maintains an attribute bag
- */
-export class TreeInspector {
-  /**
-   * Represents the bag of attributes as key-value pairs.
-   */
-  public readonly attributes: { [key: string]: any } = {};
-
-  /**
-   * Adds attribute to bag.
-   *
-   * @param key - key for metadata
-   * @param value - value of metadata.
-   */
-  public addAttribute(key: string, value: any) {
-    this.attributes[key] = value;
-  }
-}
-
-/**
- * Interface for examining a construct and exposing metadata.
- */
-export interface IInspectable {
-  /**
-   * Examines construct
-   *
-   * @param inspector - tree inspector to collect and process attributes
-   *
-   * @internal
-   */
-  _inspect(inspector: TreeInspector): void;
 }

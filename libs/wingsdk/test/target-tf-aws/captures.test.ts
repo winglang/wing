@@ -1,67 +1,124 @@
+import { test, expect, describe } from "vitest";
 import * as cloud from "../../src/cloud";
+import { inflight, lift } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../../src/util";
-import { tfResourcesOf, tfSanitize } from "../util";
+import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
-test("function with a bucket binding", () => {
-  // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const bucket = cloud.Bucket._newBucket(app, "Bucket");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle(event) { await this.bucket.put("hello.txt", event); }`,
-    {
-      bucket: {
-        obj: bucket,
-        ops: [cloud.BucketInflightMethods.PUT],
-      },
+describe("function with bucket binding", () => {
+  // Dirty little helper to check if a config contains a set of actions
+  const statementsContain = (
+    config: any,
+    actions: string[],
+    effect: string
+  ): boolean => {
+    const policies = config.resource.aws_iam_role_policy;
+
+    // This is dangerous because it checks for any policy in the entire config to contain the actions
+    // its safe for the tests here because we are really only checking 1 policy.
+    for (const policy of Object.keys(policies)) {
+      for (const statement of JSON.parse(policies[policy].policy).Statement) {
+        if (statement.Effect !== effect) {
+          continue;
+        }
+        if (actions.every((action) => statement.Action.includes(action))) {
+          return true;
+        }
+      }
     }
-  );
-  cloud.Function._newFunction(app, "Function", inflight);
-  const output = app.synth();
+    return false;
+  };
 
-  // THEN
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  test("put operation", () => {
+    // GIVEN
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const bucket = new cloud.Bucket(app, "Bucket");
+    new cloud.Function(
+      app,
+      "Function",
+      lift({ bucket })
+        .grant({ bucket: ["put"] })
+        .inflight(async (ctx, event) => {
+          await ctx.bucket.put("hello.txt", event ?? "none");
+          return undefined;
+        })
+    );
+    const output = app.synth();
 
-  expect(tfResourcesOf(output)).toEqual([
-    "aws_iam_role",
-    "aws_iam_role_policy",
-    "aws_iam_role_policy_attachment",
-    "aws_lambda_function",
-    "aws_s3_bucket",
-    "aws_s3_bucket_public_access_block",
-    "aws_s3_bucket_server_side_encryption_configuration",
-    "aws_s3_object",
-  ]);
-  expect(tfSanitize(output)).toMatchSnapshot();
+    // THEN
+    expect(tfResourcesOf(output)).toEqual([
+      "aws_cloudwatch_log_group",
+      "aws_iam_role",
+      "aws_iam_role_policy",
+      "aws_iam_role_policy_attachment",
+      "aws_lambda_function",
+      "aws_s3_bucket",
+      "aws_s3_object",
+    ]);
+    expect(tfSanitize(output)).toMatchSnapshot();
+  });
+
+  test("put json operation has correct permissions", () => {
+    // GIVEN
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const bucket = new cloud.Bucket(app, "Bucket");
+    new cloud.Function(
+      app,
+      "Function",
+      lift({ bucket })
+        .grant({ bucket: ["putJson"] })
+        .inflight(async (ctx, event) => {
+          await ctx.bucket.putJson("hello.json", event as any);
+          return undefined;
+        })
+    );
+    const output = JSON.parse(app.synth());
+    const hasActions = statementsContain(output, ["s3:PutObject*"], "Allow");
+
+    // THEN
+    expect(hasActions).toEqual(true);
+  });
+
+  test("get json operation has correct permissions", () => {
+    // GIVEN
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const bucket = new cloud.Bucket(app, "Bucket");
+
+    new cloud.Function(
+      app,
+      "Function",
+      lift({ bucket })
+        .grant({ bucket: ["getJson"] })
+        .inflight(async (ctx) => {
+          await ctx.bucket.getJson("hello.txt");
+          return undefined;
+        })
+    );
+    const output = JSON.parse(app.synth());
+    const hasActions = statementsContain(
+      output,
+      ["s3:GetObject*", "s3:GetBucket*"],
+      "Allow"
+    );
+
+    // THEN
+    expect(hasActions).toEqual(true);
+  });
 });
 
 test("function with a function binding", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const inflight1 = Testing.makeHandler(
-    app,
-    "Handler1",
-    `async handle(event) { console.log(event); }`
-  );
-  const fn1 = cloud.Function._newFunction(app, "Function1", inflight1);
-  const inflight2 = Testing.makeHandler(
-    app,
-    "Handler2",
-    `async handle(event) {
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const inflight1 = inflight(async (_, event) => {
+    console.log(event);
+  });
+  const fn1 = new cloud.Function(app, "Function1", inflight1);
+  const inflight2 = lift({ fn1 })
+    .grant({ fn1: ["invoke"] })
+    .inflight(async (ctx, event) => {
       console.log("Event: " + event);
-      await this.function.invoke(JSON.stringify({ hello: "world" }));
-    }`,
-    {
-      function: {
-        obj: fn1,
-        ops: [cloud.FunctionInflightMethods.INVOKE],
-      },
-    }
-  );
-  cloud.Function._newFunction(app, "Function2", inflight2);
+      await ctx.fn1.invoke(JSON.stringify({ hello: "world" }));
+    });
+  new cloud.Function(app, "Function2", inflight2);
   const output = app.synth();
 
   // THEN
@@ -69,6 +126,7 @@ test("function with a function binding", () => {
   expect(sanitizeCode(inflight2._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -81,20 +139,19 @@ test("function with a function binding", () => {
 
 test("two functions reusing the same IFunctionHandler", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler1",
-    `async handle(event) { console.log(event); }`
-  );
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const handler = inflight(async (_, event) => {
+    console.log(event);
+  });
 
-  cloud.Function._newFunction(app, "Function1", inflight);
-  cloud.Function._newFunction(app, "Function2", inflight);
+  new cloud.Function(app, "Function1", handler);
+  new cloud.Function(app, "Function2", handler);
 
   // THEN
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
@@ -107,27 +164,21 @@ test("two functions reusing the same IFunctionHandler", () => {
 
 test("function with a queue binding", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const queue = cloud.Queue._newQueue(app, "Queue");
-  const pusher = Testing.makeHandler(
-    app,
-    "Pusher",
-    `async handle(event) { await this.queue.push("info"); }`,
-    {
-      queue: {
-        obj: queue,
-        ops: [cloud.QueueInflightMethods.PUSH],
-      },
-    }
-  );
-  cloud.Function._newFunction(app, "Function", pusher);
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const queue = new cloud.Queue(app, "Queue");
+  const pusher = lift({ queue })
+    .grant({ queue: ["push"] })
+    .inflight(async (ctx) => {
+      await ctx.queue.push("info");
+    });
 
-  const processor = Testing.makeHandler(
-    app,
-    "Processor",
-    `async handle(event) { console.log("Received" + event); }`
-  );
-  queue.onMessage(processor);
+  new cloud.Function(app, "Function", pusher);
+
+  const processor = inflight(async (_, event) => {
+    console.log("Received" + event);
+  });
+  queue.setConsumer(processor);
+
   const output = app.synth();
 
   // THEN
@@ -135,6 +186,7 @@ test("function with a queue binding", () => {
   expect(sanitizeCode(processor._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",

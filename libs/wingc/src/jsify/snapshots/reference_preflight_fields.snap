@@ -1,0 +1,123 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    bring cloud;
+    
+    class MyType {
+      s: str;
+      b: cloud.Bucket;
+
+      new() { 
+        this.s = "hello"; 
+        this.b = new cloud.Bucket();
+      }
+
+      inflight boom() {
+        assert(this.s.length > 0);
+        assert(this.b.list().length > 0);
+      }
+
+      inflight bam() {
+        this.b.put("hello", "world");
+        this.b.get("aaa");
+      }
+    }
+    
+```
+
+## inflight.MyType-1.cjs
+
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class MyType {
+    constructor({ $this_b, $this_s }) {
+      this.$this_b = $this_b;
+      this.$this_s = $this_s;
+    }
+    async boom() {
+      $helpers.assert((this.$this_s.length > 0), "this.s.length > 0");
+      $helpers.assert(((await this.$this_b.list()).length > 0), "this.b.list().length > 0");
+    }
+    async bam() {
+      (await this.$this_b.put("hello", "world"));
+      (await this.$this_b.get("aaa"));
+    }
+  }
+  return MyType;
+}
+//# sourceMappingURL=inflight.MyType-1.cjs.map
+```
+
+## preflight.cjs
+
+```js
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+class $Root extends $stdlib.std.Resource {
+  constructor($scope, $id) {
+    super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
+    class MyType extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.s = "hello";
+        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.MyType-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const MyTypeClient = ${MyType._toInflightType()};
+            const client = new MyTypeClient({
+              $this_b: ${$stdlib.core.liftObject(this.b)},
+              $this_s: ${$stdlib.core.liftObject(this.s)},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "boom": [
+            [this.b, ["list"]],
+            [this.s, ["length"]],
+          ],
+          "bam": [
+            [this.b, [].concat(["put"], ["get"])],
+          ],
+          "$inflight_init": [
+            [this.b, []],
+            [this.s, []],
+          ],
+        });
+      }
+    }
+  }
+}
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.cjs.map
+```
+

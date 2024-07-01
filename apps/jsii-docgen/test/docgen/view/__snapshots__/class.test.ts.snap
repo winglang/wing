@@ -1,11 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`csharp snapshot 1`] = `
-Object {
-  "constants": Array [],
+{
+  "constants": [],
   "displayName": "AuthorizationToken",
-  "docs": Object {
-    "links": Array [
+  "docs": {
+    "links": [
       "https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html",
     ],
     "summary": "Authorization token to access private ECR repositories in the current environment via Docker CLI.",
@@ -13,29 +13,29 @@ Object {
   "fqn": "Amazon.CDK.AWS.ECR.AuthorizationToken",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken",
   "initializer": undefined,
-  "instanceMethods": Array [],
-  "interfaces": Array [],
-  "properties": Array [],
-  "staticMethods": Array [
-    Object {
+  "instanceMethods": [],
+  "interfaces": [],
+  "properties": [],
+  "staticMethods": [
+    {
       "displayName": "GrantRead",
-      "docs": Object {
+      "docs": {
         "summary": "Grant access to retrieve an authorization token.",
       },
       "fqn": "Amazon.CDK.AWS.ECR.AuthorizationToken.GrantRead",
       "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead",
-      "parameters": Array [
-        Object {
+      "parameters": [
+        {
           "default": undefined,
           "displayName": "Grantee",
-          "docs": Object {},
+          "docs": {},
           "fqn": "Amazon.CDK.AWS.ECR.AuthorizationToken.GrantRead.parameter.Grantee",
           "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
           "optional": undefined,
-          "type": Object {
+          "type": {
             "formattingPattern": "%",
-            "types": Array [
-              Object {
+            "types": [
+              {
                 "displayName": "IGrantable",
                 "fqn": "Amazon.CDK.AWS.IAM.IGrantable",
                 "id": "@aws-cdk/aws-iam.IGrantable",
@@ -55,22 +55,22 @@ AuthorizationToken.GrantRead(IGrantable Grantee);",
 `;
 
 exports[`csharp snapshot 2`] = `
-" AuthorizationToken <a name=\\"AuthorizationToken\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken\\"></a>
+" AuthorizationToken <a name="AuthorizationToken" id="@aws-cdk/aws-ecr.AuthorizationToken"></a>
 
 Authorization token to access private ECR repositories in the current environment via Docker CLI.
 
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">GrantRead</a></code> | Grant access to retrieve an authorization token. |
+| <code><a href="#@aws-cdk/aws-ecr.AuthorizationToken.grantRead">GrantRead</a></code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`GrantRead\` <a name=\\"GrantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
+## \`GrantRead\` <a name="GrantRead" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead"></a>
 
 \`\`\`csharp
 using Amazon.CDK.AWS.ECR;
@@ -80,7 +80,7 @@ AuthorizationToken.GrantRead(IGrantable Grantee);
 
 Grant access to retrieve an authorization token.
 
-### \`Grantee\`<sup>Required</sup> <a name=\\"Grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+### \`Grantee\`<sup>Required</sup> <a name="Grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* Amazon.CDK.AWS.IAM.IGrantable
 
@@ -91,11 +91,11 @@ Grant access to retrieve an authorization token.
 `;
 
 exports[`go snapshot 1`] = `
-Object {
-  "constants": Array [],
+{
+  "constants": [],
   "displayName": "AuthorizationToken",
-  "docs": Object {
-    "links": Array [
+  "docs": {
+    "links": [
       "https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html",
     ],
     "summary": "Authorization token to access private ECR repositories in the current environment via Docker CLI.",
@@ -103,29 +103,29 @@ Object {
   "fqn": "github.com/aws/aws-cdk-go/awscdkawsecr.AuthorizationToken",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken",
   "initializer": undefined,
-  "instanceMethods": Array [],
-  "interfaces": Array [],
-  "properties": Array [],
-  "staticMethods": Array [
-    Object {
+  "instanceMethods": [],
+  "interfaces": [],
+  "properties": [],
+  "staticMethods": [
+    {
       "displayName": "GrantRead",
-      "docs": Object {
+      "docs": {
         "summary": "Grant access to retrieve an authorization token.",
       },
       "fqn": "github.com/aws/aws-cdk-go/awscdkawsecr.AuthorizationToken.GrantRead",
       "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead",
-      "parameters": Array [
-        Object {
+      "parameters": [
+        {
           "default": undefined,
           "displayName": "grantee",
-          "docs": Object {},
+          "docs": {},
           "fqn": "github.com/aws/aws-cdk-go/awscdkawsecr.AuthorizationToken.GrantRead.parameter.grantee",
           "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
           "optional": undefined,
-          "type": Object {
+          "type": {
             "formattingPattern": "%",
-            "types": Array [
-              Object {
+            "types": [
+              {
                 "displayName": "IGrantable",
                 "fqn": "github.com/aws/aws-cdk-go/awscdk/awsiam/awscdkawsiam.IGrantable",
                 "id": "@aws-cdk/aws-iam.IGrantable",
@@ -136,7 +136,7 @@ Object {
           },
         },
       ],
-      "usage": "import \\"github.com/aws/aws-cdk-go/awscdkawsecr\\"
+      "usage": "import "github.com/aws/aws-cdk-go/awscdkawsecr"
 
 awscdkawsecr.AuthorizationToken_GrantRead(grantee IGrantable)",
     },
@@ -145,32 +145,32 @@ awscdkawsecr.AuthorizationToken_GrantRead(grantee IGrantable)",
 `;
 
 exports[`go snapshot 2`] = `
-" AuthorizationToken <a name=\\"AuthorizationToken\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken\\"></a>
+" AuthorizationToken <a name="AuthorizationToken" id="@aws-cdk/aws-ecr.AuthorizationToken"></a>
 
 Authorization token to access private ECR repositories in the current environment via Docker CLI.
 
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">GrantRead</a></code> | Grant access to retrieve an authorization token. |
+| <code><a href="#@aws-cdk/aws-ecr.AuthorizationToken.grantRead">GrantRead</a></code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`GrantRead\` <a name=\\"GrantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
+## \`GrantRead\` <a name="GrantRead" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead"></a>
 
 \`\`\`go
-import \\"github.com/aws/aws-cdk-go/awscdkawsecr\\"
+import "github.com/aws/aws-cdk-go/awscdkawsecr"
 
 awscdkawsecr.AuthorizationToken_GrantRead(grantee IGrantable)
 \`\`\`
 
 Grant access to retrieve an authorization token.
 
-### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+### \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* github.com/aws/aws-cdk-go/awscdk/awsiam/awscdkawsiam.IGrantable
 
@@ -181,11 +181,11 @@ Grant access to retrieve an authorization token.
 `;
 
 exports[`java snapshot 1`] = `
-Object {
-  "constants": Array [],
+{
+  "constants": [],
   "displayName": "AuthorizationToken",
-  "docs": Object {
-    "links": Array [
+  "docs": {
+    "links": [
       "https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html",
     ],
     "summary": "Authorization token to access private ECR repositories in the current environment via Docker CLI.",
@@ -193,29 +193,29 @@ Object {
   "fqn": "software.amazon.awscdk.services.ecr.AuthorizationToken",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken",
   "initializer": undefined,
-  "instanceMethods": Array [],
-  "interfaces": Array [],
-  "properties": Array [],
-  "staticMethods": Array [
-    Object {
+  "instanceMethods": [],
+  "interfaces": [],
+  "properties": [],
+  "staticMethods": [
+    {
       "displayName": "grantRead",
-      "docs": Object {
+      "docs": {
         "summary": "Grant access to retrieve an authorization token.",
       },
       "fqn": "software.amazon.awscdk.services.ecr.AuthorizationToken.grantRead",
       "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead",
-      "parameters": Array [
-        Object {
+      "parameters": [
+        {
           "default": undefined,
           "displayName": "grantee",
-          "docs": Object {},
+          "docs": {},
           "fqn": "software.amazon.awscdk.services.ecr.AuthorizationToken.grantRead.parameter.grantee",
           "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
           "optional": undefined,
-          "type": Object {
+          "type": {
             "formattingPattern": "%",
-            "types": Array [
-              Object {
+            "types": [
+              {
                 "displayName": "IGrantable",
                 "fqn": "software.amazon.awscdk.services.iam.IGrantable",
                 "id": "@aws-cdk/aws-iam.IGrantable",
@@ -235,22 +235,22 @@ AuthorizationToken.grantRead(IGrantable grantee)",
 `;
 
 exports[`java snapshot 2`] = `
-" AuthorizationToken <a name=\\"AuthorizationToken\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken\\"></a>
+" AuthorizationToken <a name="AuthorizationToken" id="@aws-cdk/aws-ecr.AuthorizationToken"></a>
 
 Authorization token to access private ECR repositories in the current environment via Docker CLI.
 
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">grantRead</a></code> | Grant access to retrieve an authorization token. |
+| <code><a href="#@aws-cdk/aws-ecr.AuthorizationToken.grantRead">grantRead</a></code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
+## \`grantRead\` <a name="grantRead" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead"></a>
 
 \`\`\`java
 import software.amazon.awscdk.services.ecr.AuthorizationToken;
@@ -260,7 +260,7 @@ AuthorizationToken.grantRead(IGrantable grantee)
 
 Grant access to retrieve an authorization token.
 
-### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+### \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* software.amazon.awscdk.services.iam.IGrantable
 
@@ -271,11 +271,11 @@ Grant access to retrieve an authorization token.
 `;
 
 exports[`python snapshot 1`] = `
-Object {
-  "constants": Array [],
+{
+  "constants": [],
   "displayName": "AuthorizationToken",
-  "docs": Object {
-    "links": Array [
+  "docs": {
+    "links": [
       "https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html",
     ],
     "summary": "Authorization token to access private ECR repositories in the current environment via Docker CLI.",
@@ -283,29 +283,29 @@ Object {
   "fqn": "aws_cdk.aws_ecr.AuthorizationToken",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken",
   "initializer": undefined,
-  "instanceMethods": Array [],
-  "interfaces": Array [],
-  "properties": Array [],
-  "staticMethods": Array [
-    Object {
+  "instanceMethods": [],
+  "interfaces": [],
+  "properties": [],
+  "staticMethods": [
+    {
       "displayName": "grant_read",
-      "docs": Object {
+      "docs": {
         "summary": "Grant access to retrieve an authorization token.",
       },
       "fqn": "aws_cdk.aws_ecr.AuthorizationToken.grant_read",
       "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead",
-      "parameters": Array [
-        Object {
+      "parameters": [
+        {
           "default": undefined,
           "displayName": "grantee",
-          "docs": Object {},
+          "docs": {},
           "fqn": "aws_cdk.aws_ecr.AuthorizationToken.grant_read.parameter.grantee",
           "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
           "optional": undefined,
-          "type": Object {
+          "type": {
             "formattingPattern": "%",
-            "types": Array [
-              Object {
+            "types": [
+              {
                 "displayName": "IGrantable",
                 "fqn": "aws_cdk.aws_iam.IGrantable",
                 "id": "@aws-cdk/aws-iam.IGrantable",
@@ -327,22 +327,22 @@ aws_cdk.aws_ecr.AuthorizationToken.grant_read(
 `;
 
 exports[`python snapshot 2`] = `
-" AuthorizationToken <a name=\\"AuthorizationToken\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken\\"></a>
+" AuthorizationToken <a name="AuthorizationToken" id="@aws-cdk/aws-ecr.AuthorizationToken"></a>
 
 Authorization token to access private ECR repositories in the current environment via Docker CLI.
 
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">grant_read</a></code> | Grant access to retrieve an authorization token. |
+| <code><a href="#@aws-cdk/aws-ecr.AuthorizationToken.grantRead">grant_read</a></code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`grant_read\` <a name=\\"grant_read\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
+## \`grant_read\` <a name="grant_read" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead"></a>
 
 \`\`\`python
 import aws_cdk.aws_ecr
@@ -354,7 +354,7 @@ aws_cdk.aws_ecr.AuthorizationToken.grant_read(
 
 Grant access to retrieve an authorization token.
 
-### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+### \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* aws_cdk.aws_iam.IGrantable
 
@@ -365,11 +365,11 @@ Grant access to retrieve an authorization token.
 `;
 
 exports[`typescript snapshot 1`] = `
-Object {
-  "constants": Array [],
+{
+  "constants": [],
   "displayName": "AuthorizationToken",
-  "docs": Object {
-    "links": Array [
+  "docs": {
+    "links": [
       "https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html",
     ],
     "summary": "Authorization token to access private ECR repositories in the current environment via Docker CLI.",
@@ -377,29 +377,29 @@ Object {
   "fqn": "@aws-cdk/aws-ecr.AuthorizationToken",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken",
   "initializer": undefined,
-  "instanceMethods": Array [],
-  "interfaces": Array [],
-  "properties": Array [],
-  "staticMethods": Array [
-    Object {
+  "instanceMethods": [],
+  "interfaces": [],
+  "properties": [],
+  "staticMethods": [
+    {
       "displayName": "grantRead",
-      "docs": Object {
+      "docs": {
         "summary": "Grant access to retrieve an authorization token.",
       },
       "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead",
       "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead",
-      "parameters": Array [
-        Object {
+      "parameters": [
+        {
           "default": undefined,
           "displayName": "grantee",
-          "docs": Object {},
+          "docs": {},
           "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
           "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
           "optional": undefined,
-          "type": Object {
+          "type": {
             "formattingPattern": "%",
-            "types": Array [
-              Object {
+            "types": [
+              {
                 "displayName": "IGrantable",
                 "fqn": "@aws-cdk/aws-iam.IGrantable",
                 "id": "@aws-cdk/aws-iam.IGrantable",
@@ -419,22 +419,22 @@ AuthorizationToken.grantRead(grantee: IGrantable)",
 `;
 
 exports[`typescript snapshot 2`] = `
-" AuthorizationToken <a name=\\"AuthorizationToken\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken\\"></a>
+" AuthorizationToken <a name="AuthorizationToken" id="@aws-cdk/aws-ecr.AuthorizationToken"></a>
 
 Authorization token to access private ECR repositories in the current environment via Docker CLI.
 
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">grantRead</a></code> | Grant access to retrieve an authorization token. |
+| <code><a href="#@aws-cdk/aws-ecr.AuthorizationToken.grantRead">grantRead</a></code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
+## \`grantRead\` <a name="grantRead" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead"></a>
 
 \`\`\`typescript
 import { AuthorizationToken } from '@aws-cdk/aws-ecr'
@@ -444,7 +444,7 @@ AuthorizationToken.grantRead(grantee: IGrantable)
 
 Grant access to retrieve an authorization token.
 
-### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+### \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* @aws-cdk/aws-iam.IGrantable
 
@@ -455,11 +455,11 @@ Grant access to retrieve an authorization token.
 `;
 
 exports[`wing snapshot 1`] = `
-Object {
-  "constants": Array [],
+{
+  "constants": [],
   "displayName": "AuthorizationToken",
-  "docs": Object {
-    "links": Array [
+  "docs": {
+    "links": [
       "https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html",
     ],
     "summary": "Authorization token to access private ECR repositories in the current environment via Docker CLI.",
@@ -467,29 +467,29 @@ Object {
   "fqn": "@aws-cdk/aws-ecr.AuthorizationToken",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken",
   "initializer": undefined,
-  "instanceMethods": Array [],
-  "interfaces": Array [],
-  "properties": Array [],
-  "staticMethods": Array [
-    Object {
-      "displayName": "grant_read",
-      "docs": Object {
+  "instanceMethods": [],
+  "interfaces": [],
+  "properties": [],
+  "staticMethods": [
+    {
+      "displayName": "grantRead",
+      "docs": {
         "summary": "Grant access to retrieve an authorization token.",
       },
-      "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grant_read",
+      "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead",
       "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead",
-      "parameters": Array [
-        Object {
+      "parameters": [
+        {
           "default": undefined,
           "displayName": "grantee",
-          "docs": Object {},
-          "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grant_read.parameter.grantee",
+          "docs": {},
+          "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
           "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
           "optional": undefined,
-          "type": Object {
+          "type": {
             "formattingPattern": "%",
-            "types": Array [
-              Object {
+            "types": [
+              {
                 "displayName": "IGrantable",
                 "fqn": "@aws-cdk/aws-iam.IGrantable",
                 "id": "@aws-cdk/aws-iam.IGrantable",
@@ -500,41 +500,41 @@ Object {
           },
         },
       ],
-      "usage": "bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
+      "usage": "bring { AuthorizationToken } from "@aws-cdk/aws-ecr";
 
-AuthorizationToken.grant_read(grantee: IGrantable)",
+AuthorizationToken.grantRead(grantee: IGrantable);",
     },
   ],
 }
 `;
 
 exports[`wing snapshot 2`] = `
-" AuthorizationToken <a name=\\"AuthorizationToken\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken\\"></a>
+" AuthorizationToken <a name="AuthorizationToken" id="@aws-cdk/aws-ecr.AuthorizationToken"></a>
 
 Authorization token to access private ECR repositories in the current environment via Docker CLI.
 
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">grant_read</a></code> | Grant access to retrieve an authorization token. |
+| <code><a href="#@aws-cdk/aws-ecr.AuthorizationToken.grantRead">grantRead</a></code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`grant_read\` <a name=\\"grant_read\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
+## \`grantRead\` <a name="grantRead" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead"></a>
 
 \`\`\`wing
-bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
+bring { AuthorizationToken } from "@aws-cdk/aws-ecr";
 
-AuthorizationToken.grant_read(grantee: IGrantable)
+AuthorizationToken.grantRead(grantee: IGrantable);
 \`\`\`
 
 Grant access to retrieve an authorization token.
 
-### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+### \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* @aws-cdk/aws-iam.IGrantable
 

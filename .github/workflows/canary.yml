@@ -3,10 +3,15 @@ on:
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch: {}
+  release:
+    types:
+      - published
 
 jobs:
   install:
     name: Installation User Flow
+    env:
+      WING_DISABLE_ANALYTICS: true
     strategy:
       fail-fast: true
       matrix:
@@ -16,26 +21,33 @@ jobs:
           - macos-latest
         node:
           - 18
-          - 19
+          - 20
         install_command:
-          - npm install -g winglang
+          - npm install -g winglang@latest
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - name: Get Latest Wing Version
-        id: get-version
-        run: |
-          echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
       - name: Install Wing
         run: |
-          ${{ matrix.install_command }}@${{ steps.get-version.outputs.version }}
-      - name: Download examples/tests/valid/test_bucket.w
+          ${{ matrix.install_command }}
+      - name: Create and test each quickstart app
+        shell: bash
         run: |
-          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/test_bucket.w > test_bucket.w
-          cat test_bucket.w
-      - name: Run Test
+          templates=$(wing new --list-templates)
+          for template in $templates; do
+            mkdir "$template"
+            cd "$_"
+            wing new "$template"
+            wing test main.w
+            cd ..
+          done
+      - name: Download examples/tests/valid/hello.test.w
         run: |
-          wing test test_bucket.w
+          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/hello.test.w > hello.test.w
+          cat hello.test.w
+      - name: Run Compile
+        run: |
+          wing compile hello.test.w -t tf-aws

@@ -1,0 +1,155 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: length
+  kind: 5
+  detail: num
+  documentation:
+    kind: markdown
+    value: The length of the string.
+  sortText: ab|length
+- label: at
+  kind: 2
+  detail: "(index: num): str"
+  documentation:
+    kind: markdown
+    value: "Returns the character at the specified index.\n\n#### Returns\nstring at the specified index."
+  sortText: ff|at
+  insertText: at($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: concat
+  kind: 2
+  detail: "(strN: str): str"
+  documentation:
+    kind: markdown
+    value: "Combines the text of two (or more) strings and returns a new string.\n\n#### Returns\na new combined string."
+  sortText: ff|concat
+  insertText: concat($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: contains
+  kind: 2
+  detail: "(searchString: str): bool"
+  documentation:
+    kind: markdown
+    value: "Checks if string includes substring.\n\n#### Returns\ntrue if string includes substring."
+  sortText: ff|contains
+  insertText: contains($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: endsWith
+  kind: 2
+  detail: "(searchString: str): bool"
+  documentation:
+    kind: markdown
+    value: "Does this string end with the given searchString?\n\n#### Returns\ntrue if string ends with searchString."
+  sortText: ff|endsWith
+  insertText: endsWith($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: indexOf
+  kind: 2
+  detail: "(searchString: str): num"
+  documentation:
+    kind: markdown
+    value: "Returns the index of the first occurrence of searchString found.\n\n#### Returns\nthe index of the first occurrence of searchString found, or -1 if not found."
+  sortText: ff|indexOf
+  insertText: indexOf($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: lowercase
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "Returns this string in lower case.\n\n#### Returns\na new lower case string."
+  sortText: ff|lowercase
+  insertText: lowercase()
+- label: replace
+  kind: 2
+  detail: "(searchString: str, replaceString: str): str"
+  documentation:
+    kind: markdown
+    value: "Replaces the first occurence of a substring within a string.\n\n#### Returns\nThe modified string after replacement."
+  sortText: ff|replace
+  insertText: replace($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: replaceAll
+  kind: 2
+  detail: "(searchString: str, replaceString: str): str"
+  documentation:
+    kind: markdown
+    value: "Replaces all occurrences of a substring within a string.\n\n#### Returns\nThe modified string after replacement."
+  sortText: ff|replaceAll
+  insertText: replaceAll($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: split
+  kind: 2
+  detail: "(separator: str): Array<str>"
+  documentation:
+    kind: markdown
+    value: "Splits string by separator.\n\n#### Returns\narray of strings."
+  sortText: ff|split
+  insertText: split($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: startsWith
+  kind: 2
+  detail: "(searchString: str): bool"
+  documentation:
+    kind: markdown
+    value: "Does this string start with the given searchString?\n\n#### Returns\ntrue if string starts with searchString."
+  sortText: ff|startsWith
+  insertText: startsWith($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: substring
+  kind: 2
+  detail: "(indexStart: num, indexEnd: num?): str"
+  documentation:
+    kind: markdown
+    value: "Returns a string between indexStart, indexEnd.\n\n#### Returns\nthe string contained from indexStart to indexEnd."
+  sortText: ff|substring
+  insertText: substring($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: trim
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "Removes white spaces from start and end of this string.\n\n#### Returns\na new string with white spaces removed from start and end."
+  sortText: ff|trim
+  insertText: trim()
+- label: uppercase
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "Returns this string in upper case.\n\n#### Returns\na new upper case string."
+  sortText: ff|uppercase
+  insertText: uppercase()
+

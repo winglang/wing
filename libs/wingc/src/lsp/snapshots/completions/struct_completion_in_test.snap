@@ -1,0 +1,13 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: "ab:"
+  kind: 5
+  detail: num
+  sortText: "ab|a|ab:"
+  insertText: "ab: $1"
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+

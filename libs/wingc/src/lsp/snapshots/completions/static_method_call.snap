@@ -1,0 +1,9 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: hello
+  kind: 2
+  detail: "preflight (): void"
+  sortText: ff|hello
+  insertText: hello()
+

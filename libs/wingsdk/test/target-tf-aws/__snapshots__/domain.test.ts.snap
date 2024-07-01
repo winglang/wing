@@ -1,0 +1,751 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`cloud.Domain for tf-aws > website with a domain when passing values from file 1`] = `
+{
+  "data": {
+    "aws_iam_policy_document": {
+      "Website_AllowDistributionReadOnly_24CFF6C0": {
+        "statement": [
+          {
+            "actions": [
+              "s3:GetObject",
+            ],
+            "condition": [
+              {
+                "test": "StringEquals",
+                "values": [
+                  "\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}",
+                ],
+                "variable": "AWS:SourceArn",
+              },
+            ],
+            "principals": [
+              {
+                "identifiers": [
+                  "cloudfront.amazonaws.com",
+                ],
+                "type": "Service",
+              },
+            ],
+            "resources": [
+              "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "output": {
+    "Website_Endpoint_Url_0CC0343F": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
+    },
+  },
+  "resource": {
+    "aws_cloudfront_distribution": {
+      "Website_Distribution_5E840E42": {
+        "aliases": [
+          "www.example.com",
+        ],
+        "default_cache_behavior": {
+          "allowed_methods": [
+            "GET",
+            "HEAD",
+          ],
+          "cached_methods": [
+            "GET",
+            "HEAD",
+          ],
+          "compress": true,
+          "default_ttl": 3600,
+          "forwarded_values": {
+            "cookies": {
+              "forward": "none",
+            },
+            "query_string": false,
+          },
+          "max_ttl": 86400,
+          "min_ttl": 0,
+          "target_origin_id": "s3Origin",
+          "viewer_protocol_policy": "redirect-to-https",
+        },
+        "default_root_object": "index.html",
+        "enabled": true,
+        "origin": [
+          {
+            "domain_name": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket_regional_domain_name}",
+            "origin_access_control_id": "\${aws_cloudfront_origin_access_control.Website_CloudfrontOac_756836A4.id}",
+            "origin_id": "s3Origin",
+          },
+        ],
+        "price_class": "PriceClass_100",
+        "restrictions": {
+          "geo_restriction": {
+            "locations": [],
+            "restriction_type": "none",
+          },
+        },
+        "viewer_certificate": {
+          "acm_certificate_arn": "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "cloudfront_default_certificate": true,
+          "ssl_support_method": "sni-only",
+        },
+      },
+    },
+    "aws_cloudfront_origin_access_control": {
+      "Website_CloudfrontOac_756836A4": {
+        "name": "Website-c80d509a-cloudfront-oac",
+        "origin_access_control_origin_type": "s3",
+        "signing_behavior": "always",
+        "signing_protocol": "sigv4",
+      },
+    },
+    "aws_route53_record": {
+      "Website_Route53Record_BE729446": {
+        "alias": {
+          "evaluate_target_health": false,
+          "name": "\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
+          "zone_id": "\${aws_cloudfront_distribution.Website_Distribution_5E840E42.hosted_zone_id}",
+        },
+        "name": "www.example.com",
+        "type": "A",
+        "zone_id": "Z0111111111111111111F",
+      },
+    },
+    "aws_s3_bucket": {
+      "Website_WebsiteBucket_3C0321F0": {
+        "bucket_prefix": "website-c80d509a-",
+        "force_destroy": false,
+      },
+    },
+    "aws_s3_bucket_policy": {
+      "Website_DistributionS3BucketPolicy_09AE0BCA": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.id}",
+        "policy": "\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}",
+      },
+    },
+    "aws_s3_bucket_website_configuration": {
+      "Website_BucketWebsiteConfiguration_58F891B4": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
+        "index_document": {
+          "suffix": "index.html",
+        },
+      },
+    },
+    "aws_s3_object": {
+      "Website_File--bhtml_6ACC0793": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
+        ],
+        "key": "/b.html",
+        "source": "<source>",
+        "source_hash": "\${filemd5(<source>)}",
+      },
+      "Website_File--indexhtml_864F8C36": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
+        ],
+        "key": "/index.html",
+        "source": "<source>",
+        "source_hash": "\${filemd5(<source>)}",
+      },
+      "Website_File--inner-folder--ahtml_7D20A7EF": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
+        ],
+        "key": "/inner-folder/a.html",
+        "source": "<source>",
+        "source_hash": "\${filemd5(<source>)}",
+      },
+    },
+  },
+}
+`;
+
+exports[`cloud.Domain for tf-aws > website with a domain when passing values from file 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Domain": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud domain",
+                  "title": "Domain",
+                },
+                "id": "Domain",
+                "path": "root/Default/Domain",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
+              "Website": {
+                "children": {
+                  "AllowDistributionReadOnly": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformDataSource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "AllowDistributionReadOnly",
+                    "path": "root/Default/Website/AllowDistributionReadOnly",
+                  },
+                  "BucketWebsiteConfiguration": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "BucketWebsiteConfiguration",
+                    "path": "root/Default/Website/BucketWebsiteConfiguration",
+                  },
+                  "CloudfrontOac": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudfrontOac",
+                    "path": "root/Default/Website/CloudfrontOac",
+                  },
+                  "Distribution": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Distribution",
+                    "path": "root/Default/Website/Distribution",
+                  },
+                  "DistributionS3BucketPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "DistributionS3BucketPolicy",
+                    "path": "root/Default/Website/DistributionS3BucketPolicy",
+                  },
+                  "Endpoint": {
+                    "children": {
+                      "Url": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformOutput",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Url",
+                        "path": "root/Default/Website/Endpoint/Url",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "Website root/Default/Website",
+                      "hidden": true,
+                      "title": "Endpoint",
+                    },
+                    "id": "Endpoint",
+                    "path": "root/Default/Website/Endpoint",
+                  },
+                  "File--b.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "File--b.html",
+                    "path": "root/Default/Website/File--b.html",
+                  },
+                  "File--index.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "File--index.html",
+                    "path": "root/Default/Website/File--index.html",
+                  },
+                  "File--inner-folder--a.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "File--inner-folder--a.html",
+                    "path": "root/Default/Website/File--inner-folder--a.html",
+                  },
+                  "Route53Record": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Route53Record",
+                    "path": "root/Default/Website/Route53Record",
+                  },
+                  "WebsiteBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "WebsiteBucket",
+                    "path": "root/Default/Website/WebsiteBucket",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A static website",
+                  "title": "Website",
+                },
+                "id": "Website",
+                "path": "root/Default/Website",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`cloud.Domain for tf-aws > website with a domain when passing values on the command line 1`] = `
+{
+  "data": {
+    "aws_iam_policy_document": {
+      "Website_AllowDistributionReadOnly_24CFF6C0": {
+        "statement": [
+          {
+            "actions": [
+              "s3:GetObject",
+            ],
+            "condition": [
+              {
+                "test": "StringEquals",
+                "values": [
+                  "\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}",
+                ],
+                "variable": "AWS:SourceArn",
+              },
+            ],
+            "principals": [
+              {
+                "identifiers": [
+                  "cloudfront.amazonaws.com",
+                ],
+                "type": "Service",
+              },
+            ],
+            "resources": [
+              "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*",
+            ],
+          },
+        ],
+      },
+    },
+  },
+  "output": {
+    "Website_Endpoint_Url_0CC0343F": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
+    },
+  },
+  "resource": {
+    "aws_cloudfront_distribution": {
+      "Website_Distribution_5E840E42": {
+        "aliases": [
+          "www.example.com",
+        ],
+        "default_cache_behavior": {
+          "allowed_methods": [
+            "GET",
+            "HEAD",
+          ],
+          "cached_methods": [
+            "GET",
+            "HEAD",
+          ],
+          "compress": true,
+          "default_ttl": 3600,
+          "forwarded_values": {
+            "cookies": {
+              "forward": "none",
+            },
+            "query_string": false,
+          },
+          "max_ttl": 86400,
+          "min_ttl": 0,
+          "target_origin_id": "s3Origin",
+          "viewer_protocol_policy": "redirect-to-https",
+        },
+        "default_root_object": "index.html",
+        "enabled": true,
+        "origin": [
+          {
+            "domain_name": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket_regional_domain_name}",
+            "origin_access_control_id": "\${aws_cloudfront_origin_access_control.Website_CloudfrontOac_756836A4.id}",
+            "origin_id": "s3Origin",
+          },
+        ],
+        "price_class": "PriceClass_100",
+        "restrictions": {
+          "geo_restriction": {
+            "locations": [],
+            "restriction_type": "none",
+          },
+        },
+        "viewer_certificate": {
+          "acm_certificate_arn": "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+          "cloudfront_default_certificate": true,
+          "ssl_support_method": "sni-only",
+        },
+      },
+    },
+    "aws_cloudfront_origin_access_control": {
+      "Website_CloudfrontOac_756836A4": {
+        "name": "Website-c80d509a-cloudfront-oac",
+        "origin_access_control_origin_type": "s3",
+        "signing_behavior": "always",
+        "signing_protocol": "sigv4",
+      },
+    },
+    "aws_route53_record": {
+      "Website_Route53Record_BE729446": {
+        "alias": {
+          "evaluate_target_health": false,
+          "name": "\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
+          "zone_id": "\${aws_cloudfront_distribution.Website_Distribution_5E840E42.hosted_zone_id}",
+        },
+        "name": "www.example.com",
+        "type": "A",
+        "zone_id": "Z0111111111111111111F",
+      },
+    },
+    "aws_s3_bucket": {
+      "Website_WebsiteBucket_3C0321F0": {
+        "bucket_prefix": "website-c80d509a-",
+        "force_destroy": false,
+      },
+    },
+    "aws_s3_bucket_policy": {
+      "Website_DistributionS3BucketPolicy_09AE0BCA": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.id}",
+        "policy": "\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}",
+      },
+    },
+    "aws_s3_bucket_website_configuration": {
+      "Website_BucketWebsiteConfiguration_58F891B4": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
+        "index_document": {
+          "suffix": "index.html",
+        },
+      },
+    },
+    "aws_s3_object": {
+      "Website_File--bhtml_6ACC0793": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
+        ],
+        "key": "/b.html",
+        "source": "<source>",
+        "source_hash": "\${filemd5(<source>)}",
+      },
+      "Website_File--indexhtml_864F8C36": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
+        ],
+        "key": "/index.html",
+        "source": "<source>",
+        "source_hash": "\${filemd5(<source>)}",
+      },
+      "Website_File--inner-folder--ahtml_7D20A7EF": {
+        "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
+        ],
+        "key": "/inner-folder/a.html",
+        "source": "<source>",
+        "source_hash": "\${filemd5(<source>)}",
+      },
+    },
+  },
+}
+`;
+
+exports[`cloud.Domain for tf-aws > website with a domain when passing values on the command line 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Domain": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud domain",
+                  "title": "Domain",
+                },
+                "id": "Domain",
+                "path": "root/Default/Domain",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
+              "Website": {
+                "children": {
+                  "AllowDistributionReadOnly": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformDataSource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "AllowDistributionReadOnly",
+                    "path": "root/Default/Website/AllowDistributionReadOnly",
+                  },
+                  "BucketWebsiteConfiguration": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "BucketWebsiteConfiguration",
+                    "path": "root/Default/Website/BucketWebsiteConfiguration",
+                  },
+                  "CloudfrontOac": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudfrontOac",
+                    "path": "root/Default/Website/CloudfrontOac",
+                  },
+                  "Distribution": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Distribution",
+                    "path": "root/Default/Website/Distribution",
+                  },
+                  "DistributionS3BucketPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "DistributionS3BucketPolicy",
+                    "path": "root/Default/Website/DistributionS3BucketPolicy",
+                  },
+                  "Endpoint": {
+                    "children": {
+                      "Url": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformOutput",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Url",
+                        "path": "root/Default/Website/Endpoint/Url",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "Website root/Default/Website",
+                      "hidden": true,
+                      "title": "Endpoint",
+                    },
+                    "id": "Endpoint",
+                    "path": "root/Default/Website/Endpoint",
+                  },
+                  "File--b.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "File--b.html",
+                    "path": "root/Default/Website/File--b.html",
+                  },
+                  "File--index.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "File--index.html",
+                    "path": "root/Default/Website/File--index.html",
+                  },
+                  "File--inner-folder--a.html": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "File--inner-folder--a.html",
+                    "path": "root/Default/Website/File--inner-folder--a.html",
+                  },
+                  "Route53Record": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Route53Record",
+                    "path": "root/Default/Website/Route53Record",
+                  },
+                  "WebsiteBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "WebsiteBucket",
+                    "path": "root/Default/Website/WebsiteBucket",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A static website",
+                  "title": "Website",
+                },
+                "id": "Website",
+                "path": "root/Default/Website",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;

@@ -29,6 +29,16 @@ async function generateWarnings(packageDir: string): Promise<number> {
     warnings += 1;
   }
 
+  const IResource = interfaces.find((x) => x.name === "IResource");
+  if (!IResource) {
+    throw new Error("IResource not found");
+  }
+
+  const IInflight = interfaces.find((x) => x.name === "IInflight");
+  if (!IInflight) {
+    throw new Error("IInflight not found");
+  }
+
   for (const cls of classes) {
     if (!cls.docs.summary) {
       warn(`Missing docstring for ${cls.fqn} (${loc(cls)})`);
@@ -37,6 +47,21 @@ async function generateWarnings(packageDir: string): Promise<number> {
       if (!member.docs.summary) {
         warn(
           `Missing docstring for ${cls.fqn}.${member.name} (${loc(member)})`
+        );
+      }
+    }
+    if (
+      cls.getInterfaces(true).includes(IResource) ||
+      cls.getInterfaces(true).includes(IInflight)
+    ) {
+      if (
+        cls.docs.customTag("inflight") === undefined &&
+        cls.docs.customTag("noinflight") === undefined
+      ) {
+        warn(
+          `Missing @inflight in docstring for ${cls.fqn} (${loc(
+            cls
+          )}). Suppress with @noinflight.`
         );
       }
     }
@@ -57,7 +82,11 @@ async function generateWarnings(packageDir: string): Promise<number> {
     if (iface.name.endsWith("Props")) {
       for (const prop of iface.allProperties) {
         if (prop.optional && !prop.docs.docs.default) {
-          warn(`Missing @default for ${iface.fqn}.${prop.name} (${loc(prop)})`);
+          warn(
+            `Missing @default in docstring for ${iface.fqn}.${prop.name} (${loc(
+              prop
+            )})`
+          );
         }
       }
     }
@@ -109,12 +138,12 @@ async function main() {
   } else {
     const warnings = await generateWarnings(packageDir);
     if (warnings > 0) {
-      process.exit(1);
+      process.exitCode = 1;
     }
   }
 }
 
 main().catch((e) => {
   console.error(e);
-  process.exit(1);
+  process.exitCode = 1;
 });

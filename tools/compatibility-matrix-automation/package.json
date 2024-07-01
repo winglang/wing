@@ -1,0 +1,38 @@
+{
+  "name": "compatibility-matrix-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "bin": {
+    "update-matrix": "./bin/update-matrix.cjs"
+  },
+  "scripts": {
+    "test": "vitest run --passWithNoTests --update"
+  },
+  "author": {
+    "name": "Wing Cloud",
+    "email": "ping@wing.cloud",
+    "organization": true
+  },
+  "private": true,
+  "exports": null,
+  "sideEffects": false,
+  "dependencies": {
+    "@winglang/sdk": "workspace:^",
+    "winglang": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "npm-which": "^3.0.1",
+    "tsx": "^4.15.7",
+    "typescript": "^5.5.2",
+    "vitest": "^1.6.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

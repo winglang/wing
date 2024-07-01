@@ -1,7 +1,7 @@
 import * as reflect from "jsii-reflect";
+import { InstanceMethod } from "./instance-method";
 import { MethodSchema } from "../schema";
 import { Transpile } from "../transpile/transpile";
-import { InstanceMethod } from "./instance-method";
 
 export class InstanceMethods {
   private readonly instanceMethods: InstanceMethod[];

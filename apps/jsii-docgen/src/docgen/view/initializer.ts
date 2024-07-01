@@ -1,7 +1,7 @@
 import * as reflect from "jsii-reflect";
+import { Parameter } from "./parameter";
 import { InitializerSchema } from "../schema";
 import { Transpile, TranspiledCallable } from "../transpile/transpile";
-import { Parameter } from "./parameter";
 
 export class Initializer {
   private readonly transpiled: TranspiledCallable;
@@ -22,7 +22,9 @@ export class Initializer {
       displayName: "Initializer",
       id: `${this.initializer.parentType.fqn}.Initializer`,
       parameters: this.parameters.map((param) => param.toJson()),
-      usage: `${this.transpiled.import}\n\n${this.transpiled.invocations}`,
+      usage: [this.transpiled.import, this.transpiled.invocations]
+        .filter((item) => !!item)
+        .join("\n\n"),
     };
   }
 }

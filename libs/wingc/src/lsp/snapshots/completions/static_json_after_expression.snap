@@ -1,0 +1,112 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: deepCopy
+  kind: 2
+  detail: "(json: MutJson): Json"
+  documentation:
+    kind: markdown
+    value: "Creates an immutable deep copy of the Json.\n\n#### Returns\nthe immutable copy of the Json"
+  sortText: ff|deepCopy
+  insertText: deepCopy($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: deepCopyMut
+  kind: 2
+  detail: "(json: Json): MutJson"
+  documentation:
+    kind: markdown
+    value: "Creates a mutable deep copy of the Json.\n\n#### Returns\nthe mutable copy of the Json"
+  sortText: ff|deepCopyMut
+  insertText: deepCopyMut($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: delete
+  kind: 2
+  detail: "(json: MutJson, key: str): void"
+  documentation:
+    kind: markdown
+    value: Deletes a key in a given Json.
+  sortText: ff|delete
+  insertText: delete($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: entries
+  kind: 2
+  detail: "(json: Json): Array<JsonEntry>"
+  documentation:
+    kind: markdown
+    value: "Returns the entries from the Json.\n\n#### Returns\nthe entries as Array<JsonEntry>"
+  sortText: ff|entries
+  insertText: entries($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: keys
+  kind: 2
+  detail: "(json: any): Array<str>"
+  documentation:
+    kind: markdown
+    value: "Returns the keys from the Json.\n\n#### Returns\nthe keys as Array<String>"
+  sortText: ff|keys
+  insertText: keys($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: parse
+  kind: 2
+  detail: "(str: str): Json"
+  documentation:
+    kind: markdown
+    value: "Parse a string into a Json.\n\n#### Returns\nJson representation of the string"
+  sortText: ff|parse
+  insertText: parse($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: stringify
+  kind: 2
+  detail: "(json: any, options: JsonStringifyOptions?): str"
+  documentation:
+    kind: markdown
+    value: "Formats Json as string.\n\n#### Returns\nstring representation of the Json"
+  sortText: ff|stringify
+  insertText: stringify($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryParse
+  kind: 2
+  detail: "(str: str?): Json?"
+  documentation:
+    kind: markdown
+    value: "Try to parse a string into a Json.\n\n#### Returns\nJson representation of the string or undefined if string is not parsable"
+  sortText: ff|tryParse
+  insertText: tryParse($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: values
+  kind: 2
+  detail: "(json: Json): Array<Json>"
+  documentation:
+    kind: markdown
+    value: "Returns the values from the Json.\n\n#### Returns\nthe values as Array<Json>"
+  sortText: ff|values
+  insertText: values($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+

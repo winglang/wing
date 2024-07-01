@@ -1,0 +1,5 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Errors
+Class "Derived" is an preflight class and cannot extend inflight class "Base" 2:26

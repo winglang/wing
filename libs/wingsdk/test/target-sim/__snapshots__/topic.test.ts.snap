@@ -1,102 +1,137 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`create a topic 1`] = `
-Object {
-  "app.wsim/simulator.json": Object {
-    "resources": Array [
-      Object {
-        "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      Object {
-        "attrs": Object {},
+{
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/my_topic": {
+        "addr": "c81b9a117401b1959f70a55462f9df8add290b0fda",
         "path": "root/my_topic",
-        "props": Object {
-          "subscribers": Array [],
-        },
-        "type": "wingsdk.cloud.Topic",
+        "props": {},
+        "type": "@winglang/sdk.cloud.Topic",
       },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
+      "root/my_topic/Policy": {
+        "addr": "c8635ef174eab9aa010e5bed09a712307a6b70e731",
+        "path": "root/my_topic/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_topic#attrs.handle}",
+          "statements": [],
         },
-        "my_topic": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A pub/sub notification topic",
-            "title": "Topic",
-          },
-          "id": "my_topic",
-          "path": "root/my_topic",
-        },
+        "type": "@winglang/sdk.sim.Policy",
       },
-      "constructInfo": Object {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
     },
-    "version": "tree-0.1",
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
-  "tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": true,
+  "tree.json": {
+    "tree": {
+      "children": {
+        "my_topic": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_topic/Policy",
+            },
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.3.0",
           },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_topic": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
+          "display": {
             "description": "A pub/sub notification topic",
             "title": "Topic",
           },
@@ -104,53 +139,15 @@ Object {
           "path": "root/my_topic",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
     "version": "tree-0.1",
   },
 }
-`;
-
-exports[`topic publishes messages as they are received 1`] = `
-Array [
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Topic created.",
-  "Publish (message=Alpha).",
-  "Sending message (message=Alpha, subscriber=sim-1).",
-  "Received Alpha",
-  "Invoke (payload=\\"\\"Alpha\\"\\").",
-  "Publish (message=Beta).",
-  "Sending message (message=Beta, subscriber=sim-1).",
-  "Received Beta",
-  "Invoke (payload=\\"\\"Beta\\"\\").",
-  "wingsdk.cloud.Topic deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
-]
-`;
-
-exports[`topic publishes messages to multiple subscribers 1`] = `
-Array [
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Topic created.",
-  "Publish (message=Alpha).",
-  "Sending message (message=Alpha, subscriber=sim-1).",
-  "Received Alpha",
-  "Invoke (payload=\\"\\"Alpha\\"\\").",
-  "Sending message (message=Alpha, subscriber=sim-2).",
-  "Also received Alpha",
-  "Invoke (payload=\\"\\"Alpha\\"\\").",
-  "wingsdk.cloud.Topic deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
-]
 `;

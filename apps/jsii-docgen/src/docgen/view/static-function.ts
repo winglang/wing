@@ -1,7 +1,7 @@
 import * as reflect from "jsii-reflect";
+import { Parameter } from "./parameter";
 import { extractDocs, MethodSchema } from "../schema";
 import { Transpile, TranspiledCallable } from "../transpile/transpile";
-import { Parameter } from "./parameter";
 
 export class StaticFunction {
   private readonly transpiled: TranspiledCallable;
@@ -23,7 +23,9 @@ export class StaticFunction {
       id: `${this.method.parentType.fqn}.${this.method.name}`,
       parameters: this.parameters.map((param) => param.toJson()),
       docs: extractDocs(this.method.docs),
-      usage: `${this.transpiled.import}\n\n${this.transpiled.invocations}`,
+      usage: [this.transpiled.import, this.transpiled.invocations]
+        .filter((item) => !!item)
+        .join("\n\n"),
     };
   }
 }

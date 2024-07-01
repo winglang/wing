@@ -1,0 +1,12 @@
+{
+    "$schema": "https://turborepo.org/schema.json",
+    "extends": ["//"],
+    "pipeline": {
+      "compile": {
+        "dependsOn": ["^compile"],
+        "inputs": ["**/*.w", "**/*.js", "**/*.ts"],
+        "outputs": ["target/wing-fixture.wsim/**"]
+      },
+      "topo": {}
+    }
+  }

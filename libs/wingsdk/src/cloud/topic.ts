@@ -1,77 +1,100 @@
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { Function, FunctionProps } from "./function";
+import { Queue, QueueProps } from "./queue";
 import { fqnForType } from "../constants";
-import { IResource, Inflight, Resource, App } from "../core";
+import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
+import { Node, Resource, IInflight } from "../std";
 
 export const TOPIC_FQN = fqnForType("cloud.Topic");
 
 /**
- * Properties for `Topic`.
+ * Options for `Topic`.
  */
 export interface TopicProps {}
 
 /**
- * Represents a topic.
+ * A topic.
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
+ * @abstract
  */
-export abstract class Topic extends Resource {
-  /**
-   * Create a new topic.
-   * @internal
-   */
-  public static _newTopic(
-    scope: Construct,
-    id: string,
-    props: TopicProps = {}
-  ): Topic {
-    return App.of(scope).newAbstract(TOPIC_FQN, scope, id, props);
-  }
-
-  public readonly stateful = true;
+export class Topic extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: ITopicClient;
 
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
+    if (new.target === Topic) {
+      return Resource._newFromFactory(TOPIC_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
-    this.display.title = "Topic";
-    this.display.description = "A pub/sub notification topic";
+    Node.of(this).title = "Topic";
+    Node.of(this).description = "A pub/sub notification topic";
 
     props;
   }
 
   /**
    * Run an inflight whenever an message is published to the topic.
+   * @abstract
    */
-  public abstract onMessage(
-    inflight: Inflight,
-    props?: TopicOnMessageProps
-  ): Function;
+  public onMessage(
+    inflight: ITopicOnMessageHandler,
+    props?: TopicOnMessageOptions
+  ): Function {
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
+
+  /**
+   * Subscribing queue to the topic
+   * @abstract
+   */
+  public subscribeQueue(
+    queue: Queue,
+    props?: TopicSubscribeQueueOptions
+  ): void {
+    queue;
+    props;
+    throw new AbstractMemberError();
+  }
 }
 
 /**
  * Options for `Topic.onMessage`.
  */
-export interface TopicOnMessageProps {}
+export interface TopicOnMessageOptions extends FunctionProps {}
+/**
+ * Options for `Topic.subscribeQueue`.
+ */
+export interface TopicSubscribeQueueOptions extends QueueProps {}
 
 /**
  * Inflight interface for `Topic`.
  */
 export interface ITopicClient {
   /**
-   * Publish message to topic
-   * @param message Payload to publish to Topic
+   * Publish messages to topic, if multiple messages are passed then they
+   * will be published as a batch if supported by the target platform
+   * @param messages Payload to publish to Topic
    * @inflight
    */
-  publish(message: string): Promise<void>;
+  publish(...messages: string[]): Promise<void>;
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * `Topic.on_message`.
  *
- * @inflight `wingsdk.cloud.ITopicOnMessageHandlerClient`
+ * @inflight `@winglang/sdk.cloud.ITopicOnMessageHandlerClient`
  */
-export interface ITopicOnMessageHandler extends IResource {}
+export interface ITopicOnMessageHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: ITopicOnMessageHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `ITopicOnMessageHandler`.

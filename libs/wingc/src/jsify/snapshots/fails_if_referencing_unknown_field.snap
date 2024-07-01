@@ -1,0 +1,5 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Errors
+Member "b" does not exist in "MyInflightClass" 3:13

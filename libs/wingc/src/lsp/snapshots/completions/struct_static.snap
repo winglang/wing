@@ -1,0 +1,60 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: fromJson
+  kind: 2
+  detail: "(json: Json, options: JsonValidationOptions?): T1"
+  documentation:
+    kind: markdown
+    value: Converts a Json to a Struct.
+  sortText: ff|fromJson
+  insertText: fromJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: parseJson
+  kind: 2
+  detail: "(json: str): T1"
+  documentation:
+    kind: markdown
+    value: Parse a Json string into a Struct.
+  sortText: ff|parseJson
+  insertText: parseJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: schema
+  kind: 2
+  detail: "(): JsonSchema"
+  documentation:
+    kind: markdown
+    value: Retrieve the schema for this struct.
+  sortText: ff|schema
+  insertText: schema()
+- label: tryFromJson
+  kind: 2
+  detail: "(json: Json): T1?"
+  documentation:
+    kind: markdown
+    value: "Converts a Json to a Struct, returning nil if the Json is not valid."
+  sortText: ff|tryFromJson
+  insertText: tryFromJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryParseJson
+  kind: 2
+  detail: "(json: str?): T1?"
+  documentation:
+    kind: markdown
+    value: "Parse a Json string into a Struct, returning nil if the Json is not valid."
+  sortText: ff|tryParseJson
+  insertText: tryParseJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+

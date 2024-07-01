@@ -1,0 +1,83 @@
+<html>
+  <head> </head>
+
+  <body>
+    <h1>Super User Website</h1>
+    <p>Add a new user and watch it on the list!</p>
+    <form id="form">
+      <h2>add new user:</h2>
+      <label>
+        User Name
+        <input name="name" type="text" />
+      </label>
+      <label>
+        User Age
+        <input name="age" type="number" />
+      </label>
+      <label>
+        User Id
+        <input name="id" type="text" />
+      </label>
+      <button type="submit">Add new User!</button>
+    </form>
+    <h2>Users list</h2>
+    <table border="1px" cellspacing="0" cellpadding="5">
+      <thead>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>AGE</th>
+      </thead>
+      <tbody id="users-list"></tbody>
+    </table>
+    <br />
+    <button id="get-users">Get Users List!</button>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="module">
+    const getConfig = () => {
+      return new Promise((resolve) => {
+        $.getJSON("./config.json", function (data) {
+          resolve(data);
+        });
+      });
+    };
+
+    const getUsers = async () => {
+      const config = await getConfig();
+      const res = await fetch(`${config.apiUrl}/users`);
+      const {users} = await res.json();
+
+      document.getElementById("users-list").innerHTML = users
+        .map(
+          (user) =>
+            `<tr><td>${user.id}</td><td>${user.name}</td><td>${user.age}</td></tr>`
+        )
+        .join("");
+    };
+
+    const postUser = async (e) => {
+      e.preventDefault();
+      const user = {
+        name: e.target[0].value,
+        age: Number(e.target[1].value),
+        id: e.target[2].value,
+      };
+
+      const config = await getConfig();
+      const res = await fetch(`${config.apiUrl}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+      await res.json();
+
+      return getUsers();
+    };
+
+    document.getElementById("get-users").addEventListener("click", getUsers);
+    document.getElementById("form").addEventListener("submit", postUser);
+    window.onload = getUsers;
+  </script>
+</html>

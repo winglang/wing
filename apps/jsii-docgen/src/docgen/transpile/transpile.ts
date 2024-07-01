@@ -275,6 +275,11 @@ export interface TranspiledParameter {
    * supports that.
    */
   readonly declaration: string;
+
+  /**
+   * Is the parameter variadic
+   */
+  readonly variadic?: boolean;
 }
 
 /**

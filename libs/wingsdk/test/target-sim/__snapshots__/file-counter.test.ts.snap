@@ -1,563 +1,553 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`can create sequential files in a bucket 1`] = `
-Object {
-  "app.wsim/simulator.json": Object {
-    "resources": Array [
-      Object {
-        "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
+{
+  ".wing/consumer0_c8a319bc.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            const batchItemFailures = [];
+            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
+            if (!parsed.messages)
+                throw new Error('No "messages" field in event.');
+            for (const $message of parsed.messages) {
+                try {
+                    await ctx.handler($message.payload);
+                }
+                catch (error) {
+                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
+                    batchItemFailures.push($message);
+                }
+            }
+            return batchItemFailures.length > 0
+                ? JSON.stringify(batchItemFailures)
+                : undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, event) => {
+            let next = await ctx.counter.inc();
+            let key = "file-" + next + ".txt";
+            await ctx.bucket.put(key, event);
+          }
+  const $ctx = {
+  counter: (function() {
+  let handle = process.env.COUNTER_HANDLE_87e2e6cc;
+  if (!handle) {
+    throw new Error("Missing environment variable: COUNTER_HANDLE_87e2e6cc");
+  }
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
+  }
+  const caller = process.env.WING_SIMULATOR_CALLER;
+  if (!caller) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+  }
+  const backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
+  const client = new Proxy(backend, {
+    get: function(target, prop, receiver) {
+      return async function(...args) {
+        return backend.call(prop, args);
+      };
+    },
+  });
+  return client;
+})(),
+bucket: (function() {
+  let handle = process.env.BUCKET_HANDLE_5f2a41c8;
+  if (!handle) {
+    throw new Error("Missing environment variable: BUCKET_HANDLE_5f2a41c8");
+  }
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
+  }
+  const caller = process.env.WING_SIMULATOR_CALLER;
+  if (!caller) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+  }
+  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
+})()
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  ".wing/resource_c81e2103.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 1000
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = { onStop: () => {} };
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "consumer",
+        "source": "root/HelloWorld/Queue",
+        "sourceOp": "push",
+        "target": "root/HelloWorld/Queue/Consumer0",
+        "targetOp": "invoke",
       },
-      Object {
-        "attrs": Object {},
-        "path": "root/HelloWorld/Counter",
-        "props": Object {
-          "initial": 1000,
-        },
-        "type": "wingsdk.cloud.Counter",
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Counter",
+        "sourceOp": "inc",
+        "target": "root/HelloWorld/Counter/Resource",
+        "targetOp": "call",
       },
-      Object {
-        "attrs": Object {},
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Counter",
+        "sourceOp": "dec",
+        "target": "root/HelloWorld/Counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Counter",
+        "sourceOp": "peek",
+        "target": "root/HelloWorld/Counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Counter",
+        "sourceOp": "set",
+        "target": "root/HelloWorld/Counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Queue/Consumer0",
+        "sourceOp": "invoke",
+        "target": "root/HelloWorld/Counter",
+        "targetOp": "inc",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Queue/Consumer0",
+        "sourceOp": "invoke",
+        "target": "root/HelloWorld/Bucket",
+        "targetOp": "put",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Queue/Consumer0",
+        "sourceOp": "invokeAsync",
+        "target": "root/HelloWorld/Counter",
+        "targetOp": "inc",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Queue/Consumer0",
+        "sourceOp": "invokeAsync",
+        "target": "root/HelloWorld/Bucket",
+        "targetOp": "put",
+      },
+    ],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/HelloWorld/Bucket": {
+        "addr": "c80e3625bbefd53d8c61fbb978711d410b5f2a41c8",
         "path": "root/HelloWorld/Bucket",
-        "props": Object {
-          "initialObjects": Object {},
+        "props": {
+          "initialObjects": {},
           "public": false,
+          "topics": {},
         },
-        "type": "wingsdk.cloud.Bucket",
+        "type": "@winglang/sdk.cloud.Bucket",
       },
-      Object {
-        "attrs": Object {},
-        "path": "root/HelloWorld/Queue-OnMessage-401ee792",
-        "props": Object {
-          "environmentVariables": Object {
-            "BUCKET_HANDLE_5f2a41c8": "\${root/HelloWorld/Bucket#attrs.handle}",
-            "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+      "root/HelloWorld/Bucket/Policy": {
+        "addr": "c86eb36bbe6e764a632afaaea5db2d4bd693c92624",
+        "path": "root/HelloWorld/Bucket/Policy",
+        "props": {
+          "principal": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+      "root/HelloWorld/Counter/Resource": {
+        "addr": "c81e2103dbfc2359abccf4774cbfa2f49287e2e6cc",
+        "path": "root/HelloWorld/Counter/Resource",
+        "policy": [],
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81e2103.cjs",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "@winglang/sdk.sim.Resource",
+      },
+      "root/HelloWorld/Queue": {
+        "addr": "c8de0494647ac0bdaec85a77e2a164cfbcfecc5ca1",
+        "path": "root/HelloWorld/Queue",
+        "props": {
+          "retentionPeriod": 3600,
+          "timeout": 30,
+        },
+        "type": "@winglang/sdk.cloud.Queue",
+      },
+      "root/HelloWorld/Queue/Consumer0": {
+        "addr": "c8a319bcb354a5e6d231ddfa543d3b95df95586b71",
+        "deps": [
+          "root/HelloWorld/Counter/Resource",
+          "root/HelloWorld/Bucket",
+        ],
+        "path": "root/HelloWorld/Queue/Consumer0",
+        "policy": [
+          {
+            "operation": "inc",
+            "resourceHandle": "\${wsim#root/HelloWorld/Counter/Resource#attrs.handle}",
           },
-          "sourceCodeFile": "assets/queue-onmessage-401ee792_c8515faa/index.js",
+          {
+            "operation": "put",
+            "resourceHandle": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
+          },
+          {
+            "operation": "call",
+            "resourceHandle": "\${wsim#root/HelloWorld/Counter/Resource#attrs.handle}",
+          },
+        ],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {
+            "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
+            "COUNTER_HANDLE_87e2e6cc": "\${wsim#root/HelloWorld/Counter/Resource#attrs.handle}",
+            "RESOURCE_HANDLE_87e2e6cc": "\${wsim#root/HelloWorld/Counter/Resource#attrs.handle}",
+          },
+          "sourceCodeFile": ".wing/consumer0_c8a319bc.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
-      Object {
-        "attrs": Object {},
-        "path": "root/HelloWorld/Queue",
-        "props": Object {
-          "initialMessages": Array [],
-          "subscribers": Array [
-            Object {
-              "batchSize": 1,
-              "functionHandle": "\${root/HelloWorld/Queue-OnMessage-401ee792#attrs.handle}",
+      "root/HelloWorld/Queue/Policy": {
+        "addr": "c86b009930462795eeb90e647a56dbfc5356d9ea80",
+        "path": "root/HelloWorld/Queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/HelloWorld/Queue/Consumer0#attrs.handle}",
+            },
+            {
+              "operation": "hasAvailableWorkers",
+              "resourceHandle": "\${wsim#root/HelloWorld/Queue/Consumer0#attrs.handle}",
             },
           ],
-          "timeout": 30,
         },
-        "type": "wingsdk.cloud.Queue",
+        "type": "@winglang/sdk.sim.Policy",
       },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "HelloWorld": Object {
-          "children": Object {
-            "Bucket": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [
-                  Object {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "put",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
-                  },
-                ],
-                "wing:resource:stateful": true,
-              },
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": Object {
-                "description": "A cloud object store",
-                "title": "Bucket",
-              },
-              "id": "Bucket",
-              "path": "root/HelloWorld/Bucket",
-            },
-            "Counter": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [
-                  Object {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "inc",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
-                  },
-                ],
-                "wing:resource:stateful": true,
-              },
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": Object {
-                "description": "A distributed atomic counter",
-                "title": "Counter",
-              },
-              "id": "Counter",
-              "path": "root/HelloWorld/Counter",
-            },
-            "Processor": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [
-                  Object {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "handle",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
-                  },
-                ],
-                "wing:resource:stateful": false,
-              },
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": Object {
-                "description": "An inflight resource",
-                "hidden": true,
-                "title": "Inflight",
-              },
-              "id": "Processor",
-              "path": "root/HelloWorld/Processor",
-            },
-            "Queue": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [
-                  Object {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "on_message",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
-                  },
-                ],
-                "wing:resource:stateful": true,
-              },
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": Object {
-                "description": "A distributed message queue",
-                "title": "Queue",
-              },
-              "id": "Queue",
-              "path": "root/HelloWorld/Queue",
-            },
-            "Queue-OnMessage-401ee792": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [
-                  Object {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "inc",
-                    "resource": "root/HelloWorld/Counter",
-                  },
-                  Object {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "put",
-                    "resource": "root/HelloWorld/Bucket",
-                  },
-                  Object {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle",
-                    "resource": "root/HelloWorld/Processor",
-                  },
-                  Object {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "print",
-                    "resource": "root/WingLogger",
-                  },
-                  Object {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "on_message",
-                    "resource": "root/HelloWorld/Queue",
-                  },
-                ],
-                "wing:resource:stateful": false,
-              },
-              "children": Object {
-                "Code": Object {
-                  "constructInfo": Object {
-                    "fqn": "constructs.Construct",
-                    "version": "10.1.245",
-                  },
-                  "id": "Code",
-                  "path": "root/HelloWorld/Queue-OnMessage-401ee792/Code",
-                },
-              },
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": Object {
-                "description": "A cloud function (FaaS)",
-                "title": "Function",
-              },
-              "id": "Queue-OnMessage-401ee792",
-              "path": "root/HelloWorld/Queue-OnMessage-401ee792",
-            },
-            "Queue-OnMessageHandler-401ee792": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [],
-                "wing:resource:stateful": false,
-              },
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Queue-OnMessageHandler-401ee792",
-              "path": "root/HelloWorld/Queue-OnMessageHandler-401ee792",
-            },
+      "root/HelloWorld/Queue/QueueEventMapping0": {
+        "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
+        "deps": [
+          "root/HelloWorld/Queue/Consumer0",
+          "root/HelloWorld/Queue",
+          "root/HelloWorld/Queue/Policy",
+        ],
+        "path": "root/HelloWorld/Queue/QueueEventMapping0",
+        "props": {
+          "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
+          "subscriber": "\${wsim#root/HelloWorld/Queue/Consumer0#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
           },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "id": "HelloWorld",
-          "path": "root/HelloWorld",
         },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
+        "type": "@winglang/sdk.sim.EventMapping",
       },
-      "constructInfo": Object {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
     },
-    "version": "tree-0.1",
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
-  "assets/queue-onmessage-401ee792_c8515faa/index.js": "var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
-
-var queue_onmessage_inflight_exports = {};
-__export(queue_onmessage_inflight_exports, {
-  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
-});
-var QueueOnMessageHandlerClient;
-var init_queue_onmessage_inflight = __esm({
-  \\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
-    \\"use strict\\";
-    QueueOnMessageHandlerClient = class {
-      constructor({ handler }) {
-        this.handler = handler;
-      }
-      async handle(event) {
-        let parsed = JSON.parse(event);
-        if (!parsed.messages)
-          throw new Error('No \\"messages\\" field in event.');
-        for (const $message of parsed.messages) {
-          await this.handler.handle($message);
-        }
-      }
-    };
-  }
-});
-
-var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(event2) {
-        let next = await this.counter.inc();
-        let key = \\"file-\\" + next + \\".txt\\";
-        await this.bucket.put(key, event2);
-      }
-    };
-  }())({
-    counter: function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"COUNTER_HANDLE_4ecd8d46\\"),
-    bucket: function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"BUCKET_HANDLE_5f2a41c8\\")
-  }) }).handle(event);
-};
-",
-  "tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "HelloWorld": Object {
-          "children": Object {
-            "Bucket": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [
-                  Object {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "put",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+  "tree.json": {
+    "tree": {
+      "children": {
+        "HelloWorld": {
+          "children": {
+            "Bucket": {
+              "children": {
+                "Policy": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
                   },
-                ],
-                "wing:resource:stateful": true,
+                  "display": {
+                    "description": "A simulated resource policy",
+                    "hidden": true,
+                    "title": "Policy",
+                  },
+                  "id": "Policy",
+                  "path": "root/HelloWorld/Bucket/Policy",
+                },
               },
-              "constructInfo": Object {
+              "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.3.0",
               },
-              "display": Object {
+              "display": {
                 "description": "A cloud object store",
                 "title": "Bucket",
               },
               "id": "Bucket",
               "path": "root/HelloWorld/Bucket",
             },
-            "Counter": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [
-                  Object {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "inc",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+            "Counter": {
+              "children": {
+                "Resource": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
                   },
-                ],
-                "wing:resource:stateful": true,
+                  "display": {
+                    "color": "emerald",
+                    "description": "A simulated resource",
+                    "hidden": true,
+                    "title": "Resource",
+                  },
+                  "id": "Resource",
+                  "path": "root/HelloWorld/Counter/Resource",
+                },
               },
-              "constructInfo": Object {
+              "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.3.0",
               },
-              "display": Object {
+              "display": {
                 "description": "A distributed atomic counter",
                 "title": "Counter",
               },
               "id": "Counter",
               "path": "root/HelloWorld/Counter",
             },
-            "Processor": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [
-                  Object {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "handle",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+            "Queue": {
+              "children": {
+                "Consumer0": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
                   },
-                ],
-                "wing:resource:stateful": false,
-              },
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": Object {
-                "description": "An inflight resource",
-                "hidden": true,
-                "title": "Inflight",
-              },
-              "id": "Processor",
-              "path": "root/HelloWorld/Processor",
-            },
-            "Queue": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [
-                  Object {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "on_message",
-                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                  "display": {
+                    "description": "A cloud function (FaaS)",
+                    "sourceModule": "@winglang/sdk",
+                    "title": "Consumer",
                   },
-                ],
-                "wing:resource:stateful": true,
+                  "id": "Consumer0",
+                  "path": "root/HelloWorld/Queue/Consumer0",
+                },
+                "Policy": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A simulated resource policy",
+                    "hidden": true,
+                    "title": "Policy",
+                  },
+                  "id": "Policy",
+                  "path": "root/HelloWorld/Queue/Policy",
+                },
+                "QueueEventMapping0": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "hidden": true,
+                  },
+                  "id": "QueueEventMapping0",
+                  "path": "root/HelloWorld/Queue/QueueEventMapping0",
+                },
               },
-              "constructInfo": Object {
+              "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.245",
+                "version": "10.3.0",
               },
-              "display": Object {
+              "display": {
                 "description": "A distributed message queue",
                 "title": "Queue",
               },
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
             },
-            "Queue-OnMessage-401ee792": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [
-                  Object {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "inc",
-                    "resource": "root/HelloWorld/Counter",
-                  },
-                  Object {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "put",
-                    "resource": "root/HelloWorld/Bucket",
-                  },
-                  Object {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle",
-                    "resource": "root/HelloWorld/Processor",
-                  },
-                  Object {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "print",
-                    "resource": "root/WingLogger",
-                  },
-                  Object {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "on_message",
-                    "resource": "root/HelloWorld/Queue",
-                  },
-                ],
-                "wing:resource:stateful": false,
-              },
-              "children": Object {
-                "Code": Object {
-                  "constructInfo": Object {
-                    "fqn": "constructs.Construct",
-                    "version": "10.1.245",
-                  },
-                  "id": "Code",
-                  "path": "root/HelloWorld/Queue-OnMessage-401ee792/Code",
-                },
-              },
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": Object {
-                "description": "A cloud function (FaaS)",
-                "title": "Function",
-              },
-              "id": "Queue-OnMessage-401ee792",
-              "path": "root/HelloWorld/Queue-OnMessage-401ee792",
-            },
-            "Queue-OnMessageHandler-401ee792": Object {
-              "attributes": Object {
-                "wing:resource:connections": Array [],
-                "wing:resource:stateful": false,
-              },
-              "constructInfo": Object {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Queue-OnMessageHandler-401ee792",
-              "path": "root/HelloWorld/Queue-OnMessageHandler-401ee792",
-            },
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.245",
+            "version": "10.3.0",
           },
+          "display": {},
           "id": "HelloWorld",
           "path": "root/HelloWorld",
         },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": Object {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.245",
+        "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

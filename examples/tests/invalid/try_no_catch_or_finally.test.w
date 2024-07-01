@@ -1,0 +1,3 @@
+try {
+  log("Hello World");
+}

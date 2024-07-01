@@ -2,10 +2,39 @@
 // They should not be consumed directly by users.
 // TODO: This should be an interface, currently Wing does not support interface JSII imports
 
+import { Json, JsonValidationOptions } from "./json";
+import { JsonSchema } from "./json_schema";
+import { InflightClient } from "../core";
+
 /**
  * String
+ * @wingType str
  */
 export class String {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): string {
+    return InflightClient.forType(__filename, this.name);
+  }
+
+  /**
+   * Parse string from Json.
+   *
+   * @param json to create string from.
+   * @returns a string.
+   */
+  public static fromJson(json: Json, options?: JsonValidationOptions): string {
+    const schema = JsonSchema._createJsonSchema({
+      $id: "string",
+      type: "string",
+    } as any);
+    schema.validate(json, options);
+    return json as any;
+  }
+
+  private constructor() {}
+
   /**
    * The length of the string.
    */
@@ -15,6 +44,8 @@ export class String {
 
   /**
    * Returns the character at the specified index.
+   *
+   * @macro ((args) => { if ($args$ >= $self$.length || $args$ + $self$.length < 0) {throw new Error("index out of bounds")}; return $self$.at($args$) })($args$)
    *
    * @param index position of the character.
    * @returns string at the specified index.
@@ -56,7 +87,7 @@ export class String {
    * @param searchString substring to search for.
    * @returns true if string ends with searchString.
    */
-  public ends(searchString: string): boolean {
+  public endsWith(searchString: string): boolean {
     searchString;
     throw new Error("Abstract");
   }
@@ -71,7 +102,7 @@ export class String {
    */
   public indexOf(searchString: string): number {
     searchString;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -82,7 +113,7 @@ export class String {
    * @returns a new lower case string.
    */
   public lowercase(): string {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -104,7 +135,7 @@ export class String {
    * @param searchString substring to search for.
    * @returns true if string starts with searchString.
    */
-  public starts(searchString: string): boolean {
+  public startsWith(searchString: string): boolean {
     searchString;
     throw new Error("Abstract");
   }
@@ -119,6 +150,36 @@ export class String {
   public substring(indexStart: number, indexEnd?: number): string {
     indexStart;
     indexEnd;
+    throw new Error("Abstract");
+  }
+
+  /**
+   * Replaces the first occurence of a substring within a string.
+   *
+   * @macro $self$.replace($args$)
+   *
+   * @param searchString The substring to search for.
+   * @param replaceString The replacement substring.
+   * @returns The modified string after replacement.
+   */
+  public replace(searchString: string, replaceString: string): string {
+    searchString;
+    replaceString;
+    throw new Error("Abstract");
+  }
+
+  /**
+   * Replaces all occurrences of a substring within a string.
+   *
+   * @macro $self$.replaceAll($args$)
+   *
+   * @param searchString The substring to search for.
+   * @param replaceString The replacement substring.
+   * @returns The modified string after replacement.
+   */
+  public replaceAll(searchString: string, replaceString: string): string {
+    searchString;
+    replaceString;
     throw new Error("Abstract");
   }
 
@@ -139,6 +200,6 @@ export class String {
    * @returns a new upper case string.
    */
   public uppercase(): string {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 }

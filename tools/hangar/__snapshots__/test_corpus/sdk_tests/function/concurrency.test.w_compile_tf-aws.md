@@ -1,0 +1,20 @@
+# [concurrency.test.w](../../../../../../examples/tests/sdk_tests/function/concurrency.test.w) | compile | tf-aws
+
+## main.tf.json
+```json
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root"
+    },
+    "outputs": {}
+  },
+  "provider": {
+    "aws": [
+      {}
+    ]
+  }
+}
+```
+

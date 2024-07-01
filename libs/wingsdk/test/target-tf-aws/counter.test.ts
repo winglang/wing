@@ -1,13 +1,19 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { lift } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../../src/util";
-import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import {
+  mkdtemp,
+  sanitizeCode,
+  tfResourcesOf,
+  tfSanitize,
+  treeJsonOf,
+} from "../util";
 
 test("default counter behavior", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  cloud.Counter._newCounter(app, "Counter");
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  new cloud.Counter(app, "Counter");
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual(["aws_dynamodb_table"]);
@@ -15,8 +21,8 @@ test("default counter behavior", () => {
 });
 
 test("counter with initial value", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  cloud.Counter._newCounter(app, "Counter", {
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  new cloud.Counter(app, "Counter", {
     initial: 9991,
   });
   const output = app.synth();
@@ -27,27 +33,23 @@ test("counter with initial value", () => {
 });
 
 test("function with a counter binding", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = cloud.Counter._newCounter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle(event) {
-  const val = await this.my_counter.inc(2);
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.INC],
-      },
-    }
-  );
-  cloud.Function._newFunction(app, "Function", inflight);
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const counter = new cloud.Counter(app, "Counter");
+
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [cloud.CounterInflightMethods.INC] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.inc(2);
+      console.log(val);
+    });
+
+  new cloud.Function(app, "Function", handler);
+
   const output = app.synth();
 
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for function
     "aws_dynamodb_table", // table for the counter
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
@@ -61,109 +63,77 @@ test("function with a counter binding", () => {
 });
 
 test("inc() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = cloud.Counter._newCounter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle(event) {
-  const val = await this.my_counter.inc(2);
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.INC],
-      },
-    }
-  );
-  cloud.Function._newFunction(app, "Function", inflight);
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const counter = new cloud.Counter(app, "Counter");
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [cloud.CounterInflightMethods.INC] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.inc(2);
+      console.log(val);
+    });
+  new cloud.Function(app, "Function", handler);
   const output = app.synth();
 
-  expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
+  expect(output).toContain("dynamodb:UpdateItem");
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("dec() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = cloud.Counter._newCounter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle(event) {
-  const val = await this.my_counter.dec(2);
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.DEC],
-      },
-    }
-  );
-  cloud.Function._newFunction(app, "Function", inflight);
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const counter = new cloud.Counter(app, "Counter");
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [cloud.CounterInflightMethods.DEC] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.dec(2);
+      console.log(val);
+    });
+
+  new cloud.Function(app, "Function", handler);
   const output = app.synth();
 
-  expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
+  expect(output).toContain("dynamodb:UpdateItem");
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("peek() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = cloud.Counter._newCounter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle(event) {
-  const val = await this.my_counter.peek();
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.PEEK],
-      },
-    }
-  );
-  cloud.Function._newFunction(app, "Function", inflight);
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const counter = new cloud.Counter(app, "Counter");
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [cloud.CounterInflightMethods.PEEK] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.peek();
+      console.log(val);
+    });
+  new cloud.Function(app, "Function", handler);
   const output = app.synth();
 
-  expect(tfSanitize(output)).toContain("dynamodb:GetItem");
+  expect(output).toContain("dynamodb:GetItem");
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("reset() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = cloud.Counter._newCounter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle(event) {
-  const val = await this.my_counter.reset();
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.RESET],
-      },
-    }
-  );
-  cloud.Function._newFunction(app, "Function", inflight);
+test("set() policy statement", () => {
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const counter = new cloud.Counter(app, "Counter");
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [cloud.CounterInflightMethods.SET] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.set(1);
+      console.log(val);
+    });
+  new cloud.Function(app, "Function", handler);
   const output = app.synth();
-
-  expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
+  expect(output).toContain("dynamodb:UpdateItem");
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("counter name valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = cloud.Counter._newCounter(app, "The.Amazing-Counter_01");
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const counter = new cloud.Counter(app, "The.Amazing-Counter_01");
   const output = app.synth();
 
   // THEN
@@ -181,8 +151,8 @@ test("counter name valid", () => {
 
 test("replace invalid character from counter name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = cloud.Counter._newCounter(app, "The*Amazing%Counter@01");
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const counter = new cloud.Counter(app, "The*Amazing%Counter@01");
   const output = app.synth();
 
   // THEN

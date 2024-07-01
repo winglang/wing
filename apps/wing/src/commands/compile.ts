@@ -1,228 +1,179 @@
-import * as vm from "vm";
+import { promises as fsPromise } from "fs";
+import { dirname, relative, resolve } from "path";
 
-import { mkdir, readFile } from "fs/promises";
-import { basename, dirname, join, resolve } from "path";
-
-import * as chalk from "chalk";
+import * as wingCompiler from "@winglang/compiler";
+import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
+import chalk from "chalk";
+import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import debug from "debug";
-import * as wingCompiler from "../wingc";
-import { normalPath } from "../util";
+import { glob } from "glob";
+import { loadEnvVariables } from "../env";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
 Error.stackTraceLimit = 50;
 
 const log = debug("wing:compile");
-const WINGC_COMPILE = "wingc_compile";
-const WINGC_PREFLIGHT = "preflight.js";
-
-/**
- * Available targets for compilation.
- * This is passed from Commander to the `compile` function.
- */
-export enum Target {
-  TF_AWS = "tf-aws",
-  TF_AZURE = "tf-azure",
-  TF_GCP = "tf-gcp",
-  SIM = "sim",
-}
-
-const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
-  [Target.TF_AWS]: "tfaws",
-  [Target.TF_AZURE]: "tfazure",
-  [Target.TF_GCP]: "tfgcp",
-  [Target.SIM]: undefined,
-};
 
 /**
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
  */
-export interface ICompileOptions {
-  readonly outDir: string;
-  readonly target: Target;
-  readonly plugins?: string[];
-}
-
-/**
- * Determines the synth directory for a given target. This is the directory
- * within the output directory where the SDK app will synthesize its artifacts
- * for the given target.
- */
-function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
-  const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
-  if (targetDirSuffix === undefined) {
-    // this target produces a single artifact, so we don't need a subdirectory
-    return outDir;
-  }
-  const entrypointName = basename(entrypoint, ".w");
-  return join(outDir, `${entrypointName}.${targetDirSuffix}`);
+export interface CompileOptions {
+  /**
+   * Target platform
+   * @default wingCompiler.BuiltinPlatform.SIM
+   */
+  readonly platform: string[];
+  /**
+   * App root id
+   *
+   * @default "Default"
+   */
+  readonly rootId?: string;
+  /**
+   * String with platform-specific values separated by commas
+   */
+  readonly value?: string;
+  /**
+   * Path to the file with specific platform values (TOML|YAML|JSON)
+   *
+   * example of the file's content:
+   * root/Default/Domain:
+   *   hostedZoneId: Z0111111111111111111F
+   *   acmCertificateArn: arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+   */
+  readonly values?: string;
+  /**
+   * The location to save the compilation output
+   * @default "./target"
+   */
+  readonly targetDir?: string;
+  /**
+   * The overrides the location to save the compilation output
+   * @default "./target/<entrypoint>.<target>"
+   */
+  readonly output?: string;
+  /**
+   * Whether to run the compiler in `wing test` mode. This may create multiple
+   * copies of the application resources in order to run tests in parallel.
+   */
+  readonly testing?: boolean;
 }
 
 /**
  * Compiles a Wing program. Throws an error if compilation fails.
  * @param entrypoint The program .w entrypoint.
  * @param options Compile options.
+ * @returns the output directory
  */
-export async function compile(entrypoint: string, options: ICompileOptions) {
-  const wingFile = entrypoint;
-  log("wing file: %s", wingFile);
-  const wingDir = dirname(wingFile);
-  log("wing dir: %s", wingDir);
-  const synthDir = resolveSynthDir(options.outDir, wingFile, options.target);
-  log("synth dir: %s", synthDir);
-  const workDir = resolve(synthDir, ".wing");
-  log("work dir: %s", workDir);
-
-  await Promise.all([
-    mkdir(workDir, { recursive: true }),
-    mkdir(synthDir, { recursive: true }),
-  ]);
-
-  const wingc = await wingCompiler.load({
-    env: {
-      RUST_BACKTRACE: "full",
-      WINGSDK_SYNTH_DIR: normalPath(synthDir),
-      WINGC_PREFLIGHT,
-    },
-    preopens: {
-      [wingDir]: wingDir, // for Rust's access to the source file
-      [workDir]: workDir, // for Rust's access to the work directory
-      [synthDir]: synthDir, // for Rust's access to the synth directory
-    },
-  });
-
-  const arg = `${normalPath(wingFile)};${normalPath(workDir)}`;
-  log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  let compileResult;
-  try {
-    compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
-  } catch (e) {
-    // This is a bug in Wing, not the user's code.
-    console.error(e);
-    console.log("\n\n" + chalk.bold.red("Internal error:") + " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.");
-    process.exit(1);
-  }
-  if (compileResult !== 0) {
-    // This is a bug in the user's code. Print the compiler diagnostics.
-    // TODO: change wingc to output diagnostics in a structured format,
-    // so we can format and print them in a more user-friendly way.
-    throw new Error(compileResult.toString());
-  }
-
-  const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
-  log("reading artifact from %s", artifactPath);
-  const artifact = await readFile(artifactPath, "utf-8");
-  log("artifact: %s", artifact);
-
-  const preflightRequire = (path: string) => {
-    // Try looking for dependencies not only in the current directory (wherever
-    // the wing CLI was installed to), but also in the source code directory.
-    // This is necessary because the Wing app may have installed dependencies in
-    // the project directory.
-    const requirePath = require.resolve(path, { paths: [__dirname, wingDir] });
-    return require(requirePath);
-  };
-
-  // If you're wondering how the execution of the preflight works, despite it
-  // being in a different directory: it works because at the top of the file
-  // require.resolve is called to cache wingsdk in-memory. So by the time VM
-  // is starting up, the passed context already has wingsdk in it.
-  // "__dirname" is also synthetically changed so nested requires work.
-  const context = vm.createContext({
-    require: preflightRequire,
-    process: {
-      env: {
-        WINGSDK_SYNTH_DIR: synthDir,
-        WING_TARGET: options.target,
-      },
-    },
-    console,
-    __dirname: workDir,
-    __filename: artifactPath,
-    $plugins: resolvePluginPaths(options.plugins ?? []),
-    // since the SDK is loaded in the outer VM, we need these to be the same class instance,
-    // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
-    // `serializeImmutableData` which has special cases for serializing these types.
-    Map,
-    Set,
-    Array,
-    Promise,
-    Object,
-    RegExp,
-    String,
-    Date,
-    Function,
-  });
-  log("evaluating artifact in context: %o", context);
-
-  try {
-    vm.runInContext(artifact, context);
-  } catch (e) {
-    console.error(
-      chalk.bold.red("preflight error:") + " " + (e as any).message
-    );
-
-    if (
-      (e as any).stack &&
-      (e as any).stack.includes("evalmachine.<anonymous>:")
-    ) {
-      console.log();
-      console.log(
-        "  " +
-          chalk.bold.white("note:") +
-          " " +
-          chalk.white("intermediate javascript code:")
+export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
+  if (!entrypoint) {
+    const wingFiles = (await glob("{main,*.main}.{w,ts}")).sort();
+    if (wingFiles.length === 0) {
+      throw new Error(
+        "Cannot find an entrypoint file (main.w, main.ts, *.main.w, *.main.ts) in the current directory."
       );
-      const lineNumber =
-        Number.parseInt(
-          (e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]
-        ) - 1;
-      const lines = artifact.split("\n");
-      let startLine = Math.max(lineNumber - 2, 0);
-      let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+    }
+    if (wingFiles.length > 1) {
+      throw new Error(
+        `Multiple entrypoints found in the current directory (${wingFiles.join(
+          ", "
+        )}). Please specify which one to use.`
+      );
+    }
+    entrypoint = wingFiles[0];
+  }
+  loadEnvVariables({ cwd: resolve(dirname(entrypoint)) });
+  const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
+  try {
+    return await wingCompiler.compile(entrypoint, {
+      ...options,
+      log,
+      color: coloring,
+      platform: options?.platform ?? ["sim"],
+    });
+  } catch (error) {
+    if (error instanceof wingCompiler.CompileError) {
+      // This is a bug in the user's code. Print the compiler diagnostics.
+      const diagnostics = error.diagnostics;
+      const cwd = process.cwd();
+      const result = [];
 
-      // print line and its surrounding lines
-      for (let i = startLine; i <= finishLine; i++) {
-        if (i === lineNumber) {
-          console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
-        } else {
-          console.log("   " + chalk.dim(lines[i]));
+      for (const diagnostic of diagnostics) {
+        const { message, span, annotations, hints } = diagnostic;
+        const files: File[] = [];
+        const labels: Label[] = [];
+
+        // file_id might be "" if the span is synthetic (see #2521)
+        if (span?.file_id) {
+          // `span` should only be null if source file couldn't be read etc.
+          const source = await fsPromise.readFile(span.file_id, "utf8");
+          const start = span.start_offset;
+          const end = span.end_offset;
+          const filePath = relative(cwd, span.file_id);
+          files.push({ name: filePath, source });
+          labels.push({
+            fileId: filePath,
+            rangeStart: start,
+            rangeEnd: end,
+            message: "",
+            style: "primary",
+          });
         }
+
+        for (const annotation of annotations) {
+          // file_id might be "" if the span is synthetic (see #2521)
+          if (!annotation.span?.file_id) {
+            continue;
+          }
+          const source = await fsPromise.readFile(annotation.span.file_id, "utf8");
+          const start = annotation.span.start_offset;
+          const end = annotation.span.end_offset;
+          const filePath = relative(cwd, annotation.span.file_id);
+          files.push({ name: filePath, source });
+          labels.push({
+            fileId: filePath,
+            rangeStart: start,
+            rangeEnd: end,
+            message: annotation.message,
+            style: "secondary",
+          });
+        }
+
+        const diagnosticText = emitDiagnostic(
+          files,
+          {
+            message,
+            severity: "error",
+            labels,
+            notes: hints.map((hint) => `hint: ${hint}`),
+          },
+          {
+            chars: CHARS_ASCII,
+          },
+          coloring
+        );
+        result.push(diagnosticText);
       }
-    }
+      throw new Error(result.join("\n"));
+    } else if (error instanceof wingCompiler.PreflightError) {
+      let output = await prettyPrintError(error.causedBy, {
+        chalk,
+        sourceEntrypoint: resolve(entrypoint ?? "."),
+      });
 
-    if (process.env.NODE_STACKTRACE) {
-      console.error(
-        "--------------------------------- STACK TRACE ---------------------------------"
-      );
-      console.error((e as any).stack);
+      if (process.env.DEBUG) {
+        output +=
+          "\n--------------------------------- ORIGINAL STACK TRACE ---------------------------------\n" +
+          (error.causedBy.stack ?? "(no stacktrace available)");
+      }
+
+      error.causedBy.message = output;
+
+      throw error.causedBy;
     } else {
-      console.log(
-        "  " +
-          chalk.bold.white("note:") +
-          " " +
-          chalk.white(
-            "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
-          )
-      );
+      throw error;
     }
-
-    process.exitCode = 1;
   }
-}
-
-/**
- * Resolves a list of plugin paths as absolute paths, using the current working directory
- * if absolute path is not provided.
- *
- * @param plugins list of plugin paths (absolute or relative)
- * @returns list of absolute plugin paths or relative to cwd
- */
-function resolvePluginPaths(plugins: string[]): string[] {
-  const resolvedPluginPaths: string[] = [];
-  for (const plugin of plugins) {
-    resolvedPluginPaths.push(resolve(process.cwd(), plugin));
-  }
-  return resolvedPluginPaths;
 }

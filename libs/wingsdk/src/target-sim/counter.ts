@@ -1,49 +1,71 @@
 import { Construct } from "constructs";
-import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
-import { CounterSchema, COUNTER_TYPE } from "./schema-resources";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { Resource } from "./resource";
+import { bindSimulatorResource, makeSimulatorJsClientV2 } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
+import { LiftMap, lift } from "../core";
+import { Node, IInflightHost } from "../std";
 
 /**
  * Simulator implementation of `cloud.Counter`.
  *
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
-export class Counter extends cloud.Counter implements ISimulatorResource {
+export class Counter extends cloud.Counter {
   public readonly initial: number;
+  private readonly backend: Resource;
+
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
 
     this.initial = props.initial ?? 0;
+
+    const factory = lift({
+      initial: this.initial,
+    }).inflight(async (ctx, simContext) => {
+      // TODO: make CounterBackend liftable so we can add it to the list of captures
+      const CounterBackend =
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+      const backend = new CounterBackend(simContext, { initial: ctx.initial });
+      await backend.onStart();
+      return backend;
+    });
+
+    this.backend = new Resource(this, "Resource", factory);
+    Node.of(this.backend).hidden = true;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: CounterSchema = {
-      type: COUNTER_TYPE,
-      path: this.node.path,
-      props: {
-        initial: this.initial,
-      },
-      attrs: {} as any,
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.CounterInflightMethods.INC]: [[this.backend, ["call"]]],
+      [cloud.CounterInflightMethods.DEC]: [[this.backend, ["call"]]],
+      [cloud.CounterInflightMethods.PEEK]: [[this.backend, ["call"]]],
+      [cloud.CounterInflightMethods.SET]: [[this.backend, ["call"]]],
     };
-    return schema;
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    bindSimulatorResource(__filename, this.backend, host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("counter", this, host);
-    super._bind(host, ops);
-  }
-
-  /** @internal */
-  public _toInflight(): core.Code {
-    return makeSimulatorJsClient("counter", this);
+  public _toInflight(): string {
+    return makeSimulatorJsClientV2(__filename, this.backend);
   }
 }
 
-Counter._annotateInflight("inc", {});
-Counter._annotateInflight("dec", {});
-Counter._annotateInflight("peek", {});
-Counter._annotateInflight("reset", {});
+/**
+ * Props for CounterBackend
+ * @internal
+ */
+export interface CounterBackendProps {
+  readonly initial: number;
+}
+
+/**
+ * Runtime attributes for CounterBackend
+ * @internal
+ */
+export interface CounterAttributes {}

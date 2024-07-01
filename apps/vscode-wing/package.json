@@ -6,81 +6,93 @@
     "url": "https://github.com/winglang/wing.git"
   },
   "scripts": {
-    "build": "npx projen build",
-    "clobber": "npx projen clobber",
-    "compile": "npx projen compile",
-    "default": "npx projen default",
-    "eject": "npx projen eject",
-    "eslint": "npx projen eslint",
-    "package": "npx projen package",
-    "post-compile": "npx projen post-compile",
-    "post-upgrade": "npx projen post-upgrade",
-    "pre-compile": "npx projen pre-compile",
-    "test": "npx projen test",
-    "upgrade": "npx projen upgrade",
-    "watch": "npx projen watch",
-    "projen": "npx projen"
+    "build": "pnpm exec projen build",
+    "clobber": "pnpm exec projen clobber",
+    "compile": "pnpm exec projen compile",
+    "default": "pnpm exec projen default",
+    "dev": "pnpm exec projen dev",
+    "eject": "pnpm exec projen eject",
+    "eslint": "pnpm exec projen eslint",
+    "package": "pnpm exec projen package",
+    "post-compile": "pnpm exec projen post-compile",
+    "pre-compile": "pnpm exec projen pre-compile",
+    "test": "pnpm exec projen test",
+    "watch": "pnpm exec projen watch",
+    "projen": "pnpm exec projen"
   },
   "author": {
-    "name": "Monada",
-    "email": "ping@monada.co",
-    "url": "https://monada.co",
+    "name": "Wing Cloud",
+    "email": "ping@wing.cloud",
+    "url": "https://winglang.io",
     "organization": true
   },
   "devDependencies": {
-    "@types/node": "^14",
-    "@types/which": "^2.0.2",
+    "@trpc/client": "^10.45.2",
+    "@types/node": "^20.11.0",
+    "@types/node-fetch": "^2.6.11",
+    "@types/vscode": "^1.70.0",
+    "@types/which": "^3.0.4",
+    "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "@vscode/vsce": "^2.16.0",
-    "esbuild": "^0.17.4",
+    "@vscode/vsce": "^2.29.0",
     "eslint": "^8",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-import-resolver-node": "^0.3.7",
-    "eslint-import-resolver-typescript": "^3.5.3",
-    "eslint-plugin-import": "^2.27.5",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-import-resolver-node": "^0.3.9",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^4.2.1",
-    "npm-check-updates": "^16",
-    "prettier": "^2.8.3",
-    "projen": "^0.67.11",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
-  },
-  "dependencies": {
-    "@types/vscode": "^1.70.0",
-    "vscode-languageclient": "^8.0.2",
-    "which": "^3.0.0"
+    "node-fetch": "^2.6.7",
+    "open": "^8.4.2",
+    "prettier": "^2.8.8",
+    "projen": "^0.71.163",
+    "tsup": "^8.1.0",
+    "tsx": "^4.15.7",
+    "typescript": "^5.5.2",
+    "vscode-languageclient": "^8.1.0",
+    "which": "^4.0.0",
+    "winglang": "workspace:^",
+    "ws": "^8.17.1"
   },
   "keywords": [
     "cdk",
+    "cdktf",
     "cloud",
     "infrastructure",
     "language",
-    "wing"
+    "terraform",
+    "wing",
+    "winglang"
   ],
   "engines": {
     "vscode": "^1.70.0"
   },
-  "main": "lib/index.js",
-  "license": "Apache-2.0",
+  "main": "lib/extension.js",
+  "license": "MIT",
   "homepage": "https://winglang.io",
   "version": "0.0.0",
   "bugs": {
     "url": "https://github.com/winglang/wing/issues"
   },
-  "types": "lib/index.d.ts",
+  "types": "lib/extension.d.ts",
   "publisher": "Monada",
   "preview": true,
   "private": true,
-  "displayName": "Wing [Alpha]",
+  "displayName": "Wing",
   "icon": "resources/logo.png",
   "categories": [
     "Programming Languages"
   ],
   "activationEvents": [
-    "onLanguage:wing"
+    "onLanguage:wing",
+    "onDebug"
   ],
   "contributes": {
+    "breakpoints": [
+      {
+        "language": "wing"
+      }
+    ],
     "languages": [
       {
         "id": "wing",
@@ -97,6 +109,52 @@
           "light": "resources/icon-light.png",
           "dark": "resources/icon-dark.png"
         }
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "wing",
+        "label": "Wing Debug",
+        "program": "",
+        "languages": [
+          "wing"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "entrypoint": {
+              "type": "string",
+              "description": "The entrypoint to run",
+              "default": "${file}"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "Wing CLI arguments",
+              "default": "test"
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "label": "Wing Debug: Launch",
+            "description": "Launch a Wing program",
+            "body": {
+              "type": "wing",
+              "request": "launch",
+              "name": "Launch"
+            }
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Wing Debug: Launch",
+            "description": "Launch a Wing program",
+            "body": {
+              "type": "wing",
+              "request": "launch",
+              "name": "Launch"
+            }
+          }
+        ]
       }
     ],
     "grammars": [
@@ -116,22 +174,39 @@
         }
       }
     ],
+    "commands": [
+      {
+        "command": "wing.openConsole",
+        "title": "Open in Wing Console",
+        "icon": {
+          "light": "resources/icon-light.svg",
+          "dark": "resources/icon-dark.svg"
+        }
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceLangId == wing",
+          "command": "wing.openConsole",
+          "group": "navigation"
+        }
+      ]
+    },
     "configuration": [
       {
         "title": "Wing",
         "properties": {
           "wing.bin": {
             "type": "string",
-            "default": "wing",
-            "description": "Path to the Wing binary. Will be `wing` from PATH by default.\nSet to `npx` to automatically retrieve the version that matches this extension"
+            "description": "Path to the Wing binary. Will be `wing` from PATH by default."
           }
         }
       }
     ]
   },
   "volta": {
-    "node": "18.12.1",
-    "npm": "8.19.3"
+    "extends": "../../package.json"
   },
-  "//": "~~ Generated by projen. To modify, edit .projenrc.js and run \"npx projen\"."
+  "//": "~~ Generated by projen. To modify, edit .projenrc.ts and run \"npx projen\"."
 }

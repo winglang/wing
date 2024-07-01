@@ -1,0 +1,19 @@
+{
+  "name": "ts-fixture",
+  "version": "0.0.0",
+  "scripts": {
+    "compile": "wing compile ./src/main.ts",
+    "test": "wing test ./src/main.ts"
+  },
+  "dependencies": {
+    "@wingcloud/framework": "workspace:^",
+    "@winglibs/testfixture": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "winglang": "workspace:^"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

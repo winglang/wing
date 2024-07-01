@@ -1,0 +1,19 @@
+---
+source: libs/wingc/src/lsp/signature.rs
+---
+signatures:
+  - label: "(url: str, ...options): Response"
+    documentation:
+      kind: markdown
+      value: Executes a GET request to a specified URL and provides a formatted response.
+    parameters:
+      - label: "url: str"
+        documentation:
+          kind: markdown
+          value: "The target URL for the GET request.\n\n"
+      - label: "...options"
+        documentation:
+          kind: markdown
+          value: "```wing\nstruct RequestOptions {\n  body?: str;\n  cache?: RequestCache;\n  headers?: Map<str>;\n  method?: HttpMethod;\n  redirect?: RequestRedirect;\n  referrer?: str;\n}\n```\n"
+    activeParameter: 0
+

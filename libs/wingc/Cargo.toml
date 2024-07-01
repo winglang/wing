@@ -1,28 +1,36 @@
 [package]
 name = "wingc"
-version = "0.1.0"
+version = "0.0.0"
 edition = "2021"
 
 [dependencies]
-tree-sitter = "0.20.9"
-tree-sitter-traversal = "0.1.2"
-sha2 = "0.10.6"
-base16ct = { version = "0.1.1", features = ["alloc"] }
-derivative = "2.2.0"
+tree-sitter = "0.22.5"
+derivative = "2.2"
 tree-sitter-wing = { path = "../tree-sitter-wing" }
 wingii = { path = "../wingii" }
+serde = "1.0"
 serde_json = "1.0"
 colored = "2.0"
-lazy_static = "1.4.0"
-globset = "0.4.9"
-itertools = "0.10"
-inflections = "1.1.1"
+lazy_static = "1.4"
+globset = "0.4"
+itertools = "0.12"
 phf = { version = "0.11", features = ["macros"] }
-indexmap = "1.9.1"
-aho-corasick = "0.7.20"
-lsp-types = "0.93.2"
-indoc = "2.0.0"
+indexmap = { version = "2.0", features = ["serde"] }
+aho-corasick = "1.1"
+lsp-types = "0.95"
+indoc = "2.0"
+const_format = "0.2"
+duplicate = "1.0"
+strum = { version = "0.26", features = ["derive"] }
+petgraph = "0.6"
+camino = "1.1"
+parcel_sourcemap = "2.1.1"
+regex = "1"
 
 [lib]
-path = "src/lib.rs"
-crate-type = ["cdylib", "rlib"]
+crate-type = ["rlib", "cdylib"]
+
+[dev-dependencies]
+insta = { version = "1.33", features = ["yaml", "redactions"] }
+uuid = { version = "1.4", features = ["fast-rng", "v4"] }
+tempfile = "3.8"

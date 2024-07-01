@@ -1,142 +1,191 @@
-import { join } from "path";
-import { JsonFile, cdk, javascript } from "projen";
-import rootPackageJson from "../../package.json";
+import { JsonFile, cdk, javascript, DependencyType } from "projen";
 
-const PUBLIC_JSII_DEPS = ["constructs@~10.1.228"];
+const JSII_DEPS = ["constructs@^10.3"];
+const CDKTF_VERSION = "0.20.7";
+const AWS_SDK_VERSION = "3.577.0";
 
-const PRIVATE_JSII_DEPS = [
-  "cdktf@0.15.2",
-  "@cdktf/provider-random@^5.0.0",
-  "@cdktf/provider-aws@^12.0.1",
-  "@cdktf/provider-azurerm@^5.0.1",
-  "@cdktf/provider-google@^5.0.2",
+const CDKTF_PROVIDERS = [
+  "aws@~>5.31.0",
+  "random@~>3.5.1",
+  "azurerm@~>3.96.0",
+  "google@~>5.10.0",
 ];
+
+// defines the list of dependencies required for each compilation target that is not built into the
+// compiler (like Terraform targets).
+const TARGET_DEPS: { [key: string]: string[] } = {};
+
+// we treat all the non-builtin dependencies as "side loaded". this means that we will remove them
+// from the "package.json" just before we bundle the package and the Wing CLI will require the user
+// to install them at runtime
+const sideLoad = Object.values(TARGET_DEPS).flat();
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
-  author: "Monada, Inc.",
+  author: "Wing Cloud",
   authorOrganization: true,
-  authorAddress: "ping@monada.co",
+  authorAddress: "ping@wing.cloud",
   repositoryUrl: "https://github.com/winglang/wing.git",
   repositoryDirectory: "libs/wingsdk",
+  license: "MIT",
   stability: "experimental",
   defaultReleaseBranch: "main",
-  peerDeps: [...PUBLIC_JSII_DEPS],
-  deps: [...PUBLIC_JSII_DEPS, ...PRIVATE_JSII_DEPS],
+  peerDeps: [...JSII_DEPS],
+  deps: [...JSII_DEPS],
+  tsconfig: {
+    include: ["src/**/*.ts", "test/**/*.ts", "*.ts", "*.mts", "scripts/*.mts"],
+    compilerOptions: {
+      lib: ["es2020", "dom", "dom.iterable"],
+    },
+  },
   bundledDeps: [
+    `cdktf@${CDKTF_VERSION}`,
+    ...sideLoad,
     // preflight dependencies
-    "debug",
-    "esbuild-wasm",
     "safe-stable-stringify",
-    // aws client dependencies
-    // (note: these should always be updated together, otherwise they will
-    // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.256.0",
-    "@aws-sdk/client-dynamodb@3.256.0",
-    "@aws-sdk/client-lambda@3.256.0",
-    "@aws-sdk/client-s3@3.256.0",
-    "@aws-sdk/client-sqs@3.256.0",
-    "@aws-sdk/client-sns@3.256.0",
-    "@aws-sdk/types@3.254.0",
-    "@aws-sdk/util-stream-node@3.254.0",
-    "@aws-sdk/util-utf8-node@3.208.0",
+    "jiti",
+    // aws sdk client dependencies
+    // change `AWS_SDK_VERSION` to update all deps at once
+    "@aws-sdk/client-cloudwatch-logs",
+    "@aws-sdk/client-dynamodb",
+    "@aws-sdk/client-elasticache",
+    "@aws-sdk/client-lambda",
+    "@aws-sdk/client-s3",
+    "@aws-sdk/client-secrets-manager",
+    "@aws-sdk/client-sns",
+    "@aws-sdk/client-sqs",
+    "@aws-sdk/s3-request-presigner",
+    "@aws-sdk/util-dynamodb",
+    // aws other client dependencies
+    "@smithy/util-stream@2.0.17",
+    "@smithy/util-utf8@2.0.0",
+    "@types/aws-lambda",
+    "@aws-sdk/types",
+    "mime-types",
+    "mime@^3.0.0",
     // azure client dependencies
-    "@azure/storage-blob@12.12.0",
-    "@azure/identity@3.1.3",
+    "@azure/storage-blob@12.14.0",
+    "@azure/data-tables@13.2.2",
+    "@azure/identity@4.3.0",
     "@azure/core-paging",
+    // gcp client dependencies
+    "@google-cloud/storage@6.9.5",
+    "@google-cloud/datastore@8.4.0",
+    "google-auth-library",
+    "protobufjs@7.2.5",
     // simulator dependencies
-    "tar",
+    "express",
+    "uuid",
+    // using version 3 because starting from version 4, it no longer works with CommonJS.
+    "nanoid@^3.3.7",
+    "cron-parser",
+    // shared client dependencies
+    "ioredis",
+    "ajv",
+    "cron-validator",
+    // fs module dependency
+    "yaml",
+    "toml",
+    // enhanced diagnostics
+    "stacktracey",
+    "ulid",
+    "vlq",
+    // tunnels
+    "@winglang/wingtunnels@workspace:^",
+    "glob",
   ],
   devDeps: [
-    "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
+    `@cdktf/provider-aws@^19`, // only for testing Wing plugins
+    "wing-api-checker",
+    "bump-pack",
     "@types/aws-lambda",
-    "@types/debug",
     "@types/fs-extra",
-    "@types/tar",
-    "aws-sdk-client-mock",
-    "aws-sdk-client-mock-jest",
+    "@types/mime-types",
+    "mock-gcs@^1.2.0",
+    "@types/express",
+    "@types/glob",
+    "aws-sdk-client-mock@3.0.0",
+    "aws-sdk-client-mock-jest@3.0.0",
+    `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
-    "patch-package",
+    "fs-extra",
+    "vitest",
+    "@types/uuid",
+    "nanoid", // for ESM import test in target-sim/function.test.ts
+    "chalk",
+    "tsx",
+    ...JSII_DEPS,
   ],
+  eslintOptions: {
+    dirs: ["src"],
+    devdirs: ["test", "scripts"],
+    ignorePatterns: ["src/.gen/", "**/*.d.ts"],
+  },
+  jest: false,
+  depsUpgrade: false,
   prettier: true,
   npmignoreEnabled: false,
-  minNodeVersion: "16.16.0",
-  packageManager: javascript.NodePackageManager.NPM,
+  minNodeVersion: "20.0.0",
+  projenCommand: "pnpm exec projen",
+  packageManager: javascript.NodePackageManager.PNPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
+  jsiiVersion: "~5.3.39",
 });
+project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
+project.deps.removeDependency("ts-node");
 
-project.eslint?.addPlugins("sort-exports");
-project.eslint?.addOverride({
+/**
+ * Pin AWS SDK version and keep deps in sync
+ *
+ * `@aws-sdk/types` is excluded since it gets updated independently
+ * and its version may not match that of the AWS SDK clients
+ */
+project.deps.all
+  .filter(
+    (dep) => dep.name.startsWith("@aws-sdk/") && dep.name !== "@aws-sdk/types"
+  )
+  .map((dep) => project.addBundledDeps(`${dep.name}@${AWS_SDK_VERSION}`));
+
+project.deps.addDependency("eslint@^8.56.0", DependencyType.BUILD);
+project.deps.addDependency(
+  "@typescript-eslint/eslint-plugin@^7",
+  DependencyType.BUILD
+);
+project.deps.addDependency(
+  "@typescript-eslint/parser@^7",
+  DependencyType.BUILD
+);
+project.eslint!.addPlugins("sort-exports");
+project.eslint!.addOverride({
   files: ["src/**/index.ts"],
   rules: {
     "sort-exports/sort-exports": ["error", { sortDir: "asc" }],
   },
 });
 
-// use fork of jsii-docgen with wing-ish support
-project.deps.removeDependency("jsii-docgen");
-project.addDevDeps("@winglang/jsii-docgen@file:../../apps/jsii-docgen");
-
-// tasks for locally testing the SDK without needing wing compiler
-project.addDevDeps("tsx");
-const sandboxDir = join("test", "sandbox");
-
-const sandboxSynth = project.addTask("sandbox:synth", {
-  exec: "tsx main.ts --tsconfig ../../tsconfig.dev.json",
-  cwd: sandboxDir,
-});
-
-const sandboxDeploy = project.addTask("sandbox:deploy", {
-  cwd: join("test", "sandbox", "target"),
-});
-sandboxDeploy.spawn(sandboxSynth);
-sandboxDeploy.exec("terraform init");
-sandboxDeploy.exec("terraform apply");
-
-const sandboxDestroy = project.addTask("sandbox:destroy", {
-  cwd: sandboxDir,
-});
-sandboxDestroy.exec("terraform destroy");
-
-// Set up the project so that:
-// 1. Preflight code is compiled with JSII
-// 2. Inflight and simulator code is compiled with TypeScript
-//
-// Note: inflight and preflight code are not automatically exported from
-// the root of the package, so accessing them requires barrel imports:
-// const { BucketClient } = require("wingsdk/lib/aws/bucket.inflight");
-const pkgJson = project.tryFindObjectFile("package.json");
-pkgJson!.addOverride("jsii.excludeTypescript", ["src/**/*.inflight.ts"]);
-
-// By default, the TypeScript compiler will include all types from @types, even
-// if the package is not used anywhere in our source code (`/src`). This is
-// problematic because JSII is stuck on an older TypeScript version, and we only
-// want it to compile the types exported by index.ts.
-//
-// Let's ignore these types by default, and then explicitly include the ones we
-// need for JSII compilation to work. This is OK since we are compiling things
-// twice (once with JSII, and once with the latest version of TypeScript), and
-// any other type errors can be caught by the second compilation.
-//
-// See https://github.com/aws/jsii/issues/3741
-//
-// @example ["./node_modules/@types/some-dep"]
-pkgJson!.addOverride("jsii.tsc.types", []);
-
-const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
-  obj: {
-    extends: "./tsconfig.json",
-    compilerOptions: {
-      esModuleInterop: true,
-    },
-    include: ["src/**/*.inflight.ts"],
-    exclude: ["node_modules"],
+project.eslint!.addOverride({
+  files: ["vitest.config.mts"],
+  rules: {
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        devDependencies: true,
+      },
+    ],
   },
 });
-project.compileTask.exec(`tsc -p ${tsconfigNonJsii.path}`);
+
+project.package.addField("optionalDependencies", {
+  esbuild: "^0.19.12",
+});
+
+// use fork of jsii-docgen with wing-ish support
+project.deps.removeDependency("jsii-docgen");
+project.addDevDeps("@winglang/jsii-docgen");
+project.deps.removeDependency("jsii-rosetta");
 
 enum Zone {
   PREFLIGHT = "preflight",
@@ -182,6 +231,7 @@ function disallowImportsRule(target: Zone, from: Zone): DisallowImportsRule {
 
 // Prevent unsafe imports between preflight and inflight and simulator code
 project.eslint!.addRules({
+  "@typescript-eslint/no-misused-promises": "error",
   "import/no-restricted-paths": [
     "error",
     {
@@ -192,14 +242,39 @@ project.eslint!.addRules({
       ],
     },
   ],
+  // Makes sure that all methods and properties are marked with the right member accessibility- public, protected or private
+  "@typescript-eslint/explicit-member-accessibility": [
+    "error",
+    {
+      accessibility: "explicit",
+      overrides: {
+        accessors: "off",
+        constructors: "off",
+        methods: "explicit",
+        properties: "explicit",
+        parameterProperties: "explicit",
+      },
+    },
+  ],
+  // Makes sure comments and doc strings are capitalized
+  "capitalized-comments": [
+    "error",
+    "always",
+    {
+      line: {
+        // ignore everything
+        ignorePattern: ".*",
+      },
+      block: {
+        ignoreConsecutiveComments: true,
+        ignorePattern: "pragma|ignored",
+        ignoreInlineComments: true,
+      },
+    },
+  ],
 });
 
-project.npmignore?.addPatterns(
-  "tsconfig.nonjsii.json",
-  ".prettierignore",
-  ".prettierrc.json",
-  "*.tgz"
-);
+project.npmignore?.addPatterns(".prettierignore", ".prettierrc.json", "*.tgz");
 
 const apiCheck = project.addTask("api-check", {
   exec: "wing-api-check",
@@ -211,43 +286,65 @@ project.postCompileTask.prependSpawn(apiCheck);
 
 project.tasks
   .tryFind("bump")!
-  .reset("npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version");
+  .reset("pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version");
 
 project.tasks
   .tryFind("unbump")!
-  .reset("npm version 0.0.0 --allow-same-version");
+  .reset("pnpm version 0.0.0 --allow-same-version");
 
-project.preCompileTask.exec("patch-package");
+// --------------- docs -----------------
 
-const docsFrontMatter = `---
-title: API Reference
-id: sdk
-description: Wing SDK API Reference
-keywords: [Wing sdk, sdk, Wing API Reference]
----
-`;
-
-const docsPath = "../../docs/04-reference/wingsdk-api.md";
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
-docgen.exec(`jsii-docgen -o API.md -l wing`);
-docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
-docgen.exec(`cat API.md >> ${docsPath}`);
+docgen.exec("tsx scripts/docgen.mts");
 
-// override default test timeout from 5s to 30s
-project.testTask.reset(
-  "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
-);
+// --------------- end of docs -----------------
+
+// set up vitest related config
+project.addGitIgnore("/coverage/");
+project.testTask.reset("vitest run --update");
+const testWatch = project.addTask("test:watch");
+testWatch.exec("vitest"); // Watch is default mode for vitest
+testWatch.description = "Run vitest in watch mode";
 project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.addFields({
-  volta: rootPackageJson.volta,
+  volta: {
+    extends: "../../package.json",
+  },
+});
+project.addFields({
+  "bump-pack": {
+    removeBundledDependencies: sideLoad.map((sideDep) => sideDep.split("@")[0]),
+  },
 });
 
 project.addFields({
   files: ["lib", ".jsii", "API.md", "patches"],
 });
 
-project.compileTask.exec("node scripts/remove-peers.js");
+project.gitignore.addPatterns("src/**/*.js", "src/**/*.d.ts");
+
+// generate CDKTF bindings
+new JsonFile(project, "cdktf.json", {
+  obj: {
+    language: "typescript",
+    app: "echo noop",
+    terraformProviders: CDKTF_PROVIDERS,
+    codeMakerOutput: "src/.gen",
+    projectId: "93afdbfa-23ed-40cf-9ce4-495b3289c519",
+  },
+});
+project.gitignore.addPatterns("src/.gen");
+
+project.preCompileTask.exec("cdktf get");
+
+project.package.file.addDeletionOverride("pnpm");
+
+project.tryRemoveFile(".npmrc");
+
+project.packageTask.reset("bump-pack -b");
+
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

@@ -1,0 +1,148 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: asBool
+  kind: 2
+  detail: "(): bool"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to boolean if possible.\n\n#### Returns\na boolean."
+  sortText: ff|asBool
+  insertText: asBool()
+- label: asNum
+  kind: 2
+  detail: "(): num"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to number if possible.\n\n#### Returns\na number."
+  sortText: ff|asNum
+  insertText: asNum()
+- label: asStr
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to string if possible.\n\n#### Returns\na string."
+  sortText: ff|asStr
+  insertText: asStr()
+- label: delete
+  kind: 2
+  detail: "(key: str): bool"
+  documentation:
+    kind: markdown
+    value: "Removes the specified element from a map.\n\n#### Returns\ntrue if the given key is no longer present"
+  sortText: ff|delete
+  insertText: delete($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: get
+  kind: 2
+  detail: "(key: str): MutJson"
+  documentation:
+    kind: markdown
+    value: "Returns the value associated with the specified Json key.\n\n#### Returns\nThe value associated with the specified Json key\n\n*@throws* *Json property does not exist if the given key is not part of an existing property*"
+  sortText: ff|get
+  insertText: get($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: getAt
+  kind: 2
+  detail: "(index: num): MutJson"
+  documentation:
+    kind: markdown
+    value: "Returns a specified element at a given index from MutJson Array.\n\n#### Returns\nThe element at given index in MutJson Array\n\n*@throws* *index out of bounds error if the given index does not exist for the MutJson Array*"
+  sortText: ff|getAt
+  insertText: getAt($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: has
+  kind: 2
+  detail: "(key: str): bool"
+  documentation:
+    kind: markdown
+    value: "Checks if a Json object has a given key.\n\n#### Returns\nBoolean value corresponding to whether the key exists"
+  sortText: ff|has
+  insertText: has($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: set
+  kind: 2
+  detail: "(key: str, value: MutJson): void"
+  documentation:
+    kind: markdown
+    value: Adds or updates an element in MutJson with a specific key and value.
+  sortText: ff|set
+  insertText: set($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: setAt
+  kind: 2
+  detail: "(index: num, value: MutJson): void"
+  documentation:
+    kind: markdown
+    value: Set element in MutJson Array with a specific key and value.
+  sortText: ff|setAt
+  insertText: setAt($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryAsBool
+  kind: 2
+  detail: "(): bool?"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to boolean if possible.\n\n#### Returns\na boolean."
+  sortText: ff|tryAsBool
+  insertText: tryAsBool()
+- label: tryAsNum
+  kind: 2
+  detail: "(): num?"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to number if possible.\n\n#### Returns\na number."
+  sortText: ff|tryAsNum
+  insertText: tryAsNum()
+- label: tryAsStr
+  kind: 2
+  detail: "(): str?"
+  documentation:
+    kind: markdown
+    value: "Convert Json element to string if possible.\n\n#### Returns\na string."
+  sortText: ff|tryAsStr
+  insertText: tryAsStr()
+- label: tryGet
+  kind: 2
+  detail: "(key: str): MutJson?"
+  documentation:
+    kind: markdown
+    value: "Optionally returns an specified element from the Json.\n\n#### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+  sortText: ff|tryGet
+  insertText: tryGet($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryGetAt
+  kind: 2
+  detail: "(index: num): MutJson?"
+  documentation:
+    kind: markdown
+    value: "Optionally returns a specified element at a given index from Json Array.\n\n#### Returns\nThe element at given index in Json Array, or undefined if index is not valid"
+  sortText: ff|tryGetAt
+  insertText: tryGetAt($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+

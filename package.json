@@ -1,38 +1,38 @@
 {
-  "name": "monowingo",
+  "name": "@winglang/monorepo",
+  "private": true,
   "devDependencies": {
-    "@auto-it/conventional-commits": "^10.40.0",
-    "@auto-it/git-tag": "^10.40.0",
-    "@nrwl/devkit": "15.6.3",
-    "@nxrs/cargo": "^0.3.3",
-    "all-contributors-cli": "^6.24.0",
-    "auto": "^10.40.0",
-    "npm-run-all": "^4.1.5",
-    "nx": "15.6.3"
+    "@winglang/compatibility-spy": "workspace:^",
+    "bump-pack": "workspace:^",
+    "generate-workspace": "workspace:^",
+    "turbo": "^1.13.4"
   },
   "scripts": {
-    "build": "nx run-many --all --targets build,test,package",
-    "contributors:add": "all-contributors add",
-    "contributors:check": "all-contributors check",
-    "contributors:update": "all-contributors check | grep \"Missing contributors\" -A 1 | tail -n1 | sed -e \"s/,//g\" | xargs -n1 | grep -v \"\\[bot\\]\" | xargs -n1 -I{} all-contributors add {} code",
+    "build": "turbo compile post-compile lint eslint test package",
+    "compile": "turbo compile",
+    "test": "turbo lint eslint test",
+    "package": "turbo package",
+    "package:ci": "turbo package --color && tar -czvf dist/docs.tgz docs/*",
+    "test:ci": "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar",
     "docs": "./scripts/docsite.sh",
-    "install:examples-valid": "npm --prefix examples/tests/valid install",
-    "install:examples-invalid": "npm --prefix examples/tests/invalid install",
-    "install:hangar": "npm --prefix tools/hangar install",
-    "install:jsii-docgen": "npm --prefix apps/jsii-docgen install",
-    "install:sdk": "npm --prefix libs/wingsdk install",
-    "install:tree-sitter-wing": "npm --prefix libs/tree-sitter-wing install",
-    "install:vscode-wing": "npm --prefix apps/vscode-wing install",
-    "install:wasi": "bash scripts/setup_wasi.sh",
-    "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
-    "install:wing-playground": "npm --prefix apps/wing-playground install",
-    "install:winglang": "npm --prefix apps/wing install --ignore-scripts",
-    "nx": "nx",
-    "postinstall": "run-p -l --max-parallel 3 'install:*'",
-    "test": "nx run-many --target=test --all=true"
+    "install": "bash scripts/setup_wasi.sh",
+    "postinstall": "link-bundles && generate-workspace",
+    "wing": "turbo compile --filter=winglang --output-logs=errors-only && ./apps/wing/bin/wing"
   },
   "volta": {
-    "node": "18.12.1",
-    "npm": "8.19.3"
+    "node": "20.11.1",
+    "pnpm": "8.15.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "mime": "^3.0.0",
+      "axios@>=0.8.1 <0.28.0": ">=0.28.0"
+    },
+    "patchedDependencies": {
+      "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
+      "mime@3.0.0": "patches/mime@3.0.0.patch",
+      "protobufjs@7.2.5": "patches/protobufjs@7.2.5.patch",
+      "jsii@5.3.39": "patches/jsii@5.3.39.patch"
+    }
   }
 }

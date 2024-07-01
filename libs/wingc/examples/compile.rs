@@ -1,8 +1,9 @@
 // Compiles a source file and prints any errors to stderr.
 // This should only be used for testing wingc directly.
 
-use std::{env, path::Path, process};
-use wingc::compile;
+use camino::{Utf8Path, Utf8PathBuf};
+use std::{env, process};
+use wingc::{compile, diagnostic::get_diagnostics};
 
 pub fn main() {
 	let args: Vec<String> = env::args().collect();
@@ -11,16 +12,18 @@ pub fn main() {
 		panic!("Usage: cargo run --example compile <source_file>");
 	}
 
-	let source_path = &args[1];
+	let source_path = Utf8Path::new(&args[1]).canonicalize_utf8().unwrap();
+	let target_dir: Utf8PathBuf = env::current_dir().unwrap().join("target").try_into().unwrap();
 
-	let results = compile(Path::new(source_path), None);
-	if let Err(mut err) = results {
+	let results = compile(source_path.parent().unwrap(), &source_path, None, &target_dir);
+	if results.is_err() {
+		let mut diags = get_diagnostics();
 		// Sort error messages by line number (ascending)
-		err.sort_by(|a, b| a.cmp(&b));
+		diags.sort();
 		eprintln!(
 			"Compilation failed with {} errors\n{}",
-			err.len(),
-			err.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
+			diags.len(),
+			diags.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
 		);
 		process::exit(1);
 	}

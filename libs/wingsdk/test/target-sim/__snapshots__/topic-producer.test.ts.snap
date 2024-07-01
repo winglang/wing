@@ -1,18 +1,44 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`publishing messages to topic 1`] = `
-Array [
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Topic created.",
-  "wingsdk.cloud.Function created.",
-  "Publish (message=ABC).",
+[
+  "root/TopicTester/MyTopic started",
+  "root/TopicTester/MyTopic/OnMessage0 started",
+  "root/TopicTester/MyTopic/Policy started",
+  "root/TopicTester/MyTopic/TopicEventMapping0 started",
+  "root/TopicTester/Function started",
   "Sending message (message=ABC, subscriber=sim-1).",
-  "Invoke (payload=\\"\\"ABC\\"\\").",
-  "Invoke (payload=\\"\\"ABC\\"\\").",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Topic deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
+  "InvokeAsync (payload="ABC").",
+  "Publish (messages=ABC).",
+  "Invoke (payload="ABC").",
+  "Message received",
+  "root/TopicTester/MyTopic/Policy stopped",
+  "root/TopicTester/MyTopic/TopicEventMapping0 stopped",
+  "root/TopicTester/MyTopic/OnMessage0 stopped",
+  "root/TopicTester/Function stopped",
+  "root/TopicTester/MyTopic stopped",
+]
+`;
+
+exports[`publishing multiple messages to topic 1`] = `
+[
+  "root/TopicTester/MyTopic started",
+  "root/TopicTester/MyTopic/OnMessage0 started",
+  "root/TopicTester/MyTopic/Policy started",
+  "root/TopicTester/MyTopic/TopicEventMapping0 started",
+  "root/TopicTester/Function started",
+  "Sending message (message=A, subscriber=sim-1).",
+  "Sending message (message=B, subscriber=sim-1).",
+  "Sending message (message=C, subscriber=sim-1).",
+  "InvokeAsync (payload="A").",
+  "InvokeAsync (payload="B").",
+  "InvokeAsync (payload="C").",
+  "Publish (messages=A,B,C).",
+  "Invoke (payload="ABC").",
+  "root/TopicTester/MyTopic/Policy stopped",
+  "root/TopicTester/MyTopic/TopicEventMapping0 stopped",
+  "root/TopicTester/MyTopic/OnMessage0 stopped",
+  "root/TopicTester/Function stopped",
+  "root/TopicTester/MyTopic stopped",
 ]
 `;

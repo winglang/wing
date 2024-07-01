@@ -1,0 +1,42 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: aws
+  kind: 9
+  sortText: kk|aws
+- label: cloud
+  kind: 9
+  sortText: kk|cloud
+- label: ex
+  kind: 9
+  sortText: kk|ex
+- label: expect
+  kind: 9
+  sortText: kk|expect
+- label: fs
+  kind: 9
+  sortText: kk|fs
+- label: http
+  kind: 9
+  sortText: kk|http
+- label: math
+  kind: 9
+  sortText: kk|math
+- label: regex
+  kind: 9
+  sortText: kk|regex
+- label: sim
+  kind: 9
+  sortText: kk|sim
+- label: ui
+  kind: 9
+  sortText: kk|ui
+- label: util
+  kind: 9
+  sortText: kk|util
+- label: "\"module\""
+  kind: 15
+  sortText: "ll|\"module\""
+  insertText: "\"$1\" as $2"
+  insertTextFormat: 2
+

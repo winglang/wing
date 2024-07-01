@@ -1,6 +1,6 @@
 import * as reflect from "jsii-reflect";
-import { submodulePath } from "../schema";
 import * as transpile from "./transpile";
+import { submodulePath } from "../schema";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const Case = require("case");
 

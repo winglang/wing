@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\ninflight myClass: class MyClass {\n  // No public members\n}\n```"
+range:
+  start:
+    line: 4
+    character: 6
+  end:
+    line: 4
+    character: 13
+

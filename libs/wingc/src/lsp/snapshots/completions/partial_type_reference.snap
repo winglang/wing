@@ -1,0 +1,9 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: func
+  kind: 2
+  detail: "preflight (): void"
+  sortText: ff|func
+  insertText: func()
+

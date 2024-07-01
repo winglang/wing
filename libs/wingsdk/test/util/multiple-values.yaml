@@ -1,0 +1,3 @@
+root/my-resource:
+  number: "123"
+  string: "abc"

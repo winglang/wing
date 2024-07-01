@@ -1,0 +1,26 @@
+---
+source: libs/wingc/src/lsp/goto_definition.rs
+---
+- originSelectionRange:
+    start:
+      line: 3
+      character: 20
+    end:
+      line: 3
+      character: 26
+  targetUri: "file://main.w"
+  targetRange:
+    start:
+      line: 1
+      character: 6
+    end:
+      line: 1
+      character: 12
+  targetSelectionRange:
+    start:
+      line: 1
+      character: 6
+    end:
+      line: 1
+      character: 12
+

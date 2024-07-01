@@ -1,27 +1,22 @@
+import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
+import { inflight } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
-import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../../src/util";
-import { tfResourcesOf, tfSanitize } from "../util";
+import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
 test("inflight function uses a logger", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle() {
-      console.log("hello world!");
-    }`
-  );
+  const handler = inflight(async () => console.log("hello world!"));
 
-  Function._newFunction(app, "Function", inflight);
+  new Function(app, "Function", handler);
 
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
 
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",

@@ -1,0 +1,8 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: shouldBeVisible
+  kind: 5
+  detail: num
+  sortText: ab|shouldBeVisible
+

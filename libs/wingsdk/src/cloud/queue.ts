@@ -1,8 +1,9 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { IResource, Inflight, Resource, App } from "../core";
-import { Duration } from "../std";
+import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
+import { Duration, IInflight, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Queue`.
@@ -10,63 +11,90 @@ import { Duration } from "../std";
 export const QUEUE_FQN = fqnForType("cloud.Queue");
 
 /**
- * Properties for `Queue`.
+ * Dead-letter queue default retries
+ */
+export const DEFAULT_DELIVERY_ATTEMPTS = 1;
+
+/**
+ * Dead letter queue options.
+ */
+export interface DeadLetterQueueProps {
+  /**
+   * Queue to receive messages that failed processing.
+   */
+  readonly queue: Queue;
+  /**
+   * Number of times a message will be processed before being
+   * sent to the dead-letter queue.
+   * @default 1
+   */
+  readonly maxDeliveryAttempts?: number;
+}
+
+/**
+ * Options for `Queue`.
  */
 export interface QueueProps {
   /**
    * How long a queue's consumers have to process a message.
-   * @default Duration.fromSeconds(10)
+   * @default 30s
    */
   readonly timeout?: Duration;
 
   /**
-   * Initialize the queue with a set of messages.
-   * @default []
+   * How long a queue retains a message.
+   * @default 1h
    */
-  readonly initialMessages?: string[];
+  readonly retentionPeriod?: Duration;
+
+  /**
+   * A dead-letter queue.
+   * @default - no dead letter queue
+   */
+  readonly dlq?: DeadLetterQueueProps;
 }
 
 /**
- * Represents a queue.
+ * A queue.
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
+ * @abstract
  */
-export abstract class Queue extends Resource {
-  /**
-   * Create a new `Queue` instance.
-   * @internal
-   */
-  public static _newQueue(
-    scope: Construct,
-    id: string,
-    props: QueueProps = {}
-  ): Queue {
-    return App.of(scope).newAbstract(QUEUE_FQN, scope, id, props);
-  }
+export class Queue extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IQueueClient;
 
-  public readonly stateful = true;
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
+    if (new.target === Queue) {
+      return Resource._newFromFactory(QUEUE_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
-    this.display.title = "Queue";
-    this.display.description = "A distributed message queue";
+    Node.of(this).title = "Queue";
+    Node.of(this).description = "A distributed message queue";
 
     props;
   }
 
   /**
    * Create a function to consume messages from this queue.
+   * @abstract
    */
-  public abstract onMessage(
-    inflight: Inflight,
-    props?: QueueOnMessageProps
-  ): Function;
+  public setConsumer(
+    handler: IQueueSetConsumerHandler,
+    props?: QueueSetConsumerOptions
+  ): Function {
+    handler;
+    props;
+    throw new AbstractMemberError();
+  }
 }
 
 /**
- * Options for Queue.onMessage.
+ * Options for Queue.setConsumer.
  */
-export interface QueueOnMessageProps extends FunctionProps {
+export interface QueueSetConsumerOptions extends FunctionProps {
   /**
    * The maximum number of messages to send to subscribers at once.
    * @default 1
@@ -79,11 +107,11 @@ export interface QueueOnMessageProps extends FunctionProps {
  */
 export interface IQueueClient {
   /**
-   * Push a message to the queue.
-   * @param message Payload to send to the queue.
+   * Push one or more messages to the queue.
+   * @param messages Payload to send to the queue. Each message must be non-empty.
    * @inflight
    */
-  push(message: string): Promise<void>;
+  push(...messages: string[]): Promise<void>;
 
   /**
    * Purge all of the messages in the queue.
@@ -96,20 +124,30 @@ export interface IQueueClient {
    * @inflight
    */
   approxSize(): Promise<number>;
+
+  /**
+   * Pop a message from the queue.
+   * @returns The message, or `nil` if the queue is empty.
+   * @inflight
+   */
+  pop(): Promise<string | undefined>;
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
- * `Queue.on_message`.
+ * A resource with an inflight "handle" method that can be passed to
+ * `Queue.setConsumer`.
  *
- * @inflight `wingsdk.cloud.IQueueOnMessageHandlerClient`
+ * @inflight `@winglang/sdk.cloud.IQueueSetConsumerHandlerClient`
  */
-export interface IQueueOnMessageHandler extends IResource {}
+export interface IQueueSetConsumerHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IQueueSetConsumerHandlerClient["handle"];
+}
 
 /**
- * Inflight client for `IQueueOnMessageHandler`.
+ * Inflight client for `IQueueSetConsumerHandler`.
  */
-export interface IQueueOnMessageHandlerClient {
+export interface IQueueSetConsumerHandlerClient {
   /**
    * Function that will be called when a message is received from the queue.
    * @inflight
@@ -127,5 +165,7 @@ export enum QueueInflightMethods {
   /** `Queue.purge` */
   PURGE = "purge",
   /** `Queue.approxSize` */
-  APPROX_SIZE = "approx_size",
+  APPROX_SIZE = "approxSize",
+  /** `Queue.pop` */
+  POP = "pop",
 }
