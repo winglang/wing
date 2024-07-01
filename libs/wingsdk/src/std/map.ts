@@ -64,7 +64,7 @@ export class Map {
   /**
    * Optionally returns a specified element from the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ($self$)?.[$args$]
    *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
@@ -76,15 +76,12 @@ export class Map {
 
   /**
    * Returns a boolean indicating whether an element with the specified key exists or not.
-   *
-   * @macro ($args$ in ($self$))
-   *
    * @param key The key of the element to test for presence
    * @returns true if an element with the specified key exists in the map; otherwise false.
    */
   public has(key: string): boolean {
     key;
-    throw new Error("Macro");
+    throw new Error("Abstract");
   }
 
   /**
@@ -223,15 +220,12 @@ export class MutMap {
 
   /**
    * Returns a boolean indicating whether an element with the specified key exists or not.
-   *
-   * @macro ($args$ in ($self$))
-   *
    * @param key The key of the element to test for presence
    * @returns true if an element with the specified key exists in the map; otherwise false.
    */
   public has(key: string): boolean {
     key;
-    throw new Error("Macro");
+    throw new Error("Abstract");
   }
 
   /**

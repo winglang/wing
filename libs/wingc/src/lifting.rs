@@ -129,7 +129,6 @@ impl<'a> LiftVisitor<'a> {
 				visit_ctx: &mut self.ctx,
 				source_path: None,
 			},
-			false,
 		);
 		self.ctx.pop_phase();
 		res.to_string()
