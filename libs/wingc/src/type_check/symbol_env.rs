@@ -407,7 +407,8 @@ impl SymbolEnv {
 				// We're looking up a symbol in a namespace other than our own, so we need to
 				// check if the symbol is public or not. If it's not, replace a "Found" result
 				// with a "NotPublic" result.
-				let partial_result = match env.lookup_ext(next_symb, statement_idx) {
+				// We pass None as the statement index because we're now looking inside an inner namespace (looking from the top level)
+				let partial_result = match env.lookup_ext(next_symb, None) {
 					LookupResult::Found(kind, info) => match info.access {
 						AccessModifier::Public => LookupResult::Found(kind, info),
 						AccessModifier::Private => LookupResult::NotPublic(kind, info),
@@ -798,5 +799,24 @@ mod tests {
 			}
 			_ => panic!("Expected LookupResult::NotFount(_) but got {:?}", res),
 		}
+
+		// Perform a nested lookup with a statement index before the variable's definition. This should work
+		// because the statement index is only used for the top level lookup
+		// Define a "late" variable in n1's env
+		let sym = Symbol::global("ns1_late_var");
+		assert!(matches!(
+			ns1_env.define(
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), types.number(), false, Phase::Independent),
+				AccessModifier::Public,
+				StatementIdx::Index(1000), // Variable defined late in the file
+			),
+			Ok(())
+		));
+		// Lookup from an "early" statement index
+		assert!(matches!(
+			child_env.lookup_nested_str("ns1.ns1_late_var", Some(1)),
+			LookupResult::Found(SymbolKind::Variable(_), _)
+		));
 	}
 }
