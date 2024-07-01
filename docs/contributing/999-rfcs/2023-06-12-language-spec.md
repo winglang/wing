@@ -855,6 +855,38 @@ resource Bucket {
 }
 ```
 
+An unphased function can be passed to a function that expects a preflight function or an inflight function. In this way, we can say that an unphased functions are a superset of both preflight and inflight functions.
+
+However, a preflight or inflight function cannot be passed to a function that expects an unphased function.
+An exception to this rule is that if a function is unphased, then we can automatically assume any functions passed to it or returned by it have a matching phase.
+
+You can imagine that when a function is unphased, then "preflight" and "inflight" versions of it are generated at compile-time, and unphased-function types in parameters or return types are automatically converted to the appropriate phase.
+
+For example, `Array<T>.map` is modeled like the following pseudocode:
+
+```js
+native class Array<T> {
+  unphased map<U>(f: unphased (T) => U): Array<U> {
+    // ...
+  }
+}
+```
+
+At compile-time, since the function is unphased, preflight and inflight versions are generated:
+
+```js
+native class Array<T> {
+  preflight map<U>(f: preflight (T) => U): Array<U> {
+    // ...
+  }
+  inflight map<U>(f: inflight (T) => U): Array<U> {
+    // ...
+  }
+}
+```
+
+This way, when you call `Array<T>.map` with in preflight, it's possible to pass a preflight function to it, and when you call it in inflight, it's possible to pass an inflight function to it.
+
 [`▲ top`][top]
 
 ---
