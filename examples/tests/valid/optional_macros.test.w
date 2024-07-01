@@ -34,6 +34,16 @@ test "optional chaining macros" {
 
   expect.equal(result.structItem?.item, nil);
   expect.equal(result.structItems?.tryAt(0)?.item, nil);
+
+  let var calls = 0;
+
+  let makeArray = (): Array<num> => {
+    calls = calls + 1;
+    return [1, 2, 3];
+  };
+
+  expect.ok((makeArray())?.contains(2) ?? false);
+  expect.equal(calls, 1);
 }
 
 
