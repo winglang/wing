@@ -135,9 +135,8 @@ export interface RequestOptions {
    * @default about:client
    */
   readonly referrer?: string;
-
   /**
-   * Timeout for terminating a pending request. None if undefined
+   * Timeout for terminating a pending request. None if undefined.
    * @default undefined
    */
   readonly timeout?: Duration;
