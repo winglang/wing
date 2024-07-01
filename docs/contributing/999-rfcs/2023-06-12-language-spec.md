@@ -790,10 +790,7 @@ lambda functions, docker, virtual machines etc.
 
 Code that is not dependent on the phase of execution can be designated as phase-independent using the `unphased` modifier.
 
-Using this modifier means that it is safe to call the function from
-either a preflight or inflight context.
-
-<!-- TODO: is it also safe to pass the maybe-flight function by value, or to capture it? -->
+Using this modifier means that the function can be called from either preflight or inflight contexts.
 
 ```TS
 let odd_numbers = unphased (arr: Array<num>): Array<num> => {
@@ -803,14 +800,14 @@ let odd_numbers = unphased (arr: Array<num>): Array<num> => {
       result.push(num);
     }
   }
-  return result.copy(); // convert from MutArray to Array (immutable)
+  return result.copy();
 };
 
-// OK! We are calling a maybe-inflight function from a preflight context
+// OK! We are calling an unphased function from a preflight context
 let odds = odd_numbers([1, 2, 3]);
 
 let handler = inflight () => {
-  // OK! We are calling a maybe-inflight function from an inflight context
+  // OK! We are calling an unphased function from an inflight context
   let big_odds = odd_numbers([7, 8, 9]);
 }
 ```
@@ -818,28 +815,23 @@ let handler = inflight () => {
 Phase-independent functions are useful for code that is useful across both
 execution phases, such as for data manipulation, utility functions, etc.
 
-In order for a function to be phase-independent, it must not use any
-phase-specific features, like calling methods on resources that are only
-preflight or inflight. Since phase-independent functions can be used inflight,
-they inherit the same restrictions as inflight functions, such as:
+Since phase-independent functions can be used inflight, they inherit the same restrictions as inflight functions, like not being able to call preflight functions or instantiate preflight classes.
 
-- They cannot reference mutable data structures or reassignable variables from
-outer scopes.
-- They cannot instantiate new resources.
+But phase-independent functions can also be used preflight, so they inherit the same restrictions as preflight functions, like not being able to call inflight functions or instantiate inflight classes.
 
-Phase-independent methods can also be defined on resources:
+Phase-independent methods can be defined on resources:
 
 ```TS
-resource AwsBucket {
+class AwsBucket {
   name: str; // preflight field
 
-  init() {
-    // initialize `name`
+  new() {
+    this.name = "my-bucket";
   }
 
   unphased object_url(key: str): str {
     // This method references a preflight field (this.name) -- that is
-    // possible in both phases so it is OK!
+    // allowed in both phases so it is OK!
     return `s3://${this.name}/${key}`;
   }
 }
