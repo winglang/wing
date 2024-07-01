@@ -1,4 +1,5 @@
 import type { ElkNode } from "elkjs";
+import { motion } from "framer-motion";
 import {
   type FunctionComponent,
   type PropsWithChildren,
@@ -35,98 +36,119 @@ const OriginsContext = createContext<Map<string, { x: number; y: number }>>(
 // eslint-disable-next-line unicorn/no-null
 const PortalContext = createContext<HTMLElement | null>(null);
 
-const NodeComponent = <K extends keyof IntrinsicElements = "div">({
-  elk,
-  as,
-  children,
-  ...props
-}: NodeProps<K>) => {
-  const portal = useContext(PortalContext);
-  assert(portal);
+const NodeComponent = memo(
+  <K extends keyof IntrinsicElements = "div">({
+    elk,
+    as,
+    children,
+    ...props
+  }: Omit<
+    NodeProps<K>,
+    "onAnimationStart" | "onDragStart" | "onDragEnd" | "onDrag"
+  >) => {
+    const portal = useContext(PortalContext);
+    assert(portal);
 
-  const depth = useContext(DepthContext);
+    const depth = useContext(DepthContext);
 
-  const parent = useContext(ElkNodeContext);
-  const node = useMemo(
-    () => parent.children?.find((child) => child.id === elk.id),
-    [elk.id, parent.children],
-  );
+    const parent = useContext(ElkNodeContext);
+    const node = useMemo(
+      () => parent.children?.find((child) => child.id === elk.id),
+      [elk.id, parent.children],
+    );
 
-  const origins = useContext(OriginsContext);
-  const origin = origins.get(elk.id);
+    const origins = useContext(OriginsContext);
+    const origin = origins.get(elk.id);
 
-  return createPortal(
-    createElement(
+    const Component = motion[as ?? "div"];
+    return createPortal(
+      origin && node && (
+        <Component
+          key={elk.id}
+          {...props}
+          style={{
+            ...props.style,
+            position: "absolute",
+          }}
+          initial={{
+            top: origin.y,
+            left: origin.x,
+            width: node.width,
+            height: node.height,
+            zIndex: depth,
+            opacity: 0,
+          }}
+          animate={{
+            top: origin.y,
+            left: origin.x,
+            width: node.width,
+            height: node.height,
+            zIndex: depth,
+            opacity: 1,
+          }}
+          exit={{ top: origin.y, opacity: 0 }}
+        >
+          {node && (
+            <DepthContext.Provider value={depth + 1}>
+              <ElkNodeContext.Provider key="children" value={node}>
+                {children}
+              </ElkNodeContext.Provider>
+            </DepthContext.Provider>
+          )}
+        </Component>
+      ),
+      portal,
+    );
+  },
+);
+
+const NodeChildrenComponent = memo(
+  <K extends keyof IntrinsicElements = "div">({
+    as,
+    children,
+    ...props
+  }: NodeChildrenProps<K>) => {
+    return createElement(as ?? "div", props, children);
+  },
+);
+
+const PortComponent = memo(
+  <K extends keyof IntrinsicElements = "div">({
+    elk,
+    as,
+    children,
+    ...props
+  }: PortProps<K>) => {
+    const node = useContext(ElkNodeContext);
+    const port = useMemo(
+      () => node.ports?.find((port) => port.id === elk.id),
+      [elk.id, node.ports],
+    );
+    assert(port);
+
+    return createElement(
       as ?? "div",
       {
         ...props,
         style: {
           ...props.style,
           position: "absolute",
-          top: `${origin?.y ?? 0}px`,
-          left: `${origin?.x ?? 0}px`,
-          width: `${node?.width ?? 0}px`,
-          height: `${node?.height ?? 0}px`,
-          zIndex: depth,
+          top: `${port.y ?? 0}px`,
+          left: `${port.x ?? 0}px`,
         },
       },
-      node ? (
-        <DepthContext.Provider value={depth + 1}>
-          <ElkNodeContext.Provider key="children" value={node}>
-            {children}
-          </ElkNodeContext.Provider>
-        </DepthContext.Provider>
-      ) : (
-        <></>
-      ),
-    ),
-    portal,
-  );
-};
-
-const NodeChildrenComponent = <K extends keyof IntrinsicElements = "div">({
-  as,
-  children,
-  ...props
-}: NodeChildrenProps<K>) => {
-  return createElement(as ?? "div", props, children);
-};
-
-const PortComponent = <K extends keyof IntrinsicElements = "div">({
-  elk,
-  as,
-  children,
-  ...props
-}: PortProps<K>) => {
-  const node = useContext(ElkNodeContext);
-  const port = useMemo(
-    () => node.ports?.find((port) => port.id === elk.id),
-    [elk.id, node.ports],
-  );
-  assert(port);
-
-  return createElement(
-    as ?? "div",
-    {
-      ...props,
-      style: {
-        ...props.style,
-        position: "absolute",
-        top: `${port.y ?? 0}px`,
-        left: `${port.x ?? 0}px`,
-      },
-    },
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-around",
-      }}
-    >
-      <div style={{ position: "absolute" }}>{children}</div>
-    </div>,
-  );
-};
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      >
+        <div style={{ position: "absolute" }}>{children}</div>
+      </div>,
+    );
+  },
+);
 
 const DefaultEdge: EdgeComponent = memo(
   ({ edge, offsetX = 0, offsetY = 0 }) => {
