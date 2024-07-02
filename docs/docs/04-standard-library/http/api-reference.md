@@ -477,7 +477,7 @@ timeout: duration;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
-- *Default:* undefined
+- *Default:* no timeout
 
 Timeout for terminating a pending request.
 
