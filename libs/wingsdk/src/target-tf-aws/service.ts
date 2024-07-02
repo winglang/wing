@@ -3,7 +3,9 @@ import { join, resolve } from "path";
 import { Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
+import { EcsCluster as TfAWSEcsCluster } from "./ecs-cluster";
 import { CloudwatchLogGroup } from "../.gen/providers/aws/cloudwatch-log-group";
+import { EcsCluster } from "../.gen/providers/aws/ecs-cluster";
 import { EcsService } from "../.gen/providers/aws/ecs-service";
 import { EcsTaskDefinition } from "../.gen/providers/aws/ecs-task-definition";
 import { IamRole } from "../.gen/providers/aws/iam-role";
@@ -14,8 +16,6 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { LiftMap } from "../core";
 import { createBundle } from "../shared/bundling";
-import { EcsCluster } from "../.gen/providers/aws/ecs-cluster";
-import { EcsCluster as TfAWSEcsCluster } from "./ecs-cluster";
 import {
   AwsInflightHost,
   IAwsInflightHost,
@@ -101,23 +101,18 @@ export class Service extends cloud.Service implements IAwsInflightHost {
                   "logs:PutLogEvents",
                   "logs:CreateLogGroup",
                 ],
-                Resource: `${logGroup.arn}:*`
+                Resource: `${logGroup.arn}:*`,
               },
               {
                 Effect: "Allow",
-                Action: [
-                  "ecr:BatchGetImage",
-                  "ecr:GetDownloadUrlForLayer"
-                ],
+                Action: ["ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer"],
                 Resource: app.ecr.arn,
               },
               {
                 Effect: "Allow",
-                Action: [
-                  "ecr:GetAuthorizationToken",
-                ],
+                Action: ["ecr:GetAuthorizationToken"],
                 Resource: "*",
-              }
+              },
             ],
           }),
         },
@@ -234,9 +229,11 @@ export class Service extends cloud.Service implements IAwsInflightHost {
         subnets: subnetIds,
         securityGroups: Lazy.listValue({
           produce: () => {
-            const securityGroups = this.securityGroups ? Array.from(this.securityGroups.values()) : [];
+            const securityGroups = this.securityGroups
+              ? Array.from(this.securityGroups.values())
+              : [];
             return [sg.id, ...securityGroups];
-          }
+          },
         }),
       },
     });
@@ -322,22 +319,23 @@ process.on('SIGINT', handleShutdown);
     ) {
       host.addPolicyStatements({
         actions: ["ecs:UpdateService"],
-        resources: [`arn:aws:ecs:*:*:service/${this.clusterInstance.name}/${this.service.name}`],
+        resources: [
+          `arn:aws:ecs:*:*:service/${this.clusterInstance.name}/${this.service.name}`,
+        ],
       });
     }
 
     if (ops.includes(cloud.ServiceInflightMethods.STARTED)) {
       host.addPolicyStatements({
         actions: ["ecs:DescribeServices"],
-        resources: [`arn:aws:ecs:*:*:service/${this.clusterInstance.name}/${this.service.name}`],
+        resources: [
+          `arn:aws:ecs:*:*:service/${this.clusterInstance.name}/${this.service.name}`,
+        ],
       });
     }
 
     host.addEnvironment(this.envName(), this.service.name);
-    host.addEnvironment(
-      "ECS_CLUSTER_NAME",
-      this.clusterInstance.name
-    );
+    host.addEnvironment("ECS_CLUSTER_NAME", this.clusterInstance.name);
   }
 
   /**
