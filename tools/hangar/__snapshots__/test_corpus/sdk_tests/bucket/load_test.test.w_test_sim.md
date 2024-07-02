@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ load_test.test.wsim » root/env0/test:uploading many objects
+pass ─ load_test.test.wsim » root/env0/uploading many objects
 
 Tests 1 passed (1)
 Snapshots 1 skipped

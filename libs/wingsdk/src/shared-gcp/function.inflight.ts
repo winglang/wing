@@ -30,7 +30,7 @@ export class FunctionClient implements IFunctionClient {
       if (!res.ok) {
         throw new Error(res.body);
       }
-      return res.body ?? "";
+      return res.body;
     } catch (error) {
       throw new Error(
         `Error while invoking the function ${this.functionName}:\n${
@@ -65,7 +65,7 @@ export class FunctionClient implements IFunctionClient {
           },
         },
       });
-      return res.data as string | undefined;
+      return (res.data as string) || undefined;
     } catch (error) {
       throw new Error(
         `Error while invoking the function ${this.functionName}:\n${

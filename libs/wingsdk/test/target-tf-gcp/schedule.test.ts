@@ -31,8 +31,6 @@ test("create a schedule", () => {
     "google_cloud_scheduler_job",
     "google_cloudfunctions_function",
     "google_cloudfunctions_function_iam_member",
-    "google_project_iam_custom_role",
-    "google_project_iam_member",
     "google_project_service",
     "google_service_account",
     "google_storage_bucket",

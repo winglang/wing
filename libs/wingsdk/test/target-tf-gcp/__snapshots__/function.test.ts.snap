@@ -21,22 +21,6 @@ exports[`basic function 1`] = `
         "trigger_http": true,
       },
     },
-    "google_project_iam_custom_role": {
-      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
-        "permissions": [
-          "cloudfunctions.functions.get",
-        ],
-        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
-      },
-    },
-    "google_project_iam_member": {
-      "Function_ProjectIamMember_F891F2CD": {
-        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
-        "project": "my-project",
-        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
-      },
-    },
     "google_project_service": {
       "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
         "disable_dependent_services": false,
@@ -97,15 +81,6 @@ exports[`basic function 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.7",
-                    },
-                    "display": {},
-                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                  },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -164,15 +139,6 @@ exports[`basic function 2`] = `
                     "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "ProjectIamMember": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.7",
-                    },
-                    "display": {},
-                    "id": "ProjectIamMember",
-                    "path": "root/Default/Function/ProjectIamMember",
                   },
                   "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
                     "constructInfo": {
@@ -277,22 +243,6 @@ exports[`basic function with environment variables 1`] = `
         "trigger_http": true,
       },
     },
-    "google_project_iam_custom_role": {
-      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
-        "permissions": [
-          "cloudfunctions.functions.get",
-        ],
-        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
-      },
-    },
-    "google_project_iam_member": {
-      "Function_ProjectIamMember_F891F2CD": {
-        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
-        "project": "my-project",
-        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
-      },
-    },
     "google_project_service": {
       "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
         "disable_dependent_services": false,
@@ -353,15 +303,6 @@ exports[`basic function with environment variables 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.7",
-                    },
-                    "display": {},
-                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                  },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -420,15 +361,6 @@ exports[`basic function with environment variables 2`] = `
                     "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "ProjectIamMember": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.7",
-                    },
-                    "display": {},
-                    "id": "ProjectIamMember",
-                    "path": "root/Default/Function/ProjectIamMember",
                   },
                   "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
                     "constructInfo": {
@@ -532,22 +464,6 @@ exports[`basic function with memory size specified 1`] = `
         "trigger_http": true,
       },
     },
-    "google_project_iam_custom_role": {
-      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
-        "permissions": [
-          "cloudfunctions.functions.get",
-        ],
-        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
-      },
-    },
-    "google_project_iam_member": {
-      "Function_ProjectIamMember_F891F2CD": {
-        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
-        "project": "my-project",
-        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
-      },
-    },
     "google_project_service": {
       "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
         "disable_dependent_services": false,
@@ -608,15 +524,6 @@ exports[`basic function with memory size specified 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.7",
-                    },
-                    "display": {},
-                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                  },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -675,15 +582,6 @@ exports[`basic function with memory size specified 2`] = `
                     "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "ProjectIamMember": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.7",
-                    },
-                    "display": {},
-                    "id": "ProjectIamMember",
-                    "path": "root/Default/Function/ProjectIamMember",
                   },
                   "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
                     "constructInfo": {
@@ -787,22 +685,6 @@ exports[`basic function with timeout explicitly set 1`] = `
         "trigger_http": true,
       },
     },
-    "google_project_iam_custom_role": {
-      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
-        "permissions": [
-          "cloudfunctions.functions.get",
-        ],
-        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
-      },
-    },
-    "google_project_iam_member": {
-      "Function_ProjectIamMember_F891F2CD": {
-        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
-        "project": "my-project",
-        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
-      },
-    },
     "google_project_service": {
       "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
         "disable_dependent_services": false,
@@ -863,15 +745,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.7",
-                    },
-                    "display": {},
-                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                  },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -930,15 +803,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                     "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "ProjectIamMember": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.7",
-                    },
-                    "display": {},
-                    "id": "ProjectIamMember",
-                    "path": "root/Default/Function/ProjectIamMember",
                   },
                   "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
                     "constructInfo": {

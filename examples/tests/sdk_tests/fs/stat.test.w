@@ -1,5 +1,8 @@
 bring fs;
 bring expect;
+bring util;
+
+let isGCP = util.tryEnv("WING_TARGET") == "tf-gcp";
 
 test "metadata()" {
     let tempDir = fs.mkdtemp();
@@ -17,7 +20,11 @@ test "metadata()" {
     expect.equal(unixMode.test(fileStats.permissions), true);
     assert(fileStats.accessed.year >= 2023);
     assert(fileStats.modified.year >= 2023);
-    assert(fileStats.created.year >= 2023);
+   if (!isGCP) {
+    // creation time is not available on gcp
+     assert(fileStats.created.year >= 2023);
+   }
+   
 
     // Test a Symlink
     let symlinkStats = fs.metadata(tempSymlink);
@@ -26,16 +33,20 @@ test "metadata()" {
     expect.equal(unixMode.test(symlinkStats.permissions), true);
     assert(symlinkStats.accessed.year >= 2023);
     assert(symlinkStats.modified.year >= 2023);
+    if (!isGCP) {
+      // creation time is not available on gcp
     assert(symlinkStats.created.year >= 2023);
-
+    }
     // Test a Directory
     let dirStats = fs.metadata(tempDir);
     expect.equal(dirStats.fileType, fs.FileType.DIRECTORY);
     expect.equal(unixMode.test(dirStats.permissions), true);
     assert(fileStats.accessed.year >= 2023);
     assert(fileStats.modified.year >= 2023);
+    if (!isGCP) {
+      // creation time is not available on gcp
     assert(fileStats.created.year >= 2023);
-
+    }
     // Cleanup
     fs.remove(tempDir);
     expect.equal(fs.exists(tempDir), false);
@@ -57,8 +68,10 @@ test "symlinkMetadata()" {
     expect.equal(unixMode.test(fileStats.permissions), true);
     assert(fileStats.accessed.year >= 2023);
     assert(fileStats.modified.year >= 2023);
+    if (!isGCP) {
+      // creation time is not available on gcp
     assert(fileStats.created.year >= 2023);
-
+    }
     // Test a Symlink
     let symlinkStats = fs.symlinkMetadata(tempSymlink);
     expect.notEqual(symlinkStats.size, 12);
@@ -66,16 +79,20 @@ test "symlinkMetadata()" {
     expect.equal(unixMode.test(symlinkStats.permissions), true);
     assert(symlinkStats.accessed.year >= 2023);
     assert(symlinkStats.modified.year >= 2023);
+    if (!isGCP) {
+      // creation time is not available on gcp
     assert(symlinkStats.created.year >= 2023);
-
+    }
     // Test a Directory
     let dirStats = fs.symlinkMetadata(tempDir);
     expect.equal(dirStats.fileType, fs.FileType.DIRECTORY);
     expect.equal(unixMode.test(dirStats.permissions), true);
     assert(fileStats.accessed.year >= 2023);
     assert(fileStats.modified.year >= 2023);
+    if (!isGCP) {
+      // creation time is not available on gcp
     assert(fileStats.created.year >= 2023);
-
+    }
     // Cleanup
     fs.remove(tempDir);
     expect.equal(fs.exists(tempDir), false);
