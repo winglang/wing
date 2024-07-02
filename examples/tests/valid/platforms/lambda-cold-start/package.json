@@ -1,0 +1,25 @@
+{
+  "name": "lambda-cold-start",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@cdktf/provider-aws": "^19.5.0",
+    "@winglang/sdk": "^0.57.9",
+    "cdktf": "^0.20.3",
+    "constructs": "^10.3.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3",
+    "winglang": "^0.57.9"
+  }
+}
