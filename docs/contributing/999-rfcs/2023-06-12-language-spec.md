@@ -795,7 +795,7 @@ Code that is not dependent on the phase of execution can be designated as phase-
 Using this modifier means that the function can be called from either preflight or inflight contexts.
 
 ```TS
-let odd_numbers = unphased (arr: Array<num>): Array<num> => {
+let odd_numbers = unphased (nums: Array<num>): Array<num> => {
   let result = MutArray<num>[];
   for num in nums {
     if num % 2 == 1 {
