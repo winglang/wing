@@ -92,6 +92,8 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
         await fullReload(simfile);
       }
     } catch (error) {
+      // After an error, it's likely that the simulator is in a bad state (see https://github.com/winglang/wing/issues/5426).
+      // In order to be safe, we will do a full reload next time.
       needsFullReload = true;
       await events.emit(
         "error",
