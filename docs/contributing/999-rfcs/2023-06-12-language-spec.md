@@ -867,27 +867,23 @@ You can imagine that when a function is unphased, then "preflight" and "inflight
 For example, `Array<T>.map` is modeled like the following pseudocode:
 
 ```js
-native class Array<T> {
-  unphased map<U>(f: unphased (T) => U): Array<U> {
-    // ...
-  }
+unphased map<U>(f: unphased (T) => U): Array<U> {
+  // ...
 }
 ```
 
 At compile-time, since the function is unphased, preflight and inflight versions are generated:
 
 ```js
-native class Array<T> {
-  preflight map<U>(f: preflight (T) => U): Array<U> {
-    // ...
-  }
-  inflight map<U>(f: inflight (T) => U): Array<U> {
-    // ...
-  }
+preflight map<U>(f: preflight (T) => U): Array<U> {
+  // ...
+}
+inflight map<U>(f: inflight (T) => U): Array<U> {
+  // ...
 }
 ```
 
-Notice how "f" is automatically converted to the appropriate phase. This is possible because the function is unphased.
+Notice how the type of "f" is automatically converted to the appropriate phase. This is possible because "map" is unphased.
 This way, when you call `Array<T>.map` with in preflight, it's possible to pass a preflight function to it, and when you call it in inflight, it's possible to pass an inflight function to it. (If you're calling `Array<T>.map` within another unphased function, then the unphased version of `Array<T>.map` is used.)
 
 [`▲ top`][top]
