@@ -222,6 +222,7 @@ export const createConsoleServer = async ({
     appState = "error";
     invalidateQuery("app.state");
     invalidateQuery("app.error");
+    isStarting = false;
   });
   simulator.on("trace", async (trace) => {
     // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
