@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ inflight_class_inner_capture_mutable.test.wsim » root/env0/test:inner inflight class capture immutable
+pass ─ inflight_class_inner_capture_mutable.test.wsim » Test.H-11LV9sI_/env0/test:inner inflight class capture immutable
 
 Tests 1 passed (1)
 Snapshots 1 skipped

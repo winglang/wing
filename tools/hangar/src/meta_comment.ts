@@ -40,6 +40,13 @@ export interface MetaComment {
    * @default - No environment variables will be set
    */
   env?: Record<string, string>;
+
+  /**
+   * Extra command arguments to set for this test
+   *
+   * @default - No extra arguments will be set
+   */
+  args?: string[];
 }
 
 export function parseMetaCommentFromPath(testPath: string) {

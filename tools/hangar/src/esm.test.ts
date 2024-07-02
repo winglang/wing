@@ -10,7 +10,7 @@ it("tests module package type", async () => {
     cwd: validTestDir,
     wingFile: join(validTestDir, "esm", "module_type.test.w"),
     platforms: ["sim"],
-    args: ["test"],
+    args: ["test", "--rootId", "root"],
     expectFailure: false,
   });
 
