@@ -51,7 +51,13 @@ export class Endpoint extends Resource {
     props?: EndpointProps
   ) {
     if (new.target === Endpoint) {
-      return Resource._newFromFactory(ENDPOINT_FQN, scope, id, url, props);
+      return Node.of(scope).app.platform.newAbstract(
+        ENDPOINT_FQN,
+        scope,
+        id,
+        url,
+        props
+      );
     }
 
     super(scope, id);

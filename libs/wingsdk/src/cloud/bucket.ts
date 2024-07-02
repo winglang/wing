@@ -38,7 +38,12 @@ export class Bucket extends Resource {
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     if (new.target === Bucket) {
-      return Resource._newFromFactory(BUCKET_FQN, scope, id, props);
+      return Node.of(scope).app.platform.newAbstract(
+        BUCKET_FQN,
+        scope,
+        id,
+        props
+      );
     }
 
     super(scope, id);

@@ -66,7 +66,12 @@ export class Queue extends Resource {
 
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     if (new.target === Queue) {
-      return Resource._newFromFactory(QUEUE_FQN, scope, id, props);
+      return Node.of(scope).app.platform.newAbstract(
+        QUEUE_FQN,
+        scope,
+        id,
+        props
+      );
     }
 
     super(scope, id);

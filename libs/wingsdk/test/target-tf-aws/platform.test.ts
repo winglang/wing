@@ -18,9 +18,9 @@ import "aws-sdk-client-mock-jest";
 const secretsManagerClientMock = mockClient(SecretsManagerClient);
 
 describe("tf-aws platform parameters", () => {
-  let platformManager;
-  let tempdir;
-  let wingParametersFile;
+  let platformManager: PlatformManager;
+  let tempdir: string;
+  let wingParametersFile: string;
 
   beforeEach(() => {
     platformManager = new PlatformManager({ platformPaths: ["tf-aws"] });

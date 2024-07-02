@@ -162,17 +162,6 @@ exports[`basic function 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -383,17 +372,6 @@ exports[`basic function with custom log retention 2`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {
@@ -608,17 +586,6 @@ exports[`basic function with environment variables 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -814,17 +781,6 @@ exports[`basic function with infinite log retention 2`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {
@@ -1037,17 +993,6 @@ exports[`basic function with memory size specified 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -1259,17 +1204,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -1403,17 +1337,6 @@ exports[`function name valid 2`] = `
                 "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
               },
               "The-Mighty_Function-01": {
                 "children": {
@@ -1864,17 +1787,6 @@ exports[`replace invalid character from function name 2`] = `
                 "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
               },
               "The%Mighty$Function": {
                 "children": {

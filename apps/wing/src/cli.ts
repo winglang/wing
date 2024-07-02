@@ -102,6 +102,10 @@ async function main() {
     .option("--progress", "Show compilation progress", () => {
       process.env.PROGRESS = "1";
     })
+    .option(
+      "-r, --rootId <rootId>",
+      "A custom root identifier for the app (the default is to read 'rootid` from 'wing.toml' or 'Default')"
+    )
     .option("--no-progress", "Hide show compilation progress")
     .option("--no-update-check", "Skip checking for toolchain updates")
     .option(
@@ -173,7 +177,6 @@ async function main() {
       collectPlatformVariadic,
       DEFAULT_PLATFORM
     )
-    .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-o, --output <output>",
       'path to the output directory- default is "./target/<entrypoint>.<target>"'
@@ -219,7 +222,6 @@ async function main() {
         .default("auto")
     )
     .addHelpText("afterAll", SNAPSHOTS_HELP)
-    .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-f, --test-filter <regex>",
       "Run tests that match the provided regex pattern within the selected entrypoint files"

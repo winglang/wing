@@ -1,32 +1,16 @@
 import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
-import { Api } from "./api";
-import { Bucket } from "./bucket";
 import { SIM_CONTAINER_FQN } from "./container";
-import { Counter } from "./counter";
-import { Domain } from "./domain";
-import { Endpoint } from "./endpoint";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
-import { Function } from "./function";
-import { OnDeploy } from "./on-deploy";
-import { POLICY_FQN, Policy } from "./policy";
-import { Queue } from "./queue";
-import { Redis } from "./redis";
+import { POLICY_FQN } from "./policy";
 import { SIM_RESOURCE_FQN, isSimulatorResource } from "./resource";
-import { Schedule } from "./schedule";
-import { Secret } from "./secret";
-import { Service } from "./service";
-import { STATE_FQN, State } from "./state";
-import { Table } from "./table";
+import { STATE_FQN } from "./state";
 import { TestRunner } from "./test-runner";
 import { SimTokens } from "./tokens";
-import { Topic } from "./topic";
-import { Website } from "./website";
 import {
   API_FQN,
   BUCKET_FQN,
-  COUNTER_FQN,
   DOMAIN_FQN,
   ENDPOINT_FQN,
   FUNCTION_FQN,
@@ -40,7 +24,6 @@ import {
 } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
-import { preSynthesizeAllConstructs } from "../core/app";
 import { registerTokenResolver } from "../core/tokens";
 import { REDIS_FQN, TABLE_FQN } from "../ex";
 import {
@@ -87,19 +70,60 @@ export class App extends core.App {
   public readonly outdir: string;
   public readonly _target = "sim";
 
-  private synthed = false;
-
   constructor(props: core.AppProps) {
     // doesn't allow customize the root id- as used hardcoded in the code
     super(undefined as any, "root", props);
     this.outdir = props.outdir ?? ".";
     registerTokenResolver(new SimTokens());
 
-    TestRunner._createTree(this, props.rootConstruct);
+    TestRunner._createTree(this, props.rootConstruct, props.rootId);
   }
 
-  /** @internal */
-  public _inflightClientForFqn(fqn: string): string | undefined {
+  /**
+   * Synthesize the app. This creates a tree.json file and a .wsim file in the
+   * app's outdir, and returns a path to the .wsim directory.
+   */
+  public synth(): string {
+    fs.mkdirSync(this.outdir, { recursive: true });
+
+    // write simulator.json file into workdir
+    const spec = this.synthSimulatorFile(this.outdir);
+
+    this.addTokenConnections(spec);
+
+    return this.outdir;
+  }
+
+  /**
+   * Scans the app spec for token references and adds connections to reflect
+   * this relationship.
+   *
+   * @param spec The simulator spec
+   */
+  private addTokenConnections(spec: WingSimulatorSchema) {
+    const map: Record<string, IConstruct> = {};
+    for (const c of this.node.findAll()) {
+      map[c.node.path] = c;
+    }
+
+    for (const [from, resource] of Object.entries(spec.resources)) {
+      resolveTokens(resource.props, (to) => {
+        // skip references to the "handle" of the target resource because it would be reflected by
+        // the connections created by inflight method calls.
+        if (to.attr !== "handle") {
+          core.Connections.of(this).add({
+            source: map[from],
+            target: map[to.path],
+            targetOp: to.attr,
+            name: "<ref>",
+          });
+        }
+        return "<TOKEN>"; // <-- not used
+      });
+    }
+  }
+
+  private _inflightClientForFqn(fqn: string): string | undefined {
     switch (fqn) {
       case API_FQN:
         return require.resolve("./api.inflight");
@@ -163,139 +187,6 @@ export class App extends core.App {
     }
 
     return undefined;
-  }
-
-  protected typeForFqn(fqn: string): any {
-    switch (fqn) {
-      case API_FQN:
-        return Api;
-
-      case BUCKET_FQN:
-        return Bucket;
-
-      case COUNTER_FQN:
-        return Counter;
-
-      case DOMAIN_FQN:
-        return Domain;
-
-      case ENDPOINT_FQN:
-        return Endpoint;
-
-      // EVENT_MAPPING_FQN skipped - it's not a multi-target construct
-
-      case FUNCTION_FQN:
-        return Function;
-
-      case ON_DEPLOY_FQN:
-        return OnDeploy;
-
-      case POLICY_FQN:
-        return Policy;
-
-      case QUEUE_FQN:
-        return Queue;
-
-      case REDIS_FQN:
-        return Redis;
-
-      case SCHEDULE_FQN:
-        return Schedule;
-
-      case SECRET_FQN:
-        return Secret;
-
-      case SERVICE_FQN:
-        return Service;
-
-      case STATE_FQN:
-        return State;
-
-      case TABLE_FQN:
-        return Table;
-
-      case TEST_RUNNER_FQN:
-        return TestRunner;
-
-      case TOPIC_FQN:
-        return Topic;
-
-      case WEBSITE_FQN:
-        return Website;
-
-      // SIM_CONTAINER_FQN skipped - it's not a multi-target construct
-
-      // SIM_RESOURCE_FQN skipped - it's not a multi-target construct
-    }
-
-    return undefined;
-  }
-
-  /**
-   * Synthesize the app. This creates a tree.json file and a .wsim file in the
-   * app's outdir, and returns a path to the .wsim directory.
-   */
-  public synth(): string {
-    if (this.synthed) {
-      return this.outdir;
-    }
-
-    fs.mkdirSync(this.outdir, { recursive: true });
-
-    // call preSynthesize() on every construct in the tree
-    preSynthesizeAllConstructs(this);
-
-    if (this._synthHooks?.preSynthesize) {
-      this._synthHooks.preSynthesize.forEach((hook) => hook(this));
-    }
-
-    // write simulator.json file into workdir
-    const spec = this.synthSimulatorFile(this.outdir);
-
-    this.addTokenConnections(spec);
-
-    // write tree.json file into workdir
-    core.synthesizeTree(this, this.outdir);
-
-    // write `outdir/connections.json`
-    core.Connections.of(this).synth(this.outdir);
-
-    this.synthed = true;
-
-    if (this._synthHooks?.postSynthesize) {
-      this._synthHooks.postSynthesize.forEach((hook) => hook(this));
-    }
-
-    return this.outdir;
-  }
-
-  /**
-   * Scans the app spec for token references and adds connections to reflect
-   * this relationship.
-   *
-   * @param spec The simulator spec
-   */
-  private addTokenConnections(spec: WingSimulatorSchema) {
-    const map: Record<string, IConstruct> = {};
-    for (const c of this.node.findAll()) {
-      map[c.node.path] = c;
-    }
-
-    for (const [from, resource] of Object.entries(spec.resources)) {
-      resolveTokens(resource.props, (to) => {
-        // skip references to the "handle" of the target resource because it would be reflected by
-        // the connections created by inflight method calls.
-        if (to.attr !== "handle") {
-          core.Connections.of(this).add({
-            source: map[from],
-            target: map[to.path],
-            targetOp: to.attr,
-            name: "<ref>",
-          });
-        }
-        return "<TOKEN>"; // <-- not used
-      });
-    }
   }
 
   private synthSimulatorFile(outdir: string) {

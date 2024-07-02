@@ -29,7 +29,12 @@ export class Domain extends Resource {
 
   constructor(scope: Construct, id: string, props: DomainProps) {
     if (new.target === Domain) {
-      return Resource._newFromFactory(DOMAIN_FQN, scope, id, props);
+      return Node.of(scope).app.platform.newAbstract(
+        DOMAIN_FQN,
+        scope,
+        id,
+        props
+      );
     }
 
     super(scope, id);

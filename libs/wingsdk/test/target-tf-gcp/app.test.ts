@@ -1,6 +1,11 @@
-import { test, expect } from "vitest";
+import { test, expect, beforeAll } from "vitest";
 import * as tfgcp from "../../src/target-tf-gcp";
 import { mkdtemp } from "../util";
+
+beforeAll(() => {
+  delete process.env.GOOGLE_PROJECT_ID;
+  delete process.env.GOOGLE_REGION;
+});
 
 test("throw error when no projectId provided", () => {
   // GIVEN

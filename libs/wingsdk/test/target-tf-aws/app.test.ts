@@ -1,7 +1,9 @@
 import { existsSync, readdirSync } from "fs";
+import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import { Function } from "../../src/cloud";
+import { Bucket, Function } from "../../src/cloud";
 import { inflight } from "../../src/core";
+import { Node } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../util";
 
@@ -37,4 +39,28 @@ test("no assets folder exists if app does synthesize asset producing resources",
   // THEN
   expect(existsSync(expectedCdktfJson)).toBe(true);
   expect(existsSync(expectedAssetsDir)).toBe(false);
+});
+
+test("rootId can be used to control the root id", () => {
+  class MyApp extends Construct {
+    public readonly bucket: Bucket;
+    constructor(scope: Construct, id: string) {
+      super(scope, id);
+
+      this.bucket = new Bucket(this, "Bucket");
+    }
+  }
+
+  const app = new tfaws.App({
+    outdir: mkdtemp(),
+    entrypointDir: __dirname,
+    rootId: "Bang",
+    rootConstruct: MyApp,
+  });
+
+  console.log(Node.of(app).children.map((x) => x.node.id));
+
+  expect(Node.of(app).id).toBe("Bang");
+  expect(Node.of(Node.of(app).root).id).toBe("Bang");
+  expect(Node.of(app)).toBe(Node.of(Node.of(app).root));
 });

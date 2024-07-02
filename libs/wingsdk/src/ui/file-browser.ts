@@ -48,7 +48,7 @@ export class FileBrowser extends VisualComponent {
     label: string,
     handlers: FileBrowserHandlers
   ): FileBrowser {
-    return App.of(scope).newAbstract(
+    return App.of(scope).platform.newAbstract(
       FILE_BROWSER_FQN,
       scope,
       id,

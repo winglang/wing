@@ -76,7 +76,12 @@ export class Table extends Resource {
 
   constructor(scope: Construct, id: string, props: TableProps) {
     if (new.target === Table) {
-      return Resource._newFromFactory(TABLE_FQN, scope, id, props);
+      return Node.of(scope).app.platform.newAbstract(
+        TABLE_FQN,
+        scope,
+        id,
+        props
+      );
     }
 
     super(scope, id);

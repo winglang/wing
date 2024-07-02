@@ -19,7 +19,7 @@ test("new() allows derived classes to inject a different implementation", () => 
 
 test("newAbstract() allows derived classes to inject a different implementation", () => {
   const app = new MyApp();
-  const foo = app.newAbstract(BAR_FQN, app, "my-bar");
+  const foo = app.platform.newAbstract(BAR_FQN, app, "my-bar");
   expect(foo).toBeInstanceOf(Bar);
 });
 
@@ -31,7 +31,7 @@ test("new() defaults to just creating an instance", () => {
 
 test("newAbstract() throws if there is no implementation", () => {
   const app = new MyApp();
-  expect(() => app.newAbstract(ANOTHER_FQN, app, "bar")).toThrow(
+  expect(() => app.platform.newAbstract(ANOTHER_FQN, app, "bar")).toThrow(
     /Resource \"@winglang\/sdk\.another.Another\" is not yet implemented for "awscdk" target\. Please refer to the roadmap https:\/\/github\.com\/orgs\/winglang\/projects\/3\/views\/1\?filterQuery=another\.Another/
   );
 });

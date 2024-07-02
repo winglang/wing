@@ -187,17 +187,6 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                 "id": "Domain",
                 "path": "root/Default/Domain",
               },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
-              },
               "Website": {
                 "children": {
                   "AllowDistributionReadOnly": {
@@ -561,17 +550,6 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                 },
                 "id": "Domain",
                 "path": "root/Default/Domain",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
               },
               "Website": {
                 "children": {

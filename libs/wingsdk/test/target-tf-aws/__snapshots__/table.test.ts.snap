@@ -221,17 +221,6 @@ exports[`function with a table binding 3`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
-              },
               "Table": {
                 "children": {
                   "Default": {

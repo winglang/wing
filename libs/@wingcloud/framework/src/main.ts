@@ -77,25 +77,10 @@ This is a Wing app and must be run through the Wing CLI (npm install -f winglang
       });
     }
   }
-
-  const platformPaths = ((s) => (!s ? [] : s.split(";")))(
-    process.env.WING_PLATFORMS
-  );
-  const outdir = process.env.WING_SYNTH_DIR;
-  const name = props.name ?? "main";
-  const rootConstruct = $Root;
-  const isTestEnvironment = process.env.WING_IS_TEST === "true";
-  const entrypointDir = process.env.WING_SOURCE_DIR!;
-  const rootId = process.env.WING_ROOT_ID;
-
-  const $PlatformManager = new platform.PlatformManager({ platformPaths });
+  
+  const $PlatformManager = new platform.PlatformManager();
   const app = $PlatformManager.createApp({
-    outdir,
-    name,
-    rootConstruct,
-    isTestEnvironment,
-    entrypointDir,
-    rootId,
+    rootConstruct: $Root,
   });
 
   app.synth();

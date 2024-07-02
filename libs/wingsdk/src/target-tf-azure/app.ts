@@ -1,6 +1,3 @@
-import { Bucket } from "./bucket";
-import { Counter } from "./counter";
-import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
 import { TestRunner } from "./test-runner";
 import { ApplicationInsights } from "../.gen/providers/azurerm/application-insights";
@@ -9,7 +6,6 @@ import { AzurermProvider } from "../.gen/providers/azurerm/provider";
 import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
 import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
-import { BUCKET_FQN, FUNCTION_FQN, COUNTER_FQN } from "../cloud";
 import { AppProps } from "../core";
 import {
   CaseConventions,
@@ -17,14 +13,13 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
-import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * Azure app props
  */
 export interface AzureAppProps extends AppProps {
   /** Location for resources to be deployed to */
-  readonly location: string;
+  readonly location?: string;
 }
 
 /**
@@ -84,15 +79,18 @@ export class App extends CdktfApp {
 
   constructor(props: AzureAppProps) {
     super(props);
-    this.location = props.location ?? process.env.AZURE_LOCATION;
-    TestRunner._createTree(this, props.rootConstruct);
+
+    const location = props.location ?? process.env.AZURE_LOCATION;
+
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
-    if (this.location === undefined) {
+    if (location === undefined) {
       throw new Error(
         "Location must be specified in the AZURE_LOCATION environment variable"
       );
     }
+
+    this.location = location;
 
     new AzurermProvider(this, "azure", {
       features: {
@@ -100,6 +98,8 @@ export class App extends CdktfApp {
         resourceGroup: { preventDeletionIfContainsResources: false },
       },
     });
+
+    TestRunner._createTree(this, props.rootConstruct, props.rootId);
 
     Object.defineProperty(this, APP_AZURE_TF_SYMBOL, {
       value: this,
@@ -188,23 +188,5 @@ export class App extends CdktfApp {
       });
     }
     return this._servicePlan;
-  }
-
-  protected typeForFqn(fqn: string): any {
-    switch (fqn) {
-      case TEST_RUNNER_FQN:
-        return TestRunner;
-
-      case FUNCTION_FQN:
-        return Function;
-
-      case BUCKET_FQN:
-        return Bucket;
-
-      case COUNTER_FQN:
-        return Counter;
-    }
-
-    return undefined;
   }
 }

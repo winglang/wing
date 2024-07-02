@@ -21,7 +21,7 @@ export class Redis extends Resource {
 
   constructor(scope: Construct, id: string) {
     if (new.target === Redis) {
-      return Resource._newFromFactory(REDIS_FQN, scope, id);
+      return Node.of(scope).app.platform.newAbstract(REDIS_FQN, scope, id);
     }
 
     super(scope, id);

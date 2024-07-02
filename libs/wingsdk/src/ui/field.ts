@@ -44,7 +44,7 @@ export class Field extends VisualComponent {
     handler: IFieldHandler,
     props: FieldProps = {}
   ): Field {
-    return App.of(scope).newAbstract(
+    return App.of(scope).platform.newAbstract(
       FIELD_FQN,
       scope,
       id,

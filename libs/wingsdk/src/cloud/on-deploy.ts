@@ -43,7 +43,13 @@ export class OnDeploy extends Resource {
     props: OnDeployProps = {}
   ) {
     if (new.target === OnDeploy) {
-      return Resource._newFromFactory(ON_DEPLOY_FQN, scope, id, handler, props);
+      return Node.of(scope).app.platform.newAbstract(
+        ON_DEPLOY_FQN,
+        scope,
+        id,
+        handler,
+        props
+      );
     }
 
     super(scope, id);

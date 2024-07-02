@@ -25,7 +25,13 @@ export class Button extends VisualComponent {
     label: string,
     handler: IButtonHandler
   ): Button {
-    return App.of(scope).newAbstract(BUTTON_FQN, scope, id, label, handler);
+    return App.of(scope).platform.newAbstract(
+      BUTTON_FQN,
+      scope,
+      id,
+      label,
+      handler
+    );
   }
 
   private readonly fn: Function;

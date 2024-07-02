@@ -7,10 +7,9 @@ import {
   IValidation,
 } from "constructs";
 import { Connections } from "../core/connections";
-import { ParameterRegistrar } from "../platform";
+import { APP_SYMBOL, IApp } from "../platform";
 
 const NODE_SYMBOL = Symbol.for("@winglang/sdk.std.Node");
-export const APP_SYMBOL = Symbol.for("@winglang/sdk.std.Node/app");
 const ROOT_SYMBOL = Symbol.for("@winglang/sdk.std.Node/root");
 
 export const CONNECTIONS_FILE_PATH = "connections.json";
@@ -405,7 +404,7 @@ export class Node {
    */
   private findApp(scope: IConstruct): IApp {
     if (isApp(scope)) {
-      return scope as IApp;
+      return scope;
     }
 
     if (!scope.node.scope) {
@@ -459,48 +458,6 @@ export interface AddConnectionProps {
    * A name for the connection.
    */
   readonly name: string;
-}
-
-/**
- * Represents a Wing application.
- */
-export interface IApp extends IConstruct {
-  /**
-   * Type marker.
-   * @internal
-   **/
-  readonly [APP_SYMBOL]: true;
-
-  /**
-   * The `.wing` directory into which you can emit artifacts during preflight.
-   */
-  readonly workdir: string;
-
-  /**
-   * `true` if this is a testing environment
-   */
-  readonly isTestEnvironment: boolean;
-
-  /**
-   * The directory of the entrypoint of the current program.
-   */
-  readonly entrypointDir: string;
-
-  /**
-   * The application's parameter registrar
-   */
-  readonly parameters: ParameterRegistrar;
-
-  /**
-   * Generate a unique ID for the given scope and prefix. The newly generated ID is
-   * guaranteed to be unique within the given scope.
-   * It will have the form '{prefix}{n}', where '{prefix}' is the given prefix and '{n}' is an
-   * ascending sequence of integers starting from '0'.
-   *
-   * @param scope to guarantee uniqueness in
-   * @param prefix prepended to the unique identifier
-   */
-  makeId(scope: IConstruct, prefix?: string): string;
 }
 
 function isApp(x: any): x is IApp {

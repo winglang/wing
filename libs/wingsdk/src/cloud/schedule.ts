@@ -51,7 +51,12 @@ export class Schedule extends Resource {
 
   constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
     if (new.target === Schedule) {
-      return Resource._newFromFactory(SCHEDULE_FQN, scope, id, props);
+      return Node.of(scope).app.platform.newAbstract(
+        SCHEDULE_FQN,
+        scope,
+        id,
+        props
+      );
     }
 
     super(scope, id);

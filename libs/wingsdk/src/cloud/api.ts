@@ -246,7 +246,7 @@ export class Api extends Resource {
 
   constructor(scope: Construct, id: string, props: ApiProps = {}) {
     if (new.target === Api) {
-      return Resource._newFromFactory(API_FQN, scope, id, props);
+      return Node.of(scope).app.platform.newAbstract(API_FQN, scope, id, props);
     }
 
     super(scope, id);

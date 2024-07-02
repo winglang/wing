@@ -41,7 +41,12 @@ export class Secret extends Resource {
 
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
     if (new.target === Secret) {
-      return Resource._newFromFactory(SECRET_FQN, scope, id, props);
+      return Node.of(scope).app.platform.newAbstract(
+        SECRET_FQN,
+        scope,
+        id,
+        props
+      );
     }
 
     super(scope, id);

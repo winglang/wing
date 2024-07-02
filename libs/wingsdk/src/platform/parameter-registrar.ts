@@ -1,11 +1,10 @@
 import Ajv from "ajv";
-import { Construct } from "constructs";
 import {
   loadPlatformSpecificValues,
   extractFieldsFromSchema,
   filterParametersBySchema,
 } from "./util";
-import { Json, Node } from "../std";
+import { Json } from "../std";
 
 /**
  * Options for reading parameters
@@ -18,9 +17,9 @@ export interface ReadParameterOptions {
 /**
  * Parameter Registrar
  *
- * This class is used to register and lookup parameter values.
+ * This class is used to register and lookup parameter values from `wing.toml`.
  */
-export class ParameterRegistrar extends Construct {
+export class ParameterRegistrar {
   /** Cache for parameter lookups */
   private parameterValueByPath: { [key: string]: any } = {};
   /** List of all registered parameter schemas */
@@ -29,11 +28,6 @@ export class ParameterRegistrar extends Construct {
   /** @internal */
   public readonly _rawParameters: { [key: string]: any } =
     loadPlatformSpecificValues();
-
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
-    Node.of(this).hidden = true;
-  }
 
   /**
    * Retrieve a parameter value by its path
@@ -140,9 +134,9 @@ export class ParameterRegistrar extends Construct {
   }
 
   /**
-   * @internal
+   * Called during synthesis to verify that platform parameters adhere to the schema.
    */
-  public _preSynthesize() {
+  public validate() {
     if (this.parameterSchemas.length === 0) {
       return;
     }

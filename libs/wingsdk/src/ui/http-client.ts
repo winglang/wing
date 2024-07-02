@@ -26,7 +26,7 @@ export class HttpClient extends VisualComponent {
     getUrlHandler: IHttpClientGetUrlHandler,
     getApiSpecHandler: IHttpClientGetApiSpecHandler
   ): HttpClient {
-    return App.of(scope).newAbstract(
+    return App.of(scope).platform.newAbstract(
       API_FQN,
       scope,
       id,
