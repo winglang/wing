@@ -343,7 +343,7 @@ In order to run a piece of inflight code, the inflight host may need additional 
 For example, to run an inflight function that reads from a [storage bucket](https://www.winglang.io/docs/standard-library/cloud/bucket), the inflight host may require permissions to read from the bucket, or may require certain environment variables to be set, or may require network policies must be configured.
 
 Preflight classes can be used to encapsulate these requirements.
-Any preflight class can implement a method named `onLift` that is called when the class is used in inflight code, where requirements can be added to the inflight host.
+Any preflight class can implement a method named [`onLift`](../04-standard-library/std/resource.md#@winglang/sdk.std.IHostedLiftable.onLift) that is called when the class is used in inflight code, where requirements can be added to the inflight host.
 
 Here's an example where a class named `Model` requires an AWS Lambda function to have permission to invoke a model inference:
 
