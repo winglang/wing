@@ -1,7 +1,7 @@
 /*\
 args:
-  - --rootId
-  - root
+  - "--rootId"
+  - "root"
 \*/
 
 bring expect;
