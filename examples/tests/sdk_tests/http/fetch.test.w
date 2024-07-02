@@ -40,7 +40,7 @@ test "fetch" {
   expect.equal(redirectDefault.status, 200);
   expect.equal(redirectDefault.body, "I am the target");
 
- // "redirect 'manual'" 
+  // "redirect 'manual'" 
   let redirectManual = http.get("{api.url}/redirect", redirect: http.RequestRedirect.MANUAL);
   expect.equal(redirectManual.headers.get("location"), "{api.url}/target");
   expect.equal(redirectManual.status, 301);
