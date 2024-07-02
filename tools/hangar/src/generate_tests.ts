@@ -75,7 +75,9 @@ function generateTests(options: GenerateTestsOptions) {
   test${skipText}("wing compile -t tf-aws", async () => {
     await compileTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(
       metaComment?.env
-    )}, ${includeJavaScriptInSnapshots}, ${skipMarkdownSnapshot});
+    )}, ${includeJavaScriptInSnapshots}, ${skipMarkdownSnapshot}, ${
+      metaComment?.args || []
+    });
   });
   
   test${skipText}("wing test -t sim", async () => {
