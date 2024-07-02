@@ -14,7 +14,6 @@ import {
 } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { set } from "zod";
 
 import { useEndpointsWarning } from "../inspector-pane/resource-panes/use-endpoints-warning.js";
 import { useEndpoints } from "../inspector-pane/resource-panes/use-endpoints.js";
@@ -23,13 +22,7 @@ import type { EndpointItem } from "./endpoint-item.js";
 import { EndpointsWarningModal } from "./endpoints-warning-modal.js";
 import { NoEndpoints } from "./no-endpoints.js";
 
-const EndpointTreeViewItem = ({
-  endpoint,
-  disabled = false,
-}: {
-  endpoint: EndpointItem;
-  disabled: boolean;
-}) => {
+const EndpointTreeViewItem = ({ endpoint }: { endpoint: EndpointItem }) => {
   const { theme } = useTheme();
   const { exposeEndpoint, hideEndpoint } = useEndpoints();
   const { requireAcceptWarning, notifyAcceptWarning } = useEndpointsWarning();
@@ -150,10 +143,8 @@ const EndpointTreeViewItem = ({
             className={classNames(
               "flex gap-1 items-center",
               "justify-between group/endpoint-tree-item",
-              !loading &&
-                !disabled &&
-                "hover:underline text-sky-500 hover:text-sky-600",
-              (loading || disabled) && "text-slate-400 cursor-not-allowed",
+              !loading && "hover:underline text-sky-500 hover:text-sky-600",
+              loading && "text-slate-400 cursor-not-allowed",
             )}
           >
             <span className="truncate">{endpoint.label}</span>
@@ -168,7 +159,7 @@ const EndpointTreeViewItem = ({
         secondaryLabel={
           <Button
             small
-            disabled={loading || disabled}
+            disabled={loading}
             className="min-w-[5rem] justify-center"
             onClick={() => {
               if (endpoint.exposeStatus === "connected") {
@@ -238,11 +229,7 @@ export const EndpointTree = () => {
 
               <TreeView>
                 {endpointList.data?.map((endpoint) => (
-                  <EndpointTreeViewItem
-                    key={endpoint.id}
-                    endpoint={endpoint}
-                    disabled={endpointList.isFetching}
-                  />
+                  <EndpointTreeViewItem key={endpoint.id} endpoint={endpoint} />
                 ))}
               </TreeView>
             </div>
