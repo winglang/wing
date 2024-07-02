@@ -195,12 +195,13 @@ async function testOne(
 
   let results: std.TestResult[] = [];
   if (shouldExecute) {
+    options.rootId = options.rootId ?? `Test.${nanoid(10)}`;
     const synthDir = await withSpinner(
       `Compiling ${renderTestName(entrypoint)} to ${target}...`,
       async () =>
         compile(entrypoint, {
           ...options,
-          rootId: options.rootId ?? `Test.${nanoid(10)}`,
+          rootId: options.rootId,
           testing: true,
         })
     );
@@ -503,7 +504,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     throw e;
   }
 
-  const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
+  const testRunner = s.getResource(`${options.rootId}/cloud.TestRunner`) as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
   const filteredTests = filterTests(tests, testFilter);
 
