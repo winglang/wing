@@ -94,7 +94,11 @@ export const createEndpointRouter = () => {
         const simulator = await ctx.simulator();
         const client = simulator.getResource(input.resourcePath) as Endpoint;
         await client.expose();
-        await simulator.reload(false);
+        try {
+          await simulator.reload(false);
+        } catch (error) {
+          console.error(error);
+        }
       }),
     "endpoint.hide": createProcedure
       .input(
@@ -106,7 +110,11 @@ export const createEndpointRouter = () => {
         const simulator = await ctx.simulator();
         const client = simulator.getResource(input.resourcePath) as Endpoint;
         await client.hide();
-        await simulator.reload(false);
+        try {
+          await simulator.reload(false);
+        } catch (error) {
+          console.error(error);
+        }
       }),
   });
 };
