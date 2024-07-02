@@ -6,6 +6,7 @@ my id is WingResource
 path of sqs.queue: root/env0/SqsQueue
 path of wing resource: root/env0/WingResource
 display name of wing resource: no display name
+root/env0/WingResource
 pass ─ construct-base.test.wsim (no tests)
 
 Tests 1 passed (1)

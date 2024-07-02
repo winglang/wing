@@ -49,8 +49,7 @@ module.exports = function({ $SomeEnum }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -75,6 +74,9 @@ const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const SomeEnum =
       (function (tmp) {
         tmp["ONE"] = "ONE";
@@ -118,10 +120,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [SomeEnum, [].concat(["ONE"], ["TWO"])],
             [one, []],
             [two, []],
           ],
           "$inflight_init": [
+            [SomeEnum, []],
             [one, []],
             [two, []],
           ],
@@ -155,8 +159,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [SomeEnum, [].concat(["ONE"], ["TWO"], ["THREE"])],
           ],
           "$inflight_init": [
+            [SomeEnum, []],
           ],
         });
       }

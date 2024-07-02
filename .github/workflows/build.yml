@@ -6,12 +6,10 @@ on:
       - opened
       - synchronize
     paths-ignore:
-      - "docs/**"
       - "logo/**"
   push:
     branches:
       - main
-      - dev
   workflow_dispatch: {}
 
 concurrency:
@@ -251,7 +249,7 @@ jobs:
         working-directory: tools/hangar
         run: |
           pnpm test:generate
-          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '20' }}
+          pnpm run vitest --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '20' }}
 
       - name: Create mutation if needed
         # we only care about the diff in our standard dev env

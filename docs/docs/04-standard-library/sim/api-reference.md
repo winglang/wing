@@ -1039,17 +1039,19 @@ A resource with an inflight "handle" method that can be passed to the `sim.Resou
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.sim.IResourceFactoryClient.handle">handle</a></code> | Function that will be called to create the resource. |
+| <code><a href="#@winglang/sdk.sim.IResourceFactoryClient.handle">handle</a></code> | Function that will be called to initialize the simulator resource. |
 
 ---
 
 ##### `handle` <a name="handle" id="@winglang/sdk.sim.IResourceFactoryClient.handle"></a>
 
 ```wing
-inflight handle(context: IResourceContext): IResource
+inflight handle(context: IResourceContext): IResource?
 ```
 
-Function that will be called to create the resource.
+Function that will be called to initialize the simulator resource.
+
+To implement a shutdown sequence, return an object that implements the `IResource` inflight interface with an `onStop()` method.
 
 ###### `context`<sup>Required</sup> <a name="context" id="@winglang/sdk.sim.IResourceFactoryClient.handle.parameter.context"></a>
 

@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -367,7 +366,7 @@
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Handler-c8c3c90a",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_20": "${jsonencode(aws_sqs_queue.Queue.arn)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_sqs_queue.Queue.arn)}"
           }
         },
         "function_name": "Handler-c8c3c90a",

@@ -106,8 +106,8 @@ class PaidStudent extends Student {
   
   new(name: str, major: str, hrlyWage: num) {
     this.hrlyWage = hrlyWage;
+//  ^^^^^^^^^^^^^^^^^^^^^^^^^ 'super()' must be called before accessing 'this' in the constructor of a derived class
     super(name, major);
-//  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
   }
 
   something() {

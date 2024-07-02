@@ -1,50 +1,51 @@
 bring cloud;
 bring util;
 
-let invokeCounter = new cloud.Counter();
+let invokeCounter1 = new cloud.Counter() as "invoke-counter1";
+let invokeCounter2 = new cloud.Counter() as "invoke-counter2";
+let invokeCounter3 = new cloud.Counter() as "invoke-counter3";
 
-test "waitUntil returns true if the predicate is met immediately" {
-  let start = datetime.systemNow().timestampMs;
-  let result = util.waitUntil((): bool => { return true; });
-  assert(result == true);
-  assert(datetime.systemNow().timestampMs - start < 1000);
-}
 
-test "waitUntil throws if the predicate is never met" {
-  let start = datetime.systemNow().timestampMs;
-  let var threwErr = false;
+test "waitUntil" {
+  // "waitUntil returns true if the predicate is met immediately"
+  let start1 = datetime.systemNow().timestampMs;
+  let result1 = util.waitUntil((): bool => { return true; });
+  assert(result1 == true);
+  assert(datetime.systemNow().timestampMs - start1 < 1000);
+
+// "waitUntil throws if the predicate is never met" 
+  let start2 = datetime.systemNow().timestampMs;
+  let var threwErr2 = false;
   try {
     util.waitUntil((): bool => { return false; }, timeout: 1s);
   } catch {
-    threwErr = true;
+    threwErr2 = true;
   }
-  assert(threwErr == true);
-  assert(datetime.systemNow().timestampMs - start > 1000);
-}
+  assert(threwErr2 == true);
+  assert(datetime.systemNow().timestampMs - start2 > 1000);
 
-test "waitUntil returns false if the predicate is never met and 'throws: false' is set" {
-  let start = datetime.systemNow().timestampMs;
-  let result = util.waitUntil(inflight (): bool => { return false; }, timeout: 1s, throws: false);
-  assert(result == false);
-  assert(datetime.systemNow().timestampMs - start > 1 * 1000);
-}
+// "waitUntil returns false if the predicate is never met and 'throws: false' is set" 
+  let start3 = datetime.systemNow().timestampMs;
+  let result3 = util.waitUntil(inflight (): bool => { return false; }, timeout: 1s, throws: false);
+  assert(result3 == false);
+  assert(datetime.systemNow().timestampMs - start3 > 1 * 1000);
 
-test "waitUntil returns true if the predicate is met after some time waiting" {
-  let start = datetime.systemNow().timestampMs;
+// "waitUntil returns true if the predicate is met after some time waiting" 
+  let start4 = datetime.systemNow().timestampMs;
   let returnTrueAfter3Seconds = (): bool => { 
-    invokeCounter.inc();
-    return datetime.systemNow().timestampMs - start > 3 * 1000; 
+    invokeCounter1.inc();
+    return datetime.systemNow().timestampMs - start4 > 3 * 1000; 
   };
   util.waitUntil(returnTrueAfter3Seconds, interval: 1s, timeout: 10s);
-  let invocations = invokeCounter.peek();
+  let invocations = invokeCounter1.peek();
   // Check that the condition was evaluated several times
   assert( invocations > 1 && invocations < 10 );
-}
 
-test "waitUntil with custom props" {
-  let start = datetime.systemNow().timestampMs;
+
+// "waitUntil with custom props" 
+  let start5 = datetime.systemNow().timestampMs;
   let returnFalse = (): bool => { 
-    invokeCounter.inc();
+    invokeCounter2.inc();
     return false;
   };
 
@@ -52,19 +53,18 @@ test "waitUntil with custom props" {
     assert(false);
   } else {
     // making sure that the predicate was invoked almost 5 times
-    let invokeCount = invokeCounter.peek();
+    let invokeCount = invokeCounter2.peek();
     assert(invokeCount > 3 && invokeCount < 7);
   }
-}
 
-test "throwing exception from predicate should throw immediately" {
+//  "throwing exception from predicate should throw immediately" 
   try {
     util.waitUntil((): bool => { 
-      invokeCounter.inc();
+      invokeCounter3.inc();
       throw "ERROR";
     });
     assert(false);
   } catch {
-    assert(invokeCounter.peek() == 1);
+    assert(invokeCounter3.peek() == 1);
   }
 }

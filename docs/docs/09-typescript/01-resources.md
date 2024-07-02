@@ -26,7 +26,7 @@ main((root) => {
 });
 ```
 
-API documentation for the `cloud` namespace is available [here](../04-standard-library/cloud).
+API documentation for the `cloud` namespace is available [here](/docs/category/cloud).
 Note that those docs are meant for The TypeScript API is similar, with two primary differences:
 
 - Resources always have 2 arguments first: the `scope` resource to contain the new one and an `id` for it

@@ -45,8 +45,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -68,10 +67,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -139,7 +141,7 @@ class $Root extends $stdlib.std.Resource {
           const d = $if_let_value;
           $helpers.assert(false, "false");
         }
-        else if (((b) != null)) {
+        else if ($helpers.neq(b, undefined)) {
           $helpers.assert(true, "true");
         }
         else {
@@ -170,7 +172,7 @@ class $Root extends $stdlib.std.Resource {
             const e = $elif_let_value0;
             $helpers.assert(true, "true");
           }
-          else if (((b) != null)) {
+          else if ($helpers.neq(b, undefined)) {
             $helpers.assert(false, "false");
           }
           else {
