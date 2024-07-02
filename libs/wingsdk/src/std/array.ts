@@ -42,7 +42,7 @@ export class Array {
   /**
    * Get the value at the given index, returning nil if the index is out of bounds.
    *
-   * @macro $self$.at($args$)
+   * @macro $self$?.at($args$)
    *
    * @param index index of the value to get
    * @returns the value at the given index, or undefined if the index is out of bounds
@@ -66,7 +66,7 @@ export class Array {
   /**
    * Checks if this array includes searchElement.
    *
-   * @macro $self$.includes($args$)
+   * @macro $self$?.includes($args$)
    *
    * @param searchElement to search for.
    * @returns true if this array includes searchElement.
@@ -190,7 +190,7 @@ export class MutArray {
   /**
    * Checks if this array includes searchElement.
    *
-   * @macro $self$.includes($args$)
+   * @macro $self$?.includes($args$)
    *
    * @param searchElement to search for.
    * @returns true if this array includes searchElement.

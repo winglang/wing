@@ -157,7 +157,7 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(unestedJsonArr, 0), 1), "unestedJsonArr.getAt(0) == 1");
     const jsonElements = ({"strings": ({"single": "Hello", "array": ["Hello", "World", "!"]}), "numbers": ({"one": 1, "two": 2, "three": 3}), "bools": ({"t": true, "f": false})});
     {
-      const $if_let_value = ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((jsonElements)?.["strings"])?.["single"]);
+      const $if_let_value = (((jsonElements)?.["strings"])?.["single"] === undefined ? undefined : ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((jsonElements)?.["strings"])?.["single"]));
       if ($if_let_value != undefined) {
         const val = $if_let_value;
         $helpers.assert($helpers.eq(val, "Hello"), "val == \"Hello\"");
@@ -167,7 +167,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $if_let_value = ((jsonElements)?.["strings"])?.["array"];
+      const $if_let_value = ((jsonElements)?.["strings"] === undefined ? undefined : ((jsonElements)?.["strings"])?.["array"]);
       if ($if_let_value != undefined) {
         const vals = $if_let_value;
         {
@@ -186,7 +186,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $if_let_value = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["numbers"])?.["two"]);
+      const $if_let_value = (((jsonElements)?.["numbers"])?.["two"] === undefined ? undefined : ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["numbers"])?.["two"]));
       if ($if_let_value != undefined) {
         const two = $if_let_value;
         $helpers.assert($helpers.eq((two + 2), 4), "two + 2 == 4");
@@ -196,7 +196,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $if_let_value = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["bools"])?.["t"]);
+      const $if_let_value = (((jsonElements)?.["bools"])?.["t"] === undefined ? undefined : ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["bools"])?.["t"]));
       if ($if_let_value != undefined) {
         const truth = $if_let_value;
         $helpers.assert(truth, "truth");
@@ -206,14 +206,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $if_let_value = ((((jsonElements)?.["strings"])?.["non"])?.["existant"])?.["element"];
+      const $if_let_value = ((((jsonElements)?.["strings"])?.["non"])?.["existant"] === undefined ? undefined : ((((jsonElements)?.["strings"])?.["non"])?.["existant"])?.["element"]);
       if ($if_let_value != undefined) {
         const val = $if_let_value;
         $helpers.assert(false, "false");
       }
     }
     {
-      const $if_let_value = (((jsonElements)?.["cant"])?.[1000])?.[42];
+      const $if_let_value = (((jsonElements)?.["cant"])?.[1000] === undefined ? undefined : (((jsonElements)?.["cant"])?.[1000])?.[42]);
       if ($if_let_value != undefined) {
         const val = $if_let_value;
         $helpers.assert(false, "false");
