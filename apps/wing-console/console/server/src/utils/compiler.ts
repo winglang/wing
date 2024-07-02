@@ -4,6 +4,7 @@ import * as wing from "@winglang/compiler";
 import chokidar from "chokidar";
 import Emittery from "emittery";
 
+import { loadEnvVariables } from "./env.js";
 import { formatWingError } from "./format-wing-error.js";
 
 export interface CompilerEvents {
@@ -45,6 +46,8 @@ export const createCompiler = ({
       return;
     }
 
+    loadEnvVariables();
+
     try {
       isCompiling = true;
       await events.emit("compiling");
@@ -85,6 +88,7 @@ export const createCompiler = ({
     `!**/.git/**`,
     `!${dirname}/target/**`,
     dirname,
+    `${dirname}/.env`,
     ...(watchGlobs ?? []),
   ];
 
