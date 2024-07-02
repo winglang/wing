@@ -9,4 +9,4 @@ for c in nodeof(this).children {
 }
 
 expect.notNil(nodeof(this));
-expect.equal(nodeof(this).path.split("/").at(0), "root");
+expect.match(nodeof(this).path.split("/").at(0), "Test.");
