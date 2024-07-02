@@ -42,7 +42,6 @@ module.exports = grammar({
     // These modifier conflicts should be solved through GLR parsing
     [$.field_modifiers, $.method_modifiers],
     [$.class_modifiers, $.closure_modifiers, $.interface_modifiers],
-    [$.inflight_method_signature, $.field_modifiers],
   ],
 
   supertypes: ($) => [$.expression, $._literal],
@@ -108,7 +107,7 @@ module.exports = grammar({
 
     accessor: ($) => choice(".", "?."),
 
-    inflight_specifier: ($) => "inflight",
+    phase_specifier: ($) => choice("unphased", "inflight"),
 
     _statement: ($) =>
       choice(
@@ -220,7 +219,7 @@ module.exports = grammar({
     // Classes
 
     class_modifiers: ($) =>
-      repeat1(choice($.access_modifier, $.inflight_specifier)),
+      repeat1(choice($.access_modifier, $.phase_specifier)),
 
     class_definition: ($) =>
       seq(
@@ -240,7 +239,7 @@ module.exports = grammar({
         choice(
           $.access_modifier,
           $.static,
-          $.inflight_specifier,
+          $.phase_specifier,
           $.reassignable
         )
       ),
@@ -257,7 +256,7 @@ module.exports = grammar({
     /// Interfaces
 
     interface_modifiers: ($) =>
-      repeat1(choice($.access_modifier, $.inflight_specifier)),
+      repeat1(choice($.access_modifier, $.phase_specifier)),
 
     interface_definition: ($) =>
       seq(
@@ -269,11 +268,7 @@ module.exports = grammar({
       ),
 
     interface_implementation: ($) =>
-      braced(
-        repeat(
-          choice($.method_signature, $.inflight_method_signature, $.class_field)
-        )
-      ),
+      braced(repeat(choice($.method_definition, $.class_field))),
 
     inclusive_range: ($) => "=",
 
@@ -532,7 +527,7 @@ module.exports = grammar({
     function_type: ($) =>
       prec.right(
         seq(
-          optional(field("inflight", $.inflight_specifier)),
+          optional(field("phase_specifier", $.phase_specifier)),
           field("parameter_types", $.parameter_type_list),
           seq(":", field("return_type", $._type))
         )
@@ -545,7 +540,7 @@ module.exports = grammar({
 
     initializer: ($) =>
       seq(
-        optional(field("inflight", $.inflight_specifier)),
+        optional(field("phase_specifier", $.phase_specifier)),
         field("ctor_name", "new"),
         field("parameter_list", $.parameter_list),
         field("block", $.block)
@@ -555,21 +550,13 @@ module.exports = grammar({
 
     _return_type: ($) => $._type_annotation,
 
-    method_signature: ($) =>
-      seq(
-        field("name", $.identifier),
-        field("parameter_list", $.parameter_list),
-        optional($._return_type),
-        $._semicolon
-      ),
-
     method_modifiers: ($) =>
       repeat1(
         choice(
           $.extern_modifier,
           $.access_modifier,
           $.static,
-          $.inflight_specifier
+          $.phase_specifier
         )
       ),
 
@@ -580,15 +567,6 @@ module.exports = grammar({
         field("parameter_list", $.parameter_list),
         optional($._return_type),
         choice(field("block", $.block), $._semicolon)
-      ),
-
-    inflight_method_signature: ($) =>
-      seq(
-        field("phase_modifier", $.inflight_specifier),
-        field("name", $.identifier),
-        field("parameter_list", $.parameter_list),
-        optional($._return_type),
-        $._semicolon
       ),
 
     access_modifier: ($) => choice("pub", "protected", "internal"),
@@ -697,7 +675,7 @@ module.exports = grammar({
       );
     },
 
-    closure_modifiers: ($) => repeat1(choice($.inflight_specifier)),
+    closure_modifiers: ($) => repeat1(choice($.phase_specifier)),
 
     closure: ($) =>
       seq(
