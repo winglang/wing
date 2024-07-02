@@ -137,7 +137,7 @@ export interface RequestOptions {
   readonly referrer?: string;
   /**
    * Timeout for terminating a pending request. None if undefined.
-   * @default undefined
+   * @default - no timeout
    */
   readonly timeout?: Duration;
 }
