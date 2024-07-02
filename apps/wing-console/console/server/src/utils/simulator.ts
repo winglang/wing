@@ -48,6 +48,7 @@ const stopSilently = async (simulator: simulator.Simulator) => {
 export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
   const events = new Emittery<SimulatorEvents>();
   let instance: simulator.Simulator | undefined;
+  // The simulator may need to be fully reloaded after an error. See https://github.com/winglang/wing/issues/5426.
   let needsFullReload = false;
   const fullReload = async (simfile: string) => {
     if (instance) {
