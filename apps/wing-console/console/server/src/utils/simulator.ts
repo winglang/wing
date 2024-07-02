@@ -48,38 +48,51 @@ const stopSilently = async (simulator: simulator.Simulator) => {
 export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
   const events = new Emittery<SimulatorEvents>();
   let instance: simulator.Simulator | undefined;
+  let needsFullReload = false;
+  const fullReload = async (simfile: string) => {
+    if (instance) {
+      await stopSilently(instance);
+    }
+    instance = new simulator.Simulator({
+      simfile,
+      stateDir: props?.stateDir,
+    });
+    instance.onTrace({
+      callback(trace) {
+        events.emit("trace", trace);
+      },
+    });
+    instance.onResourceLifecycleEvent({
+      callback(event) {
+        events.emit("resourceLifecycleEvent", event);
+      },
+    });
+    await events.emit("starting", { instance });
+    await instance.start();
+    await events.emit("started");
+  };
   const handleExistingInstance = async (simfile: string): Promise<boolean> => {
     if (!instance) {
       return true;
     }
-    await events.emit("starting", { instance });
-    await instance.update(simfile);
-    await events.emit("started");
+    if (needsFullReload) {
+      await fullReload(simfile);
+      needsFullReload = false;
+    } else {
+      await events.emit("starting", { instance });
+      await instance.update(simfile);
+      await events.emit("started");
+    }
     return false;
   };
   const start = async (simfile: string) => {
     try {
       const shouldStartSim = await handleExistingInstance(simfile);
       if (shouldStartSim) {
-        instance = new simulator.Simulator({
-          simfile,
-          stateDir: props?.stateDir,
-        });
-        instance.onTrace({
-          callback(trace) {
-            events.emit("trace", trace);
-          },
-        });
-        instance.onResourceLifecycleEvent({
-          callback(event) {
-            events.emit("resourceLifecycleEvent", event);
-          },
-        });
-        await events.emit("starting", { instance });
-        await instance.start();
-        await events.emit("started");
+        await fullReload(simfile);
       }
     } catch (error) {
+      needsFullReload = true;
       await events.emit(
         "error",
         new Error(
