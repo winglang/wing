@@ -10,7 +10,7 @@ use super::{ExprId, CLASS_INFLIGHT_INIT_NAME};
 #[derive(Debug)]
 pub struct Lifts {
 	// TODO: make all these private and add accessors+helper logic
-	/// All the lifts. Map from method to a map from inflight code to lift qualifications.
+	/// All the lifts. Map from method to a map from preflight code to lift qualifications.
 	pub lifts_qualifications: BTreeMap<String, BTreeMap<String, LiftQualification>>,
 
 	/// All the captures. The key is token the value is the preflight code.

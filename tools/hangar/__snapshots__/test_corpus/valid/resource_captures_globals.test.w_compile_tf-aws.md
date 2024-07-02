@@ -362,11 +362,14 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -517,6 +520,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "myPut": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
             [Another, ["myStaticMethod"]],
             [globalAnother, ["myMethod"]],
             [globalAnother.first.myResource, ["put"]],
@@ -532,6 +536,7 @@ class $Root extends $stdlib.std.Resource {
             [this.localTopic, ["publish"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [Another, []],
             [globalAnother, []],
             [globalAnother.first.myResource, []],

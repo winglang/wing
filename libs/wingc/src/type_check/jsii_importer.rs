@@ -732,9 +732,14 @@ impl<'a> JsiiImporter<'a> {
 			implements: vec![],
 			is_abstract: jsii_class.abstract_.unwrap_or(false),
 			phase: class_phase,
+			defined_in_phase: Phase::Preflight,
 			docs: Docs::from(&jsii_class.docs),
 			std_construct_args: false, // Temporary value, will be updated once we parse the initializer args
 			lifts: None,
+
+			// uid is used to create unique names class types so we can access the correct type regardless of type name shadowing,
+			// this isn't relevant for imported types (that aren't code generated), so we can default to 0
+			uid: 0,
 		};
 		let mut new_type = self.wing_types.add_type(Type::Class(class_spec));
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);

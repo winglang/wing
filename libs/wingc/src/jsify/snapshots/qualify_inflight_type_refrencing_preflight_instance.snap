@@ -5,24 +5,20 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```w
 
-    bring cloud;
-    class YourType {
-      pub b: cloud.Bucket;
-      new() {
-        this.b = new cloud.Bucket();
-      }
+    class PreflightC {
+      pub inflight bar() {}
     }
-    class MyType {
-      pub y: YourType;
-      new() {
-        this.y = new YourType();
-      }
-    }
+    let pc = new PreflightC();
 
-    let t = new MyType();
+    inflight class InflightC {
+      pub foo() {
+        pc.bar();
+      }
+    }
 
     test "test" {
-      t.y.b.put("hello", "world");
+      let ic = new InflightC();
+      ic.foo();
     }
     
 ```
@@ -32,7 +28,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $t_y_b }) {
+module.exports = function({ $InflightC }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -40,7 +36,8 @@ module.exports = function({ $t_y_b }) {
       return $obj;
     }
     async handle() {
-      (await $t_y_b.put("hello", "world"));
+      const ic = (await (async () => {const o = new $InflightC(); await o.$inflight_init?.(); return o; })());
+      (await ic.foo());
     }
   }
   return $Closure1;
@@ -48,34 +45,37 @@ module.exports = function({ $t_y_b }) {
 //# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.MyType-1.cjs
+## inflight.InflightC-1.cjs
 
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({  }) {
-  class MyType {
-    constructor({  }) {
+module.exports = function({ $pc }) {
+  class InflightC {
+    async foo() {
+      (await $pc.bar());
     }
   }
-  return MyType;
+  return InflightC;
 }
-//# sourceMappingURL=inflight.MyType-1.cjs.map
+//# sourceMappingURL=inflight.InflightC-1.cjs.map
 ```
 
-## inflight.YourType-1.cjs
+## inflight.PreflightC-1.cjs
 
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
-  class YourType {
+  class PreflightC {
     constructor({  }) {
     }
+    async bar() {
+    }
   }
-  return YourType;
+  return PreflightC;
 }
-//# sourceMappingURL=inflight.YourType-1.cjs.map
+//# sourceMappingURL=inflight.PreflightC-1.cjs.map
 ```
 
 ## preflight.cjs
@@ -94,24 +94,22 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const cloud = $stdlib.cloud;
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
-    class YourType extends $stdlib.std.Resource {
+    class PreflightC extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.YourType-1.cjs")({
+          require("${$helpers.normalPath(__dirname)}/inflight.PreflightC-1.cjs")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const YourTypeClient = ${YourType._toInflightType()};
-            const client = new YourTypeClient({
+            const PreflightCClient = ${PreflightC._toInflightType()};
+            const client = new PreflightCClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -120,27 +118,29 @@ class $Root extends $stdlib.std.Resource {
       }
       get _liftMap() {
         return ({
+          "bar": [
+          ],
           "$inflight_init": [
           ],
         });
       }
     }
-    class MyType extends $stdlib.std.Resource {
+    class InflightC extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.y = new YourType(this, "YourType");
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.MyType-1.cjs")({
+          require("${$helpers.normalPath(__dirname)}/inflight.InflightC-1.cjs")({
+            $pc: ${$stdlib.core.liftObject(pc)},
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const MyTypeClient = ${MyType._toInflightType()};
-            const client = new MyTypeClient({
+            const InflightCClient = ${InflightC._toInflightType()};
+            const client = new InflightCClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -149,11 +149,17 @@ class $Root extends $stdlib.std.Resource {
       }
       get _liftMap() {
         return ({
+          "foo": [
+            [pc, ["bar"]],
+          ],
           "$inflight_init": [
+            [pc, []],
           ],
         });
       }
     }
+    if ($preflightTypesMap[2]) { throw new Error("InflightC is already in type map"); }
+    $preflightTypesMap[2] = InflightC;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -163,7 +169,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $t_y_b: ${$stdlib.core.liftObject(t.y.b)},
+            $InflightC: ${$stdlib.core.liftObject(InflightC)},
           })
         `;
       }
@@ -181,15 +187,17 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [t.y.b, ["put"]],
+            [$helpers.preflightClassSingleton(this, 2), ["foo"]],
+            [InflightC, []],
           ],
           "$inflight_init": [
-            [t.y.b, []],
+            [$helpers.preflightClassSingleton(this, 2), []],
+            [InflightC, []],
           ],
         });
       }
     }
-    const t = new MyType(this, "MyType");
+    const pc = new PreflightC(this, "PreflightC");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
