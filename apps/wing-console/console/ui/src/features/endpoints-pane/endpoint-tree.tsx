@@ -178,6 +178,7 @@ export const EndpointTree = () => {
 
   const onHideEndpoint = useCallback(
     async (endpoint: EndpointItem) => {
+      setSelectedEndpoint(endpoint);
       await hideEndpoint.mutateAsync({ resourcePath: endpoint.id });
       showNotification(`Endpoint "${endpoint.label}" is hidden`, {
         type: "info",
