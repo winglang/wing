@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ set.test.wsim » root/env0/test:set()
+pass ─ set.test.wsim » Test.UsGXDc3NII/env0/test:set()
 
 Tests 1 passed (1)
 Snapshots 1 skipped

@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ assert.test.wsim » root/env0/test:expect
+pass ─ assert.test.wsim » Test.xuWpJkydBG/env0/test:expect
 
 Tests 1 passed (1)
 Snapshots 1 skipped

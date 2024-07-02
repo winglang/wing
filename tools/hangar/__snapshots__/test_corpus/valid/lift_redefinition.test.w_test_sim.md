@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ lift_redefinition.test.wsim » root/env0/test:test
+pass ─ lift_redefinition.test.wsim » Test.-YgSqM5Mlr/env0/test:test
 
 Tests 1 passed (1)
 Snapshots 1 skipped

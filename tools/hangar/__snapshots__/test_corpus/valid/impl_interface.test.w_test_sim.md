@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ impl_interface.test.wsim » root/env0/test:can call inherited inflight interface method
+pass ─ impl_interface.test.wsim » Test.acGNlLBiQz/env0/test:can call inherited inflight interface method
 
 Tests 1 passed (1)
 Snapshots 1 skipped

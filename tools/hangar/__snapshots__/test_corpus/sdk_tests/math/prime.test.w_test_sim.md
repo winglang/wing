@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ prime.test.wsim » root/env0/test:inflight prime numbers
+pass ─ prime.test.wsim » Test.Y0yibIp1jp/env0/test:inflight prime numbers
 
 Tests 1 passed (1)
 Snapshots 1 skipped

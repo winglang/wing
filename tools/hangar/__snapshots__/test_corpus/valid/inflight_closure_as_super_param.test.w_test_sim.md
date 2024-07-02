@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ inflight_closure_as_super_param.test.wsim » root/env0/test:boom!
+pass ─ inflight_closure_as_super_param.test.wsim » Test.R46r-L6biu/env0/test:boom!
 
 Tests 1 passed (1)
 Snapshots 1 skipped

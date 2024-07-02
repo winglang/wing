@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ list.test.wsim » root/env0/test:list
+pass ─ list.test.wsim » Test.b0p_1q2kp0/env0/test:list
 
 Tests 1 passed (1)
 Snapshots 1 skipped

@@ -39,8 +39,9 @@ class $Root extends $stdlib.std.Resource {
     for (const c of $helpers.nodeof(this).children) {
       console.log($helpers.nodeof(c).path);
     }
+    const rootMatch = ({"true": "Test.", "false": "root"});
     (expect.Util.notNil($helpers.nodeof(this)));
-    (expect.Util.equal(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(($helpers.nodeof(this).path.split("/")), 0), "root"));
+    (expect.Util.match(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(($helpers.nodeof(this).path.split("/")), 0), $helpers.lookup(rootMatch, String.raw({ raw: ["", ""] }, $helpers.nodeof(this).app.isTestEnvironment))));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

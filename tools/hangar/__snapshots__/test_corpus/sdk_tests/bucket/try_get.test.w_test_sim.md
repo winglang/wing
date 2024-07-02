@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ try_get.test.wsim » root/env0/test:tryGet
+pass ─ try_get.test.wsim » Test.4JEIWA2idp/env0/test:tryGet
 
 Tests 1 passed (1)
 Snapshots 1 skipped
