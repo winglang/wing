@@ -387,7 +387,7 @@ pub class Model {
 
 `Model` has two public inflight methods, `invoke` and `printModelId`.
 Inside the `onLift` method, the class checks if the "invoke" method was one of the operations requested by the inflight host.
-It then check if inflight host that's trying to use `Model` is an AWS Lambda function, and if so, it adds a [policy statement](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) to the Lambda function that allows it to invoke the model.
+It then checks if inflight host is an AWS Lambda function, and if so, it adds a [policy statement](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) to the Lambda function that allows it to invoke the model.
 
 Under the hood, the compiler will call `onLift` on the `Model` class once for each inflight host that uses it.
 `onLift` should not be called directly.
