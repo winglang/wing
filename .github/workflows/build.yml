@@ -316,7 +316,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
+            Console preview environment is available <a href="https://${{env.APP_NAME}}.fly.dev" target="_blank">here</a> :rocket:
 
             ###### Last Updated (UTC) ${{steps.deploy-fly.outputs.deploytime }}
           comment_tag: Console preview environment
