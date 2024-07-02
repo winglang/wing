@@ -843,7 +843,7 @@ Phase-independent methods take on the additional restriction that they
 cannot mutate fields of the resource. For example, the following is disallowed:
 
 ```TS
-resource Bucket {
+class Bucket {
   name: str; // preflight field
 
   init() {
