@@ -2,7 +2,7 @@ import { ITerraformDependable } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Topic as AWSTopic } from "./topic";
-import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
+import { S3Bucket, S3BucketCorsRule } from "../.gen/providers/aws/s3-bucket";
 import {
   S3BucketNotification,
   S3BucketNotificationTopic,
@@ -61,7 +61,12 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     this.public = props.public ?? false;
 
-    this.bucket = createEncryptedBucket(this, this.public);
+    this.bucket = createEncryptedBucket(
+      this,
+      this.public,
+      "Default",
+      props.corsRules
+    );
   }
 
   public addObject(key: string, body: string): void {
@@ -90,6 +95,9 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
       [cloud.BucketInflightMethods.METADATA]: [],
       [cloud.BucketInflightMethods.COPY]: [],
       [cloud.BucketInflightMethods.RENAME]: [],
+      [cloud.BucketInflightMethods.START_UPLOAD]: [],
+      [cloud.BucketInflightMethods.COMPLETE_UPLOAD]: [],
+      [cloud.BucketInflightMethods.UPLOAD_PART]: [],
     };
   }
 
@@ -173,7 +181,8 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 export function createEncryptedBucket(
   scope: Construct,
   isPublic: boolean,
-  name: string = "Default"
+  name: string = "Default",
+  corsRules: cloud.BucketCorsRule[] = []
 ): S3Bucket {
   const bucketPrefix = ResourceNames.generateName(scope, BUCKET_PREFIX_OPTS);
 
@@ -193,8 +202,20 @@ export function createEncryptedBucket(
 
   const isTestEnvironment = App.of(scope).isTestEnvironment;
 
+  const s3CorsRules: S3BucketCorsRule[] = [];
+  (corsRules || []).forEach((rule) => {
+    s3CorsRules.push({
+      allowedHeaders: rule.allowedHeaders || [],
+      allowedMethods: rule.allowedMethods || [],
+      allowedOrigins: rule.allowedOrigins || [],
+      exposeHeaders: rule.exposeHeaders || [],
+      maxAgeSeconds: rule.maxAgeSeconds || undefined,
+    });
+  });
+
   const bucket = new S3Bucket(scope, name, {
     bucketPrefix,
+    corsRule: s3CorsRules,
     forceDestroy: !!isTestEnvironment,
   });
 

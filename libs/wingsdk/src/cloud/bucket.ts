@@ -22,6 +22,36 @@ export interface BucketProps {
    * @default false
    */
   readonly public?: boolean;
+  /**
+   * The CORS rules for the bucket.
+   */
+  readonly corsRules?: BucketCorsRule[];
+}
+
+/**
+ * CORS rules for a bucket.
+ */
+export interface BucketCorsRule {
+  /**
+   * The HTTP methods that are allowed.
+   */
+  readonly allowedMethods?: string[];
+  /**
+   * The origins that are allowed.
+   */
+  readonly allowedOrigins?: string[];
+  /**
+   * The headers that are allowed.
+   */
+  readonly allowedHeaders?: string[];
+  /**
+   * The time in seconds that the preflight request is valid.
+   */
+  readonly maxAgeSeconds?: number;
+  /**
+   * The headers that are exposed.
+   */
+  readonly exposeHeaders?: string[];
 }
 
 /**
@@ -263,7 +293,7 @@ export interface BucketGetOptions {
 /**
  * Options for `Bucket.tryGet()`.
  */
-export interface BucketTryGetOptions extends BucketGetOptions {}
+export interface BucketTryGetOptions extends BucketGetOptions { }
 
 /**
  * Options for `Bucket.put()`.
@@ -318,6 +348,45 @@ export interface BucketSignedUrlOptions {
    * @default BucketSignedUrlAction.DOWNLOAD
    */
   readonly action?: BucketSignedUrlAction;
+
+  /**
+   * The multipart upload, , if the signed url is a multipart upload.
+   * @default undefined
+   */
+  readonly multipartUpload?: MultipartUpload;
+
+  /**
+   * The upload part number, if the signed url is a multipart upload.
+   * @default undefined
+   */
+  readonly partNumber?: number;
+}
+
+/**
+ * Object representing a multipart upload operation
+ * Created using `startUpload()` and then passed
+ * to `completeUpload()` to finish the upload.
+ */
+export interface MultipartUpload {
+  /**
+   * The upload id for the multipart upload.
+   */
+  readonly uploadId: string;
+
+  /**
+   * The key of the object being uploaded.
+   */
+  readonly key: string;
+
+  /**
+   * The parts that have been uploaded.
+   */
+  readonly parts: UploadedPart[];
+}
+
+export interface UploadedPart {
+  readonly num: number;
+  readonly etag: string;
 }
 
 /**
@@ -457,27 +526,51 @@ export interface IBucketClient {
    * @inflight
    */
   rename(srcKey: string, dstKey: string): Promise<void>;
+
+  /**
+   * Initiate a multipart upload to a given key in the bucket.
+   * @param key The key to upload to
+   * @returns The upload id for the multipart upload
+   * @inflight
+   */
+  startUpload(key: string): Promise<MultipartUpload>;
+
+  /**
+   * Complete a multipart upload to a given key in the bucket.
+   * @inflight
+   */
+  completeUpload(multipartUpload: MultipartUpload): Promise<void>;
+
+  /**
+   * Put a part of an object in a multipart upload.
+   * @inflight
+   */
+  uploadPart(
+    multipartUpload: MultipartUpload,
+    partNumber: number,
+    body: string
+  ): Promise<void>;
 }
 
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateOptions {}
+export interface BucketOnCreateOptions { }
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteOptions {}
+export interface BucketOnDeleteOptions { }
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateOptions {}
+export interface BucketOnUpdateOptions { }
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventOptions {}
+export interface BucketOnEventOptions { }
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -570,4 +663,10 @@ export enum BucketInflightMethods {
   COPY = "copy",
   /** `Bucket.rename` */
   RENAME = "rename",
+  /** `Bucket.startUpload` */
+  START_UPLOAD = "startUpload",
+  /** `Bucket.completeUpload */
+  COMPLETE_UPLOAD = "completeUpload",
+  /** `Bucket.uploadPart` */
+  UPLOAD_PART = "uploadPart",
 }

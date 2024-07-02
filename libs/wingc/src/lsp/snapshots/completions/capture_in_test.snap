@@ -1,6 +1,18 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: completeMultipartUpload
+  kind: 2
+  detail: "inflight (uploadId: str): void"
+  documentation:
+    kind: markdown
+    value: Complete a multipart upload to a given key in the bucket.
+  sortText: ff|completeMultipartUpload
+  insertText: completeMultipartUpload($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: copy
   kind: 2
   detail: "inflight (srcKey: str, dstKey: str): void"
@@ -81,6 +93,18 @@ source: libs/wingc/src/lsp/completions.rs
     value: "Get the metadata of an object in the bucket.\n\n*@Throws* *if there is no object with the given key.*"
   sortText: ff|metadata
   insertText: metadata($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: multipartUpload
+  kind: 2
+  detail: "inflight (key: str): str"
+  documentation:
+    kind: markdown
+    value: "Initiate a multipart upload to a given key in the bucket.\n\n#### Returns\nThe upload id for the multipart upload"
+  sortText: ff|multipartUpload
+  insertText: multipartUpload($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

@@ -221,7 +221,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketSignedUrlOptions {\n  action?: BucketSignedUrlAction;\n  duration?: duration;\n}\n```\n---\nOptions for `Bucket.signedUrl()`."
+    value: "```wing\nstruct BucketSignedUrlOptions {\n  action?: BucketSignedUrlAction;\n  duration?: duration;\n  partNumber?: num;\n  uploadId?: str;\n}\n```\n---\nOptions for `Bucket.signedUrl()`."
   sortText: hh|BucketSignedUrlOptions
 - label: BucketTryGetOptions
   kind: 22
@@ -383,7 +383,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IBucketClient {\n  inflight copy(): void;\n  inflight delete(): void;\n  inflight exists(): bool;\n  inflight get(): str;\n  inflight getJson(): Json;\n  inflight list(): Array<str>;\n  /* ... */\n}\n```\n---\nInflight interface for `Bucket`."
+    value: "```wing\ninterface IBucketClient {\n  inflight completeMultipartUpload(): void;\n  inflight copy(): void;\n  inflight delete(): void;\n  inflight exists(): bool;\n  inflight get(): str;\n  inflight getJson(): Json;\n  /* ... */\n}\n```\n---\nInflight interface for `Bucket`."
   sortText: ii|IBucketClient
 - label: IBucketEventHandler
   kind: 8

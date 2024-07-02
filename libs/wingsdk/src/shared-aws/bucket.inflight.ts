@@ -16,8 +16,11 @@ import {
   NotFound,
   NoSuchKey,
   PutObjectCommand,
+  UploadPartCommand,
   S3Client,
   HeadBucketCommand,
+  CreateMultipartUploadCommand,
+  CompleteMultipartUploadCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import mime from "mime-types";
@@ -30,6 +33,7 @@ import {
   BucketSignedUrlAction,
   BucketGetOptions,
   BucketTryGetOptions,
+  MultipartUpload,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -37,7 +41,7 @@ export class BucketClient implements IAwsBucketClient {
   constructor(
     private readonly bucketName: string,
     private readonly s3Client: S3Client = new S3Client({})
-  ) {}
+  ) { }
 
   public async bucketRegion(): Promise<string> {
     const res = await this.s3Client.send(
@@ -140,8 +144,7 @@ export class BucketClient implements IAwsBucketClient {
         );
       } catch (e) {
         throw new Error(
-          `Object content could not be read as text (key=${key}): ${
-            (e as Error).stack
+          `Object content could not be read as text (key=${key}): ${(e as Error).stack
           })}`
         );
       }
@@ -391,7 +394,7 @@ export class BucketClient implements IAwsBucketClient {
     key: string,
     opts?: BucketSignedUrlOptions
   ): Promise<string> {
-    let s3Command: GetObjectCommand | PutObjectCommand;
+    let s3Command: GetObjectCommand | PutObjectCommand | UploadPartCommand;
 
     // Set default action to DOWNLOAD if not provided
     const action = opts?.action ?? BucketSignedUrlAction.DOWNLOAD;
@@ -410,17 +413,33 @@ export class BucketClient implements IAwsBucketClient {
         });
         break;
       case BucketSignedUrlAction.UPLOAD:
-        s3Command = new PutObjectCommand({
-          Bucket: this.bucketName,
-          Key: key,
-        });
+        if (opts?.multipartUpload !== undefined) {
+          if (opts.partNumber === undefined) {
+            throw new Error(
+              "partNumber must be provided for multipart uploads"
+            );
+          }
+
+          s3Command = new UploadPartCommand({
+            Bucket: this.bucketName,
+            Key: key,
+            UploadId: opts.multipartUpload.uploadId,
+            PartNumber: opts.partNumber,
+          });
+        } else {
+          s3Command = new PutObjectCommand({
+            Bucket: this.bucketName,
+            Key: key,
+          });
+        }
         break;
       default:
         throw new Error(`Invalid action: ${opts?.action}`);
     }
 
     // Generate the presigned URL
-    const signedUrl = await getSignedUrl(this.s3Client, s3Command, {
+    // doing `s3Command as any` because `UploadPartCommand` doesn't work here together with `GetObjectCommand`/`PutObjectCommand`
+    const signedUrl = await getSignedUrl(this.s3Client, s3Command as any, {
       expiresIn: opts?.duration?.seconds ?? 900,
     });
 
@@ -462,4 +481,62 @@ export class BucketClient implements IAwsBucketClient {
       await this.s3Client.send(command);
     return region;
   }
+
+  /**
+   * Create a multipart upload for the given key.
+   * @param key The key of the object in the bucket.
+   * @returns Object representing the multipart upload.
+   * @inflight
+   */
+  public async startUpload(key: string): Promise<MultipartUpload> {
+    let req = new CreateMultipartUploadCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+    let response = await this.s3Client.send(req);
+
+    if (!response.UploadId) {
+      throw new Error(`Failed to create multipart upload for key: ${key}`);
+    }
+    return {
+      uploadId: response.UploadId, key, parts: []
+    };
+  }
+
+  /**
+   * Complete a multipart upload to a given key in the bucket.
+   * @param multipartUpload The multipart upload to complete
+   * @inflight
+   */
+  public async completeUpload(multipartUpload: MultipartUpload): Promise<void> {
+    let req = new CompleteMultipartUploadCommand({
+      Bucket: this.bucketName,
+      Key: multipartUpload.key,
+      UploadId: multipartUpload.uploadId,
+      MultipartUpload: {
+        Parts: multipartUpload.parts.map((part) => ({ ETag: part.etag, PartNumber: part.num })),
+      },
+    });
+    await this.s3Client.send(req);
+  }
+
+  /** 
+   * Put a part of a multipart upload to the bucket.
+   * @inflight
+   */
+  public async uploadPart(multipartUpload: MultipartUpload, partNumber: number, body: string): Promise<void> {
+    let req = new UploadPartCommand({
+      Bucket: this.bucketName,
+      Key: multipartUpload.key,
+      UploadId: multipartUpload.uploadId,
+      PartNumber: partNumber,
+      Body: body,
+    });
+    let response = await this.s3Client.send(req);
+    if (!response.ETag) {
+      throw new Error(`Failed to upload part ${partNumber} for key: ${multipartUpload.key}`);
+    }
+    multipartUpload.parts.push({ num: partNumber, etag: response.ETag });
+  }
 }
+

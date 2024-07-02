@@ -114,7 +114,10 @@ export function calculateBucketPermissions(
   if (
     ops.includes(cloud.BucketInflightMethods.PUT) ||
     ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
-    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL) ||
+    ops.includes(cloud.BucketInflightMethods.START_UPLOAD) ||
+    ops.includes(cloud.BucketInflightMethods.COMPLETE_UPLOAD) ||
+    ops.includes(cloud.BucketInflightMethods.UPLOAD_PART)
   ) {
     actions.push("s3:PutObject*", "s3:Abort*");
   }
@@ -160,6 +163,12 @@ export function calculateBucketPermissions(
   ) {
     actions.push("s3:CopyObject");
   }
+
+  // multipart upload signed url
+  if (ops.includes(cloud.BucketInflightMethods.SIGNED_URL)) {
+    actions.push("s3:UploadPart");
+  }
+
   if (actions.length === 0) {
     return [];
   }

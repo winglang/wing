@@ -161,6 +161,7 @@ new cloud.Bucket(props?: BucketProps);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.completeMultipartUpload">completeMultipartUpload</a></code> | Complete a multipart upload to a given key in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.copy">copy</a></code> | Copy an object to a new location in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
@@ -168,6 +169,7 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.metadata">metadata</a></code> | Get the metadata of an object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.multipartUpload">multipartUpload</a></code> | Initiate a multipart upload to a given key in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
@@ -316,6 +318,22 @@ Run an inflight whenever a file is updated in the bucket.
 
 ---
 
+##### `completeMultipartUpload` <a name="completeMultipartUpload" id="@winglang/sdk.cloud.IBucketClient.completeMultipartUpload"></a>
+
+```wing
+inflight completeMultipartUpload(uploadId: str): void
+```
+
+Complete a multipart upload to a given key in the bucket.
+
+###### `uploadId`<sup>Required</sup> <a name="uploadId" id="@winglang/sdk.cloud.IBucketClient.completeMultipartUpload.parameter.uploadId"></a>
+
+- *Type:* str
+
+The upload id for the multipart upload.
+
+---
+
 ##### `copy` <a name="copy" id="@winglang/sdk.cloud.IBucketClient.copy"></a>
 
 ```wing
@@ -454,6 +472,22 @@ Get the metadata of an object in the bucket.
 - *Type:* str
 
 Key of the object.
+
+---
+
+##### `multipartUpload` <a name="multipartUpload" id="@winglang/sdk.cloud.IBucketClient.multipartUpload"></a>
+
+```wing
+inflight multipartUpload(key: str): str
+```
+
+Initiate a multipart upload to a given key in the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.multipartUpload.parameter.key"></a>
+
+- *Type:* str
+
+The key to upload to.
 
 ---
 
@@ -976,6 +1010,8 @@ let BucketSignedUrlOptions = cloud.BucketSignedUrlOptions{ ... };
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.action">action</a></code> | <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction">BucketSignedUrlAction</a></code> | The action allowed by the signed URL. |
 | <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed URL to expire. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.partNumber">partNumber</a></code> | <code>num</code> | The upload part number, if the signed url is a multipart upload. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.uploadId">uploadId</a></code> | <code>str</code> | The upload id, if the signed url is a multipart upload. |
 
 ---
 
@@ -1002,6 +1038,32 @@ duration: duration;
 - *Default:* 15m
 
 The duration for the signed URL to expire.
+
+---
+
+##### `partNumber`<sup>Optional</sup> <a name="partNumber" id="@winglang/sdk.cloud.BucketSignedUrlOptions.property.partNumber"></a>
+
+```wing
+partNumber: num;
+```
+
+- *Type:* num
+- *Default:* undefined
+
+The upload part number, if the signed url is a multipart upload.
+
+---
+
+##### `uploadId`<sup>Optional</sup> <a name="uploadId" id="@winglang/sdk.cloud.BucketSignedUrlOptions.property.uploadId"></a>
+
+```wing
+uploadId: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+The upload id, if the signed url is a multipart upload.
 
 ---
 

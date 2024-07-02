@@ -3,7 +3,10 @@ import { App } from "./app";
 import { Function as GCPFunction } from "./function";
 import { calculateBucketPermissions } from "./permissions";
 import { ProjectService } from "../.gen/providers/google/project-service";
-import { StorageBucket } from "../.gen/providers/google/storage-bucket";
+import {
+  StorageBucket,
+  StorageBucketCors,
+} from "../.gen/providers/google/storage-bucket";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import { Id } from "../.gen/providers/random/id";
@@ -73,6 +76,16 @@ export class Bucket extends cloud.Bucket {
         disableOnDestroy: false,
       }
     );
+
+    const s3CorsRules: StorageBucketCors[] = [];
+    (props.corsRules || []).forEach((rule) => {
+      s3CorsRules.push({
+        responseHeader: rule.allowedHeaders || [],
+        method: rule.allowedMethods || [],
+        origin: rule.allowedOrigins || [],
+        maxAgeSeconds: rule.maxAgeSeconds || undefined,
+      });
+    });
 
     this.bucket = new StorageBucket(this, "Default", {
       name: bucketName + "-" + randomId.hex,

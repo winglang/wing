@@ -13,6 +13,7 @@ import {
   BucketSignedUrlOptions,
   BucketGetOptions,
   BucketTryGetOptions,
+  MultipartUpload,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -115,8 +116,7 @@ export class BucketClient implements IBucketClient {
       );
     } catch (e) {
       throw new Error(
-        `Object contents could not be read as text (key=${key}): ${
-          (e as Error).stack
+        `Object contents could not be read as text (key=${key}): ${(e as Error).stack
         })}`
       );
     }
@@ -321,5 +321,21 @@ export class BucketClient implements IBucketClient {
       });
       stream.on("error", reject);
     });
+  }
+
+  public async startUpload(_key: string): Promise<MultipartUpload> {
+    throw new Error(`startUpload is not implemented yet for tf-azure)`);
+  }
+
+  public async completeUpload(_multipartUpload: MultipartUpload): Promise<void> {
+    throw new Error(
+      `completeUpload is not implemented yet for tf-azure)`
+    );
+  }
+
+  public async uploadPart(_multipartUpload: MultipartUpload, _partNumber: number, _body: string): Promise<void> {
+    throw new Error(
+      `uploadPart is not implemented yet for tf-azure`
+    );
   }
 }
