@@ -38,7 +38,7 @@ const UNDOCUMENTED_STD_FILES = [
   "README",
   "index",
   "test-runner",
-  "resource",
+  // "resource",
   "test",
   "range",
   "generics",
