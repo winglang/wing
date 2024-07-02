@@ -15,7 +15,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { R } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 import { useTheme } from "./theme-provider.js";
 
@@ -24,7 +23,7 @@ interface Notification {
   body?: string | React.ReactNode;
   id: string;
   show: boolean;
-  type?: "success" | "error";
+  type?: "success" | "error" | "info";
   autoCloseTimeoutId?: ReturnType<typeof setTimeout>;
 }
 
@@ -35,7 +34,7 @@ interface NotificationsContext {
     options?: {
       body?: string | React.ReactNode;
       autoCloseDelayMs?: number;
-      type?: "success" | "error";
+      type?: "success" | "error" | "info";
     },
   ): void;
   closeNotification(notificationId: string): void;
@@ -101,12 +100,20 @@ function NotificationsContainer() {
                 <div className="p-3">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      {notification.type === "error" ? (
+                      {notification.type === "error" && (
                         <ExclamationCircleIcon
                           className={"h-6 w-6 text-red-400"}
                           aria-hidden="true"
                         />
-                      ) : (
+                      )}
+                      {notification.type === "info" && (
+                        <ExclamationCircleIcon
+                          className={"h-6 w-6 text-blue-400"}
+                          aria-hidden="true"
+                        />
+                      )}
+                      {(notification.type === "success" ||
+                        notification.type === undefined) && (
                         <CheckCircleIcon
                           className="h-6 w-6 text-green-400"
                           aria-hidden="true"

@@ -47,6 +47,17 @@ const getEndpointDetails = async (
 
 export const createEndpointRouter = () => {
   return createRouter({
+    "endpoint.requireAcceptWarning": createProcedure.query(async ({ ctx }) => {
+      const requireAcceptWarning = await ctx.requireAcceptEndpointWarning?.();
+      return {
+        requireAcceptWarning: requireAcceptWarning ?? false,
+      };
+    }),
+    "endpoint.notifyAcceptWarning": createProcedure.mutation(
+      async ({ ctx }) => {
+        await ctx.notifyAcceptEndpointWarning?.();
+      },
+    ),
     "endpoint.list": createProcedure.query(async ({ input, ctx }) => {
       if (ctx.appState() !== "success") {
         return [];

@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 import { createConsoleServer } from "@wingconsole/server";
+import { Json } from "@winglang/sdk/lib/std/json.js";
 import { createServer as createViteServer } from "vite";
 
 import { viteConfig } from "./config.mjs";
@@ -44,6 +45,9 @@ const options = parseArgs({
     analyticsAnonymousId: undefined,
     async requireSignIn() {
       return options.requireSignIn ?? false;
+    },
+    async requireAcceptEndpointWarning() {
+      return options.requireAcceptEndpointWarning ?? false;
     },
   });
 
