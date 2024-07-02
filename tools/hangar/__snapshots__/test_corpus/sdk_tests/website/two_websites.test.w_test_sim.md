@@ -4,7 +4,7 @@
 ```log
 [INFO] deploying two websites | Website server listening on http://<IP>:<PORT>
 [INFO] deploying two websites | Website server listening on http://<IP>:<PORT>
-pass ─ two_websites.test.wsim » Test.OkC5eoU6Os/env0/test:deploying two websites
+pass ─ two_websites.test.wsim » root/env0/test:deploying two websites
 
 Tests 1 passed (1)
 Snapshots 1 skipped

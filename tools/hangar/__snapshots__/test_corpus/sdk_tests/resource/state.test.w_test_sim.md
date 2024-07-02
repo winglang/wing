@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ state.test.wsim » Test.n1ZbdpoAdQ/env0/test:sim.Resource can read and write state
+pass ─ state.test.wsim » root/env0/test:sim.Resource can read and write state
 
 Tests 1 passed (1)
 Snapshots 1 skipped

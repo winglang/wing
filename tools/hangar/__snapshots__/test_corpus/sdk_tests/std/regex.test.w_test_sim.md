@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ regex.test.wsim » Test.a1tz-EvSUl/env0/test:regex
+pass ─ regex.test.wsim » root/env0/test:regex
 
 Tests 1 passed (1)
 Snapshots 1 skipped

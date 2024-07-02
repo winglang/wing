@@ -10,7 +10,7 @@
 6 |     throw "unexpected error!";
   |     ^
 at onStop <ABSOLUTE>/on-stop.test.w:6:5
-pass ─ on-stop.test.wsim » Test.JqcoEl9NSD/env0/test:if a resource throws an error on stopping, it doesn't crash the simulation
+pass ─ on-stop.test.wsim » root/env0/test:if a resource throws an error on stopping, it doesn't crash the simulation
 
 Tests 1 passed (1)
 Snapshots 1 skipped

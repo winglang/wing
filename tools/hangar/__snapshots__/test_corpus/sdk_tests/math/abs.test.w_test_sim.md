@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ abs.test.wsim » Test.-s7ZpHYHqE/env0/test:inflight absolute
+pass ─ abs.test.wsim » root/env0/test:inflight absolute
 
 Tests 1 passed (1)
 Snapshots 1 skipped

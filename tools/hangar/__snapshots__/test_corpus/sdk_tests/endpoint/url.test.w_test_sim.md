@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ url.test.wsim » Test.T8AH28bwMl/env0/test:access endpoint url
+pass ─ url.test.wsim » root/env0/test:access endpoint url
 
 Tests 1 passed (1)
 Snapshots 1 skipped

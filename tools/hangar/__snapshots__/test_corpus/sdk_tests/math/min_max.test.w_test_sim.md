@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ min_max.test.wsim » Test.Saummn56G5/env0/test:inflight min--max
+pass ─ min_max.test.wsim » root/env0/test:inflight min--max
 
 Tests 1 passed (1)
 Snapshots 1 skipped

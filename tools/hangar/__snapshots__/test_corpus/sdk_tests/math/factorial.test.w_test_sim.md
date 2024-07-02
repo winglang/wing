@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ factorial.test.wsim » Test.p-OWAziUgB/env0/test:inflight factorial
+pass ─ factorial.test.wsim » root/env0/test:inflight factorial
 
 Tests 1 passed (1)
 Snapshots 1 skipped
