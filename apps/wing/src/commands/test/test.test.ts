@@ -227,6 +227,7 @@ describe("output-file option", () => {
       clean: true,
       platform: [BuiltinPlatform.SIM],
       outputFile,
+      rootId: "root",
     });
 
     expect(writeResultsSpy).toBeCalledTimes(1);
