@@ -201,7 +201,6 @@ async function testOne(
       async () =>
         compile(entrypoint, {
           ...options,
-          rootId: options.rootId,
           testing: true,
         })
     );
