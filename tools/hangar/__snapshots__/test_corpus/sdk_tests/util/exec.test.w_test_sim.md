@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ exec.test.wsim » root/env0/test:exec()
+pass ─ exec.test.wsim » Test.xaJDJhGoLP/env0/test:exec()
 
 Tests 1 passed (1)
 Snapshots 1 skipped

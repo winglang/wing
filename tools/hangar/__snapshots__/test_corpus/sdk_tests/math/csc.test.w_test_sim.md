@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ csc.test.wsim » root/env0/test:inflight cosecant
+pass ─ csc.test.wsim » Test.zZNQOSSrXH/env0/test:inflight cosecant
 
 Tests 1 passed (1)
 Snapshots 1 skipped

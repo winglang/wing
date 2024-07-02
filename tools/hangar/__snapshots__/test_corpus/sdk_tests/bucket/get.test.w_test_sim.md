@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ get.test.wsim » root/env0/test:get range of an object
+pass ─ get.test.wsim » Test.q5CXOHPxV6/env0/test:get range of an object
 
 Tests 1 passed (1)
 Snapshots 1 skipped

@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ path_vars.test.wsim » root/env0/test:path vars are valid
+pass ─ path_vars.test.wsim » Test.xFrFzaORlR/env0/test:path vars are valid
 
 Tests 1 passed (1)
 Snapshots 1 skipped

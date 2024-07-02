@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ add_row.test.wsim » root/env0/test:addRow
+pass ─ add_row.test.wsim » Test.qBSM5HHeye/env0/test:addRow
 
 Tests 1 passed (1)
 Snapshots 1 skipped

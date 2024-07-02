@@ -3,7 +3,7 @@
 ## stdout.log
 ```log
 [INFO] fetch | I am the target
-pass ─ fetch.test.wsim » root/env0/test:fetch
+pass ─ fetch.test.wsim » Test.fWiqPm3aV3/env0/test:fetch
 
 Tests 1 passed (1)
 Snapshots 1 skipped

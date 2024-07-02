@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ aws-topic.test.wsim » root/env0/test:validates the AWS topic name
+pass ─ aws-topic.test.wsim » Test.j66sDgul7S/env0/test:validates the AWS topic name
 
 Tests 1 passed (1)
 Snapshots 1 skipped

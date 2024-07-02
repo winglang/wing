@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ node.test.wsim » root/env0/test:singleton
+pass ─ node.test.wsim » Test.-ZVbzF5xXR/env0/test:singleton
 
 Tests 1 passed (1)
 Snapshots 1 skipped

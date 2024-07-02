@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ public_url.test.wsim » root/env0/test:publicUrl
+pass ─ public_url.test.wsim » Test.ODUswJa-V2/env0/test:publicUrl
 
 Tests 1 passed (1)
 Snapshots 1 skipped
