@@ -14,6 +14,8 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { LiftMap } from "../core";
 import { createBundle } from "../shared/bundling";
+import { EcsCluster } from "../.gen/providers/aws/ecs-cluster";
+import { EcsCluster as TfAWSEcsCluster } from "./ecs-cluster";
 import {
   AwsInflightHost,
   IAwsInflightHost,
@@ -34,6 +36,9 @@ export class Service extends cloud.Service implements IAwsInflightHost {
   private policyStatments?: any[];
   private dockerFileName: string;
   private service: EcsService;
+  private subnets?: Set<string>;
+  private securityGroups?: Set<string>;
+  private clusterInstance: EcsCluster;
 
   /** @internal */
   public _liftMap?: LiftMap | undefined;
@@ -50,10 +55,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     this.wrapperEntrypoint = join(this.workdir, `${this.assetName}_wrapper.js`);
     this.dockerFileName = `Dockerfile_${this.assetName}`;
     const app = App.of(this) as App;
-
-    // Make sure the app has a docker provider and VPC
-    app.dockerProvider;
-    app.vpc;
+    this.clusterInstance = TfAWSEcsCluster.getOrCreate(this);
 
     const image = new Image(this, "DockerImage", {
       name: `${app.ecr.repositoryUrl}:${this.assetName}`,
@@ -66,6 +68,11 @@ export class Service extends cloud.Service implements IAwsInflightHost {
 
     new RegistryImage(this, "RegistryImage", {
       name: image.name,
+    });
+
+    const logGroup = new CloudwatchLogGroup(this, "LogGroup", {
+      name: `/ecs/${this.assetName}`,
+      retentionInDays: 7,
     });
 
     const executionRole = new IamRole(this, "ExecutionRole", {
@@ -94,17 +101,23 @@ export class Service extends cloud.Service implements IAwsInflightHost {
                   "logs:PutLogEvents",
                   "logs:CreateLogGroup",
                 ],
-                Resource: `arn:aws:ecr:::repository/${image.name}`,
+                Resource: `${logGroup.arn}:*`
               },
               {
                 Effect: "Allow",
                 Action: [
                   "ecr:BatchGetImage",
-                  "ecr:GetDownloadUrlForLayer",
+                  "ecr:GetDownloadUrlForLayer"
+                ],
+                Resource: app.ecr.arn,
+              },
+              {
+                Effect: "Allow",
+                Action: [
                   "ecr:GetAuthorizationToken",
                 ],
-                Resource: `arn:aws:ecr:::repository/${image.name}`,
-              },
+                Resource: "*",
+              }
             ],
           }),
         },
@@ -154,11 +167,6 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       ],
     });
 
-    const logGroup = new CloudwatchLogGroup(this, "LogGroup", {
-      name: `/ecs/${this.assetName}`,
-      retentionInDays: 7,
-    });
-
     const taskDef = new EcsTaskDefinition(this, "Task", {
       family: this.assetName,
       executionRoleArn: executionRole.arn,
@@ -179,7 +187,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
                 logDriver: "awslogs",
                 options: {
                   "awslogs-group": `/ecs/${this.assetName}`,
-                  "awslogs-region": "us-east-1", // TODO: Can I ignore this?
+                  "awslogs-region": app.region,
                   "awslogs-stream-prefix": logGroup.name,
                 },
               },
@@ -192,7 +200,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       cpu: "256",
     });
 
-    const subnetIds = app.subnets.private.map((subnet) => subnet.id);
+    const subnetIds = app.privateSubnetIds;
 
     const sg = new SecurityGroup(this, "SecurityGroup", {
       vpcId: app.vpc.id,
@@ -206,7 +214,6 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       ],
       ingress: [
         {
-          // TODO: Support network config
           fromPort: 0,
           toPort: 0,
           protocol: "-1",
@@ -217,7 +224,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
 
     this.service = new EcsService(this, "Service", {
       name: this.assetName,
-      cluster: app.ecsCluster.arn,
+      cluster: this.clusterInstance.arn,
       desiredCount: 1,
       launchType: "FARGATE",
       taskDefinition: taskDef.arn,
@@ -225,7 +232,12 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       enableExecuteCommand: true,
       networkConfiguration: {
         subnets: subnetIds,
-        securityGroups: [sg.id],
+        securityGroups: Lazy.listValue({
+          produce: () => {
+            const securityGroups = this.securityGroups ? Array.from(this.securityGroups.values()) : [];
+            return [sg.id, ...securityGroups];
+          }
+        }),
       },
     });
   }
@@ -244,9 +256,14 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     }
   }
 
-  public addNetwork(config: NetworkConfig): void {
-    // TODO: handle networking
-    console.log("Adding network", config);
+  public addNetwork(vpcConfig: NetworkConfig): void {
+    if (!this.subnets || !this.securityGroups) {
+      this.subnets = new Set();
+      this.securityGroups = new Set();
+    }
+
+    vpcConfig.subnetIds.forEach((subnet) => this.subnets!.add(subnet));
+    vpcConfig.securityGroupIds.forEach((sg) => this.securityGroups!.add(sg));
   }
 
   /** @internal */
@@ -299,29 +316,28 @@ process.on('SIGINT', handleShutdown);
       throw new Error("Host is not an AWS inflight host");
     }
 
-    const clusterArn = (App.of(this) as App).ecsCluster.arn;
     if (
       ops.includes(cloud.ServiceInflightMethods.START) ||
       ops.includes(cloud.ServiceInflightMethods.STOP)
     ) {
       host.addPolicyStatements({
         actions: ["ecs:UpdateService"],
-        resources: [`${clusterArn}`], // TODO: add the service specific ARN (I think I can just do /this.service.name but need to test)
+        resources: [`arn:aws:ecs:*:*:service/${this.clusterInstance.name}/${this.service.name}`],
       });
     }
 
     if (ops.includes(cloud.ServiceInflightMethods.STARTED)) {
       host.addPolicyStatements({
         actions: ["ecs:DescribeServices"],
-        resources: [`${clusterArn}`], // TODO: add the service specific ARN (I think I can just do /this.service.name but need to test)
+        resources: [`arn:aws:ecs:*:*:service/${this.clusterInstance.name}/${this.service.name}`],
       });
     }
 
     host.addEnvironment(this.envName(), this.service.name);
     host.addEnvironment(
       "ECS_CLUSTER_NAME",
-      (App.of(this) as App).ecsCluster.name
-    ); // TODO: Should I add hash to name?
+      this.clusterInstance.name
+    );
   }
 
   /**

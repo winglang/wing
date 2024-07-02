@@ -6,8 +6,6 @@ import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
 import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
 import { DataAwsVpc } from "../.gen/providers/aws/data-aws-vpc";
 import { EcrRepository } from "../.gen/providers/aws/ecr-repository";
-import { EcsCluster } from "../.gen/providers/aws/ecs-cluster";
-import { EcsClusterCapacityProviders } from "../.gen/providers/aws/ecs-cluster-capacity-providers";
 import { Eip } from "../.gen/providers/aws/eip";
 import { InternetGateway } from "../.gen/providers/aws/internet-gateway";
 import { NatGateway } from "../.gen/providers/aws/nat-gateway";
@@ -36,8 +34,6 @@ export class App extends CdktfApp {
   private _ecr?: EcrRepository;
   private _ecr_auth?: DataAwsEcrAuthorizationToken;
   private _dockerProvider?: DockerProvider;
-  private _ecsCluster?: EcsCluster;
-  private _rootConstruct: Construct;
 
   /** Subnets shared across app */
   public subnets: { [key: string]: (Subnet | DataAwsSubnet)[] };
@@ -51,7 +47,6 @@ export class App extends CdktfApp {
       public: [],
     };
 
-    this._rootConstruct = props.rootConstruct;
     TestRunner._createTree(this, props.rootConstruct);
   }
 
@@ -280,9 +275,8 @@ export class App extends CdktfApp {
     if (this._ecr) {
       return this._ecr;
     }
-
     const ecr = new EcrRepository(this, "Ecr", {
-      name: `${this._rootConstruct.node.id}-images`,
+      name: `${this.node.id.toLowerCase()}-images`,
     });
 
     this._ecr = ecr;
@@ -336,22 +330,24 @@ export class App extends CdktfApp {
   }
 
   /**
-   * The ECS Cluster for the App
+   * Retrieve private subnet ids for the app
    */
-  public get ecsCluster(): EcsCluster {
-    if (this._ecsCluster) {
-      return this._ecsCluster;
+  public get privateSubnetIds(): string[] {
+    // Ensure vpc exists
+    if (!this._vpc) {
+      this.vpc;
     }
+    return this.subnets.private.map((s) => s.id);
+  }
 
-    this._ecsCluster = new EcsCluster(this, "EcsCluster", {
-      name: `${this._rootConstruct.node.id}-cluster`,
-    });
-
-    new EcsClusterCapacityProviders(this, "EcsClusterCapacityProviders", {
-      clusterName: this._ecsCluster.name,
-      capacityProviders: ["FARGATE"],
-    });
-
-    return this._ecsCluster;
+  /**
+   * Retrieve public subnet ids for the app
+   */
+  public get publicSubnetIds(): string[] {
+    // Ensure vpc exists
+    if (!this._vpc) {
+      this.vpc;
+    }
+    return this.subnets.public.map((s) => s.id);
   }
 }
