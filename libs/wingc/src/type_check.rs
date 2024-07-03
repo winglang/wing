@@ -1272,6 +1272,7 @@ impl TypeRef {
 				}
 				true
 			}
+			Type::Optional(v) => v.is_json_legal_value(),
 			Type::Json(Some(v)) => match &v.kind {
 				JsonDataKind::Type(SpannedTypeInfo { type_, .. }) => type_.is_json_legal_value(),
 				JsonDataKind::Fields(fields) => {
@@ -3490,7 +3491,9 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 
 		// If the expected type is Json and the actual type is a Json legal value then we're good
 		if expected_types.iter().any(|t| t.maybe_unwrap_option().is_json()) {
-			if return_type.is_json_legal_value() {
+			// the actual type should be legal value, and match the optionality of the expected type
+			if return_type.is_json_legal_value() && (!expected_types.iter().any(|t| t.is_json()) || !return_type.is_option())
+			{
 				return return_type;
 			}
 		} else {
