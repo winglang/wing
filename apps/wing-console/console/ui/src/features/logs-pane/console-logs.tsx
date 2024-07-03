@@ -18,7 +18,17 @@ import {
   useState,
 } from "react";
 
-const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
+const shortDateTimeFormat = new Intl.DateTimeFormat(undefined, {
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  fractionalSecondDigits: 3,
+});
+
+const longDateTimeFormat = new Intl.DateTimeFormat(undefined, {
+  year: "2-digit",
+  month: "2-digit",
+  day: "2-digit",
   hour: "2-digit",
   minute: "2-digit",
   second: "2-digit",
@@ -98,18 +108,14 @@ const LogEntryRow = memo(
       [log.ctx?.sourcePath],
     );
 
-    const formatDate = useCallback(
-      (timestamp: number) => {
-        const date = new Date(timestamp);
+    const formattedDate = useMemo(() => {
+      const date = new Date(log.timestamp ?? Date.now());
 
-        if (useLongDateFormat) {
-          return `${date.toLocaleDateString()} ${dateTimeFormat.format(date)}`;
-        }
-
-        return dateTimeFormat.format(date);
-      },
-      [useLongDateFormat],
-    );
+      if (useLongDateFormat) {
+        return longDateTimeFormat.format(date);
+      }
+      return shortDateTimeFormat.format(date);
+    }, [log.timestamp, useLongDateFormat]);
 
     return (
       <Fragment>
@@ -157,7 +163,7 @@ const LogEntryRow = memo(
                 "flex-shrink-0 select-none pointer-events-none",
               )}
             >
-              {formatDate(log.timestamp)}
+              {formattedDate}
             </div>
           )}
           <div
