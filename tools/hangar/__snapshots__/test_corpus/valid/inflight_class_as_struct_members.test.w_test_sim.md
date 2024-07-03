@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ inflight_class_as_struct_members.test.wsim » Test.Sv0T7uvcdZ/env0/test:test
+pass ─ inflight_class_as_struct_members.test.wsim » root/env0/test:test
 
 Tests 1 passed (1)
 Snapshots 1 skipped

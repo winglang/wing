@@ -2,8 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ unused_lift.test.wsim » Test.1xPmaHd17F/env0/test:Use class but not method that access lifted object       
-pass ─ unused_lift.test.wsim » Test.1xPmaHd17F/env1/test:Use class but not static method that access lifted object
+pass ─ unused_lift.test.wsim » root/env0/test:Use class but not method that access lifted object       
+pass ─ unused_lift.test.wsim » root/env1/test:Use class but not static method that access lifted object
 
 Tests 2 passed (2)
 Snapshots 1 skipped

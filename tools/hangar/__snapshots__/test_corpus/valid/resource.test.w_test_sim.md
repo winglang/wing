@@ -3,8 +3,8 @@
 ## stdout.log
 ```log
 [INFO] test | counter is: 201
-pass ─ resource.test.wsim » Test.qzb18SqDiu/env0/test:test             
-pass ─ resource.test.wsim » Test.qzb18SqDiu/env1/test:dependency cycles
+pass ─ resource.test.wsim » root/env0/test:test             
+pass ─ resource.test.wsim » root/env1/test:dependency cycles
 
 Tests 2 passed (2)
 Snapshots 1 skipped

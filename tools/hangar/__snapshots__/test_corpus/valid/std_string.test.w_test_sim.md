@@ -5,7 +5,7 @@
 [INFO] string | index of "s" in s1 is 0
 [INFO] string | string
 [INFO] string | some strings are immutable
-pass ─ std_string.test.wsim » Test.GwYBsTK3s5/env0/test:string
+pass ─ std_string.test.wsim » root/env0/test:string
 
 Tests 1 passed (1)
 Snapshots 1 skipped

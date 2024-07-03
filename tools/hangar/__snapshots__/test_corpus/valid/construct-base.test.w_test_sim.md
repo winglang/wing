@@ -3,10 +3,10 @@
 ## stdout.log
 ```log
 my id is WingResource
-path of sqs.queue: Test.oQEM0QBPQ5/env0/SqsQueue
-path of wing resource: Test.oQEM0QBPQ5/env0/WingResource
+path of sqs.queue: root/env0/SqsQueue
+path of wing resource: root/env0/WingResource
 display name of wing resource: no display name
-Test.oQEM0QBPQ5/env0/WingResource
+root/env0/WingResource
 pass ─ construct-base.test.wsim (no tests)
 
 Tests 1 passed (1)

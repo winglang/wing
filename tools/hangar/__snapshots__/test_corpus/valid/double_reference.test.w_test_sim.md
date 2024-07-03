@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ double_reference.test.wsim » Test.Sv01pmwusY/env0/test:hello
+pass ─ double_reference.test.wsim » root/env0/test:hello
 
 Tests 1 passed (1)
 Snapshots 1 skipped
