@@ -262,15 +262,17 @@ export const ConsoleLogs = memo(
   }: ConsoleLogsProps) => {
     const { theme } = useTheme();
 
-    const useLongDateFormat = useMemo(() => {
-      if (!logs[0]?.timestamp) {
-        return false;
+    const [useLongDateFormat, setUseLongDateFormat] = useState(false);
+
+    useEffect(() => {
+      if (!logs[0]?.timestamp || useLongDateFormat) {
+        return;
       }
       const now = new Date();
       const logDate = new Date(logs[0].timestamp);
 
-      return logDate.getDate() !== now.getDate();
-    }, [logs]);
+      setUseLongDateFormat(logDate.getDate() !== now.getDate());
+    }, [logs, useLongDateFormat]);
 
     return (
       <div
