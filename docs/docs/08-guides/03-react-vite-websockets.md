@@ -101,7 +101,7 @@ Now, we will create our backend for our app:
 
     ```sh
     npm install -g winglang
-    wing -V # should be >= 0.60.1
+    wing -v # should be >= 0.60.1
     ```
 
 2. Create a `backend` directory under the project root:
