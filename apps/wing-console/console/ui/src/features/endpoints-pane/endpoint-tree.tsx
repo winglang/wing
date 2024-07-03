@@ -21,7 +21,14 @@ export const EndpointTree = () => {
   const { requireAcceptWarning, notifyWarningAccepted } = useEndpointsWarning();
   const { showNotification } = useNotifications();
 
-  const [showWarningModal, setShowWarningModal] = useState(false);
+  const [warningModalVisible, setWarningModalVisible] = useState(false);
+  const [showWarningModal, setShowWarningModal] = useState(true);
+  useEffect(() => {
+    if (requireAcceptWarning.data?.requireAcceptWarning === false) {
+      setShowWarningModal(false);
+    }
+  }, [requireAcceptWarning.data]);
+
   const [selectedEndpoint, setSelectedEndpoint] = useState<EndpointItem>();
 
   const loading = useMemo(
@@ -29,20 +36,27 @@ export const EndpointTree = () => {
     [exposeEndpoint.isLoading, hideEndpoint.isLoading],
   );
 
-  const onExposeEndpoint = useCallback(
+  const expose = useCallback(
     async (endpoint: EndpointItem) => {
-      setSelectedEndpoint(endpoint);
-
-      if (requireAcceptWarning.data?.requireAcceptWarning === true) {
-        setShowWarningModal(true);
-        return;
-      }
       await exposeEndpoint.mutateAsync({ resourcePath: endpoint.id });
       showNotification(`Endpoint "${endpoint.label}" is exposed`, {
         type: "info",
       });
     },
-    [exposeEndpoint, showNotification, requireAcceptWarning.data],
+    [exposeEndpoint, showNotification],
+  );
+
+  const onExposeEndpoint = useCallback(
+    async (endpoint: EndpointItem) => {
+      setSelectedEndpoint(endpoint);
+
+      if (showWarningModal) {
+        setWarningModalVisible(true);
+        return;
+      }
+      expose(endpoint);
+    },
+    [showWarningModal, expose],
   );
 
   const onHideEndpoint = useCallback(
@@ -54,13 +68,14 @@ export const EndpointTree = () => {
   );
 
   const onAcceptWarning = useCallback(async () => {
-    if (selectedEndpoint) {
-      notifyWarningAccepted.mutate();
-      setShowWarningModal(false);
-      await onExposeEndpoint(selectedEndpoint);
-      setSelectedEndpoint(undefined);
+    if (!selectedEndpoint) {
+      return;
     }
-  }, [notifyWarningAccepted, onExposeEndpoint, selectedEndpoint]);
+    notifyWarningAccepted.mutate();
+    setShowWarningModal(false);
+    setWarningModalVisible(false);
+    expose(selectedEndpoint);
+  }, [notifyWarningAccepted, expose, selectedEndpoint]);
 
   useEffect(() => {
     if (exposeEndpoint.error) {
@@ -132,9 +147,9 @@ export const EndpointTree = () => {
       </div>
 
       <EndpointsWarningModal
-        visible={showWarningModal}
+        visible={warningModalVisible}
         onContinue={onAcceptWarning}
-        onCancel={() => setShowWarningModal(false)}
+        onCancel={() => setWarningModalVisible(false)}
       />
     </div>
   );

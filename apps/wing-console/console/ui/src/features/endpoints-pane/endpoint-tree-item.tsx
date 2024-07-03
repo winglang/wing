@@ -4,12 +4,8 @@ import {
 } from "@heroicons/react/24/outline";
 import {
   Button,
-  ScrollableArea,
   SpinnerLoader,
-  Toolbar,
   TreeItem,
-  TreeView,
-  useNotifications,
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
