@@ -30,7 +30,7 @@ export interface CompileOptions {
    *
    * @default "Default"
    */
-  rootId?: string;
+  readonly rootId?: string;
   /**
    * String with platform-specific values separated by commas
    */

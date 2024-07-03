@@ -192,20 +192,20 @@ async function testOne(
   // determine snapshot behavior
   const snapshotMode = determineSnapshotMode(target, options);
   const shouldExecute = snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.DEPLOY;
+  const testOptions = { ...options, rootId: options.rootId ?? `Test.${nanoid(10)}` };
 
   let results: std.TestResult[] = [];
   if (shouldExecute) {
-    options.rootId = options.rootId ?? `Test.${nanoid(10)}`;
     const synthDir = await withSpinner(
       `Compiling ${renderTestName(entrypoint)} to ${target}...`,
       async () =>
         compile(entrypoint, {
-          ...options,
+          ...testOptions,
           testing: true,
         })
     );
 
-    results = await executeTest(synthDir, target, options);
+    results = await executeTest(synthDir, target, testOptions);
   }
 
   // if one of the tests failed, return the results without updating any snapshots.
