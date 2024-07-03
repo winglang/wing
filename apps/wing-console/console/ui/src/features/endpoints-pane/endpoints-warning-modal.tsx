@@ -1,30 +1,23 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import {
-  Button,
-  Link,
-  Loader,
-  Modal,
-  useTheme,
-} from "@wingconsole/design-system";
+import { Button, Modal, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
-import React from "react";
 
 export interface EndpointsWarningModalProps {
   visible: boolean;
-  onContinue: () => void;
+  onExpose: () => void;
   onCancel: () => void;
 }
 
 export const EndpointsWarningModal = ({
   visible = true,
-  onContinue,
+  onExpose,
   onCancel,
 }: EndpointsWarningModalProps) => {
   const { theme } = useTheme();
 
   return (
     <Modal visible={visible}>
-      <div className="flex flex-col gap-6 max-w-lg items-center p-6">
+      <div className="flex flex-col gap-4 max-w-lg items-center">
         <h3
           className={classNames(
             theme.text1,
@@ -47,7 +40,7 @@ export const EndpointsWarningModal = ({
           <Button onClick={onCancel} transparent>
             Cancel
           </Button>
-          <Button onClick={onContinue}>I Understand, Continue</Button>
+          <Button onClick={onExpose}>Expose</Button>
         </div>
       </div>
     </Modal>

@@ -149,7 +149,7 @@ export const EndpointTree = () => {
 
       <EndpointsWarningModal
         visible={warningModalVisible}
-        onContinue={onAcceptWarning}
+        onExpose={onAcceptWarning}
         onCancel={() => setWarningModalVisible(false)}
       />
     </div>
