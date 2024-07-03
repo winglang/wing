@@ -90,6 +90,8 @@ export const EndpointTree = () => {
       return;
     }
     if (endpointList.data) {
+      setInitialNotification(false);
+
       const exposedEndpoints = endpointList.data
         .filter((endpoint) => endpoint.exposeStatus === "connected")
         .map((endpoint) => endpoint.label);
@@ -103,7 +105,6 @@ export const EndpointTree = () => {
         type: "info",
         autoCloseDelayMs: 15_000,
       });
-      setInitialNotification(false);
     }
   }, [endpointList.data, showNotification, initialNotification]);
 
