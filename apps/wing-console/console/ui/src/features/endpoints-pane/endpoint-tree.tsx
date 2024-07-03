@@ -113,8 +113,8 @@ const EndpointTreeViewItem = ({
           className={classNames(
             "flex gap-1 items-center",
             "justify-between group/endpoint-tree-item",
-            !disabled && "hover:underline text-sky-500 hover:text-sky-600",
-            disabled && "text-slate-400 cursor-not-allowed",
+            !loading && "hover:underline text-sky-500 hover:text-sky-600",
+            loading && "text-slate-400 cursor-not-allowed",
           )}
         >
           <span className="truncate">{endpoint.label}</span>
