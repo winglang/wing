@@ -26,16 +26,14 @@ class Foo {
 let foo = new Foo();
 
 test "nil return" {
-  assert(foo.returnNil(true)? == true);
-  assert(foo.returnNil(false)? == false);
+  assert(foo.returnNil(true) != nil);
+  assert(foo.returnNil(false) == nil);
 }
 
 test "optional instance variable" {
-  assert(foo.getOptionalValue()? == false);
+  assert(foo.getOptionalValue() == nil);
   foo.setOptionalValue("hello");
-  assert(foo.getOptionalValue()? == true);
   assert(foo.getOptionalValue() != nil);
   foo.setOptionalValue(nil);
-  assert(foo.getOptionalValue()? == false);
   assert(foo.getOptionalValue() == nil);
 }

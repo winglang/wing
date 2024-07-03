@@ -15,9 +15,6 @@ fOptional("");
 //        ^^ error: expected num?, got str
 
 let y = true;
-if y? {
- // ^ y isn't optional
-}
 
 let z = y ?? 1;
 //      ^ y isn't optional

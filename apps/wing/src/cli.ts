@@ -169,7 +169,7 @@ async function main() {
     .argument("[entrypoint]", "program .w entrypoint")
     .option(
       "-t, --platform <platform> --platform <platform>",
-      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp)",
       collectPlatformVariadic,
       DEFAULT_PLATFORM
     )

@@ -21,10 +21,6 @@ test "nillarooni" {
 //           ^^^ Expected type to be "num", but got "nil" instead (hint: to allow "nil" assignment use optional type: "num?")
 }
 
-if nil? {
-// ^^^ Expected optional type, found "nil"
-}
-
 let nilWannabe = nil;
 //               ^^^ Cannot assign nil value to variables without explicit optional type
 

@@ -31,7 +31,10 @@ const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
     const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{houses:{type:"array",items:{type:"object",properties:{address:{type:"string"},residents:{type:"array",items:{type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]}},},required:["address","residents",]}},},required:["houses",]});
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const app = $helpers.nodeof(this).app;
     const myParams = MyParams._fromJson((app.parameters.read({ schema: MyParams })));
     $helpers.assert($helpers.eq(myParams.houses.length, 2), "myParams.houses.length == 2");

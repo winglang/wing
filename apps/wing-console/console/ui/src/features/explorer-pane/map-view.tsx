@@ -61,6 +61,7 @@ interface ConstructNodeProps {
   collapsed: boolean;
   icon?: string;
   hierarchichalRunningState: ResourceRunningState;
+  depth: number;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -79,6 +80,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       collapsed,
       icon,
       hierarchichalRunningState,
+      depth,
     }) => {
       const select = useCallback(
         () => onSelectedNodeIdChange(id),
@@ -121,7 +123,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             className={clsx(
               "w-full h-full",
               "rounded-lg",
-              "bg-white dark:bg-slate-700",
+              depth % 2 === 0 && "bg-white dark:bg-slate-700",
+              depth % 2 === 1 && "bg-slate-50 dark:bg-slate-650",
               highlight && "bg-sky-50 dark:bg-sky-900",
               "border",
               "outline outline-0",
@@ -509,6 +512,7 @@ const RenderNode = ({
   isNodeHidden,
   nodeInfo,
   expandedItems,
+  depth = 0,
   onCollapse,
   onExpand,
 }: {
@@ -518,6 +522,7 @@ const RenderNode = ({
   isNodeHidden: (path: string) => boolean;
   nodeInfo?: Map<string, NodeV2>;
   expandedItems: string[];
+  depth?: number;
   onCollapse: (path: string) => void;
   onExpand: (path: string) => void;
 }) => {
@@ -569,6 +574,7 @@ const RenderNode = ({
         }
       }}
       hierarchichalRunningState={constructTreeNode.hierarchichalRunningState}
+      depth={depth}
     >
       {childNodes.map((child) => (
         <RenderNode
@@ -581,6 +587,7 @@ const RenderNode = ({
           expandedItems={expandedItems}
           onCollapse={onCollapse}
           onExpand={onExpand}
+          depth={depth + 1}
         />
       ))}
     </ConstructNode>
