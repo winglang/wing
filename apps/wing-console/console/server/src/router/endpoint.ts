@@ -53,9 +53,9 @@ export const createEndpointRouter = () => {
         requireAcceptWarning: requireAcceptWarning ?? false,
       };
     }),
-    "endpoint.notifyAcceptWarning": createProcedure.mutation(
+    "endpoint.notifyWarningAccepted": createProcedure.mutation(
       async ({ ctx }) => {
-        await ctx.notifyAcceptEndpointWarning?.();
+        await ctx.notifyEndpointWarningAccepted?.();
       },
     ),
     "endpoint.list": createProcedure.query(async ({ input, ctx }) => {

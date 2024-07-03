@@ -80,7 +80,7 @@ export interface CreateConsoleServerOptions {
   notifySignedIn?: () => Promise<void>;
   watchGlobs?: string[];
   requireAcceptEndpointWarning?: () => Promise<boolean>;
-  notifyAcceptEndpointWarning?: () => Promise<void>;
+  notifyEndpointWarningAccepted?: () => Promise<void>;
 }
 
 export const createConsoleServer = async ({
@@ -103,7 +103,7 @@ export const createConsoleServer = async ({
   notifySignedIn,
   watchGlobs,
   requireAcceptEndpointWarning,
-  notifyAcceptEndpointWarning,
+  notifyEndpointWarningAccepted,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -333,7 +333,7 @@ export const createConsoleServer = async ({
     requireSignIn,
     notifySignedIn,
     requireAcceptEndpointWarning,
-    notifyAcceptEndpointWarning,
+    notifyEndpointWarningAccepted,
   });
 
   const close = async (callback?: () => void) => {

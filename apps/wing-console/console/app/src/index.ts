@@ -42,7 +42,7 @@ export interface CreateConsoleAppOptions {
   open?: boolean;
   watchGlobs?: string[];
   requireAcceptEndpointWarning?: boolean;
-  notifyAcceptEndpointWarning?: () => void;
+  notifyEndpointWarningAccepted?: () => void;
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -84,7 +84,7 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     async requireAcceptEndpointWarning() {
       return analyticsStorage.getEndpointWarningAcknowledged();
     },
-    async notifyAcceptEndpointWarning() {
+    async notifyEndpointWarningAccepted() {
       analyticsStorage.notifyEndpointWarningAcknowledged();
     },
     onExpressCreated(app) {

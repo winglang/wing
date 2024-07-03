@@ -53,7 +53,7 @@ export interface CreateExpressServerOptions {
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
   requireAcceptEndpointWarning?: () => Promise<boolean>;
-  notifyAcceptEndpointWarning?: () => Promise<void>;
+  notifyEndpointWarningAccepted?: () => Promise<void>;
 }
 
 export const createExpressServer = async ({
@@ -82,7 +82,7 @@ export const createExpressServer = async ({
   requireSignIn,
   notifySignedIn,
   requireAcceptEndpointWarning,
-  notifyAcceptEndpointWarning,
+  notifyEndpointWarningAccepted,
 }: CreateExpressServerOptions) => {
   const app = expressApp ?? express();
   app.use(cors());
@@ -124,7 +124,7 @@ export const createExpressServer = async ({
       requireSignIn,
       notifySignedIn,
       requireAcceptEndpointWarning,
-      notifyAcceptEndpointWarning,
+      notifyEndpointWarningAccepted,
     };
   };
   app.use(

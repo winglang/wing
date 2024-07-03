@@ -148,7 +148,7 @@ const EndpointTreeViewItem = ({
 
 export const EndpointTree = () => {
   const { endpointList, exposeEndpoint, hideEndpoint } = useEndpoints();
-  const { requireAcceptWarning, notifyAcceptWarning } = useEndpointsWarning();
+  const { requireAcceptWarning, notifyWarningAccepted } = useEndpointsWarning();
   const { showNotification } = useNotifications();
 
   const [showWarningModal, setShowWarningModal] = useState(false);
@@ -180,21 +180,18 @@ export const EndpointTree = () => {
     async (endpoint: EndpointItem) => {
       setSelectedEndpoint(endpoint);
       await hideEndpoint.mutateAsync({ resourcePath: endpoint.id });
-      showNotification(`Endpoint "${endpoint.label}" is hidden`, {
-        type: "info",
-      });
     },
-    [hideEndpoint, showNotification],
+    [hideEndpoint],
   );
 
   const onAcceptWarning = useCallback(async () => {
     if (selectedEndpoint) {
-      notifyAcceptWarning.mutate();
+      notifyWarningAccepted.mutate();
       setShowWarningModal(false);
       await onExposeEndpoint(selectedEndpoint);
       setSelectedEndpoint(undefined);
     }
-  }, [notifyAcceptWarning, onExposeEndpoint, selectedEndpoint]);
+  }, [notifyWarningAccepted, onExposeEndpoint, selectedEndpoint]);
 
   useEffect(() => {
     if (exposeEndpoint.error) {

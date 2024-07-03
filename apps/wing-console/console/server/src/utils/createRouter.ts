@@ -113,7 +113,7 @@ export interface RouterContext {
   notifySignedIn?: () => Promise<void>;
   analytics?: Analytics;
   requireAcceptEndpointWarning?: () => Promise<boolean>;
-  notifyAcceptEndpointWarning?: () => Promise<void>;
+  notifyEndpointWarningAccepted?: () => Promise<void>;
 }
 
 const t = initTRPC.context<RouterContext>().meta<RouterMeta>().create();
