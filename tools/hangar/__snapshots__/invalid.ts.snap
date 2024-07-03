@@ -3304,11 +3304,18 @@ Duration <DURATION>"
 `;
 
 exports[`json_is_not_nil.test.w 1`] = `
-"error: Expected type to be \\"Json\\", but got \\"Json?\\" instead
-   --> ../../../examples/tests/invalid/json_is_not_nil.test.w:25:11
+"error: Expected type to be "Json", but got "Json?" instead
+   --> ../../../examples/tests/invalid/json_is_not_nil.test.w:63:11
    |
-25 | outerJson(innerOptional());
+63 | outerJson(innerOptional());
    |           ^^^^^^^^^^^^^^^
+
+
+error: Expected type to be "Json", but got "str?" instead
+   --> ../../../examples/tests/invalid/json_is_not_nil.test.w:67:11
+   |
+67 | outerJson(optionalStr());
+   |           ^^^^^^^^^^^^^
 
 
 
