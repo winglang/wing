@@ -98,19 +98,6 @@ const LogEntryRow = memo(
       [log.ctx?.sourcePath],
     );
 
-    const formatDate = useCallback(
-      (timestamp: number) => {
-        const date = new Date(timestamp);
-
-        if (useLongDateFormat) {
-          return `${date.toLocaleDateString()} ${dateTimeFormat.format(date)}`;
-        }
-
-        return dateTimeFormat.format(date);
-      },
-      [useLongDateFormat],
-    );
-
     const EntryRow = memo(
       ({
         log,
@@ -120,6 +107,21 @@ const LogEntryRow = memo(
         useLongDateFormat,
       }: LogEntryProps) => {
         const { theme } = useTheme();
+
+        const formatDate = useCallback(
+          (timestamp: number) => {
+            const date = new Date(timestamp);
+
+            if (useLongDateFormat) {
+              return `${date.toLocaleDateString()} ${dateTimeFormat.format(
+                date,
+              )}`;
+            }
+
+            return dateTimeFormat.format(date);
+          },
+          [useLongDateFormat],
+        );
 
         return (
           <Fragment>
