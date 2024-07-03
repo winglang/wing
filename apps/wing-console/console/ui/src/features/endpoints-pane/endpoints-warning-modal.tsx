@@ -24,10 +24,7 @@ export const EndpointsWarningModal = ({
 
   return (
     <Modal visible={visible}>
-      <div
-        className="flex flex-col gap-6 max-w-lg items-center p-6"
-        data-testid="endpoints-warning-modal"
-      >
+      <div className="flex flex-col gap-6 max-w-lg items-center p-6">
         <h3
           className={classNames(
             theme.text1,
@@ -36,22 +33,14 @@ export const EndpointsWarningModal = ({
           )}
         >
           <ExclamationTriangleIcon className="size-6" />
-          Security Warning
+          Expose endpoint · Security warning
         </h3>
 
         <div
           className={classNames(theme.text2, "text-sm text-center space-y-4")}
         >
-          <p>
-            Opening a tunnel will expose your local resource to the internet.
-          </p>
-          <p className="font-bold">
-            This can expose your system to security risks.
-          </p>
-          <p>
-            Please ensure you understand the risks before proceeding. Do you
-            acknowledge and accept these security implications?
-          </p>
+          <p>Exposing an endpoint will make it accessible from the internet.</p>
+          <p>Please, ensure you understand the risks before proceeding.</p>
         </div>
 
         <div className="flex gap-4 justify-center">
