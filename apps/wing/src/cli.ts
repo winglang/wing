@@ -93,7 +93,7 @@ async function main() {
     showGlobalOptions: true,
   });
 
-  program.name("wing").version(PACKAGE_VERSION);
+  program.name("wing").version(PACKAGE_VERSION, '-v, --version, -V', 'output the current version');
 
   program
     .option("--debug", "Enable debug logging (same as DEBUG=1)", () => {
