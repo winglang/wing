@@ -1,0 +1,806 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`multiple services 1`] = `
+{
+  "data": {
+    "aws_caller_identity": {
+      "account": {},
+    },
+    "aws_ecr_authorization_token": {
+      "EcrAuth": {
+        "registry_id": "\${data.aws_caller_identity.account.account_id}",
+      },
+    },
+    "aws_region": {
+      "Region": {},
+    },
+  },
+  "resource": {
+    "aws_cloudwatch_log_group": {
+      "Service1_LogGroup_2E78F26A": {
+        "name": "/ecs/service1_c8f1ce0b",
+        "retention_in_days": 7,
+      },
+      "Service2_LogGroup_FAA52B67": {
+        "name": "/ecs/service2_c8bc6ec4",
+        "retention_in_days": 7,
+      },
+    },
+    "aws_ecr_repository": {
+      "Ecr": {
+        "name": "default-images",
+      },
+    },
+    "aws_ecs_cluster": {
+      "Service1_ECSCluster_5E962854": {
+        "name": "Default_cluster",
+      },
+    },
+    "aws_ecs_cluster_capacity_providers": {
+      "Service1_EcsClusterCapacityProviders_B21BFFBD": {
+        "capacity_providers": [
+          "FARGATE",
+        ],
+        "cluster_name": "\${aws_ecs_cluster.Service1_ECSCluster_5E962854.name}",
+      },
+    },
+    "aws_ecs_service": {
+      "Service1_Service_6EBC868E": {
+        "cluster": "\${aws_ecs_cluster.Service1_ECSCluster_5E962854.arn}",
+        "desired_count": 1,
+        "enable_execute_command": true,
+        "force_new_deployment": true,
+        "launch_type": "FARGATE",
+        "name": "service1_c8f1ce0b",
+        "network_configuration": {
+          "security_groups": [
+            "\${aws_security_group.Service1_SecurityGroup_B2282577.id}",
+          ],
+          "subnets": [
+            "\${aws_subnet.PrivateSubnet.id}",
+            "\${aws_subnet.PrivateSubnet2.id}",
+          ],
+        },
+        "task_definition": "\${aws_ecs_task_definition.Service1_Task_FC88EF5A.arn}",
+      },
+      "Service2_Service_EE0EB41F": {
+        "cluster": "\${aws_ecs_cluster.Service1_ECSCluster_5E962854.arn}",
+        "desired_count": 1,
+        "enable_execute_command": true,
+        "force_new_deployment": true,
+        "launch_type": "FARGATE",
+        "name": "service2_c8bc6ec4",
+        "network_configuration": {
+          "security_groups": [
+            "\${aws_security_group.Service2_SecurityGroup_2315209E.id}",
+          ],
+          "subnets": [
+            "\${aws_subnet.PrivateSubnet.id}",
+            "\${aws_subnet.PrivateSubnet2.id}",
+          ],
+        },
+        "task_definition": "\${aws_ecs_task_definition.Service2_Task_E3C8D394.arn}",
+      },
+    },
+    "aws_ecs_task_definition": {
+      "Service1_Task_FC88EF5A": {
+        "container_definitions": "[{"name":"service1_c8f1ce0b","image":"\${docker_image.Service1_DockerImage_C07DD112.name}","environment":[],"logConfiguration":{"logDriver":"awslogs","options":{"awslogs-group":"/ecs/service1_c8f1ce0b","awslogs-region":"\${data.aws_region.Region.name}","awslogs-stream-prefix":"\${aws_cloudwatch_log_group.Service1_LogGroup_2E78F26A.name}"}}}]",
+        "cpu": "256",
+        "execution_role_arn": "\${aws_iam_role.Service1_ExecutionRole_CEB17761.arn}",
+        "family": "service1_c8f1ce0b",
+        "memory": "512",
+        "network_mode": "awsvpc",
+        "requires_compatibilities": [
+          "FARGATE",
+        ],
+        "task_role_arn": "\${aws_iam_role.Service1_TaskRole_5B1AC79D.arn}",
+      },
+      "Service2_Task_E3C8D394": {
+        "container_definitions": "[{"name":"service2_c8bc6ec4","image":"\${docker_image.Service2_DockerImage_6FF8A504.name}","environment":[],"logConfiguration":{"logDriver":"awslogs","options":{"awslogs-group":"/ecs/service2_c8bc6ec4","awslogs-region":"\${data.aws_region.Region.name}","awslogs-stream-prefix":"\${aws_cloudwatch_log_group.Service2_LogGroup_FAA52B67.name}"}}}]",
+        "cpu": "256",
+        "execution_role_arn": "\${aws_iam_role.Service2_ExecutionRole_53603302.arn}",
+        "family": "service2_c8bc6ec4",
+        "memory": "512",
+        "network_mode": "awsvpc",
+        "requires_compatibilities": [
+          "FARGATE",
+        ],
+        "task_role_arn": "\${aws_iam_role.Service2_TaskRole_7DAC975F.arn}",
+      },
+    },
+    "aws_eip": {
+      "EIP": {},
+    },
+    "aws_iam_role": {
+      "Service1_ExecutionRole_CEB17761": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ecs-tasks.amazonaws.com"},"Action":"sts:AssumeRole"}]}",
+        "inline_policy": [
+          {
+            "name": "service1_c8f1ce0b-inline-policy",
+            "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["logs:CreateLogStream","logs:PutLogEvents","logs:CreateLogGroup"],"Resource":"\${aws_cloudwatch_log_group.Service1_LogGroup_2E78F26A.arn}:*"},{"Effect":"Allow","Action":["ecr:BatchGetImage","ecr:GetDownloadUrlForLayer"],"Resource":"\${aws_ecr_repository.Ecr.arn}"},{"Effect":"Allow","Action":["ecr:GetAuthorizationToken"],"Resource":"*"}]}",
+          },
+        ],
+      },
+      "Service1_TaskRole_5B1AC79D": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ecs-tasks.amazonaws.com"},"Action":"sts:AssumeRole"}]}",
+        "inline_policy": [
+          {
+            "name": "service1_c8f1ce0b-inline-policy",
+            "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
+          },
+        ],
+      },
+      "Service2_ExecutionRole_53603302": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ecs-tasks.amazonaws.com"},"Action":"sts:AssumeRole"}]}",
+        "inline_policy": [
+          {
+            "name": "service2_c8bc6ec4-inline-policy",
+            "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["logs:CreateLogStream","logs:PutLogEvents","logs:CreateLogGroup"],"Resource":"\${aws_cloudwatch_log_group.Service2_LogGroup_FAA52B67.arn}:*"},{"Effect":"Allow","Action":["ecr:BatchGetImage","ecr:GetDownloadUrlForLayer"],"Resource":"\${aws_ecr_repository.Ecr.arn}"},{"Effect":"Allow","Action":["ecr:GetAuthorizationToken"],"Resource":"*"}]}",
+          },
+        ],
+      },
+      "Service2_TaskRole_7DAC975F": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ecs-tasks.amazonaws.com"},"Action":"sts:AssumeRole"}]}",
+        "inline_policy": [
+          {
+            "name": "service2_c8bc6ec4-inline-policy",
+            "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
+          },
+        ],
+      },
+    },
+    "aws_internet_gateway": {
+      "InternetGateway": {
+        "tags": {
+          "Name": "Default-c82bf964-internet-gateway",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_nat_gateway": {
+      "NATGateway": {
+        "allocation_id": "\${aws_eip.EIP.id}",
+        "subnet_id": "\${aws_subnet.PublicSubnet.id}",
+        "tags": {
+          "Name": "Default-c82bf964-nat-gateway",
+        },
+      },
+    },
+    "aws_route_table": {
+      "PrivateRouteTable": {
+        "route": [
+          {
+            "carrier_gateway_id": null,
+            "cidr_block": "0.0.0.0/0",
+            "core_network_arn": null,
+            "destination_prefix_list_id": null,
+            "egress_only_gateway_id": null,
+            "gateway_id": null,
+            "ipv6_cidr_block": null,
+            "local_gateway_id": null,
+            "nat_gateway_id": "\${aws_nat_gateway.NATGateway.id}",
+            "network_interface_id": null,
+            "transit_gateway_id": null,
+            "vpc_endpoint_id": null,
+            "vpc_peering_connection_id": null,
+          },
+        ],
+        "tags": {
+          "Name": "Default-c82bf964-private-route-table-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "PrivateRouteTable2": {
+        "route": [
+          {
+            "carrier_gateway_id": null,
+            "cidr_block": "0.0.0.0/0",
+            "core_network_arn": null,
+            "destination_prefix_list_id": null,
+            "egress_only_gateway_id": null,
+            "gateway_id": null,
+            "ipv6_cidr_block": null,
+            "local_gateway_id": null,
+            "nat_gateway_id": "\${aws_nat_gateway.NATGateway.id}",
+            "network_interface_id": null,
+            "transit_gateway_id": null,
+            "vpc_endpoint_id": null,
+            "vpc_peering_connection_id": null,
+          },
+        ],
+        "tags": {
+          "Name": "Default-c82bf964-private-route-table-2",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "PublicRouteTable": {
+        "route": [
+          {
+            "carrier_gateway_id": null,
+            "cidr_block": "0.0.0.0/0",
+            "core_network_arn": null,
+            "destination_prefix_list_id": null,
+            "egress_only_gateway_id": null,
+            "gateway_id": "\${aws_internet_gateway.InternetGateway.id}",
+            "ipv6_cidr_block": null,
+            "local_gateway_id": null,
+            "nat_gateway_id": null,
+            "network_interface_id": null,
+            "transit_gateway_id": null,
+            "vpc_endpoint_id": null,
+            "vpc_peering_connection_id": null,
+          },
+        ],
+        "tags": {
+          "Name": "Default-c82bf964-public-route-table-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_route_table_association": {
+      "PrivateRouteTableAssociation": {
+        "route_table_id": "\${aws_route_table.PrivateRouteTable.id}",
+        "subnet_id": "\${aws_subnet.PrivateSubnet.id}",
+      },
+      "PrivateRouteTableAssociation2": {
+        "route_table_id": "\${aws_route_table.PrivateRouteTable2.id}",
+        "subnet_id": "\${aws_subnet.PrivateSubnet2.id}",
+      },
+      "PublicRouteTableAssociation": {
+        "route_table_id": "\${aws_route_table.PublicRouteTable.id}",
+        "subnet_id": "\${aws_subnet.PublicSubnet.id}",
+      },
+    },
+    "aws_security_group": {
+      "Service1_SecurityGroup_B2282577": {
+        "egress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0",
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0,
+          },
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0",
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0,
+          },
+        ],
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "Service2_SecurityGroup_2315209E": {
+        "egress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0",
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0,
+          },
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0",
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0,
+          },
+        ],
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_subnet": {
+      "PrivateSubnet": {
+        "availability_zone": "\${data.aws_region.Region.name}a",
+        "cidr_block": "10.0.4.0/22",
+        "tags": {
+          "Name": "Default-c82bf964-private-subnet-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "PrivateSubnet2": {
+        "availability_zone": "\${data.aws_region.Region.name}b",
+        "cidr_block": "10.0.8.0/22",
+        "tags": {
+          "Name": "Default-c82bf964-private-subnet-2",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "PublicSubnet": {
+        "availability_zone": "\${data.aws_region.Region.name}a",
+        "cidr_block": "10.0.0.0/24",
+        "tags": {
+          "Name": "Default-c82bf964-public-subnet-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_vpc": {
+      "VPC": {
+        "cidr_block": "10.0.0.0/16",
+        "enable_dns_hostnames": true,
+        "enable_dns_support": true,
+        "tags": {
+          "Name": "Default-c82bf964-vpc",
+        },
+      },
+    },
+    "docker_image": {
+      "Service1_DockerImage_C07DD112": {
+        "build": {
+          "context": ".wing",
+          "dockerfile": "Dockerfile_service1_c8f1ce0b",
+          "platform": "linux/amd64",
+        },
+        "name": "\${aws_ecr_repository.Ecr.repository_url}:service1_c8f1ce0b",
+      },
+      "Service2_DockerImage_6FF8A504": {
+        "build": {
+          "context": ".wing",
+          "dockerfile": "Dockerfile_service2_c8bc6ec4",
+          "platform": "linux/amd64",
+        },
+        "name": "\${aws_ecr_repository.Ecr.repository_url}:service2_c8bc6ec4",
+      },
+    },
+    "docker_registry_image": {
+      "Service1_RegistryImage_5E0CA5DC": {
+        "name": "\${docker_image.Service1_DockerImage_C07DD112.name}",
+      },
+      "Service2_RegistryImage_A69ED65E": {
+        "name": "\${docker_image.Service2_DockerImage_6FF8A504.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`multiple services 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "DockerProvider": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "DockerProvider",
+                "path": "root/Default/DockerProvider",
+              },
+              "EIP": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "EIP",
+                "path": "root/Default/EIP",
+              },
+              "Ecr": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "Ecr",
+                "path": "root/Default/Ecr",
+              },
+              "EcrAuth": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformDataSource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "EcrAuth",
+                "path": "root/Default/EcrAuth",
+              },
+              "InternetGateway": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "InternetGateway",
+                "path": "root/Default/InternetGateway",
+              },
+              "NATGateway": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "NATGateway",
+                "path": "root/Default/NATGateway",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
+              "PrivateRouteTable": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "PrivateRouteTable",
+                "path": "root/Default/PrivateRouteTable",
+              },
+              "PrivateRouteTable2": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "PrivateRouteTable2",
+                "path": "root/Default/PrivateRouteTable2",
+              },
+              "PrivateRouteTableAssociation": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "PrivateRouteTableAssociation",
+                "path": "root/Default/PrivateRouteTableAssociation",
+              },
+              "PrivateRouteTableAssociation2": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "PrivateRouteTableAssociation2",
+                "path": "root/Default/PrivateRouteTableAssociation2",
+              },
+              "PrivateSubnet": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "PrivateSubnet",
+                "path": "root/Default/PrivateSubnet",
+              },
+              "PrivateSubnet2": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "PrivateSubnet2",
+                "path": "root/Default/PrivateSubnet2",
+              },
+              "PublicRouteTable": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "PublicRouteTable",
+                "path": "root/Default/PublicRouteTable",
+              },
+              "PublicRouteTableAssociation": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "PublicRouteTableAssociation",
+                "path": "root/Default/PublicRouteTableAssociation",
+              },
+              "PublicSubnet": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "PublicSubnet",
+                "path": "root/Default/PublicSubnet",
+              },
+              "Region": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformDataSource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "Region",
+                "path": "root/Default/Region",
+              },
+              "Service1": {
+                "children": {
+                  "DockerImage": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "DockerImage",
+                    "path": "root/Default/Service1/DockerImage",
+                  },
+                  "ECSCluster": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "ECSCluster",
+                    "path": "root/Default/Service1/ECSCluster",
+                  },
+                  "EcsClusterCapacityProviders": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "EcsClusterCapacityProviders",
+                    "path": "root/Default/Service1/EcsClusterCapacityProviders",
+                  },
+                  "ExecutionRole": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "ExecutionRole",
+                    "path": "root/Default/Service1/ExecutionRole",
+                  },
+                  "LogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "LogGroup",
+                    "path": "root/Default/Service1/LogGroup",
+                  },
+                  "RegistryImage": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "RegistryImage",
+                    "path": "root/Default/Service1/RegistryImage",
+                  },
+                  "SecurityGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "SecurityGroup",
+                    "path": "root/Default/Service1/SecurityGroup",
+                  },
+                  "Service": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Service",
+                    "path": "root/Default/Service1/Service",
+                  },
+                  "Task": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Task",
+                    "path": "root/Default/Service1/Task",
+                  },
+                  "TaskRole": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "TaskRole",
+                    "path": "root/Default/Service1/TaskRole",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud service",
+                  "title": "Service",
+                },
+                "id": "Service1",
+                "path": "root/Default/Service1",
+              },
+              "Service2": {
+                "children": {
+                  "DockerImage": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "DockerImage",
+                    "path": "root/Default/Service2/DockerImage",
+                  },
+                  "ExecutionRole": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "ExecutionRole",
+                    "path": "root/Default/Service2/ExecutionRole",
+                  },
+                  "LogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "LogGroup",
+                    "path": "root/Default/Service2/LogGroup",
+                  },
+                  "RegistryImage": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "RegistryImage",
+                    "path": "root/Default/Service2/RegistryImage",
+                  },
+                  "SecurityGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "SecurityGroup",
+                    "path": "root/Default/Service2/SecurityGroup",
+                  },
+                  "Service": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Service",
+                    "path": "root/Default/Service2/Service",
+                  },
+                  "Task": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Task",
+                    "path": "root/Default/Service2/Task",
+                  },
+                  "TaskRole": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "TaskRole",
+                    "path": "root/Default/Service2/TaskRole",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud service",
+                  "title": "Service",
+                },
+                "id": "Service2",
+                "path": "root/Default/Service2",
+              },
+              "VPC": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "VPC",
+                "path": "root/Default/VPC",
+              },
+              "account": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformDataSource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "account",
+                "path": "root/Default/account",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
