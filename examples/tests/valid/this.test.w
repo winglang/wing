@@ -13,7 +13,5 @@ for c in nodeof(this).children {
   log(nodeof(c).path);
 }
 
-
-
 expect.notNil(nodeof(this));
 expect.equal(nodeof(this).path.split("/").at(0), "root");
