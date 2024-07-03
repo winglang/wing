@@ -98,167 +98,149 @@ const LogEntryRow = memo(
       [log.ctx?.sourcePath],
     );
 
-    const EntryRow = memo(
-      ({
-        log,
-        showIcons = true,
-        onRowClick,
-        onResourceClick,
-        useLongDateFormat,
-      }: LogEntryProps) => {
-        const { theme } = useTheme();
+    const formatDate = useCallback(
+      (timestamp: number) => {
+        const date = new Date(timestamp);
 
-        const formatDate = useCallback(
-          (timestamp: number) => {
-            const date = new Date(timestamp);
+        if (useLongDateFormat) {
+          return `${date.toLocaleDateString()} ${dateTimeFormat.format(date)}`;
+        }
 
-            if (useLongDateFormat) {
-              return `${date.toLocaleDateString()} ${dateTimeFormat.format(
-                date,
-              )}`;
-            }
-
-            return dateTimeFormat.format(date);
-          },
-          [useLongDateFormat],
-        );
-
-        return (
-          <Fragment>
-            {/*TODO: Fix a11y*/}
-            {/*eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions*/}
-            <div
-              className={classNames(
-                "group w-full flex",
-                "flex min-w-0",
-                "justify-between",
-                theme.border4,
-                theme.bg2Hover,
-                "border-t text-2xs py-0.5 px-2",
-                {
-                  [theme.text1]: log.level === "info",
-                  "text-blue-500": log.level === "verbose",
-                  "hover:text-blue-600":
-                    log.level === "verbose" && canBeExpanded,
-                  "text-yellow-500": log.level === "warn",
-                  "hover:text-yellow-600":
-                    log.level === "warn" && canBeExpanded,
-                  "text-red-500": log.level === "error",
-                  "hover:text-red-600": log.level === "error" && canBeExpanded,
-                },
-                log.ctx?.messageType === "info" && theme.bg4,
-              )}
-              onClick={() => onRowClick?.(log)}
-            >
-              {showIcons && (
-                <div className="flex-shrink-0">
-                  <XCircleIcon
-                    className={classNames(
-                      "w-3.5 h-3.5",
-                      "text-red-500 mr-1 inline-block -mt-0.5",
-                      {
-                        invisible: log.level !== "error",
-                      },
-                    )}
-                  />
-                </div>
-              )}
-
-              {log.timestamp && !log.ctx?.hideTimestamp && (
-                <div
-                  className={classNames(
-                    theme.text2,
-                    "flex-shrink-0 select-none pointer-events-none",
-                  )}
-                >
-                  {formatDate(log.timestamp)}
-                </div>
-              )}
-              <div
-                className={classNames("min-w-0 text-left grow", {
-                  truncate: !expanded,
-                  "ml-2": log.timestamp && !log.ctx?.hideTimestamp,
-                })}
-              >
-                {canBeExpanded && (
-                  <button
-                    onClick={() => {
-                      setExpanded((expanded) => !expanded);
-                    }}
-                  >
-                    <ChevronIcon
-                      className={classNames(
-                        "w-3.5 h-3.5",
-                        "mr-0.5 inline-block -mt-0.5",
-                        theme.text1,
-                        theme.text1Hover,
-                      )}
-                    />
-                  </button>
-                )}
-                <pre
-                  className={classNames(
-                    "inline",
-                    expanded && "whitespace-pre-wrap break-words",
-                    log.ctx?.messageType === "info" && theme.text2,
-                    log.ctx?.messageType === "title" && theme.text1,
-                    log.ctx?.messageType === "success" &&
-                      "text-green-700 dark:text-green-500",
-                    log.ctx?.messageType === "fail" && "text-red-500",
-                    log.ctx?.messageType === "summary" && [
-                      "font-medium",
-                      theme.text1,
-                    ],
-                  )}
-                  ref={expandableRef}
-                >
-                  <Linkify
-                    options={{
-                      className: "text-sky-500 underline hover:text-sky-800",
-                      attributes: {
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                      },
-                    }}
-                  >
-                    {logText(log, expanded)}
-                  </Linkify>
-                </pre>
-              </div>
-
-              {onResourceClick && (
-                <div className="ml-1 flex gap-1 select-none">
-                  {parentName && (
-                    <span className="text-slate-400">{parentName}/</span>
-                  )}
-                  {log.ctx?.sourceType && (
-                    <span className="p-0.5">
-                      <ResourceIcon
-                        resourceType={log.ctx.sourceType}
-                        resourcePath={log.ctx.sourcePath}
-                        className="h-4 w-4"
-                      />
-                    </span>
-                  )}
-                  <button
-                    onClick={() => onResourceClick(log)}
-                    className={classNames(
-                      "flex cursor-pointer underline truncate",
-                      theme.text1,
-                      theme.text3Hover,
-                    )}
-                  >
-                    {resourceName}
-                  </button>
-                </div>
-              )}
-            </div>
-          </Fragment>
-        );
+        return dateTimeFormat.format(date);
       },
+      [useLongDateFormat],
     );
 
-    return <EntryRow log={log} />;
+    return (
+      <Fragment>
+        {/*TODO: Fix a11y*/}
+        {/*eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions*/}
+        <div
+          className={classNames(
+            "group w-full flex",
+            "flex min-w-0",
+            "justify-between",
+            theme.border4,
+            theme.bg2Hover,
+            "border-t text-2xs py-0.5 px-2",
+            {
+              [theme.text1]: log.level === "info",
+              "text-blue-500": log.level === "verbose",
+              "hover:text-blue-600": log.level === "verbose" && canBeExpanded,
+              "text-yellow-500": log.level === "warn",
+              "hover:text-yellow-600": log.level === "warn" && canBeExpanded,
+              "text-red-500": log.level === "error",
+              "hover:text-red-600": log.level === "error" && canBeExpanded,
+            },
+            log.ctx?.messageType === "info" && theme.bg4,
+          )}
+          onClick={() => onRowClick?.(log)}
+        >
+          {showIcons && (
+            <div className="flex-shrink-0">
+              <XCircleIcon
+                className={classNames(
+                  "w-3.5 h-3.5",
+                  "text-red-500 mr-1 inline-block -mt-0.5",
+                  {
+                    invisible: log.level !== "error",
+                  },
+                )}
+              />
+            </div>
+          )}
+
+          {log.timestamp && !log.ctx?.hideTimestamp && (
+            <div
+              className={classNames(
+                theme.text2,
+                "flex-shrink-0 select-none pointer-events-none",
+              )}
+            >
+              {formatDate(log.timestamp)}
+            </div>
+          )}
+          <div
+            className={classNames("min-w-0 text-left grow", {
+              truncate: !expanded,
+              "ml-2": log.timestamp && !log.ctx?.hideTimestamp,
+            })}
+          >
+            {canBeExpanded && (
+              <button
+                onClick={() => {
+                  setExpanded((expanded) => !expanded);
+                }}
+              >
+                <ChevronIcon
+                  className={classNames(
+                    "w-3.5 h-3.5",
+                    "mr-0.5 inline-block -mt-0.5",
+                    theme.text1,
+                    theme.text1Hover,
+                  )}
+                />
+              </button>
+            )}
+            <pre
+              className={classNames(
+                "inline",
+                expanded && "whitespace-pre-wrap break-words",
+                log.ctx?.messageType === "info" && theme.text2,
+                log.ctx?.messageType === "title" && theme.text1,
+                log.ctx?.messageType === "success" &&
+                  "text-green-700 dark:text-green-500",
+                log.ctx?.messageType === "fail" && "text-red-500",
+                log.ctx?.messageType === "summary" && [
+                  "font-medium",
+                  theme.text1,
+                ],
+              )}
+              ref={expandableRef}
+            >
+              <Linkify
+                options={{
+                  className: "text-sky-500 underline hover:text-sky-800",
+                  attributes: {
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                  },
+                }}
+              >
+                {logText(log, expanded)}
+              </Linkify>
+            </pre>
+          </div>
+
+          {onResourceClick && (
+            <div className="ml-1 flex gap-1 select-none">
+              {parentName && (
+                <span className="text-slate-400">{parentName}/</span>
+              )}
+              {log.ctx?.sourceType && (
+                <span className="p-0.5">
+                  <ResourceIcon
+                    resourceType={log.ctx.sourceType}
+                    resourcePath={log.ctx.sourcePath}
+                    className="h-4 w-4"
+                  />
+                </span>
+              )}
+              <button
+                onClick={() => onResourceClick(log)}
+                className={classNames(
+                  "flex cursor-pointer underline truncate",
+                  theme.text1,
+                  theme.text3Hover,
+                )}
+              >
+                {resourceName}
+              </button>
+            </div>
+          )}
+        </div>
+      </Fragment>
+    );
   },
 );
 
