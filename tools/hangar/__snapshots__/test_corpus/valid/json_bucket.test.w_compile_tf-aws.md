@@ -126,6 +126,9 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Function_IamRole_678BE84C.arn}",

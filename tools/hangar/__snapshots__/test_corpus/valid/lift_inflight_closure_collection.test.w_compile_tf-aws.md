@@ -412,6 +412,9 @@ module.exports = function({ $complex }) {
         },
         "function_name": "f1-c8545025",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f1_IamRole_FD68C58F.arn}",
@@ -445,6 +448,9 @@ module.exports = function({ $complex }) {
         },
         "function_name": "f2-c812cd39",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f2_IamRole_B66911B2.arn}",
@@ -478,6 +484,9 @@ module.exports = function({ $complex }) {
         },
         "function_name": "f3-c8555a7c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f3_IamRole_72675FA1.arn}",
@@ -511,6 +520,9 @@ module.exports = function({ $complex }) {
         },
         "function_name": "f4-c8745b6f",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f4_IamRole_E4904831.arn}",
