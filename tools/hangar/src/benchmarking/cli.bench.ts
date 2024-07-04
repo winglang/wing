@@ -15,7 +15,7 @@ describe("compile", async () => {
   bench("version", async () => {
     await runWingCommand({
       cwd: benchmarksTestDir,
-      args: ["-V"],
+      args: ["--version"],
       expectFailure: false,
     });
   });
