@@ -16,6 +16,7 @@ export const ModalFooter = ({ children }: { children: ReactNode }) => {
   return (
     <div
       className={classNames(
+        "-mt-2",
         "px-4 py-3",
         "bg-slate-50 dark:bg-slate-750",
         "flex items-center justify-end gap-4",
@@ -27,7 +28,7 @@ export const ModalFooter = ({ children }: { children: ReactNode }) => {
 };
 
 export const ModalBody = ({ children }: { children: ReactNode }) => {
-  return <div className="px-6 pt-6 pb-4">{children}</div>;
+  return <div className="p-6">{children}</div>;
 };
 
 export const Modal = ({
