@@ -211,6 +211,9 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
         },
         "function_name": "get_foo0-c8fedbc0",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_foo0_IamRole_B1AE8E5D.arn}",
