@@ -1,13 +1,5 @@
-import {
-  GlobeAltIcon,
-  ArrowTopRightOnSquareIcon,
-} from "@heroicons/react/24/outline";
-import {
-  Button,
-  SpinnerLoader,
-  TreeItem,
-  useTheme,
-} from "@wingconsole/design-system";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { Button, TreeItem, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useMemo } from "react";
 
