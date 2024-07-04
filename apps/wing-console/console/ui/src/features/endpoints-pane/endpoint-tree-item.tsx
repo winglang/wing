@@ -79,12 +79,12 @@ export const EndpointTreeItem = ({
           <div className="flex size-4 justify-center items-center">
             {isLoading && (
               <div className="relative">
-                <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-500 opacity-75" />
-                <div className="size-1.5 rounded-full bg-gray-500" />
+                <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75" />
+                <div className="size-1.5 rounded-full bg-gray-400" />
               </div>
             )}
             {!isLoading && endpoint.exposeStatus === "connected" && (
-              <div className="size-1.5 rounded-full bg-green-500" />
+              <div className="size-1.5 rounded-full bg-green-400" />
             )}
             {!isLoading && endpoint.exposeStatus === "disconnected" && (
               <div className="size-1.5 rounded-full bg-gray-400" />
