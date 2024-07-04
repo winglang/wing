@@ -354,6 +354,9 @@ exports[`bucket with onCreate method 1`] = `
         },
         "function_name": "OnCreate-OnMessage0-c8b6ea23",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnCreate-OnMessage0_IamRole_A815D0BA.arn}",
@@ -741,6 +744,9 @@ exports[`bucket with onDelete method 1`] = `
         },
         "function_name": "OnDelete-OnMessage0-c804d7e9",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnDelete-OnMessage0_IamRole_F99741C4.arn}",
@@ -1158,6 +1164,9 @@ exports[`bucket with onEvent method 1`] = `
         },
         "function_name": "OnCreate-OnMessage0-c8b6ea23",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnCreate-OnMessage0_IamRole_A815D0BA.arn}",
@@ -1182,6 +1191,9 @@ exports[`bucket with onEvent method 1`] = `
         },
         "function_name": "OnDelete-OnMessage0-c804d7e9",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnDelete-OnMessage0_IamRole_F99741C4.arn}",
@@ -1206,6 +1218,9 @@ exports[`bucket with onEvent method 1`] = `
         },
         "function_name": "OnUpdate-OnMessage0-c81076cf",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnUpdate-OnMessage0_IamRole_846F92CF.arn}",
@@ -1909,6 +1924,9 @@ exports[`bucket with onUpdate method 1`] = `
         },
         "function_name": "OnUpdate-OnMessage0-c81076cf",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnUpdate-OnMessage0_IamRole_846F92CF.arn}",
