@@ -101,9 +101,11 @@ export const EndpointTreeItem = ({
               title={endpoint.url}
               aria-disabled={isLoading}
               className={classNames(
-                "hidden group-hover/endpoint-tree-item:block",
-                !isLoading && "text-sky-500 hover:text-sky-600",
-                isLoading && "text-slate-400 cursor-not-allowed",
+                "hidden",
+                !isLoading && [
+                  "group-hover/endpoint-tree-item:block",
+                  "text-sky-500 hover:text-sky-600",
+                ],
               )}
             >
               <ArrowTopRightOnSquareIcon className="size-4 shrink-0" />
