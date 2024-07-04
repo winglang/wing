@@ -102,6 +102,7 @@ export const EndpointTreeItem = ({
               aria-disabled={isLoading}
               className={classNames(
                 "hidden",
+                "pl-0.5",
                 !isLoading && [
                   "group-hover/endpoint-tree-item:block",
                   "text-sky-500 hover:text-sky-600",
