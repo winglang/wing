@@ -117,7 +117,7 @@ export const EndpointTreeItem = ({
           <Button
             small
             disabled={isLoading || disabled}
-            className="min-w-[4.2rem] justify-center"
+            className="min-w-[4.3rem] justify-center"
             onClick={() => {
               if (endpoint.exposeStatus === "connected") {
                 onHideEndpoint();
