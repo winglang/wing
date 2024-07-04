@@ -41,8 +41,8 @@ const PREFLIGHT_FILE_NAME: &str = "preflight.cjs";
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE: &str = formatcp!("{STDLIB}.core");
-const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
-const STDLIB_CORE_AUTOID_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_AUTOID_RESOURCE);
+const STDLIB_CORE_RESOURCE: &str = formatcp!("{STDLIB}.{WINGSDK_RESOURCE}");
+const STDLIB_CORE_AUTOID_RESOURCE: &str = formatcp!("{STDLIB}.{WINGSDK_AUTOID_RESOURCE}");
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
@@ -59,6 +59,9 @@ const __DIRNAME: &str = "__dirname";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
+const PREFLIGHT_TYPES_MAP: &str = "$helpers.nodeof(this).root.$preflightTypesMap";
+const MODULE_PREFLIGHT_TYPES_MAP: &str = "$preflightTypesMap";
+
 const SCOPE_PARAM: &str = "$scope";
 
 pub struct JSifyContext<'a> {
@@ -72,7 +75,7 @@ pub struct JSifier<'a> {
 	/// Store the output files here.
 	pub output_files: RefCell<Files>,
 	/// Stored struct schemas that are referenced in the code.
-	pub referenced_struct_schemas: RefCell<BTreeMap<String, CodeMaker>>,
+	pub referenced_struct_schemas: RefCell<IndexMap<Utf8PathBuf, BTreeMap<String, CodeMaker>>>,
 	/// Counter for generating unique preflight file names.
 	preflight_file_counter: RefCell<usize>,
 
@@ -100,7 +103,7 @@ impl VisitorWithContext for JSifyContext<'_> {
 /// Preflight classes have two types of host binding methods:
 /// `Type` for binding static fields and methods to the host and
 /// `instance` for binding instance fields and methods to the host.
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq)]
 enum BindMethod {
 	Type,
 	Instance,
@@ -121,7 +124,7 @@ impl<'a> JSifier<'a> {
 			source_file_graph,
 			compilation_init_path,
 			out_dir,
-			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
+			referenced_struct_schemas: RefCell::new(IndexMap::new()),
 			inflight_file_counter: RefCell::new(0),
 			inflight_file_map: RefCell::new(IndexMap::new()),
 			preflight_file_counter: RefCell::new(0),
@@ -154,11 +157,7 @@ impl<'a> JSifier<'a> {
 		}) {
 			let scope_env = self.types.get_scope_env(&scope);
 			let s = self.jsify_statement(&scope_env, statement, &mut jsify_context); // top level statements are always preflight
-			if let StmtKind::Bring {
-				identifier: _,
-				source: _,
-			} = statement.kind
-			{
+			if matches!(statement.kind, StmtKind::Bring { .. }) {
 				imports.add_code(s);
 			} else {
 				js.add_code(s);
@@ -193,14 +192,23 @@ impl<'a> JSifier<'a> {
 		output.line(format!(
 			"const {EXTERN_VAR} = {HELPERS_VAR}.createExternRequire({__DIRNAME});"
 		));
-		output.add_code(imports);
 
 		if is_entrypoint {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}({SCOPE_PARAM}, $id) {{"));
 			root_class.line(format!("super({SCOPE_PARAM}, $id);"));
-			root_class.add_code(self.jsify_struct_schemas());
+			root_class.line(format!("{PREFLIGHT_TYPES_MAP} = {{ }};"));
+
+			// The root preflight types map
+			root_class.line(format!("let {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
+
+			root_class.add_code(imports);
+			root_class.add_code(self.jsify_struct_schemas(source_path));
+
+			// A global map pointing to the root preflight types map
+			root_class.line(format!("{PREFLIGHT_TYPES_MAP} = {MODULE_PREFLIGHT_TYPES_MAP};"));
+
 			root_class.add_code(js);
 			root_class.close("}");
 			root_class.close("}");
@@ -220,35 +228,43 @@ impl<'a> JSifier<'a> {
 			let directory_children = self.source_file_graph.dependencies_of(source_path);
 			let preflight_file_map = self.preflight_file_map.borrow();
 
-			// supposing a directory has two files and two subdirectories in it,
+			// supposing a directory has a file and a subdirectory in it,
 			// we generate code like this:
 			// ```
-			// module.exports = {
-			//   get inner_directory1() { return require("./preflight.inner-directory1.cjs") },
-			//   get inner_directory2() { return require("./preflight.inner-directory2.cjs") },
-			//   ...require("./preflight.inner-file1.cjs"),
-			//   ...require("./preflight.inner-file2.cjs"),
-			// };
+			// let $preflightTypesMap = {};
+			// Object.assign(module.exports, $helpers.bringJs("./preflight.inner-file1.js", $preflightTypesMap));
+			// Object.assign(module.exports, { get inner_directory1() { $helpers.bringJs("./preflight.inner-directory1.js", $preflightTypesMap); } });
+			// module.exports = { ...module.exports, $preflightTypesMap };
 			// ```
-			output.open("module.exports = {");
+
+			// This module's preflight type map
+			output.line(format!("const {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
+
 			for file in directory_children {
 				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
 				if file.is_dir() {
 					let directory_name = file.file_stem().unwrap();
 					output.line(format!(
-						"get {directory_name}() {{ return require(\"./{preflight_file_name}\") }},"
+						"Object.assign(module.exports, {{ get {directory_name}() {{ return $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP}); }} }});"
 					));
 				} else {
-					output.line(format!("...require(\"./{preflight_file_name}\"),"));
+					output.line(format!(
+						"Object.assign(module.exports, $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP}));"
+					));
 				}
 			}
-			output.close("};");
+			output.line(format!(
+				"module.exports = {{ ...module.exports, {MODULE_PREFLIGHT_TYPES_MAP} }};"
+			));
 		} else {
-			output.add_code(self.jsify_struct_schemas());
+			// This module's preflight type map
+			output.line(format!("let {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
+			output.add_code(imports);
+			output.add_code(self.jsify_struct_schemas(source_path));
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
 			output.line(format!(
-				"module.exports = {{ {} }};",
+				"module.exports = {{ {MODULE_PREFLIGHT_TYPES_MAP}, {} }};",
 				exports.iter().map(ToString::to_string).join(", ")
 			));
 		}
@@ -307,13 +323,17 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_struct_schemas(&self) -> CodeMaker {
+	fn jsify_struct_schemas(&self, source_path: &Utf8Path) -> CodeMaker {
 		// For each struct schema that is referenced in the code
 		// (this is determined by the StructSchemaVisitor before jsification starts)
 		// we write an inline call to stdlib struct class to instantiate the schema object
 		// preflight root class.
 		let mut code = CodeMaker::default();
-		for (name, schema_code) in self.referenced_struct_schemas.borrow().iter() {
+		let file_schemas = self.referenced_struct_schemas.borrow();
+		let Some(file_schemas) = file_schemas.get(source_path) else {
+			return code;
+		};
+		for (name, schema_code) in file_schemas.iter() {
 			let flat_name = name.replace(".", "_");
 
 			code.line(format!(
@@ -523,7 +543,14 @@ impl<'a> JSifier<'a> {
 						}) {
 							Some(SCOPE_PARAM.to_string())
 						} else {
-							Some("this".to_string())
+							// By default use `this` as the scope.
+							// If we're inside an argument to a `super()` call then `this` isn't avialble, in which case
+							// we can safely use the ctor's `$scope` arg.
+							if ctx.visit_ctx.current_stmt_is_super_call() {
+								Some(SCOPE_PARAM.to_string())
+							} else {
+								Some("this".to_string())
+							}
 						}
 					}
 				} else {
@@ -964,10 +991,6 @@ impl<'a> JSifier<'a> {
 				match op {
 					UnaryOperator::Minus => new_code!(expr_span, "(-", js_exp, ")"),
 					UnaryOperator::Not => new_code!(expr_span, "(!", js_exp, ")"),
-					UnaryOperator::OptionalTest => {
-						// We use the abstract inequality operator here because we want to check for null or undefined
-						new_code!(expr_span, "((", js_exp, ") != null)")
-					}
 					UnaryOperator::OptionalUnwrap => {
 						new_code!(expr_span, "$helpers.unwrap(", js_exp, ")")
 					}
@@ -1146,7 +1169,7 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::with_source(&statement.span);
 
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
-		ctx.visit_ctx.push_stmt(statement.idx);
+		ctx.visit_ctx.push_stmt(statement);
 		match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
 				BringSource::BuiltinModule(name) => {
@@ -1155,10 +1178,7 @@ impl<'a> JSifier<'a> {
 					code.line(format!("const {var_name} = {STDLIB}.{name};"))
 				}
 				BringSource::TrustedModule(name, module_dir) => {
-					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
-					let var_name = identifier.as_ref().unwrap_or(&name);
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
+					code.append(self.jsify_bring_stmt(module_dir, &Some(identifier.as_ref().unwrap_or(name).clone())));
 				}
 				BringSource::JsiiModule(name) => {
 					// checked during type checking
@@ -1166,25 +1186,10 @@ impl<'a> JSifier<'a> {
 					code.line(format!("const {var_name} = require(\"{name}\");"))
 				}
 				BringSource::WingLibrary(_, module_dir) => {
-					// checked during type checking
-					let var_name = identifier.as_ref().expect("bring wing library requires an alias");
-					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
+					code.append(self.jsify_bring_stmt(module_dir, identifier));
 				}
-				BringSource::WingFile(path) => {
-					// checked during type checking
-					let var_name = identifier.as_ref().expect("bring wing file requires an alias");
-					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(path).unwrap();
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
-				}
-				BringSource::Directory(path) => {
-					// checked during type checking
-					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(path).unwrap();
-					let var_name = identifier.as_ref().expect("bring wing directory requires an alias");
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
+				BringSource::Directory(path) | BringSource::WingFile(path) => {
+					code.append(self.jsify_bring_stmt(path, identifier));
 				}
 			},
 			StmtKind::SuperConstructor { arg_list } => {
@@ -1484,6 +1489,18 @@ impl<'a> JSifier<'a> {
 			}
 		};
 		ctx.visit_ctx.pop_stmt();
+		code
+	}
+
+	fn jsify_bring_stmt(&self, path: &Utf8Path, identifier: &Option<Symbol>) -> CodeMaker {
+		let mut code = CodeMaker::default();
+		// checked during type checking
+		let var_name = identifier.as_ref().expect("bring wing module requires an alias");
+		let preflight_file_map = self.preflight_file_map.borrow();
+		let preflight_file_name = preflight_file_map.get(path).unwrap();
+		code.line(format!(
+			"const {var_name} = $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP});"
+		));
 		code
 	}
 
@@ -1838,8 +1855,30 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
 			code.close("}");
+
+			// Inflight classes might need to be lift-qualified (onLift), but their type name might not be necessarily available
+			// at the scope when they are qualified (it might even be shadowed by another type name). We store a reference to these
+			// class types in a global preflight types map indexed by the class's unique id.
+			if class.phase == Phase::Inflight {
+				code.line(format!(
+					"if ({MODULE_PREFLIGHT_TYPES_MAP}[{}]) {{ throw new Error(\"{} is already in type map\"); }}",
+					class_type.as_class().unwrap().uid,
+					class.name
+				));
+				code.line(format!(
+					"{MODULE_PREFLIGHT_TYPES_MAP}[{}] = {};",
+					class_type.as_class().unwrap().uid,
+					class.name
+				));
+			}
+
 			code
 		})
+	}
+
+	pub fn class_singleton(&self, type_: TypeRef) -> String {
+		let c = type_.as_class().unwrap();
+		format!("$helpers.preflightClassSingleton(this, {})", c.uid)
 	}
 
 	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
@@ -1857,12 +1896,12 @@ impl<'a> JSifier<'a> {
 			FunctionBody::External(_) => panic!("'init' cannot be 'extern'"),
 		};
 
-		// Check if the first statement is a super constructor call, if not we need to add one
-		let super_called = if let Some(s) = init_statements.statements.iter().find(|s| !s.kind.is_type_def()) {
-			matches!(s.kind, StmtKind::SuperConstructor { .. })
-		} else {
-			false
-		};
+		// Check if some of the statements is the super constructor call, if not we need to add one
+		// as the first statement.
+		let super_called = init_statements
+			.statements
+			.iter()
+			.any(|s| matches!(s.kind, StmtKind::SuperConstructor { .. }));
 
 		let mut body_code = CodeMaker::with_source(&class.name.span);
 
@@ -2003,9 +2042,12 @@ impl<'a> JSifier<'a> {
 		class_code
 	}
 
-	pub fn add_referenced_struct_schema(&self, struct_name: String, schema: CodeMaker) {
+	pub fn add_referenced_struct_schema(&self, file_path: &Utf8Path, struct_name: String, schema: CodeMaker) {
 		let mut struct_schemas = self.referenced_struct_schemas.borrow_mut();
-		struct_schemas.insert(struct_name, schema);
+		struct_schemas
+			.entry(file_path.into())
+			.or_default()
+			.insert(struct_name, schema);
 	}
 
 	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {
@@ -2156,9 +2198,9 @@ impl<'a> JSifier<'a> {
 			}
 		}
 
-		for m in class.inflight_fields() {
-			let name = &m.name;
-			let is_static = m.is_static;
+		for f in class.inflight_fields() {
+			let name = &f.name;
+			let is_static = f.is_static;
 			let filter = match bind_method_kind {
 				BindMethod::Instance => !is_static,
 				BindMethod::Type => is_static,
@@ -2183,7 +2225,9 @@ impl<'a> JSifier<'a> {
 			if bind_method_kind == BindMethod::Instance && class.parent.is_some() {
 				// mergeLiftDeps is a helper method that combines the lift deps of the parent class with the
 				// lift deps of this class
-				bind_method.open(format!("return {STDLIB_CORE}.mergeLiftDeps(super._liftMap, {{"));
+				bind_method.open(format!(
+					"return {STDLIB_CORE}.mergeLiftDeps(super.{bind_method_name}, {{"
+				));
 			} else {
 				bind_method.open("return ({".to_string());
 			}

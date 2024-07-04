@@ -20,8 +20,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -60,11 +59,14 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const aws = require("@cdktf/provider-aws");
-const cdktf = require("cdktf");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const aws = require("@cdktf/provider-aws");
+    const cdktf = require("cdktf");
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -94,7 +96,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket", aws.s3Bucket.S3Bucket, this, "Bucket", { bucketPrefix: "hello", versioning: ({"enabled": true, "mfaDelete": true}) });
+    const bucket = this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket", aws.s3Bucket.S3Bucket, this, "Bucket", { bucketPrefix: "hello", versioning: ({"enabled": true, "mfaDelete": true}) });
+    $helpers.nodeof(bucket).color = "pink";
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

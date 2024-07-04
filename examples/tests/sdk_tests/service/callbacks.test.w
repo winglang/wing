@@ -21,7 +21,7 @@ if util.env("WING_TARGET") == "sim" {
   }, autoStart: false);
 
   test "does not start automatically if autoStart is false" {
-    assert(!b.tryGet(status)?);
+    assert(b.tryGet(status) == nil);
   }
 
   test "start() calls onStart() idempotently" {
@@ -38,7 +38,7 @@ if util.env("WING_TARGET") == "sim" {
     
     // we haven't started the service yet, so onStop() should not be called
     s.stop();
-    assert(!b.tryGet(status)?);
+    assert(b.tryGet(status) == nil);
     assert(startCounter.peek() == 0);
 
     // now we are starting..

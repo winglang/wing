@@ -138,8 +138,9 @@ exports[`function with a table binding 3`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
               },
@@ -148,56 +149,63 @@ exports[`function with a table binding 3`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
                   },
@@ -218,6 +226,9 @@ exports[`function with a table binding 3`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "display": {
+                  "hidden": true,
+                },
                 "id": "ParameterRegistrar",
                 "path": "root/Default/ParameterRegistrar",
               },
@@ -226,8 +237,9 @@ exports[`function with a table binding 3`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Table/Default",
                   },
@@ -246,8 +258,9 @@ exports[`function with a table binding 3`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -256,30 +269,34 @@ exports[`function with a table binding 3`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },

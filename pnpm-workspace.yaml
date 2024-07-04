@@ -3,6 +3,7 @@ packages:
   - "libs/*"
   - "libs/@wingcloud/*"
   - "tools/*"
+  - "docs"
   - "docs/docs"
   - "apps/wing-console/packages/*"
   - "apps/wing-console/console/*"

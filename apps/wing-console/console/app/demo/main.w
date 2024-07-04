@@ -1,6 +1,15 @@
 bring cloud;
 bring ex;
 bring ui;
+bring util;
+bring sim;
+
+let errorService = new cloud.Service(inflight () => {}) as "ErrorService";
+
+let errorResource = new sim.Resource(inflight () => {
+  util.sleep(5s);
+  throw "Oops";
+}) as "ErrorResource" in errorService;
 
 // @see https://github.com/winglang/wing/issues/4237 it crashes the Console preview env.
 //let secret = new cloud.Secret(name: "my-secret");
@@ -43,6 +52,7 @@ class myBucket {
 }
 
 let myB = new myBucket() as "MyUIComponentBucket";
+
 let putfucn = new cloud.Function(inflight () => {
     myB.put("test", "Test");
 }) as "PutFileInCustomBucket";
@@ -106,6 +116,7 @@ let table = new ex.Table(
 let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
   rate: 5m
 }) as "Rate Schedule";
+nodeof(rateSchedule).expanded = true;
 
 rateSchedule.onTick(inflight () => {
   log("Rate schedule ticked!");
@@ -165,10 +176,12 @@ test "Add fixtures" {
 class WidgetService {
   data: cloud.Bucket;
   counter: cloud.Counter;
+  bucket: myBucket;
 
   new() {
     this.data = new cloud.Bucket();
     this.counter = new cloud.Counter();
+    this.bucket = new myBucket() as "MyInternalBucket";
     
     // a field displays a labeled value, with optional refreshing
     new ui.Field(

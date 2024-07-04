@@ -29,7 +29,7 @@ class DynamoTable {
     }
 
     this.table = new tfaws.dynamodbTable.DynamodbTable(
-      name: this.node.addr,
+      name: nodeof(this).addr,
       billingMode: "PAY_PER_REQUEST",
       hashKey: "Flavor",
       attribute: [

@@ -89,7 +89,7 @@ export class Bucket extends Resource {
    * @returns the created topic
    */
   protected createTopic(actionType: BucketEventType): Topic {
-    const topic = new Topic(this, actionType.toLowerCase());
+    const topic = new Topic(this, actionType);
     this.node.addDependency(topic);
     return topic;
   }
@@ -524,15 +524,15 @@ export enum BucketEventType {
   /**
    * Create
    */
-  CREATE = "onCreate",
+  CREATE = "OnCreate",
   /**
    * Delete
    */
-  DELETE = "onDelete",
+  DELETE = "OnDelete",
   /**
    * Update
    */
-  UPDATE = "onUpdate",
+  UPDATE = "OnUpdate",
 }
 
 /**

@@ -96,9 +96,9 @@ bucket: (function() {
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = () => statedir;
-          ctx.resolveToken = (name, value) => attrs[name] = value;
-          ctx.log = (message, level) => {
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
           };
@@ -122,7 +122,7 @@ bucket: (function() {
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -162,7 +162,7 @@ bucket: (function() {
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/HelloWorld/Queue",
         "sourceOp": "push",
         "target": "root/HelloWorld/Queue/Consumer0",
@@ -197,28 +197,28 @@ bucket: (function() {
         "targetOp": "call",
       },
       {
-        "name": "inc",
+        "name": "call",
         "source": "root/HelloWorld/Queue/Consumer0",
         "sourceOp": "invoke",
         "target": "root/HelloWorld/Counter",
         "targetOp": "inc",
       },
       {
-        "name": "put",
+        "name": "call",
         "source": "root/HelloWorld/Queue/Consumer0",
         "sourceOp": "invoke",
         "target": "root/HelloWorld/Bucket",
         "targetOp": "put",
       },
       {
-        "name": "inc",
+        "name": "call",
         "source": "root/HelloWorld/Queue/Consumer0",
         "sourceOp": "invokeAsync",
         "target": "root/HelloWorld/Counter",
         "targetOp": "inc",
       },
       {
-        "name": "put",
+        "name": "call",
         "source": "root/HelloWorld/Queue/Consumer0",
         "sourceOp": "invokeAsync",
         "target": "root/HelloWorld/Bucket",
@@ -492,7 +492,7 @@ bucket: (function() {
                   "display": {
                     "description": "A cloud function (FaaS)",
                     "sourceModule": "@winglang/sdk",
-                    "title": "setConsumer()",
+                    "title": "Consumer",
                   },
                   "id": "Consumer0",
                   "path": "root/HelloWorld/Queue/Consumer0",
@@ -538,6 +538,7 @@ bucket: (function() {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "display": {},
           "id": "HelloWorld",
           "path": "root/HelloWorld",
         },
@@ -546,6 +547,7 @@ bucket: (function() {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

@@ -200,6 +200,7 @@ describe("wing pack", () => {
     expect(mod).toBeDefined();
     expect(Object.keys(mod).sort()).toMatchInlineSnapshot(`
       [
+        "$preflightTypesMap",
         "FavoriteNumbers",
         "Store",
         "default",

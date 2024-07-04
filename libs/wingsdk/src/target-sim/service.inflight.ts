@@ -1,7 +1,7 @@
 import { resolve } from "path";
 import { ServiceAttributes, ServiceSchema } from "./schema-resources";
 import { IServiceClient, SERVICE_FQN } from "../cloud";
-import { Bundle } from "../shared/bundling";
+import { Bundle, isBundleInvalidated } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
 import {
   ISimulatorContext,
@@ -34,6 +34,13 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     return this._context;
   }
 
+  private async ensureBundled(): Promise<void> {
+    await this.createBundlePromise;
+    if (!this.bundle) {
+      throw new Error("Bundle not created");
+    }
+  }
+
   private async createBundle(): Promise<void> {
     this.bundle = await Sandbox.createBundle(
       this.resolvedSourceCodeFile,
@@ -60,10 +67,25 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
 
   public async save(): Promise<void> {}
 
-  public async plan(): Promise<UpdatePlan> {
-    // for now, always replace because we can't determine if the function code
-    // has changed since the last update. see https://github.com/winglang/wing/issues/6116
-    return UpdatePlan.REPLACE;
+  public async plan(invalidated: boolean): Promise<UpdatePlan> {
+    if (invalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    // Make sure that we don't have an ongoing bundle operation
+    await this.ensureBundled();
+
+    // Check if any of the bundled files have changed since the last bundling
+    const bundleInvalidated = await isBundleInvalidated(
+      this.resolvedSourceCodeFile,
+      this.bundle!,
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
+    );
+    if (bundleInvalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    return UpdatePlan.SKIP;
   }
 
   public async start(): Promise<void> {

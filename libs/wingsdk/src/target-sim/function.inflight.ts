@@ -1,8 +1,7 @@
-import { stat } from "fs/promises";
 import * as path from "path";
 import { FunctionAttributes, FunctionSchema } from "./schema-resources";
 import { FUNCTION_FQN, IFunctionClient } from "../cloud";
-import { Bundle } from "../shared/bundling";
+import { Bundle, isBundleInvalidated } from "../shared/bundling";
 import { Sandbox, SandboxTimeoutError } from "../shared/sandbox";
 import {
   ISimulatorContext,
@@ -67,20 +66,12 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     await this.ensureBundled();
 
     // Check if any of the bundled files have changed since the last bundling
-    const inputFiles = this.bundle!.inputFiles;
-    const modifiedFiles = await filesModifiedSince(
-      inputFiles,
-      process.cwd(),
-      this.bundle!.time
+    const bundleInvalidated = await isBundleInvalidated(
+      this.originalFile,
+      this.bundle!,
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
     );
-    if (modifiedFiles.length > 0) {
-      this.addTrace(
-        `Files modified since last bundling: [${modifiedFiles
-          .map((x) => `"${x}"`)
-          .join(", ")}]`,
-        TraceType.SIMULATOR,
-        LogLevel.VERBOSE
-      );
+    if (bundleInvalidated) {
       return UpdatePlan.REPLACE;
     }
 
@@ -215,32 +206,5 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       sourceType: FUNCTION_FQN,
       timestamp: new Date().toISOString(),
     });
-  }
-}
-
-async function filesModifiedSince(
-  filePaths: string[],
-  directory: string,
-  dateTime: Date
-): Promise<string[]> {
-  const absolutePaths = filePaths.map((filePath) =>
-    path.resolve(directory, filePath)
-  );
-
-  try {
-    const statsPromises = absolutePaths.map((filePath) => stat(filePath));
-    const stats = await Promise.all(statsPromises);
-    const changedFiles = new Array<string>();
-
-    for (let i = 0; i < absolutePaths.length; i++) {
-      if (stats[i].mtime > dateTime) {
-        changedFiles.push(absolutePaths[i]);
-      }
-    }
-
-    return changedFiles;
-  } catch (error) {
-    console.error("Error checking file modification times:", error);
-    throw error;
   }
 }

@@ -5,6 +5,7 @@ import {
   Function as CdkFunction,
   Code,
   Runtime,
+  LayerVersion,
   LogFormat,
 } from "aws-cdk-lib/aws-lambda";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
@@ -95,6 +96,15 @@ export class Function
       );
     }
     this.assetPath = asset.assetPath;
+  }
+
+  public addLambdaLayer(layerArn: string): void {
+    const layer = LayerVersion.fromLayerVersionArn(
+      this,
+      `Layer${layerArn}`,
+      layerArn
+    );
+    this.function.addLayers(layer);
   }
 
   /** @internal */

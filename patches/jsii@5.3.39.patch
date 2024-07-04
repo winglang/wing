@@ -1,0 +1,46 @@
+diff --git a/lib/assembler.js b/lib/assembler.js
+index 75fbc9583eb98336f94f3245cc656ba786021472..aee348079ebcffa71d12a412fe32766af97ed9c1 100644
+--- a/lib/assembler.js
++++ b/lib/assembler.js
+@@ -1572,7 +1572,12 @@ class Assembler {
+             return { type: spec.CANONICAL_ANY };
+         }
+         if (type.symbol.name === 'Array') {
+-            return { type: _arrayType.call(this) };
++            // "Array" only refers to the real JS array type if it has a type parameter
++            // this is a hack so we can export classes named Array
++            const typeRef = type;
++            if (typeRef.typeArguments && typeRef.typeArguments.length === 1) {
++                return { type: _arrayType.call(this) };
++            }
+         }
+         if (type.symbol.name === '__type' && type.symbol.members) {
+             return { type: _mapType.call(this) };
+@@ -1583,9 +1588,9 @@ class Assembler {
+                 this._diagnostics.push(jsii_diagnostic_1.JsiiDiagnostic.JSII_1002_UNSPECIFIED_PROMISE.create(declaration));
+                 return { type: spec.CANONICAL_ANY };
+             }
+-            return {
+-                type: this._typeReference(typeRef.typeArguments[0], declaration, purpose),
+-            };
++            // (hacky) allow optionals to be returned from async methods
++            // see https://github.com/aws/jsii/issues/4035
++            return this._optionalValue(typeRef.typeArguments[0], declaration, purpose);
+         }
+         const fqn = this._getFQN(type, declaration, purpose, isThisType);
+         if (fqn == null) {
+diff --git a/lib/tsconfig/compiler-options.js b/lib/tsconfig/compiler-options.js
+index e97343ab6ec9cfccda4b5a0c3780796755eb2b0a..2c1eaad9288c2951cba6410fd344647ebce884b5 100644
+--- a/lib/tsconfig/compiler-options.js
++++ b/lib/tsconfig/compiler-options.js
+@@ -8,8 +8,9 @@ exports.BASE_COMPILER_OPTIONS = {
+     declaration: true,
+     experimentalDecorators: true,
+     incremental: true,
+-    lib: ['lib.es2020.d.ts'],
++    lib: ['lib.es2020.d.ts','lib.dom.d.ts'],
+     module: ts.ModuleKind.CommonJS,
++    esModuleInterop: true,
+     noEmitOnError: true,
+     noFallthroughCasesInSwitch: true,
+     noImplicitAny: true,

@@ -58,6 +58,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   private subnets?: Set<string>;
   private vpcPermissionsAdded = false;
   private securityGroups?: Set<string>;
+  private layers?: Set<string>;
 
   /**
    * Qualified Function ARN
@@ -201,6 +202,10 @@ export class Function extends cloud.Function implements IAwsFunction {
       runtime: "nodejs20.x",
       role: this.role.arn,
       publish: true,
+      layers: Lazy.listValue({
+        produce: () =>
+          this.layers ? Array.from(this.layers.values()) : undefined,
+      }),
       vpcConfig: {
         subnetIds: Lazy.listValue({
           produce: () =>
@@ -320,6 +325,16 @@ export class Function extends cloud.Function implements IAwsFunction {
       "FunctionClient",
       [`process.env["${this.envName()}"], "${this.node.path}"`]
     );
+  }
+
+  /**
+   * Add a Lambda Layer to the function
+   */
+  public addLambdaLayer(layerArn: string): void {
+    if (!this.layers) {
+      this.layers = new Set();
+    }
+    this.layers.add(layerArn);
   }
 
   /**

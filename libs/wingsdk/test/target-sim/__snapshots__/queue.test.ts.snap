@@ -146,6 +146,7 @@ exports[`create a queue 1`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -761,6 +762,7 @@ exports[`push rejects empty message 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -929,6 +931,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1029,21 +1032,21 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/my_queue",
         "sourceOp": "push",
         "target": "root/my_queue/Consumer0",
         "targetOp": "invoke",
       },
       {
-        "name": "push",
+        "name": "call",
         "source": "root/my_queue_messages/Function",
         "sourceOp": "invoke",
         "target": "root/my_queue",
         "targetOp": "push",
       },
       {
-        "name": "push",
+        "name": "call",
         "source": "root/my_queue_messages/Function",
         "sourceOp": "invokeAsync",
         "target": "root/my_queue",
@@ -1243,7 +1246,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
+                "title": "Consumer",
               },
               "id": "Consumer0",
               "path": "root/my_queue/Consumer0",
@@ -1316,6 +1319,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1378,7 +1382,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/my_queue",
         "sourceOp": "push",
         "target": "root/my_queue/Consumer0",
@@ -1544,7 +1548,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
+                "title": "Consumer",
               },
               "id": "Consumer0",
               "path": "root/my_queue/Consumer0",
@@ -1590,6 +1594,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

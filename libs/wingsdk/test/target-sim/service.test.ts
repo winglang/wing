@@ -24,6 +24,7 @@ test("create a service with on start method", async () => {
   expect(s.getResourceConfig("/my_service")).toEqual({
     attrs: {
       handle: expect.any(String),
+      runningState: expect.any(String),
     },
     path: "root/my_service",
     addr: expect.any(String),
@@ -52,6 +53,7 @@ test("create a service with a on stop method", async () => {
   expect(s.getResourceConfig("/my_service")).toEqual({
     attrs: {
       handle: expect.any(String),
+      runningState: expect.any(String),
     },
     path: "root/my_service",
     addr: expect.any(String),
@@ -93,6 +95,7 @@ test("create a service without autostart", async () => {
   expect(s.getResourceConfig("/my_service")).toEqual({
     attrs: {
       handle: expect.any(String),
+      runningState: expect.any(String),
     },
     path: "root/my_service",
     addr: expect.any(String),

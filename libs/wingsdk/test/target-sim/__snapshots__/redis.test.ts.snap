@@ -3,7 +3,14 @@
 exports[`create a Redis resource 1`] = `
 {
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "<ref>",
+        "source": "root/my_redis",
+        "target": "root/my_redis/Container",
+        "targetOp": "host_port",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -143,6 +150,7 @@ exports[`create a Redis resource 1`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

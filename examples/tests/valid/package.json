@@ -3,19 +3,19 @@
   "dependencies": {
     "@aws-cdk/asset-awscli-v1": "^2.2.202",
     "@aws-cdk/asset-kubectl-v20": "^2.1.2",
-    "@aws-cdk/asset-node-proxy-agent-v6": "^2.0.1",
-    "@aws-sdk/client-dynamodb": "^3.503.1",
-    "@cdktf/provider-aws": "^19",
-    "aws-cdk-lib": "^2.124.0",
-    "cdk8s": "^2.68.43",
-    "cdk8s-plus-27": "^2.7.81",
-    "cdktf": "0.20.3",
-    "constructs": "^10.3",
-    "jsii-code-samples": "1.7.0",
-    "projen": "^0.71.163",
-    "uuid": "^9.0.0",
+    "@aws-cdk/asset-node-proxy-agent-v6": "^2.0.3",
+    "@aws-sdk/client-dynamodb": "^3.602.0",
+    "@cdktf/provider-aws": "^19.23.0",
     "@winglibs/testfixture": "workspace:^",
-    "jsii-fixture": "workspace:^"
+    "aws-cdk-lib": "^2.147.0",
+    "cdk8s": "^2.68.81",
+    "cdk8s-plus-27": "^2.9.5",
+    "cdktf": "0.20.7",
+    "constructs": "^10.3.0",
+    "jsii-code-samples": "1.7.0",
+    "jsii-fixture": "workspace:^",
+    "projen": "^0.71.163",
+    "uuid": "^9.0.1"
   },
   "volta": {
     "extends": "../../../package.json"

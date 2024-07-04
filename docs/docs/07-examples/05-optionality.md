@@ -6,26 +6,26 @@ keywords: [Wing example]
 
 ## Definition 
 
-```ts playground
+```ts playground example
 let s1: str? = "Hello"; // type str? (optional), value "Hello"
 let s2: str? = nil; // type str? (optional), value nil
 ```
 
 ## Testing existence  
-```ts playground
+```ts playground example
 let s1: str? = "Hello"; // type str? (optional), value "Hello"
 let s2: str? = nil; // type str? (optional), value nil
 
-if s1? {
+if s1 != nil {
   log("x1 is not nil");
 }
-if !s2? {
+if s2 == nil {
   log("x2 is nil");
 }
 ```
 
 ## Using if let
-```ts playground
+```ts playground example
 let s1: str? = "Hello"; // type str? (optional), value "Hello"
 
 // unwrap optional s1 and create s from type str
@@ -46,7 +46,7 @@ log("s1 type is optional str");
 
 ## Using ?? 
 
-```ts playground
+```ts playground example
 let s1: str? = nil; // type str? (optional), value nil
 let s2 = s1 ?? "default value";  // s2 is of type str
 log(s2); // prints default value
@@ -54,7 +54,7 @@ log(s2); // prints default value
 
 ## Optional Chaining 
 
-```ts playground
+```ts playground example
 let j  = Json {
   working: {
     a: {
@@ -77,12 +77,8 @@ if let value = j.tryGet("broken")?.tryGet("a")?.tryGet("b")?.tryAsStr() {
 
 ## Optional bool
 
-```ts playground
+```ts playground example
 let b3: bool? = false; 
-
-if b3? {
-  log("although b3 is false, the if statement here checks for existence of value");
-}
 
 if let b3 = b3  { // unboxing b3 and shadowing original b3 
   if b3 {
@@ -96,7 +92,6 @@ if let b3 = b3  { // unboxing b3 and shadowing original b3
 
 /**
  * prints:
-  although b3 is false, the if statement here checks for existence of value
   b3 is false
 **/
 ```

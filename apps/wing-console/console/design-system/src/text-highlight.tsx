@@ -1,3 +1,4 @@
+import escape from "lodash.escape";
 import { memo, useEffect, useState } from "react";
 
 import type { Theme } from "./theme-provider.js";
@@ -41,7 +42,7 @@ const highlightJson = (value: string, theme: Theme) => {
         } else if (/null/.test(match)) {
           className = palette.null;
         }
-        return `<span class="${className}">${match}</span>`;
+        return `<span class="${className}">${escape(match)}</span>`;
       },
     )}${formatted.slice(CHAR_LIMIT)}`;
 };

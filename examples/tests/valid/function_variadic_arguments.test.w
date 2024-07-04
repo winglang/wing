@@ -4,7 +4,7 @@ let bucket2 = new cloud.Bucket() as "bucket2";
 let bucket3 = new cloud.Bucket() as "bucket3";
 
 // can use variadic methods from the jsii world
-bucket3.node.addDependency(bucket1, bucket2);
+nodeof(bucket3).addDependency(bucket1, bucket2);
 
 let funcBucket = (...buckets: Array<cloud.Bucket>) => {
   assert(buckets.length == 2);

@@ -75,14 +75,25 @@ module.exports = function({ $counter }) {
 //# sourceMappingURL=inflight.Example-2.cjs.map
 ```
 
+## inflight.InflightBar-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class InflightBar {
+  }
+  return InflightBar;
+}
+//# sourceMappingURL=inflight.InflightBar-1.cjs.map
+```
+
 ## main.tf.json
 ```json
 {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -227,6 +238,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 class Bar extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -261,7 +273,37 @@ class Bar extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { Bar };
+class InflightBar extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.InflightBar-1.cjs")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const InflightBarClient = ${InflightBar._toInflightType()};
+        const client = new InflightBarClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+if ($preflightTypesMap[2]) { throw new Error("InflightBar is already in type map"); }
+$preflightTypesMap[2] = InflightBar;
+module.exports = { $preflightTypesMap, Bar, InflightBar };
 //# sourceMappingURL=preflight.bar-1.cjs.map
 ```
 
@@ -275,14 +317,17 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const fs = $stdlib.fs;
-const expect = $stdlib.expect;
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
-const bar = require("./preflight.bar-1.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const fs = $stdlib.fs;
+    const expect = $stdlib.expect;
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`, $preflightTypesMap);
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Example extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);

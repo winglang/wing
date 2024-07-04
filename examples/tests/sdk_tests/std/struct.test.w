@@ -78,3 +78,11 @@ test "valid Json types" {
   expect.equal(arr.someJson, [1, 2, 3]);
   expect.equal(j.someJson, {even: "more json!"});
 }
+
+// These two files define a struct with the same name and different fields
+// We validate the compiler doesn't mix them up when generating their JSON schema
+bring "./struct_a.w" as struct_a;
+bring "./struct_b.w" as struct_b;
+
+assert({a: 1} == struct_a.FooA.fromJson(#"{\"a\": 1}"));
+assert({b: 2} == struct_b.FooB.fromJson(#"{\"b\": 2}"));

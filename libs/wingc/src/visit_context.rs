@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::{
-	ast::{Class, ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
+	ast::{Class, Expr, ExprId, FunctionSignature, Phase, Stmt, StmtKind, Symbol, UserDefinedType},
 	type_check::symbol_env::SymbolEnvRef,
 };
 
@@ -19,6 +19,12 @@ pub enum PropertyObject {
 }
 
 #[derive(Clone)]
+pub struct StmtContext {
+	pub idx: usize,
+	pub super_call: bool,
+}
+
+#[derive(Clone)]
 pub struct VisitContext {
 	phase: Vec<Phase>,
 	env: Vec<SymbolEnvRef>,
@@ -26,7 +32,7 @@ pub struct VisitContext {
 	property: Vec<(PropertyObject, Symbol)>,
 	function: Vec<FunctionContext>,
 	class: Vec<UserDefinedType>,
-	statement: Vec<usize>,
+	statement: Vec<StmtContext>,
 	in_json: Vec<bool>,
 	in_type_annotation: Vec<bool>,
 	expression: Vec<ExprId>,
@@ -64,8 +70,11 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_stmt(&mut self, stmt: usize) {
-		self.statement.push(stmt);
+	pub fn push_stmt(&mut self, stmt: &Stmt) {
+		self.statement.push(StmtContext {
+			idx: stmt.idx,
+			super_call: matches!(stmt.kind, StmtKind::SuperConstructor { .. }),
+		});
 	}
 
 	pub fn pop_stmt(&mut self) {
@@ -73,13 +82,17 @@ impl VisitContext {
 	}
 
 	pub fn current_stmt_idx(&self) -> usize {
-		*self.statement.last().unwrap_or(&0)
+		self.statement.last().map_or(0, |s| s.idx)
+	}
+
+	pub fn current_stmt_is_super_call(&self) -> bool {
+		self.statement.last().map_or(false, |s| s.super_call)
 	}
 
 	// --
 
-	pub fn push_expr(&mut self, expr: ExprId) {
-		self.expression.push(expr);
+	pub fn push_expr(&mut self, expr: &Expr) {
+		self.expression.push(expr.id);
 	}
 
 	pub fn pop_expr(&mut self) {
@@ -224,13 +237,13 @@ impl VisitContext {
 pub trait VisitorWithContext {
 	fn ctx(&mut self) -> &mut VisitContext;
 
-	fn with_expr(&mut self, expr: ExprId, f: impl FnOnce(&mut Self)) {
+	fn with_expr(&mut self, expr: &Expr, f: impl FnOnce(&mut Self)) {
 		self.ctx().push_expr(expr);
 		f(self);
 		self.ctx().pop_expr();
 	}
 
-	fn with_stmt(&mut self, stmt: usize, f: impl FnOnce(&mut Self)) {
+	fn with_stmt(&mut self, stmt: &Stmt, f: impl FnOnce(&mut Self)) {
 		self.ctx().push_stmt(stmt);
 		f(self);
 		self.ctx().pop_stmt();

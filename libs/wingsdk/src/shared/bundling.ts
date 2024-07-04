@@ -1,10 +1,14 @@
 import * as crypto from "crypto";
-import { mkdirSync, realpathSync, writeFileSync } from "fs";
+import { mkdirSync, realpathSync, statSync, writeFileSync } from "fs";
+import { stat } from "fs/promises";
 import { posix, resolve } from "path";
 import { decode, encode } from "vlq";
 import { normalPath } from "./misc";
 
 const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
+
+// TODO: refactor Bundle into a dedicated class with methods to check if the bundling is
+// finished, invalidated, etc.
 
 export interface Bundle {
   directory: string;
@@ -45,6 +49,21 @@ export function createBundle(
 
   const outfile = posix.join(outdir, outfileName);
   const outfileMap = posix.join(outdir, soucemapFilename);
+
+  const stats = statSync(normalEntrypoint);
+
+  // Track what time we started bundling so we can invalidate the bundle if any
+  // of the source files are modified after this time.
+  let startTime = new Date();
+
+  // For unknown reasons, the date created here by JavaScript can sometimes be a
+  // few milliseconds before the last modification date of the entrypoint file.
+  // This can cause the bundle to be invalidated when it shouldn't be. To
+  // prevent this flakiness in unit tests, we check if the modification date of the
+  // entrypoint file and update the start time if it's newer.
+  if (stats.mtime > startTime) {
+    startTime = stats.mtime;
+  }
 
   // eslint-disable-next-line import/no-extraneous-dependencies,@typescript-eslint/no-require-imports
   const esbuilder: typeof import("esbuild") = require("esbuild");
@@ -109,7 +128,7 @@ export function createBundle(
     outfilePath: outfile,
     sourcemapPath: outfileMap,
     inputFiles,
-    time: new Date(),
+    time: startTime,
   };
 }
 
@@ -208,4 +227,61 @@ export function fixSourcemaps(sourcemapData: SourceMap): void {
   }
 
   sourcemapData.mappings = newMapping;
+}
+
+export async function filesModifiedSince(
+  filePaths: string[],
+  directory: string,
+  dateTime: Date
+): Promise<string[]> {
+  const absolutePaths = filePaths.map((filePath) =>
+    resolve(directory, filePath)
+  );
+
+  try {
+    const statsPromises = absolutePaths.map((filePath) => stat(filePath));
+    const stats = await Promise.all(statsPromises);
+    const changedFiles = new Array<string>();
+
+    for (let i = 0; i < absolutePaths.length; i++) {
+      if (stats[i].mtime > dateTime) {
+        console.error(
+          `File ${absolutePaths[i]} has been modified since the last bundle`,
+          stats[i].mtime,
+          dateTime
+        );
+        changedFiles.push(absolutePaths[i]);
+      }
+    }
+
+    return changedFiles;
+  } catch (error) {
+    console.error("Error checking file modification times:", error);
+    throw error;
+  }
+}
+
+export async function isBundleInvalidated(
+  entrypoint: string,
+  bundle: Bundle,
+  log?: (msg: string) => void
+): Promise<boolean> {
+  const modifiedFiles = await filesModifiedSince(
+    [entrypoint, ...bundle.inputFiles],
+    process.cwd(),
+    bundle.time
+  );
+  if (modifiedFiles.length === 0) {
+    return false;
+  }
+
+  if (process.env.DEBUG) {
+    log?.(
+      `Files modified since last bundling: [${modifiedFiles
+        .map((x) => `"${x}"`)
+        .join(", ")}]`
+    );
+  }
+
+  return true;
 }

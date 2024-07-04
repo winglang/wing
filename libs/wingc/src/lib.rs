@@ -68,6 +68,7 @@ mod type_check_assert;
 mod valid_json_visitor;
 pub mod visit;
 mod visit_context;
+mod visit_stmt_before_super;
 mod visit_types;
 mod wasm_util;
 
@@ -125,6 +126,7 @@ const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!("{}.{}", WINGSDK_ASSEM
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
+const CONSTRUCT_NODE_PROPERTY: &'static str = "node";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
@@ -240,6 +242,7 @@ pub fn type_check(
 		None,
 	);
 	tc.add_builtins(scope);
+	tc.patch_constructs();
 
 	// If the file is an entrypoint file, we add "this" to its symbol environment
 	if is_entrypoint_file(file_path) {
@@ -354,7 +357,7 @@ pub fn compile(
 	asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
-			let mut reference_visitor = StructSchemaVisitor::new(&jsifier);
+			let mut reference_visitor = StructSchemaVisitor::new(&path, &jsifier);
 			reference_visitor.visit_scope(&scope);
 			(path, scope)
 		})

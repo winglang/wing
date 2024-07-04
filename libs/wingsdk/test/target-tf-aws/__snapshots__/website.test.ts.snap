@@ -328,40 +328,45 @@ exports[`default website behavior 2`] = `
                   "AllowDistributionReadOnly": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "AllowDistributionReadOnly",
                     "path": "root/Default/Website/AllowDistributionReadOnly",
                   },
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "BucketWebsiteConfiguration",
                     "path": "root/Default/Website/BucketWebsiteConfiguration",
                   },
                   "CloudfrontOac": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudfrontOac",
                     "path": "root/Default/Website/CloudfrontOac",
                   },
                   "Distribution": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Distribution",
                     "path": "root/Default/Website/Distribution",
                   },
                   "DistributionS3BucketPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
@@ -370,8 +375,9 @@ exports[`default website behavior 2`] = `
                       "Url": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformOutput",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Url",
                         "path": "root/Default/Website/Endpoint/Url",
                       },
@@ -391,32 +397,36 @@ exports[`default website behavior 2`] = `
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File--b.html",
                     "path": "root/Default/Website/File--b.html",
                   },
                   "File--index.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File--index.html",
                     "path": "root/Default/Website/File--index.html",
                   },
                   "File--inner-folder--a.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File--inner-folder--a.html",
                     "path": "root/Default/Website/File--inner-folder--a.html",
                   },
                   "WebsiteBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "WebsiteBucket",
                     "path": "root/Default/Website/WebsiteBucket",
                   },
@@ -435,8 +445,9 @@ exports[`default website behavior 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -445,30 +456,34 @@ exports[`default website behavior 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -648,40 +663,45 @@ exports[`website with addFile 2`] = `
                   "AllowDistributionReadOnly": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "AllowDistributionReadOnly",
                     "path": "root/Default/Website/AllowDistributionReadOnly",
                   },
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "BucketWebsiteConfiguration",
                     "path": "root/Default/Website/BucketWebsiteConfiguration",
                   },
                   "CloudfrontOac": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudfrontOac",
                     "path": "root/Default/Website/CloudfrontOac",
                   },
                   "Distribution": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Distribution",
                     "path": "root/Default/Website/Distribution",
                   },
                   "DistributionS3BucketPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
@@ -690,8 +710,9 @@ exports[`website with addFile 2`] = `
                       "Url": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformOutput",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Url",
                         "path": "root/Default/Website/Endpoint/Url",
                       },
@@ -711,40 +732,45 @@ exports[`website with addFile 2`] = `
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File--b.html",
                     "path": "root/Default/Website/File--b.html",
                   },
                   "File--index.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File--index.html",
                     "path": "root/Default/Website/File--index.html",
                   },
                   "File--inner-folder--a.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File--inner-folder--a.html",
                     "path": "root/Default/Website/File--inner-folder--a.html",
                   },
                   "File-addition.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File-addition.html",
                     "path": "root/Default/Website/File-addition.html",
                   },
                   "WebsiteBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "WebsiteBucket",
                     "path": "root/Default/Website/WebsiteBucket",
                   },
@@ -763,8 +789,9 @@ exports[`website with addFile 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -773,30 +800,34 @@ exports[`website with addFile 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -976,40 +1007,45 @@ exports[`website with addJson 2`] = `
                   "AllowDistributionReadOnly": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "AllowDistributionReadOnly",
                     "path": "root/Default/Website/AllowDistributionReadOnly",
                   },
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "BucketWebsiteConfiguration",
                     "path": "root/Default/Website/BucketWebsiteConfiguration",
                   },
                   "CloudfrontOac": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudfrontOac",
                     "path": "root/Default/Website/CloudfrontOac",
                   },
                   "Distribution": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Distribution",
                     "path": "root/Default/Website/Distribution",
                   },
                   "DistributionS3BucketPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
@@ -1018,8 +1054,9 @@ exports[`website with addJson 2`] = `
                       "Url": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformOutput",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Url",
                         "path": "root/Default/Website/Endpoint/Url",
                       },
@@ -1039,40 +1076,45 @@ exports[`website with addJson 2`] = `
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File--b.html",
                     "path": "root/Default/Website/File--b.html",
                   },
                   "File--index.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File--index.html",
                     "path": "root/Default/Website/File--index.html",
                   },
                   "File--inner-folder--a.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File--inner-folder--a.html",
                     "path": "root/Default/Website/File--inner-folder--a.html",
                   },
                   "File-config.json": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "File-config.json",
                     "path": "root/Default/Website/File-config.json",
                   },
                   "WebsiteBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "WebsiteBucket",
                     "path": "root/Default/Website/WebsiteBucket",
                   },
@@ -1091,8 +1133,9 @@ exports[`website with addJson 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -1101,30 +1144,34 @@ exports[`website with addJson 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
