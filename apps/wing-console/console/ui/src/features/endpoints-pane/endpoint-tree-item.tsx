@@ -37,6 +37,11 @@ export const EndpointTreeItem = ({
 }) => {
   const { theme } = useTheme();
 
+  const isLoading = useMemo(
+    () => loading || endpoint.exposeStatus === "connecting",
+    [loading, endpoint.exposeStatus],
+  );
+
   const buttonLabel = useMemo(() => {
     if (endpoint.exposeStatus === "connected") {
       return loading ? "Closing" : "Close";
@@ -71,8 +76,8 @@ export const EndpointTreeItem = ({
       title={endpointTitle}
       icon={
         <>
-          {loading && <SpinnerLoader size="xs" />}
-          {!loading && (
+          {isLoading && <SpinnerLoader size="xs" />}
+          {!isLoading && (
             <>
               {endpoint.exposeStatus === "disconnected" && (
                 <div className={classNames("size-4", theme.text2)}>
@@ -109,12 +114,12 @@ export const EndpointTreeItem = ({
           target="_blank"
           rel="noreferrer"
           title={endpoint.url}
-          aria-disabled={loading}
+          aria-disabled={isLoading}
           className={classNames(
             "flex gap-1 items-center",
             "justify-between group/endpoint-tree-item",
-            !loading && "hover:underline text-sky-500 hover:text-sky-600",
-            loading && "text-slate-400 cursor-not-allowed",
+            !isLoading && "hover:underline text-sky-500 hover:text-sky-600",
+            isLoading && "text-slate-400 cursor-not-allowed",
           )}
         >
           <span className="truncate">{endpoint.label}</span>
@@ -129,7 +134,7 @@ export const EndpointTreeItem = ({
       secondaryLabel={
         <Button
           small
-          disabled={loading || disabled}
+          disabled={isLoading || disabled}
           className="min-w-[5rem] justify-center"
           onClick={() => {
             if (endpoint.exposeStatus === "connected") {

@@ -46,7 +46,7 @@ export const EndpointsWarningModal = ({
                 "text-gray-900 dark:text-slate-100",
               )}
             >
-              Deactivate account
+              Expose endpoint · Security warning
             </h3>
             <div
               className={classNames(
