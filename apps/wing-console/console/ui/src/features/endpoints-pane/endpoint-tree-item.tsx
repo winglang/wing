@@ -80,14 +80,14 @@ export const EndpointTreeItem = ({
             {isLoading && (
               <div className="relative">
                 <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75" />
-                <div className="size-1.5 rounded-full bg-gray-400" />
+                <div className="size-2 rounded-full bg-gray-400" />
               </div>
             )}
             {!isLoading && endpoint.exposeStatus === "connected" && (
-              <div className="size-1.5 rounded-full bg-green-400" />
+              <div className="size-2 rounded-full bg-green-400" />
             )}
             {!isLoading && endpoint.exposeStatus === "disconnected" && (
-              <div className="size-1.5 rounded-full bg-gray-400" />
+              <div className="size-2 rounded-full border border-gray-400" />
             )}
           </div>
         }
@@ -105,6 +105,7 @@ export const EndpointTreeItem = ({
                 !isLoading && [
                   "group-hover/endpoint-tree-item:block",
                   "text-sky-500 hover:text-sky-600",
+                  "dark:text-sky-600 dark:hover:text-sky-500",
                 ],
               )}
             >
