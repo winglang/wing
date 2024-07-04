@@ -1,5 +1,5 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { Modal } from "@wingconsole/design-system";
+import { Modal, ModalBody } from "@wingconsole/design-system";
 import { useEffect, useState } from "react";
 
 import { useWebSocketState } from "./use-websocket.js";
@@ -19,8 +19,8 @@ export const WebSocketState = () => {
   return (
     <div>
       <Modal visible={showConnectionLost}>
-        <div>
-          <div className="sm:flex sm:items-start">
+        <ModalBody>
+          <div className="sm:flex sm:items-start p-4">
             <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
               <ExclamationTriangleIcon
                 className="h-6 w-6 text-red-600"
@@ -43,7 +43,7 @@ export const WebSocketState = () => {
               </div>
             </div>
           </div>
-        </div>
+        </ModalBody>
       </Modal>
     </div>
   );

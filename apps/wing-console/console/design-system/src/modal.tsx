@@ -12,6 +12,24 @@ export interface ModalProps {
   children?: ReactNode;
 }
 
+export const ModalFooter = ({ children }: { children: ReactNode }) => {
+  return (
+    <div
+      className={classNames(
+        "px-4 py-3",
+        "bg-slate-50 dark:bg-slate-750",
+        "flex items-center justify-end gap-4",
+      )}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const ModalBody = ({ children }: { children: ReactNode }) => {
+  return <div className="px-6 pt-6 pb-4">{children}</div>;
+};
+
 export const Modal = ({
   visible,
   setVisible,
@@ -55,8 +73,7 @@ export const Modal = ({
               <Dialog.Panel
                 className={classNames(
                   "relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all",
-                  "my-8 p-6",
-                  "bg-white dark:bg-slate-800",
+                  "bg-white dark:bg-slate-700",
                   "border",
                   theme.border3,
                   className,

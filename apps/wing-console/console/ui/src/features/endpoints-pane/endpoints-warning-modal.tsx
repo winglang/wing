@@ -1,5 +1,11 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { Button, Modal, useTheme } from "@wingconsole/design-system";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  useTheme,
+} from "@wingconsole/design-system";
 import classNames from "classnames";
 
 export interface EndpointsWarningModalProps {
@@ -17,16 +23,16 @@ export const EndpointsWarningModal = ({
 
   return (
     <Modal visible={visible}>
-      <div className="-m-6">
-        <div className={classNames("sm:flex sm:items-start", "px-6 pt-6 pb-4")}>
+      <ModalBody>
+        <div className="sm:flex sm:items-start">
           <div
             className={classNames(
-              "mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10",
-              theme.bg3,
-              theme.text1,
+              "mx-auto flex size-12 flex-shrink-0 items-center justify-center rounded-full",
+              "text-yellow-600 dark:text-yellow-300",
+              "bg-yellow-100 dark:bg-yellow-800",
             )}
           >
-            <ExclamationTriangleIcon className="size-6" />
+            <ExclamationTriangleIcon className="size-7" />
           </div>
           <div
             className={classNames(
@@ -36,11 +42,11 @@ export const EndpointsWarningModal = ({
           >
             <h3
               className={classNames(
-                "text-base font-semibold leading-6",
+                "text-lg font-semibold leading-6",
                 "text-gray-900 dark:text-slate-100",
               )}
             >
-              Expose endpoint · Security warning
+              Deactivate account
             </h3>
             <div
               className={classNames(
@@ -55,25 +61,13 @@ export const EndpointsWarningModal = ({
             </div>
           </div>
         </div>
-
-        <div
-          className={classNames(
-            "px-4 py-3",
-            "mt-4",
-            "bg-slate-50 dark:bg-slate-700",
-            "flex items-center justify-end gap-4",
-          )}
-        >
-          <Button
-            onClick={onCancel}
-            transparent
-            className={"hover:bg-slate-100"}
-          >
-            Cancel
-          </Button>
-          <Button onClick={onExpose}>Expose</Button>
-        </div>
-      </div>
+      </ModalBody>
+      <ModalFooter>
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button onClick={onExpose} primary>
+          Expose
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };
