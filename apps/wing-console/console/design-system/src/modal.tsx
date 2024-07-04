@@ -56,7 +56,7 @@ export const Modal = ({
                 className={classNames(
                   "relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all",
                   "my-8 p-6",
-                  theme.bg3,
+                  "bg-white dark:bg-slate-800",
                   "border",
                   theme.border3,
                   className,
