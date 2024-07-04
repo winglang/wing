@@ -253,6 +253,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         },
         "function_name": "Topic-OnMessage0-c8bb74dc",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.MyResource_Topic-OnMessage0_IamRole_CFB3A523.arn}",
