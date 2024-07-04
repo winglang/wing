@@ -84,7 +84,7 @@ export const EndpointTreeItem = ({
           </div>
         }
         label={
-          <div className="truncate flex justify-between items-center">
+          <div className="truncate flex justify-between items-center gap-0.5">
             <span className="truncate">{endpoint.label}</span>
             <a
               href={endpoint.url}
@@ -94,7 +94,6 @@ export const EndpointTreeItem = ({
               aria-disabled={isLoading}
               className={classNames(
                 "hidden",
-                "pl-0.5",
                 !isLoading && [
                   "group-hover/endpoint-tree-item:block",
                   "text-sky-500 hover:text-sky-600",
