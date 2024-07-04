@@ -6,7 +6,7 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { useEndpointsWarning } from "../inspector-pane/resource-panes/use-endpoints-warning.js";
 import { useEndpoints } from "../inspector-pane/resource-panes/use-endpoints.js";
@@ -110,6 +110,16 @@ export const EndpointTree = () => {
 
   const { theme } = useTheme();
 
+  const endpointsSortedList = useMemo(() => {
+    return (
+      endpointList.data?.sort(
+        (a, b) =>
+          a.exposeStatus.localeCompare(b.exposeStatus) ||
+          a.label.localeCompare(b.label),
+      ) ?? []
+    );
+  }, [endpointList.data]);
+
   return (
     <div
       className={classNames("w-full h-full flex flex-col", theme.bg3)}
@@ -128,10 +138,10 @@ export const EndpointTree = () => {
             )}
           >
             <div className="flex flex-col">
-              {endpointList.data?.length === 0 && <NoEndpoints />}
+              {endpointsSortedList.length === 0 && <NoEndpoints />}
 
               <TreeView>
-                {endpointList.data?.map((endpoint) => (
+                {endpointsSortedList.map((endpoint) => (
                   <EndpointTreeItem
                     key={endpoint.id}
                     endpoint={endpoint}

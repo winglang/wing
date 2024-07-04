@@ -69,84 +69,64 @@ export const EndpointTreeItem = ({
   }, [endpoint.exposeStatus]);
 
   return (
-    <TreeItem
-      key={endpoint.id}
-      itemId={endpoint.id}
-      selectable={false}
-      title={endpointTitle}
-      icon={
-        <>
-          {isLoading && <SpinnerLoader size="xs" />}
-          {!isLoading && (
-            <>
-              {endpoint.exposeStatus === "disconnected" && (
-                <div className={classNames("size-4", theme.text2)}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 3l18 18"
-                    />
-                  </svg>
-                </div>
-              )}
-              {endpoint.exposeStatus === "connected" && (
-                <GlobeAltIcon className={classNames("size-4", theme.text1)} />
-              )}
-            </>
-          )}
-        </>
-      }
-      label={
-        <a
-          href={endpoint.url}
-          target="_blank"
-          rel="noreferrer"
-          title={endpoint.url}
-          aria-disabled={isLoading}
-          className={classNames(
-            "flex gap-1 items-center",
-            "justify-between group/endpoint-tree-item",
-            !isLoading && "hover:underline text-sky-500 hover:text-sky-600",
-            isLoading && "text-slate-400 cursor-not-allowed",
-          )}
-        >
-          <span className="truncate">{endpoint.label}</span>
-          <ArrowTopRightOnSquareIcon
-            className={classNames(
-              "size-4 shrink-0 hidden",
-              "group-hover/endpoint-tree-item:block",
+    <div className=" group/endpoint-tree-item ">
+      <TreeItem
+        key={endpoint.id}
+        itemId={endpoint.id}
+        selectable={false}
+        title={endpointTitle}
+        icon={
+          <div className="flex size-4 justify-center items-center">
+            {isLoading && (
+              <div className="relative">
+                <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-500 opacity-75" />
+                <div className="size-1.5 rounded-full bg-gray-500" />
+              </div>
             )}
-          />
-        </a>
-      }
-      secondaryLabel={
-        <Button
-          small
-          disabled={isLoading || disabled}
-          className="min-w-[5rem] justify-center"
-          onClick={() => {
-            if (endpoint.exposeStatus === "connected") {
-              onHideEndpoint();
-            } else {
-              onExposeEndpoint();
-            }
-          }}
-        >
-          {buttonLabel}
-        </Button>
-      }
-    />
+            {!isLoading && endpoint.exposeStatus === "connected" && (
+              <div className="size-1.5 rounded-full bg-green-500" />
+            )}
+            {!isLoading && endpoint.exposeStatus === "disconnected" && (
+              <div className="size-1.5 rounded-full bg-gray-400" />
+            )}
+          </div>
+        }
+        label={
+          <div className="truncate flex justify-between items-center">
+            <span className="truncate">{endpoint.label}</span>
+            <a
+              href={endpoint.url}
+              target="_blank"
+              rel="noreferrer"
+              title={endpoint.url}
+              aria-disabled={isLoading}
+              className={classNames(
+                "hidden group-hover/endpoint-tree-item:block",
+                !isLoading && "text-sky-500 hover:text-sky-600",
+                isLoading && "text-slate-400 cursor-not-allowed",
+              )}
+            >
+              <ArrowTopRightOnSquareIcon className="size-4 shrink-0" />
+            </a>
+          </div>
+        }
+        secondaryLabel={
+          <Button
+            small
+            disabled={isLoading || disabled}
+            className="min-w-[4.2rem] justify-center"
+            onClick={() => {
+              if (endpoint.exposeStatus === "connected") {
+                onHideEndpoint();
+              } else {
+                onExposeEndpoint();
+              }
+            }}
+          >
+            {buttonLabel}
+          </Button>
+        }
+      />
+    </div>
   );
 };
