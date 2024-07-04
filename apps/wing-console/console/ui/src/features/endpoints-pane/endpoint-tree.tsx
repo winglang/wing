@@ -39,8 +39,9 @@ export const EndpointTree = () => {
   const expose = useCallback(
     async (endpoint: EndpointItem) => {
       await exposeEndpoint.mutateAsync({ resourcePath: endpoint.id });
-      showNotification(`Endpoint "${endpoint.label}" is exposed`, {
+      showNotification(`${endpoint.label}`, {
         type: "info",
+        body: "The endpoint is now exposed.",
       });
     },
     [exposeEndpoint, showNotification],
