@@ -273,13 +273,22 @@ export const ResourceMetadata = memo(
         <div className="flex flex-col gap-2 py-2">
           <div className="flex items-center gap-2 px-2 ">
             <div className="flex-shrink-0">
+              <div className="relative">
               <ResourceIcon
-                className="w-6 h-6"
+                  className="size-6"
                 resourceType={node.type}
                 resourcePath={node.path}
                 color={node.display?.color}
                 icon={node.display?.icon}
               />
+
+                <div className="absolute -right-0.5 bottom-0">
+                  <RunningStateIndicator
+                    runningState={node.hierarchichalRunningState}
+                    className="size-2 outline outline-2 outline-slate-100 dark:outline-slate-700"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col min-w-0">
@@ -288,19 +297,6 @@ export const ResourceMetadata = memo(
                 <Pill>{node.type}</Pill>
               </div>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 px-2">
-            <Attribute className="grow" name="Running Status">
-              <div className="flex gap-2 items-center">
-                <span>
-                  {runningStateToText(node.hierarchichalRunningState)}
-                </span>
-                <RunningStateIndicator
-                  runningState={node.hierarchichalRunningState}
-                />
-              </div>
-            </Attribute>
           </div>
         </div>
 

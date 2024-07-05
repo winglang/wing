@@ -151,12 +151,28 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                   "transition-all",
                 )}
               >
-                <ResourceIcon
-                  className="size-4 -ml-0.5"
-                  resourceType={fqn}
-                  color={color}
-                  icon={icon}
-                />
+                <div className="-ml-0 5">
+                  <div className="relative">
+                    <ResourceIcon
+                      className="size-4"
+                      resourceType={fqn}
+                      color={color}
+                      icon={icon}
+                    />
+                    <div className="absolute -right-0.5 bottom-0">
+                      <RunningStateIndicator
+                        runningState={hierarchichalRunningState}
+                        className={clsx(
+                          "size-1.5 outline outline-2",
+                          depth % 2 === 0 &&
+                            "outline-white dark:outline-slate-700",
+                          depth % 2 === 1 &&
+                            "outline-slate-50 dark:outline-slate-650",
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 <span
                   className={clsx(
@@ -170,10 +186,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 >
                   {name}
                 </span>
-
-                <RunningStateIndicator
-                  runningState={hierarchichalRunningState}
-                />
 
                 {(hasChildNodes || collapsed) && (
                   <>
