@@ -46,7 +46,7 @@ const options = parseArgs({
       return options.requireSignIn ?? false;
     },
     async getEndpointWarningAccepted() {
-      return options.getEndpointWarningAccepted ?? false;
+      return options.getEndpointWarningAccepted ?? true;
     },
   });
 
