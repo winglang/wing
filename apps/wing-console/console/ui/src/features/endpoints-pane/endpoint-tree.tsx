@@ -112,12 +112,13 @@ export const EndpointTree = () => {
   const { theme } = useTheme();
 
   const endpointsSortedList = useMemo(() => {
-    return (
-      endpointList.data?.sort(
-        (a, b) =>
-          a.exposeStatus.localeCompare(b.exposeStatus) ||
-          a.label.localeCompare(b.label),
-      ) ?? []
+    if (!endpointList.data) {
+      return [];
+    }
+    return [...endpointList.data].sort(
+      (a, b) =>
+        a.exposeStatus.localeCompare(b.exposeStatus) ||
+        a.label.localeCompare(b.label),
     );
   }, [endpointList.data]);
 
