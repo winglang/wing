@@ -13,10 +13,10 @@ export const EndpointInteractionView = memo(
 
     const endpoint = getEndpoint(resourcePath);
     const handleExposeEndpoint = () => {
-      exposeEndpoint(resourcePath);
+      exposeEndpoint.mutate({ resourcePath });
     };
     const handleHideEndpoint = () => {
-      hideEndpoint(resourcePath);
+      hideEndpoint.mutate({ resourcePath });
     };
 
     return (
