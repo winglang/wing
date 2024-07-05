@@ -15,6 +15,7 @@ import { AppContext } from "./AppContext.js";
 import { LayoutType } from "./features/layout/layout-provider.js";
 import { WebSocketProvider } from "./features/websocket-state/use-websocket.js";
 import { trpc } from "./trpc.js";
+import { useEvent } from "react-use";
 
 export const Console = ({
   trpcUrl,
@@ -137,6 +138,22 @@ export const Console = ({
       window.removeEventListener("keydown", vscodeCommands);
     };
   }, [layout]);
+
+  // Prevent the default zoom behavior everywhere in the app.
+  // Since the explorer panel handles the zoom manually, sometimes
+  // users may end up zooming the whole app by mistake and end up
+  // with the explorer panel covering the whole screen. This is
+  // a big problem since users won't be able to zoom out of it.
+  useEvent(
+    "wheel",
+    (event) => {
+      if ((event as WheelEvent).ctrlKey) {
+        event.preventDefault();
+      }
+    },
+    document,
+    { passive: false },
+  );
 
   return (
     <AppContext.Provider
