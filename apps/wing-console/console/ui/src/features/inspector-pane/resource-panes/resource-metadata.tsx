@@ -274,13 +274,13 @@ export const ResourceMetadata = memo(
           <div className="flex items-center gap-2 px-2 ">
             <div className="flex-shrink-0">
               <div className="relative">
-              <ResourceIcon
+                <ResourceIcon
                   className="size-6"
-                resourceType={node.type}
-                resourcePath={node.path}
-                color={node.display?.color}
-                icon={node.display?.icon}
-              />
+                  resourceType={node.type}
+                  resourcePath={node.path}
+                  color={node.display?.color}
+                  icon={node.display?.icon}
+                />
 
                 <div className="absolute -right-0.5 bottom-0">
                   <RunningStateIndicator
