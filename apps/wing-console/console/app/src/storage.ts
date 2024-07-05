@@ -23,7 +23,7 @@ export interface AnalyticsConfig {
   optOut?: boolean;
   /** whether sign in is required */
   requireSignIn?: boolean;
-  /** whether the user has acknowledged the exposing endpoints risk warning */
+  /** whether the user has acceptede the exposing endpoints risk warning */
   endpointWarningAccepted?: boolean;
 }
 
