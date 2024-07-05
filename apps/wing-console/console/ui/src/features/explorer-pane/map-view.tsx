@@ -151,7 +151,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                   "transition-all",
                 )}
               >
-                <div className="-ml-0 5">
+                <div className="-ml-0.5">
                   <div className="relative">
                     <ResourceIcon
                       className="size-4"
