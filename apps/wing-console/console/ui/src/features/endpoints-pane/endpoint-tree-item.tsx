@@ -1,7 +1,7 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
-import { Button, TreeItem, useTheme } from "@wingconsole/design-system";
+import { Button, TreeItem } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 export type EndpointExposeStatus = "connected" | "disconnected" | "connecting";
 
@@ -27,8 +27,6 @@ export const EndpointTreeItem = ({
   onExposeEndpoint: () => void;
   onHideEndpoint: () => void;
 }) => {
-  const { theme } = useTheme();
-
   const isLoading = useMemo(
     () => loading || endpoint.exposeStatus === "connecting",
     [loading, endpoint.exposeStatus],
@@ -60,6 +58,33 @@ export const EndpointTreeItem = ({
     }
   }, [endpoint.exposeStatus]);
 
+  const StatusIcon = memo(
+    ({
+      loading,
+      status,
+    }: {
+      loading: boolean;
+      status: EndpointExposeStatus;
+    }) => {
+      return (
+        <div className="flex size-4 justify-center items-center">
+          {loading && (
+            <div className="relative">
+              <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-500 opacity-75" />
+              <div className="size-2 rounded-full bg-yellow-500" />
+            </div>
+          )}
+          {!loading && status === "connected" && (
+            <div className="size-2 rounded-full bg-green-400" />
+          )}
+          {!loading && status === "disconnected" && (
+            <div className="size-2 rounded-full border border-gray-400" />
+          )}
+        </div>
+      );
+    },
+  );
+
   return (
     <div className=" group/endpoint-tree-item ">
       <TreeItem
@@ -69,18 +94,7 @@ export const EndpointTreeItem = ({
         title={endpointTitle}
         icon={
           <div className="flex size-4 justify-center items-center">
-            {isLoading && (
-              <div className="relative">
-                <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-500 opacity-75" />
-                <div className="size-2 rounded-full bg-yellow-500" />
-              </div>
-            )}
-            {!isLoading && endpoint.exposeStatus === "connected" && (
-              <div className="size-2 rounded-full bg-green-400" />
-            )}
-            {!isLoading && endpoint.exposeStatus === "disconnected" && (
-              <div className="size-2 rounded-full border border-gray-400" />
-            )}
+            {<StatusIcon loading={isLoading} status={endpoint.exposeStatus} />}
           </div>
         }
         label={
@@ -93,10 +107,7 @@ export const EndpointTreeItem = ({
               aria-disabled={isLoading}
               className={classNames(
                 " flex justify-between items-center gap-0.5",
-                !isLoading && [
-                  "text-sky-500 hover:text-sky-600",
-                  "dark:text-sky-600 dark:hover:text-sky-500",
-                ],
+                "text-sky-500 hover:underline",
               )}
             >
               <span className="truncate">{endpoint.label}</span>
