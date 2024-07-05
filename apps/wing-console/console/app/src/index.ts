@@ -82,10 +82,10 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
       analyticsStorage.notifySignedIn();
     },
     async requireAcceptEndpointWarning() {
-      return analyticsStorage.getEndpointWarningAcknowledged();
+      return analyticsStorage.getEndpointWarningAccepted();
     },
     async notifyEndpointWarningAccepted() {
-      analyticsStorage.notifyEndpointWarningAcknowledged();
+      analyticsStorage.notifyEndpointWarningAccepted();
     },
     onExpressCreated(app) {
       app.use(express.static(staticDir));
