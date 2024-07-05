@@ -5,13 +5,6 @@ import { Fragment } from "react";
 
 import { useTheme } from "./theme-provider.js";
 
-export interface ModalProps {
-  visible: boolean;
-  setVisible?: (visible: boolean) => void;
-  className?: string;
-  children?: ReactNode;
-}
-
 export const ModalFooter = ({ children }: { children: ReactNode }) => {
   return (
     <div
@@ -30,6 +23,13 @@ export const ModalFooter = ({ children }: { children: ReactNode }) => {
 export const ModalBody = ({ children }: { children: ReactNode }) => {
   return <div className="p-6">{children}</div>;
 };
+
+export interface ModalProps {
+  visible: boolean;
+  setVisible?: (visible: boolean) => void;
+  className?: string;
+  children?: ReactNode;
+}
 
 export const Modal = ({
   visible,
