@@ -108,7 +108,8 @@ export const EndpointTreeItem = ({
               className={classNames(
                 " flex justify-between items-center gap-0.5",
                 !isLoading && "text-sky-600 hover:underline",
-                isLoading && "text-slate-400 cursor-not-allowed",
+                isLoading &&
+                  "text-slate-400 dark:text-slate-500 cursor-not-allowed",
               )}
             >
               <span className="truncate">{endpoint.label}</span>
