@@ -5,6 +5,25 @@ import { Fragment } from "react";
 
 import { useTheme } from "./theme-provider.js";
 
+export const ModalFooter = ({ children }: { children: ReactNode }) => {
+  return (
+    <div
+      className={classNames(
+        "-mt-2",
+        "px-4 py-3",
+        "bg-slate-50 dark:bg-slate-750",
+        "flex items-center justify-end gap-4",
+      )}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const ModalBody = ({ children }: { children: ReactNode }) => {
+  return <div className="p-6">{children}</div>;
+};
+
 export interface ModalProps {
   visible: boolean;
   setVisible?: (visible: boolean) => void;
@@ -55,8 +74,7 @@ export const Modal = ({
               <Dialog.Panel
                 className={classNames(
                   "relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all",
-                  "my-8 p-6",
-                  theme.bg3,
+                  "bg-white dark:bg-slate-700",
                   "border",
                   theme.border3,
                   className,
