@@ -107,15 +107,16 @@ export const EndpointTreeItem = ({
               aria-disabled={isLoading}
               className={classNames(
                 " flex justify-between items-center gap-0.5",
-                "text-sky-500 hover:underline",
+                !isLoading && "text-sky-600 hover:underline",
+                isLoading && "text-slate-400 cursor-not-allowed",
               )}
             >
               <span className="truncate">{endpoint.label}</span>
               <ArrowTopRightOnSquareIcon
                 className={classNames(
-                  "hidden",
-                  "group-hover/endpoint-tree-item:block",
                   "size-4 shrink-0",
+                  "hidden",
+                  !isLoading && "group-hover/endpoint-tree-item:block",
                 )}
               />
             </a>

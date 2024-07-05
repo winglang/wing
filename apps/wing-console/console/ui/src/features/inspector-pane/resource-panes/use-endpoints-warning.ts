@@ -1,13 +1,13 @@
 import { trpc } from "../../../trpc.js";
 
 export const useEndpointsWarning = () => {
-  const requireAcceptWarning = trpc["endpoint.requireAcceptWarning"].useQuery();
+  const warningAccepted = trpc["endpoint.warningAccepted"].useQuery();
 
   const notifyWarningAccepted =
     trpc["endpoint.notifyWarningAccepted"].useMutation();
 
   return {
-    requireAcceptWarning,
+    warningAccepted,
     notifyWarningAccepted,
   };
 };

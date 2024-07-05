@@ -41,7 +41,7 @@ export interface CreateConsoleAppOptions {
   stateDir?: string;
   open?: boolean;
   watchGlobs?: string[];
-  requireAcceptEndpointWarning?: boolean;
+  getEndpointWarningAccepted?: boolean;
   notifyEndpointWarningAccepted?: () => void;
 }
 
@@ -81,7 +81,7 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     async notifySignedIn() {
       analyticsStorage.notifySignedIn();
     },
-    async requireAcceptEndpointWarning() {
+    async getEndpointWarningAccepted() {
       return analyticsStorage.getEndpointWarningAccepted();
     },
     async notifyEndpointWarningAccepted() {

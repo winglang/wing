@@ -112,7 +112,7 @@ export interface RouterContext {
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
   analytics?: Analytics;
-  requireAcceptEndpointWarning?: () => Promise<boolean>;
+  getEndpointWarningAccepted?: () => Promise<boolean>;
   notifyEndpointWarningAccepted?: () => Promise<void>;
 }
 

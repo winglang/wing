@@ -18,16 +18,16 @@ import { NoEndpoints } from "./no-endpoints.js";
 
 export const EndpointTree = () => {
   const { endpointList, exposeEndpoint, hideEndpoint } = useEndpoints();
-  const { requireAcceptWarning, notifyWarningAccepted } = useEndpointsWarning();
+  const { warningAccepted, notifyWarningAccepted } = useEndpointsWarning();
   const { showNotification } = useNotifications();
 
   const [warningModalVisible, setWarningModalVisible] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(true);
   useEffect(() => {
-    if (requireAcceptWarning.data?.requireAcceptWarning === false) {
+    if (warningAccepted.data?.warningAccepted === true) {
       setShowWarningModal(false);
     }
-  }, [requireAcceptWarning.data]);
+  }, [warningAccepted.data]);
 
   const [selectedEndpoint, setSelectedEndpoint] = useState<EndpointItem>();
 

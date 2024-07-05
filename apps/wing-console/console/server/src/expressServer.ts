@@ -52,7 +52,7 @@ export interface CreateExpressServerOptions {
   analytics?: Analytics;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
-  requireAcceptEndpointWarning?: () => Promise<boolean>;
+  getEndpointWarningAccepted?: () => Promise<boolean>;
   notifyEndpointWarningAccepted?: () => Promise<void>;
 }
 
@@ -81,7 +81,7 @@ export const createExpressServer = async ({
   analytics,
   requireSignIn,
   notifySignedIn,
-  requireAcceptEndpointWarning,
+  getEndpointWarningAccepted,
   notifyEndpointWarningAccepted,
 }: CreateExpressServerOptions) => {
   const app = expressApp ?? express();
@@ -123,7 +123,7 @@ export const createExpressServer = async ({
       analytics,
       requireSignIn,
       notifySignedIn,
-      requireAcceptEndpointWarning,
+      getEndpointWarningAccepted,
       notifyEndpointWarningAccepted,
     };
   };
