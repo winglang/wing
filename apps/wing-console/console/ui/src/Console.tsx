@@ -9,13 +9,13 @@ import {
 import type { Mode } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
 import { useEffect, useMemo, useState } from "react";
+import { useEvent } from "react-use";
 
 import { App } from "./App.js";
 import { AppContext } from "./AppContext.js";
 import { LayoutType } from "./features/layout/layout-provider.js";
 import { WebSocketProvider } from "./features/websocket-state/use-websocket.js";
 import { trpc } from "./trpc.js";
-import { useEvent } from "react-use";
 
 export const Console = ({
   trpcUrl,
