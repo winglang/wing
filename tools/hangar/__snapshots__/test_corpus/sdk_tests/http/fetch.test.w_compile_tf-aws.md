@@ -245,6 +245,9 @@
         },
         "function_name": "get_delayed0-c890c00c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_delayed0_IamRole_BF4D162F.arn}",
@@ -277,6 +280,9 @@
         },
         "function_name": "get_redirect0-c8014f2b",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_redirect0_IamRole_C9E5BF5A.arn}",
@@ -308,6 +314,9 @@
         },
         "function_name": "get_target0-c8691704",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_target0_IamRole_865D04CC.arn}",

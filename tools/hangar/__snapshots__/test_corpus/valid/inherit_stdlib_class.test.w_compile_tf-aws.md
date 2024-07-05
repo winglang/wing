@@ -223,6 +223,9 @@ module.exports = function({ $cloud_Api }) {
         },
         "function_name": "get_0-c86e4717",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.AnApi_get_0_IamRole_B03773D7.arn}",
