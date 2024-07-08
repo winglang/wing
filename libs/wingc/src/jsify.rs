@@ -198,6 +198,8 @@ impl<'a> JSifier<'a> {
 				"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
 				PLATFORMS_VAR
 			));
+			output
+				.line("if (globalThis.$ClassFactory !== undefined) { throw new Error(\"$ClassFactory already defined\"); }");
 			output.line("globalThis.$ClassFactory = $PlatformManager.createClassFactory();".to_string());
 
 			let mut root_class = CodeMaker::default();
