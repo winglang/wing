@@ -34,7 +34,7 @@ npm install -g winglang
 
 Verify your installation:
 ```
-wing -V
+wing --version
 ```
 
 ## IDE Extension
