@@ -28,7 +28,6 @@ export interface Node {
   attributes: Record<string, any> | undefined;
   children: string[];
   display?: NodeDisplay;
-  resourceConfig?: BaseResourceSchema;
   runningState: ResourceRunningState;
 }
 
@@ -98,7 +97,6 @@ export function buildConstructTreeNodeMap(
       attributes: node.attributes,
       constructInfo: node.constructInfo,
       display: node.display,
-      resourceConfig: simulator.tryGetResourceConfig(node.path),
       runningState:
         simulator.tryGetResourceRunningState(node.path) ?? "stopped",
     };

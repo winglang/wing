@@ -331,7 +331,7 @@ export class Simulator {
     // Mark remaining resources as started. This is necessary because
     // `this._model.graph.nodes` only contains resources that have
     // some kind of runtime code to be executed.
-    if (!failed.length) {
+    if (failed.length === 0) {
       const visit = async (node: ConstructTreeNode) => {
         if (node.children) {
           for (const child of Object.values(node.children)) {
