@@ -451,6 +451,9 @@ export class Simulator {
     }
   }
 
+  /**
+   * Get the running state of a resource.
+   */
   public tryGetResourceRunningState(
     path: string
   ): ResourceRunningState | undefined {
