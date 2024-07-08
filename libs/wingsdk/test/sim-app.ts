@@ -3,7 +3,7 @@ import { join } from "path";
 import { onTestFailed } from "vitest";
 import { directorySnapshot, mkdtemp } from "./util";
 import { Function, IFunctionClient, IFunctionHandler } from "../src/cloud";
-import { PolyconFactory } from "../src/core";
+import { ClassFactory } from "../src/core";
 import { Simulator } from "../src/simulator";
 import { App } from "../src/target-sim/app";
 import { Platform } from "../src/target-sim/platform";
@@ -36,7 +36,7 @@ export class SimApp extends App {
     const { isTestEnvironment, rootConstruct, outdir } = props;
 
     const platform = new Platform();
-    const polyconFactory = new PolyconFactory(
+    const classFactory = new ClassFactory(
       [platform.newInstance.bind(platform)],
       [platform.resolveType.bind(platform)]
     );
@@ -46,7 +46,7 @@ export class SimApp extends App {
       entrypointDir: __dirname,
       isTestEnvironment,
       rootConstruct,
-      polyconFactory,
+      classFactory,
     });
 
     // symlink the node_modules so we can test imports and stuffs

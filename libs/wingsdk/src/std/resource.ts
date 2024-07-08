@@ -1,5 +1,5 @@
 import { Construct, IConstruct } from "constructs";
-import { App, LiftMap, PolyconFactory } from "../core";
+import { App, LiftMap, ClassFactory } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { Node } from "../std";
 
@@ -171,7 +171,7 @@ export abstract class Resource extends Construct implements IResource {
     id: string,
     ...args: any[]
   ): TResource {
-    return PolyconFactory.of(scope).new(fqn, undefined, scope, id, ...args);
+    return ClassFactory.of(scope).new(fqn, undefined, scope, id, ...args);
   }
 
   /**

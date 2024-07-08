@@ -56,7 +56,7 @@ export interface AppProps {
   /**
    * Factory for instantiating new classes defined by the platform.
    */
-  readonly polyconFactory: PolyconFactory;
+  readonly classFactory: ClassFactory;
 
   /**
    * ParameterRegistrar of composed platforms
@@ -163,10 +163,10 @@ export abstract class App extends Construct implements IApp {
     this._synthHooks = props.synthHooks;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
 
-    if (!props.polyconFactory) {
-      throw new Error("PolyconFactory is required");
+    if (!props.classFactory) {
+      throw new Error("ClassFactory is required");
     }
-    props.polyconFactory.register(this);
+    props.classFactory.register(this);
   }
 
   /**
@@ -205,22 +205,22 @@ export abstract class App extends Construct implements IApp {
 
 // TODO: Move this to a separate file
 
-const POLYCON_FACTORY_SYMBOL = Symbol("@winglang/sdk.core.PolyconFactory");
+const CLASS_FACTORY_SYMBOL = Symbol("@winglang/sdk.core.ClassFactory");
 
 /**
  * A factory for instantiating new classes defined by platform(s).
  */
-export class PolyconFactory {
+export class ClassFactory {
   /**
-   * Returns the PolyconFactory for the given scope.
-   * @param scope the scope to get the PolyconFactory for
-   * @returns the PolyconFactory for the given scope
+   * Returns the ClassFactory for the given scope.
+   * @param scope the scope to get the ClassFactory for
+   * @returns the ClassFactory for the given scope
    */
-  public static of(scope: IConstruct): PolyconFactory {
+  public static of(scope: IConstruct): ClassFactory {
     const app = Node.of(scope).app;
-    const factory = (app as any)[POLYCON_FACTORY_SYMBOL];
+    const factory = (app as any)[CLASS_FACTORY_SYMBOL];
     if (!factory) {
-      throw new Error("PolyconFactory not found");
+      throw new Error("ClassFactory not found");
     }
     return factory;
   }
@@ -302,17 +302,17 @@ export class PolyconFactory {
   }
 
   /**
-   * Registers the PolyconFactory to an App, so that given any construct,
-   * its PolyconFactory can be retrieved.
+   * Registers the ClassFactory to an App, so that given any construct,
+   * its ClassFactory can be retrieved.
    *
    * @param app the App to register to
    */
   public register(app: App) {
-    const existing = (app as any)[POLYCON_FACTORY_SYMBOL];
+    const existing = (app as any)[CLASS_FACTORY_SYMBOL];
     if (existing && existing !== this) {
-      throw new Error("PolyconFactory already registered");
+      throw new Error("ClassFactory already registered");
     }
-    (app as any)[POLYCON_FACTORY_SYMBOL] = this;
+    (app as any)[CLASS_FACTORY_SYMBOL] = this;
   }
 }
 

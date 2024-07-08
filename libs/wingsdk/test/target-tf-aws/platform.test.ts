@@ -21,14 +21,14 @@ describe("tf-aws platform parameters", () => {
   let platformManager;
   let tempdir;
   let wingParametersFile;
-  let polyconFactory;
+  let classFactory;
 
   beforeEach(() => {
     platformManager = new PlatformManager({ platformPaths: ["tf-aws"] });
     tempdir = mkdtemp();
     wingParametersFile = path.join(tempdir, "wing.json");
     process.env.WING_VALUES_FILE = wingParametersFile;
-    polyconFactory = platformManager.createPolyconFactory();
+    classFactory = platformManager.createClassFactory();
   });
 
   test("throws if private subnet ids are not an array", () => {
@@ -46,7 +46,7 @@ describe("tf-aws platform parameters", () => {
     const app = platformManager.createApp({
       outdir: tempdir,
       entrypointDir: tempdir,
-      polyconFactory,
+      classFactory,
     });
 
     // THEN
@@ -68,7 +68,7 @@ describe("tf-aws platform parameters", () => {
     const app = platformManager.createApp({
       outdir: tempdir,
       entrypointDir: tempdir,
-      polyconFactory,
+      classFactory,
     });
 
     // THEN
@@ -90,7 +90,7 @@ describe("tf-aws platform parameters", () => {
     const app = platformManager.createApp({
       outdir: tempdir,
       entrypointDir: tempdir,
-      polyconFactory,
+      classFactory,
     });
     // THEN
     expect(() => app.synth()).toThrow(
@@ -113,7 +113,7 @@ describe("tf-aws platform parameters", () => {
     const app = platformManager.createApp({
       outdir: tempdir,
       entrypointDir: tempdir,
-      polyconFactory,
+      classFactory,
     });
     // THEN
     expect(() => app.synth()).not.toThrow();
@@ -135,7 +135,7 @@ describe("tf-aws platform parameters", () => {
     const app = platformManager.createApp({
       outdir: tempdir,
       entrypointDir: tempdir,
-      polyconFactory,
+      classFactory,
     });
 
     new Function(

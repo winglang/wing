@@ -4,7 +4,7 @@ import { cwd } from "process";
 import * as vm from "vm";
 import { IPlatform } from "./platform";
 import { scanDirForPlatformFile } from "./util";
-import { App, AppProps, PolyconFactory, SynthHooks } from "../core";
+import { App, AppProps, ClassFactory, SynthHooks } from "../core";
 import { SECRET_SYMBOL } from "../core/types";
 
 interface PlatformManagerOptions {
@@ -103,7 +103,7 @@ export class PlatformManager {
     });
   }
 
-  public createPolyconFactory(): PolyconFactory {
+  public createClassFactory(): ClassFactory {
     this.createPlatformInstances();
     const newInstanceOverrides: any[] = [];
     const resolveTypeOverrides: any[] = [];
@@ -122,7 +122,7 @@ export class PlatformManager {
     newInstanceOverrides.reverse();
     resolveTypeOverrides.reverse();
 
-    return new PolyconFactory(newInstanceOverrides, resolveTypeOverrides);
+    return new ClassFactory(newInstanceOverrides, resolveTypeOverrides);
   }
 
   // This method is called from preflight.js in order to return an App instance

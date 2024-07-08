@@ -1,4 +1,4 @@
-import { PolyconFactory } from "../../src/core";
+import { ClassFactory } from "../../src/core";
 import { App, AppProps } from "../../src/target-tf-gcp";
 import { Platform } from "../../src/target-tf-gcp/platform";
 import { mkdtemp } from "../util";
@@ -8,7 +8,7 @@ export interface GcpAppProps extends Partial<AppProps> {}
 export class GcpApp extends App {
   constructor(props: GcpAppProps = {}) {
     const platform = new Platform();
-    const polyconFactory = new PolyconFactory(
+    const classFactory = new ClassFactory(
       [platform.newInstance.bind(platform)],
       [platform.resolveType.bind(platform)]
     );
@@ -21,7 +21,7 @@ export class GcpApp extends App {
       projectId: "my-project",
       region: "us-central1",
       zone: "us-central1-a",
-      polyconFactory,
+      classFactory,
       ...props,
     });
   }

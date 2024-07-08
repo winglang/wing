@@ -23,7 +23,7 @@ const TERRAFORM_STACK_NAME = "root";
 
 /**
  * An app that knows how to synthesize constructs into Terraform configuration
- * using cdktf. No polycon factory or Terraform providers are included.
+ * using cdktf. No Terraform providers are included.
  */
 export abstract class CdktfApp extends App {
   /**
