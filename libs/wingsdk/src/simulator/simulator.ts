@@ -9,7 +9,7 @@ import { resolveTokens } from "./tokens";
 import { Tree } from "./tree";
 import { exists } from "./util";
 import { SDK_VERSION } from "../constants";
-import { TREE_FILE_PATH } from "../core";
+import { ConstructTreeNode, TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, LogLevel, Trace, TraceType } from "../std";
 import { POLICY_FQN } from "../target-sim";
@@ -305,11 +305,13 @@ export class Simulator {
   private async startResources() {
     const retries: Record<string, number> = {};
     const queue = this._model.graph.nodes.map((n) => n.path);
-    const failed = [];
+    const started = new Array<string>();
+    const failed = new Array<string>();
     while (queue.length > 0) {
       const top = queue.shift()!;
       try {
         await this.startResource(top);
+        started.push(top);
       } catch (e: any) {
         if (e instanceof UnresolvedTokenError) {
           retries[top] = (retries[top] ?? 0) + 1;
@@ -324,6 +326,26 @@ export class Simulator {
 
         this.addSimulatorTrace(top, { message: e.message }, LogLevel.ERROR);
       }
+    }
+
+    // Mark remaining resources as started. This is necessary because
+    // `this._model.graph.nodes` only contains resources that have
+    // some kind of runtime code to be executed.
+    if (!failed.length) {
+      const visit = async (node: ConstructTreeNode) => {
+        if (node.children) {
+          for (const child of Object.values(node.children)) {
+            await visit(child);
+          }
+        }
+
+        if (started.includes(node.path)) {
+          return;
+        }
+
+        this.setResourceRunningState(node.path, "started");
+      };
+      await visit(this._model.tree.rawData().tree);
     }
 
     // mark as "running" so that we can stop the simulation if needed
@@ -413,14 +435,26 @@ export class Simulator {
     path: string,
     runningState: ResourceRunningState
   ) {
-    this.state[path].attrs = {
-      ...this.state[path].attrs,
+    const state = this.state[path] ?? {
+      props: {},
+      attrs: {},
+      policy: [],
+    };
+    state.attrs = {
+      ...state.attrs,
       [RUNNING_STATE_ATTRIBUTE]: runningState,
     };
+    this.state[path] = state;
 
     for (const subscriber of this._resourceLifecyleSubscribers) {
       subscriber.callback({ path, runningState });
     }
+  }
+
+  public tryGetResourceRunningState(
+    path: string
+  ): ResourceRunningState | undefined {
+    return this.state[path]?.attrs[RUNNING_STATE_ATTRIBUTE];
   }
 
   private async stopResource(path: string) {

@@ -1,3 +1,5 @@
+import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/simulator.js";
+
 import type { BaseResourceSchema, Simulator } from "../wingsdk.js";
 
 import type { ConstructInfo, ConstructTreeNode } from "./construct-tree.js";
@@ -27,6 +29,7 @@ export interface Node {
   children: string[];
   display?: NodeDisplay;
   resourceConfig?: BaseResourceSchema;
+  runningState: ResourceRunningState;
 }
 
 export interface ConstructTreeNodeRecord {
@@ -96,6 +99,8 @@ export function buildConstructTreeNodeMap(
       constructInfo: node.constructInfo,
       display: node.display,
       resourceConfig: simulator.tryGetResourceConfig(node.path),
+      runningState:
+        simulator.tryGetResourceRunningState(node.path) ?? "stopped",
     };
 
     if (!parent) {
