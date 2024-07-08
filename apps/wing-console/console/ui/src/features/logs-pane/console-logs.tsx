@@ -3,7 +3,11 @@ import {
   ChevronRightIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
-import { useTheme, ResourceIcon } from "@wingconsole/design-system";
+import {
+  useTheme,
+  ResourceIcon,
+  TextHighlight,
+} from "@wingconsole/design-system";
 import type { LogEntry } from "@wingconsole/server";
 import classNames from "classnames";
 import Linkify from "linkify-react";
@@ -213,7 +217,7 @@ const LogEntryRow = memo(
                   },
                 }}
               >
-                {logText(log, expanded)}
+                <TextHighlight text={logText(log, expanded) ?? ""} />
               </Linkify>
             </pre>
           </div>
