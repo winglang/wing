@@ -1,12 +1,12 @@
 ---
 title: Terraform/Azure
 id: tf-azure
-sidebar_label: tf-azure
+sidebar_label: Terraform (tf-azure)
 description: Terraform/Azure platform
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language, cli, terraform, tf-azure, azure, microsoft azure, platform]
 ---
 
-The `tf-azure` [platform](../02-concepts/03-platforms.md) compiles your program for Terraform and run on Azure.
+The `tf-azure` [platform](/docs/platforms/microsoft-azure/tf-azure) compiles your program for Terraform and run on Azure.
 
 ## Usage
 

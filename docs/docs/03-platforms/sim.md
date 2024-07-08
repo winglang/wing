@@ -1,7 +1,7 @@
 ---
 title: Wing Cloud Simulator
 id: sim
-sidebar_label: sim
+sidebar_label: Wing Cloud Simulator (sim)
 description: Simulator Platform
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language, simulator, sim, wing simulator]
 ---
@@ -10,7 +10,7 @@ The Wing Cloud Simulator is a tool for running Wing applications on a single hos
 simple localhost implementation of all the resources of the Wing Cloud Library to allow developers
 to develop and functionally test cloud applications without having to deploy to the cloud.
 
-The `sim` [platform](../02-concepts/03-platforms.md) compiles your program so it can run in the
+The `sim` [platform](/docs/platforms/sim) compiles your program so it can run in the
 Wing Cloud Simulator.
 
 ## Usage

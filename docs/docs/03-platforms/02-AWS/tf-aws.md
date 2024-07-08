@@ -1,12 +1,12 @@
 ---
 title: Terraform/AWS
 id: tf-aws
-sidebar_label: tf-aws
+sidebar_label: Terraform (tf-aws)
 description: Terraform/AWS platform
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language, cli, terraform, aws, tf-aws, tfaws, amazon web services, platform]
 ---
 
-The `tf-aws` [platform](../02-concepts/03-platforms.md) compiles your program for Terraform and run on AWS.
+The `tf-aws` [platform](/docs/platforms/AWS/tf-aws) compiles your program for Terraform and run on AWS.
 
 ## Usage
 

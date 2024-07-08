@@ -1,6 +1,6 @@
-label: Standard Library
+label: Microsoft Azure
 collapsible: true
 collapsed: true
 link:
   type: generated-index
-  title: Wing Standard Library
+  title: Microsoft Azure

@@ -593,8 +593,8 @@ the following properties (given an example intrinsic `@x`):
 | `@assert()`     | checks a condition and _throws_ if evaluated to false                                                                     |
 | `@dirname`      | current source directory                                                                                                  |
 | `@unsafeCast()` | cast a value into a different type                                                                                        |
-| `@nodeof()`     | obtain the [tree node](./02-concepts/02-application-tree.md) of a preflight object                                        |
-| `@lift()`       | explicitly qualify a [lift](./02-concepts/01-preflight-and-inflight.md#explicit-lift-qualification) of a preflight object |
+| `@nodeof()`     | obtain the [tree node](/docs/concepts/application-tree) of a preflight object                                        |
+| `@lift()`       | explicitly qualify a [lift](/docs/concepts/inflights) of a preflight object |
 
 > ```TS
 > @log("Hello {name}");

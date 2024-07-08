@@ -1,6 +1,6 @@
-label: Examples
+label: AWS
 collapsible: true
 collapsed: true
 link:
   type: generated-index
-  title: Wing examples
+  title: AWS

@@ -1,13 +1,12 @@
 ---
 id: why-wing
-title: Why Wing
+title: What is Wing?
 description: Wing is a cloud-oriented programming language. Most programming languages think about computers as individual machines. In Wing, the cloud is the computer.
 image: https://assets.website-files.com/63720940a94e098b4e2a542b/637e2d5495f59f7654160773_Social%20thumbnail.png
 
 ---
 
-
-## What is a cloud-oriented language?
+<!-- ## What is a cloud-oriented language? -->
 
 Wing is what we call a **cloud-oriented programming language**. It allows
 developers to build distributed systems that fully leverage the power of the
@@ -57,7 +56,7 @@ environment.
 Every Wing installation includes access to the Wing Console, a visual application-centric operations and management console that lets you interact with the cloud simulator.
 Through the console you can view logs, inspect resources, and even run unit tests:
 
-![Wing Console screenshot](../06-tools/console-demo-1.png)
+![Wing Console screenshot](./06-tools/console-demo-1.png)
 
 This is what we call **cloud-oriented programming**. It's a programming paradigm
 which treats the cloud as a computer, and heavily relies on managed services and

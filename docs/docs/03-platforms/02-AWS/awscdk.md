@@ -1,12 +1,12 @@
 ---
 title: AWS CDK
 id: awscdk
-sidebar_label: awscdk
+sidebar_label: AWS CDK (awscdk)
 description: AWS CDK platform
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language, aws, awscdk, amazon web services, cloudformation]
 ---
 
-The `@winglang/platform-awscdk` [platform](../02-concepts/03-platforms.md) compiles your program for
+The `@winglang/platform-awscdk` [platform](/docs/platforms/AWS/awscdk) compiles your program for
 the AWS CDK and deployed through the CDK CLI (and AWS CloudFormation).
 
 ## Prerequisites

@@ -45,41 +45,6 @@ From there, you can perform various actions such as sending messages to queues, 
 
 ![The Wing Console Interaction view](console-interaction-1.png 'Wing Console Interaction')
 
-## Exposing endpoints with Wing tunnels
-
-The console gives you the ability to create a secure (https) tunnel to expose your API to the internet.  
-
-<iframe width="460" height="315" src="https://www.youtube.com/embed/6y47uQXjg2s?si=lNNzZcr3clzIBinc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-During development tunnels can be helpful to help with integration testing (e.g webhook testing).
-
-Creating a tunnel will provide you with a secure wingcloud endpoint URL (e.g https://{ID}.endpoints.wingcloud.dev/).
-
-:::warning
-  Creating a tunnel exposes your API to the internet and may be a security risk. 
-:::
-
-### Creating a Wing tunnel
-
-1. Click on the **Expose** button next to the API route (can take a few seconds).
-1. Once the tunnel has been created, click on the **link** to view the tunnel URL.
-    - URL will look https://{RANDOM_ID}.endpoints.wingcloud.dev/
-
-![The Wing Console tunnel creation](console-open-tunnel.png 'Open Wing Console tunnel')
-
-### Closing a tunnel
-
-1. Click on the **Close** button next to the API route (can take a few seconds).
-1. Verify your tunnel is closed. Click on the **link** to view the tunnel URL.
-
-![The Wing Console tunnel closing](console-close-tunnel.png 'Close Wing Console tunnel')
-
-:::tip Tunnels will automatically close when wing console stops
-**Tunnels will be closed automatically when you stop the Wing console**. 
-
-Tunnels will automatically be open when you start your Wing console if they were previously left open.
-:::
-
 ## Run Tests
 
 The Console enables you to run the tests you wrote for your Wing application and view the results of these tests in real-time.
