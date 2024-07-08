@@ -84,7 +84,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
+globalThis.$ClassFactory = $PlatformManager.createClassFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -195,10 +195,10 @@ class $Root extends $stdlib.std.Resource {
     }
     const b = new B(this, "B");
     const c = new C(this, "C", b);
-    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:something", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:something", new $Closure1(this, "$Closure1"));
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "lift_weird_order.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "lift_weird_order.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

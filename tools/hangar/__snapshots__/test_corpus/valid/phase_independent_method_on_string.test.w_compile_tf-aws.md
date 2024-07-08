@@ -137,7 +137,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
+globalThis.$ClassFactory = $PlatformManager.createClassFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -190,14 +190,14 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const api = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
+    const api = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
     const urlRegex = (std.Regex.compile("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256\}\\.[a-zA-Z0-9()]{1,6\}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"));
     (expect.Util.equal((urlRegex.test(api.url)), false));
     const tokenLength = api.url.length;
-    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:phase independent method on string evaluated inflight", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:phase independent method on string evaluated inflight", new $Closure1(this, "$Closure1"));
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "phase_independent_method_on_string.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "phase_independent_method_on_string.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

@@ -1,6 +1,6 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { App, CdkAppProps, Platform } from "../src";
-import { PolyconFactory } from "@winglang/sdk/lib/core";
+import { ClassFactory } from "@winglang/sdk/lib/core";
 import { mkdtemp } from "@winglang/sdk/test/util";
 
 export interface AwsCdkAppProps extends Partial<CdkAppProps> {}
@@ -8,7 +8,7 @@ export interface AwsCdkAppProps extends Partial<CdkAppProps> {}
 export class AwsCdkApp extends App {
   constructor(props: AwsCdkAppProps = {}) {
     const platform = new Platform();
-    const polyconFactory = new PolyconFactory(
+    const classFactory = new ClassFactory(
       [platform.newInstance.bind(platform)],
       [platform.resolveType.bind(platform)]
     );
@@ -18,7 +18,7 @@ export class AwsCdkApp extends App {
       entrypointDir: __dirname,
       isTestEnvironment: false,
       rootConstruct: undefined,
-      polyconFactory,
+      classFactory,
       stackName: "my-project",
       ...props,
     });

@@ -57,7 +57,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
+globalThis.$ClassFactory = $PlatformManager.createClassFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -95,11 +95,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     let count = 0;
-    globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, new CustomScope(this, "CustomScope"), "Bucket");
+    globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, new CustomScope(this, "CustomScope"), "Bucket");
     $helpers.assert($helpers.eq(count, 1), "count == 1");
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "new_jsii.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "new_jsii.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

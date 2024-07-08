@@ -2,7 +2,7 @@ import { writeFileSync, readFileSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { Construct } from "constructs";
 import { platform, core, std } from "@winglang/sdk";
-import { PolyconFactory } from "@winglang/sdk/lib/core";
+import { ClassFactory } from "@winglang/sdk/lib/core";
 
 const PARENT_PROPERTIES: Set<string> = new Set([
   "node",
@@ -30,7 +30,7 @@ export class Platform implements platform.IPlatform {
   }
 
   newInstance(fqn: string, scope: Construct, id: string, ...args: any) {
-    const type = PolyconFactory.of(scope).resolveType(fqn);
+    const type = ClassFactory.of(scope).resolveType(fqn);
 
     if (!type) {
       return undefined;

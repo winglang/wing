@@ -1,5 +1,5 @@
-import { PolyconFactory } from "@winglang/sdk/lib/core";
+import { ClassFactory } from "@winglang/sdk/lib/core";
 
 declare global {
-  var $PolyconFactory: PolyconFactory;
+  var $ClassFactory: ClassFactory;
 }

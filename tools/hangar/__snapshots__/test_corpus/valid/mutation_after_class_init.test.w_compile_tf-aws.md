@@ -343,7 +343,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
+globalThis.$ClassFactory = $PlatformManager.createClassFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -355,7 +355,7 @@ class $Root extends $stdlib.std.Resource {
     class Queue extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.data = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+        this.data = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
         class $Closure1 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
@@ -536,12 +536,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const q = new Queue(this, "Queue");
-    const c = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+    const c = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
     (q.setConsumer(new $Closure3(this, "$Closure3")));
-    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:hi", new $Closure4(this, "$Closure4"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:hi", new $Closure4(this, "$Closure4"));
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "mutation_after_class_init.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "mutation_after_class_init.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

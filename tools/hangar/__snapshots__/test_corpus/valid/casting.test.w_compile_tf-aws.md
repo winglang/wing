@@ -48,7 +48,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
+globalThis.$ClassFactory = $PlatformManager.createClassFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -58,7 +58,7 @@ class $Root extends $stdlib.std.Resource {
     const util = $stdlib.util;
     const aws = require("@cdktf/provider-aws");
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
-    const b = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const b = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     if ($helpers.eq((util.Util.env("WING_TARGET")), "tf-aws")) {
       const s3Bucket = ($helpers.nodeof(b).findChild("Default"));
       (s3Bucket.addOverride("bucket_prefix", "my-prefix-"));
@@ -66,7 +66,7 @@ class $Root extends $stdlib.std.Resource {
     }
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "casting.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "casting.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

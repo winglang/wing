@@ -65,7 +65,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
+globalThis.$ClassFactory = $PlatformManager.createClassFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -145,7 +145,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const hello = new stuff.HelloWorld();
     const greeting = (hello.sayHello("wingnuts"));
-    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:sayHello", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:sayHello", new $Closure1(this, "$Closure1"));
     const jsiiClass = new jsii_fixture.JsiiClass(10);
     $helpers.assert($helpers.eq((jsiiClass.applyClosure(5, ((x) => {
       return (x * 2);
@@ -153,7 +153,7 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq((jsiiClass.methodWithStructParam(({"field": "struct field"}))), "struct field"), "jsiiClass.methodWithStructParam({ field: \"struct field\" }) == \"struct field\"");
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_jsii.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_jsii.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

@@ -172,7 +172,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
+globalThis.$ClassFactory = $PlatformManager.createClassFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -233,10 +233,10 @@ class $Root extends $stdlib.std.Resource {
     const mySecondBool = false;
     const myDur = (std.Duration.fromSeconds(600));
     const handler = new $Closure1(this, "$Closure1");
-    globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", handler);
+    globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", handler);
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "capture_primitives.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "capture_primitives.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

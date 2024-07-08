@@ -557,7 +557,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
+globalThis.$ClassFactory = $PlatformManager.createClassFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -598,7 +598,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const api = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "default api");
+    const api = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "default api");
     const handler = new $Closure1(this, "$Closure1");
     const testInvalidPath = ((path, apiInstance) => {
       let error = "";
@@ -653,10 +653,10 @@ class $Root extends $stdlib.std.Resource {
     (testValidPath("/test/segment1/segment2?query=value1&query2=value2"));
     (testValidPath("/test/path.withDots"));
     (testValidPath("/test/path/.withDots/:param/:param-dash/x"));
-    (testValidPath("/", globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "api for root path")));
+    (testValidPath("/", globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "api for root path")));
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api_valid_path.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api_valid_path.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

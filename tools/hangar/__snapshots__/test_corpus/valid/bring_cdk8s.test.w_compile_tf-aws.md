@@ -29,7 +29,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
+globalThis.$ClassFactory = $PlatformManager.createClassFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -38,13 +38,13 @@ class $Root extends $stdlib.std.Resource {
     const cdk8s = require("cdk8s");
     const kplus = require("cdk8s-plus-27");
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
-    const app = globalThis.$PolyconFactory.new("cdk8s.App", cdk8s.App, );
-    const chart = globalThis.$PolyconFactory.new("cdk8s.Chart", cdk8s.Chart, this, "Chart");
-    const deploy = globalThis.$PolyconFactory.new("cdk8s-plus-27.Deployment", kplus.Deployment, chart, "Deployment");
+    const app = globalThis.$ClassFactory.new("cdk8s.App", cdk8s.App, );
+    const chart = globalThis.$ClassFactory.new("cdk8s.Chart", cdk8s.Chart, this, "Chart");
+    const deploy = globalThis.$ClassFactory.new("cdk8s-plus-27.Deployment", kplus.Deployment, chart, "Deployment");
     (deploy.addContainer(({"image": "hashicorp/http-echo", "args": ["-text", "text"], "portNumber": 5678})));
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_cdk8s.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_cdk8s.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

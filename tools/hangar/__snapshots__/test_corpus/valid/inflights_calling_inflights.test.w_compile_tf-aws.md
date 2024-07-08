@@ -276,7 +276,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
+globalThis.$ClassFactory = $PlatformManager.createClassFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -496,16 +496,16 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const globalBucket = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const globalBucket = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const storeInBucket = new $Closure1(this, "$Closure1");
     const handler1 = new $Closure2(this, "$Closure2");
-    const func1 = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "func1", handler1);
-    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflights can call other inflights", new $Closure3(this, "$Closure3"));
+    const func1 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "func1", handler1);
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflights can call other inflights", new $Closure3(this, "$Closure3"));
     const x = new MyResource(this, "MyResource");
-    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:variable can be an inflight closure", new $Closure5(this, "$Closure5"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:variable can be an inflight closure", new $Closure5(this, "$Closure5"));
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflights_calling_inflights.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflights_calling_inflights.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

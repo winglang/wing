@@ -23,11 +23,11 @@ describe("compatibility spy", async () => {
     }
   );
 
-  const factory = manager.createPolyconFactory();
+  const factory = manager.createClassFactory();
 
   const app = manager.createApp({
     entrypointDir: __dirname,
-    polyconFactory: factory,
+    classFactory: factory,
   }) as SimApp;
 
   test("app overrides and hooks set correctly", () => {
