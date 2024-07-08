@@ -87,6 +87,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
         [onSelectedNodeIdChange, id],
       );
 
+      const isStarting = hierarchichalRunningState === "starting";
       const hasError = hierarchichalRunningState === "error";
 
       return (
@@ -133,7 +134,12 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 "border-slate-200 dark:border-slate-800",
               highlight && !hasError && "border-sky-400 dark:border-sky-500",
               highlight && "outline-4",
-              !hasError && "outline-sky-200/50 dark:outline-sky-500/50",
+              !hasError &&
+                !isStarting &&
+                "outline-sky-200/50 dark:outline-sky-500/50",
+              isStarting &&
+                !hasError &&
+                "border-yellow-500 dark:border-yellow-500 outline-yellow-200/50 dark:outline-yellow-500/50",
               hasError &&
                 "border-red-500 dark:border-red-500 outline-red-200/50 dark:outline-red-500/50",
               "shadow",
