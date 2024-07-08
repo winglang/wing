@@ -62,8 +62,7 @@ module.exports = function({ $cloud_Api }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {
       "root": {
@@ -224,6 +223,9 @@ module.exports = function({ $cloud_Api }) {
         },
         "function_name": "get_0-c86e4717",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.AnApi_get_0_IamRole_B03773D7.arn}",
@@ -292,11 +294,14 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
-const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const http = $stdlib.http;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class AnApi extends (globalThis.$PolyconFactory.resolveType("@winglang/sdk.cloud.Api") ?? cloud.Api) {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -386,9 +391,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), ["get"]],
             [api.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [api.url, []],
           ],
         });

@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -143,6 +142,9 @@
         },
         "function_name": "Topic-OnMessage0-c85d7820",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Topic-OnMessage0_IamRole_64DD36FA.arn}",
@@ -175,6 +177,9 @@
         },
         "function_name": "Topic-OnMessage1-c8763765",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Topic-OnMessage1_IamRole_6EE8D90C.arn}",

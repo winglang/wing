@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {
       "root": {
@@ -246,6 +245,9 @@
         },
         "function_name": "get_default-response0-c8ce77c1",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_default-response0_IamRole_A864CAEB.arn}",
@@ -277,6 +279,9 @@
         },
         "function_name": "get_default-status0-c8c4d89b",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_default-status0_IamRole_39C8F206.arn}",
@@ -308,6 +313,9 @@
         },
         "function_name": "get_path0-c8789d12",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_path0_IamRole_66BB88D8.arn}",

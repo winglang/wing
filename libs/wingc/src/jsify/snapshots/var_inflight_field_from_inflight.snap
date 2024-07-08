@@ -56,6 +56,9 @@ globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class MyType extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);

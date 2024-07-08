@@ -187,8 +187,7 @@ module.exports = function({ $InflightA }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -226,11 +225,14 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const expect = $stdlib.expect;
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const expect = $stdlib.expect;
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class A extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -415,6 +417,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    if ($preflightTypesMap[6]) { throw new Error("InflightA is already in type map"); }
+    $preflightTypesMap[6] = InflightA;
     class InflightB extends InflightA {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -446,6 +450,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    if ($preflightTypesMap[7]) { throw new Error("InflightB is already in type map"); }
+    $preflightTypesMap[7] = InflightB;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -474,8 +480,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$helpers.preflightClassSingleton(this, 7), ["description"]],
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
+            [InflightB, []],
           ],
           "$inflight_init": [
+            [$helpers.preflightClassSingleton(this, 7), []],
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [InflightB, []],
           ],
         });
       }
@@ -575,9 +587,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [extended, ["do"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
             [extended, []],
           ],
         });

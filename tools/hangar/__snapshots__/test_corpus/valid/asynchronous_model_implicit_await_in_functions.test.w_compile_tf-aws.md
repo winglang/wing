@@ -46,8 +46,7 @@ module.exports = function({ $strToStr }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -164,6 +163,9 @@ module.exports = function({ $strToStr }) {
         },
         "function_name": "func-c8cf78f6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.func_IamRole_EED2D17C.arn}",
@@ -195,6 +197,9 @@ module.exports = function({ $strToStr }) {
         },
         "function_name": "strToStr-c8d5081f",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.strToStr_IamRole_3B9A4F9A.arn}",
@@ -272,10 +277,13 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {

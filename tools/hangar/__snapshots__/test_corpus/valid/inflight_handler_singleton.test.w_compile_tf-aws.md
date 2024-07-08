@@ -144,8 +144,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -300,6 +299,9 @@ module.exports = function({  }) {
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -331,6 +333,9 @@ module.exports = function({  }) {
         },
         "function_name": "fn2-c892a4c6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.fn2_IamRole_DE8D96D2.arn}",
@@ -362,6 +367,9 @@ module.exports = function({  }) {
         },
         "function_name": "fn3-c856234e",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.fn3_IamRole_B0C65815.arn}",
@@ -437,12 +445,15 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
-const expect = $stdlib.expect;
-const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const expect = $stdlib.expect;
+    const util = $stdlib.util;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -577,11 +588,13 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [fn, ["invoke"]],
             [fn2, ["invoke"]],
             [sim, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
             [fn, []],
             [fn2, []],
             [sim, []],
@@ -618,9 +631,13 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"), ["fromSeconds"]],
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["sleep"]],
             [foo, [].concat(["inc"], ["get"])],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"), []],
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [foo, []],
           ],
         });
@@ -655,9 +672,13 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"), ["fromSeconds"]],
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["sleep"]],
             [fn3, [].concat(["invokeAsync"], ["invoke"])],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"), []],
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [fn3, []],
           ],
         });

@@ -14,6 +14,6 @@ signatures:
       - label: "...options"
         documentation:
           kind: markdown
-          value: "```wing\nstruct RequestOptions {\n  body?: str;\n  cache?: RequestCache;\n  headers?: Map<str>;\n  method?: HttpMethod;\n  redirect?: RequestRedirect;\n  referrer?: str;\n}\n```\n"
+          value: "```wing\nstruct RequestOptions {\n  body?: str;\n  cache?: RequestCache;\n  headers?: Map<str>;\n  method?: HttpMethod;\n  redirect?: RequestRedirect;\n  referrer?: str;\n  /* ... */\n}\n```\n"
     activeParameter: 0
 

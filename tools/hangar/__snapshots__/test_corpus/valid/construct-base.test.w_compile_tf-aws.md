@@ -20,8 +20,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -57,16 +56,19 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
-const cx = require("constructs");
-const aws = require("@cdktf/provider-aws");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const cx = require("constructs");
+    const aws = require("@cdktf/provider-aws");
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class WingResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id));
+        console.log(String.raw({ raw: ["my id is ", ""] }, $helpers.nodeof(this).id));
       }
       static _toInflightType() {
         return `
@@ -93,7 +95,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const getPath = ((c) => {
-      return c.node.path;
+      return $helpers.nodeof(c).path;
     });
     const getDisplayName = ((r) => {
       return $helpers.nodeof(r).title;
@@ -105,6 +107,7 @@ class $Root extends $stdlib.std.Resource {
     console.log(String.raw({ raw: ["path of wing resource: ", ""] }, (getPath(wr))));
     const title = ((getDisplayName(wr)) ?? "no display name");
     console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title));
+    console.log((cx.Node.of(wr)).path);
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "construct-base.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });

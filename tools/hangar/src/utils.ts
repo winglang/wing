@@ -58,7 +58,7 @@ export function sanitizeOutput(output: string) {
       // Normalize line endings
       .replaceAll("\r\n", "\n")
       // Normalize windows slashes
-      .replace(/\\+([a-zA-Z0-9]+?)/g, "/$1")
+      .replace(/\\+([a-zA-Z0-9\.]{1})/g, "/$1")
       // Remove line/column numbers from rust sources
       .replace(/(src\/.+\.rs):\d+:\d+/g, "$1:LINE:COL")
       // Remove absolute stacktraces
@@ -76,7 +76,10 @@ export function sanitizeOutput(output: string) {
       // Remove timestamps
       .replace(/\b\d{2}:\d{2}:\d{2}.\d{3}\b/g, "<TIMESTAMP>")
       .replace(/\b\d{4}-\d{2}-\d{2}\b/g, "<TIMESTAMP>")
-      .replace(/\b(?:(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept|Oct|Nov|Dec)\w* )?(\d{1,2})(?:st|nd|th)?[,]? (?:(?:(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept|Oct|Nov|Dec)\w*)?[,]? )?(\d{2,4})\b/g, "<TIMESTAMP>")
+      .replace(
+        /\b(?:(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept|Oct|Nov|Dec)\w* )?(\d{1,2})(?:st|nd|th)?[,]? (?:(?:(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept|Oct|Nov|Dec)\w*)?[,]? )?(\d{2,4})\b/g,
+        "<TIMESTAMP>"
+      )
   );
 }
 
@@ -96,6 +99,8 @@ export function sanitize_json_paths(path: string) {
     .replace(sourceHashRegex, '"${filemd5(<SOURCE>)}"');
   const finalObj = JSON.parse(sanitizedJsonText);
   delete finalObj.terraform;
+  // Remove cdktf version
+  delete finalObj["//"]["metadata"]["version"];
 
   return finalObj;
 }

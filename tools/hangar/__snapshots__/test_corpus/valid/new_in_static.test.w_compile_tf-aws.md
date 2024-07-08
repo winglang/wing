@@ -98,8 +98,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -177,13 +176,16 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
-const c = require("constructs");
-const jsii_fixture = require("jsii-fixture");
-const new_in_static_lib = require("./preflight.newinstaticlib-1.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const c = require("constructs");
+    const jsii_fixture = require("jsii-fixture");
+    const new_in_static_lib = $helpers.bringJs(`${__dirname}/preflight.newinstaticlib-1.cjs`, $preflightTypesMap);
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class MyClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -360,6 +362,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -419,7 +422,7 @@ class LibClass extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { Foo, LibClass };
+module.exports = { $preflightTypesMap, Foo, LibClass };
 //# sourceMappingURL=preflight.newinstaticlib-1.cjs.map
 ```
 

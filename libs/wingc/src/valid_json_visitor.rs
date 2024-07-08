@@ -1,7 +1,7 @@
 use crate::{
 	ast::{Expr, ExprKind, Intrinsic, IntrinsicKind, Scope},
 	diagnostic::{report_diagnostic, Diagnostic},
-	type_check::{JsonData, JsonDataKind, Type, Types},
+	type_check::{JsonData, JsonDataKind, SpannedTypeInfo, Type, Types},
 	visit::{self, Visit},
 };
 
@@ -21,6 +21,19 @@ impl<'a> ValidJsonVisitor<'a> {
 
 	pub fn check(&mut self, scope: &Scope) {
 		self.visit_scope(scope);
+	}
+
+	fn report_invalid_json_value(&mut self, inner: &SpannedTypeInfo) {
+		let tt = self.types.maybe_unwrap_inference(inner.type_);
+		// Report an error if this isn't a valid type to put in a json (avoiding cascading errors resulting from unresolved types)
+		if !tt.is_json_legal_value() && !tt.is_unresolved() {
+			report_diagnostic(Diagnostic {
+				message: format!("\"{tt}\" is not a legal JSON value"),
+				span: Some(inner.span.clone()),
+				annotations: vec![],
+				hints: vec![],
+			})
+		}
 	}
 }
 
@@ -70,40 +83,16 @@ impl<'a> Visit<'_> for ValidJsonVisitor<'a> {
 				if !exclude {
 					match kind {
 						JsonDataKind::Type(inner) => {
-							let tt = self.types.maybe_unwrap_inference(inner.type_);
-							if !tt.is_json_legal_value() {
-								report_diagnostic(Diagnostic {
-									message: format!("\"{tt}\" is not a legal JSON value"),
-									span: Some(inner.span.clone()),
-									annotations: vec![],
-									hints: vec![],
-								})
-							}
+							self.report_invalid_json_value(inner);
 						}
 						JsonDataKind::Fields(fields) => {
 							for (_, inner) in fields {
-								let tt = self.types.maybe_unwrap_inference(inner.type_);
-								if !tt.is_json_legal_value() {
-									report_diagnostic(Diagnostic {
-										message: format!("\"{tt}\" is not a legal JSON value"),
-										span: Some(inner.span.clone()),
-										annotations: vec![],
-										hints: vec![],
-									})
-								}
+								self.report_invalid_json_value(inner);
 							}
 						}
 						JsonDataKind::List(list) => {
 							for v in list {
-								let tt = self.types.maybe_unwrap_inference(v.type_);
-								if !tt.is_json_legal_value() {
-									report_diagnostic(Diagnostic {
-										message: format!("\"{tt}\" is not a legal JSON value"),
-										span: Some(v.span.clone()),
-										annotations: vec![],
-										hints: vec![],
-									})
-								}
+								self.report_invalid_json_value(v);
 							}
 						}
 					}

@@ -363,7 +363,7 @@ describe("retry and parallel options", () => {
     });
 
     const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
-    expect(retryLogs.length).toBe(3);
+    expect(retryLogs.length).toBe(2);
   });
 
   test("wing test --parallel [batch]", async () => {

@@ -42,7 +42,7 @@ exports[`bucket is public 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -53,7 +53,7 @@ exports[`bucket is public 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -62,7 +62,7 @@ exports[`bucket is public 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicAccessBlock",
@@ -71,7 +71,7 @@ exports[`bucket is public 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicPolicy",
@@ -101,7 +101,7 @@ exports[`bucket is public 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -110,7 +110,7 @@ exports[`bucket is public 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -119,7 +119,7 @@ exports[`bucket is public 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -155,7 +155,7 @@ exports[`bucket prefix must be lowercase 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -176,7 +176,7 @@ exports[`bucket prefix must be lowercase 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -194,7 +194,7 @@ exports[`bucket prefix must be lowercase 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -203,7 +203,7 @@ exports[`bucket prefix must be lowercase 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -212,7 +212,7 @@ exports[`bucket prefix must be lowercase 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -246,7 +246,7 @@ exports[`bucket prefix valid 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -257,7 +257,7 @@ exports[`bucket prefix valid 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -287,7 +287,7 @@ exports[`bucket prefix valid 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -296,7 +296,7 @@ exports[`bucket prefix valid 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -305,7 +305,7 @@ exports[`bucket prefix valid 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -354,6 +354,9 @@ exports[`bucket with onCreate method 1`] = `
         },
         "function_name": "OnCreate-OnMessage0-c8b6ea23",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnCreate-OnMessage0_IamRole_A815D0BA.arn}",
@@ -459,7 +462,7 @@ exports[`bucket with onCreate method 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -479,7 +482,7 @@ exports[`bucket with onCreate method 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -490,7 +493,7 @@ exports[`bucket with onCreate method 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -501,7 +504,7 @@ exports[`bucket with onCreate method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -510,7 +513,7 @@ exports[`bucket with onCreate method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -519,7 +522,7 @@ exports[`bucket with onCreate method 2`] = `
                       "TopicSubscription0": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "TopicSubscription0",
@@ -542,7 +545,7 @@ exports[`bucket with onCreate method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -551,7 +554,7 @@ exports[`bucket with onCreate method 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -560,7 +563,7 @@ exports[`bucket with onCreate method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -569,7 +572,7 @@ exports[`bucket with onCreate method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -578,7 +581,7 @@ exports[`bucket with onCreate method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -587,7 +590,7 @@ exports[`bucket with onCreate method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -596,7 +599,7 @@ exports[`bucket with onCreate method 2`] = `
                       "InvokePermission-c88b8dd64481dc3b326d5e0afc3b583852a5c383f8": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c88b8dd64481dc3b326d5e0afc3b583852a5c383f8",
@@ -605,7 +608,7 @@ exports[`bucket with onCreate method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -626,7 +629,7 @@ exports[`bucket with onCreate method 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicAccessBlock",
@@ -635,7 +638,7 @@ exports[`bucket with onCreate method 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicPolicy",
@@ -644,7 +647,7 @@ exports[`bucket with onCreate method 2`] = `
                   "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "S3BucketNotification",
@@ -674,7 +677,7 @@ exports[`bucket with onCreate method 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -683,7 +686,7 @@ exports[`bucket with onCreate method 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -692,7 +695,7 @@ exports[`bucket with onCreate method 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -741,6 +744,9 @@ exports[`bucket with onDelete method 1`] = `
         },
         "function_name": "OnDelete-OnMessage0-c804d7e9",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnDelete-OnMessage0_IamRole_F99741C4.arn}",
@@ -846,7 +852,7 @@ exports[`bucket with onDelete method 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -866,7 +872,7 @@ exports[`bucket with onDelete method 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -877,7 +883,7 @@ exports[`bucket with onDelete method 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -888,7 +894,7 @@ exports[`bucket with onDelete method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -897,7 +903,7 @@ exports[`bucket with onDelete method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -906,7 +912,7 @@ exports[`bucket with onDelete method 2`] = `
                       "TopicSubscription0": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "TopicSubscription0",
@@ -929,7 +935,7 @@ exports[`bucket with onDelete method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -938,7 +944,7 @@ exports[`bucket with onDelete method 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -947,7 +953,7 @@ exports[`bucket with onDelete method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -956,7 +962,7 @@ exports[`bucket with onDelete method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -965,7 +971,7 @@ exports[`bucket with onDelete method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -974,7 +980,7 @@ exports[`bucket with onDelete method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -983,7 +989,7 @@ exports[`bucket with onDelete method 2`] = `
                       "InvokePermission-c818f13827fc0721db2eca69eab078997f6f9a8c7a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c818f13827fc0721db2eca69eab078997f6f9a8c7a",
@@ -992,7 +998,7 @@ exports[`bucket with onDelete method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -1013,7 +1019,7 @@ exports[`bucket with onDelete method 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicAccessBlock",
@@ -1022,7 +1028,7 @@ exports[`bucket with onDelete method 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicPolicy",
@@ -1031,7 +1037,7 @@ exports[`bucket with onDelete method 2`] = `
                   "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "S3BucketNotification",
@@ -1061,7 +1067,7 @@ exports[`bucket with onDelete method 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -1070,7 +1076,7 @@ exports[`bucket with onDelete method 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -1079,7 +1085,7 @@ exports[`bucket with onDelete method 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -1158,6 +1164,9 @@ exports[`bucket with onEvent method 1`] = `
         },
         "function_name": "OnCreate-OnMessage0-c8b6ea23",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnCreate-OnMessage0_IamRole_A815D0BA.arn}",
@@ -1182,6 +1191,9 @@ exports[`bucket with onEvent method 1`] = `
         },
         "function_name": "OnDelete-OnMessage0-c804d7e9",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnDelete-OnMessage0_IamRole_F99741C4.arn}",
@@ -1206,6 +1218,9 @@ exports[`bucket with onEvent method 1`] = `
         },
         "function_name": "OnUpdate-OnMessage0-c81076cf",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnUpdate-OnMessage0_IamRole_846F92CF.arn}",
@@ -1373,7 +1388,7 @@ exports[`bucket with onEvent method 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -1393,7 +1408,7 @@ exports[`bucket with onEvent method 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -1404,7 +1419,7 @@ exports[`bucket with onEvent method 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -1415,7 +1430,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -1424,7 +1439,7 @@ exports[`bucket with onEvent method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -1433,7 +1448,7 @@ exports[`bucket with onEvent method 2`] = `
                       "TopicSubscription0": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "TopicSubscription0",
@@ -1456,7 +1471,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -1465,7 +1480,7 @@ exports[`bucket with onEvent method 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -1474,7 +1489,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -1483,7 +1498,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -1492,7 +1507,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -1501,7 +1516,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -1510,7 +1525,7 @@ exports[`bucket with onEvent method 2`] = `
                       "InvokePermission-c88b8dd64481dc3b326d5e0afc3b583852a5c383f8": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c88b8dd64481dc3b326d5e0afc3b583852a5c383f8",
@@ -1519,7 +1534,7 @@ exports[`bucket with onEvent method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -1542,7 +1557,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -1551,7 +1566,7 @@ exports[`bucket with onEvent method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -1560,7 +1575,7 @@ exports[`bucket with onEvent method 2`] = `
                       "TopicSubscription0": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "TopicSubscription0",
@@ -1583,7 +1598,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -1592,7 +1607,7 @@ exports[`bucket with onEvent method 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -1601,7 +1616,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -1610,7 +1625,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -1619,7 +1634,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -1628,7 +1643,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -1637,7 +1652,7 @@ exports[`bucket with onEvent method 2`] = `
                       "InvokePermission-c818f13827fc0721db2eca69eab078997f6f9a8c7a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c818f13827fc0721db2eca69eab078997f6f9a8c7a",
@@ -1646,7 +1661,7 @@ exports[`bucket with onEvent method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -1669,7 +1684,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -1678,7 +1693,7 @@ exports[`bucket with onEvent method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -1687,7 +1702,7 @@ exports[`bucket with onEvent method 2`] = `
                       "TopicSubscription0": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "TopicSubscription0",
@@ -1710,7 +1725,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -1719,7 +1734,7 @@ exports[`bucket with onEvent method 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -1728,7 +1743,7 @@ exports[`bucket with onEvent method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -1737,7 +1752,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -1746,7 +1761,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -1755,7 +1770,7 @@ exports[`bucket with onEvent method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -1764,7 +1779,7 @@ exports[`bucket with onEvent method 2`] = `
                       "InvokePermission-c84ec84688efaa3bd78e7099e53e40fb2fe4ca5229": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c84ec84688efaa3bd78e7099e53e40fb2fe4ca5229",
@@ -1773,7 +1788,7 @@ exports[`bucket with onEvent method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -1794,7 +1809,7 @@ exports[`bucket with onEvent method 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicAccessBlock",
@@ -1803,7 +1818,7 @@ exports[`bucket with onEvent method 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicPolicy",
@@ -1812,7 +1827,7 @@ exports[`bucket with onEvent method 2`] = `
                   "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "S3BucketNotification",
@@ -1842,7 +1857,7 @@ exports[`bucket with onEvent method 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -1851,7 +1866,7 @@ exports[`bucket with onEvent method 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -1860,7 +1875,7 @@ exports[`bucket with onEvent method 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -1909,6 +1924,9 @@ exports[`bucket with onUpdate method 1`] = `
         },
         "function_name": "OnUpdate-OnMessage0-c81076cf",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_OnUpdate-OnMessage0_IamRole_846F92CF.arn}",
@@ -2014,7 +2032,7 @@ exports[`bucket with onUpdate method 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -2034,7 +2052,7 @@ exports[`bucket with onUpdate method 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -2045,7 +2063,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -2056,7 +2074,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -2065,7 +2083,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
@@ -2074,7 +2092,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "TopicSubscription0": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "TopicSubscription0",
@@ -2097,7 +2115,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -2106,7 +2124,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -2115,7 +2133,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -2124,7 +2142,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -2133,7 +2151,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -2142,7 +2160,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -2151,7 +2169,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "InvokePermission-c84ec84688efaa3bd78e7099e53e40fb2fe4ca5229": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c84ec84688efaa3bd78e7099e53e40fb2fe4ca5229",
@@ -2160,7 +2178,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -2181,7 +2199,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicAccessBlock",
@@ -2190,7 +2208,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicPolicy",
@@ -2199,7 +2217,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "S3BucketNotification": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "S3BucketNotification",
@@ -2229,7 +2247,7 @@ exports[`bucket with onUpdate method 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -2238,7 +2256,7 @@ exports[`bucket with onUpdate method 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -2247,7 +2265,7 @@ exports[`bucket with onUpdate method 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -2311,7 +2329,7 @@ exports[`bucket with two preflight files 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -2322,7 +2340,7 @@ exports[`bucket with two preflight files 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -2331,7 +2349,7 @@ exports[`bucket with two preflight files 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicAccessBlock",
@@ -2340,7 +2358,7 @@ exports[`bucket with two preflight files 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicPolicy",
@@ -2349,7 +2367,7 @@ exports[`bucket with two preflight files 2`] = `
                   "S3Object-file1.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "S3Object-file1.txt",
@@ -2358,7 +2376,7 @@ exports[`bucket with two preflight files 2`] = `
                   "S3Object-file2.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "S3Object-file2.txt",
@@ -2388,7 +2406,7 @@ exports[`bucket with two preflight files 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -2397,7 +2415,7 @@ exports[`bucket with two preflight files 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -2406,7 +2424,7 @@ exports[`bucket with two preflight files 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -2470,7 +2488,7 @@ exports[`bucket with two preflight objects 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -2481,7 +2499,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -2490,7 +2508,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "PublicAccessBlock": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicAccessBlock",
@@ -2499,7 +2517,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "PublicPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "PublicPolicy",
@@ -2508,7 +2526,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "S3Object-file1.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "S3Object-file1.txt",
@@ -2517,7 +2535,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "S3Object-file2.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "S3Object-file2.txt",
@@ -2547,7 +2565,7 @@ exports[`bucket with two preflight objects 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -2556,7 +2574,7 @@ exports[`bucket with two preflight objects 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -2565,7 +2583,7 @@ exports[`bucket with two preflight objects 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -2599,7 +2617,7 @@ exports[`create a bucket 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -2610,7 +2628,7 @@ exports[`create a bucket 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -2640,7 +2658,7 @@ exports[`create a bucket 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -2649,7 +2667,7 @@ exports[`create a bucket 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -2658,7 +2676,7 @@ exports[`create a bucket 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",

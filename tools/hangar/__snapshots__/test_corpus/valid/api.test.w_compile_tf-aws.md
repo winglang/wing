@@ -85,8 +85,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {
       "root": {
@@ -350,11 +349,14 @@ module.exports = function({  }) {
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "get_endpoint10-c8e91512",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_33_EXECUTE_API_TFTOKEN_TOKEN_25_AMAZONAWS_COM_TFTOKEN_TOKEN_34": "${jsonencode(\"https://${aws_api_gateway_rest_api.A_Api_api_06466CBC.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.A_Api_api_stage_75CEFF9A.stage_name}\")}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_34_EXECUTE_API_TFTOKEN_TOKEN_26_AMAZONAWS_COM_TFTOKEN_TOKEN_35": "${jsonencode(\"https://${aws_api_gateway_rest_api.A_Api_api_06466CBC.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.A_Api_api_stage_75CEFF9A.stage_name}\")}"
           }
         },
         "function_name": "get_endpoint10-c8e91512",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.A_Api_get_endpoint10_IamRole_656A5EFF.arn}",
@@ -387,6 +389,9 @@ module.exports = function({  }) {
         },
         "function_name": "get_hello_world0-c8808650",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_hello_world0_IamRole_BE6EA0B6.arn}",
@@ -479,10 +484,13 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -511,9 +519,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
             [counter, ["inc"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
             [counter, []],
           ],
         });

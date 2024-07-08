@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -34,6 +33,9 @@ globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const d = (std.Duration.fromMinutes(5));
     const n = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })("12");
     $helpers.assert($helpers.eq(d.seconds, (5 * 60)), "d.seconds == 5 * 60");

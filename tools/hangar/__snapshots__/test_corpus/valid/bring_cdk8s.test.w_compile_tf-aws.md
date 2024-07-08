@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -31,11 +30,14 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cdk8s = require("cdk8s");
-const kplus = require("cdk8s-plus-27");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cdk8s = require("cdk8s");
+    const kplus = require("cdk8s-plus-27");
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const app = globalThis.$PolyconFactory.new("cdk8s.App", cdk8s.App, );
     const chart = globalThis.$PolyconFactory.new("cdk8s.Chart", cdk8s.Chart, this, "Chart");
     const deploy = globalThis.$PolyconFactory.new("cdk8s-plus-27.Deployment", kplus.Deployment, chart, "Deployment");

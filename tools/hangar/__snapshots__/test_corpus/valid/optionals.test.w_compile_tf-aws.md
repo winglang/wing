@@ -4,7 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
+module.exports = function({ $payloadWithBucket_c, $payloadWithoutOptions_b }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,8 +12,8 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($__payloadWithoutOptions_b_____null_, false), "payloadWithoutOptions.b? == false");
-      if ($__payloadWithBucket_c_____null_) {
+      $helpers.assert($helpers.eq($payloadWithoutOptions_b, undefined), "payloadWithoutOptions.b == nil");
+      if ($helpers.neq($payloadWithBucket_c, undefined)) {
         (await $payloadWithBucket_c?.put?.("x.txt", "something"));
       }
     }
@@ -87,8 +87,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -126,11 +125,14 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
     const Person = $stdlib.std.Struct._createJsonSchema({$id:"/Person",type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]});
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Super extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -260,9 +262,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $__payloadWithBucket_c_____null_: ${$stdlib.core.liftObject(((payloadWithBucket.c) != null))},
-            $__payloadWithoutOptions_b_____null_: ${$stdlib.core.liftObject(((payloadWithoutOptions.b) != null))},
             $payloadWithBucket_c: ${$stdlib.core.liftObject(payloadWithBucket.c)},
+            $payloadWithoutOptions_b: ${$stdlib.core.liftObject(payloadWithoutOptions.b)},
           })
         `;
       }
@@ -280,21 +281,18 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((payloadWithBucket.c) != null), []],
-            [((payloadWithoutOptions.b) != null), []],
             [payloadWithBucket.c, ["put"]],
+            [payloadWithoutOptions.b, []],
           ],
           "$inflight_init": [
-            [((payloadWithBucket.c) != null), []],
-            [((payloadWithoutOptions.b) != null), []],
             [payloadWithBucket.c, []],
+            [payloadWithoutOptions.b, []],
           ],
         });
       }
     }
     const x = 4;
-    $helpers.assert($helpers.eq(((x) != null), true), "x? == true");
-    $helpers.assert($helpers.eq((!((x) != null)), false), "!x? == false");
+    $helpers.assert($helpers.neq(x, undefined), "x != nil");
     $helpers.assert($helpers.eq((x ?? 5), 4), "x ?? 5 == 4");
     const y = (x ?? 5);
     $helpers.assert($helpers.eq(y, 4), "y == 4");

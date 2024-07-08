@@ -2,7 +2,6 @@ import { test, expect } from "vitest";
 import { treeJsonOf, waitUntilTrace } from "./util";
 import * as cloud from "../../src/cloud";
 import { inflight } from "../../src/core";
-import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
 
@@ -16,6 +15,7 @@ test("create a topic", async () => {
   expect(s.getResourceConfig("/my_topic")).toEqual({
     attrs: {
       handle: expect.any(String),
+      runningState: expect.any(String),
     },
     path: "root/my_topic",
     addr: expect.any(String),

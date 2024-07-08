@@ -45,8 +45,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -70,10 +69,13 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const expect = $stdlib.expect;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, b) {
         super($scope, $id);
@@ -151,6 +153,15 @@ class $Root extends $stdlib.std.Resource {
     const aNode = ({"val": "someval"});
     const bNode = ({"val": "otherval", "next": aNode});
     (expect.Util.equal(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(bNode), "{\"val\":\"otherval\",\"next\":{\"val\":\"someval\"\}\}"));
+    const numField = 1337;
+    const strField = "leet";
+    const boolField = true;
+    const structField = ({"numField": numField});
+    const someStruct3 = ({"boolField": boolField, "strField": strField, "otherField": "good", "structField": structField});
+    $helpers.assert($helpers.eq(someStruct3.boolField, true), "someStruct3.boolField == true");
+    $helpers.assert($helpers.eq(someStruct3.strField, "leet"), "someStruct3.strField == \"leet\"");
+    $helpers.assert($helpers.eq(someStruct3.structField.numField, 1337), "someStruct3.structField.numField == 1337");
+    $helpers.assert($helpers.eq(someStruct3.otherField, "good"), "someStruct3.otherField == \"good\"");
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "structs.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });

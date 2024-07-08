@@ -12,8 +12,8 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((((await $foo.returnNil(true))) != null), true), "foo.returnNil(true)? == true");
-      $helpers.assert($helpers.eq((((await $foo.returnNil(false))) != null), false), "foo.returnNil(false)? == false");
+      $helpers.assert($helpers.neq((await $foo.returnNil(true)), undefined), "foo.returnNil(true) != nil");
+      $helpers.assert($helpers.eq((await $foo.returnNil(false)), undefined), "foo.returnNil(false) == nil");
     }
   }
   return $Closure1;
@@ -33,12 +33,10 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), false), "foo.getOptionalValue()? == false");
+      $helpers.assert($helpers.eq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() == nil");
       (await $foo.setOptionalValue("hello"));
-      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), true), "foo.getOptionalValue()? == true");
       $helpers.assert($helpers.neq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() != nil");
       (await $foo.setOptionalValue(undefined));
-      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), false), "foo.getOptionalValue()? == false");
       $helpers.assert($helpers.eq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() == nil");
     }
   }
@@ -82,8 +80,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -107,10 +104,13 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);

@@ -20,14 +20,14 @@
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
-    "constructs": "^10.3",
-    "@winglang/sdk": "workspace:^"
+    "@winglang/sdk": "workspace:^",
+    "constructs": "^10.3.0"
   },
   "devDependencies": {
     "bump-pack": "workspace:^",
-    "typescript": "^5.3.3",
-    "tsup": "^8.0.2",
-    "vitest": "^0.34.6"
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.2",
+    "vitest": "^1.6.0"
   },
   "scripts": {
     "compile": "tsup",

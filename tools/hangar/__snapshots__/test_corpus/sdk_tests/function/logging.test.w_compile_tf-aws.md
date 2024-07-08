@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -123,6 +122,9 @@
         },
         "function_name": "f1-c8545025",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f1_IamRole_FD68C58F.arn}",
@@ -155,6 +157,9 @@
         },
         "function_name": "f2-c812cd39",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f2_IamRole_B66911B2.arn}",

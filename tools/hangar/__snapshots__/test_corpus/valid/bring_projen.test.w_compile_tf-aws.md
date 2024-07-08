@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -31,10 +30,13 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const projen = require("projen");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const projen = require("projen");
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     $helpers.assert($helpers.neq(projen.LogLevel.OFF, projen.LogLevel.VERBOSE), "projen.LogLevel.OFF != projen.LogLevel.VERBOSE");
   }
 }

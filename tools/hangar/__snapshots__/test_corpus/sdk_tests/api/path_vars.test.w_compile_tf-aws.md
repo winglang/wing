@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {
       "root": {
@@ -207,6 +206,9 @@
         },
         "function_name": "get_path_-name_-age0-c8e1843f",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_path_name_age0_IamRole_02E21B80.arn}",
@@ -238,6 +240,9 @@
         },
         "function_name": "get_users_-name0-c8831d94",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_users_name0_IamRole_B9DD1767.arn}",

@@ -232,8 +232,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -424,6 +423,9 @@ module.exports = function({  }) {
         },
         "function_name": "Queue-SetConsumer0-c8931d51",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_Queue-SetConsumer0_IamRole_D38B87EE.arn}",
@@ -456,6 +458,9 @@ module.exports = function({  }) {
         },
         "function_name": "Topic-OnMessage0-c8bea057",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_Topic-OnMessage0_IamRole_FEF4CFBB.arn}",
@@ -488,6 +493,9 @@ module.exports = function({  }) {
         },
         "function_name": "OnCreate-OnMessage0-c8ab841c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_b2_OnCreate-OnMessage0_IamRole_2B7C8C04.arn}",
@@ -711,11 +719,14 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const MyEnum =
       (function (tmp) {
         tmp["A"] = "A";
@@ -809,11 +820,13 @@ class $Root extends $stdlib.std.Resource {
           "testTypeAccess": [
             [Bar, ["barStatic"]],
             [Foo, ["fooStatic"]],
+            [MyEnum, ["B"]],
             [this.e, []],
           ],
           "$inflight_init": [
             [Bar, []],
             [Foo, []],
+            [MyEnum, []],
             [this.b, []],
             [this.e, []],
             [this.foo, []],
@@ -1055,9 +1068,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
             [bigOlPublisher, [].concat(["publish"], ["getObjectCount"])],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [bigOlPublisher, []],
           ],
         });
@@ -1098,15 +1113,15 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         const d1 = new Dummy(this, "Dummy");
-        $helpers.assert(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"), "d1.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy\")");
+        $helpers.assert($helpers.nodeof(d1).path.endsWith("/ScopeAndIdTestClass/Dummy"), "nodeof(d1).path.endsWith(\"/ScopeAndIdTestClass/Dummy\")");
         const d2 = new Dummy(d1, "Dummy");
-        $helpers.assert(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"), "d2.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")");
+        $helpers.assert($helpers.nodeof(d2).path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"), "nodeof(d2).path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")");
         const d3 = new Dummy((Dummy.getInstance(this, d2)), "Dummy");
-        $helpers.assert(d3.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"), "d3.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy\")");
+        $helpers.assert($helpers.nodeof(d3).path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"), "nodeof(d3).path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy\")");
         for (const i of $helpers.range(0,3,false)) {
           const x = new Dummy(this, String.raw({ raw: ["tc", ""] }, i));
           const expected_path = String.raw({ raw: ["/ScopeAndIdTestClass/tc", ""] }, i);
-          $helpers.assert(x.node.path.endsWith(expected_path), "x.node.path.endsWith(expected_path)");
+          $helpers.assert($helpers.nodeof(x).path.endsWith(expected_path), "nodeof(x).path.endsWith(expected_path)");
         }
       }
       static _toInflightType() {

@@ -256,19 +256,6 @@ class User {
 		"#
 	);
 
-	// TODO: not supported yet- therefore disabled
-	test_rename_prepare!(
-		cant_rename_struct_key,
-		r#"
-    struct user {
-      name: str;
-      //^
-    }
- 
- let a: user = {name: "a"};
-		"#
-	);
-
 	test_rename_prepare!(
 		cant_rename_struct_keyword,
 		r#"
@@ -333,6 +320,53 @@ class User {
     let a: str = "hi";
           //^
     "#
+	);
+
+	test_rename_prepare!(
+		cant_rename_super,
+		r#"
+   class A {}
+   class B extends A {
+    new() {
+      super();
+      //^
+    }
+   }
+    "#
+	);
+
+	test_rename_prepare!(
+		cant_rename_new,
+		r#"
+   class A {}
+   class B extends A {
+    new() {
+   //^
+      super();
+    }
+   }
+    "#
+	);
+
+	test_rename_prepare!(
+		cant_rename_inflight_new,
+		r#"
+   inflight class A {
+    inflight new() {
+     //^
+    }
+   }
+    "#
+	);
+
+	test_rename_prepare!(
+		cant_rename_json_key,
+		r#"
+ let a = {name: "a"};
+
+ log(a.name);
+      //^
+		"#
 	);
 
 	test_rename_prepare!(

@@ -80,8 +80,7 @@ module.exports = function({ $headers }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {
       "root": {
@@ -378,6 +377,9 @@ module.exports = function({ $headers }) {
         },
         "function_name": "AnotherFunction-c88d2a81",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.AnotherFunction_IamRole_74447271.arn}",
@@ -409,6 +411,9 @@ module.exports = function({ $headers }) {
         },
         "function_name": "get_hello0-c8557c1a",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_hello0_IamRole_1E6956F6.arn}",
@@ -443,6 +448,9 @@ module.exports = function({ $headers }) {
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -477,6 +485,9 @@ module.exports = function({ $headers }) {
         },
         "function_name": "Queue-SetConsumer0-c83c303c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
@@ -651,10 +662,13 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {

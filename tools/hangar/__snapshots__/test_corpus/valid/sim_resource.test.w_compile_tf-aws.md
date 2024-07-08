@@ -53,8 +53,7 @@ module.exports = function({ $MyEnum }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -78,10 +77,13 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const sim = $stdlib.sim;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const sim = $stdlib.sim;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const MyEnum =
       (function (tmp) {
         tmp["A"] = "A";
@@ -129,6 +131,7 @@ class $Root extends $stdlib.std.Resource {
           "methodWithJsons": [
           ],
           "methodWithEnums": [
+            [MyEnum, ["A"]],
           ],
           "methodWithArrays": [
           ],
@@ -141,10 +144,13 @@ class $Root extends $stdlib.std.Resource {
           "methodWithComplexTypes": [
           ],
           "$inflight_init": [
+            [MyEnum, []],
           ],
         });
       }
     }
+    if ($preflightTypesMap[1]) { throw new Error("ResourceBackend is already in type map"); }
+    $preflightTypesMap[1] = ResourceBackend;
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "sim_resource.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });

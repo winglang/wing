@@ -37,6 +37,7 @@ test("create a function", async () => {
   expect(s.getResourceConfig("/my_function")).toEqual({
     attrs: {
       handle: expect.any(String),
+      runningState: expect.any(String),
     },
     path: "root/my_function",
     addr: expect.any(String),

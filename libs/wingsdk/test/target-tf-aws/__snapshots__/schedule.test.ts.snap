@@ -50,6 +50,9 @@ exports[`convert single dayOfWeek from Unix to AWS 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -99,7 +102,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -123,7 +126,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -132,7 +135,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -141,7 +144,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -150,7 +153,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -159,7 +162,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -168,7 +171,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -177,7 +180,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
@@ -186,7 +189,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -207,7 +210,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
                   "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Schedule",
@@ -216,7 +219,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
                   "ScheduleTarget0": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "ScheduleTarget0",
@@ -237,7 +240,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -255,7 +258,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -264,7 +267,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -273,7 +276,7 @@ exports[`convert single dayOfWeek from Unix to AWS 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -333,6 +336,9 @@ exports[`convert the list of dayOfWeek from Unix to AWS 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -382,7 +388,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -406,7 +412,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -415,7 +421,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -424,7 +430,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -433,7 +439,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -442,7 +448,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -451,7 +457,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -460,7 +466,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
@@ -469,7 +475,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -490,7 +496,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
                   "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Schedule",
@@ -499,7 +505,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
                   "ScheduleTarget0": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "ScheduleTarget0",
@@ -520,7 +526,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -538,7 +544,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -547,7 +553,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -556,7 +562,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -616,6 +622,9 @@ exports[`convert the range of dayOfWeek from Unix to AWS 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -665,7 +674,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -689,7 +698,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -698,7 +707,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -707,7 +716,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -716,7 +725,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -725,7 +734,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -734,7 +743,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -743,7 +752,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
@@ -752,7 +761,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -773,7 +782,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
                   "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Schedule",
@@ -782,7 +791,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
                   "ScheduleTarget0": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "ScheduleTarget0",
@@ -803,7 +812,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -821,7 +830,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -830,7 +839,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -839,7 +848,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -899,6 +908,9 @@ exports[`schedule behavior with cron 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -948,7 +960,7 @@ exports[`schedule behavior with cron 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -972,7 +984,7 @@ exports[`schedule behavior with cron 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -981,7 +993,7 @@ exports[`schedule behavior with cron 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -990,7 +1002,7 @@ exports[`schedule behavior with cron 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -999,7 +1011,7 @@ exports[`schedule behavior with cron 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -1008,7 +1020,7 @@ exports[`schedule behavior with cron 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -1017,7 +1029,7 @@ exports[`schedule behavior with cron 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -1026,7 +1038,7 @@ exports[`schedule behavior with cron 2`] = `
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
@@ -1035,7 +1047,7 @@ exports[`schedule behavior with cron 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -1056,7 +1068,7 @@ exports[`schedule behavior with cron 2`] = `
                   "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Schedule",
@@ -1065,7 +1077,7 @@ exports[`schedule behavior with cron 2`] = `
                   "ScheduleTarget0": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "ScheduleTarget0",
@@ -1086,7 +1098,7 @@ exports[`schedule behavior with cron 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -1104,7 +1116,7 @@ exports[`schedule behavior with cron 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -1113,7 +1125,7 @@ exports[`schedule behavior with cron 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -1122,7 +1134,7 @@ exports[`schedule behavior with cron 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -1182,6 +1194,9 @@ exports[`schedule behavior with rate 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -1231,7 +1246,7 @@ exports[`schedule behavior with rate 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -1255,7 +1270,7 @@ exports[`schedule behavior with rate 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -1264,7 +1279,7 @@ exports[`schedule behavior with rate 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -1273,7 +1288,7 @@ exports[`schedule behavior with rate 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -1282,7 +1297,7 @@ exports[`schedule behavior with rate 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -1291,7 +1306,7 @@ exports[`schedule behavior with rate 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -1300,7 +1315,7 @@ exports[`schedule behavior with rate 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -1309,7 +1324,7 @@ exports[`schedule behavior with rate 2`] = `
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
@@ -1318,7 +1333,7 @@ exports[`schedule behavior with rate 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -1339,7 +1354,7 @@ exports[`schedule behavior with rate 2`] = `
                   "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Schedule",
@@ -1348,7 +1363,7 @@ exports[`schedule behavior with rate 2`] = `
                   "ScheduleTarget0": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "ScheduleTarget0",
@@ -1369,7 +1384,7 @@ exports[`schedule behavior with rate 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -1387,7 +1402,7 @@ exports[`schedule behavior with rate 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -1396,7 +1411,7 @@ exports[`schedule behavior with rate 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -1405,7 +1420,7 @@ exports[`schedule behavior with rate 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -1465,6 +1480,9 @@ exports[`schedule with two functions 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -1514,7 +1532,7 @@ exports[`schedule with two functions 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -1538,7 +1556,7 @@ exports[`schedule with two functions 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Asset",
@@ -1547,7 +1565,7 @@ exports[`schedule with two functions 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "CloudwatchLogGroup",
@@ -1556,7 +1574,7 @@ exports[`schedule with two functions 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Default",
@@ -1565,7 +1583,7 @@ exports[`schedule with two functions 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRole",
@@ -1574,7 +1592,7 @@ exports[`schedule with two functions 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicy",
@@ -1583,7 +1601,7 @@ exports[`schedule with two functions 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "IamRolePolicyAttachment",
@@ -1592,7 +1610,7 @@ exports[`schedule with two functions 2`] = `
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
@@ -1601,7 +1619,7 @@ exports[`schedule with two functions 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "S3Object",
@@ -1622,7 +1640,7 @@ exports[`schedule with two functions 2`] = `
                   "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Schedule",
@@ -1631,7 +1649,7 @@ exports[`schedule with two functions 2`] = `
                   "ScheduleTarget0": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "ScheduleTarget0",
@@ -1652,7 +1670,7 @@ exports[`schedule with two functions 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -1670,7 +1688,7 @@ exports[`schedule with two functions 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -1679,7 +1697,7 @@ exports[`schedule with two functions 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -1688,7 +1706,7 @@ exports[`schedule with two functions 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",

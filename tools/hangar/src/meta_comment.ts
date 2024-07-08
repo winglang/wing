@@ -36,7 +36,7 @@ export interface MetaComment {
 
   /**
    * Environment variables to set for this test
-   * 
+   *
    * @default - No environment variables will be set
    */
   env?: Record<string, string>;
@@ -56,4 +56,11 @@ export function parseMetaComment(content: string) {
   }
 
   return YAML.parse(rawYaml) as MetaComment;
+}
+
+export function shouldSkipTest(metadata: MetaComment | undefined) {
+  return (
+    metadata?.skip ||
+    (metadata?.skipPlatforms?.includes(process.platform) && process.env.CI)
+  );
 }

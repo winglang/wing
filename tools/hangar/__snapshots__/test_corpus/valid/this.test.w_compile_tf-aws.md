@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -31,16 +30,19 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const path = this.node.path;
-    for (const c of this.node.children) {
-      console.log(c.node.path);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const expect = $stdlib.expect;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
+    const path = $helpers.nodeof(this).path;
+    for (const c of $helpers.nodeof(this).children) {
+      console.log($helpers.nodeof(c).path);
     }
-    (expect.Util.notNil(this.node));
-    (expect.Util.equal(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((this.node.path.split("/")), 0), "root"));
+    (expect.Util.notNil($helpers.nodeof(this)));
+    (expect.Util.equal(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(($helpers.nodeof(this).path.split("/")), 0), "root"));
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "this.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });

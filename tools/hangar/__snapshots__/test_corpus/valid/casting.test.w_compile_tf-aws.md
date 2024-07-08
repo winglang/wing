@@ -11,8 +11,7 @@
           "bucket_prefix"
         ]
       },
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -50,17 +49,20 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
-const aws = require("@cdktf/provider-aws");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    const aws = require("@cdktf/provider-aws");
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const b = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     if ($helpers.eq((util.Util.env("WING_TARGET")), "tf-aws")) {
-      const s3Bucket = (b.node.findChild("Default"));
+      const s3Bucket = ($helpers.nodeof(b).findChild("Default"));
       (s3Bucket.addOverride("bucket_prefix", "my-prefix-"));
-      console.log(s3Bucket.node.path);
+      console.log($helpers.nodeof(s3Bucket).path);
     }
   }
 }
