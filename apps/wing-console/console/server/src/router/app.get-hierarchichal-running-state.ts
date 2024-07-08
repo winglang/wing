@@ -20,7 +20,7 @@ export const getHierarchichalRunningState = (
   }
 
   const runningState = (node?.resourceConfig?.attrs?.["runningState"] ??
-    "started") as RunningState;
+    "stopped") as RunningState;
 
   if (node.children?.length > 0) {
     const childrenRunningStates = node.children.map((child) =>
