@@ -94,7 +94,7 @@ export const useZoomPane = () => {
   return useContext(context);
 };
 
-const boundaryPadding = 64 + 24;
+const boundaryPadding = 24;
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   const { boundingBox, children, className, onClick, ...divProps } = props;
@@ -116,19 +116,36 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     (transform: Transform) => {
       const containerWidth = containerRef.current?.clientWidth ?? 0;
       const boundingBoxWidth = boundingBox?.width ?? 0;
-      const x = Math.min(
-        Math.max(transform.x, -containerWidth / transform.z + boundaryPadding),
-        boundingBoxWidth - boundaryPadding,
-      );
-
       const containerHeight = containerRef.current?.clientHeight ?? 0;
       const boundingBoxHeight = boundingBox?.height ?? 0;
+
+      // Sample: adapt the boundary padding to the zoom level.
+      // const x = Math.min(
+      //   Math.max(transform.x, -containerWidth / transform.z + boundaryPadding),
+      //   boundingBoxWidth - boundaryPadding,
+      // );
+      // const y = Math.min(
+      //   Math.max(
+      //     transform.y,
+      //     -(containerHeight - boundaryPadding * transform.z) / transform.z,
+      //   ),
+      //   boundingBoxHeight - boundaryPadding,
+      // );
+
+      // Maintain the boundary padding independently of the zoom level.
+      const x = Math.min(
+        Math.max(
+          transform.x,
+          (-containerWidth + boundaryPadding) / transform.z,
+        ),
+        (boundingBoxWidth * transform.z - boundaryPadding) / transform.z,
+      );
       const y = Math.min(
         Math.max(
           transform.y,
-          -(containerHeight - boundaryPadding * transform.z) / transform.z,
+          (-containerHeight + boundaryPadding) / transform.z,
         ),
-        boundingBoxHeight - boundaryPadding,
+        (boundingBoxHeight * transform.z - boundaryPadding) / transform.z,
       );
       return {
         x,
@@ -427,7 +444,20 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     };
 
     // Add some extra padding to trigger the out of bounds warning sooner.
-    const padding = boundaryPadding + 24;
+    const extraPaddingPercentage = 1.1;
+
+    // Sample: adapt the boundary padding to the zoom level.
+    // const padding = boundaryPadding * extraPaddingPercentage;
+    // return !boundingBoxOverlap(viewBoundingBox, {
+    //   x: padding,
+    //   y: padding,
+    //   width: boundingBox.width - padding * 2,
+    //   height: boundingBox.height - padding * 2,
+    // });
+
+    // Maintain the boundary padding independently of the zoom level.
+    const padding =
+      (boundaryPadding * extraPaddingPercentage) / viewTransform.z;
     return !boundingBoxOverlap(viewBoundingBox, {
       x: padding,
       y: padding,
