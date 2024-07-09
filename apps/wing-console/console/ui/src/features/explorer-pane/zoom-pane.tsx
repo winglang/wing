@@ -25,7 +25,12 @@ export interface Viewport {
   height: number;
 }
 
-type BoundingBox = Viewport;
+type BoundingBox = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 
 export interface ZoomPaneContextValue {
   zoomIn(): void;
@@ -89,6 +94,8 @@ export const useZoomPane = () => {
   return useContext(context);
 };
 
+const boundaryPadding = 64 + 24;
+
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   const { boundingBox, children, className, onClick, ...divProps } = props;
 
@@ -105,48 +112,78 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     }px, ${-viewTransform.y * viewTransform.z}px) scale(${viewTransform.z})`;
   }, [viewTransform]);
 
-  const onWheel = useCallback((event: WheelEvent) => {
-    event.preventDefault();
-    const boundingRect = (
-      event.currentTarget as HTMLDivElement
-    ).getBoundingClientRect();
-    setViewTransform((viewTransform) => {
-      if (event.ctrlKey) {
-        const localCursor = toLocal(
-          event.x - boundingRect.left,
-          event.y - boundingRect.top,
-          viewTransform,
-        );
-        const dx = localCursor.x - viewTransform.x;
-        const dy = localCursor.y - viewTransform.y;
+  const restrict = useCallback(
+    (transform: Transform) => {
+      const containerWidth = containerRef.current?.clientWidth ?? 0;
+      const boundingBoxWidth = boundingBox?.width ?? 0;
+      const x = Math.min(
+        Math.max(transform.x, -containerWidth / transform.z + boundaryPadding),
+        boundingBoxWidth - boundaryPadding,
+      );
 
-        const z = Math.min(
-          MAX_ZOOM_LEVEL,
-          Math.max(
-            MIN_ZOOM_LEVEL,
-            viewTransform.z * Math.exp(-event.deltaY * WHEEL_SENSITIVITY),
-          ),
-        );
-        const dz = z / viewTransform.z;
+      const containerHeight = containerRef.current?.clientHeight ?? 0;
+      const boundingBoxHeight = boundingBox?.height ?? 0;
+      const y = Math.min(
+        Math.max(
+          transform.y,
+          -(containerHeight - boundaryPadding * transform.z) / transform.z,
+        ),
+        boundingBoxHeight - boundaryPadding,
+      );
+      return {
+        x,
+        y,
+        z: transform.z,
+      };
+    },
+    [boundingBox?.height, boundingBox?.width],
+  );
 
-        return {
-          x: viewTransform.x + dx - dx / dz,
-          y: viewTransform.y + dy - dy / dz,
-          z: z,
-        };
-      } else {
-        return {
-          x:
-            viewTransform.x +
-            (event.deltaX * MOVE_SENSITIVITY) / viewTransform.z,
-          y:
-            viewTransform.y +
-            (event.deltaY * MOVE_SENSITIVITY) / viewTransform.z,
-          z: viewTransform.z,
-        };
-      }
-    });
-  }, []);
+  const onWheel = useCallback(
+    (event: WheelEvent) => {
+      event.preventDefault();
+      const boundingRect = (
+        event.currentTarget as HTMLDivElement
+      ).getBoundingClientRect();
+      setViewTransform((viewTransform) => {
+        if (event.ctrlKey) {
+          const localCursor = toLocal(
+            event.x - boundingRect.left,
+            event.y - boundingRect.top,
+            viewTransform,
+          );
+          const dx = localCursor.x - viewTransform.x;
+          const dy = localCursor.y - viewTransform.y;
+
+          const z = Math.min(
+            MAX_ZOOM_LEVEL,
+            Math.max(
+              MIN_ZOOM_LEVEL,
+              viewTransform.z * Math.exp(-event.deltaY * WHEEL_SENSITIVITY),
+            ),
+          );
+          const dz = z / viewTransform.z;
+
+          return restrict({
+            x: viewTransform.x + dx - dx / dz,
+            y: viewTransform.y + dy - dy / dz,
+            z: z,
+          });
+        } else {
+          return restrict({
+            x:
+              viewTransform.x +
+              (event.deltaX * MOVE_SENSITIVITY) / viewTransform.z,
+            y:
+              viewTransform.y +
+              (event.deltaY * MOVE_SENSITIVITY) / viewTransform.z,
+            z: viewTransform.z,
+          });
+        }
+      });
+    },
+    [restrict],
+  );
   useEvent("wheel", onWheel as (event: Event) => void, containerRef.current, {
     // Use passive: false to prevent the default behavior of scrolling the page.
     passive: false,
@@ -219,14 +256,14 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         dragStart.current = { x: event.x, y: event.y };
 
         setViewTransform((viewTransform) => {
-          return {
+          return restrict({
             x: viewTransform.x + diff.x / viewTransform.z,
             y: viewTransform.y + diff.y / viewTransform.z,
             z: viewTransform.z,
-          };
+          });
         });
       },
-      [isSpacePressed, isDragging],
+      [isSpacePressed, isDragging, restrict],
     ) as (event: Event) => void,
   );
 
@@ -272,13 +309,13 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         Math.max(MIN_ZOOM_LEVEL, viewTransform.z * ZOOM_SENSITIVITY),
       );
       const dz = z / viewTransform.z;
-      return {
+      return restrict({
         x: viewTransform.x + dx - dx / dz,
         y: viewTransform.y + dy - dy / dz,
         z: z,
-      };
+      });
     });
-  }, []);
+  }, [restrict]);
 
   const zoomOut = useCallback(() => {
     const container = containerRef.current;
@@ -299,13 +336,13 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         Math.max(MIN_ZOOM_LEVEL, viewTransform.z / ZOOM_SENSITIVITY),
       );
       const dz = z / viewTransform.z;
-      return {
+      return restrict({
         x: viewTransform.x + dx - dx / dz,
         y: viewTransform.y + dy - dy / dz,
         z: z,
-      };
+      });
     });
-  }, []);
+  }, [restrict]);
 
   const zoomToFit = useCallback(
     (viewport?: Viewport) => {
@@ -374,12 +411,13 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     };
 
     // Add padding to the view bounding box to prevent the bounding box from being too close to the edge.
-    const padding = 64 + 24;
+    const zoomedBoundaryPadding = boundaryPadding / viewTransform.z;
+    // const zoomedBoundaryPadding = boundaryPadding * viewTransform.z;
     return !boundingBoxOverlap(viewBoundingBox, {
-      x: 0 + padding,
-      y: 0 + padding,
-      width: boundingBox.width - padding * 2,
-      height: boundingBox.height - padding * 2,
+      x: 0 + zoomedBoundaryPadding * 2,
+      y: 0 + zoomedBoundaryPadding * 2,
+      width: boundingBox.width - zoomedBoundaryPadding * 2,
+      height: boundingBox.height - zoomedBoundaryPadding * 2,
     });
   }, [viewTransform, boundingBox]);
 
@@ -393,14 +431,40 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     >
       <div ref={targetRef} className="absolute inset-0 origin-top-left">
         <context.Provider value={{ viewTransform }}>
-          {children}
+          {/* <div
+            className={classNames(
+              "transition-all inline-block rounded-lg",
+              // "bg-white dark:bg-slate-550",
+              {
+                "bg-white dark:bg-slate-550 animate-pulse": outOfBounds,
+              },
+            )}
+          >
+            {children}
+          </div> */}
+          <div className="relative inline-block">
+            <AnimatePresence>
+              {outOfBounds && (
+                <motion.div
+                  className={classNames(
+                    "absolute inset-0 w-full h-full rounded-lg shadow-lg bg-slate-250 dark:bg-slate-500 animate-pulse",
+                  )}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                />
+              )}
+            </AnimatePresence>
+            {children}
+          </div>
         </context.Provider>
       </div>
 
       <AnimatePresence>
         {outOfBounds && (
           <motion.div
-            className="absolute inset-0 z-10 flex justify-around items-center backdrop-blur-[1.5px]"
+            className="absolute inset-0 z-10 flex justify-around items-center pointer-events-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -414,7 +478,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
               <p className={classNames(theme.text1, "px-2 py-0.5 rounded")}>
                 The map is out of bounds
               </p>
-              <div className="flex justify-around">
+              <div className="flex justify-around pointer-events-auto">
                 <Button onClick={() => zoomToFit()}>Fit map to screen</Button>
               </div>
             </div>
