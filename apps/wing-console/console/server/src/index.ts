@@ -79,6 +79,8 @@ export interface CreateConsoleServerOptions {
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
   watchGlobs?: string[];
+  getEndpointWarningAccepted?: () => Promise<boolean>;
+  notifyEndpointWarningAccepted?: () => Promise<void>;
 }
 
 export const createConsoleServer = async ({
@@ -100,6 +102,8 @@ export const createConsoleServer = async ({
   requireSignIn,
   notifySignedIn,
   watchGlobs,
+  getEndpointWarningAccepted,
+  notifyEndpointWarningAccepted,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -222,6 +226,7 @@ export const createConsoleServer = async ({
     appState = "error";
     invalidateQuery("app.state");
     invalidateQuery("app.error");
+    isStarting = false;
   });
   simulator.on("trace", async (trace) => {
     // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
@@ -328,6 +333,8 @@ export const createConsoleServer = async ({
     analytics,
     requireSignIn,
     notifySignedIn,
+    getEndpointWarningAccepted,
+    notifyEndpointWarningAccepted,
   });
 
   const close = async (callback?: () => void) => {

@@ -105,9 +105,9 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-module.exports = {
-  ...require("./preflight.lib-1.cjs"),
-};
+const $preflightTypesMap = {};
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.lib-1.cjs`, $preflightTypesMap));
+module.exports = { ...module.exports, $preflightTypesMap };
 //# sourceMappingURL=preflight.cjs.map
 ```
 
@@ -125,6 +125,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 class InflightClass extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -155,6 +156,8 @@ class InflightClass extends $stdlib.std.Resource {
     });
   }
 }
+if ($preflightTypesMap[1]) { throw new Error("InflightClass is already in type map"); }
+$preflightTypesMap[1] = InflightClass;
 class ParentClass extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -186,12 +189,14 @@ class ParentClass extends $stdlib.std.Resource {
       "bar": [
       ],
       "$inflight_init": [
+        [InflightClass, []],
       ],
     });
   }
   static get _liftTypeMap() {
     return ({
       "static_method": [
+        [InflightClass, []],
       ],
     });
   }
@@ -225,7 +230,7 @@ class Child extends ParentClass {
     });
   }
 }
-module.exports = { InflightClass, ParentClass, Child };
+module.exports = { $preflightTypesMap, InflightClass, ParentClass, Child };
 //# sourceMappingURL=preflight.lib-1.cjs.map
 ```
 

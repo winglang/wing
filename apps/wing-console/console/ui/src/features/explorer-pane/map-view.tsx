@@ -61,6 +61,7 @@ interface ConstructNodeProps {
   collapsed: boolean;
   icon?: string;
   hierarchichalRunningState: ResourceRunningState;
+  depth: number;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -79,6 +80,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       collapsed,
       icon,
       hierarchichalRunningState,
+      depth,
     }) => {
       const select = useCallback(
         () => onSelectedNodeIdChange(id),
@@ -121,7 +123,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             className={clsx(
               "w-full h-full",
               "rounded-lg",
-              "bg-white dark:bg-slate-700",
+              depth % 2 === 0 && "bg-white dark:bg-slate-700",
+              depth % 2 === 1 && "bg-slate-50 dark:bg-slate-650",
               highlight && "bg-sky-50 dark:bg-sky-900",
               "border",
               "outline outline-0",
@@ -148,12 +151,28 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                   "transition-all",
                 )}
               >
-                <ResourceIcon
-                  className="size-4 -ml-0.5"
-                  resourceType={fqn}
-                  color={color}
-                  icon={icon}
-                />
+                <div className="-ml-0.5">
+                  <div className="relative">
+                    <ResourceIcon
+                      className="size-4"
+                      resourceType={fqn}
+                      color={color}
+                      icon={icon}
+                    />
+                    <div className="absolute -right-0.5 bottom-0">
+                      <RunningStateIndicator
+                        runningState={hierarchichalRunningState}
+                        className={clsx(
+                          "size-1.5 outline outline-2",
+                          depth % 2 === 0 &&
+                            "outline-white dark:outline-slate-700",
+                          depth % 2 === 1 &&
+                            "outline-slate-50 dark:outline-slate-650",
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 <span
                   className={clsx(
@@ -167,10 +186,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 >
                   {name}
                 </span>
-
-                <RunningStateIndicator
-                  runningState={hierarchichalRunningState}
-                />
 
                 {(hasChildNodes || collapsed) && (
                   <>
@@ -509,6 +524,7 @@ const RenderNode = ({
   isNodeHidden,
   nodeInfo,
   expandedItems,
+  depth = 0,
   onCollapse,
   onExpand,
 }: {
@@ -518,6 +534,7 @@ const RenderNode = ({
   isNodeHidden: (path: string) => boolean;
   nodeInfo?: Map<string, NodeV2>;
   expandedItems: string[];
+  depth?: number;
   onCollapse: (path: string) => void;
   onExpand: (path: string) => void;
 }) => {
@@ -569,6 +586,7 @@ const RenderNode = ({
         }
       }}
       hierarchichalRunningState={constructTreeNode.hierarchichalRunningState}
+      depth={depth}
     >
       {childNodes.map((child) => (
         <RenderNode
@@ -581,6 +599,7 @@ const RenderNode = ({
           expandedItems={expandedItems}
           onCollapse={onCollapse}
           onExpand={onExpand}
+          depth={depth + 1}
         />
       ))}
     </ConstructNode>

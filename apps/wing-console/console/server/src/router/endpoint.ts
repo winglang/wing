@@ -47,6 +47,17 @@ const getEndpointDetails = async (
 
 export const createEndpointRouter = () => {
   return createRouter({
+    "endpoint.warningAccepted": createProcedure.query(async ({ ctx }) => {
+      const warningAccepted = await ctx.getEndpointWarningAccepted?.();
+      return {
+        warningAccepted: warningAccepted ?? true,
+      };
+    }),
+    "endpoint.notifyWarningAccepted": createProcedure.mutation(
+      async ({ ctx }) => {
+        await ctx.notifyEndpointWarningAccepted?.();
+      },
+    ),
     "endpoint.list": createProcedure.query(async ({ input, ctx }) => {
       if (ctx.appState() !== "success") {
         return [];
@@ -83,6 +94,8 @@ export const createEndpointRouter = () => {
         const simulator = await ctx.simulator();
         const client = simulator.getResource(input.resourcePath) as Endpoint;
         await client.expose();
+
+        // We need to reload the simulator because the endpoints are read during the simulator initialization.
         await simulator.reload(false);
       }),
     "endpoint.hide": createProcedure
@@ -95,6 +108,8 @@ export const createEndpointRouter = () => {
         const simulator = await ctx.simulator();
         const client = simulator.getResource(input.resourcePath) as Endpoint;
         await client.hide();
+
+        // We need to reload the simulator because the endpoints are read during the simulator initialization.
         await simulator.reload(false);
       }),
   });

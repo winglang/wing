@@ -176,6 +176,9 @@
         },
         "function_name": "Function-c899c2a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.init1_Function_IamRole_3B884CB0.arn}",
@@ -208,6 +211,9 @@
         },
         "function_name": "Function-c86c3d88",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.init2_Function_IamRole_A05B341B.arn}",

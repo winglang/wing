@@ -201,6 +201,9 @@ module.exports = function({  }) {
         },
         "function_name": "Function-c892ab6d",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Doubler2_Function_IamRole_66AECEFB.arn}",
@@ -252,10 +255,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Doubler extends $stdlib.std.Resource {
       constructor($scope, $id, func) {
         super($scope, $id);
@@ -356,9 +362,13 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
+                [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
+                [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), ["fromStr"]],
                 [handler, ["handle"]],
               ],
               "$inflight_init": [
+                [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
+                [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), []],
                 [handler, []],
               ],
             });

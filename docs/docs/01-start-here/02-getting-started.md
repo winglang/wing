@@ -5,8 +5,6 @@ keywords: [Getting started, Wing installation, installation, Wing toolchain]
 slug: /
 ---
 
-## Welcome
-
 Welcome, it's great to see you here!
 
 As you prepare to start taking flight with Wing 😉, there are a few things you need to do to get set up.
@@ -36,7 +34,7 @@ npm install -g winglang
 
 Verify your installation:
 ```
-wing -V
+wing --version
 ```
 
 ## IDE Extension
@@ -93,7 +91,8 @@ queue.setConsumer(inflight (message: str) => {
 
 :::info
 
-<details><summary>Experimental TypeScript Support</summary>
+<details>
+<summary>Experimental TypeScript Support</summary>
 
 If you'd like to use TypeScript instead of winglang, you can add the `--language ts` flag when creating a new project:
 

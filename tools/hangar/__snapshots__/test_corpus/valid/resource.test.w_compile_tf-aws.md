@@ -423,6 +423,9 @@ module.exports = function({  }) {
         },
         "function_name": "Queue-SetConsumer0-c8931d51",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_Queue-SetConsumer0_IamRole_D38B87EE.arn}",
@@ -455,6 +458,9 @@ module.exports = function({  }) {
         },
         "function_name": "Topic-OnMessage0-c8bea057",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_Topic-OnMessage0_IamRole_FEF4CFBB.arn}",
@@ -487,6 +493,9 @@ module.exports = function({  }) {
         },
         "function_name": "OnCreate-OnMessage0-c8ab841c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_b2_OnCreate-OnMessage0_IamRole_2B7C8C04.arn}",
@@ -708,11 +717,14 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const MyEnum =
       (function (tmp) {
         tmp["A"] = "A";
@@ -806,11 +818,13 @@ class $Root extends $stdlib.std.Resource {
           "testTypeAccess": [
             [Bar, ["barStatic"]],
             [Foo, ["fooStatic"]],
+            [MyEnum, ["B"]],
             [this.e, []],
           ],
           "$inflight_init": [
             [Bar, []],
             [Foo, []],
+            [MyEnum, []],
             [this.b, []],
             [this.e, []],
             [this.foo, []],
@@ -1052,9 +1066,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
             [bigOlPublisher, [].concat(["publish"], ["getObjectCount"])],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [bigOlPublisher, []],
           ],
         });
