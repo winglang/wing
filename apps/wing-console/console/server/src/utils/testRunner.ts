@@ -167,7 +167,10 @@ export const createTestRunner = ({
         testing: true,
       });
       const testSimulator = createSimulator();
+
       testCompiler.on("compiled", async ({ simfile }) => {
+        await testSimulator.start(simfile);
+
         const simulator = await testSimulator.waitForInstance();
         resolve(simulator);
       });
@@ -182,12 +185,12 @@ export const createTestRunner = ({
 
   const initialize = async () => {
     const simulator = await getSimulatorInstance();
+
     const testRunner = simulator.getResource(
       "root/cloud.TestRunner",
     ) as ITestRunnerClient;
-    const tests = await testRunner.listTests();
 
-    console.log(`Found ${tests.length} tests`);
+    const tests = await testRunner.listTests();
 
     testsState.setTests(
       tests.map((test) => ({
