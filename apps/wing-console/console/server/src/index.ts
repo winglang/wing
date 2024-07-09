@@ -13,23 +13,13 @@ import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
 import type { Analytics } from "./utils/analytics.js";
 import { createCompiler } from "./utils/compiler.js";
-import type {
-  FileLink,
-  LayoutConfig,
-  TestItem,
-  TestsStateManager,
-} from "./utils/createRouter.js";
+import type { FileLink, LayoutConfig } from "./utils/createRouter.js";
 import { formatTraceError } from "./utils/format-wing-error.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 import { createTestRunner } from "./utils/testRunner.js";
 
-export type {
-  TestsStateManager,
-  TestStatus,
-  TestItem,
-  FileLink,
-} from "./utils/createRouter.js";
+export type { TestStatus, FileLink } from "./utils/createRouter.js";
 export type { Trace, State } from "./types.js";
 export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
@@ -163,30 +153,14 @@ export const createConsoleServer = async ({
     wingfile,
     watchGlobs,
     platform,
+    logger: consoleLogger,
+  });
+  testRunner.onTestsChange(async () => {
+    await invalidateQuery("test.list");
   });
 
   let lastErrorMessage = "";
   let selectedNode = "";
-  let tests: TestItem[] = [];
-
-  const testsStateManager = (): TestsStateManager => {
-    return {
-      getTests: () => {
-        return tests;
-      },
-      setTests: (newTests: TestItem[]) => {
-        tests = newTests;
-      },
-      setTest: (test: TestItem) => {
-        const index = tests.findIndex((t) => t.id === test.id);
-        if (index === -1) {
-          tests.push(test);
-        } else {
-          tests[index] = test;
-        }
-      },
-    };
-  };
 
   let appState: State = "compiling";
   compiler.on("compiling", () => {
@@ -208,8 +182,7 @@ export const createConsoleServer = async ({
   simulator.on("started", () => {
     appState = "success";
 
-    // Clear tests when simulator is restarted
-    testsStateManager().setTests([]);
+    testRunner.restart();
     invalidateQuery(undefined);
     isStarting = false;
   });

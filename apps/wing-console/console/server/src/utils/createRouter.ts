@@ -58,20 +58,6 @@ export interface LayoutConfig {
 
 export type TestStatus = "pending" | "running" | "success" | "error";
 
-export interface TestItem {
-  id: string;
-  label: string;
-  status: TestStatus;
-  datetime: number;
-  time?: number;
-}
-
-export interface TestsStateManager {
-  getTests: () => TestItem[];
-  setTests: (tests: TestItem[]) => void;
-  setTest: (test: TestItem) => void;
-}
-
 export interface FileLink {
   path: string;
   line?: number;
