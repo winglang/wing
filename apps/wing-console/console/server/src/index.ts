@@ -19,7 +19,8 @@ import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 import { createTestRunner } from "./utils/testRunner.js";
 
-export type { TestStatus, FileLink } from "./utils/createRouter.js";
+export type { FileLink } from "./utils/createRouter.js";
+export type { TestStatus, TestItem } from "./utils/testRunner.js";
 export type { Trace, State } from "./types.js";
 export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
@@ -182,7 +183,7 @@ export const createConsoleServer = async ({
   simulator.on("started", () => {
     appState = "success";
 
-    testRunner.restart();
+    testRunner.initialize();
     invalidateQuery(undefined);
     isStarting = false;
   });

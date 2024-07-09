@@ -56,8 +56,6 @@ export interface LayoutConfig {
   };
 }
 
-export type TestStatus = "pending" | "running" | "success" | "error";
-
 export interface FileLink {
   path: string;
   line?: number;

@@ -41,8 +41,8 @@ export interface TestRunner {
   // Used to report tests status changes to the frontend via websockets.
   onTestsChange(callback: () => void): void;
 
-  // Restart
-  restart(): void;
+  // initialize
+  initialize(): void;
 }
 
 export interface CreateTestRunnerProps {
@@ -155,6 +155,11 @@ export const createTestRunner = ({
   const testsState = testsStateManager();
 
   const onTestChangeCallbacks: Array<() => void> = [];
+  const runOnTestChangeCallbacks = () => {
+    for (const callback of onTestChangeCallbacks) {
+      callback();
+    }
+  };
 
   const getSimulatorInstance = async () => {
     return new Promise<Simulator>((resolve) => {
@@ -173,12 +178,6 @@ export const createTestRunner = ({
         resolve(simulator);
       });
     });
-  };
-
-  const runOnTestChangeCallbacks = () => {
-    for (const callback of onTestChangeCallbacks) {
-      callback();
-    }
   };
 
   const initialize = async () => {
@@ -200,12 +199,6 @@ export const createTestRunner = ({
     );
     await simulator.stop();
     runOnTestChangeCallbacks();
-  };
-
-  initialize();
-
-  const listTests = () => {
-    return testsState.getTests();
   };
 
   const status = () => {
@@ -241,6 +234,16 @@ export const createTestRunner = ({
     const testList = await listSimulatorTests(simulator);
     const result: InternalTestResult[] = [];
 
+    // set all tests to running
+    testsState.setTests(
+      testList.map((test) => ({
+        id: test,
+        label: getTestName(test),
+        status: "running",
+        datetime: Date.now(),
+      })),
+    );
+
     for (const resourcePath of testList) {
       await simulator.reload(true);
       const response = await executeTest(simulator, resourcePath, logger);
@@ -263,13 +266,12 @@ export const createTestRunner = ({
     await simulator.stop();
   };
 
-  const onTestsChange = (callback: () => void) => {
-    onTestChangeCallbacks.push(callback);
+  const listTests = () => {
+    return testsState.getTests();
   };
 
-  const restart = () => {
-    testsState.setTests([]);
-    runOnTestChangeCallbacks();
+  const onTestsChange = (callback: () => void) => {
+    onTestChangeCallbacks.push(callback);
   };
 
   return {
@@ -278,6 +280,6 @@ export const createTestRunner = ({
     runTest,
     runAllTests,
     onTestsChange,
-    restart,
+    initialize,
   };
 };

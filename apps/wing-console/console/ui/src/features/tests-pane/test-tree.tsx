@@ -14,11 +14,11 @@ import {
   TreeView,
   useTheme,
 } from "@wingconsole/design-system";
+import type { TestItem } from "@wingconsole/server";
 import classNames from "classnames";
 import { useMemo } from "react";
 
 import { NoTests } from "./no-tests.js";
-import type { TestItem } from "./test-item.js";
 
 export interface TestTreeProps {
   testList: TestItem[];
@@ -119,7 +119,7 @@ export const TestTree = ({
                             )}
                           />
                         )}
-                        {test.status === "pending" && (
+                        {test.status === "idle" && (
                           <MinusCircleIcon
                             className={classNames(theme.text2, "w-4 h-4")}
                           />
