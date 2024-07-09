@@ -431,7 +431,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
 
   // Whether the bounding box is out of bounds of the transform view.
   const outOfBounds = useMemo(() => {
-    if (!boundingBox) {
+    if (!boundingBox || boundingBox.width === 0 || boundingBox.height === 0) {
       return false;
     }
 
@@ -440,6 +440,9 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       return false;
     }
     const containerBoundingBox = container.getBoundingClientRect();
+    if (containerBoundingBox.width === 0 || containerBoundingBox.height === 0) {
+      return false;
+    }
 
     const viewBoundingBox = {
       x: viewTransform.x,
