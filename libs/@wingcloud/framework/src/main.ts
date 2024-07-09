@@ -88,16 +88,14 @@ This is a Wing app and must be run through the Wing CLI (npm install -f winglang
   const entrypointDir = process.env.WING_SOURCE_DIR!;
   const rootId = process.env.WING_ROOT_ID;
 
-  const $PlatformManager = new platform.PlatformManager({ platformPaths });
-  globalThis.$ClassFactory = $PlatformManager.createClassFactory();
-  const app = $PlatformManager.createApp({
+  const platformManager = new platform.PlatformManager({ platformPaths });
+  const app = platformManager.createApp({
     outdir,
     name,
     rootConstruct,
     isTestEnvironment,
     entrypointDir,
     rootId,
-    classFactory: globalThis.$ClassFactory,
   });
 
   app.synth();

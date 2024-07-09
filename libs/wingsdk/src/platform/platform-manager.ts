@@ -127,7 +127,12 @@ export class PlatformManager {
 
   // This method is called from preflight.js in order to return an App instance
   // that can be synthesized
-  public createApp(appProps: AppProps): App {
+  public createApp(appProps: Omit<AppProps, "classFactory">): App {
+    if (globalThis.$ClassFactory !== undefined) {
+      throw new Error("$ClassFactory already defined");
+    }
+    globalThis.$ClassFactory = this.createClassFactory();
+
     let appCall = this.platformInstances[0].newApp;
 
     if (!appCall) {
@@ -140,6 +145,7 @@ export class PlatformManager {
 
     const app = appCall!({
       ...appProps,
+      classFactory: globalThis.$ClassFactory,
       synthHooks: hooks.synthHooks,
     }) as App;
 

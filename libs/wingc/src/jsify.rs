@@ -198,9 +198,6 @@ impl<'a> JSifier<'a> {
 				"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
 				PLATFORMS_VAR
 			));
-			output
-				.line("if (globalThis.$ClassFactory !== undefined) { throw new Error(\"$ClassFactory already defined\"); }");
-			output.line("globalThis.$ClassFactory = $PlatformManager.createClassFactory();".to_string());
 
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
@@ -224,7 +221,7 @@ impl<'a> JSifier<'a> {
 			output.add_code(root_class);
 			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
-				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], classFactory: globalThis.$ClassFactory }});",
+				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
 				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
 			));
 			output.line("$APP.synth();".to_string());
