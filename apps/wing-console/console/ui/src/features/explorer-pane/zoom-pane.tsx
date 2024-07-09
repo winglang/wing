@@ -400,7 +400,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       <AnimatePresence>
         {outOfBounds && (
           <motion.div
-            className="absolute inset-0 z-10 flex justify-around items-center backdrop-blur-[2px]"
+            className="absolute inset-0 z-10 flex justify-around items-center backdrop-blur-[1.5px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
