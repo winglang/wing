@@ -485,19 +485,13 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       <div ref={targetRef} className="absolute inset-0 origin-top-left">
         <context.Provider value={{ viewTransform }}>
           <div className="relative inline-block">
-            <AnimatePresence>
-              {outOfBounds && (
-                <motion.div
-                  className={classNames(
-                    "absolute inset-0 w-full h-full rounded-lg shadow-lg bg-slate-250 dark:bg-slate-500 animate-pulse",
-                  )}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                />
-              )}
-            </AnimatePresence>
+            {outOfBounds && (
+              <div
+                className={classNames(
+                  "absolute inset-0 w-full h-full rounded-lg shadow-lg bg-slate-250 dark:bg-slate-500 animate-pulse",
+                )}
+              />
+            )}
             {children}
           </div>
         </context.Provider>
