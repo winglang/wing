@@ -1,5 +1,5 @@
 import { Construct, IConstruct } from "constructs";
-import { App, LiftMap } from "../core";
+import { App, LiftMap, ClassFactory } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { Node } from "../std";
 
@@ -169,9 +169,9 @@ export abstract class Resource extends Construct implements IResource {
     fqn: string,
     scope: Construct,
     id: string,
-    ...props: any[]
+    ...args: any[]
   ): TResource {
-    return App.of(scope).newAbstract(fqn, scope, id, ...props);
+    return ClassFactory.of(scope).new(fqn, undefined, scope, id, ...args);
   }
 
   /**

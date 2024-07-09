@@ -292,6 +292,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -300,7 +301,7 @@ class $Root extends $stdlib.std.Resource {
     const cloud = $stdlib.cloud;
     const http = $stdlib.http;
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
-    class AnApi extends (this?.node?.root?.typeForFqn("@winglang/sdk.cloud.Api") ?? cloud.Api) {
+    class AnApi extends (globalThis.$ClassFactory.resolveType("@winglang/sdk.cloud.Api") ?? cloud.Api) {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
@@ -401,10 +402,9 @@ class $Root extends $stdlib.std.Resource {
     }
     const api = new AnApi(this, "AnApi");
     (api.get("/", new $Closure1(this, "$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:can inherit std lib preflight class", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:can inherit std lib preflight class", new $Closure2(this, "$Closure2"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inherit_stdlib_class.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
