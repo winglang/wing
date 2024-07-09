@@ -9,7 +9,12 @@ import { createCompiler } from "./compiler.js";
 import { formatTraceError } from "./format-wing-error.js";
 import { createSimulator } from "./simulator.js";
 
-export type TestStatus = "success" | "error" | "idle" | "running";
+export type TestStatus =
+  | "success"
+  | "error"
+  | "idle"
+  | "running"
+  | "uninitialized";
 
 export interface TestItem {
   id: string;
@@ -17,12 +22,6 @@ export interface TestItem {
   status: TestStatus;
   datetime: number;
   time?: number;
-}
-
-export interface TestsStateManager {
-  getTests: () => TestItem[];
-  setTests: (tests: TestItem[]) => void;
-  setTest: (test: TestItem) => void;
 }
 
 export interface TestRunner {
@@ -57,14 +56,16 @@ const getTestName = (testPath: string) => {
   return test.replaceAll("test:", "");
 };
 
-const testsStateManager = (): TestsStateManager => {
+const testsStateManager = () => {
   let tests: TestItem[] = [];
+  let initialized = false;
 
   return {
     getTests: () => {
       return tests;
     },
     setTests: (newTests: TestItem[]) => {
+      initialized = true;
       tests = newTests;
     },
     setTest: (test: TestItem) => {
@@ -75,14 +76,10 @@ const testsStateManager = (): TestsStateManager => {
         tests[index] = test;
       }
     },
+    initialized: () => {
+      return initialized;
+    },
   };
-};
-
-const listSimulatorTests = (simulator: Simulator): Promise<string[]> => {
-  const testRunner = simulator.getResource(
-    "root/cloud.TestRunner",
-  ) as ITestRunnerClient;
-  return testRunner.listTests();
 };
 
 const executeTest = async (
@@ -183,11 +180,11 @@ export const createTestRunner = ({
   const initialize = async () => {
     const simulator = await getSimulatorInstance();
 
-    const testRunner = simulator.getResource(
+    const simTestRunner = simulator.getResource(
       "root/cloud.TestRunner",
     ) as ITestRunnerClient;
 
-    const tests = await testRunner.listTests();
+    const tests = await simTestRunner.listTests();
 
     testsState.setTests(
       tests.map((test) => ({
@@ -201,7 +198,10 @@ export const createTestRunner = ({
     runOnTestChangeCallbacks();
   };
 
-  const status = () => {
+  const status = (): TestStatus => {
+    if (!testsState.initialized()) {
+      return "uninitialized";
+    }
     if (testsState.getTests().some((t) => t.status === "running")) {
       return "running";
     }
@@ -216,6 +216,7 @@ export const createTestRunner = ({
 
   const runTest = async (testId: string) => {
     const simulator = await getSimulatorInstance();
+
     const response = await executeTest(simulator, testId, logger);
     testsState.setTest({
       id: testId,
@@ -224,33 +225,31 @@ export const createTestRunner = ({
       time: response.time,
       datetime: Date.now(),
     });
+
     await simulator.stop();
     runOnTestChangeCallbacks();
   };
 
   const runAllTests = async () => {
-    const simulator = await getSimulatorInstance();
-
-    const testList = await listSimulatorTests(simulator);
     const result: InternalTestResult[] = [];
 
-    // set all tests to running
+    // Set all tests to running.
+    const testList = testsState.getTests();
     testsState.setTests(
       testList.map((test) => ({
-        id: test,
-        label: getTestName(test),
+        ...test,
         status: "running",
         datetime: Date.now(),
       })),
     );
 
-    for (const resourcePath of testList) {
+    const simulator = await getSimulatorInstance();
+    for (const test of testList) {
       await simulator.reload(true);
-      const response = await executeTest(simulator, resourcePath, logger);
+      const response = await executeTest(simulator, test.id, logger);
       result.push(response);
       testsState.setTest({
-        id: resourcePath,
-        label: getTestName(resourcePath),
+        ...test,
         status: response.error ? "error" : "success",
         time: response.time,
         datetime: Date.now(),
