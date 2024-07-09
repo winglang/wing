@@ -157,7 +157,8 @@ export const createConsoleServer = async ({
     logger: consoleLogger,
   });
   testRunner.onTestsChange(async () => {
-    await invalidateQuery("test.list");
+    invalidateQuery("test.list");
+    invalidateQuery("test.status");
   });
 
   let lastErrorMessage = "";

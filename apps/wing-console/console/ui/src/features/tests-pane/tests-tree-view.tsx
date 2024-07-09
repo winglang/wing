@@ -10,10 +10,11 @@ export interface TestsTreeViewProps {
 
 export const TestsTreeView = memo(
   ({ onSelectedItemsChange, selectedItemId }: TestsTreeViewProps) => {
-    const { testList, runAllTests, runTest } = useTests();
+    const { status, testList, runAllTests, runTest } = useTests();
 
     return (
       <TestTree
+        status={status}
         testList={testList}
         handleRunAllTests={runAllTests}
         handleRunTest={runTest}

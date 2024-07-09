@@ -8,19 +8,19 @@ import {
 import {
   PlayAllIcon,
   ScrollableArea,
+  SpinnerLoader,
   Toolbar,
   ToolbarButton,
   TreeItem,
   TreeView,
   useTheme,
 } from "@wingconsole/design-system";
-import type { TestItem } from "@wingconsole/server";
+import type { TestItem, TestStatus } from "@wingconsole/server";
 import classNames from "classnames";
 import { useMemo } from "react";
 
-import { NoTests } from "./no-tests.js";
-
 export interface TestTreeProps {
+  status: TestStatus;
   testList: TestItem[];
   handleRunAllTests: () => void;
   handleRunTest: (testPath: string) => void;
@@ -29,6 +29,7 @@ export interface TestTreeProps {
 }
 
 export const TestTree = ({
+  status,
   testList,
   handleRunTest,
   handleRunAllTests,
@@ -48,15 +49,13 @@ export const TestTree = ({
       data-testid="test-tree-menu"
     >
       <Toolbar title="Tests">
-        {testList.length > 0 && (
-          <ToolbarButton
-            onClick={handleRunAllTests}
-            title="Run All Tests"
-            disabled={testList.length === 0}
-          >
-            <PlayAllIcon className="w-4 h-4" />
-          </ToolbarButton>
-        )}
+        <ToolbarButton
+          onClick={handleRunAllTests}
+          title="Run All Tests"
+          disabled={testList.length === 0}
+        >
+          <PlayAllIcon className="size-4" />
+        </ToolbarButton>
       </Toolbar>
 
       <div className="relative grow">
@@ -70,7 +69,38 @@ export const TestTree = ({
             )}
           >
             <div className="flex flex-col">
-              {testList.length === 0 && <NoTests />}
+              {testList.length === 0 && (
+                <div
+                  className={classNames(
+                    theme.text2,
+                    "flex flex-col text-xs px-3 py-2 items-center",
+                  )}
+                >
+                  {status === "uninitialized" && (
+                    <div className="flex items-center gap-2">
+                      <SpinnerLoader size="xs" />
+                      <div>Loading... </div>
+                    </div>
+                  )}
+                  {status !== "uninitialized" && (
+                    <>
+                      <div>There are no tests.</div>
+                      <div>
+                        <span>Learn how to add tests </span>
+                        <a
+                          className="text-sky-500 hover:text-sky-600"
+                          href="https://www.winglang.io/docs/concepts/tests"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          here.
+                        </a>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
               <TreeView
                 selectedItems={selectedItems}
                 onSelectedItemsChange={onSelectedItemsChange}

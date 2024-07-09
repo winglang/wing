@@ -10,7 +10,10 @@ export interface InternalTestResult extends TestResult {
 
 export const createTestRouter = () => {
   return createRouter({
-    "test.list": createProcedure.query(async ({ input, ctx }) => {
+    "test.status": createProcedure.query(async ({ ctx }) => {
+      return ctx.getTestRunner().status();
+    }),
+    "test.list": createProcedure.query(async ({ ctx }) => {
       return ctx.getTestRunner().listTests();
     }),
     "test.run": createProcedure
