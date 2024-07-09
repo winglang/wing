@@ -1,15 +1,9 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { GcpApp } from "./gcp-util";
 import { Counter, CounterInflightMethods, Function } from "../../src/cloud";
 import { lift } from "../../src/core";
-import { App } from "../../src/target-tf-gcp";
-import {
-  mkdtemp,
-  sanitizeCode,
-  tfResourcesOf,
-  tfSanitize,
-  treeJsonOf,
-} from "../util";
+import { sanitizeCode, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const GCP_APP_OPTS = {
   projectId: "my-project",
@@ -41,7 +35,7 @@ function checkDatastorePermissions(
 
 test("counter name valid", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "The.Amazing-Counter_01");
   const output = app.synth();
 
@@ -64,10 +58,9 @@ test("counter name valid", () => {
 
 test("replace invalid character from counter name", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "The*Amazing%Counter@01");
   const output = app.synth();
-  console.log(output);
 
   // THEN
   expect(
@@ -88,7 +81,7 @@ test("replace invalid character from counter name", () => {
 
 test("default counter behavior", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   new Counter(app, "Counter");
   const output = app.synth();
 
@@ -102,7 +95,7 @@ test("default counter behavior", () => {
 
 test("counter with initial value", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   new Counter(app, "Counter", {
     initial: 9991,
   });
@@ -119,7 +112,7 @@ test("counter with initial value", () => {
 
 test("function with a counter binding", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "Counter");
   const handler = lift({ my_counter: counter })
     .grant({ my_counter: [CounterInflightMethods.INC] })
@@ -150,7 +143,7 @@ test("function with a counter binding", () => {
 
 test("inc() IAM permissions", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "Counter");
   const handler = lift({ my_counter: counter })
     .grant({ my_counter: [CounterInflightMethods.INC] })
@@ -174,7 +167,7 @@ test("inc() IAM permissions", () => {
 
 test("dec() IAM permissions", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "Counter");
   const handler = lift({ my_counter: counter })
     .grant({ my_counter: [CounterInflightMethods.DEC] })
@@ -198,7 +191,7 @@ test("dec() IAM permissions", () => {
 
 test("peek() IAM permissions", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "Counter");
 
   const handler = lift({ my_counter: counter })
@@ -222,7 +215,7 @@ test("peek() IAM permissions", () => {
 
 test("set() IAM permissions", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "Counter");
   const handler = lift({ my_counter: counter })
     .grant({ my_counter: [CounterInflightMethods.SET] })

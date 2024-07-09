@@ -17,7 +17,6 @@ import { PolicySchema } from "../target-sim/schema-resources";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 const HANDLE_ATTRIBUTE = "handle";
-const RUNNING_STATE_ATTRIBUTE = "runningState";
 
 /**
  * If an API call is made to a resource with name as the caller, any permissions
@@ -223,10 +222,12 @@ export class Simulator {
   // merged in when calling `getResourceConfig()`.
   private state: Record<string, ResourceState> = {};
 
+  // keeps the running state of all resources.
+  private runningState: Record<string, ResourceRunningState> = {};
+
   constructor(props: SimulatorProps) {
     const simdir = resolve(props.simfile);
     this.statedir = props.stateDir ?? join(simdir, ".state");
-    this._model = this._loadApp(simdir);
 
     this._running = "stopped";
     this._handles = new HandleManager();
@@ -234,6 +235,8 @@ export class Simulator {
     this._traces = new Array();
     this._traceSubscribers = new Array();
     this._resourceLifecyleSubscribers = new Array();
+
+    this._model = this._loadApp(simdir);
   }
 
   private _loadApp(simdir: string): Model {
@@ -276,6 +279,15 @@ export class Simulator {
     }
     const connections = readJsonSync(connectionJson).connections;
     const graph = new Graph(Object.values(schema.resources));
+
+    // initialize new resources to "stopped" state.
+    for (const node of graph.nodes) {
+      if (this.tryGetResourceRunningState(node.path) !== undefined) {
+        continue;
+      }
+
+      this.setResourceRunningState(node.path, "stopped");
+    }
 
     return { schema, tree, connections, simdir, graph };
   }
@@ -413,10 +425,7 @@ export class Simulator {
     path: string,
     runningState: ResourceRunningState
   ) {
-    this.state[path].attrs = {
-      ...this.state[path].attrs,
-      [RUNNING_STATE_ATTRIBUTE]: runningState,
-    };
+    this.runningState[path] = runningState;
 
     for (const subscriber of this._resourceLifecyleSubscribers) {
       subscriber.callback({ path, runningState });
@@ -598,6 +607,15 @@ export class Simulator {
       throw new Error(`Resource "${path}" not found.`);
     }
     return config;
+  }
+
+  /**
+   * Get the running state of a resource.
+   */
+  public tryGetResourceRunningState(
+    path: string
+  ): ResourceRunningState | undefined {
+    return this.runningState[path];
   }
 
   /**

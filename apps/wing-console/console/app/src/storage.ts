@@ -23,6 +23,8 @@ export interface AnalyticsConfig {
   optOut?: boolean;
   /** whether sign in is required */
   requireSignIn?: boolean;
+  /** whether the user has accepted the exposing endpoints risk warning */
+  endpointWarningAccepted?: boolean;
 }
 
 /**
@@ -93,6 +95,21 @@ export class AnalyticsStorage {
   public notifySignedIn() {
     let config = this.loadConfig();
     config.requireSignIn = false;
+    this.saveConfig(config);
+  }
+
+  public getEndpointWarningAccepted(): boolean {
+    let config = this.loadConfig();
+    if (config.endpointWarningAccepted == undefined) {
+      config.endpointWarningAccepted = false;
+      this.saveConfig(config);
+    }
+    return config.endpointWarningAccepted;
+  }
+
+  public notifyEndpointWarningAccepted() {
+    let config = this.loadConfig();
+    config.endpointWarningAccepted = true;
     this.saveConfig(config);
   }
 
