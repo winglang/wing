@@ -67,7 +67,6 @@ test("create an api", async () => {
   expect(s.getResourceConfig("/my_api")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
       url: expect.any(String),
     },
     path: "root/my_api",

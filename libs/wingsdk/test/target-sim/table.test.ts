@@ -19,7 +19,6 @@ test("create a table", async () => {
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_table",
     addr: expect.any(String),
@@ -59,7 +58,6 @@ test("insert row", async () => {
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_table",
     addr: expect.any(String),
@@ -107,7 +105,6 @@ test("get row", async () => {
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_table",
     addr: expect.any(String),
@@ -154,7 +151,6 @@ test("tryGet row", async () => {
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_table",
     addr: expect.any(String),
@@ -200,7 +196,6 @@ test("update row", async () => {
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_table",
     addr: expect.any(String),
@@ -245,7 +240,6 @@ test("list table", async () => {
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_table",
     addr: expect.any(String),
@@ -352,7 +346,6 @@ test("can add row in preflight", async () => {
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_table",
     addr: expect.any(String),
