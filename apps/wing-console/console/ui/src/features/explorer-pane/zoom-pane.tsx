@@ -289,6 +289,22 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     containerRef.current,
   );
 
+  const fixViewport = useCallback(() => {
+    setViewTransform((viewTransform) => {
+      return restrict(viewTransform);
+    });
+  }, [restrict]);
+
+  useEffect(() => {
+    const myObserver = new ResizeObserver(() => {
+      fixViewport();
+    });
+
+    myObserver.observe(containerRef.current!);
+
+    return () => myObserver.disconnect();
+  }, [fixViewport]);
+
   const zoomIn = useCallback(() => {
     const container = containerRef.current;
     if (!container) {
