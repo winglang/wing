@@ -1,5 +1,6 @@
 import { Button, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   createContext,
   forwardRef,
@@ -372,11 +373,13 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       height: containerBoundingBox.height / viewTransform.z,
     };
 
+    // Add padding to the view bounding box to prevent the bounding box from being too close to the edge.
+    const padding = 64 + 24;
     return !boundingBoxOverlap(viewBoundingBox, {
-      x: 0,
-      y: 0,
-      width: boundingBox.width,
-      height: boundingBox.height,
+      x: 0 + padding,
+      y: 0 + padding,
+      width: boundingBox.width - padding * 2,
+      height: boundingBox.height - padding * 2,
     });
   }, [viewTransform, boundingBox]);
 
@@ -394,6 +397,39 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         </context.Provider>
       </div>
 
+      <AnimatePresence>
+        {outOfBounds && (
+          <motion.div
+            className="absolute inset-0 z-10 flex justify-around items-center backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div
+              className={classNames(
+                "p-4 rounded flex flex-col justify-around gap-2",
+              )}
+            >
+              <p className={classNames(theme.text1, "px-2 py-0.5 rounded")}>
+                The map is out of bounds
+              </p>
+              <div className="flex justify-around">
+                <Button onClick={() => zoomToFit()}>Fit map to screen</Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {isSpacePressed && (
+        <div
+          className={classNames("absolute inset-0 z-10", {
+            "cursor-grab": !isDragging,
+            "cursor-grabbing": isDragging,
+          })}
+        ></div>
+      )}
+
       <div className="relative z-10 flex">
         <div className="absolute cursor-grab backdrop-blur right-0">
           <MapControls
@@ -403,38 +439,6 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
           />
         </div>
       </div>
-
-      {outOfBounds && (
-        <div className="absolute inset-0 z-10 flex justify-around items-center">
-          <div
-            className={classNames(
-              "p-4 rounded flex flex-col justify-around gap-2",
-            )}
-          >
-            <p
-              className={classNames(
-                theme.text1,
-                theme.bg4,
-                "px-2 py-0.5 rounded",
-              )}
-            >
-              The map is out of bounds
-            </p>
-            <div className="flex justify-around">
-              <Button onClick={() => zoomToFit()}>Fit map to screen</Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isSpacePressed && (
-        <div
-          className={classNames("absolute inset-0", {
-            "cursor-grab": !isDragging,
-            "cursor-grabbing": isDragging,
-          })}
-        ></div>
-      )}
     </div>
   );
 });
