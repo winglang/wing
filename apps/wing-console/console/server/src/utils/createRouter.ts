@@ -9,7 +9,7 @@ import type { State, Trace } from "../types.js";
 import type { Updater } from "../updater.js";
 
 import type { Analytics } from "./analytics.js";
-import type { TestRunner } from "./testRunner.js";
+import type { TestRunner } from "./test-runner/test-runner.js";
 
 export type QueryNames = {
   query:

@@ -1,13 +1,13 @@
 import type { ITestRunnerClient } from "@winglang/sdk/lib/std/test-runner.js";
 import { TraceType } from "@winglang/sdk/lib/std/test-runner.js";
 
-import type { ConsoleLogger } from "../consoleLogger.js";
-import type { InternalTestResult } from "../router/test.js";
-import type { Simulator } from "../wingsdk.js";
+import type { ConsoleLogger } from "../../consoleLogger.js";
+import type { InternalTestResult } from "../../router/test.js";
+import type { Simulator } from "../../wingsdk.js";
+import { formatTraceError } from "../format-wing-error.js";
 
-import { createCompiler } from "./compiler.js";
-import { formatTraceError } from "./format-wing-error.js";
-import { createSimulator } from "./simulator.js";
+import { createSimulatorManager } from "./simulator-manager.js";
+import { createTestStateManager } from "./test-state-manager.js";
 
 export type TestStatus =
   | "success"
@@ -42,6 +42,9 @@ export interface TestRunner {
 
   // Initialize the test runner.
   initialize(): void;
+
+  // Stop the test runner.
+  stop(): void;
 }
 
 export interface CreateTestRunnerProps {
@@ -54,34 +57,6 @@ export interface CreateTestRunnerProps {
 const getTestName = (testPath: string) => {
   const test = testPath.split("/").pop() ?? testPath;
   return test.replaceAll("test:", "");
-};
-
-const testsStateManager = () => {
-  let tests: TestItem[] = [];
-  let initialized = false;
-
-  return {
-    getTests: () => {
-      return tests;
-    },
-    setTests: (newTests: TestItem[]) => {
-      tests = newTests;
-    },
-    setTest: (test: TestItem) => {
-      const index = tests.findIndex((t) => t.id === test.id);
-      if (index === -1) {
-        tests.push(test);
-      } else {
-        tests[index] = test;
-      }
-    },
-    initialized: () => {
-      return initialized;
-    },
-    setInitialized: (value: boolean) => {
-      initialized = value;
-    },
-  };
 };
 
 const executeTest = async (
@@ -151,45 +126,34 @@ export const createTestRunner = ({
   watchGlobs,
   logger,
 }: CreateTestRunnerProps): TestRunner => {
-  const testsState = testsStateManager();
+  const testsState = createTestStateManager();
+
+  const simulatorManager = createSimulatorManager({
+    wingfile,
+    platform,
+    watchGlobs,
+  });
 
   const onTestChangeCallbacks: Array<() => void> = [];
+
   const runOnTestChangeCallbacks = () => {
     for (const callback of onTestChangeCallbacks) {
       callback();
     }
   };
 
-  const getSimulatorInstance = async () => {
-    return new Promise<Simulator>((resolve) => {
-      const testCompiler = createCompiler({
-        wingfile,
-        platform,
-        watchGlobs,
-        testing: true,
-      });
-      const testSimulator = createSimulator();
-
-      testCompiler.on("compiled", async ({ simfile }) => {
-        await testSimulator.start(simfile);
-        await testSimulator.reload();
-        const simulator = await testSimulator.waitForInstance();
-        resolve(simulator);
-      });
-    });
-  };
-
   const initialize = async () => {
-    testsState.setInitialized(false);
-    testsState.setTests([]);
+    testsState.restart();
 
-    const simulator = await getSimulatorInstance();
+    const simulator = await simulatorManager.getSimulator();
 
     const simTestRunner = simulator.getResource(
       "root/cloud.TestRunner",
     ) as ITestRunnerClient;
 
     const tests = await simTestRunner.listTests();
+
+    simulator.stop();
 
     testsState.setTests(
       tests.map((test) => ({
@@ -199,8 +163,7 @@ export const createTestRunner = ({
         datetime: Date.now(),
       })),
     );
-    testsState.setInitialized(true);
-    await simulator.stop();
+
     runOnTestChangeCallbacks();
   };
 
@@ -221,7 +184,7 @@ export const createTestRunner = ({
   };
 
   const runTest = async (testId: string) => {
-    const simulator = await getSimulatorInstance();
+    const simulator = await simulatorManager.getSimulator();
 
     const response = await executeTest(simulator, testId, logger);
     testsState.setTest({
@@ -232,8 +195,8 @@ export const createTestRunner = ({
       datetime: Date.now(),
     });
 
-    await simulator.stop();
     runOnTestChangeCallbacks();
+    simulator.stop();
   };
 
   const runAllTests = async () => {
@@ -249,7 +212,8 @@ export const createTestRunner = ({
       })),
     );
 
-    const simulator = await getSimulatorInstance();
+    const simulator = await simulatorManager.getSimulator();
+
     for (const test of testList) {
       await simulator.reload(true);
       const response = await executeTest(simulator, test.id, logger);
@@ -268,7 +232,7 @@ export const createTestRunner = ({
       });
       runOnTestChangeCallbacks();
     }
-    await simulator.stop();
+    simulator.stop();
   };
 
   const listTests = () => {
@@ -279,6 +243,10 @@ export const createTestRunner = ({
     onTestChangeCallbacks.push(callback);
   };
 
+  const stop = async () => {
+    simulatorManager.stop();
+  };
+
   return {
     listTests,
     status,
@@ -286,5 +254,6 @@ export const createTestRunner = ({
     runAllTests,
     onTestsChange,
     initialize,
+    stop,
   };
 };

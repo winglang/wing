@@ -21,7 +21,7 @@ import type {
 } from "./utils/createRouter.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
 import type { LogInterface } from "./utils/LogInterface.js";
-import type { TestRunner } from "./utils/testRunner.js";
+import type { TestRunner } from "./utils/test-runner/test-runner.js";
 
 export interface CreateExpressServerOptions {
   simulatorInstance(): simulator.Simulator;

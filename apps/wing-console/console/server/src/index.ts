@@ -17,10 +17,10 @@ import type { FileLink, LayoutConfig } from "./utils/createRouter.js";
 import { formatTraceError } from "./utils/format-wing-error.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
-import { createTestRunner } from "./utils/testRunner.js";
+import { createTestRunner } from "./utils/test-runner/test-runner.js";
 
 export type { FileLink } from "./utils/createRouter.js";
-export type { TestStatus, TestItem } from "./utils/testRunner.js";
+export type { TestStatus, TestItem } from "./utils/test-runner/test-runner.js";
 export type { Trace, State } from "./types.js";
 export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
@@ -314,6 +314,7 @@ export const createConsoleServer = async ({
         server.close(),
         compiler.stop(),
         simulator.stop(),
+        testRunner.stop(),
       ]);
     } catch (error) {
       log.error(error);
