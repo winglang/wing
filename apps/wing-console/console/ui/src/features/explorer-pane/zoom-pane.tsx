@@ -393,15 +393,15 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
 
   // Whether the bounding box is out of bounds of the transform view.
   const outOfBounds = useMemo(() => {
+    if (!boundingBox) {
+      return false;
+    }
+
     const container = containerRef.current;
     if (!container) {
       return false;
     }
     const containerBoundingBox = container.getBoundingClientRect();
-
-    if (!boundingBox) {
-      return false;
-    }
 
     const viewBoundingBox = {
       x: viewTransform.x,
@@ -410,14 +410,13 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       height: containerBoundingBox.height / viewTransform.z,
     };
 
-    // Add padding to the view bounding box to prevent the bounding box from being too close to the edge.
-    const zoomedBoundaryPadding = boundaryPadding / viewTransform.z;
-    // const zoomedBoundaryPadding = boundaryPadding * viewTransform.z;
+    // Add some extra padding to trigger the out of bounds warning sooner.
+    const padding = boundaryPadding + 24;
     return !boundingBoxOverlap(viewBoundingBox, {
-      x: 0 + zoomedBoundaryPadding * 2,
-      y: 0 + zoomedBoundaryPadding * 2,
-      width: boundingBox.width - zoomedBoundaryPadding * 2,
-      height: boundingBox.height - zoomedBoundaryPadding * 2,
+      x: padding,
+      y: padding,
+      width: boundingBox.width - padding * 2,
+      height: boundingBox.height - padding * 2,
     });
   }, [viewTransform, boundingBox]);
 
@@ -431,17 +430,6 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     >
       <div ref={targetRef} className="absolute inset-0 origin-top-left">
         <context.Provider value={{ viewTransform }}>
-          {/* <div
-            className={classNames(
-              "transition-all inline-block rounded-lg",
-              // "bg-white dark:bg-slate-550",
-              {
-                "bg-white dark:bg-slate-550 animate-pulse": outOfBounds,
-              },
-            )}
-          >
-            {children}
-          </div> */}
           <div className="relative inline-block">
             <AnimatePresence>
               {outOfBounds && (
@@ -494,7 +482,6 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
           })}
         ></div>
       )}
-
       <div className="relative z-10 flex">
         <div className="absolute cursor-grab backdrop-blur right-0">
           <MapControls
