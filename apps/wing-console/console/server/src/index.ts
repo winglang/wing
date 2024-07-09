@@ -8,7 +8,6 @@ import { type ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
 import type { HostUtils } from "./hostUtils.js";
 import type { Router } from "./router/index.js";
-import { createTestRouter } from "./router/test.js";
 import type { Trace } from "./types.js";
 import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
@@ -23,6 +22,7 @@ import type {
 import { formatTraceError } from "./utils/format-wing-error.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
+import { createTestRunner } from "./utils/testRunner.js";
 
 export type {
   TestsStateManager,
@@ -132,7 +132,7 @@ export const createConsoleServer = async ({
   const compiler = createCompiler({
     wingfile,
     platform,
-    testing: true,
+    testing: false,
     stateDir,
     watchGlobs,
   });
@@ -159,7 +159,11 @@ export const createConsoleServer = async ({
     }
   });
 
-  const testRunner = createTestRouter();
+  const testRunner = createTestRunner({
+    wingfile,
+    watchGlobs,
+    platform,
+  });
 
   let lastErrorMessage = "";
   let selectedNode = "";
@@ -281,6 +285,9 @@ export const createConsoleServer = async ({
     simulatorInstance() {
       return simulator.instance();
     },
+    getTestRunner: () => {
+      return testRunner;
+    },
     restartSimulator() {
       return simulator.reload();
     },
@@ -311,7 +318,6 @@ export const createConsoleServer = async ({
     setSelectedNode: (node: string) => {
       selectedNode = node;
     },
-    testRunner,
     analyticsAnonymousId,
     analytics,
     requireSignIn,
@@ -333,7 +339,6 @@ export const createConsoleServer = async ({
         server.close(),
         compiler.stop(),
         simulator.stop(),
-        testSimulator.stop(),
       ]);
     } catch (error) {
       log.error(error);

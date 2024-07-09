@@ -107,7 +107,7 @@ export interface RouterContext {
   layoutConfig?: LayoutConfig;
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
-  testRunner: () => TestRunner;
+  getTestRunner: () => TestRunner;
   analyticsAnonymousId?: string;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;

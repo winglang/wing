@@ -46,7 +46,7 @@ export interface CreateExpressServerOptions {
   layoutConfig?: LayoutConfig;
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
-  testRunner: () => TestRunner;
+  getTestRunner: () => TestRunner;
   analyticsAnonymousId?: string;
   analytics?: Analytics;
   requireSignIn?: () => Promise<boolean>;
@@ -74,7 +74,7 @@ export const createExpressServer = async ({
   layoutConfig,
   getSelectedNode,
   setSelectedNode,
-  testRunner,
+  getTestRunner,
   analyticsAnonymousId,
   analytics,
   requireSignIn,
@@ -113,7 +113,7 @@ export const createExpressServer = async ({
       layoutConfig,
       getSelectedNode,
       setSelectedNode,
-      testRunner,
+      getTestRunner,
       analyticsAnonymousId,
       analytics,
       requireSignIn,
