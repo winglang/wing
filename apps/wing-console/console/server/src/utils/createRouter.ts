@@ -9,6 +9,7 @@ import type { State, Trace } from "../types.js";
 import type { Updater } from "../updater.js";
 
 import type { Analytics } from "./analytics.js";
+import type { TestRunner } from "./testRunner.js";
 
 export type QueryNames = {
   query:
@@ -87,7 +88,6 @@ export interface RouterMeta {
 export interface RouterContext {
   simulator(): Promise<simulator.Simulator>;
   restartSimulator(): Promise<void>;
-  testSimulator(): Promise<simulator.Simulator>;
   appDetails(): Promise<{
     wingVersion: string | undefined;
   }>;
@@ -107,7 +107,7 @@ export interface RouterContext {
   layoutConfig?: LayoutConfig;
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
-  testsStateManager: () => TestsStateManager;
+  testRunner: () => TestRunner;
   analyticsAnonymousId?: string;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;

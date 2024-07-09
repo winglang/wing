@@ -18,15 +18,14 @@ import type {
   FileLink,
   LayoutConfig,
   RouterContext,
-  TestsStateManager,
 } from "./utils/createRouter.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
 import type { LogInterface } from "./utils/LogInterface.js";
+import type { TestRunner } from "./utils/testRunner.js";
 
 export interface CreateExpressServerOptions {
   simulatorInstance(): simulator.Simulator;
   restartSimulator(): Promise<void>;
-  testSimulatorInstance(): Promise<simulator.Simulator>;
   consoleLogger: ConsoleLogger;
   errorMessage(): string | undefined;
   emitter: Emittery<{
@@ -47,7 +46,7 @@ export interface CreateExpressServerOptions {
   layoutConfig?: LayoutConfig;
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
-  testsStateManager: () => TestsStateManager;
+  testRunner: () => TestRunner;
   analyticsAnonymousId?: string;
   analytics?: Analytics;
   requireSignIn?: () => Promise<boolean>;
@@ -59,7 +58,6 @@ export interface CreateExpressServerOptions {
 export const createExpressServer = async ({
   simulatorInstance,
   restartSimulator,
-  testSimulatorInstance,
   consoleLogger,
   errorMessage,
   emitter,
@@ -76,7 +74,7 @@ export const createExpressServer = async ({
   layoutConfig,
   getSelectedNode,
   setSelectedNode,
-  testsStateManager,
+  testRunner,
   analyticsAnonymousId,
   analytics,
   requireSignIn,
@@ -95,9 +93,6 @@ export const createExpressServer = async ({
       },
       async restartSimulator() {
         return await restartSimulator();
-      },
-      async testSimulator() {
-        return await testSimulatorInstance();
       },
       async appDetails() {
         return {
@@ -118,7 +113,7 @@ export const createExpressServer = async ({
       layoutConfig,
       getSelectedNode,
       setSelectedNode,
-      testsStateManager,
+      testRunner,
       analyticsAnonymousId,
       analytics,
       requireSignIn,

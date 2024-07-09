@@ -1,7 +1,3 @@
-import { mkdtempSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-
 import type { inferRouterInputs } from "@trpc/server";
 import Emittery from "emittery";
 import type { Express } from "express";
@@ -12,6 +8,7 @@ import { type ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
 import type { HostUtils } from "./hostUtils.js";
 import type { Router } from "./router/index.js";
+import { createTestRouter } from "./router/test.js";
 import type { Trace } from "./types.js";
 import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
@@ -135,7 +132,7 @@ export const createConsoleServer = async ({
   const compiler = createCompiler({
     wingfile,
     platform,
-    testing: false,
+    testing: true,
     stateDir,
     watchGlobs,
   });
@@ -162,16 +159,7 @@ export const createConsoleServer = async ({
     }
   });
 
-  const testCompiler = createCompiler({
-    wingfile,
-    platform,
-    testing: true,
-    watchGlobs,
-  });
-  const testSimulator = createSimulator();
-  testCompiler.on("compiled", ({ simfile }) => {
-    testSimulator.start(simfile);
-  });
+  const testRunner = createTestRouter();
 
   let lastErrorMessage = "";
   let selectedNode = "";
@@ -290,11 +278,6 @@ export const createConsoleServer = async ({
 
   const { server, port } = await createExpressServer({
     consoleLogger,
-    testSimulatorInstance() {
-      // TODO: The test simulator instance isn't using the statedir anyway. Fix this later.
-      // const statedir = mkdtempSync(join(tmpdir(), "wing-console-test-"));
-      return testSimulator.waitForInstance();
-    },
     simulatorInstance() {
       return simulator.instance();
     },
@@ -328,7 +311,7 @@ export const createConsoleServer = async ({
     setSelectedNode: (node: string) => {
       selectedNode = node;
     },
-    testsStateManager,
+    testRunner,
     analyticsAnonymousId,
     analytics,
     requireSignIn,
