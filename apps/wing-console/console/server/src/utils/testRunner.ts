@@ -173,7 +173,7 @@ export const createTestRunner = ({
 
       testCompiler.on("compiled", async ({ simfile }) => {
         await testSimulator.start(simfile);
-
+        await testSimulator.reload();
         const simulator = await testSimulator.waitForInstance();
         resolve(simulator);
       });

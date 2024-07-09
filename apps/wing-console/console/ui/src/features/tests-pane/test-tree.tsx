@@ -97,6 +97,7 @@ export const TestTree = ({
                         <ToolbarButton
                           title={`Run ${test.label}`}
                           onClick={() => handleRunTest(test.id)}
+                          disabled={test.status === "running"}
                         >
                           <PlayIcon className="w-4 h-4" />
                         </ToolbarButton>
@@ -127,7 +128,7 @@ export const TestTree = ({
                       </>
                     }
                     onKeyDown={(event) => {
-                      if (event.key === "Enter") {
+                      if (event.key === "Enter" && test.status !== "running") {
                         handleRunTest(test.id);
                       }
                     }}
