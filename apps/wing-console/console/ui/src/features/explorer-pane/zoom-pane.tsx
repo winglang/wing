@@ -17,6 +17,7 @@ import type { ReactNode } from "react";
 import { useEvent } from "react-use";
 
 import { MapControls } from "./map-controls.js";
+import { useRafThrottle } from "./use-raf-throttle.js";
 
 export interface Viewport {
   x: number;
@@ -94,7 +95,7 @@ export const useZoomPane = () => {
   return useContext(context);
 };
 
-const boundaryPadding = 24;
+const boundaryPadding = 48;
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   const { boundingBox, children, className, onClick, ...divProps } = props;
@@ -312,15 +313,19 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     });
   }, [restrict]);
 
+  const throttledFixViewport = useRafThrottle(fixViewport);
+
   useEffect(() => {
     const myObserver = new ResizeObserver(() => {
-      fixViewport();
+      throttledFixViewport();
     });
 
     myObserver.observe(containerRef.current!);
 
-    return () => myObserver.disconnect();
-  }, [fixViewport]);
+    return () => {
+      myObserver.disconnect();
+    };
+  }, [throttledFixViewport]);
 
   const zoomIn = useCallback(() => {
     const container = containerRef.current;
