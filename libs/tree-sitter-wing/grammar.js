@@ -364,7 +364,6 @@ module.exports = grammar({
 
     expression: ($) =>
       choice(
-        $.unwrap_or,
         $.binary_expression,
         $.unary_expression,
         $.new_expression,
@@ -603,16 +602,6 @@ module.exports = grammar({
     _container_value_type: ($) =>
       seq("<", field("type_parameter", $._type), ">"),
 
-    unwrap_or: ($) =>
-      prec.right(
-        PREC.UNWRAP_OR,
-        seq(
-          field("left", $.expression),
-          field("op", "??"),
-          field("right", $.expression)
-        )
-      ),
-
     optional_unwrap: ($) =>
       prec.right(PREC.OPTIONAL_UNWRAP, seq($.expression, "!")),
 
@@ -636,34 +625,36 @@ module.exports = grammar({
     },
 
     binary_expression: ($) => {
-      /** @type {Array<[RuleOrLiteral, number]>} */
+      /** @type {Array<[RuleOrLiteral, number, "left" | "right"]>} */
       const table = [
-        ["+", PREC.ADD],
-        ["-", PREC.ADD],
-        ["*", PREC.MULTIPLY],
-        ["/", PREC.MULTIPLY],
-        ["\\", PREC.MULTIPLY],
-        ["%", PREC.MULTIPLY],
-        ["**", PREC.POWER],
-        ["||", PREC.LOGICAL_OR],
-        ["&&", PREC.LOGICAL_AND],
-        //['|', PREC.INCLUSIVE_OR],
-        //['^', PREC.EXCLUSIVE_OR],
-        //['&', PREC.BITWISE_AND],
-        ["==", PREC.EQUAL],
-        ["!=", PREC.EQUAL],
-        [">", PREC.RELATIONAL],
-        [">=", PREC.RELATIONAL],
-        ["<=", PREC.RELATIONAL],
-        ["<", PREC.RELATIONAL],
-        //['<<', PREC.SHIFT],
-        //['>>', PREC.SHIFT],
-        //['>>>', PREC.SHIFT],
+        ["+", PREC.ADD, "left"],
+        ["-", PREC.ADD, "left"],
+        ["*", PREC.MULTIPLY, "left"],
+        ["/", PREC.MULTIPLY, "left"],
+        ["\\", PREC.MULTIPLY, "left"],
+        ["%", PREC.MULTIPLY, "left"],
+        ["**", PREC.POWER, "left"],
+        ["||", PREC.LOGICAL_OR, "left"],
+        ["&&", PREC.LOGICAL_AND, "left"],
+        //['|', PREC.INCLUSIVE_OR, "left"],
+        //['^', PREC.EXCLUSIVE_OR, "left"],
+        //['&', PREC.BITWISE_AND, "left"],
+        ["==", PREC.EQUAL, "left"],
+        ["!=", PREC.EQUAL, "left"],
+        [">", PREC.RELATIONAL, "left"],
+        [">=", PREC.RELATIONAL, "left"],
+        ["<=", PREC.RELATIONAL, "left"],
+        ["<", PREC.RELATIONAL, "left"],
+        //['<<', PREC.SHIFT, "left"],
+        //['>>', PREC.SHIFT, "left"],
+        //['>>>', PREC.SHIFT, "left"],
+        ["??", PREC.UNWRAP_OR, "right"],
       ];
 
       return choice(
-        ...table.map(([operator, precedence]) => {
-          return prec.left(
+        ...table.map(([operator, precedence, associativity]) => {
+          const precFn = associativity === "left" ? prec.left : prec.right;
+          return precFn(
             precedence,
             seq(
               field("left", $.expression),

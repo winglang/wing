@@ -1643,14 +1643,14 @@ Duration <DURATION>"
 `;
 
 exports[`explicit_lift_qualification.test.w 1`] = `
-"error: Lift blocks are only allowed in inflight phase
+"error: Lift blocks are only allowed in inflight code blocks
    --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:11:5
    |
 11 |     lift {bucket: [put]}{} // Lift statment in preflight method
    |     ^^^^^^^^^^^^^^^^^^^^^^
 
 
-error: Lift blocks are only allowed in inflight phase
+error: Lift blocks are only allowed in inflight code blocks
    --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:21:1
    |
 21 | lift {bucket: [put]}{}
@@ -2820,7 +2820,7 @@ error: Access modifiers are not allowed in interfaces
    --> ../../../examples/tests/invalid/interface.test.w:38:3
    |
 38 |   pub method2(): str;  
-   |   ^^^^^^^^^^^^^^^^^^^
+   |   ^^^
 
 
 error: Expected type annotation
@@ -2835,13 +2835,6 @@ error: Expected type annotation
    |
 44 |   method1(a, b): void;
    |              ^
-
-
-error: Unknown parser error
-   --> ../../../examples/tests/invalid/interface.test.w:38:14
-   |
-38 |   pub method2(): str;  
-   |              ^^
 
 
 error: Unknown symbol "IB"
@@ -3669,8 +3662,7 @@ Duration <DURATION>"
 `;
 
 exports[`panic.test.w 1`] = `
-"error: Compiler bug during type-checking ('panicked at libs/wingc/src/type_check.rs:LINE:COL:
-User invoked panic'), please report at https://www.winglang.io/contributing/start-here/bugs
+"error: Compiler bug during type-checking ('panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL'), please report at https://www.winglang.io/contributing/start-here/bugs
   --> ../../../examples/tests/invalid/panic.test.w:6:1
   |
 6 | 😱;
@@ -5277,6 +5269,84 @@ error: Member "methodWhichIsNotPartOfBucketApi" does not exist in "Bucket"
    |
 23 |     return this.bucket.methodWhichIsNotPartOfBucketApi(id);
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`unphased.test.w 1`] = `
+"error: Unphased classes are not yet supported
+  --> ../../../examples/tests/invalid/unphased.test.w:1:1
+  |
+1 | unphased class UnphasedClass {}
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Unphased interfaces are not yet supported
+  --> ../../../examples/tests/invalid/unphased.test.w:4:1
+  |
+4 | unphased interface UnphasedInterface {}
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Unphased functions are not yet supported
+   --> ../../../examples/tests/invalid/unphased.test.w:7:18
+   |  
+ 7 |   let unphasedFn = unphased () => {
+   | /------------------^
+ 8 | |   // ^ Error: Unphased functions are not yet supported
+ 9 | |   log("Hello, world!");
+10 | | };
+   | \\-^
+
+
+error: Unphased functions are not yet supported
+   --> ../../../examples/tests/invalid/unphased.test.w:12:35
+   |
+12 | let fnWithUnphasedParamType = (f: unphased (str): num) => {
+   |                                   ^^^^^^^^
+
+
+error: Unphased functions are not yet supported
+   --> ../../../examples/tests/invalid/unphased.test.w:16:37
+   |
+16 | let fnWithUnphasedReturnType = (): (unphased (str): num)? => {
+   |                                     ^^^^^^^^
+
+
+error: Class fields cannot be unphased
+   --> ../../../examples/tests/invalid/unphased.test.w:22:3
+   |
+22 |   unphased myField: str;
+   |   ^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Class constructors cannot be unphased
+   --> ../../../examples/tests/invalid/unphased.test.w:24:3
+   |
+24 |   unphased new() {}
+   |   ^^^^^^^^
+
+
+error: Unphased functions are not yet supported
+   --> ../../../examples/tests/invalid/unphased.test.w:26:3
+   |
+26 |   unphased myMethod() {}
+   |   ^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Unphased methods on interfaces are not yet supported
+   --> ../../../examples/tests/invalid/unphased.test.w:30:1
+   |  
+30 | / interface IFoo {
+31 | |   unphased bar(): void;
+32 | |   // ^ Error: Unphased methods on interfaces are not yet supported
+33 | | }
+   | \\-^
 
 
 

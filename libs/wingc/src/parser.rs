@@ -1346,7 +1346,10 @@ impl<'s> Parser<'s> {
 					};
 					if initializer_phase == Phase::Independent {
 						self
-							.with_error::<Node>("Class constructors cannot be unphased", &statement_node)
+							.with_error::<Node>(
+								"Class constructors cannot be unphased",
+								&initializer_phase_node.unwrap_or(class_element),
+							)
 							.err();
 					}
 					let is_inflight = initializer_phase == Phase::Inflight;
@@ -1617,6 +1620,12 @@ impl<'s> Parser<'s> {
 			match interface_element.kind() {
 				"method_definition" => {
 					let modifiers = interface_element.child_by_field_name("modifiers");
+					let access_modifier = self.get_modifier("access_modifier", &modifiers)?;
+					if access_modifier.is_some() {
+						self
+							.with_error::<Node>("Access modifiers are not allowed in interfaces", &modifiers.unwrap())
+							.err();
+					}
 					let method_phase = match self.get_phase_specifier(&modifiers)? {
 						Some(phase) => phase,
 						None => interface_phase,
@@ -1774,6 +1783,11 @@ impl<'s> Parser<'s> {
 			Some(phase) => phase,
 			None => scope_phase,
 		};
+		if phase == Phase::Independent {
+			self
+				.with_error::<Node>("Unphased functions are not yet supported", &func_def_node)
+				.err();
+		}
 
 		let is_static = self.get_modifier("static", &modifiers)?.is_some();
 
@@ -1991,6 +2005,14 @@ impl<'s> Parser<'s> {
 					Some(phase) => phase,
 					None => scope_phase,
 				};
+				if phase == Phase::Independent {
+					self
+						.with_error::<Node>(
+							"Unphased functions are not yet supported",
+							&phase_node.unwrap_or(*type_node),
+						)
+						.err();
+				}
 
 				Ok(TypeAnnotation {
 					kind: TypeAnnotationKind::Function(FunctionSignature {
@@ -2231,7 +2253,7 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
-			"binary_expression" | "unwrap_or" => Ok(Expr::new(
+			"binary_expression" => Ok(Expr::new(
 				ExprKind::Binary {
 					left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap(), phase)?),
 					right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap(), phase)?),
