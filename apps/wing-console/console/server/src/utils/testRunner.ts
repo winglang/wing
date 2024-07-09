@@ -65,7 +65,6 @@ const testsStateManager = () => {
       return tests;
     },
     setTests: (newTests: TestItem[]) => {
-      initialized = true;
       tests = newTests;
     },
     setTest: (test: TestItem) => {
@@ -78,6 +77,9 @@ const testsStateManager = () => {
     },
     initialized: () => {
       return initialized;
+    },
+    setInitialized: (value: boolean) => {
+      initialized = value;
     },
   };
 };
@@ -178,6 +180,9 @@ export const createTestRunner = ({
   };
 
   const initialize = async () => {
+    testsState.setInitialized(false);
+    testsState.setTests([]);
+
     const simulator = await getSimulatorInstance();
 
     const simTestRunner = simulator.getResource(
@@ -194,6 +199,7 @@ export const createTestRunner = ({
         datetime: Date.now(),
       })),
     );
+    testsState.setInitialized(true);
     await simulator.stop();
     runOnTestChangeCallbacks();
   };
