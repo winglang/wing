@@ -75,6 +75,7 @@ export class Table extends ex.Table {
     const instanceConfig: BigtableInstanceConfig = {
       name: instanceName,
       cluster: [instanceCluster],
+      deletionProtection: false,
     };
 
     let instance = new BigtableInstance(this, "Instance", instanceConfig);
