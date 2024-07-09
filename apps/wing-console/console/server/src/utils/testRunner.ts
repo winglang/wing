@@ -65,8 +65,6 @@ const testsStateManager = (): TestsStateManager => {
       return tests;
     },
     setTests: (newTests: TestItem[]) => {
-      console.log("################### CALL newTests ###################");
-      console.log(JSON.stringify(newTests));
       tests = newTests;
     },
     setTest: (test: TestItem) => {
