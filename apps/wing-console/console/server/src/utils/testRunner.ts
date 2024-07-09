@@ -32,16 +32,16 @@ export interface TestRunner {
   // Status of the test runner as a whole.
   status(): TestStatus;
 
-  // Starts running a test.
+  // Run a single test.
   runTest(testId: string): void;
 
   // Run all tests.
   runAllTests(): void;
 
-  // Used to report tests status changes to the frontend via websockets.
+  // Register a callback to be called when the tests change.
   onTestsChange(callback: () => void): void;
 
-  // initialize
+  // Initialize the test runner.
   initialize(): void;
 }
 
