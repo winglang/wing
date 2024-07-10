@@ -70,7 +70,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
         context_hash: Lazy.stringValue({
           produce: () => this.bundledHash,
         }),
-      }
+      },
     });
 
     new RegistryImage(this, "RegistryImage", {
@@ -79,7 +79,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
         context_hash: Lazy.stringValue({
           produce: () => this.bundledHash,
         }),
-      }
+      },
     });
 
     const logGroup = new CloudwatchLogGroup(this, "LogGroup", {
@@ -252,7 +252,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
         context_hash: Lazy.stringValue({
           produce: () => this.bundledHash,
         }),
-      }
+      },
     });
   }
 

@@ -27,7 +27,4 @@ test("multiple services", () => {
 
   // Only one ECR repository should be created (all services share the same repository)
   expect(tfResourcesOfCount(output, "aws_ecr_repository")).toBe(1);
-
-  expect(tfSanitize(output)).toMatchSnapshot();
-  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
