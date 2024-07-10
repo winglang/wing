@@ -20,7 +20,11 @@ import { createSimulator } from "./utils/simulator.js";
 import { createTestRunner } from "./utils/test-runner/test-runner.js";
 
 export type { FileLink } from "./utils/createRouter.js";
-export type { TestStatus, TestItem } from "./utils/test-runner/test-runner.js";
+export type {
+  TestStatus,
+  TestItem,
+  TestRunnerStatus,
+} from "./utils/test-runner/test-runner.js";
 export type { Trace, State } from "./types.js";
 export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";

@@ -135,7 +135,7 @@ export const TestTree = ({
             )}
           >
             <div className="flex flex-col">
-              {testList.length === 0 && (
+              {(status === "uninitialized" || testList.length === 0) && (
                 <div
                   className={classNames(
                     theme.text2,
