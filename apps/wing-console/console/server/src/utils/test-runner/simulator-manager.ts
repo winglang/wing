@@ -4,8 +4,8 @@ import type { Simulator } from "../../wingsdk.js";
 import { createCompiler, type Compiler } from "../compiler.js";
 import { createSimulator } from "../simulator.js";
 
-const getSimulatorInstance = async (simfile: string, stateId?: string) => {
-  const stateDir = `/tmp/wing-test-${stateId ?? uniqueid()}`;
+const getSimulatorInstance = async (simfile: string) => {
+  const stateDir = `/tmp/wing-test-${uniqueid()}`;
   const testSimulator = createSimulator({
     stateDir,
   });
@@ -31,9 +31,9 @@ export const createSimulatorManager = ({
 
   let simfilePath = "";
 
-  const getSimulator = async (stateId?: string) => {
+  const getSimulator = async () => {
     if (testCompiler && simfilePath) {
-      testSimulator = await getSimulatorInstance(simfilePath, stateId);
+      testSimulator = await getSimulatorInstance(simfilePath);
       return testSimulator;
     }
 
@@ -47,7 +47,7 @@ export const createSimulatorManager = ({
     return new Promise<Simulator>(async (resolve) => {
       testCompiler.on("compiled", async ({ simfile }) => {
         simfilePath = simfile;
-        testSimulator = await getSimulatorInstance(simfile, stateId);
+        testSimulator = await getSimulatorInstance(simfile);
         resolve(testSimulator);
       });
     });
