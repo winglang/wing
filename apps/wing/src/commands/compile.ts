@@ -2,8 +2,8 @@ import { promises as fsPromise } from "fs";
 import { dirname, relative, resolve } from "path";
 
 import * as wingCompiler from "@winglang/compiler";
+import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
-import { loadEnvVariables } from "@winglang/sdk/lib/util/env";
 import chalk from "chalk";
 import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import debug from "debug";

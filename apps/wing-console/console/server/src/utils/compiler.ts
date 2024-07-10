@@ -1,7 +1,7 @@
 import path from "node:path";
 
 import * as wing from "@winglang/compiler";
-import { loadEnvVariables } from "@winglang/sdk/lib/util/env";
+import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import chokidar from "chokidar";
 import Emittery from "emittery";
 

@@ -2,7 +2,7 @@ import { existsSync } from "fs";
 import { dirname, resolve } from "path";
 import { createConsoleApp } from "@wingconsole/app";
 import { BuiltinPlatform } from "@winglang/compiler";
-import { loadEnvVariables } from "@winglang/sdk/lib/util/env";
+import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import { debug } from "debug";
 import { glob } from "glob";
 import { parseNumericString } from "../util";

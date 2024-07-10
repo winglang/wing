@@ -5,7 +5,7 @@ import * as path from "path";
 import { resolve } from "path";
 import Arborist from "@npmcli/arborist";
 import { BuiltinPlatform } from "@winglang/compiler";
-import { loadEnvVariables } from "@winglang/sdk/lib/util/env";
+import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import packlist from "npm-packlist";
 import * as tar from "tar";
 import { compile } from "./compile";
