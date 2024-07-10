@@ -26,11 +26,11 @@ main((root) => {
 });
 ```
 
-API documentation for the `cloud` namespace is available [here](../04-standard-library/cloud).
+API documentation for the `cloud` namespace is available [here](/docs/api/category/cloud).
 Note that those docs are meant for The TypeScript API is similar, with two primary differences:
 
 - Resources always have 2 arguments first: the `scope` resource to contain the new one and an `id` for it
-- Some types are different, a table can be found in the [winglang reference](../03-language-reference.md#522-type-model)
+- Some types are different, a table can be found in the [winglang reference](/docs/api/language-reference#522-type-model)
 
 ### Creating new resources
 
@@ -60,4 +60,4 @@ main((root) => {
 });
 ```
 
-> The creation of [`lift`able classes like winglang](../07-examples/08-classes.md) is not currently supported in TypeScript.
+> The creation of [`lift`able classes like winglang](/docs/api/language/classes) is not currently supported in TypeScript.

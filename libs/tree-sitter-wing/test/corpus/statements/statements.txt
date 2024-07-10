@@ -492,7 +492,7 @@ if let x = y {} elif let x = z {} else {}
 (If Let) (Elif Let) (Elif) (Else)
 ================================================================================
 
-if let x = y {} elif let x = z {} elif v? {} else {}
+if let x = y {} elif let x = z {} elif v {} else {}
 
 --------------------------------------------------------------------------------
 
@@ -508,9 +508,8 @@ if let x = y {} elif let x = z {} elif v? {} else {}
         (reference_identifier))
       block: (block))
     elif_block: (elif_block
-      condition: (optional_test
-        (reference
-          (reference_identifier)))
+      condition: (reference
+        (reference_identifier))
       block: (block))
     else_block: (block)))
 

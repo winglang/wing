@@ -1,9 +1,7 @@
-import { Match, Template, MatchResult } from "aws-cdk-lib/assertions";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import { simulator, cloud, std } from "@winglang/sdk";
-import * as awscdk from "../src";
-import { mkdtemp } from "@winglang/sdk/test/util";
-import { awscdkSanitize, CDK_APP_OPTS } from "./util";
+import { cloud, std } from "@winglang/sdk";
+import { AwsCdkApp, awscdkSanitize } from "./util";
 import { inflight } from "@winglang/sdk/lib/core";
 
 const INFLIGHT_CODE = inflight(async (_, event) => {
@@ -12,7 +10,7 @@ const INFLIGHT_CODE = inflight(async (_, event) => {
 
 test("schedule behavior with rate", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     rate: std.Duration.fromMinutes(2),
   });
@@ -30,7 +28,7 @@ test("schedule behavior with rate", () => {
 
 test("schedule behavior with cron", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * * * *",
   });
@@ -48,7 +46,7 @@ test("schedule behavior with cron", () => {
 
 test("convert single dayOfWeek from Unix to AWS", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1",
   });
@@ -66,7 +64,7 @@ test("convert single dayOfWeek from Unix to AWS", () => {
 
 test("convert the range of dayOfWeek from Unix to AWS", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1-7",
   });
@@ -84,7 +82,7 @@ test("convert the range of dayOfWeek from Unix to AWS", () => {
 
 test("convert the list of dayOfWeek from Unix to AWS", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1,3,5,7",
   });
@@ -102,7 +100,7 @@ test("convert the list of dayOfWeek from Unix to AWS", () => {
 
 test("schedule with two functions", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * * * *",
   });
@@ -123,7 +121,7 @@ test("schedule with two functions", () => {
 
 test("schedule with rate and cron simultaneously", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
 
   // THEN
   expect(
@@ -137,7 +135,7 @@ test("schedule with rate and cron simultaneously", () => {
 
 test("cron with more than five values", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
 
   // THEN
   expect(
@@ -150,7 +148,7 @@ test("cron with more than five values", () => {
 
 test("schedule without rate or cron", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
 
   // THEN
   expect(() => new cloud.Schedule(app, "Schedule")).toThrow(
@@ -160,7 +158,7 @@ test("schedule without rate or cron", () => {
 
 test("schedule with rate less than 1 minute", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
 
   // THEN
   expect(
@@ -173,7 +171,7 @@ test("schedule with rate less than 1 minute", () => {
 
 test("cron with day of month and day of week configured at the same time", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
 
   // THEN
   expect(

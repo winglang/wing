@@ -119,6 +119,9 @@ module.exports = function({  }) {
         },
         "function_name": "Function-c8e9a190",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Foo_Function_IamRole_F86A3AD2.arn}",
@@ -170,10 +173,14 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -213,7 +220,7 @@ class $Root extends $stdlib.std.Resource {
             });
           }
         }
-        this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", new $Closure1(this, "$Closure1"));
+        globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", new $Closure1(this, "$Closure1"));
       }
       static _toInflightType() {
         return `
@@ -244,7 +251,6 @@ class $Root extends $stdlib.std.Resource {
     new Foo(this, "Foo");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "use_inflight_method_inside_init_closure.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

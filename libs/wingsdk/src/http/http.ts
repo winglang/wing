@@ -1,5 +1,6 @@
 import { URL as NodeUrl, format } from "url";
 import { InflightClient } from "../core";
+import { Duration } from "../std";
 
 /**
  * The cache mode of the request.
@@ -134,6 +135,11 @@ export interface RequestOptions {
    * @default about:client
    */
   readonly referrer?: string;
+  /**
+   * Timeout for terminating a pending request. None if undefined.
+   * @default - no timeout
+   */
+  readonly timeout?: Duration;
 }
 /**
  * The response to a HTTP request.
@@ -251,8 +257,24 @@ export class Util {
     url: string,
     options?: RequestOptions
   ): Promise<Response> {
-    const res = await fetch(url, { ...defaultOptions, ...options });
-    return this._formatResponse(res);
+    if (options?.timeout) {
+      const abortController = new AbortController();
+      setTimeout(() => {
+        abortController.abort();
+      }, options.timeout.milliseconds);
+
+      return this._formatResponse(
+        await fetch(url, {
+          ...defaultOptions,
+          ...options,
+          signal: abortController.signal,
+        })
+      );
+    }
+
+    return this._formatResponse(
+      await fetch(url, { ...defaultOptions, ...options })
+    );
   }
   /**
    * Executes a GET request to a specified URL and provides a formatted response.

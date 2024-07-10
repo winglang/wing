@@ -20,7 +20,6 @@ test("create a bucket", async () => {
   expect(s.getResourceConfig("/my_bucket")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_bucket",
     addr: expect.any(String),

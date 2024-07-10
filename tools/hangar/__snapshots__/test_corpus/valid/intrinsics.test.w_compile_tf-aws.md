@@ -75,6 +75,18 @@ module.exports = function({ $counter }) {
 //# sourceMappingURL=inflight.Example-2.cjs.map
 ```
 
+## inflight.InflightBar-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class InflightBar {
+  }
+  return InflightBar;
+}
+//# sourceMappingURL=inflight.InflightBar-1.cjs.map
+```
+
 ## main.tf.json
 ```json
 {
@@ -178,6 +190,9 @@ module.exports = function({ $counter }) {
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -226,6 +241,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 class Bar extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -260,7 +276,37 @@ class Bar extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { Bar };
+class InflightBar extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.InflightBar-1.cjs")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const InflightBarClient = ${InflightBar._toInflightType()};
+        const client = new InflightBarClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+if ($preflightTypesMap[2]) { throw new Error("InflightBar is already in type map"); }
+$preflightTypesMap[2] = InflightBar;
+module.exports = { $preflightTypesMap, Bar, InflightBar };
 //# sourceMappingURL=preflight.bar-1.cjs.map
 ```
 
@@ -274,14 +320,18 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const fs = $stdlib.fs;
-const expect = $stdlib.expect;
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
-const bar = require("./preflight.bar-1.cjs");
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const fs = $stdlib.fs;
+    const expect = $stdlib.expect;
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`, $preflightTypesMap);
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Example extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -396,16 +446,15 @@ class $Root extends $stdlib.std.Resource {
     (expect.Util.equal(filename, (fs.Util.basename(currentFile))));
     (expect.Util.equal($helpers.resolveDirname(__dirname, "../../.."), (fs.Util.dirname(currentFile))));
     (expect.Util.equal((bar.Bar.getSubdir(this)), (fs.Util.join($helpers.resolveDirname(__dirname, "../../.."), "subdir"))));
-    const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+    const counter = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
     const echo = $stdlib.core.importInflight(`require('../../../inflight_ts/example1.ts')["default"]`);
     const example = new Example(this, "Example");
     const funcFunction = $stdlib.core.importInflight(`require('../../../inflight_ts/example2.ts')["main"]`, [({ obj: example, alias: "example" }), ({ obj: example, ops: ["getMessage", ], alias: "exampleCopy" }), ({ obj: [1, 2, 3], alias: "numbers" })]);
-    const func = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", funcFunction);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke default function", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke inflight function", new $Closure2(this, "$Closure2"));
+    const func = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", funcFunction);
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke default function", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke inflight function", new $Closure2(this, "$Closure2"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "intrinsics.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

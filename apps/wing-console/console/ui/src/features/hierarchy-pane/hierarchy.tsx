@@ -34,7 +34,7 @@ const renderTreeItems = (items: TreeMenuItem[]) => {
   });
 };
 
-export interface ExplorerProps {
+export interface HierarchyProps {
   loading?: boolean;
   "data-testid"?: string;
 }
@@ -48,7 +48,7 @@ export const Hierarchy = memo((props: HierarchyProps) => {
       className={classNames("w-full h-full flex flex-col", theme.bg3)}
       data-testid={props["data-testid"]}
     >
-      <Toolbar title="Explorer">
+      <Toolbar title="Hierarchy">
         <ToolbarButton onClick={selectionContext.expandAll} title="Expand All">
           <SquareStackPlusIcon className="w-4 h-4 rotate-90" />
         </ToolbarButton>

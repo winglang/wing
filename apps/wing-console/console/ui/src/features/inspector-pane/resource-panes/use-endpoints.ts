@@ -1,40 +1,30 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback } from "react";
 
 import { trpc } from "../../../trpc.js";
-import type { EndpointItem } from "../../endpoints-pane/endpoint-item.js";
 
 export const useEndpoints = () => {
-  const [endpointList, setEndpointList] = useState<EndpointItem[]>([]);
-
   const endpointListQuery = trpc["endpoint.list"].useQuery();
 
-  useEffect(() => {
-    return setEndpointList(endpointListQuery.data ?? []);
-  }, [endpointListQuery.data]);
-
   const exposeEndpointMutation = trpc["endpoint.expose"].useMutation();
-  const exposeEndpoint = (resourcePath: string) => {
-    exposeEndpointMutation.mutate({ resourcePath });
-    setTimeout(endpointListQuery.refetch);
-  };
 
   const hideEndpointMutation = trpc["endpoint.hide"].useMutation();
-  const hideEndpoint = (resourcePath: string) => {
-    hideEndpointMutation.mutate({ resourcePath });
-    setTimeout(endpointListQuery.refetch);
-  };
 
   const getEndpoint = useCallback(
     (resourcePath: string) => {
-      return endpointList.find((endpoint) => endpoint.id === resourcePath);
+      if (!endpointListQuery.data) {
+        return;
+      }
+      return endpointListQuery.data.find(
+        (endpoint) => endpoint.id === resourcePath,
+      );
     },
-    [endpointList],
+    [endpointListQuery],
   );
 
   return {
     getEndpoint,
-    endpointList,
-    exposeEndpoint,
-    hideEndpoint,
+    endpointList: endpointListQuery,
+    exposeEndpoint: exposeEndpointMutation,
+    hideEndpoint: hideEndpointMutation,
   };
 };

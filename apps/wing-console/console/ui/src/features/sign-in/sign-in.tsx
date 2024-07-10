@@ -3,6 +3,7 @@ import {
   Link,
   Loader,
   Modal,
+  ModalBody,
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
@@ -133,70 +134,72 @@ export const SignInModal = (props: SignInModalProps) => {
 
   return (
     <Modal visible={signInRequired}>
-      <div
-        className="flex flex-col gap-4 max-w-lg items-center"
-        data-testid="signin-modal"
-      >
-        <h3
-          className={classNames(
-            theme.text1,
-            "text-base font-semibold leading-6",
-          )}
+      <ModalBody>
+        <div
+          className="flex flex-col gap-4 max-w-lg items-center"
+          data-testid="signin-modal"
         >
-          Wing Console
-        </h3>
+          <h3
+            className={classNames(
+              theme.text1,
+              "text-base font-semibold leading-6",
+            )}
+          >
+            Wing Console
+          </h3>
 
-        <p className={classNames(theme.text2, "text-sm text-center")}>
-          Please sign in to help us improve your experience in Wing Console and
-          Wing CLI.
-        </p>
+          <p className={classNames(theme.text2, "text-sm text-center")}>
+            Please sign in to help us improve your experience in Wing Console
+            and Wing CLI.
+          </p>
 
-        <div className="flex justify-around">
-          <div className="flex flex-col gap-2.5">
-            <Button
-              disabled={isLoading}
-              onClick={() => {
-                setGithubIsLoading(true);
-                void signInWithGithub();
-              }}
-              dataTestid="signin-github-button"
-            >
-              {githubIsLoading ? (
-                <Loader size="xs" />
-              ) : (
-                <GithubIcon className="w-4 h-4" />
-              )}
-              <span className="text-sm">Continue with GitHub</span>
-            </Button>
+          <div className="flex justify-around">
+            <div className="flex flex-col gap-2.5">
+              <Button
+                disabled={isLoading}
+                onClick={() => {
+                  setGithubIsLoading(true);
+                  void signInWithGithub();
+                }}
+                dataTestid="signin-github-button"
+              >
+                {githubIsLoading ? (
+                  <Loader size="xs" />
+                ) : (
+                  <GithubIcon className="w-4 h-4" />
+                )}
+                <span className="text-sm">Continue with GitHub</span>
+              </Button>
 
-            <Button
-              disabled={isLoading}
-              onClick={() => {
-                setGoogleIsLoading(true);
-                void signInWithGoogle();
-              }}
-              dataTestid="signin-google-button"
-            >
-              {googleIsLoading ? (
-                <Loader size="xs" />
-              ) : (
-                <GoogleIcon className="w-4 h-4" />
-              )}
-              <span className="text-sm">Continue with Google</span>
-            </Button>
+              <Button
+                disabled={isLoading}
+                onClick={() => {
+                  setGoogleIsLoading(true);
+                  void signInWithGoogle();
+                }}
+                dataTestid="signin-google-button"
+              >
+                {googleIsLoading ? (
+                  <Loader size="xs" />
+                ) : (
+                  <GoogleIcon className="w-4 h-4" />
+                )}
+                <span className="text-sm">Continue with Google</span>
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex justify-around">
+            <p className={classNames(theme.text2, "text-xs")}>
+              By signing up, you agree to our{" "}
+              <Link href={TERMS_AND_CONDITIONS_URL} target="_blank">
+                Terms and Conditions
+              </Link>
+              .
+            </p>
           </div>
         </div>
-
-        <div className="flex justify-around">
-          <p className={classNames(theme.text2, "text-xs")}>
-            By signing up, you agree to our{" "}
-            <Link href={TERMS_AND_CONDITIONS_URL} target="_blank">
-              Terms and Conditions
-            </Link>
-            .
-          </p>
-        </div>
-      </div>
+      </ModalBody>
     </Modal>
   );
 };

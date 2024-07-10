@@ -178,9 +178,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class A extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -244,6 +248,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    if ($preflightTypesMap[2]) { throw new Error("B is already in type map"); }
+    $preflightTypesMap[2] = B;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -342,6 +348,8 @@ class $Root extends $stdlib.std.Resource {
             });
           }
         }
+        if ($preflightTypesMap[8]) { throw new Error("F is already in type map"); }
+        $preflightTypesMap[8] = F;
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
@@ -369,8 +377,12 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
+                [$helpers.preflightClassSingleton(this, 8), ["foo"]],
+                [F, ["foo"]],
               ],
               "$inflight_init": [
+                [$helpers.preflightClassSingleton(this, 8), []],
+                [F, []],
               ],
             });
           }
@@ -440,12 +452,16 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$helpers.preflightClassSingleton(this, 2), ["foo"]],
+            [B, []],
             [a, ["goo"]],
             [d, ["callInner"]],
             [fn, ["handle"]],
             [innerD, ["handle"]],
           ],
           "$inflight_init": [
+            [$helpers.preflightClassSingleton(this, 2), []],
+            [B, []],
             [a, []],
             [d, []],
             [fn, []],
@@ -459,10 +475,9 @@ class $Root extends $stdlib.std.Resource {
     const fn = new $Closure1(this, "$Closure1");
     const d = new D(this, "D");
     const innerD = (d.getInner());
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure3(this, "$Closure3"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure3(this, "$Closure3"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_class_definitions.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

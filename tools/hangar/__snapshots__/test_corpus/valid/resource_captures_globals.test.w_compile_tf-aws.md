@@ -253,6 +253,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         },
         "function_name": "Topic-OnMessage0-c8bb74dc",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.MyResource_Topic-OnMessage0_IamRole_CFB3A523.arn}",
@@ -362,15 +365,19 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+        this.myResource = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
       }
       static _toInflightType() {
         return `
@@ -441,8 +448,8 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.localTopic = this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "Topic");
-        this.localCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+        this.localTopic = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "Topic");
+        this.localCounter = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
         const $parentThis = this;
         class R extends $stdlib.std.Resource {
           _id = $stdlib.core.closureId();
@@ -517,6 +524,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "myPut": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
             [Another, ["myStaticMethod"]],
             [globalAnother, ["myMethod"]],
             [globalAnother.first.myResource, ["put"]],
@@ -532,6 +540,7 @@ class $Root extends $stdlib.std.Resource {
             [this.localTopic, ["publish"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [Another, []],
             [globalAnother, []],
             [globalAnother.first.myResource, []],
@@ -619,8 +628,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
-    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+    const globalBucket = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const globalCounter = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
     const globalStr = "hello";
     const globalBool = true;
     const globalNum = 42;
@@ -629,11 +638,10 @@ class $Root extends $stdlib.std.Resource {
     const globalSetOfStr = new Set(["a", "b"]);
     const globalAnother = new Another(this, "Another");
     const res = new MyResource(this, "MyResource");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access cloud resource through static methods only", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:access cloud resource through static methods only", new $Closure2(this, "$Closure2"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource_captures_globals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

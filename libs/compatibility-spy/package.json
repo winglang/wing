@@ -31,6 +31,7 @@
   },
   "scripts": {
     "compile": "tsup",
+    "watch": "tsup --watch",
     "package": "bump-pack -b",
     "test": "vitest run --update"
   },

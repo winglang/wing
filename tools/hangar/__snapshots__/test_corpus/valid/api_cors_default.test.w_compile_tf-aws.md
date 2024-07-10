@@ -241,6 +241,9 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_HttpMethod,
         },
         "function_name": "get_users0-c82bfbcd",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_users0_IamRole_950ACE40.arn}",
@@ -307,13 +310,17 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const ex = $stdlib.ex;
-const http = $stdlib.http;
-const expect = $stdlib.expect;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const ex = $stdlib.ex;
+    const http = $stdlib.http;
+    const expect = $stdlib.expect;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -375,9 +382,13 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), [].concat(["equal"], ["nil"])],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), ["get"]],
             [apiDefaultCors.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [apiDefaultCors.url, []],
           ],
         });
@@ -413,21 +424,26 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), [].concat(["equal"], ["nil"])],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), ["OPTIONS"]],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), ["fetch"]],
             [apiDefaultCors.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), []],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [apiDefaultCors.url, []],
           ],
         });
       }
     }
-    const apiDefaultCors = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api", { cors: true });
+    const apiDefaultCors = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api", { cors: true });
     (apiDefaultCors.get("/users", new $Closure1(this, "$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users has default cors headers", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users has default cors headers", new $Closure3(this, "$Closure3"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users has default cors headers", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users has default cors headers", new $Closure3(this, "$Closure3"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api_cors_default.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

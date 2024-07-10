@@ -137,7 +137,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct RequestOptions {\n  body?: str;\n  cache?: RequestCache;\n  headers?: Map<str>;\n  method?: HttpMethod;\n  redirect?: RequestRedirect;\n  referrer?: str;\n}\n```\n---\nAn object containing any custom settings that you want to apply to the request."
+    value: "```wing\nstruct RequestOptions {\n  body?: str;\n  cache?: RequestCache;\n  headers?: Map<str>;\n  method?: HttpMethod;\n  redirect?: RequestRedirect;\n  referrer?: str;\n  /* ... */\n}\n```\n---\nAn object containing any custom settings that you want to apply to the request."
   sortText: hh|RequestOptions
 - label: Response
   kind: 22

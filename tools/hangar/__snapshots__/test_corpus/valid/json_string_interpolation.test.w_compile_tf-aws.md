@@ -28,9 +28,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const obj = ({"strValue": "test", "numValue": 1});
     const notStringifyStrValue = String.raw({ raw: ["string: ", ""] }, JSON.stringify(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "strValue")));
     $helpers.assert($helpers.eq(notStringifyStrValue, "string: \"test\""), "notStringifyStrValue == \"string: \\\"test\\\"\"");
@@ -42,7 +46,6 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "strValue"), JSON.parse(String.raw({ raw: ["", ""] }, JSON.stringify(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "strValue"))))), "obj.get(\"strValue\") == Json.parse(\"{obj.get(\"strValue\")}\")");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "json_string_interpolation.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
