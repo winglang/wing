@@ -1,8 +1,7 @@
-import exp from "constants";
 import { test, expect } from "vitest";
 import { Service } from "../../src/cloud";
 import { inflight } from "../../src/core";
-import * as tfaws from "../../src/target-tf-aws";
+import { AwsApp } from "./aws-util";
 import { mkdtemp, tfResourcesOfCount, tfSanitize, treeJsonOf } from "../util";
 
 const INFLIGHT_CODE = inflight(async (_, name) => {
@@ -11,7 +10,7 @@ const INFLIGHT_CODE = inflight(async (_, name) => {
 
 test("multiple services", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   new Service(app, "Service1", INFLIGHT_CODE);
   new Service(app, "Service2", INFLIGHT_CODE);
