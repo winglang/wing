@@ -1,3 +1,5 @@
+import uniqueid from "lodash.uniqueid";
+
 import type { Simulator } from "../../wingsdk.js";
 import { createCompiler, type Compiler } from "../compiler.js";
 import { createSimulator } from "../simulator.js";
@@ -20,9 +22,11 @@ export const createSimulatorManager = ({
     } else if (!simfile) {
       simfile = simfilePath;
     }
-    const testSimulator = createSimulator();
+    const stateDir = `/tmp/wing-test-${uniqueid()}`;
+    const testSimulator = createSimulator({
+      stateDir,
+    });
     await testSimulator.start(simfile);
-    await testSimulator.reload();
 
     simfilePath = simfile;
     return await testSimulator.waitForInstance();

@@ -658,6 +658,9 @@ importers:
       launch-editor:
         specifier: ^2.8.0
         version: 2.8.0
+      lodash.uniqueid:
+        specifier: ^4.0.1
+        version: 4.0.1
       ms:
         specifier: ^2.1.3
         version: 2.1.3
@@ -674,6 +677,9 @@ importers:
       '@types/lodash.uniqby':
         specifier: ^4.7.9
         version: 4.7.9
+      '@types/lodash.uniqueid':
+        specifier: ^4.0.9
+        version: 4.0.9
       '@types/ws':
         specifier: ^8.5.10
         version: 8.5.10
@@ -10795,6 +10801,12 @@ packages:
       '@types/lodash': 4.17.5
     dev: true
 
+  /@types/lodash.uniqueid@4.0.9:
+    resolution: {integrity: sha512-SEzkJBS8t+tqAUnSmyqbuWqxKU+Z/Xu2cgPtD+Ik0l+M7L2q7So9VoN2rQ8H0mmL87lJ00ykxal8oB54QRet6g==}
+    dependencies:
+      '@types/lodash': 4.17.5
+    dev: true
+
   /@types/lodash@4.17.5:
     resolution: {integrity: sha512-MBIOHVZqVqgfro1euRDWX7OO0fBVUUMrN6Pwm8LQsz8cWhEpihlvR70ENj3f40j58TNxZaWv2ndSkInykNBBJw==}
     dev: true
@@ -14304,7 +14316,7 @@ packages:
     dependencies:
       semver: 7.6.2
       shelljs: 0.8.5
-      typescript: 5.6.0-dev.20240703
+      typescript: 5.6.0-dev.20240710
     dev: true
 
   /dset@3.1.3:
@@ -18081,6 +18093,10 @@ packages:
 
   /lodash.uniqby@4.7.0:
     resolution: {integrity: sha512-e/zcLx6CSbmaEgFHCA7BnoQKyCtKMxnuWrJygbwPs/AIn+IMKl66L8/s+wBUn5LRw2pZx3bUHibiV1b6aTWIww==}
+
+  /lodash.uniqueid@4.0.1:
+    resolution: {integrity: sha512-GQQWaIeGlL6DIIr06kj1j6sSmBxyNMwI8kaX9aKpHR/XsMTiaXDVPNPAkiboOTK9OJpTJF/dXT3xYoFQnj386Q==}
+    dev: false
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -22622,8 +22638,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.6.0-dev.20240703:
-    resolution: {integrity: sha512-AAOGWtykhMpxB4l+5CwojT2aBVAszalz9guzYaZMavmKHWxm3HciR+cIcKqDgR22hR7fPBJHtOti7uFCo4mt4A==}
+  /typescript@5.6.0-dev.20240710:
+    resolution: {integrity: sha512-W4KoPsKX2+oLR5QD9KEqqF//lhrVlqibMkq2lUhioMBETQjQvaGABvtTLtUoszswbVYmxqTipH+d4QL10ZXXkQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
