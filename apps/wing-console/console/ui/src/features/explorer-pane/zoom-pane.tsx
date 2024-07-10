@@ -18,6 +18,7 @@ import { useEvent } from "react-use";
 
 import { MapControls } from "./map-controls.js";
 import { useRafThrottle } from "./use-raf-throttle.js";
+import { ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
 
 export interface Viewport {
   x: number;
@@ -515,7 +516,12 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
                 The map is out of bounds
               </p>
               <div className="flex justify-around pointer-events-auto">
-                <Button onClick={() => zoomToFit()}>Fit map to screen</Button>
+                <Button
+                  onClick={() => zoomToFit()}
+                  icon={ArrowsPointingOutIcon}
+                >
+                  Fit map to screen
+                </Button>
               </div>
             </div>
           </motion.div>
