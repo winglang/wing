@@ -20,10 +20,10 @@ import { useTheme } from "./theme-provider.js";
 
 interface Notification {
   title: string;
-  body?: string;
+  body?: string | React.ReactNode;
   id: string;
   show: boolean;
-  type?: "success" | "error";
+  type?: "success" | "error" | "info";
   autoCloseTimeoutId?: ReturnType<typeof setTimeout>;
 }
 
@@ -32,9 +32,9 @@ interface NotificationsContext {
   showNotification(
     title: string,
     options?: {
-      body?: string;
+      body?: string | React.ReactNode;
       autoCloseDelayMs?: number;
-      type?: "success" | "error";
+      type?: "success" | "error" | "info";
     },
   ): void;
   closeNotification(notificationId: string): void;
@@ -100,12 +100,20 @@ function NotificationsContainer() {
                 <div className="p-3">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      {notification.type === "error" ? (
+                      {notification.type === "error" && (
                         <ExclamationCircleIcon
                           className={"h-6 w-6 text-red-400"}
                           aria-hidden="true"
                         />
-                      ) : (
+                      )}
+                      {notification.type === "info" && (
+                        <ExclamationCircleIcon
+                          className={"h-6 w-6 text-blue-400"}
+                          aria-hidden="true"
+                        />
+                      )}
+                      {(notification.type === "success" ||
+                        notification.type === undefined) && (
                         <CheckCircleIcon
                           className="h-6 w-6 text-green-400"
                           aria-hidden="true"
@@ -122,9 +130,11 @@ function NotificationsContainer() {
                         {notification.title}
                       </p>
                       {notification.body && (
-                        <p className={classNames("mt-1 text-sm", theme.text2)}>
+                        <div
+                          className={classNames("mt-1 text-sm", theme.text2)}
+                        >
                           {notification.body}
-                        </p>
+                        </div>
                       )}
                     </div>
                     <div className="ml-4 flex-shrink-0 flex">
@@ -190,7 +200,7 @@ export function NotificationsProvider(props: PropsWithChildren) {
       const showNotification = (
         title: string,
         options?: {
-          body?: string;
+          body?: string | React.ReactNode;
           autoCloseDelayMs?: number;
           type?: "success" | "error";
         },

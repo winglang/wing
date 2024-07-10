@@ -45,6 +45,9 @@ const options = parseArgs({
     async requireSignIn() {
       return options.requireSignIn ?? false;
     },
+    async getEndpointWarningAccepted() {
+      return options.getEndpointWarningAccepted ?? true;
+    },
   });
 
   const vite = await createViteServer({

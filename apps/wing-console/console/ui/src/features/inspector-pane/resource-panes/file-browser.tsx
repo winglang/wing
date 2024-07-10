@@ -8,6 +8,7 @@ import {
   Button,
   FilePreview,
   Modal,
+  ModalBody,
   ResponseInput,
   ToolbarButton,
   Tree,
@@ -181,35 +182,37 @@ export const FileBrowser = ({
         setVisible={closePreview}
         className="max-w-[80vw] space-y-1.5"
       >
-        <div className={classNames(theme.text2, "text-md flex space-x-1")}>
-          <span className={theme.text1}>File:</span>
-          <span className="truncate">{selectedFile}</span>
-          <div className="grow" />
-          <ToolbarButton
-            title="Download"
-            disabled={!selectedFile || !selectedFileData}
-            onClick={onDownloadCurrentFileClick}
-          >
-            <ArrowDownTrayIcon className="w-5 h-5" />
-          </ToolbarButton>
-          <ToolbarButton title="Close" onClick={closePreview}>
-            <XMarkIcon className="w-5 h-5" />
-          </ToolbarButton>
-        </div>
-        <FilePreview
-          filename={selectedFile ?? ""}
-          content={selectedFileData ?? ""}
-          className={classNames(
-            previewType === "image" &&
-              "min-h-[15rem] min-w-[15rem] max-h-[70vh]",
-            previewType === "video" && "min-w-[70vw]",
-            previewType === "pdf" && "min-h-[70vh] min-w-[50vw]",
-            previewType === "text" && [
-              "min-w-[15rem] min-h-[20rem] max-h-[80vh] max-w-[75vw] w-full",
-              "resize overflow-auto",
-            ],
-          )}
-        />
+        <ModalBody>
+          <div className={classNames(theme.text2, "text-md flex space-x-1")}>
+            <span className={theme.text1}>File:</span>
+            <span className="truncate">{selectedFile}</span>
+            <div className="grow" />
+            <ToolbarButton
+              title="Download"
+              disabled={!selectedFile || !selectedFileData}
+              onClick={onDownloadCurrentFileClick}
+            >
+              <ArrowDownTrayIcon className="w-5 h-5" />
+            </ToolbarButton>
+            <ToolbarButton title="Close" onClick={closePreview}>
+              <XMarkIcon className="w-5 h-5" />
+            </ToolbarButton>
+          </div>
+          <FilePreview
+            filename={selectedFile ?? ""}
+            content={selectedFileData ?? ""}
+            className={classNames(
+              previewType === "image" &&
+                "min-h-[15rem] min-w-[15rem] max-h-[70vh]",
+              previewType === "video" && "min-w-[70vw]",
+              previewType === "pdf" && "min-h-[70vh] min-w-[50vw]",
+              previewType === "text" && [
+                "min-w-[15rem] min-h-[20rem] max-h-[80vh] max-w-[75vw] w-full",
+                "resize overflow-auto",
+              ],
+            )}
+          />
+        </ModalBody>
       </Modal>
     </div>
   );

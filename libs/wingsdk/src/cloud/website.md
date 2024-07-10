@@ -45,6 +45,40 @@ An extended Web App example including static Website, API Gateway and a Redis da
 
 Review the [Website RFC](https://www.winglang.io/contributing/rfcs/2023-04-16-website-resource) for detailed information.
 
+### Pass variables to the website
+You can pass dynamic variables from the main.w file to the website, and recuperate them by fetching the config.js file.
+// inside main.w
+
+```ts
+bring cloud;
+
+let website = new cloud.Website(path: "./static");
+let api = new cloud.Api();
+
+website.addJson("config.json", { api: api.url });
+```
+
+inside ./static/index.html
+
+```html
+<html lang="en">
+<html>
+<body>
+...
+    <script>
+        // Fetch the config file and get the API URL
+        let ApiUrl;
+        fetch('/config.json')
+            .then(response => response.json())
+            .then(data => {
+                ApiUrl = data.api;
+            });
+    </script>
+</body>
+</html>
+```
+
+
 ### Simulator (`sim`)
 
 sim implementations of `cloud.Website` is using [nodejs express](https://expressjs.com/).

@@ -53,4 +53,4 @@ main((root) => {
 });
 ```
 
-More details about targets can be found [here](../02-concepts/03-platforms.md).
+More details about targets can be found [here](/docs/category/platforms).

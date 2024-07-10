@@ -25,7 +25,6 @@ describe("secrets", () => {
     expect(s.getResourceConfig("/my_secret")).toEqual({
       attrs: {
         handle: expect.any(String),
-        runningState: expect.any(String),
       },
       path: "root/my_secret",
       addr: expect.any(String),

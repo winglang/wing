@@ -23,17 +23,21 @@ describe("compatibility spy", async () => {
     }
   );
 
+  const factory = manager.createClassFactory();
+
   const app = manager.createApp({
     entrypointDir: __dirname,
+    classFactory: factory,
   }) as SimApp;
 
   test("app overrides and hooks set correctly", () => {
-    expect(app._newInstanceOverrides.length).toBe(1);
+    expect(factory.newInstanceOverrides.length).toBe(2); // 1 from sim, 1 from spy
     expect(app._synthHooks?.preSynthesize.length).toBe(1);
   });
 
-  const bucket = app.newAbstract(
+  const bucket = factory.new(
     cloud.BUCKET_FQN,
+    undefined,
     app,
     "bucket"
   ) as cloud.Bucket;

@@ -2,7 +2,6 @@ import type { ElkExtendedEdge, ElkNode } from "elkjs";
 import { AnimatePresence } from "framer-motion";
 import {
   memo,
-  useCallback,
   useEffect,
   useMemo,
   useRef,

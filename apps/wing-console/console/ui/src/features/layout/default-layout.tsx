@@ -11,7 +11,7 @@ import classNames from "classnames";
 import { useCallback, useEffect, useMemo } from "react";
 
 import { BlueScreenOfDeath } from "../blue-screen-of-death/blue-screen-of-death.js";
-import { EndpointsTreeView } from "../endpoints-pane/endpoints-tree-view.js";
+import { EndpointTree } from "../endpoints-pane/endpoint-tree.js";
 import { Explorer } from "../explorer-pane/explorer.js";
 import { Hierarchy } from "../hierarchy-pane/hierarchy.js";
 import { Inspector } from "../inspector-pane/inspector.js";
@@ -142,7 +142,7 @@ export const DefaultLayout = ({
           );
         }
         case "endpoints": {
-          return <EndpointsTreeView key={component.type} />;
+          return <EndpointTree key={component.type} />;
         }
       }
     },

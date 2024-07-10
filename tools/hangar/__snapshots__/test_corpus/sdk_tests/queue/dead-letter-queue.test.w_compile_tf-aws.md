@@ -172,6 +172,9 @@
         },
         "function_name": "queue-without-retries-SetConsumer0-c8ba2958",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.queuewithoutretries-SetConsumer0_IamRole_F76F585E.arn}",
@@ -204,6 +207,9 @@
         },
         "function_name": "queue-with-retries-SetConsumer0-c82b1a26",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.queuewithretries-SetConsumer0_IamRole_B95C0A26.arn}",

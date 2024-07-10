@@ -174,6 +174,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -189,7 +190,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
       }
       static createBucket($scope, scope) {
-        return ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "Bucket"))(scope);
+        return globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, scope, "Bucket");
       }
       static createMyClass($scope, scope) {
         return new MyClass(scope, "MyClass");
@@ -198,7 +199,7 @@ class $Root extends $stdlib.std.Resource {
         return new MyClass($scope, String.raw({ raw: ["implicit-scope-myclass-", ""] }, id));
       }
       static createBucketWithImplicitScope($scope) {
-        return ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "implicit-scope-bucket"))($scope);
+        return globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "implicit-scope-bucket");
       }
       instanceMethod() {
         const my = (MyClass.createMyClassWithImplicitScope(this, "from-instance-method"));
@@ -329,12 +330,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const createBucket = (() => {
-      this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
+      globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
     });
     if (true) {
-      this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
+      globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
     }
-    const scope = this.node.root.new("constructs.Construct", c.Construct, this, "Construct");
+    const scope = globalThis.$ClassFactory.new("constructs.Construct", c.Construct, this, "Construct");
     const bucket = (MyClass.createBucket(this, scope));
     const bucket2 = (createBucket());
     const my = (MyClass.createMyClass(this, scope));
@@ -343,12 +344,11 @@ class $Root extends $stdlib.std.Resource {
     const my3 = (MyClass.staticMehtodThatCallsAnotherStaticMethod(this));
     (my.instanceMethod());
     $helpers.assert($helpers.eq((jsii_fixture.JsiiClass.staticMethod("foo")), "Got foo"), "jsii_fixture.JsiiClass.staticMethod(\"foo\") == \"Got foo\"");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:play with buckets", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:play with buckets", new $Closure1(this, "$Closure1"));
     const f = new Foo(this, "Foo");
     const lib_f = (new_in_static_lib.LibClass.createFoo(this, "lib-foo"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "new_in_static.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
