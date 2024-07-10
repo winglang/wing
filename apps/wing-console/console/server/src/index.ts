@@ -314,7 +314,7 @@ export const createConsoleServer = async ({
         server.close(),
         compiler.stop(),
         simulator.stop(),
-        testRunner.stop(),
+        testRunner.forceStop(),
       ]);
     } catch (error) {
       log.error(error);

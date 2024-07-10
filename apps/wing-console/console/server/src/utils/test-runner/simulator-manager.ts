@@ -59,7 +59,7 @@ export const createSimulatorManager = ({
     return result;
   };
 
-  const stop = () => {
+  const forceStop = () => {
     testCompiler?.stop();
     testSimulator?.stop();
   };
@@ -67,6 +67,6 @@ export const createSimulatorManager = ({
   return {
     useSimulatorInstance,
     getSimulator,
-    stop,
+    forceStop,
   };
 };

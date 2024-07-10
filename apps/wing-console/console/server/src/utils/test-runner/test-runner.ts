@@ -44,7 +44,7 @@ export interface TestRunner {
   initialize(): void;
 
   // Stop the test runner.
-  stop(): void;
+  forceStop(): void;
 }
 
 export interface CreateTestRunnerProps {
@@ -256,8 +256,8 @@ export const createTestRunner = ({
     onTestsChangeCallbacks.push(callback);
   };
 
-  const stop = async () => {
-    simulatorManager.stop();
+  const forceStop = async () => {
+    simulatorManager.forceStop();
   };
 
   return {
@@ -267,6 +267,6 @@ export const createTestRunner = ({
     runAllTests,
     onTestsChange,
     initialize,
-    stop,
+    forceStop,
   };
 };
