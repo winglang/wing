@@ -1,3 +1,4 @@
+import { ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
 import { Button, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,7 +19,6 @@ import { useEvent } from "react-use";
 
 import { MapControls } from "./map-controls.js";
 import { useRafThrottle } from "./use-raf-throttle.js";
-import { ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
 
 export interface Viewport {
   x: number;
