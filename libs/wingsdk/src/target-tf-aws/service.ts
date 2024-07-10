@@ -37,6 +37,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
   private dockerFileName: string;
   private service: EcsService;
   private subnets?: Set<string>;
+  private bundledHash?: string;
   private securityGroups?: Set<string>;
   private clusterInstance: EcsCluster;
 
@@ -54,6 +55,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     this.workdir = App.of(this).workdir;
     this.wrapperEntrypoint = join(this.workdir, `${this.assetName}_wrapper.js`);
     this.dockerFileName = `Dockerfile_${this.assetName}`;
+
     const app = App.of(this) as App;
     this.clusterInstance = TfAWSEcsCluster.getOrCreate(this);
 
@@ -64,10 +66,20 @@ export class Service extends cloud.Service implements IAwsInflightHost {
         dockerfile: this.dockerFileName,
         platform: "linux/amd64",
       },
+      triggers: {
+        context_hash: Lazy.stringValue({
+          produce: () => this.bundledHash,
+        }),
+      }
     });
 
     new RegistryImage(this, "RegistryImage", {
       name: image.name,
+      triggers: {
+        context_hash: Lazy.stringValue({
+          produce: () => this.bundledHash,
+        }),
+      }
     });
 
     const logGroup = new CloudwatchLogGroup(this, "LogGroup", {
@@ -236,6 +248,11 @@ export class Service extends cloud.Service implements IAwsInflightHost {
           },
         }),
       },
+      triggers: {
+        context_hash: Lazy.stringValue({
+          produce: () => this.bundledHash,
+        }),
+      }
     });
   }
 
@@ -298,7 +315,7 @@ process.on('SIGINT', handleShutdown);
     `;
     writeFileSync(this.wrapperEntrypoint, wrapper);
     const bundle = createBundle(this.wrapperEntrypoint);
-    bundle;
+    this.bundledHash = bundle.hash;
 
     const dockerFile = `FROM --platform=linux/amd64 node:20-slim
     WORKDIR /app
