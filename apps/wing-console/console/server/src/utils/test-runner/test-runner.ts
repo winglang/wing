@@ -38,7 +38,7 @@ export interface TestRunner {
   runAllTests(): void;
 
   // Register a callback to be called when the tests change.
-  onTestsChange(callback: () => void): void;
+  onTestsChange(callback: (testId?: string) => void): void;
 
   // Initialize the test runner.
   initialize(): void;
@@ -145,15 +145,15 @@ export const createTestRunner = ({
   const initialize = async () => {
     testsState.restart();
 
-    const simulator = await simulatorManager.getSimulator();
+    const tests = await simulatorManager.useSimulatorInstance(
+      async (simulator: Simulator) => {
+        const simTestRunner = simulator.getResource(
+          "root/cloud.TestRunner",
+        ) as ITestRunnerClient;
 
-    const simTestRunner = simulator.getResource(
-      "root/cloud.TestRunner",
-    ) as ITestRunnerClient;
-
-    const tests = await simTestRunner.listTests();
-
-    simulator.stop();
+        return await simTestRunner.listTests();
+      },
+    );
 
     testsState.setTests(
       tests.map((test) => ({
@@ -184,9 +184,19 @@ export const createTestRunner = ({
   };
 
   const runTest = async (testId: string) => {
-    const simulator = await simulatorManager.getSimulator();
+    testsState.setTest({
+      id: testId,
+      label: getTestName(testId),
+      status: "running",
+      datetime: Date.now(),
+    });
 
-    const response = await executeTest(simulator, testId, logger);
+    const response = await simulatorManager.useSimulatorInstance(
+      async (simulator: Simulator) => {
+        return await executeTest(simulator, testId, logger);
+      },
+    );
+
     testsState.setTest({
       id: testId,
       label: getTestName(testId),
@@ -196,7 +206,6 @@ export const createTestRunner = ({
     });
 
     runOnTestChangeCallbacks();
-    simulator.stop();
   };
 
   const runAllTests = async () => {
@@ -212,34 +221,33 @@ export const createTestRunner = ({
       })),
     );
 
-    const simulator = await simulatorManager.getSimulator();
-
-    for (const test of testList) {
-      await simulator.reload(true);
-      const response = await executeTest(simulator, test.id, logger);
-      result.push(response);
-      testsState.setTest({
-        ...test,
-        status: response.error ? "error" : "success",
-        time: response.time,
-        datetime: Date.now(),
-      });
-      const testPassed = result.filter((r) => r.pass);
-      const time = result.reduce((accumulator, r) => accumulator + r.time, 0);
-      const message = `Tests completed: ${testPassed.length}/${testList.length} passed. (${time}ms)`;
-      logger.log(message, "console", {
-        messageType: "summary",
-      });
-      runOnTestChangeCallbacks();
-    }
-    simulator.stop();
+    simulatorManager.useSimulatorInstance(async (simulator: Simulator) => {
+      for (const test of testList) {
+        await simulator.reload(true);
+        const response = await executeTest(simulator, test.id, logger);
+        result.push(response);
+        testsState.setTest({
+          ...test,
+          status: response.error ? "error" : "success",
+          time: response.time,
+          datetime: Date.now(),
+        });
+        const testPassed = result.filter((r) => r.pass);
+        const time = result.reduce((accumulator, r) => accumulator + r.time, 0);
+        const message = `Tests completed: ${testPassed.length}/${testList.length} passed. (${time}ms)`;
+        logger.log(message, "console", {
+          messageType: "summary",
+        });
+        runOnTestChangeCallbacks();
+      }
+    });
   };
 
   const listTests = () => {
     return testsState.getTests();
   };
 
-  const onTestsChange = (callback: () => void) => {
+  const onTestsChange = (callback: (testId?: string) => void) => {
     onTestChangeCallbacks.push(callback);
   };
 
