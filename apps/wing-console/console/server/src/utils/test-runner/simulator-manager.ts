@@ -64,12 +64,7 @@ export const createSimulatorManager = ({
   };
 
   const forceStop = () => {
-    try {
-      testCompiler?.stop();
-      testSimulator?.stop();
-    } catch (error) {
-      console.log(error);
-    }
+    testCompiler?.stop();
   };
 
   return {
