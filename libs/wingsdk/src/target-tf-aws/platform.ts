@@ -14,6 +14,7 @@ import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 import { Website } from "./website";
+import { Service } from "./service";
 import {
   API_FQN,
   BUCKET_FQN,
@@ -25,6 +26,7 @@ import {
   QUEUE_FQN,
   SCHEDULE_FQN,
   SECRET_FQN,
+  SERVICE_FQN,
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
@@ -163,6 +165,9 @@ export class Platform implements IPlatform {
 
       case ENDPOINT_FQN:
         return Endpoint;
+
+      case SERVICE_FQN:
+        return Service
     }
 
     return undefined;
