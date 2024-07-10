@@ -1,10 +1,5 @@
-// !!!! This file was copied from `apps/wing/src/env.ts` !!!!
-//
-// We need to refactor.
-
-import fs from "node:fs";
-import { join } from "node:path";
-
+import fs from "fs";
+import { join } from "path";
 import { parse } from "dotenv";
 import { expand } from "dotenv-expand";
 
@@ -15,14 +10,14 @@ export interface EnvLoadOptions {
    * The directory to load the environment variables from.
    * @default process.cwd()
    */
-  cwd?: string;
+  readonly cwd?: string;
 }
 
 /**
  * Loads environment variables from `.env` and `.env.local` files.
  */
 export function loadEnvVariables(
-  options?: EnvLoadOptions,
+  options?: EnvLoadOptions
 ): Record<string, string> | undefined {
   const envDir = options?.cwd ?? process.cwd();
   const envFiles = DEFAULT_ENV_FILES.map((file) => join(envDir, file));
@@ -32,10 +27,10 @@ export function loadEnvVariables(
     envFiles.flatMap((file) => {
       try {
         return Object.entries(parse(fs.readFileSync(file)));
-      } catch {
+      } catch (_) {
         return [];
       }
-    }),
+    })
   );
 
   // Expand and force load the environment variables

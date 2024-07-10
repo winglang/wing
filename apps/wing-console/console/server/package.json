@@ -39,8 +39,6 @@
     "chokidar": "^3.6.0",
     "constructs": "^10.3.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "dotenv-expand": "^10.0.0",
     "emittery": "^1.0.3",
     "env-paths": "^3.0.0",
     "esbuild-plugin-raw": "^0.1.8",

@@ -2,9 +2,9 @@ import { existsSync } from "fs";
 import { dirname, resolve } from "path";
 import { createConsoleApp } from "@wingconsole/app";
 import { BuiltinPlatform } from "@winglang/compiler";
+import { loadEnvVariables } from "@winglang/sdk/lib/util/env";
 import { debug } from "debug";
 import { glob } from "glob";
-import { loadEnvVariables } from "../env";
 import { parseNumericString } from "../util";
 import { beforeShutdown } from "../util.before-shutdown.js";
 

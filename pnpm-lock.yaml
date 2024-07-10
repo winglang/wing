@@ -1365,6 +1365,12 @@ importers:
       cron-validator:
         specifier: ^1.3.1
         version: 1.3.1
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      dotenv-expand:
+        specifier: ^10.0.0
+        version: 10.0.0
       express:
         specifier: ^4.19.2
         version: 4.19.2
@@ -14298,7 +14304,7 @@ packages:
     dependencies:
       semver: 7.6.2
       shelljs: 0.8.5
-      typescript: 5.6.0-dev.20240702
+      typescript: 5.6.0-dev.20240710
     dev: true
 
   /dset@3.1.3:
@@ -22612,8 +22618,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.6.0-dev.20240702:
-    resolution: {integrity: sha512-hbRazJD/2++Y7fBv6NZtCyoMfoVYmuDlGs+jqdWicZfXP6Fp8q9FDFnuvYpKNq1fXwBrGIUXEZlXssvXIWy/FQ==}
+  /typescript@5.6.0-dev.20240710:
+    resolution: {integrity: sha512-W4KoPsKX2+oLR5QD9KEqqF//lhrVlqibMkq2lUhioMBETQjQvaGABvtTLtUoszswbVYmxqTipH+d4QL10ZXXkQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

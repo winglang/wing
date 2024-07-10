@@ -1,10 +1,10 @@
 import { mkdtemp, writeFile } from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
-import { test, expect } from "vitest";
-import { loadEnvVariables } from "./env";
+import { describe, expect } from "vitest";
+import { loadEnvVariables } from "../../src/util/env";
 
-test("can load env file", async () => {
+describe("can load env file", async () => {
   const tempdir = await mkdtemp(join(tmpdir(), "env-test"));
 
   const envFile = `${tempdir}/.env`;
@@ -19,7 +19,7 @@ test("can load env file", async () => {
   expect(loaded.TEST2).toBe("2");
 });
 
-test("can load env file with expansion", async () => {
+describe("can load env file with expansion", async () => {
   const tempdir = await mkdtemp(join(tmpdir(), "env-test"));
 
   const envFile = `${tempdir}/.env`;

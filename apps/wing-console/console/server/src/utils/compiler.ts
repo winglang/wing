@@ -1,10 +1,10 @@
 import path from "node:path";
 
 import * as wing from "@winglang/compiler";
+import { loadEnvVariables } from "@winglang/sdk/lib/util/env";
 import chokidar from "chokidar";
 import Emittery from "emittery";
 
-import { loadEnvVariables } from "./env.js";
 import { formatWingError } from "./format-wing-error.js";
 
 export interface CompilerEvents {
