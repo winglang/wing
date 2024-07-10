@@ -184,13 +184,15 @@ export const createTestRunner = ({
   };
 
   const runTest = async (testId: string) => {
-    // Set the test to running.
-    testsState.setTest({
-      id: testId,
-      label: getTestName(testId),
-      status: "running",
-      datetime: Date.now(),
-    });
+    const test = testsState.getTest(testId);
+
+    if (test) {
+      // Set the test to running.
+      testsState.setTest({
+        ...test,
+        status: "running",
+      });
+    }
 
     const response = await simulatorManager.useSimulatorInstance(
       async (simulator: Simulator) => {
@@ -214,7 +216,6 @@ export const createTestRunner = ({
       testList.map((test) => ({
         ...test,
         status: "running",
-        datetime: Date.now(),
       })),
     );
 

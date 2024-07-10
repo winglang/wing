@@ -12,6 +12,9 @@ export const createTestStateManager = ({
     getTests: () => {
       return tests;
     },
+    getTest: (testId: string) => {
+      return tests.find((t) => t.id === testId);
+    },
     setTests: (newTests: TestItem[]) => {
       tests = newTests;
       onTestsChange();

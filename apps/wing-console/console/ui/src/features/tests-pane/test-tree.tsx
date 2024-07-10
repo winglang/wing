@@ -17,7 +17,7 @@ import {
 } from "@wingconsole/design-system";
 import type { TestItem, TestStatus } from "@wingconsole/server";
 import classNames from "classnames";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 export interface TestTreeProps {
   status: TestStatus;
@@ -41,6 +41,72 @@ export const TestTree = ({
   const selectedItems = useMemo(
     () => (selectedItemId ? [selectedItemId] : undefined),
     [selectedItemId],
+  );
+
+  const TestTreeItem = memo(
+    ({
+      test,
+      handleRunTest,
+    }: {
+      test: TestItem;
+      handleRunTest: (testPath: string) => void;
+    }) => {
+      const { theme } = useTheme();
+
+      return (
+        <TreeItem
+          itemId={test.id}
+          label={
+            <div className="flex items-center gap-1">
+              <span className="truncate">{test.label}</span>
+
+              <span className={classNames(theme.text2, "text-xs")}>
+                {test.time && test.time > 0 ? `${test.time}ms` : ""}
+              </span>
+            </div>
+          }
+          secondaryLabel={
+            <div
+              className={classNames("hidden group-hover:flex items-center ")}
+            >
+              <ToolbarButton
+                title={`Run ${test.label}`}
+                onClick={() => handleRunTest(test.id)}
+                disabled={test.status === "running"}
+              >
+                <PlayIcon className="w-4 h-4" />
+              </ToolbarButton>
+            </div>
+          }
+          title={test.label}
+          icon={
+            <>
+              {test.status === "success" && (
+                <CheckCircleIcon className="w-4 h-4 text-green-500" />
+              )}
+              {test.status === "error" && (
+                <XCircleIcon className="w-4 h-4 text-red-500" />
+              )}
+              {test.status === "running" && (
+                <ArrowPathIcon
+                  className={classNames(theme.text2, "w-4 h-4 animate-spin")}
+                />
+              )}
+              {test.status === "idle" && (
+                <MinusCircleIcon
+                  className={classNames(theme.text2, "w-4 h-4")}
+                />
+              )}
+            </>
+          }
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && test.status !== "running") {
+              handleRunTest(test.id);
+            }
+          }}
+        />
+      );
+    },
   );
 
   return (
@@ -106,62 +172,10 @@ export const TestTree = ({
                 onSelectedItemsChange={onSelectedItemsChange}
               >
                 {testList.map((test) => (
-                  <TreeItem
+                  <TestTreeItem
                     key={test.id}
-                    itemId={test.id}
-                    label={
-                      <div className="flex items-center gap-1">
-                        <span className="truncate">{test.label}</span>
-
-                        <span className={classNames(theme.text2, "text-xs")}>
-                          {test.time && test.time > 0 ? `${test.time}ms` : ""}
-                        </span>
-                      </div>
-                    }
-                    secondaryLabel={
-                      <div
-                        className={classNames(
-                          "hidden group-hover:flex items-center ",
-                        )}
-                      >
-                        <ToolbarButton
-                          title={`Run ${test.label}`}
-                          onClick={() => handleRunTest(test.id)}
-                          disabled={test.status === "running"}
-                        >
-                          <PlayIcon className="w-4 h-4" />
-                        </ToolbarButton>
-                      </div>
-                    }
-                    title={test.label}
-                    icon={
-                      <>
-                        {test.status === "success" && (
-                          <CheckCircleIcon className="w-4 h-4 text-green-500" />
-                        )}
-                        {test.status === "error" && (
-                          <XCircleIcon className="w-4 h-4 text-red-500" />
-                        )}
-                        {test.status === "running" && (
-                          <ArrowPathIcon
-                            className={classNames(
-                              theme.text2,
-                              "w-4 h-4 animate-spin",
-                            )}
-                          />
-                        )}
-                        {test.status === "idle" && (
-                          <MinusCircleIcon
-                            className={classNames(theme.text2, "w-4 h-4")}
-                          />
-                        )}
-                      </>
-                    }
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" && test.status !== "running") {
-                        handleRunTest(test.id);
-                      }
-                    }}
+                    test={test}
+                    handleRunTest={handleRunTest}
                   />
                 ))}
               </TreeView>
