@@ -37,6 +37,7 @@ export const createCompiler = ({
   stateDir,
   watchGlobs,
 }: CreateCompilerProps): Compiler => {
+  const dirname = path.dirname(wingfile);
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
   let shouldCompileAgain = false;
@@ -46,7 +47,7 @@ export const createCompiler = ({
       return;
     }
 
-    loadEnvVariables();
+    loadEnvVariables({ cwd: dirname });
 
     try {
       isCompiling = true;
@@ -80,8 +81,6 @@ export const createCompiler = ({
       }
     }
   };
-
-  const dirname = path.dirname(wingfile);
 
   const pathsToWatch = [
     `!**/node_modules/**`,
