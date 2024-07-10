@@ -14,6 +14,9 @@ const getSimulatorInstance = async (simfile: string, stateId?: string) => {
   return await testSimulator.waitForInstance();
 };
 
+/**
+ * Create a simulator manager that can be used to run tests.
+ */
 export const createSimulatorManager = ({
   wingfile,
   platform,
@@ -50,6 +53,7 @@ export const createSimulatorManager = ({
     });
   };
 
+  // Run a callback with a simulator instance.
   const useSimulatorInstance = async <T>(
     callback: (simulator: Simulator) => Promise<T>,
   ): Promise<T> => {
@@ -69,7 +73,6 @@ export const createSimulatorManager = ({
 
   return {
     useSimulatorInstance,
-    getSimulator,
     forceStop,
   };
 };

@@ -123,14 +123,18 @@ export const createTestRunner = ({
   watchGlobs,
   logger,
 }: CreateTestRunnerProps): TestRunner => {
-  const runOnTestsChangeCallbacks = () => {
-    for (const callback of onTestsChangeCallbacks) {
-      callback();
-    }
-  };
+  // Whether the test runner has been initialized.
+  let initialized = false;
+
+  // Callbacks to be called when the tests change.
+  const onTestsChangeCallbacks: Array<() => void> = [];
 
   const testsState = createTestStateManager({
-    onTestsChange: runOnTestsChangeCallbacks,
+    onTestsChange: () => {
+      for (const callback of onTestsChangeCallbacks) {
+        callback();
+      }
+    },
   });
 
   const simulatorManager = createSimulatorManager({
@@ -139,9 +143,6 @@ export const createTestRunner = ({
     watchGlobs,
   });
 
-  const onTestsChangeCallbacks: Array<() => void> = [];
-
-  let initialized = false;
   const initialize = async () => {
     initialized = false;
     testsState.restart();
@@ -252,21 +253,17 @@ export const createTestRunner = ({
     return testsState.getTests();
   };
 
-  const onTestsChange = (callback: (testId?: string) => void) => {
-    onTestsChangeCallbacks.push(callback);
-  };
-
-  const forceStop = async () => {
-    simulatorManager.forceStop();
-  };
-
   return {
     listTests,
     status,
     runTest,
     runAllTests,
-    onTestsChange,
+    onTestsChange: (callback: (testId?: string) => void) => {
+      onTestsChangeCallbacks.push(callback);
+    },
     initialize,
-    forceStop,
+    forceStop: () => {
+      simulatorManager.forceStop();
+    },
   };
 };

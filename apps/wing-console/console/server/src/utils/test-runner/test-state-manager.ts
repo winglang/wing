@@ -1,5 +1,8 @@
 import type { TestItem } from "./test-runner.js";
 
+/*
+ * Manages the list of tests and their status, and notifies when the tests change.
+ */
 export const createTestStateManager = ({
   onTestsChange,
 }: {
