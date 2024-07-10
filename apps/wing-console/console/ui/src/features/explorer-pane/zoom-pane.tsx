@@ -15,6 +15,8 @@ import type { DetailedHTMLProps, HTMLAttributes } from "react";
 import type { ReactNode } from "react";
 import { useEvent } from "react-use";
 
+import { useAppLocalStorage } from "../../use-localstorage.js";
+
 import { MapControls } from "./map-controls.js";
 
 export interface Viewport {
@@ -78,6 +80,7 @@ export interface ZoomPaneProps
 
 export interface ZoomPaneRef {
   zoomToFit(viewport?: Viewport): void;
+  shouldDoInitialZoomToFit: boolean;
 }
 
 const context = createContext({
@@ -91,7 +94,8 @@ export const useZoomPane = () => {
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   const { boundingBox, children, className, onClick, ...divProps } = props;
 
-  const [viewTransform, setViewTransform] = useState(IDENTITY_TRANSFORM);
+  const [viewTransform, setViewTransform, viewTransformExists] =
+    useAppLocalStorage("zoomPane.viewTransform", IDENTITY_TRANSFORM);
   const containerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -348,9 +352,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     () => {
       return {
         zoomToFit,
+        shouldDoInitialZoomToFit: !viewTransformExists,
       };
     },
-    [zoomToFit],
+    [viewTransformExists, zoomToFit],
   );
 
   // Whether the bounding box is out of bounds of the transform view.

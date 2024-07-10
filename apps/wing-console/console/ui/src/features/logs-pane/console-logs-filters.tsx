@@ -17,6 +17,7 @@ import uniqby from "lodash.uniqby";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 export const LOG_LEVELS: LogLevel[] = ["verbose", "info", "warn", "error"];
+export const DEFAULT_LOG_LEVELS: LogLevel[] = ["info", "warn", "error"];
 
 const logLevelNames = {
   verbose: "Verbose",
@@ -75,10 +76,11 @@ export const ConsoleLogsFilters = memo(
       debouncedOnSearch(searchText);
     }, [debouncedOnSearch, searchText]);
 
-    const [defaultLogTypeSelection] = useState(selectedLogTypeFilters.sort());
+    const defaultLogTypeSelection = DEFAULT_LOG_LEVELS.sort();
     const resetFiltersDisabled = useMemo(() => {
       return (
-        selectedLogTypeFilters === defaultLogTypeSelection &&
+        selectedLogTypeFilters.sort().toString() ===
+          defaultLogTypeSelection.toString() &&
         selectedResourceIds.length === 0 &&
         selectedResourceTypes.length === 0
       );
