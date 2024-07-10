@@ -148,24 +148,28 @@ export const createTestRunner = ({
     // Notify new test runner status.
     onTestsChange();
 
-    const tests = await simulatorManager.useSimulatorInstance(
-      async (simulator: Simulator) => {
-        const simTestRunner = simulator.getResource(
-          "root/cloud.TestRunner",
-        ) as ITestRunnerClient;
+    try {
+      const tests = await simulatorManager.useSimulatorInstance(
+        async (simulator: Simulator) => {
+          const simTestRunner = simulator.getResource(
+            "root/cloud.TestRunner",
+          ) as ITestRunnerClient;
 
-        return await simTestRunner.listTests();
-      },
-    );
+          return await simTestRunner.listTests();
+        },
+      );
 
-    testsState.setTests(
-      tests.map((test) => ({
-        id: test,
-        label: getTestName(test),
-        status: "idle",
-        datetime: Date.now(),
-      })),
-    );
+      testsState.setTests(
+        tests.map((test) => ({
+          id: test,
+          label: getTestName(test),
+          status: "idle",
+          datetime: Date.now(),
+        })),
+      );
+    } catch (error) {
+      console.log(error);
+    }
     initialized = true;
   };
 
