@@ -9,12 +9,9 @@ import { formatTraceError } from "../format-wing-error.js";
 import { createSimulatorManager } from "./simulator-manager.js";
 import { createTestStateManager } from "./test-state-manager.js";
 
-export type TestStatus =
-  | "success"
-  | "error"
-  | "idle"
-  | "running"
-  | "uninitialized";
+export type TestStatus = "success" | "error" | "idle" | "running";
+
+export type TestRunnerStatus = TestStatus | "uninitialized";
 
 export interface TestItem {
   id: string;
@@ -29,7 +26,7 @@ export interface TestRunner {
   listTests(): Array<TestItem>;
 
   // Status of the test runner as a whole.
-  status(): TestStatus;
+  status(): TestRunnerStatus;
 
   // Run a single test.
   runTest(testId: string): void;
@@ -144,7 +141,9 @@ export const createTestRunner = ({
 
   const onTestsChangeCallbacks: Array<() => void> = [];
 
+  let initialized = false;
   const initialize = async () => {
+    initialized = false;
     testsState.restart();
 
     const tests = await simulatorManager.useSimulatorInstance(
@@ -165,10 +164,11 @@ export const createTestRunner = ({
         datetime: Date.now(),
       })),
     );
+    initialized = true;
   };
 
-  const status = (): TestStatus => {
-    if (!testsState.initialized()) {
+  const status = (): TestRunnerStatus => {
+    if (!initialized) {
       return "uninitialized";
     }
     if (testsState.getTests().some((t) => t.status === "running")) {

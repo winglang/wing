@@ -6,7 +6,6 @@ export const createTestStateManager = ({
   onTestsChange: (testId?: string) => void;
 }) => {
   let tests: TestItem[] = [];
-  let initialized = false;
 
   return {
     getTests: () => {
@@ -28,11 +27,8 @@ export const createTestStateManager = ({
       }
       onTestsChange(test.id);
     },
-    initialized: () => {
-      return initialized;
-    },
+
     restart: () => {
-      initialized = false;
       tests = [];
       onTestsChange();
     },
