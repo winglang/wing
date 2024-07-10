@@ -128,14 +128,13 @@ export const createTestRunner = ({
 
   // Callbacks to be called when the tests change.
   const onTestsChangeCallbacks: Array<() => void> = [];
+  const onTestsChange = () => {
+    for (const callback of onTestsChangeCallbacks) {
+      callback();
+    }
+  };
 
-  const testsState = createTestStateManager({
-    onTestsChange: () => {
-      for (const callback of onTestsChangeCallbacks) {
-        callback();
-      }
-    },
-  });
+  const testsState = createTestStateManager({ onTestsChange });
 
   const simulatorManager = createSimulatorManager({
     wingfile,
@@ -145,6 +144,9 @@ export const createTestRunner = ({
 
   const initialize = async () => {
     initialized = false;
+
+    // Notify new test runner status.
+    onTestsChange();
 
     const tests = await simulatorManager.useSimulatorInstance(
       async (simulator: Simulator) => {
@@ -185,28 +187,27 @@ export const createTestRunner = ({
 
   const runTest = async (testId: string) => {
     const test = testsState.getTest(testId);
-
-    if (test) {
-      // Set the test to running.
-      testsState.setTest({
-        ...test,
-        status: "running",
-      });
+    if (!test) {
+      return;
     }
 
-    const response = await simulatorManager.useSimulatorInstance(
+    // Set the test to running.
+    testsState.setTest({
+      ...test,
+      status: "running",
+    });
+
+    await simulatorManager.useSimulatorInstance(
       async (simulator: Simulator) => {
-        return await executeTest(simulator, testId, logger);
+        const response = await executeTest(simulator, testId, logger);
+        testsState.setTest({
+          ...test,
+          status: response.error ? "error" : "success",
+          time: response.time,
+          datetime: Date.now(),
+        });
       },
     );
-
-    testsState.setTest({
-      id: testId,
-      label: getTestName(testId),
-      status: response.error ? "error" : "success",
-      time: response.time,
-      datetime: Date.now(),
-    });
   };
 
   const runAllTests = async () => {
@@ -249,6 +250,9 @@ export const createTestRunner = ({
   };
 
   const listTests = () => {
+    if (!initialized) {
+      return [];
+    }
     return testsState.getTests();
   };
 

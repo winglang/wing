@@ -15,12 +15,12 @@ import {
   TreeView,
   useTheme,
 } from "@wingconsole/design-system";
-import type { TestItem, TestStatus } from "@wingconsole/server";
+import type { TestItem, TestRunnerStatus } from "@wingconsole/server";
 import classNames from "classnames";
 import { memo, useMemo } from "react";
 
 export interface TestTreeProps {
-  status: TestStatus;
+  status: TestRunnerStatus;
   testList: TestItem[];
   handleRunAllTests: () => void;
   handleRunTest: (testPath: string) => void;
@@ -166,19 +166,20 @@ export const TestTree = ({
                   )}
                 </div>
               )}
-
-              <TreeView
-                selectedItems={selectedItems}
-                onSelectedItemsChange={onSelectedItemsChange}
-              >
-                {testList.map((test) => (
-                  <TestTreeItem
-                    key={test.id}
-                    test={test}
-                    handleRunTest={handleRunTest}
-                  />
-                ))}
-              </TreeView>
+              {status !== "uninitialized" && testList.length > 0 && (
+                <TreeView
+                  selectedItems={selectedItems}
+                  onSelectedItemsChange={onSelectedItemsChange}
+                >
+                  {testList.map((test) => (
+                    <TestTreeItem
+                      key={test.id}
+                      test={test}
+                      handleRunTest={handleRunTest}
+                    />
+                  ))}
+                </TreeView>
+              )}
             </div>
           </ScrollableArea>
         </div>
