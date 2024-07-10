@@ -55,13 +55,21 @@ export const createSimulatorManager = ({
   ): Promise<T> => {
     const simulator = await getSimulator();
     const result = await callback(simulator);
-    simulator.stop();
+    try {
+      simulator.stop();
+    } catch (error) {
+      console.log(error);
+    }
     return result;
   };
 
   const forceStop = () => {
-    testCompiler?.stop();
-    testSimulator?.stop();
+    try {
+      testCompiler?.stop();
+      testSimulator?.stop();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return {
