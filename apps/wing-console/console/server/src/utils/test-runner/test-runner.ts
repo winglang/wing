@@ -126,7 +126,15 @@ export const createTestRunner = ({
   watchGlobs,
   logger,
 }: CreateTestRunnerProps): TestRunner => {
-  const testsState = createTestStateManager();
+  const runOnTestsChangeCallbacks = () => {
+    for (const callback of onTestsChangeCallbacks) {
+      callback();
+    }
+  };
+
+  const testsState = createTestStateManager({
+    onTestsChange: runOnTestsChangeCallbacks,
+  });
 
   const simulatorManager = createSimulatorManager({
     wingfile,
@@ -134,13 +142,7 @@ export const createTestRunner = ({
     watchGlobs,
   });
 
-  const onTestChangeCallbacks: Array<() => void> = [];
-
-  const runOnTestChangeCallbacks = () => {
-    for (const callback of onTestChangeCallbacks) {
-      callback();
-    }
-  };
+  const onTestsChangeCallbacks: Array<() => void> = [];
 
   const initialize = async () => {
     testsState.restart();
@@ -163,8 +165,6 @@ export const createTestRunner = ({
         datetime: Date.now(),
       })),
     );
-
-    runOnTestChangeCallbacks();
   };
 
   const status = (): TestStatus => {
@@ -184,6 +184,7 @@ export const createTestRunner = ({
   };
 
   const runTest = async (testId: string) => {
+    // Set the test to running.
     testsState.setTest({
       id: testId,
       label: getTestName(testId),
@@ -204,13 +205,9 @@ export const createTestRunner = ({
       time: response.time,
       datetime: Date.now(),
     });
-
-    runOnTestChangeCallbacks();
   };
 
   const runAllTests = async () => {
-    const result: InternalTestResult[] = [];
-
     // Set all tests to running.
     const testList = testsState.getTests();
     testsState.setTests(
@@ -221,25 +218,32 @@ export const createTestRunner = ({
       })),
     );
 
-    simulatorManager.useSimulatorInstance(async (simulator: Simulator) => {
-      for (const test of testList) {
-        await simulator.reload(true);
-        const response = await executeTest(simulator, test.id, logger);
-        result.push(response);
-        testsState.setTest({
-          ...test,
-          status: response.error ? "error" : "success",
-          time: response.time,
-          datetime: Date.now(),
-        });
-        const testPassed = result.filter((r) => r.pass);
-        const time = result.reduce((accumulator, r) => accumulator + r.time, 0);
-        const message = `Tests completed: ${testPassed.length}/${testList.length} passed. (${time}ms)`;
-        logger.log(message, "console", {
-          messageType: "summary",
-        });
-        runOnTestChangeCallbacks();
-      }
+    const result = await simulatorManager.useSimulatorInstance(
+      async (simulator: Simulator) => {
+        const result: InternalTestResult[] = [];
+        for (const test of testList) {
+          const response = await executeTest(simulator, test.id, logger);
+
+          testsState.setTest({
+            ...test,
+            status: response.error ? "error" : "success",
+            time: response.time,
+            datetime: Date.now(),
+          });
+
+          await simulator.reload(true);
+
+          result.push(response);
+        }
+        return result;
+      },
+    );
+
+    const testPassed = result.filter((r) => r.pass);
+    const time = result.reduce((accumulator, r) => accumulator + r.time, 0);
+    const message = `Tests completed: ${testPassed.length}/${testList.length} passed. (${time}ms)`;
+    logger.log(message, "console", {
+      messageType: "summary",
     });
   };
 
@@ -248,7 +252,7 @@ export const createTestRunner = ({
   };
 
   const onTestsChange = (callback: (testId?: string) => void) => {
-    onTestChangeCallbacks.push(callback);
+    onTestsChangeCallbacks.push(callback);
   };
 
   const stop = async () => {

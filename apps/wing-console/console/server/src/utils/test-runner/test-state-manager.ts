@@ -1,6 +1,10 @@
 import type { TestItem } from "./test-runner.js";
 
-export const createTestStateManager = () => {
+export const createTestStateManager = ({
+  onTestsChange,
+}: {
+  onTestsChange: (testId?: string) => void;
+}) => {
   let tests: TestItem[] = [];
   let initialized = false;
 
@@ -10,6 +14,7 @@ export const createTestStateManager = () => {
     },
     setTests: (newTests: TestItem[]) => {
       tests = newTests;
+      onTestsChange();
     },
     setTest: (test: TestItem) => {
       const index = tests.findIndex((t) => t.id === test.id);
@@ -18,6 +23,7 @@ export const createTestStateManager = () => {
       } else {
         tests[index] = test;
       }
+      onTestsChange(test.id);
     },
     initialized: () => {
       return initialized;
@@ -25,6 +31,7 @@ export const createTestStateManager = () => {
     restart: () => {
       initialized = false;
       tests = [];
+      onTestsChange();
     },
   };
 };
