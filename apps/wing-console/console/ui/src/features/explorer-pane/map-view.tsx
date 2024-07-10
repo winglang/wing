@@ -315,18 +315,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
     },
   );
 
-/**
- * Returns the middle point between two points with a given radius.
- */
-const midPoint = (pt1: ElkPoint, pt2: ElkPoint, radius: number) => {
-  const distance = Math.sqrt((pt2.x - pt1.x) ** 2 + (pt2.y - pt1.y) ** 2);
-  const radiusCapped = Math.min(radius, distance / 2);
-  const diffX = (pt2.x - pt1.x) / distance;
-  const diffY = (pt2.y - pt1.y) / distance;
-  return { x: pt2.x - radiusCapped * diffX, y: pt2.y - radiusCapped * diffY };
-};
-
-const RoundedEdge: FunctionComponent<
+const SimpleCurvedEdge: FunctionComponent<
   EdgeComponentProps & {
     selected?: boolean;
     highlighted?: boolean;
@@ -343,75 +332,24 @@ const RoundedEdge: FunctionComponent<
     highlighted,
     onClick,
   }) => {
-    const points = useMemo(
+    const paths = useMemo(
       () =>
-        edge.sections?.flatMap((section) => [
-          section.startPoint,
-          ...(section.bendPoints ?? []),
-          section.endPoint,
-        ]) ?? [],
+        edge.sections?.map((section) => {
+          return {
+            d: `M${section.startPoint.x},${section.startPoint.y} C${
+              section.startPoint.x + 40
+            },${section.startPoint.y} ${section.endPoint.x - 40},${
+              section.endPoint.y
+            } ${section.endPoint.x},${section.endPoint.y}`,
+            lastPoint: section.endPoint,
+          };
+        }),
       [edge.sections],
     );
 
-    const additionalPoints = useMemo(() => {
-      const additionalPoints: ElkPoint[] = [];
-      {
-        const startPoint = points[0];
-        assert(startPoint);
-        additionalPoints.push(startPoint);
-      }
-      for (let index = 0; index < points.length - 2; index++) {
-        const [start, middle, end] = points.slice(index, index + 3);
-        assert(start && middle && end);
-        additionalPoints.push(
-          midPoint(start, middle, EDGE_ROUNDED_RADIUS),
-          middle,
-          midPoint(end, middle, EDGE_ROUNDED_RADIUS),
-        );
-      }
-      {
-        const lastPoint = points.at(-1);
-        assert(lastPoint);
-        additionalPoints.push(lastPoint);
-      }
-      return additionalPoints;
-    }, [points]);
-
-    const d = useMemo(() => {
-      if (additionalPoints.length === 0) {
-        return "";
-      }
-
-      if (additionalPoints.length === 2) {
-        const [start, end] = additionalPoints;
-        assert(start);
-        assert(end);
-        return `M${start.x},${start.y} L${end.x},${end.y}`;
-      }
-
-      let path = "";
-      for (
-        let index = 0;
-        index < additionalPoints.length - 1;
-        index = index + 3
-      ) {
-        const [start, c1, c2, c3] = additionalPoints.slice(index, index + 4);
-        if (!start) {
-          return path;
-        }
-        if (c1 && c2 && c3) {
-          path = `${path} M${start.x},${start.y} L${c1.x},${c1.y} Q${c2.x},${c2.y} ${c3.x},${c3.y}`;
-        } else if (c1) {
-          path = `${path} L${c1.x},${c1.y}`;
-        }
-      }
-      return path;
-    }, [additionalPoints]);
-
-    const lastPoint = additionalPoints.at(-1);
-
-    return (
+    return paths?.map(({ d, lastPoint }, index) => (
       <svg
+        key={index}
         width={graphWidth}
         height={graphHeight}
         className={clsx(
@@ -498,7 +436,7 @@ const RoundedEdge: FunctionComponent<
           />
         </motion.g>
       </svg>
-    );
+    ));
   },
 );
 
@@ -626,7 +564,7 @@ const RenderEdge = ({
     );
 
   return (
-    <RoundedEdge
+    <SimpleCurvedEdge
       key={props.edge.id}
       {...props}
       edge={props.edge}
