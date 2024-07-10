@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import { Service } from "../../src/cloud";
 import { inflight } from "../../src/core";
-import { AwsApp } from "./aws-util";
 import { mkdtemp, tfResourcesOfCount, tfSanitize, treeJsonOf } from "../util";
 
 const INFLIGHT_CODE = inflight(async (_, name) => {

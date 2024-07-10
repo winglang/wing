@@ -15,8 +15,8 @@ import { RouteTableAssociation } from "../.gen/providers/aws/route-table-associa
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import { Subnet } from "../.gen/providers/aws/subnet";
 import { Vpc } from "../.gen/providers/aws/vpc";
-import { AppProps } from "../core";
 import { DockerProvider } from "../.gen/providers/docker/provider";
+import { AppProps } from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
 
