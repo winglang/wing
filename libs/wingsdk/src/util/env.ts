@@ -5,6 +5,9 @@ import { expand } from "dotenv-expand";
 
 const DEFAULT_ENV_FILES = [`.env`, `.env.local`];
 
+/**
+ * Options for loading environment variables.
+ */
 export interface EnvLoadOptions {
   /**
    * The directory to load the environment variables from.
