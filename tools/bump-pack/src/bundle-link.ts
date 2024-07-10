@@ -26,15 +26,12 @@ export async function linkBundledTransitiveDeps(
   workspaceDir: string,
   project: Project
 ) {
-  console.log({ workspaceDir });
   const bundledDeps =
     project.manifest.bundledDependencies ?? project.manifest.bundleDependencies;
   if (!bundledDeps || bundledDeps.length === 0) {
     // No bundled deps
     return;
   }
-
-  console.log({ workspaceDir, bundledDeps });
 
   const dependencyHierarchy = (
     await buildDependenciesHierarchy([project.dir], {
@@ -108,9 +105,6 @@ export async function linkBundledTransitiveDeps(
   }
 
   const linkedKeys = Object.keys(depsToLink);
-  console.log(
-    `Linked ${linkedKeys.length} transitive bundled deps for:\t ${project.manifest.name}`
-  );
 
   await fs.writeJSON(
     path.join(project.dir, "node_modules", ".modulelinks"),
@@ -119,7 +113,6 @@ export async function linkBundledTransitiveDeps(
 }
 
 // Run for all packages in the workspace
-console.log("BUNDLE LINKS?????");
 let workspaceDir = await findWorkspaceDir(process.cwd());
 if (!workspaceDir) {
   throw new Error("No workspace found");
