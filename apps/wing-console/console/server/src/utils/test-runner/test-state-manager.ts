@@ -30,10 +30,5 @@ export const createTestStateManager = ({
       }
       onTestsChange(test.id);
     },
-
-    restart: () => {
-      tests = [];
-      onTestsChange();
-    },
   };
 };

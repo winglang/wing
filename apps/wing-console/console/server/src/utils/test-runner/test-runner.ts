@@ -145,7 +145,6 @@ export const createTestRunner = ({
 
   const initialize = async () => {
     initialized = false;
-    testsState.restart();
 
     const tests = await simulatorManager.useSimulatorInstance(
       async (simulator: Simulator) => {
