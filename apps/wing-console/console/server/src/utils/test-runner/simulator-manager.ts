@@ -2,19 +2,22 @@ import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
+import { simulator } from "@winglang/sdk";
+
 import type { Simulator } from "../../wingsdk.js";
 import { createCompiler, type Compiler } from "../compiler.js";
-import { createSimulator } from "../simulator.js";
 
 const getSimulatorInstance = async (simfile: string) => {
   const stateDir = await mkdtemp(join(tmpdir(), "wing-console-test"));
 
-  const testSimulator = createSimulator({
+  const instance = new simulator.Simulator({
+    simfile,
     stateDir,
   });
-  await testSimulator.start(simfile);
 
-  return await testSimulator.waitForInstance();
+  await instance.start();
+
+  return instance;
 };
 
 /**
@@ -29,29 +32,27 @@ export const createSimulatorManager = ({
   platform?: string[];
   watchGlobs?: string[];
 }) => {
-  let testCompiler: Compiler;
-  let testSimulator: Simulator;
+  let simfilePath: string;
 
-  let simfilePath = "";
+  const testCompiler = createCompiler({
+    wingfile,
+    platform,
+    watchGlobs,
+    testing: true,
+  });
+  testCompiler.on("compiled", async ({ simfile }) => {
+    simfilePath = simfile;
+  });
 
   const getSimulator = async () => {
-    if (testCompiler && simfilePath) {
-      testSimulator = await getSimulatorInstance(simfilePath);
-      return testSimulator;
+    if (simfilePath) {
+      return await getSimulatorInstance(simfilePath);
     }
-
-    testCompiler = createCompiler({
-      wingfile,
-      platform,
-      watchGlobs,
-      testing: true,
-    });
 
     return new Promise<Simulator>(async (resolve) => {
       testCompiler.on("compiled", async ({ simfile }) => {
         simfilePath = simfile;
-        testSimulator = await getSimulatorInstance(simfile);
-        resolve(testSimulator);
+        resolve(await getSimulator());
       });
     });
   };
