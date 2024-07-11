@@ -1,17 +1,13 @@
-import { mkdtempSync } from "node:fs";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-
-import uniqueid from "lodash.uniqueid";
 
 import type { Simulator } from "../../wingsdk.js";
 import { createCompiler, type Compiler } from "../compiler.js";
 import { createSimulator } from "../simulator.js";
 
 const getSimulatorInstance = async (simfile: string) => {
-  const stateDir = mkdtempSync(
-    join(tmpdir(), `pwing-console-test-${uniqueid()}`),
-  );
+  const stateDir = await mkdtemp(join(tmpdir(), "wing-console-test"));
 
   const testSimulator = createSimulator({
     stateDir,
