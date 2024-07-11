@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode, KeyboardEvent } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   createContext,
   useCallback,
@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { PropsWithChildren, ReactNode, KeyboardEvent } from "react";
 
 import { useTreeContext } from "./tree-context.js";
 
@@ -162,13 +163,20 @@ export const TreeItem = ({
       )}
       {Content && typeof Content !== "function" && Content}
 
-      <ul role="group" style={{ display: expanded ? undefined : "none" }}>
+      <motion.ul
+        role="group"
+        style={{ overflow: "hidden" }}
+        initial={{ opacity: 0, height: 0 }}
+        animate={{ opacity: expanded ? 1 : 0, height: expanded ? "auto" : 0 }}
+        exit={{ opacity: 0, height: 0 }}
+        transition={{ duration: 0.15 }}
+      >
         <treeItemContext.Provider
           value={{ itemId, indentation: indentation + 1 }}
         >
           {children}
         </treeItemContext.Provider>
-      </ul>
+      </motion.ul>
     </li>
   );
 };

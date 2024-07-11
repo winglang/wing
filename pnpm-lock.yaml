@@ -561,6 +561,9 @@ importers:
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
+      framer-motion:
+        specifier: ^10.18.0
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
       lodash.escape:
         specifier: ^4.0.1
         version: 4.0.1
@@ -14359,7 +14362,7 @@ packages:
     dependencies:
       semver: 7.6.2
       shelljs: 0.8.5
-      typescript: 5.6.0-dev.20240703
+      typescript: 5.6.0-dev.20240711
     dev: true
 
   /dset@3.1.3:
@@ -22677,8 +22680,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.6.0-dev.20240703:
-    resolution: {integrity: sha512-AAOGWtykhMpxB4l+5CwojT2aBVAszalz9guzYaZMavmKHWxm3HciR+cIcKqDgR22hR7fPBJHtOti7uFCo4mt4A==}
+  /typescript@5.6.0-dev.20240711:
+    resolution: {integrity: sha512-7P96lBbF9T4qBB2IseUQBz/IakXa9a0zLOywLmWTZQB6EFbRnRMlwa7103Q44mwI8tfvdXRmed3ICuxHxSNUwA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
