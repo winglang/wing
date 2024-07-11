@@ -51,6 +51,24 @@ export interface CreateTestRunnerProps {
   logger: ConsoleLogger;
 }
 
+const getTestPaths = (node: ConstructTreeNode) => {
+  let tests: string[] = [];
+  if (node.constructInfo?.fqn === "@winglang/sdk.std.Test") {
+    for (const child of Object.values(node.children ?? {})) {
+      if (child.id === "Handler") {
+        tests.push(node.path);
+        break;
+      }
+    }
+  }
+  if (node.children) {
+    for (const child of Object.values(node.children)) {
+      tests.push(...getTestPaths(child));
+    }
+  }
+  return tests;
+};
+
 const getTestName = (testPath: string) => {
   const test = testPath.split("/").pop() ?? testPath;
   return test.replaceAll("test:", "");
@@ -181,20 +199,7 @@ export const createTestRunner = ({
 
     const { tree } = simulator.tree().rawData();
 
-    const tests: string[] = [];
-
-    const searchTests = (node: ConstructTreeNode) => {
-      if (
-        node.constructInfo?.fqn === "@winglang/sdk.std.Test" &&
-        node.path.startsWith("root/env0/")
-      ) {
-        tests.push(node.path);
-      }
-      for (const child of Object.values(node.children ?? {})) {
-        searchTests(child);
-      }
-    };
-    searchTests(tree);
+    const tests = getTestPaths(tree);
 
     // Notify initialization completed.
     testRunnerState = "idle";
@@ -272,8 +277,7 @@ export const createTestRunner = ({
 
     const result = await simulatorManager.useSimulatorInstance(
       async (simulator: Simulator) => {
-        const result: InternalTestResult[] = [];
-        for (const test of testList) {
+        const promises = testList.map(async (test) => {
           const response = await executeTest(simulator, test.id, logger);
 
           testsState.setTest({
@@ -283,9 +287,9 @@ export const createTestRunner = ({
             datetime: Date.now(),
           });
 
-          result.push(response);
-        }
-        return result;
+          return response;
+        });
+        return await Promise.all(promises);
       },
     );
 
@@ -298,7 +302,7 @@ export const createTestRunner = ({
   };
 
   const listTests = () => {
-    if (!testRunnerState) {
+    if (testRunnerState === "uninitialized") {
       return [];
     }
     return testsState.getTests();
