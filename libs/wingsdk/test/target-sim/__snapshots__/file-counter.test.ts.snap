@@ -23,7 +23,7 @@ exports.handler = async function(event) {
                 throw new Error('No "messages" field in event.');
             }
             return batchItemFailures.length > 0
-                ? std_1.Json._fromAny(batchItemFailures)
+                ? batchItemFailures
                 : undefined;
         }
   const $ctx = {
