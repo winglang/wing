@@ -1767,12 +1767,11 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_anonymous_closure(
-		&self,
-		anon_closure_node: &Node,
-		scope_phase: Phase,
-	) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(None, anon_closure_node, scope_phase, false, None)
+	fn build_anonymous_closure(&self, anon_closure_node: &Node, scope_phase: Phase) -> DiagnosticResult<Expr> {
+		Ok(Expr::new(
+			ExprKind::FunctionClosure(self.build_function_definition(None, anon_closure_node, scope_phase, false, None)?),
+			self.node_span(&anon_closure_node),
+		))
 	}
 
 	fn build_function_definition(
@@ -2232,367 +2231,29 @@ impl<'s> Parser<'s> {
 		CompilationContext::set(CompilationPhase::Parsing, &expression_span);
 		let expression_node = &self.check_error(*exp_node, "expression")?;
 		match expression_node.kind() {
-			"new_expression" => {
-				let class_udt = self.build_udt(&expression_node.child_by_field_name("class").unwrap())?;
-
-				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
-					self.build_arg_list(&args_node, phase)
-				} else {
-					Ok(ArgList::new_empty(WingSpan::default()))
-				};
-
-				let obj_id = if let Some(id_node) = expression_node.child_by_field_name("id") {
-					Some(Box::new(self.build_expression(&id_node, phase)?))
-				} else {
-					None
-				};
-				let obj_scope = if let Some(scope_expr_node) = expression_node.child_by_field_name("scope") {
-					Some(Box::new(self.build_expression(&scope_expr_node, phase)?))
-				} else {
-					None
-				};
-
-				Ok(Expr::new(
-					ExprKind::New(New {
-						class: class_udt,
-						obj_id,
-						arg_list: arg_list?,
-						obj_scope,
-					}),
-					expression_span,
-				))
-			}
-			"binary_expression" => Ok(Expr::new(
-				ExprKind::Binary {
-					left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap(), phase)?),
-					right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap(), phase)?),
-					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
-						"+" => BinaryOperator::AddOrConcat,
-						"-" => BinaryOperator::Sub,
-						"==" => BinaryOperator::Equal,
-						"!=" => BinaryOperator::NotEqual,
-						">" => BinaryOperator::Greater,
-						">=" => BinaryOperator::GreaterOrEqual,
-						"<" => BinaryOperator::Less,
-						"<=" => BinaryOperator::LessOrEqual,
-						"&&" => BinaryOperator::LogicalAnd,
-						"||" => BinaryOperator::LogicalOr,
-						"%" => BinaryOperator::Mod,
-						"*" => BinaryOperator::Mul,
-						"/" => BinaryOperator::Div,
-						"\\" => BinaryOperator::FloorDiv,
-						"**" => BinaryOperator::Power,
-						"??" => BinaryOperator::UnwrapOr,
-						"ERROR" => self.with_error::<BinaryOperator>("Expected binary operator", expression_node)?,
-						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
-					},
-				},
-				expression_span,
-			)),
-			"unary_expression" => Ok(Expr::new(
-				ExprKind::Unary {
-					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
-						"-" => UnaryOperator::Minus,
-						"!" => UnaryOperator::Not,
-						"ERROR" => self.with_error::<UnaryOperator>("Expected unary operator", expression_node)?,
-						other => return self.report_unimplemented_grammar(other, "unary operator", expression_node),
-					},
-					exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap(), phase)?),
-				},
-				expression_span,
-			)),
-			"non_interpolated_string" => {
-				// skipping the first #
-				let byte_range = (expression_node.start_byte() + 1)..expression_node.end_byte();
-				Ok(Expr::new(
-					ExprKind::Literal(Literal::NonInterpolatedString(
-						self.node_text_from_range(byte_range).into(),
-					)),
-					expression_span,
-				))
-			}
-			"string" => {
-				if expression_node.named_child_count() == 0 {
-					Ok(Expr::new(
-						ExprKind::Literal(Literal::String(self.node_text(&expression_node).into())),
-						expression_span,
-					))
-				} else {
-					// We must go over the string and separate it into parts (static and expr)
-					let mut cursor = expression_node.walk();
-					let mut parts = Vec::new();
-
-					// Skip first and last quote
-					let end = expression_node.end_byte() - 1;
-					let start = expression_node.start_byte() + 1;
-					let mut last_start = start;
-					let mut last_end = end;
-					let mut start_from = last_end;
-
-					for interpolation_node in expression_node.named_children(&mut cursor) {
-						if interpolation_node.is_extra() {
-							continue;
-						}
-						let interpolation_start = interpolation_node.start_byte();
-						let interpolation_end = interpolation_node.end_byte();
-
-						if start == last_start && interpolation_start < last_end {
-							start_from = last_start;
-						}
-
-						parts.push(InterpolatedStringPart::Static(
-							str::from_utf8(&self.source[start_from..interpolation_start])
-								.unwrap()
-								.into(),
-						));
-
-						parts.push(InterpolatedStringPart::Expr(
-							self.build_expression(&interpolation_node.named_child(0).unwrap(), phase)?,
-						));
-
-						last_start = interpolation_start;
-						last_end = interpolation_end;
-						start_from = last_end;
-					}
-
-					parts.push(InterpolatedStringPart::Static(
-						str::from_utf8(&self.source[last_end..end]).unwrap().into(),
-					));
-
-					Ok(Expr::new(
-						ExprKind::Literal(Literal::InterpolatedString(InterpolatedString { parts })),
-						expression_span,
-					))
-				}
-			}
-			"loop_range" => {
-				let inclusive = if expression_node.child_by_field_name("inclusive").is_some() {
-					Some(true)
-				} else {
-					Some(false)
-				};
-				Ok(Expr::new(
-					ExprKind::Range {
-						start: Box::new(
-							self.build_expression(
-								&expression_node
-									.child_by_field_name("start")
-									.expect("range expression should always include start"),
-								phase,
-							)?,
-						),
-						inclusive: inclusive,
-						end: Box::new(
-							self.build_expression(
-								&expression_node
-									.child_by_field_name("end")
-									.expect("range expression should always include end"),
-								phase,
-							)?,
-						),
-					},
-					expression_span,
-				))
-			}
-			"number" => Ok(Expr::new(
-				ExprKind::Literal(Literal::Number(parse_number(self.node_text(&expression_node)))),
-				expression_span,
-			)),
-			"nil_value" => Ok(Expr::new(ExprKind::Literal(Literal::Nil), expression_span)),
-			"bool" => Ok(Expr::new(
-				ExprKind::Literal(Literal::Boolean(match self.node_text(&expression_node) {
-					"true" => true,
-					"false" => false,
-					"ERROR" => self.with_error::<bool>("Expected boolean literal", expression_node)?,
-					other => return self.report_unimplemented_grammar(other, "boolean literal", expression_node),
-				})),
-				expression_span,
-			)),
-			"intrinsic" => {
-				let name = self.node_symbol(&self.get_child_field(expression_node, "name")?)?;
-				let kind = IntrinsicKind::from_str(&name.name);
-				let arg_list = if let Some(arg_node) = expression_node.child_by_field_name("args") {
-					Some(self.build_arg_list(&arg_node, phase)?)
-				} else {
-					None
-				};
-
-				if matches!(kind, IntrinsicKind::Unknown) {
-					self.add_error("Invalid intrinsic", &expression_node);
-				}
-
-				Ok(Expr::new(
-					ExprKind::Intrinsic(Intrinsic { name, arg_list, kind }),
-					expression_span,
-				))
-			}
+			"new_expression" => self.build_new_expression(&expression_node, phase),
+			"binary_expression" => self.build_binary_expression(&expression_node, phase),
+			"unary_expression" => self.build_unary_expression(&expression_node, phase),
+			"non_interpolated_string" => self.build_non_interpolated_string(&expression_node, phase),
+			"string" => self.build_string_expression(&expression_node, phase),
+			"loop_range" => self.build_loop_range_expression(&expression_node, phase),
+			"number" => self.build_number_expression(&expression_node, phase),
+			"nil_value" => self.build_nil_expression(&expression_node, phase),
+			"bool" => self.build_bool_expression(&expression_node, phase),
+			"intrinsic" => self.build_intrinsic_expression(&expression_node, phase),
 			"duration" => self.build_duration(&expression_node),
 			"reference" => self.build_reference(&expression_node, phase),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
-			"call" => {
-				let caller_node = expression_node.child_by_field_name("caller").unwrap();
-				let callee = if caller_node.kind() == "super_call" {
-					CalleeKind::SuperCall(self.node_symbol(&caller_node.child_by_field_name("method").unwrap())?)
-				} else {
-					CalleeKind::Expr(Box::new(self.build_expression(&caller_node, phase)?))
-				};
-				Ok(Expr::new(
-					ExprKind::Call {
-						callee,
-						arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap(), phase)?,
-					},
-					expression_span,
-				))
-			}
+			"call" => self.build_call_expression(&expression_node, phase),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
-			"closure" => Ok(Expr::new(
-				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, phase)?),
-				expression_span,
-			)),
-			"array_literal" => {
-				let array_type = if let Some(type_node) = get_actual_child_by_field_name(*expression_node, "type") {
-					self.build_type_annotation(Some(type_node), phase).ok()
-				} else {
-					None
-				};
-
-				// check if the array type is annotated as a Set/MutSet
-				// if so, we should build a set literal instead
-				if let Some(TypeAnnotation { kind, .. }) = &array_type {
-					if matches!(kind, TypeAnnotationKind::Set(_) | TypeAnnotationKind::MutSet(_)) {
-						return self.build_set_literal(expression_node, phase);
-					}
-				}
-
-				let mut items = Vec::new();
-				let mut cursor = expression_node.walk();
-				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
-					items.push(self.build_expression(&element_node, phase)?);
-				}
-
-				Ok(Expr::new(
-					ExprKind::ArrayLiteral {
-						items,
-						type_: array_type,
-					},
-					expression_span,
-				))
-			}
-			"json_map_literal" => {
-				let fields = self.build_json_map_fields(expression_node, phase)?;
-				Ok(Expr::new(ExprKind::JsonMapLiteral { fields }, expression_span))
-			}
-			"map_literal" => {
-				let map_type = if let Some(type_node) = get_actual_child_by_field_name(*expression_node, "type") {
-					self.build_type_annotation(Some(type_node), phase).ok()
-				} else {
-					None
-				};
-
-				let fields = self.build_map_fields(expression_node, phase)?;
-
-				Ok(Expr::new(
-					ExprKind::MapLiteral {
-						fields,
-						type_: map_type,
-					},
-					expression_span,
-				))
-			}
-			"json_literal" => {
-				let type_node = expression_node.child_by_field_name("type");
-				*self.in_json.borrow_mut() += 1;
-
-				let mut is_mut = *self.is_in_mut_json.borrow();
-
-				if let Some(type_node) = type_node {
-					is_mut = match self.node_text(&type_node) {
-						"MutJson" => {
-							*self.is_in_mut_json.borrow_mut() = true;
-							true
-						}
-						_ => false,
-					};
-				}
-
-				let element_node = expression_node
-					.child_by_field_name("element")
-					.expect("Should always have element");
-
-				let named_element_child = element_node.named_child(0);
-				let exp = if element_node.kind() == "reference"
-					&& named_element_child
-						.expect("references always have a child")
-						.is_missing()
-				{
-					self.add_error("Json literal must have an element", &named_element_child.unwrap());
-					Expr::new(ExprKind::Literal(Literal::Number(0.0)), self.node_span(&element_node))
-				} else {
-					self.build_expression(&element_node, phase)?
-				};
-
-				*self.in_json.borrow_mut() -= 1;
-
-				// Only set mutability back to false if we are no longer parsing nested json
-				if *self.in_json.borrow() == 0 {
-					*self.is_in_mut_json.borrow_mut() = false;
-				}
-
-				// avoid unnecessary wrapping of json elements
-				if matches!(exp.kind, ExprKind::JsonLiteral { .. }) {
-					return Ok(exp);
-				}
-
-				let element = Box::new(exp);
-				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
-			}
-			"struct_literal" => {
-				let type_ = self.build_type_annotation(get_actual_child_by_field_name(*expression_node, "type"), phase);
-				let mut fields = IndexMap::new();
-				let mut cursor = expression_node.walk();
-				for field in expression_node.children_by_field_name("fields", &mut cursor) {
-					if !field.is_named() || field.is_extra() {
-						continue;
-					}
-					let field_name = self.node_symbol(&field.named_child(0).unwrap());
-					let field_value = if let Some(field_expr_node) = field.named_child(1) {
-						self.build_expression(&field_expr_node, phase)
-					} else {
-						if let Ok(field_name) = &field_name {
-							Ok(Expr::new(
-								ExprKind::Reference(Reference::Identifier(field_name.clone())),
-								self.node_span(&field),
-							))
-						} else {
-							Err(())
-						}
-					};
-
-					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
-					if let (Ok(k), Ok(v)) = (field_name, field_value) {
-						if fields.contains_key(&k) {
-							self.add_error(format!("Duplicate field {} in struct literal", k), expression_node);
-						} else {
-							fields.insert(k, v);
-						}
-					}
-				}
-				Ok(Expr::new(
-					ExprKind::StructLiteral { type_: type_?, fields },
-					expression_span,
-				))
-			}
-			"optional_unwrap" => {
-				let expression = self.build_expression(&expression_node.named_child(0).unwrap(), phase);
-				Ok(Expr::new(
-					ExprKind::Unary {
-						op: UnaryOperator::OptionalUnwrap,
-						exp: Box::new(expression?),
-					},
-					expression_span,
-				))
-			}
+			"closure" => self.build_anonymous_closure(&expression_node, phase),
+			"array_literal" => self.build_array_literal(&expression_node, phase),
+			"json_map_literal" => self.build_json_map_literal(expression_node, phase),
+			"map_literal" => self.build_map_literal(&expression_node, phase),
+			"json_literal" => self.build_json_literal(&expression_node, phase),
+			"struct_literal" => self.build_struct_literal(&expression_node, phase),
+			"optional_unwrap" => self.build_optional_unwrap_expression(&expression_node, phase),
 			"compiler_dbg_panic" => {
 				// Handle the debug panic expression (during parsing)
 				dbg_panic!();
@@ -2602,7 +2263,271 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_json_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
+	fn build_new_expression(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let class_udt = self.build_udt(&expression_node.child_by_field_name("class").unwrap())?;
+
+		let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
+			self.build_arg_list(&args_node, phase)
+		} else {
+			Ok(ArgList::new_empty(WingSpan::default()))
+		};
+
+		let obj_id = if let Some(id_node) = expression_node.child_by_field_name("id") {
+			Some(Box::new(self.build_expression(&id_node, phase)?))
+		} else {
+			None
+		};
+		let obj_scope = if let Some(scope_expr_node) = expression_node.child_by_field_name("scope") {
+			Some(Box::new(self.build_expression(&scope_expr_node, phase)?))
+		} else {
+			None
+		};
+
+		Ok(Expr::new(
+			ExprKind::New(New {
+				class: class_udt,
+				obj_id,
+				arg_list: arg_list?,
+				obj_scope,
+			}),
+			self.node_span(expression_node),
+		))
+	}
+
+	fn build_binary_expression(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		Ok(Expr::new(
+			ExprKind::Binary {
+				left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap(), phase)?),
+				right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap(), phase)?),
+				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
+					"+" => BinaryOperator::AddOrConcat,
+					"-" => BinaryOperator::Sub,
+					"==" => BinaryOperator::Equal,
+					"!=" => BinaryOperator::NotEqual,
+					">" => BinaryOperator::Greater,
+					">=" => BinaryOperator::GreaterOrEqual,
+					"<" => BinaryOperator::Less,
+					"<=" => BinaryOperator::LessOrEqual,
+					"&&" => BinaryOperator::LogicalAnd,
+					"||" => BinaryOperator::LogicalOr,
+					"%" => BinaryOperator::Mod,
+					"*" => BinaryOperator::Mul,
+					"/" => BinaryOperator::Div,
+					"\\" => BinaryOperator::FloorDiv,
+					"**" => BinaryOperator::Power,
+					"??" => BinaryOperator::UnwrapOr,
+					"ERROR" => self.with_error::<BinaryOperator>("Expected binary operator", expression_node)?,
+					other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
+				},
+			},
+			self.node_span(expression_node),
+		))
+	}
+
+	fn build_unary_expression(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		Ok(Expr::new(
+			ExprKind::Unary {
+				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
+					"-" => UnaryOperator::Minus,
+					"!" => UnaryOperator::Not,
+					"ERROR" => self.with_error::<UnaryOperator>("Expected unary operator", expression_node)?,
+					other => return self.report_unimplemented_grammar(other, "unary operator", expression_node),
+				},
+				exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap(), phase)?),
+			},
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_non_interpolated_string(&self, expression_node: &Node, _phase: Phase) -> Result<Expr, ()> {
+		// skipping the first #
+		let byte_range = (expression_node.start_byte() + 1)..expression_node.end_byte();
+		Ok(Expr::new(
+			ExprKind::Literal(Literal::NonInterpolatedString(
+				self.node_text_from_range(byte_range).into(),
+			)),
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_string_expression(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let span = self.node_span(&expression_node);
+		if expression_node.named_child_count() == 0 {
+			Ok(Expr::new(
+				ExprKind::Literal(Literal::String(self.node_text(&expression_node).into())),
+				span,
+			))
+		} else {
+			// We must go over the string and separate it into parts (static and expr)
+			let mut cursor = expression_node.walk();
+			let mut parts = Vec::new();
+
+			// Skip first and last quote
+			let end = expression_node.end_byte() - 1;
+			let start = expression_node.start_byte() + 1;
+			let mut last_start = start;
+			let mut last_end = end;
+			let mut start_from = last_end;
+
+			for interpolation_node in expression_node.named_children(&mut cursor) {
+				if interpolation_node.is_extra() {
+					continue;
+				}
+				let interpolation_start = interpolation_node.start_byte();
+				let interpolation_end = interpolation_node.end_byte();
+
+				if start == last_start && interpolation_start < last_end {
+					start_from = last_start;
+				}
+
+				parts.push(InterpolatedStringPart::Static(
+					str::from_utf8(&self.source[start_from..interpolation_start])
+						.unwrap()
+						.into(),
+				));
+
+				parts.push(InterpolatedStringPart::Expr(
+					self.build_expression(&interpolation_node.named_child(0).unwrap(), phase)?,
+				));
+
+				last_start = interpolation_start;
+				last_end = interpolation_end;
+				start_from = last_end;
+			}
+
+			parts.push(InterpolatedStringPart::Static(
+				str::from_utf8(&self.source[last_end..end]).unwrap().into(),
+			));
+
+			Ok(Expr::new(
+				ExprKind::Literal(Literal::InterpolatedString(InterpolatedString { parts })),
+				span,
+			))
+		}
+	}
+
+	fn build_loop_range_expression(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let inclusive = if expression_node.child_by_field_name("inclusive").is_some() {
+			Some(true)
+		} else {
+			Some(false)
+		};
+		Ok(Expr::new(
+			ExprKind::Range {
+				start: Box::new(
+					self.build_expression(
+						&expression_node
+							.child_by_field_name("start")
+							.expect("range expression should always include start"),
+						phase,
+					)?,
+				),
+				inclusive: inclusive,
+				end: Box::new(
+					self.build_expression(
+						&expression_node
+							.child_by_field_name("end")
+							.expect("range expression should always include end"),
+						phase,
+					)?,
+				),
+			},
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_number_expression(&self, expression_node: &Node, _phase: Phase) -> Result<Expr, ()> {
+		Ok(Expr::new(
+			ExprKind::Literal(Literal::Number(parse_number(self.node_text(&expression_node)))),
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_nil_expression(&self, expression_node: &Node, _phase: Phase) -> Result<Expr, ()> {
+		Ok(Expr::new(
+			ExprKind::Literal(Literal::Nil),
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_bool_expression(&self, expression_node: &Node, _phase: Phase) -> Result<Expr, ()> {
+		Ok(Expr::new(
+			ExprKind::Literal(Literal::Boolean(match self.node_text(&expression_node) {
+				"true" => true,
+				"false" => false,
+				"ERROR" => self.with_error::<bool>("Expected boolean literal", expression_node)?,
+				other => return self.report_unimplemented_grammar(other, "boolean literal", expression_node),
+			})),
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_intrinsic_expression(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let name = self.node_symbol(&self.get_child_field(expression_node, "name")?)?;
+		let kind = IntrinsicKind::from_str(&name.name);
+		let arg_list = if let Some(arg_node) = expression_node.child_by_field_name("args") {
+			Some(self.build_arg_list(&arg_node, phase)?)
+		} else {
+			None
+		};
+
+		if matches!(kind, IntrinsicKind::Unknown) {
+			self.add_error("Invalid intrinsic", &expression_node);
+		}
+
+		Ok(Expr::new(
+			ExprKind::Intrinsic(Intrinsic { name, arg_list, kind }),
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_call_expression(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let caller_node = expression_node.child_by_field_name("caller").unwrap();
+		let callee = if caller_node.kind() == "super_call" {
+			CalleeKind::SuperCall(self.node_symbol(&caller_node.child_by_field_name("method").unwrap())?)
+		} else {
+			CalleeKind::Expr(Box::new(self.build_expression(&caller_node, phase)?))
+		};
+		Ok(Expr::new(
+			ExprKind::Call {
+				callee,
+				arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap(), phase)?,
+			},
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_array_literal(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let array_type = if let Some(type_node) = get_actual_child_by_field_name(*expression_node, "type") {
+			self.build_type_annotation(Some(type_node), phase).ok()
+		} else {
+			None
+		};
+
+		// check if the array type is annotated as a Set/MutSet
+		// if so, we should build a set literal instead
+		if let Some(TypeAnnotation { kind, .. }) = &array_type {
+			if matches!(kind, TypeAnnotationKind::Set(_) | TypeAnnotationKind::MutSet(_)) {
+				return self.build_set_literal(expression_node, phase);
+			}
+		}
+
+		let mut items = Vec::new();
+		let mut cursor = expression_node.walk();
+		for element_node in expression_node.children_by_field_name("element", &mut cursor) {
+			items.push(self.build_expression(&element_node, phase)?);
+		}
+
+		Ok(Expr::new(
+			ExprKind::ArrayLiteral {
+				items,
+				type_: array_type,
+			},
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_json_map_literal(&self, expression_node: &Node<'_>, phase: Phase) -> Result<Expr, ()> {
 		let mut fields = IndexMap::new();
 		let mut cursor = expression_node.walk();
 		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
@@ -2631,10 +2556,131 @@ impl<'s> Parser<'s> {
 				fields.insert(key, value);
 			}
 		}
-		Ok(fields)
+
+		Ok(Expr::new(
+			ExprKind::JsonMapLiteral { fields },
+			self.node_span(&expression_node),
+		))
 	}
 
-	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<Vec<(Expr, Expr)>, ()> {
+	fn build_map_literal(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let map_type = if let Some(type_node) = get_actual_child_by_field_name(*expression_node, "type") {
+			self.build_type_annotation(Some(type_node), phase).ok()
+		} else {
+			None
+		};
+
+		let fields = self.build_map_fields(expression_node, phase)?;
+
+		Ok(Expr::new(
+			ExprKind::MapLiteral {
+				fields,
+				type_: map_type,
+			},
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_json_literal(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let type_node = expression_node.child_by_field_name("type");
+		*self.in_json.borrow_mut() += 1;
+
+		let mut is_mut = *self.is_in_mut_json.borrow();
+
+		if let Some(type_node) = type_node {
+			is_mut = match self.node_text(&type_node) {
+				"MutJson" => {
+					*self.is_in_mut_json.borrow_mut() = true;
+					true
+				}
+				_ => false,
+			};
+		}
+
+		let element_node = expression_node
+			.child_by_field_name("element")
+			.expect("Should always have element");
+
+		let named_element_child = element_node.named_child(0);
+		let exp = if element_node.kind() == "reference"
+			&& named_element_child
+				.expect("references always have a child")
+				.is_missing()
+		{
+			self.add_error("Json literal must have an element", &named_element_child.unwrap());
+			Expr::new(ExprKind::Literal(Literal::Number(0.0)), self.node_span(&element_node))
+		} else {
+			self.build_expression(&element_node, phase)?
+		};
+
+		*self.in_json.borrow_mut() -= 1;
+
+		// Only set mutability back to false if we are no longer parsing nested json
+		if *self.in_json.borrow() == 0 {
+			*self.is_in_mut_json.borrow_mut() = false;
+		}
+
+		// avoid unnecessary wrapping of json elements
+		if matches!(exp.kind, ExprKind::JsonLiteral { .. }) {
+			return Ok(exp);
+		}
+
+		let element = Box::new(exp);
+		Ok(Expr::new(
+			ExprKind::JsonLiteral { is_mut, element },
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_struct_literal(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let type_ = self.build_type_annotation(get_actual_child_by_field_name(*expression_node, "type"), phase);
+		let mut fields = IndexMap::new();
+		let mut cursor = expression_node.walk();
+		for field in expression_node.children_by_field_name("fields", &mut cursor) {
+			if !field.is_named() || field.is_extra() {
+				continue;
+			}
+			let field_name = self.node_symbol(&field.named_child(0).unwrap());
+			let field_value = if let Some(field_expr_node) = field.named_child(1) {
+				self.build_expression(&field_expr_node, phase)
+			} else {
+				if let Ok(field_name) = &field_name {
+					Ok(Expr::new(
+						ExprKind::Reference(Reference::Identifier(field_name.clone())),
+						self.node_span(&field),
+					))
+				} else {
+					Err(())
+				}
+			};
+
+			// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
+			if let (Ok(k), Ok(v)) = (field_name, field_value) {
+				if fields.contains_key(&k) {
+					self.add_error(format!("Duplicate field {} in struct literal", k), expression_node);
+				} else {
+					fields.insert(k, v);
+				}
+			}
+		}
+		Ok(Expr::new(
+			ExprKind::StructLiteral { type_: type_?, fields },
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_optional_unwrap_expression(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let expression = self.build_expression(&expression_node.named_child(0).unwrap(), phase);
+		Ok(Expr::new(
+			ExprKind::Unary {
+				op: UnaryOperator::OptionalUnwrap,
+				exp: Box::new(expression?),
+			},
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_map_fields(&self, expression_node: &Node, phase: Phase) -> Result<Vec<(Expr, Expr)>, ()> {
 		let mut fields = vec![];
 		let mut cursor = expression_node.walk();
 		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
