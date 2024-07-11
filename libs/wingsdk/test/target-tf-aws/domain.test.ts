@@ -1,10 +1,8 @@
 import path from "path";
 import { beforeEach, describe, expect, test } from "vitest";
+import { AwsApp } from "./aws-util";
 import * as cloud from "../../src/cloud";
-import * as ex from "../../src/ex";
-import * as tfaws from "../../src/target-tf-aws";
 import {
-  mkdtemp,
   tfResourcesOf,
   tfResourcesWithProperty,
   tfSanitize,
@@ -41,7 +39,7 @@ describe("cloud.Domain for tf-aws", () => {
     // GIVEN
     process.env.WING_VALUES =
       "root/Default/Domain/hostedZoneId=Z0111111111111111111F,root/Default/Domain/acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = new AwsApp();
     const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
     });
@@ -78,7 +76,7 @@ describe("cloud.Domain for tf-aws", () => {
   test("website with a domain when passing values from file", () => {
     // GIVEN
     process.env.WING_VALUES_FILE = __dirname + "/domain.values.yaml";
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = new AwsApp();
     const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
     });
@@ -115,10 +113,7 @@ describe("cloud.Domain for tf-aws", () => {
   test("default domain behavior without hostedZoneId and certificate information", () => {
     expect(() => {
       // GIVEN
-      const app = new tfaws.App({
-        outdir: mkdtemp(),
-        entrypointDir: __dirname,
-      });
+      const app = new AwsApp();
       new cloud.Domain(app, "Domain", {
         domainName: "www.example.com",
       });

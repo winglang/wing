@@ -16,7 +16,6 @@ test("create a Redis resource", async () => {
   expect(redisResource).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_redis",
     addr: expect.any(String),

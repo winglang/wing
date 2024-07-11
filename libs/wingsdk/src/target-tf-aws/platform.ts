@@ -1,5 +1,39 @@
+import { Construct } from "constructs";
+import { Api } from "./api";
 import { App } from "./app";
+import { Bucket } from "./bucket";
+import { Counter } from "./counter";
+import { Endpoint } from "./endpoint";
+import { Function } from "./function";
+import { OnDeploy } from "./on-deploy";
+import { Queue } from "./queue";
+import { Redis } from "./redis";
+import { Schedule } from "./schedule";
+import { Secret } from "./secret";
+import { Service } from "./service";
+import { Table } from "./table";
+import { TestRunner } from "./test-runner";
+import { Topic } from "./topic";
+import { Website } from "./website";
+import {
+  API_FQN,
+  BUCKET_FQN,
+  COUNTER_FQN,
+  DOMAIN_FQN,
+  ENDPOINT_FQN,
+  FUNCTION_FQN,
+  ON_DEPLOY_FQN,
+  QUEUE_FQN,
+  SCHEDULE_FQN,
+  SECRET_FQN,
+  SERVICE_FQN,
+  TOPIC_FQN,
+  WEBSITE_FQN,
+} from "../cloud";
+import { REDIS_FQN, TABLE_FQN } from "../ex";
 import { IPlatform } from "../platform";
+import { Domain } from "../shared-aws/domain";
+import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * AWS Terraform Platform
@@ -64,8 +98,79 @@ export class Platform implements IPlatform {
     },
   };
 
-  public newApp?(appProps: any): any {
+  public newApp(appProps: any): any {
     return new App(appProps);
+  }
+
+  public newInstance(
+    type: string,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    const Type = this.resolveType(type);
+    if (Type) {
+      return new Type(scope, id, ...args);
+    }
+
+    return undefined;
+  }
+
+  public resolveType(fqn: string): any {
+    switch (fqn) {
+      case API_FQN:
+        return Api;
+
+      case FUNCTION_FQN:
+        return Function;
+
+      case BUCKET_FQN:
+        return Bucket;
+
+      case QUEUE_FQN:
+        return Queue;
+
+      case TOPIC_FQN:
+        return Topic;
+
+      case COUNTER_FQN:
+        return Counter;
+
+      case SCHEDULE_FQN:
+        return Schedule;
+
+      case TABLE_FQN:
+        return Table;
+
+      case TOPIC_FQN:
+        return Topic;
+
+      case TEST_RUNNER_FQN:
+        return TestRunner;
+
+      case REDIS_FQN:
+        return Redis;
+
+      case WEBSITE_FQN:
+        return Website;
+
+      case SECRET_FQN:
+        return Secret;
+
+      case ON_DEPLOY_FQN:
+        return OnDeploy;
+
+      case DOMAIN_FQN:
+        return Domain;
+
+      case ENDPOINT_FQN:
+        return Endpoint;
+
+      case SERVICE_FQN:
+        return Service;
+    }
+
+    return undefined;
   }
 
   public async storeSecrets(secrets: Record<string, string>): Promise<void> {

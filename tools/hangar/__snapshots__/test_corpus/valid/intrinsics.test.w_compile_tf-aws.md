@@ -320,6 +320,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -445,16 +446,15 @@ class $Root extends $stdlib.std.Resource {
     (expect.Util.equal(filename, (fs.Util.basename(currentFile))));
     (expect.Util.equal($helpers.resolveDirname(__dirname, "../../.."), (fs.Util.dirname(currentFile))));
     (expect.Util.equal((bar.Bar.getSubdir(this)), (fs.Util.join($helpers.resolveDirname(__dirname, "../../.."), "subdir"))));
-    const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+    const counter = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
     const echo = $stdlib.core.importInflight(`require('../../../inflight_ts/example1.ts')["default"]`);
     const example = new Example(this, "Example");
     const funcFunction = $stdlib.core.importInflight(`require('../../../inflight_ts/example2.ts')["main"]`, [({ obj: example, alias: "example" }), ({ obj: example, ops: ["getMessage", ], alias: "exampleCopy" }), ({ obj: [1, 2, 3], alias: "numbers" })]);
-    const func = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", funcFunction);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke default function", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke inflight function", new $Closure2(this, "$Closure2"));
+    const func = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", funcFunction);
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke default function", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke inflight function", new $Closure2(this, "$Closure2"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "intrinsics.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

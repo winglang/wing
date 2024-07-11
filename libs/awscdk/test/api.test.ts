@@ -1,22 +1,15 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import { simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
-import { mkdtemp } from "@winglang/sdk/test/util";
-import { awscdkSanitize } from "./util";
+import { AwsCdkApp, awscdkSanitize } from "./util";
 import { inflight } from "@winglang/sdk/lib/core";
-
-const CDK_APP_OPTS = {
-  stackName: "my-project",
-  entrypointDir: __dirname,
-};
 
 const INFLIGHT_CODE = inflight(async () => "Hello, World");
 const INFLIGHT_CODE_2 = inflight(async () => "Hello, Wing");
 
 test("api with GET route at root", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.get("/", INFLIGHT_CODE);
@@ -43,7 +36,7 @@ test("api with GET route at root", () => {
 
 test("api with multiple methods on same route", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.get("/", INFLIGHT_CODE);
@@ -75,7 +68,7 @@ test("api with multiple methods on same route", () => {
 
 test("api with GET routes with common prefix", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
@@ -92,7 +85,7 @@ test("api with GET routes with common prefix", () => {
 
 test("api with GET routes with different prefix", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
@@ -109,7 +102,7 @@ test("api with GET routes with different prefix", () => {
 
 test("api with multiple GET route and one lambda", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
@@ -126,7 +119,7 @@ test("api with multiple GET route and one lambda", () => {
 
 test("api with multiple methods and multiple lambda", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
@@ -143,7 +136,7 @@ test("api with multiple methods and multiple lambda", () => {
 
 test("api with multiple methods and one lambda", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
@@ -160,7 +153,7 @@ test("api with multiple methods and one lambda", () => {
 
 test("api with path parameter", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.get("/hello/:world", INFLIGHT_CODE);
@@ -176,7 +169,7 @@ test("api with path parameter", () => {
 
 test("api with 'name' parameter", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.get("/:name", INFLIGHT_CODE);
@@ -192,7 +185,7 @@ test("api with 'name' parameter", () => {
 
 test("api with 'name' & 'age' parameter", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.get("/:name/:age", INFLIGHT_CODE);
@@ -208,7 +201,7 @@ test("api with 'name' & 'age' parameter", () => {
 
 test("api with POST route", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.post("/", INFLIGHT_CODE);
@@ -238,7 +231,7 @@ test("api with POST route", () => {
 
 test("api with PUT route", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.put("/", INFLIGHT_CODE);
@@ -268,7 +261,7 @@ test("api with PUT route", () => {
 
 test("api with PATCH route", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.patch("/", INFLIGHT_CODE);
@@ -298,7 +291,7 @@ test("api with PATCH route", () => {
 
 test("api with DELETE route", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.delete("/", INFLIGHT_CODE);
@@ -328,7 +321,7 @@ test("api with DELETE route", () => {
 
 test("api with OPTIONS route", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.options("/", INFLIGHT_CODE);
@@ -358,7 +351,7 @@ test("api with OPTIONS route", () => {
 
 test("api with HEAD route", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.head("/", INFLIGHT_CODE);
@@ -388,7 +381,7 @@ test("api with HEAD route", () => {
 
 test("api with CONNECT route", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
 
   api.connect("/", INFLIGHT_CODE);
@@ -418,7 +411,7 @@ test("api with CONNECT route", () => {
 
 test("api url can be used as environment variable", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api");
   new awscdk.Function(app, "Fn", INFLIGHT_CODE, {
     env: {
@@ -447,7 +440,7 @@ test("api url can be used as environment variable", () => {
 
 test("api configured for cors", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const api = new awscdk.Api(app, "Api", { cors: true });
   api.get("/", INFLIGHT_CODE);
 
