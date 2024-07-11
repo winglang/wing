@@ -152,8 +152,7 @@ export const createTestRunner = ({
   watchGlobs,
   logger,
 }: CreateTestRunnerProps): TestRunner => {
-  // Whether the test runner has been initialized.
-  let initialized = false;
+  let testRunnerState: TestRunnerStatus = "uninitialized";
 
   // Callbacks to be called when the tests change.
   const onTestsChangeCallbacks: Array<() => void> = [];
@@ -172,9 +171,9 @@ export const createTestRunner = ({
   });
 
   const initialize = async () => {
-    initialized = false;
+    testRunnerState = "uninitialized";
 
-    // Notify new test runner status.
+    // Notify initialization started.
     onTestsChange();
 
     try {
@@ -189,9 +188,9 @@ export const createTestRunner = ({
       );
 
       testsState.setTests(
-        tests.map((test) => ({
-          id: test,
-          label: getTestName(test),
+        tests.map((testId) => ({
+          id: testId,
+          label: getTestName(testId),
           status: "idle",
           datetime: Date.now(),
         })),
@@ -199,23 +198,34 @@ export const createTestRunner = ({
     } catch (error) {
       console.log(error);
     }
-    initialized = true;
+    testRunnerState = "idle";
+    onTestsChange();
   };
 
   const status = (): TestRunnerStatus => {
-    if (!initialized) {
-      return "uninitialized";
+    if (testRunnerState === "uninitialized") {
+      return testRunnerState;
     }
-    if (testsState.getTests().some((t) => t.status === "running")) {
-      return "running";
+
+    const tests = testsState.getTests();
+
+    for (const test of tests) {
+      if (test.status === "running") {
+        testRunnerState = "running";
+        return testRunnerState;
+      }
+      if (test.status === "error") {
+        testRunnerState = "error";
+        return testRunnerState;
+      }
+      if (test.status === "idle") {
+        testRunnerState = "idle";
+        return testRunnerState;
+      }
     }
-    if (testsState.getTests().some((t) => t.status === "error")) {
-      return "error";
-    }
-    if (testsState.getTests().some((t) => t.status === "idle")) {
-      return "idle";
-    }
-    return "success";
+
+    testRunnerState = "success";
+    return testRunnerState;
   };
 
   const runTest = async (testId: string) => {
@@ -283,7 +293,7 @@ export const createTestRunner = ({
   };
 
   const listTests = () => {
-    if (!initialized) {
+    if (!testRunnerState) {
       return [];
     }
     return testsState.getTests();
