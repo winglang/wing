@@ -671,7 +671,7 @@ impl<'s> Parser<'s> {
 	fn build_lift_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		// Lift statements are only legal in inflight
 		if phase != Phase::Inflight {
-			return self.with_error("Lift blocks are only allowed in inflight phase", statement_node);
+			return self.with_error("Lift blocks are only allowed in inflight code blocks", statement_node);
 		}
 
 		let lift_qualifications_node = statement_node.child_by_field_name("lift_qualifications").unwrap();
@@ -1271,13 +1271,26 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_class_statement(&self, statement_node: &Node, class_phase: Phase) -> DiagnosticResult<StmtKind> {
+	/// Builds a class field from a class_field node
+	///
+	/// If a class's phase isn't specified, it falls back to the phase of the scope.
+	fn build_class_statement(&self, statement_node: &Node, scope_phase: Phase) -> DiagnosticResult<StmtKind> {
 		let class_modifiers = statement_node.child_by_field_name("modifiers");
-		let class_phase = if self.get_modifier("inflight_specifier", &class_modifiers)?.is_some() {
-			Phase::Inflight
+
+		let class_phase = if let Some(phase) = self.get_phase_specifier(&class_modifiers)? {
+			phase
 		} else {
-			class_phase
+			scope_phase
 		};
+		if class_phase == Phase::Independent {
+			self
+				.with_error::<Node>(
+					"Unphased classes are not yet supported - see https://github.com/winglang/wing/issues/435",
+					&statement_node,
+				)
+				.err();
+		}
+
 		let mut cursor = statement_node.walk();
 		let mut fields = vec![];
 		let mut methods = vec![];
@@ -1328,7 +1341,21 @@ impl<'s> Parser<'s> {
 					// the initializer is considered an inflight initializer if either the class is inflight
 					// (and then everything inside it is inflight by definition) or if there's an "inflight"
 					// modifier.
-					let is_inflight = class_phase == Phase::Inflight || class_element.child_by_field_name("inflight").is_some();
+					let initializer_phase_node = class_element.child_by_field_name("phase_specifier");
+					let initializer_phase = if let Some(phase) = self.build_phase(&initializer_phase_node) {
+						phase
+					} else {
+						class_phase
+					};
+					if initializer_phase == Phase::Independent {
+						self
+							.with_error::<Node>(
+								"Class constructors cannot be unphased",
+								&initializer_phase_node.unwrap_or(class_element),
+							)
+							.err();
+					}
+					let is_inflight = initializer_phase == Phase::Inflight;
 					if initializer.is_some() && !is_inflight {
 						self
 							.with_error::<Node>(
@@ -1543,10 +1570,17 @@ impl<'s> Parser<'s> {
 				hints: vec![],
 			});
 		}
-		let phase = match self.get_modifier("inflight_specifier", &modifiers)? {
+
+		let phase = match self.get_phase_specifier(&modifiers)? {
+			Some(phase) => phase,
 			None => class_phase,
-			Some(_) => Phase::Inflight,
 		};
+		if phase == Phase::Independent {
+			self
+				.with_error::<Node>("Class fields cannot be unphased", &class_element)
+				.err();
+		}
+
 		Ok(ClassField {
 			name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 			member_type: self.build_type_annotation(get_actual_child_by_field_name(class_element, "type"), phase)?,
@@ -1558,17 +1592,25 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_interface_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+	fn build_interface_statement(&self, statement_node: &Node, scope_phase: Phase) -> DiagnosticResult<StmtKind> {
 		let mut cursor = statement_node.walk();
 		let mut extends = vec![];
 		let mut methods = vec![];
 
 		let interface_modifiers = statement_node.child_by_field_name("modifiers");
-		let phase = if self.get_modifier("inflight_specifier", &interface_modifiers)?.is_some() {
-			Phase::Inflight
-		} else {
-			phase
+
+		let interface_phase = match self.get_phase_specifier(&interface_modifiers)? {
+			Some(phase) => phase,
+			None => scope_phase,
 		};
+		if interface_phase == Phase::Independent {
+			self
+				.with_error::<Node>(
+					"Unphased interfaces are not yet supported - see https://github.com/winglang/wing/issues/435",
+					&statement_node,
+				)
+				.err();
+		}
 
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 		let mut doc_builder = DocBuilder::new(self);
@@ -1582,13 +1624,24 @@ impl<'s> Parser<'s> {
 				continue;
 			};
 			match interface_element.kind() {
-				"method_signature" => {
-					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, phase) {
-						methods.push((method_name, func_sig, doc))
+				"method_definition" => {
+					let modifiers = interface_element.child_by_field_name("modifiers");
+					let access_modifier = self.get_modifier("access_modifier", &modifiers)?;
+					if access_modifier.is_some() {
+						self
+							.with_error::<Node>("Access modifiers are not allowed in interfaces", &modifiers.unwrap())
+							.err();
 					}
-				}
-				"inflight_method_signature" => {
-					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, Phase::Inflight) {
+					let method_phase = match self.get_phase_specifier(&modifiers)? {
+						Some(phase) => phase,
+						None => interface_phase,
+					};
+					if method_phase == Phase::Independent {
+						self
+							.with_error::<Node>("Unphased methods on interfaces are not yet supported - see https://github.com/winglang/wing/issues/435", &statement_node)
+							.err();
+					}
+					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, method_phase) {
 						methods.push((method_name, func_sig, doc))
 					}
 				}
@@ -1653,7 +1706,7 @@ impl<'s> Parser<'s> {
 			methods,
 			extends,
 			access,
-			phase,
+			phase: interface_phase,
 		}))
 	}
 
@@ -1662,6 +1715,14 @@ impl<'s> Parser<'s> {
 		interface_element: Node,
 		phase: Phase,
 	) -> DiagnosticResult<(Symbol, FunctionSignature)> {
+		// Make sure there's no statements block for interface methods
+		if let Some(body) = &interface_element.child_by_field_name("block") {
+			self
+				.build_error("Interface methods cannot have a body", &interface_element)
+				.with_annotation("Body defined here", self.node_span(body))
+				.report();
+		}
+
 		let name = interface_element.child_by_field_name("name").unwrap();
 		let method_name = self.node_symbol(&name)?;
 		let func_sig = self.build_function_signature(&interface_element, phase, true)?;
@@ -1706,24 +1767,36 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(None, anon_closure_node, phase, false, None)
+	fn build_anonymous_closure(
+		&self,
+		anon_closure_node: &Node,
+		scope_phase: Phase,
+	) -> DiagnosticResult<FunctionDefinition> {
+		self.build_function_definition(None, anon_closure_node, scope_phase, false, None)
 	}
 
 	fn build_function_definition(
 		&self,
 		name: Option<Symbol>,
 		func_def_node: &Node,
-		phase: Phase,
+		scope_phase: Phase,
 		require_annotations: bool,
 		doc: Option<String>,
 	) -> DiagnosticResult<FunctionDefinition> {
 		let modifiers = func_def_node.child_by_field_name("modifiers");
 
-		let phase = match self.get_modifier("inflight_specifier", &modifiers)? {
-			Some(_) => Phase::Inflight,
-			None => phase,
+		let phase = match self.get_phase_specifier(&modifiers)? {
+			Some(phase) => phase,
+			None => scope_phase,
 		};
+		if phase == Phase::Independent {
+			self
+				.with_error::<Node>(
+					"Unphased functions are not yet supported - see https://github.com/winglang/wing/issues/435",
+					&func_def_node,
+				)
+				.err();
+		}
 
 		let is_static = self.get_modifier("static", &modifiers)?.is_some();
 
@@ -1794,6 +1867,7 @@ impl<'s> Parser<'s> {
 
 		Ok(res)
 	}
+
 	fn build_udt(&self, type_node: &Node) -> DiagnosticResult<UserDefinedType> {
 		match type_node.kind() {
 			"custom_type" => {
@@ -1840,6 +1914,23 @@ impl<'s> Parser<'s> {
 		}
 	}
 
+	/// Get the phase specifier from an elements (closure/class/field/method) modifiers node (from a list of multiple modifiers)
+	fn get_phase_specifier(&self, modifiers: &Option<Node>) -> DiagnosticResult<Option<Phase>> {
+		Ok(self.build_phase(&self.get_modifier("phase_specifier", modifiers)?))
+	}
+
+	/// Given a phase specifier node parse the correct phase
+	fn build_phase(&self, maybe_access_modifer: &Option<Node>) -> Option<Phase> {
+		match maybe_access_modifer {
+			Some(access_modifier) => match self.node_text(access_modifier) {
+				"inflight" => Some(Phase::Inflight),
+				"unphased" => Some(Phase::Independent),
+				other => panic!("Unexpected phase specifier: \"{}\"", other),
+			},
+			None => None,
+		}
+	}
+
 	/// Get the access modifier an elements (closure/class/field/method) modifiers node (from a list of multiple modifiers)
 	fn get_access_modifier(&self, modifiers: &Option<Node>) -> DiagnosticResult<AccessModifier> {
 		Ok(self.build_access_modifier(&self.get_modifier("access_modifier", modifiers)?))
@@ -1857,7 +1948,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_type_annotation(&self, type_node: Option<Node>, phase: Phase) -> DiagnosticResult<TypeAnnotation> {
+	fn build_type_annotation(&self, type_node: Option<Node>, scope_phase: Phase) -> DiagnosticResult<TypeAnnotation> {
 		let type_node = &match type_node {
 			Some(node) => node,
 			None => {
@@ -1895,7 +1986,7 @@ impl<'s> Parser<'s> {
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
-				let inner_type = self.build_type_annotation(type_node.named_child(0), phase)?;
+				let inner_type = self.build_type_annotation(type_node.named_child(0), scope_phase)?;
 				Ok(TypeAnnotation {
 					kind: TypeAnnotationKind::Optional(Box::new(inner_type)),
 					span,
@@ -1908,7 +1999,7 @@ impl<'s> Parser<'s> {
 
 				let mut parameters = vec![];
 				for param_type in param_type_list_node.named_children(&mut cursor) {
-					let t = self.build_type_annotation(Some(param_type), phase)?;
+					let t = self.build_type_annotation(Some(param_type), scope_phase)?;
 
 					parameters.push(FunctionParameter {
 						name: "".into(),
@@ -1918,18 +2009,28 @@ impl<'s> Parser<'s> {
 					})
 				}
 
+				let phase_node = type_node.child_by_field_name("phase_specifier");
+				let phase = match self.build_phase(&phase_node) {
+					Some(phase) => phase,
+					None => scope_phase,
+				};
+				if phase == Phase::Independent {
+					self
+						.with_error::<Node>(
+							"Unphased functions are not yet supported - see https://github.com/winglang/wing/issues/435",
+							&phase_node.unwrap_or(*type_node),
+						)
+						.err();
+				}
+
 				Ok(TypeAnnotation {
 					kind: TypeAnnotationKind::Function(FunctionSignature {
 						parameters,
 						return_type: Box::new(self.build_type_annotation(
 							Some(get_actual_child_by_field_name(*type_node, "return_type").unwrap()),
-							phase,
+							scope_phase,
 						)?),
-						phase: if type_node.child_by_field_name("inflight").is_some() {
-							Phase::Inflight
-						} else {
-							phase // inherit from scope
-						},
+						phase,
 					}),
 					span,
 				})
@@ -1953,27 +2054,27 @@ impl<'s> Parser<'s> {
 				let element_type = get_actual_child_by_field_name(*type_node, "type_parameter");
 				match container_type {
 					"Map" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Map(Box::new(self.build_type_annotation(element_type, phase)?)),
+						kind: TypeAnnotationKind::Map(Box::new(self.build_type_annotation(element_type, scope_phase)?)),
 						span,
 					}),
 					"MutMap" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::MutMap(Box::new(self.build_type_annotation(element_type, phase)?)),
+						kind: TypeAnnotationKind::MutMap(Box::new(self.build_type_annotation(element_type, scope_phase)?)),
 						span,
 					}),
 					"Array" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Array(Box::new(self.build_type_annotation(element_type, phase)?)),
+						kind: TypeAnnotationKind::Array(Box::new(self.build_type_annotation(element_type, scope_phase)?)),
 						span,
 					}),
 					"MutArray" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::MutArray(Box::new(self.build_type_annotation(element_type, phase)?)),
+						kind: TypeAnnotationKind::MutArray(Box::new(self.build_type_annotation(element_type, scope_phase)?)),
 						span,
 					}),
 					"Set" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Set(Box::new(self.build_type_annotation(element_type, phase)?)),
+						kind: TypeAnnotationKind::Set(Box::new(self.build_type_annotation(element_type, scope_phase)?)),
 						span,
 					}),
 					"MutSet" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::MutSet(Box::new(self.build_type_annotation(element_type, phase)?)),
+						kind: TypeAnnotationKind::MutSet(Box::new(self.build_type_annotation(element_type, scope_phase)?)),
 						span,
 					}),
 					"ERROR" => self.with_error("Expected builtin container type", type_node)?,
@@ -2161,7 +2262,7 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
-			"binary_expression" | "unwrap_or" => Ok(Expr::new(
+			"binary_expression" => Ok(Expr::new(
 				ExprKind::Binary {
 					left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap(), phase)?),
 					right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap(), phase)?),
