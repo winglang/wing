@@ -1,6 +1,6 @@
 import * as cloud from "../cloud";
 
-export function createBucketPermissions(ops: string[]): string[] {
+export function calculateBucketPermissions(ops: string[]): string[] {
   const permissions: string[] = [];
 
   if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {

@@ -2,7 +2,7 @@ import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as GCPFunction } from "./function";
-import { createBucketPermissions } from "./permissions";
+import { calculateBucketPermissions } from "./permissions";
 import { ProjectService } from "../.gen/providers/google/project-service";
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
@@ -202,7 +202,7 @@ export class Bucket extends cloud.Bucket {
       host._addTokenCreator();
     }
 
-    for (const role of createBucketPermissions(ops)) {
+    for (const role of calculateBucketPermissions(ops)) {
       const bucketHash = Fn.sha256(this.bucket.name).slice(-8);
       const permissionHash = Fn.sha256(role).slice(-8);
 
