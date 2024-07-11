@@ -34,8 +34,8 @@ bring cloud;
 bring util;
 
 // defining a cloud.Function resource
-let countWords = new cloud.Function(inflight (s: str?): str => {
-  return "{s?.split(" ")?.length ?? 0}";
+let countWords = new cloud.Function(inflight (payload: Json?): Json => {
+  return "{payload?.tryAsStr()?.split(" ")?.length ?? 0}";
 }) as "countWords";
 
 let longTask = new cloud.Function(inflight () => {
