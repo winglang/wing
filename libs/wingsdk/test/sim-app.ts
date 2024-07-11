@@ -89,7 +89,6 @@ export class SimApp extends App {
     this.synthIfNeeded();
     const simfile = this.synth();
     const s = new Simulator({ simfile, stateDir });
-
     await s.start();
 
     // When tests fail, we still want to make sure the simulator is stopped
