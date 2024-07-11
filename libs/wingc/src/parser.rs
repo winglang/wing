@@ -1284,7 +1284,10 @@ impl<'s> Parser<'s> {
 		};
 		if class_phase == Phase::Independent {
 			self
-				.with_error::<Node>("Unphased classes are not yet supported", &statement_node)
+				.with_error::<Node>(
+					"Unphased classes are not yet supported - see https://github.com/winglang/wing/issues/435",
+					&statement_node,
+				)
 				.err();
 		}
 
@@ -1602,7 +1605,10 @@ impl<'s> Parser<'s> {
 		};
 		if interface_phase == Phase::Independent {
 			self
-				.with_error::<Node>("Unphased interfaces are not yet supported", &statement_node)
+				.with_error::<Node>(
+					"Unphased interfaces are not yet supported - see https://github.com/winglang/wing/issues/435",
+					&statement_node,
+				)
 				.err();
 		}
 
@@ -1632,7 +1638,7 @@ impl<'s> Parser<'s> {
 					};
 					if method_phase == Phase::Independent {
 						self
-							.with_error::<Node>("Unphased methods on interfaces are not yet supported", &statement_node)
+							.with_error::<Node>("Unphased methods on interfaces are not yet supported - see https://github.com/winglang/wing/issues/435", &statement_node)
 							.err();
 					}
 					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, method_phase) {
@@ -1785,7 +1791,10 @@ impl<'s> Parser<'s> {
 		};
 		if phase == Phase::Independent {
 			self
-				.with_error::<Node>("Unphased functions are not yet supported", &func_def_node)
+				.with_error::<Node>(
+					"Unphased functions are not yet supported - see https://github.com/winglang/wing/issues/435",
+					&func_def_node,
+				)
 				.err();
 		}
 
@@ -2008,7 +2017,7 @@ impl<'s> Parser<'s> {
 				if phase == Phase::Independent {
 					self
 						.with_error::<Node>(
-							"Unphased functions are not yet supported",
+							"Unphased functions are not yet supported - see https://github.com/winglang/wing/issues/435",
 							&phase_node.unwrap_or(*type_node),
 						)
 						.err();
