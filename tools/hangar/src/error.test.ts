@@ -7,7 +7,7 @@ import { parseMetaCommentFromPath, shouldSkipTest } from "./meta_comment";
 errorWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
     const platforms = ["sim"];
-    const args = ["test", "--rootId", "root"];
+    const args = ["test"];
 
     const relativeWingFile = path.relative(
       tmpDir,

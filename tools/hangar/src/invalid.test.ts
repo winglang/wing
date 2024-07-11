@@ -12,7 +12,7 @@ import { parseMetaCommentFromPath } from "./meta_comment";
 invalidWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
     const platforms = ["sim"];
-    const args = ["test", "--rootId", "root"];
+    const args = ["test"];
 
     const absoluteWingFile = path.join(invalidTestDir, wingFile);
     const relativeWingFile = path.relative(tmpDir, absoluteWingFile);

@@ -192,7 +192,10 @@ async function testOne(
   // determine snapshot behavior
   const snapshotMode = determineSnapshotMode(target, options);
   const shouldExecute = snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.DEPLOY;
-  const testOptions = { ...options, rootId: options.rootId ?? `Test.${nanoid(10)}` };
+  const testOptions = {
+    ...options,
+    rootId: options.rootId ?? target === BuiltinPlatform.SIM ? "root" : `Test.${nanoid(10)}`,
+  };
 
   let results: std.TestResult[] = [];
   if (shouldExecute) {

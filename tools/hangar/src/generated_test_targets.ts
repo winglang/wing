@@ -92,7 +92,7 @@ export async function testTest(
   const fileMap: Record<string, string> = {};
   const platforms = ["sim"];
   // for stable snapshots
-  const args = ["test", "--rootId", "root"];
+  const args = ["test"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
 
   // only entrypoint files have tests (for now)
