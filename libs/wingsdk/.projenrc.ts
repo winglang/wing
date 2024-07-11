@@ -9,6 +9,7 @@ const CDKTF_PROVIDERS = [
   "random@~>3.5.1",
   "azurerm@~>3.96.0",
   "google@~>5.10.0",
+  "kreuzwerker/docker@~>3.0.2",
 ];
 
 // defines the list of dependencies required for each compilation target that is not built into the
@@ -50,6 +51,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-dynamodb",
     "@aws-sdk/client-elasticache",
     "@aws-sdk/client-lambda",
+    "@aws-sdk/client-ecs",
     "@aws-sdk/client-s3",
     "@aws-sdk/client-secrets-manager",
     "@aws-sdk/client-sns",

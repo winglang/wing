@@ -686,7 +686,7 @@ export const MapView = memo(
                   id: "root",
                   layoutOptions: {
                     ...baseLayoutOptions,
-                    "elk.padding": "[top=24,left=20,bottom=20,right=20]",
+                    "elk.padding": "[top=24,left=24,bottom=24,right=24]",
                   },
                 }}
                 edges={edges}

@@ -55,7 +55,7 @@ export class Redis extends ex.Redis {
       this.securityGroups.push(
         new SecurityGroup(this, `${subnet.id.slice(-8)}securityGroup`, {
           vpcId: vpc.id,
-          name: `${this.node.addr.slice(-8)}-securityGroup`,
+          name: `${this.node.addr.slice(-8)}-${subnet.id}-securityGroup`,
           ingress: [
             {
               cidrBlocks: [subnet.cidrBlock],

@@ -114,7 +114,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
           "${aws_security_group.Redis_KEN21securityGroup_139152DE.id}",
-          "${aws_security_group.Redis_KEN24securityGroup_6EFFC29B.id}"
+          "${aws_security_group.Redis_KEN25securityGroup_D3232AB7.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.Redis_RedisSubnetGroup_E7D796E2.name}"
       },
@@ -133,8 +133,8 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.r2_KEN35securityGroup_DF1EB5F4.id}",
-          "${aws_security_group.r2_KEN38securityGroup_41F37500.id}"
+          "${aws_security_group.r2_KEN37securityGroup_BF109712.id}",
+          "${aws_security_group.r2_KEN41securityGroup_A4C819DF.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.r2_RedisSubnetGroup_C415566B.name}"
       }
@@ -266,7 +266,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "vpc_config": {
           "security_group_ids": [
             "${aws_security_group.Redis_KEN21securityGroup_139152DE.id}",
-            "${aws_security_group.Redis_KEN24securityGroup_6EFFC29B.id}"
+            "${aws_security_group.Redis_KEN25securityGroup_D3232AB7.id}"
           ],
           "subnet_ids": [
             "${aws_subnet.PrivateSubnet.id}",
@@ -473,14 +473,14 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "to_port": 6379
           }
         ],
-        "name": "3542402a-securityGroup",
+        "name": "3542402a-${aws_subnet.PrivateSubnet.id}-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "Redis_KEN24securityGroup_6EFFC29B": {
+      "Redis_KEN25securityGroup_D3232AB7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Redis/KEN.24]}securityGroup",
-            "uniqueId": "Redis_KEN24securityGroup_6EFFC29B"
+            "path": "root/Default/Default/Redis/KEN.25]}securityGroup",
+            "uniqueId": "Redis_KEN25securityGroup_D3232AB7"
           }
         },
         "egress": [
@@ -513,14 +513,14 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "to_port": 6379
           }
         ],
-        "name": "3542402a-securityGroup",
+        "name": "3542402a-${aws_subnet.PrivateSubnet2.id}-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "r2_KEN35securityGroup_DF1EB5F4": {
+      "r2_KEN37securityGroup_BF109712": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/r2/KEN.35]}securityGroup",
-            "uniqueId": "r2_KEN35securityGroup_DF1EB5F4"
+            "path": "root/Default/Default/r2/KEN.37]}securityGroup",
+            "uniqueId": "r2_KEN37securityGroup_BF109712"
           }
         },
         "egress": [
@@ -553,14 +553,14 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "to_port": 6379
           }
         ],
-        "name": "30c8c4ae-securityGroup",
+        "name": "30c8c4ae-${aws_subnet.PrivateSubnet.id}-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "r2_KEN38securityGroup_41F37500": {
+      "r2_KEN41securityGroup_A4C819DF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/r2/KEN.38]}securityGroup",
-            "uniqueId": "r2_KEN38securityGroup_41F37500"
+            "path": "root/Default/Default/r2/KEN.41]}securityGroup",
+            "uniqueId": "r2_KEN41securityGroup_A4C819DF"
           }
         },
         "egress": [
@@ -593,7 +593,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "to_port": 6379
           }
         ],
-        "name": "30c8c4ae-securityGroup",
+        "name": "30c8c4ae-${aws_subnet.PrivateSubnet2.id}-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       }
     },

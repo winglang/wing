@@ -1,5 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { App } from "./app";
+import { NotImplementedError } from "./errors";
 import { Node } from "../std/node";
 
 const CLASS_FACTORY_SYMBOL = Symbol("@winglang/sdk.core.ClassFactory");
@@ -50,7 +51,7 @@ export class ClassFactory {
       return new ctor(scope, id, ...args);
     }
 
-    throw new Error(`Unsupported resource type: ${fqn}`);
+    throw new NotImplementedError(`Unsupported resource type: ${fqn}`);
   }
 
   /**
