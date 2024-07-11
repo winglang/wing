@@ -7,7 +7,13 @@ import { simulator } from "@winglang/sdk";
 import type { Simulator } from "../../wingsdk.js";
 import { createCompiler } from "../compiler.js";
 
-const getSimulatorInstance = async (simfile: string) => {
+const createSimulatorInstance = async ({
+  simfile,
+  start = true,
+}: {
+  simfile: string;
+  start?: boolean;
+}) => {
   const stateDir = await mkdtemp(join(tmpdir(), "wing-console-test"));
 
   const instance = new simulator.Simulator({
@@ -15,7 +21,9 @@ const getSimulatorInstance = async (simfile: string) => {
     stateDir,
   });
 
-  await instance.start();
+  if (start) {
+    await instance.start();
+  }
 
   return instance;
 };
@@ -32,7 +40,7 @@ export const createSimulatorManager = ({
   platform?: string[];
   watchGlobs?: string[];
 }) => {
-  let simfilePath: string;
+  let simfilePath: string | undefined;
 
   const testCompiler = createCompiler({
     wingfile,
@@ -44,14 +52,27 @@ export const createSimulatorManager = ({
     simfilePath = simfile;
   });
 
-  const getSimulator = async (simfile?: string) => {
-    if (simfile) {
-      return await getSimulatorInstance(simfile);
+  const getSimulator = async ({
+    simfile,
+    start = true,
+  }: {
+    simfile?: string;
+    start?: boolean;
+  } = {}) => {
+    const path = simfile || simfilePath;
+    if (path) {
+      return await createSimulatorInstance({ simfile: path, start });
     }
 
     return new Promise<Simulator>(async (resolve) => {
       testCompiler.on("compiled", async ({ simfile }) => {
-        resolve(await getSimulator(simfile));
+        simfilePath = simfile;
+        resolve(
+          await getSimulator({
+            simfile,
+            start,
+          }),
+        );
       });
     });
   };
@@ -60,7 +81,9 @@ export const createSimulatorManager = ({
   const useSimulatorInstance = async <T>(
     callback: (simulator: Simulator) => Promise<T>,
   ): Promise<T> => {
-    const simulator = await getSimulator(simfilePath);
+    const simulator = await getSimulator({
+      simfile: simfilePath,
+    });
     try {
       const result = await callback(simulator);
       simulator.stop();
@@ -76,6 +99,7 @@ export const createSimulatorManager = ({
   };
 
   return {
+    getSimulator,
     useSimulatorInstance,
     forceStop,
   };

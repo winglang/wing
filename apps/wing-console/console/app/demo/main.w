@@ -7,8 +7,8 @@ bring sim;
 let errorService = new cloud.Service(inflight () => {}) as "ErrorService";
 
 let errorResource = new sim.Resource(inflight () => {
-  util.sleep(5s);
-  //throw "Oops";
+  //util.sleep(5s);
+  // throw "Oops";
 }) as "ErrorResource" in errorService;
 
 // @see https://github.com/winglang/wing/issues/4237 it crashes the Console preview env.
