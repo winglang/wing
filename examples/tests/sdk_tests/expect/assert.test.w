@@ -187,7 +187,7 @@ test "expect" {
     try{
         expect.match("this contains hello world string", "new string");
     }catch err{
-        expect.equal(err, "The input did not match the regular expression new string");
+        expect.equal(err, "The input \"this contains hello world string\" did not match the regular expression new string");
     }
 
 // "negative doesNotMatch test"
