@@ -1264,7 +1264,6 @@ impl TypeRef {
 			Type::Inferred(..) => true,
 			Type::Array(v) => v.is_json_legal_value(),
 			Type::Map(v) => v.is_json_legal_value(),
-			Type::Optional(v) => v.is_json_legal_value(),
 			Type::Struct(ref s) => {
 				for t in s.fields(true).map(|(_, v)| v.type_) {
 					if !t.is_json_legal_value() {
@@ -1273,6 +1272,7 @@ impl TypeRef {
 				}
 				true
 			}
+			Type::Optional(v) => v.is_json_legal_value(),
 			Type::Json(Some(v)) => match &v.kind {
 				JsonDataKind::Type(SpannedTypeInfo { type_, .. }) => type_.is_json_legal_value(),
 				JsonDataKind::Fields(fields) => {
@@ -3491,7 +3491,9 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 
 		// If the expected type is Json and the actual type is a Json legal value then we're good
 		if expected_types.iter().any(|t| t.maybe_unwrap_option().is_json()) {
-			if return_type.is_json_legal_value() {
+			// the actual type should be legal value, and match the optionality of the expected type
+			if return_type.is_json_legal_value() && (!expected_types.iter().any(|t| t.is_json()) || !return_type.is_option())
+			{
 				return return_type;
 			}
 		} else {
@@ -3524,7 +3526,11 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			));
 		}
 
-		if matches!(**return_type.maybe_unwrap_option(), Type::Json(None) | Type::MutJson) {
+		if matches!(**return_type.maybe_unwrap_option(), Type::Json(None) | Type::MutJson)
+			&& !matches!(
+				**first_expected_type.maybe_unwrap_option(),
+				Type::Json(None) | Type::MutJson
+			) {
 			// known json data is statically known
 			hints.push(format!(
 				"use {first_expected_type}.fromJson() to convert dynamic Json\""
