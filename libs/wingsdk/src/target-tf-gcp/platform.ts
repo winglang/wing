@@ -29,7 +29,7 @@ export class Platform implements IPlatform {
     ...args: any[]
   ): any {
     const Type = this.resolveType(type);
-    if (!Type) {
+    if (Type) {
       return new Type(scope, id, ...args);
     }
 

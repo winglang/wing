@@ -18,19 +18,14 @@ function checkDatastorePermissions(
   expectedPermissions: string[]
 ) {
   const outputObject = JSON.parse(output);
-  const customRoleName = Object.keys(
-    outputObject.resource.google_project_iam_custom_role
-  ).find((name) => name.startsWith("Function_CustomRole"));
-  const customRole =
-    outputObject.resource.google_project_iam_custom_role[customRoleName!];
+  const membersRoles = (
+    Object.values(outputObject.resource.google_project_iam_member) as {
+      role: string;
+    }[]
+  ).map((e) => e.role);
 
-  const datastorePermissions = customRole.permissions.filter((perm) =>
-    perm.startsWith("datastore.entities.")
-  );
-  expect(datastorePermissions).toEqual(
-    expect.arrayContaining(expectedPermissions)
-  );
-  expect(datastorePermissions).toHaveLength(expectedPermissions.length);
+  expect(membersRoles).toEqual(expect.arrayContaining(expectedPermissions));
+  expect(membersRoles).toHaveLength(expectedPermissions.length);
 }
 
 test("counter name valid", () => {
@@ -129,7 +124,6 @@ test("function with a counter binding", () => {
   expect(tfResourcesOf(output)).toEqual([
     "google_cloudfunctions_function",
     "google_firestore_database",
-    "google_project_iam_custom_role",
     "google_project_iam_member",
     "google_project_service",
     "google_service_account",
@@ -156,11 +150,7 @@ test("inc() IAM permissions", () => {
   const output = app.synth();
 
   // THEN
-  checkDatastorePermissions(output, [
-    "datastore.entities.get",
-    "datastore.entities.create",
-    "datastore.entities.update",
-  ]);
+  checkDatastorePermissions(output, ["roles/datastore.user"]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -180,11 +170,7 @@ test("dec() IAM permissions", () => {
   const output = app.synth();
 
   // THEN
-  checkDatastorePermissions(output, [
-    "datastore.entities.get",
-    "datastore.entities.create",
-    "datastore.entities.update",
-  ]);
+  checkDatastorePermissions(output, ["roles/datastore.user"]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -205,10 +191,7 @@ test("peek() IAM permissions", () => {
   const output = app.synth();
 
   // THEN
-  checkDatastorePermissions(output, [
-    "datastore.entities.get",
-    "datastore.entities.create",
-  ]);
+  checkDatastorePermissions(output, ["roles/datastore.user"]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -228,10 +211,7 @@ test("set() IAM permissions", () => {
   const output = app.synth();
 
   // THEN
-  checkDatastorePermissions(output, [
-    "datastore.entities.create",
-    "datastore.entities.update",
-  ]);
+  checkDatastorePermissions(output, ["roles/datastore.user"]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

@@ -1,9 +1,11 @@
 import { BUCKET_PREFIX_OPTS } from "./bucket";
 import { TestRunner } from "./test-runner";
 import { DataAwsCallerIdentity } from "../.gen/providers/aws/data-aws-caller-identity";
+import { DataAwsEcrAuthorizationToken } from "../.gen/providers/aws/data-aws-ecr-authorization-token";
 import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
 import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
 import { DataAwsVpc } from "../.gen/providers/aws/data-aws-vpc";
+import { EcrRepository } from "../.gen/providers/aws/ecr-repository";
 import { Eip } from "../.gen/providers/aws/eip";
 import { InternetGateway } from "../.gen/providers/aws/internet-gateway";
 import { NatGateway } from "../.gen/providers/aws/nat-gateway";
@@ -13,6 +15,7 @@ import { RouteTableAssociation } from "../.gen/providers/aws/route-table-associa
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import { Subnet } from "../.gen/providers/aws/subnet";
 import { Vpc } from "../.gen/providers/aws/vpc";
+import { DockerProvider } from "../.gen/providers/docker/provider";
 import { AppProps } from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
@@ -28,6 +31,9 @@ export class App extends CdktfApp {
   private awsAccountIdProvider?: DataAwsCallerIdentity;
   private _vpc?: Vpc | DataAwsVpc;
   private _codeBucket?: S3Bucket;
+  private _ecr?: EcrRepository;
+  private _ecr_auth?: DataAwsEcrAuthorizationToken;
+  private _dockerProvider?: DockerProvider;
 
   /** Subnets shared across app */
   public subnets: { [key: string]: (Subnet | DataAwsSubnet)[] };
@@ -260,5 +266,88 @@ export class App extends CdktfApp {
     this.subnets.private.push(privateSubnet);
     this.subnets.private.push(privateSubnet2);
     return this._vpc;
+  }
+
+  /**
+   * The ECR Repository for the App
+   */
+  public get ecr(): EcrRepository {
+    if (this._ecr) {
+      return this._ecr;
+    }
+    const ecr = new EcrRepository(this, "Ecr", {
+      name: `${this.node.id.toLowerCase()}-images`,
+    });
+
+    this._ecr = ecr;
+    return this._ecr;
+  }
+
+  /**
+   * The ECR Authorization Token for the App
+   */
+  public get ecrAuth(): DataAwsEcrAuthorizationToken {
+    if (this._ecr_auth) {
+      return this._ecr_auth;
+    }
+
+    if (!this._ecr) {
+      this.ecr;
+    }
+
+    const ecrAuth = new DataAwsEcrAuthorizationToken(this, "EcrAuth", {
+      registryId: this.accountId,
+    });
+
+    this._ecr_auth = ecrAuth;
+    return this._ecr_auth;
+  }
+
+  /**
+   * The Docker Provider for the App
+   */
+  public get dockerProvider(): DockerProvider {
+    if (this._dockerProvider) {
+      return this._dockerProvider;
+    }
+
+    // Make sure we also have an ECR repository in this app
+    if (!this._ecr_auth) {
+      this.ecrAuth;
+    }
+
+    this._dockerProvider = new DockerProvider(this, "DockerProvider", {
+      registryAuth: [
+        {
+          address: this.ecrAuth.proxyEndpoint,
+          username: this.ecrAuth.userName,
+          password: this.ecrAuth.password,
+        },
+      ],
+    });
+
+    return this._dockerProvider;
+  }
+
+  /**
+   * Retrieve private subnet ids for the app
+   */
+  public get privateSubnetIds(): string[] {
+    // Ensure vpc exists
+    if (!this._vpc) {
+      this.vpc;
+    }
+    return this.subnets.private.map((s) => s.id);
+  }
+
+  /**
+   * Retrieve public subnet ids for the app
+   */
+  public get publicSubnetIds(): string[] {
+    // Ensure vpc exists
+    if (!this._vpc) {
+      this.vpc;
+    }
+    return this.subnets.public.map((s) => s.id);
   }
 }
