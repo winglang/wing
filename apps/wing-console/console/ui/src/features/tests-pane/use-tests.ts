@@ -26,16 +26,13 @@ export const useTests = () => {
     setTestsExists(!!testListQuery.data && testListQuery.data.length > 0);
   }, [setTestsExists, testListQuery.data]);
 
-  const runAllTests = useCallback(() => {
+  const runAllTests = () => {
     runAllTestsMutation.mutate();
-  }, [runAllTestsMutation]);
+  };
 
-  const runTest = useCallback(
-    (resourcePath: string) => {
-      runTestMutation.mutate({ resourcePath });
-    },
-    [runTestMutation.mutate],
-  );
+  const runTest = (resourcePath: string) => {
+    runTestMutation.mutate({ resourcePath });
+  };
 
   return {
     status,
