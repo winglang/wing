@@ -176,9 +176,6 @@ jobs:
         with:
           workload_identity_provider: "projects/833985639028/locations/global/workloadIdentityPools/gh-action/providers/gh-action-provider"
           service_account: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
-          # token_format: "id_token"
-          # id_token_audience: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
-          # create_credentials_file: true
 
       - name: Set-up gcloud
         if: ${{ matrix.target == 'tf-gcp' }}
