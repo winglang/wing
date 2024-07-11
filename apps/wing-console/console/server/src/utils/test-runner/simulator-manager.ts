@@ -61,9 +61,14 @@ export const createSimulatorManager = ({
     callback: (simulator: Simulator) => Promise<T>,
   ): Promise<T> => {
     const simulator = await getSimulator(simfilePath);
-    const result = await callback(simulator);
-    simulator.stop();
-    return result;
+    try {
+      const result = await callback(simulator);
+      simulator.stop();
+      return result;
+    } catch (error) {
+      simulator.stop();
+      throw error;
+    }
   };
 
   const forceStop = () => {
