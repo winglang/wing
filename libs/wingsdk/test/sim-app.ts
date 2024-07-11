@@ -85,21 +85,10 @@ export class SimApp extends App {
    *
    * @returns A started `Simulator` instance. No need to call `start()` again.
    */
-  public async startSimulator(
-    stateDir?: string,
-    printTraces?: boolean
-  ): Promise<Simulator> {
+  public async startSimulator(stateDir?: string): Promise<Simulator> {
     this.synthIfNeeded();
     const simfile = this.synth();
     const s = new Simulator({ simfile, stateDir });
-
-    if (printTraces) {
-      s.onTrace({
-        callback: (trace) => {
-          console.log(trace);
-        },
-      });
-    }
 
     await s.start();
 
