@@ -27,6 +27,7 @@ describe("tf-aws platform parameters", () => {
     tempdir = mkdtemp();
     wingParametersFile = path.join(tempdir, "wing.json");
     process.env.WING_VALUES_FILE = wingParametersFile;
+    globalThis.$ClassFactory = undefined;
   });
 
   test("throws if private subnet ids are not an array", () => {

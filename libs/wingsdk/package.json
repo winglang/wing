@@ -79,6 +79,7 @@
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "3.577.0",
     "@aws-sdk/client-dynamodb": "3.577.0",
+    "@aws-sdk/client-ecs": "3.577.0",
     "@aws-sdk/client-elasticache": "3.577.0",
     "@aws-sdk/client-lambda": "3.577.0",
     "@aws-sdk/client-s3": "3.577.0",
@@ -123,6 +124,7 @@
   "bundledDependencies": [
     "@aws-sdk/client-cloudwatch-logs",
     "@aws-sdk/client-dynamodb",
+    "@aws-sdk/client-ecs",
     "@aws-sdk/client-elasticache",
     "@aws-sdk/client-lambda",
     "@aws-sdk/client-s3",

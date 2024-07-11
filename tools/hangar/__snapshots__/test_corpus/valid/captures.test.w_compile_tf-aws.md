@@ -660,6 +660,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -778,21 +779,20 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
-    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "PublicBucket", ({"public": true}));
-    const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "PrivateBucket", { public: false });
-    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
+    const bucket1 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const bucket2 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "PublicBucket", ({"public": true}));
+    const bucket3 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "PrivateBucket", { public: false });
+    const queue = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
     const handler = new $Closure1(this, "$Closure1");
     (queue.setConsumer(new $Closure2(this, "$Closure2"), { batchSize: 5 }));
-    this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", handler, { env: ({}) });
+    globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", handler, { env: ({}) });
     const emptyEnv = ({});
-    this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "AnotherFunction", handler, { env: emptyEnv });
+    globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "AnotherFunction", handler, { env: emptyEnv });
     const headers = ({["my-fancy-header"]: "my-fancy-value", ["not-even-real\""]: "wow` !"});
-    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
+    const api = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
     (api.get("/hello", new $Closure3(this, "$Closure3")));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "captures.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

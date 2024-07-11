@@ -56,6 +56,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -93,11 +94,10 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     let count = 0;
-    ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "Bucket"))(new CustomScope(this, "CustomScope"));
+    globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, new CustomScope(this, "CustomScope"), "Bucket");
     $helpers.assert($helpers.eq(count, 1), "count == 1");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "new_jsii.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
