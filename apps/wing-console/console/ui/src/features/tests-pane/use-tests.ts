@@ -1,5 +1,5 @@
 import type { TestItem } from "@wingconsole/server";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { trpc } from "../../trpc.js";
 
@@ -26,13 +26,16 @@ export const useTests = () => {
     setTestsExists(!!testListQuery.data && testListQuery.data.length > 0);
   }, [setTestsExists, testListQuery.data]);
 
-  const runAllTests = () => {
+  const runAllTests = useCallback(() => {
     runAllTestsMutation.mutate();
-  };
+  }, [runAllTestsMutation]);
 
-  const runTest = (resourcePath: string) => {
-    runTestMutation.mutate({ resourcePath });
-  };
+  const runTest = useCallback(
+    (resourcePath: string) => {
+      runTestMutation.mutate({ resourcePath });
+    },
+    [runTestMutation.mutate],
+  );
 
   return {
     status,
