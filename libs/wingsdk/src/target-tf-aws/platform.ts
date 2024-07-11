@@ -10,6 +10,7 @@ import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
+import { Service } from "./service";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
@@ -25,6 +26,7 @@ import {
   QUEUE_FQN,
   SCHEDULE_FQN,
   SECRET_FQN,
+  SERVICE_FQN,
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
@@ -163,6 +165,9 @@ export class Platform implements IPlatform {
 
       case ENDPOINT_FQN:
         return Endpoint;
+
+      case SERVICE_FQN:
+        return Service;
     }
 
     return undefined;

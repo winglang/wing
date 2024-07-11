@@ -196,7 +196,7 @@ describe("match", () => {
       Assert.match("abc", "def");
     }).toThrow(
       new nodeAssert.AssertionError({
-        message: "The input did not match the regular expression def",
+        message: 'The input "abc" did not match the regular expression def',
       })
     );
   });

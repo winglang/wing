@@ -22,7 +22,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
           "\${aws_security_group.Redis_KEN21securityGroup_139152DE.id}",
-          "\${aws_security_group.Redis_KEN24securityGroup_6EFFC29B.id}",
+          "\${aws_security_group.Redis_KEN25securityGroup_D3232AB7.id}",
         ],
         "subnet_group_name": "\${aws_elasticache_subnet_group.Redis_RedisSubnetGroup_E7D796E2.name}",
       },
@@ -170,10 +170,10 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
             "to_port": 6379,
           },
         ],
-        "name": "3542402a-securityGroup",
+        "name": "3542402a-\${aws_subnet.PrivateSubnet.id}-securityGroup",
         "vpc_id": "\${aws_vpc.VPC.id}",
       },
-      "Redis_KEN24securityGroup_6EFFC29B": {
+      "Redis_KEN25securityGroup_D3232AB7": {
         "egress": [
           {
             "cidr_blocks": [
@@ -204,7 +204,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
             "to_port": 6379,
           },
         ],
-        "name": "3542402a-securityGroup",
+        "name": "3542402a-\${aws_subnet.PrivateSubnet2.id}-securityGroup",
         "vpc_id": "\${aws_vpc.VPC.id}",
       },
     },
