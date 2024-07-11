@@ -123,7 +123,6 @@ rateSchedule.onTick(inflight () => {
 
 new cloud.Service(
   inflight () => {
-    log("start!");
     return inflight () => {
       log("stop!");
     };
