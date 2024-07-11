@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import { Function } from "../../src/cloud";
 import { inflight } from "../../src/core";
 import * as ex from "../../src/ex";
@@ -18,7 +19,7 @@ const INFLIGHT_CODE = inflight(async (_, name) => {
 describe("When creating a Redis resource", () => {
   it("should create an elasticache cluster and required vpc networking resources", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = new AwsApp();
     new ex.Redis(app, "Redis");
 
     // WHEN
@@ -42,7 +43,7 @@ describe("When creating a Redis resource", () => {
 
   it("should only contain a single instance of the vpc resources", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = new AwsApp();
     new ex.Redis(app, "Redis");
 
     // WHEN
@@ -59,10 +60,7 @@ describe("When creating a Redis resource", () => {
   describe("that is used by a function", () => {
     it("lambda function should have access to the redis cluster", () => {
       // GIVEN
-      const app = new tfaws.App({
-        outdir: mkdtemp(),
-        entrypointDir: __dirname,
-      });
+      const app = new AwsApp();
       const redisCluster = new ex.Redis(app, "Redis") as ex.Redis;
       const func = new Function(app, "Function", INFLIGHT_CODE);
       redisCluster.onLift(func, ["set", "get"]);
@@ -83,7 +81,7 @@ describe("When creating a Redis resource", () => {
 describe("When creating multiple Redis resources", () => {
   it("should only contain a single instance of the vpc resources", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = new AwsApp();
     new ex.Redis(app, "RedisOne");
     new ex.Redis(app, "RedisTwo");
 
@@ -104,10 +102,7 @@ describe("When creating multiple Redis resources", () => {
   describe("that are used by a function", () => {
     it("the function should have access to both clusters", () => {
       // GIVEN
-      const app = new tfaws.App({
-        outdir: mkdtemp(),
-        entrypointDir: __dirname,
-      });
+      const app = new AwsApp();
       const redisCluster = new ex.Redis(app, "Redis") as ex.Redis;
       const otherCluster = new ex.Redis(app, "OtherRedis") as ex.Redis;
       const func = new Function(app, "Function", INFLIGHT_CODE);

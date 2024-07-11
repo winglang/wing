@@ -101,19 +101,18 @@ test "shell() with cwd option" {
   let tempFile = fs.join(tempDir, "tempfile.txt");
   fs.writeFile(tempFile, "Hello, Wing!");
 
-  let command = "ls -1";
-  let opts = {cwd: tempDir};
+  let command1 = "ls -1";
+  let opts1 = {cwd: tempDir};
 
-  let output = util.shell(command, opts);
+  let output1 = util.shell(command1, opts1);
 
-  expect.equal(output, "tempfile.txt\n");
-}
+  expect.equal(output1, "tempfile.txt\n");
 
-test "shell() with throw option" {
-  let command = "exit 1";
-  let opts = {throw: false};
+// "shell() with throw option" 
+  let command2 = "exit 1";
+  let opts2 = {throw: false};
 
-  let output = util.shell(command, opts);
+  let output2 = util.shell(command2, opts2);
 
-  expect.equal(output, "Error executing command \"exit 1\". Exited with error code: 1");
+  expect.equal(output2, "Error executing command \"exit 1\". Exited with error code: 1");
 }

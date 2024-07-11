@@ -49,8 +49,7 @@ module.exports = function({ $SomeEnum }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -72,9 +71,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const SomeEnum =
       (function (tmp) {
         tmp["ONE"] = "ONE";
@@ -118,10 +121,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [SomeEnum, [].concat(["ONE"], ["TWO"])],
             [one, []],
             [two, []],
           ],
           "$inflight_init": [
+            [SomeEnum, []],
             [one, []],
             [two, []],
           ],
@@ -155,8 +160,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [SomeEnum, [].concat(["ONE"], ["TWO"], ["THREE"])],
           ],
           "$inflight_init": [
+            [SomeEnum, []],
           ],
         });
       }
@@ -165,14 +172,13 @@ class $Root extends $stdlib.std.Resource {
     const three = SomeEnum.THREE;
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight", new $Closure1(this, "$Closure1"));
     $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, SomeEnum.ONE), "ONE"), "\"{SomeEnum.ONE}\" == \"ONE\"");
     $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, SomeEnum.TWO), "TWO"), "\"{SomeEnum.TWO}\" == \"TWO\"");
     $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, SomeEnum.THREE), "THREE"), "\"{SomeEnum.THREE}\" == \"THREE\"");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:toStr inflight", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:toStr inflight", new $Closure2(this, "$Closure2"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "enums.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

@@ -24,7 +24,6 @@ export class Schedule
 
   constructor(props: ScheduleSchema) {
     this.interval = parseExpression(props.cronExpression, { utc: true });
-    this.scheduleFunction();
   }
 
   private get context(): ISimulatorContext {
@@ -36,19 +35,32 @@ export class Schedule
 
   // Calculate the delay for the next execution
   private nextDelay(interval: CronExpression) {
-    return interval.next().toDate().getTime() - Date.now();
+    const nextDate = interval.next().toDate();
+    this.context.addTrace({
+      type: TraceType.RESOURCE,
+      level: LogLevel.VERBOSE,
+      data: {
+        message: `Scheduling the next task to run at: ${nextDate} (the current time is ${new Date()})`,
+      },
+      sourcePath: this.context.resourcePath,
+      sourceType: SCHEDULE_FQN,
+      timestamp: new Date().toISOString(),
+    });
+    return nextDate.getTime() - new Date().getTime();
   }
 
   // Recursively schedule the function to be executed
   private scheduleFunction() {
+    const delay = this.nextDelay(this.interval);
     this.intervalTimeout = setTimeout(() => {
       this.runTasks();
       this.scheduleFunction();
-    }, this.nextDelay(this.interval));
+    }, delay);
   }
 
   public async init(context: ISimulatorContext): Promise<ScheduleAttributes> {
     this._context = context;
+    this.scheduleFunction();
     return {};
   }
 

@@ -45,7 +45,7 @@ if true {
   let c: str? = "c";
   if let d = a {
     assert(false);
-  } elif b? {
+  } elif b != nil {
     assert(true);
   } elif let e = c {
     assert(false);
@@ -62,7 +62,7 @@ if true {
     assert(false);
   } elif let e = c {
     assert(true);
-  } elif b? {
+  } elif b != nil {
     assert(false);
   } else {
     assert(false);

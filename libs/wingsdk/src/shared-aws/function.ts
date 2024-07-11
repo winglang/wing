@@ -30,6 +30,12 @@ export interface IAwsFunction extends IAwsInflightHost {
    * AWS Function name
    */
   readonly functionName: string;
+
+  /**
+   * Add a Lambda layer to the function.
+   * @param layerArn The ARN of the layer.
+   */
+  addLambdaLayer(layerArn: string): void;
 }
 
 /**

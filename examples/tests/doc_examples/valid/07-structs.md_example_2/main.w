@@ -7,6 +7,6 @@ struct Example {
 }
 
 let example = Example { };
-if ! example.a? {
+if example.a == nil {
   log("a is nil"); 
 }

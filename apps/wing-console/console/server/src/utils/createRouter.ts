@@ -86,6 +86,7 @@ export interface RouterMeta {
 
 export interface RouterContext {
   simulator(): Promise<simulator.Simulator>;
+  restartSimulator(): Promise<void>;
   testSimulator(): Promise<simulator.Simulator>;
   appDetails(): Promise<{
     wingVersion: string | undefined;
@@ -111,6 +112,8 @@ export interface RouterContext {
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
   analytics?: Analytics;
+  getEndpointWarningAccepted?: () => Promise<boolean>;
+  notifyEndpointWarningAccepted?: () => Promise<void>;
 }
 
 const t = initTRPC.context<RouterContext>().meta<RouterMeta>().create();

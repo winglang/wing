@@ -232,8 +232,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -424,6 +423,9 @@ module.exports = function({  }) {
         },
         "function_name": "Queue-SetConsumer0-c8931d51",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_Queue-SetConsumer0_IamRole_D38B87EE.arn}",
@@ -456,6 +458,9 @@ module.exports = function({  }) {
         },
         "function_name": "Topic-OnMessage0-c8bea057",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_Topic-OnMessage0_IamRole_FEF4CFBB.arn}",
@@ -488,6 +493,9 @@ module.exports = function({  }) {
         },
         "function_name": "OnCreate-OnMessage0-c8ab841c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_b2_OnCreate-OnMessage0_IamRole_2B7C8C04.arn}",
@@ -709,11 +717,15 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const MyEnum =
       (function (tmp) {
         tmp["A"] = "A";
@@ -725,7 +737,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.c = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+        this.c = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
       }
       static _toInflightType() {
         return `
@@ -807,11 +819,13 @@ class $Root extends $stdlib.std.Resource {
           "testTypeAccess": [
             [Bar, ["barStatic"]],
             [Foo, ["fooStatic"]],
+            [MyEnum, ["B"]],
             [this.e, []],
           ],
           "$inflight_init": [
             [Bar, []],
             [Foo, []],
+            [MyEnum, []],
             [this.b, []],
             [this.e, []],
             [this.foo, []],
@@ -869,10 +883,10 @@ class $Root extends $stdlib.std.Resource {
     class BigPublisher extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
-        this.b2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
-        this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
-        this.t = this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "Topic");
+        this.b = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+        this.b2 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
+        this.q = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
+        this.t = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "Topic");
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
@@ -1053,9 +1067,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
             [bigOlPublisher, [].concat(["publish"], ["getObjectCount"])],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [bigOlPublisher, []],
           ],
         });
@@ -1096,15 +1112,15 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         const d1 = new Dummy(this, "Dummy");
-        $helpers.assert(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"), "d1.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy\")");
+        $helpers.assert($helpers.nodeof(d1).path.endsWith("/ScopeAndIdTestClass/Dummy"), "nodeof(d1).path.endsWith(\"/ScopeAndIdTestClass/Dummy\")");
         const d2 = new Dummy(d1, "Dummy");
-        $helpers.assert(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"), "d2.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")");
+        $helpers.assert($helpers.nodeof(d2).path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"), "nodeof(d2).path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")");
         const d3 = new Dummy((Dummy.getInstance(this, d2)), "Dummy");
-        $helpers.assert(d3.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"), "d3.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy\")");
+        $helpers.assert($helpers.nodeof(d3).path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"), "nodeof(d3).path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy\")");
         for (const i of $helpers.range(0,3,false)) {
           const x = new Dummy(this, String.raw({ raw: ["tc", ""] }, i));
           const expected_path = String.raw({ raw: ["/ScopeAndIdTestClass/tc", ""] }, i);
-          $helpers.assert(x.node.path.endsWith(expected_path), "x.node.path.endsWith(expected_path)");
+          $helpers.assert($helpers.nodeof(x).path.endsWith(expected_path), "nodeof(x).path.endsWith(expected_path)");
         }
       }
       static _toInflightType() {
@@ -1131,15 +1147,14 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const bucket = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const res = new Bar(this, "Bar", "Arr", bucket, MyEnum.B);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
     const bigOlPublisher = new BigPublisher(this, "BigPublisher");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:dependency cycles", new $Closure5(this, "$Closure5"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:dependency cycles", new $Closure5(this, "$Closure5"));
     new ScopeAndIdTestClass(this, "ScopeAndIdTestClass");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

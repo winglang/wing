@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -212,6 +211,9 @@
         },
         "function_name": "Topic-OnMessage0-c85d7820",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Topic-OnMessage0_IamRole_64DD36FA.arn}",
@@ -244,6 +246,9 @@
         },
         "function_name": "q1-SetConsumer0-c8600a39",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.q1-SetConsumer0_IamRole_8299B0EC.arn}",
@@ -276,6 +281,9 @@
         },
         "function_name": "q2-SetConsumer0-c8ba098b",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.q2-SetConsumer0_IamRole_910A96B5.arn}",

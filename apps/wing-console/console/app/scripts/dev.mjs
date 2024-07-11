@@ -43,8 +43,10 @@ const options = parseArgs({
     requireAcceptTerms: true,
     analyticsAnonymousId: undefined,
     async requireSignIn() {
-      // Return `true` if you want to show the sign in prompt.
-      return false;
+      return options.requireSignIn ?? false;
+    },
+    async getEndpointWarningAccepted() {
+      return options.getEndpointWarningAccepted ?? true;
     },
   });
 

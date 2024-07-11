@@ -281,8 +281,7 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -304,9 +303,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -501,8 +504,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["values"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
           ],
         });
       }
@@ -829,37 +834,36 @@ class $Root extends $stdlib.std.Resource {
     const strA = "wing";
     const strB = "wing";
     const strC = "wingnuts";
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Primitive types with the same value", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Primitive types with different values", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Primitive types with the same value", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Primitive types with different values", new $Closure2(this, "$Closure2"));
     const jsonA = ({"a": 1});
     const jsonB = ({"a": 1});
     const jsonC = [1, 2, 3];
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Json with the same value", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Json with different values", new $Closure4(this, "$Closure4"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Json.values equality", new $Closure5(this, "$Closure5"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Json with the same value", new $Closure3(this, "$Closure3"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Json with different values", new $Closure4(this, "$Closure4"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Json.values equality", new $Closure5(this, "$Closure5"));
     const setA = new Set([1, 2, 3]);
     const setB = new Set([1, 2, 3]);
     const setC = new Set([4, 5, 6]);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with the same value", new $Closure6(this, "$Closure6"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with different values", new $Closure7(this, "$Closure7"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with the same value", new $Closure6(this, "$Closure6"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with different values", new $Closure7(this, "$Closure7"));
     const mapA = ({["a"]: 1, ["b"]: 2});
     const mapB = ({["a"]: 1, ["b"]: 2});
     const mapC = ({["c"]: 10, ["b"]: 2});
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with the same value", new $Closure8(this, "$Closure8"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with different values", new $Closure9(this, "$Closure9"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with the same value", new $Closure8(this, "$Closure8"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with different values", new $Closure9(this, "$Closure9"));
     const arrayA = [1, 2, 3];
     const arrayB = [1, 2, 3];
     const arrayC = [4, 5, 6];
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Array with the same value", new $Closure10(this, "$Closure10"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Array with different values", new $Closure11(this, "$Closure11"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Array with the same value", new $Closure10(this, "$Closure10"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Array with different values", new $Closure11(this, "$Closure11"));
     const cat1 = ({"name": "Mittens", "age": 3});
     const cat2 = ({"name": "Mittens", "age": 3});
     const cat3 = ({"name": "Simba", "age": 5});
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Struct with the same value", new $Closure12(this, "$Closure12"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Struct with different values", new $Closure13(this, "$Closure13"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Struct with the same value", new $Closure12(this, "$Closure12"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Struct with different values", new $Closure13(this, "$Closure13"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "deep_equality.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

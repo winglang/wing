@@ -60,6 +60,12 @@ export class Bucket extends cloud.Bucket {
     this.public = props.public ?? false;
 
     const app = App.of(this) as App;
+    if (app._target !== "tf-azure") {
+      throw new Error(
+        `Bucket can only be created in a tf-azure app, got ${app._target}`
+      );
+    }
+
     this.storageAccount = app.storageAccount;
 
     const storageContainerName = ResourceNames.generateName(
@@ -102,17 +108,16 @@ export class Bucket extends cloud.Bucket {
   public get _liftMap(): core.LiftMap {
     // TODO: After fixing the tests we realized that nothing is working-https://github.com/winglang/wing/issues/5123
     return {
-      [cloud.BucketInflightMethods.DELETE]: [],
-      [cloud.BucketInflightMethods.GET]: [],
-      [cloud.BucketInflightMethods.GET_JSON]: [],
-      [cloud.BucketInflightMethods.LIST]: [],
-      [cloud.BucketInflightMethods.PUT]: [],
-      [cloud.BucketInflightMethods.PUT_JSON]: [],
-      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
-      [cloud.BucketInflightMethods.EXISTS]: [],
-      [cloud.BucketInflightMethods.TRY_GET]: [],
-      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
-      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      // [cloud.BucketInflightMethods.DELETE]: [],
+      // [cloud.BucketInflightMethods.GET]: [],
+      // [cloud.BucketInflightMethods.GET_JSON]: [],
+      // [cloud.BucketInflightMethods.LIST]: [],
+      // [cloud.BucketInflightMethods.PUT]: [],
+      // [cloud.BucketInflightMethods.PUT_JSON]: [],
+      // [cloud.BucketInflightMethods.EXISTS]: [],
+      // [cloud.BucketInflightMethods.TRY_GET]: [],
+      // [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      // [cloud.BucketInflightMethods.TRY_DELETE]: [],
     };
   }
 

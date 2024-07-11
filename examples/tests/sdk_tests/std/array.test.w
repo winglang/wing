@@ -25,7 +25,7 @@ test "length" {
 assert(["hello"].at(0) == "hello");
 assert(MutArray<str>["hello", "world"].at(1) == "world");
 
-assert(buckets.at(0).node.id == "myBucket");
+assert(nodeof(buckets.at(0)).id == "myBucket");
 
 test "at()" {
   assert(["hello"].at(0) == "hello");
@@ -150,8 +150,8 @@ assert(d.at(1) == "wing");
 
 let mergedBuckets = buckets.concat(anotherBuckets);
 assert(mergedBuckets.length == 2);
-assert(mergedBuckets.at(0).node.id == "myBucket");
-assert(mergedBuckets.at(1).node.id == "mySecondBucket");
+assert(nodeof(mergedBuckets.at(0)).id == "myBucket");
+assert(nodeof(mergedBuckets.at(1)).id == "mySecondBucket");
 
 test "concatMutArray()" {
   let b = MutArray<str>["hello"];
@@ -265,7 +265,7 @@ assert(o.at(0) == p.at(0));
 
 let copiedBuckets = buckets.copyMut();
 assert(copiedBuckets.length == 1);
-assert(copiedBuckets.at(0).node.id == "myBucket");
+assert(nodeof(copiedBuckets.at(0)).id == "myBucket");
 
 test "copy()" {
   let o = MutArray<str>["hello", "wing"];

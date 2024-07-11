@@ -2051,10 +2051,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "optional_test"
-        },
-        {
-          "type": "SYMBOL",
           "name": "compiler_dbg_panic"
         },
         {
@@ -2461,23 +2457,6 @@
                 "value": "u\\{[0-9a-fA-F]+\\}"
               }
             ]
-          }
-        ]
-      }
-    },
-    "optional_test": {
-      "type": "PREC_RIGHT",
-      "value": 130,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "expression"
-          },
-          {
-            "type": "STRING",
-            "value": "?"
           }
         ]
       }
@@ -4472,19 +4451,28 @@
       ]
     },
     "struct_literal_member": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
           "name": "identifier"
         },
         {
-          "type": "STRING",
-          "value": ":"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "expression"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "identifier"
+            },
+            {
+              "type": "STRING",
+              "value": ":"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "expression"
+            }
+          ]
         }
       ]
     },
@@ -4614,28 +4602,37 @@
       ]
     },
     "json_literal_member": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
-          "type": "CHOICE",
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SEQ",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "identifier"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "string"
+                }
+              ]
+            },
+            {
+              "type": "STRING",
+              "value": ":"
             },
             {
               "type": "SYMBOL",
-              "name": "string"
+              "name": "expression"
             }
           ]
-        },
-        {
-          "type": "STRING",
-          "value": ":"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "expression"
         }
       ]
     },

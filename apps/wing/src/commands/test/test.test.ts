@@ -79,10 +79,17 @@ describe("wing test (custom platform)", () => {
         newApp(appProps) {
           return new tfaws.App(appProps);
         }
+
+        newInstance(fqn, scope, id, ...args) {
+          if (fqn === "@winglang/sdk.std.TestRunner") {
+            return new tfaws.TestRunner(scope, id, ...args);
+          }
+        }
       }
       module.exports = { Platform }`
     );
 
+    // entrypoint array is empty because foo.test.w is inferred as the only entrypoint
     await wingTest([], {
       clean: true,
       platform: ["./custom-platform.js"],
@@ -356,7 +363,7 @@ describe("retry and parallel options", () => {
     });
 
     const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
-    expect(retryLogs.length).toBe(3);
+    expect(retryLogs.length).toBe(2);
   });
 
   test("wing test --parallel [batch]", async () => {

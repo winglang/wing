@@ -216,8 +216,7 @@ module.exports = function({ $complex }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -413,6 +412,9 @@ module.exports = function({ $complex }) {
         },
         "function_name": "f1-c8545025",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f1_IamRole_FD68C58F.arn}",
@@ -446,6 +448,9 @@ module.exports = function({ $complex }) {
         },
         "function_name": "f2-c812cd39",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f2_IamRole_B66911B2.arn}",
@@ -479,6 +484,9 @@ module.exports = function({ $complex }) {
         },
         "function_name": "f3-c8555a7c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f3_IamRole_72675FA1.arn}",
@@ -512,6 +520,9 @@ module.exports = function({ $complex }) {
         },
         "function_name": "f4-c8745b6f",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f4_IamRole_E4904831.arn}",
@@ -638,10 +649,14 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -992,27 +1007,26 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const b1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
+    const b1 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
     (b1.addObject("k", "v1"));
-    const b2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
+    const b2 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
     (b2.addObject("k", "v2"));
     const c1 = new $Closure1(this, "$Closure1");
     const c2 = new $Closure2(this, "$Closure2");
     const ar = [c1, c2];
-    const f1 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f1", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure array", new $Closure4(this, "$Closure4"));
+    const f1 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f1", new $Closure3(this, "$Closure3"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure array", new $Closure4(this, "$Closure4"));
     const map = ({["k1"]: c1, ["k2"]: c2});
-    const f2 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f2", new $Closure5(this, "$Closure5"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure map", new $Closure6(this, "$Closure6"));
+    const f2 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f2", new $Closure5(this, "$Closure5"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure map", new $Closure6(this, "$Closure6"));
     const set = new Set([c1, c2]);
-    const f3 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f3", new $Closure7(this, "$Closure7"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure set", new $Closure8(this, "$Closure8"));
+    const f3 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f3", new $Closure7(this, "$Closure7"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure set", new $Closure8(this, "$Closure8"));
     const complex = [({["k1"]: new Set([c1, c2])})];
-    const f4 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f4", new $Closure9(this, "$Closure9"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure in complex collection", new $Closure10(this, "$Closure10"));
+    const f4 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f4", new $Closure9(this, "$Closure9"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure in complex collection", new $Closure10(this, "$Closure10"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "lift_inflight_closure_collection.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

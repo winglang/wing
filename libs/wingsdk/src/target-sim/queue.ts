@@ -179,7 +179,7 @@ export class QueueSetConsumerHandler {
       }
 
       return batchItemFailures.length > 0
-        ? Json._fromAny(batchItemFailures)
+        ? (batchItemFailures as unknown as Json)
         : undefined;
     });
   }

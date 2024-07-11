@@ -11,7 +11,6 @@ const PREC = {
   ADD: 100,
   MULTIPLY: 110,
   UNARY: 120,
-  OPTIONAL_TEST: 130,
   POWER: 140,
   STRUCTURED_ACCESS: 150, // x[y]
   MEMBER: 160,
@@ -384,7 +383,6 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.json_literal,
         $.struct_literal,
-        $.optional_test,
         $.compiler_dbg_panic,
         $.optional_unwrap,
         $.intrinsic
@@ -470,9 +468,6 @@ module.exports = grammar({
           )
         )
       ),
-
-    optional_test: ($) =>
-      prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
 
     compiler_dbg_panic: ($) => "😱",
     compiler_dbg_env: ($) => seq("🗺️", optional(";")),
@@ -735,7 +730,7 @@ module.exports = grammar({
       ),
 
     map_literal_member: ($) => seq($.expression, "=>", $.expression),
-    struct_literal_member: ($) => seq($.identifier, ":", $.expression),
+    struct_literal_member: ($) => choice($.identifier, seq($.identifier, ":", $.expression)),
     structured_access_expression: ($) =>
       prec.right(
         PREC.STRUCTURED_ACCESS,
@@ -754,8 +749,7 @@ module.exports = grammar({
     json_map_literal: ($) =>
       braced(commaSep(field("member", $.json_literal_member))),
     json_literal_member: ($) =>
-      seq(choice($.identifier, $.string), ":", $.expression),
-
+      choice($.identifier, seq(choice($.identifier, $.string), ":", $.expression)),
     json_container_type: ($) => $._json_types,
 
     _json_types: ($) => choice("Json", "MutJson"),

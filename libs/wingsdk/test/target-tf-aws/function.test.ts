@@ -1,11 +1,11 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import { Function } from "../../src/cloud";
 import { inflight } from "../../src/core";
 import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import {
-  mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,
@@ -17,7 +17,7 @@ const INFLIGHT_CODE = inflight(async (_, name) => {
 });
 
 test("basic function", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   new Function(app, "Function", INFLIGHT_CODE);
   const output = app.synth();
@@ -46,7 +46,7 @@ test("basic function", () => {
 
 test("function will be behind a vpc when vpc_lambda is set to true", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const parameters = app.parameters;
   parameters._rawParameters["tf-aws"] = {
     vpc: "new",
@@ -68,7 +68,7 @@ test("function will be behind a vpc when vpc_lambda is set to true", () => {
 });
 
 test("basic function with environment variables", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new Function(app, "Function", INFLIGHT_CODE, {
     env: {
       FOO: "BAR",
@@ -92,7 +92,7 @@ test("basic function with environment variables", () => {
 });
 
 test("function name valid", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const func = new Function(app, "The-Mighty_Function-01", INFLIGHT_CODE);
   const output = app.synth();
 
@@ -107,7 +107,7 @@ test("function name valid", () => {
 });
 
 test("replace invalid character from function name", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const func = new Function(app, "The%Mighty$Function", INFLIGHT_CODE);
   const output = app.synth();
 
@@ -122,7 +122,7 @@ test("replace invalid character from function name", () => {
 });
 
 test("basic function with timeout explicitly set", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new Function(app, "Function", INFLIGHT_CODE, {
     timeout: Duration.fromSeconds(30),
   });
@@ -138,7 +138,7 @@ test("basic function with timeout explicitly set", () => {
 });
 
 test("basic function with memory size specified", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new Function(app, "Function", INFLIGHT_CODE, { memory: 512 });
   const output = app.synth();
 
@@ -156,7 +156,7 @@ test("basic function with memory size specified", () => {
 });
 
 test("basic function with custom log retention", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new Function(app, "Function", INFLIGHT_CODE, { logRetentionDays: 7 });
   const output = app.synth();
 
@@ -174,7 +174,7 @@ test("basic function with custom log retention", () => {
 });
 
 test("basic function with infinite log retention", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new Function(app, "Function", INFLIGHT_CODE, { logRetentionDays: -1 });
   const output = app.synth();
 
@@ -192,7 +192,7 @@ test("asset path is stripped of spaces", () => {
   // GIVEN
   const some_name = "I have a space in my name";
   const expectedReplacement = "i_have_a_space_in_my_name";
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const f = new Function(app, some_name, INFLIGHT_CODE);
   // WHEN
   app.synth();
@@ -201,7 +201,7 @@ test("asset path is stripped of spaces", () => {
 });
 
 test("vpc permissions are added even if there is no policy", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const f = new tfaws.Function(app, "Function", INFLIGHT_CODE);
 
   f.addNetwork({

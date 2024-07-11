@@ -24,9 +24,7 @@ export class FunctionClient implements IFunctionClient {
       if (!res.ok) {
         throw new Error((await res.text()) || "Invocation Error");
       }
-
-      const responseBody = await res.json();
-      return responseBody as Json;
+      return Json._fromAny(res.json()) || undefined;
     } catch (error) {
       throw new Error(
         `Error while invoking the function ${this.functionName}: ${

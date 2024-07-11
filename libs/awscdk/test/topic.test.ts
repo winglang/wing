@@ -1,14 +1,12 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import { cloud, simulator } from "@winglang/sdk";
-import * as awscdk from "../src";
-import { mkdtemp } from "@winglang/sdk/test/util";
-import { sanitizeCode, awscdkSanitize, CDK_APP_OPTS } from "./util";
+import { cloud } from "@winglang/sdk";
+import { sanitizeCode, awscdkSanitize, AwsCdkApp } from "./util";
 import { inflight } from "@winglang/sdk/lib/core";
 
 test("default topic behavior", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   new cloud.Topic(app, "Topic");
   const output = app.synth();
 
@@ -19,9 +17,11 @@ test("default topic behavior", () => {
 
 test("topic with subscriber function", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const topic = new cloud.Topic(app, "Topic");
-  const subscriber = inflight(async (_, event) => console.log("Received: ", event));
+  const subscriber = inflight(async (_, event) =>
+    console.log("Received: ", event)
+  );
   topic.onMessage(subscriber);
   const output = app.synth();
 
@@ -38,9 +38,11 @@ test("topic with subscriber function", () => {
 
 test("topic with multiple subscribers", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const topic = new cloud.Topic(app, "Topic");
-  const subOne = inflight(async (_, event) => console.log("Got Event: ", event));
+  const subOne = inflight(async (_, event) =>
+    console.log("Got Event: ", event)
+  );
   const subTwo = inflight(async (_, event) => console.log("Ohh yea!! ", event));
 
   // WHEN

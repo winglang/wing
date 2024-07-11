@@ -328,7 +328,7 @@ exports[`default website behavior 2`] = `
                   "AllowDistributionReadOnly": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "AllowDistributionReadOnly",
@@ -337,7 +337,7 @@ exports[`default website behavior 2`] = `
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "BucketWebsiteConfiguration",
@@ -346,7 +346,7 @@ exports[`default website behavior 2`] = `
                   "CloudfrontOac": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "CloudfrontOac",
@@ -355,7 +355,7 @@ exports[`default website behavior 2`] = `
                   "Distribution": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Distribution",
@@ -364,7 +364,7 @@ exports[`default website behavior 2`] = `
                   "DistributionS3BucketPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "DistributionS3BucketPolicy",
@@ -375,7 +375,7 @@ exports[`default website behavior 2`] = `
                       "Url": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformOutput",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Url",
@@ -397,7 +397,7 @@ exports[`default website behavior 2`] = `
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File--b.html",
@@ -406,7 +406,7 @@ exports[`default website behavior 2`] = `
                   "File--index.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File--index.html",
@@ -415,7 +415,7 @@ exports[`default website behavior 2`] = `
                   "File--inner-folder--a.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File--inner-folder--a.html",
@@ -424,7 +424,7 @@ exports[`default website behavior 2`] = `
                   "WebsiteBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "WebsiteBucket",
@@ -445,7 +445,7 @@ exports[`default website behavior 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -463,7 +463,7 @@ exports[`default website behavior 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -472,7 +472,7 @@ exports[`default website behavior 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -481,7 +481,7 @@ exports[`default website behavior 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -639,7 +639,7 @@ exports[`website with addFile 1`] = `
       "Website_File-additionhtml_546E3AAA": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
         "content": "<html>Hello world!</html>",
-        "content_type": "text/plain",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],
@@ -663,7 +663,7 @@ exports[`website with addFile 2`] = `
                   "AllowDistributionReadOnly": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "AllowDistributionReadOnly",
@@ -672,7 +672,7 @@ exports[`website with addFile 2`] = `
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "BucketWebsiteConfiguration",
@@ -681,7 +681,7 @@ exports[`website with addFile 2`] = `
                   "CloudfrontOac": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "CloudfrontOac",
@@ -690,7 +690,7 @@ exports[`website with addFile 2`] = `
                   "Distribution": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Distribution",
@@ -699,7 +699,7 @@ exports[`website with addFile 2`] = `
                   "DistributionS3BucketPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "DistributionS3BucketPolicy",
@@ -710,7 +710,7 @@ exports[`website with addFile 2`] = `
                       "Url": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformOutput",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Url",
@@ -732,7 +732,7 @@ exports[`website with addFile 2`] = `
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File--b.html",
@@ -741,7 +741,7 @@ exports[`website with addFile 2`] = `
                   "File--index.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File--index.html",
@@ -750,7 +750,7 @@ exports[`website with addFile 2`] = `
                   "File--inner-folder--a.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File--inner-folder--a.html",
@@ -759,7 +759,7 @@ exports[`website with addFile 2`] = `
                   "File-addition.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File-addition.html",
@@ -768,7 +768,7 @@ exports[`website with addFile 2`] = `
                   "WebsiteBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "WebsiteBucket",
@@ -789,7 +789,7 @@ exports[`website with addFile 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -807,7 +807,7 @@ exports[`website with addFile 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -816,7 +816,7 @@ exports[`website with addFile 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -825,7 +825,7 @@ exports[`website with addFile 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -1007,7 +1007,7 @@ exports[`website with addJson 2`] = `
                   "AllowDistributionReadOnly": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "AllowDistributionReadOnly",
@@ -1016,7 +1016,7 @@ exports[`website with addJson 2`] = `
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "BucketWebsiteConfiguration",
@@ -1025,7 +1025,7 @@ exports[`website with addJson 2`] = `
                   "CloudfrontOac": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "CloudfrontOac",
@@ -1034,7 +1034,7 @@ exports[`website with addJson 2`] = `
                   "Distribution": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Distribution",
@@ -1043,7 +1043,7 @@ exports[`website with addJson 2`] = `
                   "DistributionS3BucketPolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "DistributionS3BucketPolicy",
@@ -1054,7 +1054,7 @@ exports[`website with addJson 2`] = `
                       "Url": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformOutput",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
                         "display": {},
                         "id": "Url",
@@ -1076,7 +1076,7 @@ exports[`website with addJson 2`] = `
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File--b.html",
@@ -1085,7 +1085,7 @@ exports[`website with addJson 2`] = `
                   "File--index.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File--index.html",
@@ -1094,7 +1094,7 @@ exports[`website with addJson 2`] = `
                   "File--inner-folder--a.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File--inner-folder--a.html",
@@ -1103,7 +1103,7 @@ exports[`website with addJson 2`] = `
                   "File-config.json": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "File-config.json",
@@ -1112,7 +1112,7 @@ exports[`website with addJson 2`] = `
                   "WebsiteBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "WebsiteBucket",
@@ -1133,7 +1133,7 @@ exports[`website with addJson 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -1151,7 +1151,7 @@ exports[`website with addJson 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -1160,7 +1160,7 @@ exports[`website with addJson 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -1169,7 +1169,7 @@ exports[`website with addJson 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",

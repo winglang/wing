@@ -1727,6 +1727,29 @@ AWS Dynamodb name.
 
 A shared interface for AWS functions.
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.addLambdaLayer">addLambdaLayer</a></code> | Add a Lambda layer to the function. |
+
+---
+
+##### `addLambdaLayer` <a name="addLambdaLayer" id="@winglang/sdk.aws.IAwsFunction.addLambdaLayer"></a>
+
+```wing
+addLambdaLayer(layerArn: str): void
+```
+
+Add a Lambda layer to the function.
+
+###### `layerArn`<sup>Required</sup> <a name="layerArn" id="@winglang/sdk.aws.IAwsFunction.addLambdaLayer.parameter.layerArn"></a>
+
+- *Type:* str
+
+The ARN of the layer.
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 

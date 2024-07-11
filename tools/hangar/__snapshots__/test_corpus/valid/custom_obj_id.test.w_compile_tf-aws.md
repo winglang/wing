@@ -20,8 +20,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -43,9 +42,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -76,11 +79,10 @@ class $Root extends $stdlib.std.Resource {
     }
     const foo1 = new Foo(this, "Foo");
     const bar2 = new Foo(this, "bar2");
-    $helpers.assert($helpers.eq(foo1.node.id, "Foo"), "foo1.node.id == \"Foo\"");
-    $helpers.assert($helpers.eq(bar2.node.id, "bar2"), "bar2.node.id == \"bar2\"");
+    $helpers.assert($helpers.eq($helpers.nodeof(foo1).id, "Foo"), "nodeof(foo1).id == \"Foo\"");
+    $helpers.assert($helpers.eq($helpers.nodeof(bar2).id, "bar2"), "nodeof(bar2).id == \"bar2\"");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "custom_obj_id.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
