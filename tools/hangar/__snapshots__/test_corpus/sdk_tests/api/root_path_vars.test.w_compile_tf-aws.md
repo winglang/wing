@@ -167,6 +167,9 @@
         },
         "function_name": "get_-id0-c8c761b0",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_id0_IamRole_74C8077C.arn}",

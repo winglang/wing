@@ -1,5 +1,11 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { Button, Modal, useTheme } from "@wingconsole/design-system";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  useTheme,
+} from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useCallback, useState } from "react";
 
@@ -33,26 +39,32 @@ export const ResetButton = ({ disabled }: { disabled?: boolean }) => {
       </button>
 
       <Modal visible={showRestartModal}>
-        <div className="flex flex-col gap-4 max-w-lg items-center">
-          <h3
-            className={classNames(
-              theme.text1,
-              "text-base font-semibold leading-6",
-            )}
-          >
-            Reset Application
-          </h3>
-          <p className={classNames(theme.text2, "text-sm text-center")}>
-            Are you sure you want to reset all state and restart the
-            application?
-          </p>
-          <div className="flex justify-around gap-2">
-            <Button onClick={() => setShowRestartModal(false)}>Cancel</Button>{" "}
-            <Button onClick={restart} dataTestid="restart-simulator-button">
-              Reset
-            </Button>
+        <ModalBody>
+          <div className="flex flex-col gap-4 max-w-lg items-center">
+            <h3
+              className={classNames(
+                theme.text1,
+                "text-base font-semibold leading-6",
+              )}
+            >
+              Reset Application
+            </h3>
+            <p className={classNames(theme.text2, "text-sm text-center")}>
+              Are you sure you want to reset all state and restart the
+              application?
+            </p>
           </div>
-        </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={() => setShowRestartModal(false)}>Cancel</Button>
+          <Button
+            onClick={restart}
+            dataTestid="restart-simulator-button"
+            primary
+          >
+            Reset
+          </Button>
+        </ModalFooter>
       </Modal>
     </>
   );

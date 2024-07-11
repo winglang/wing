@@ -1,24 +1,18 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { AzureApp } from "./azure-util";
 import { Bucket } from "../../src/cloud";
 import { inflight } from "../../src/core";
-import * as tfazure from "../../src/target-tf-azure";
 import {
-  mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,
   treeJsonOf,
 } from "../util";
 
-const AZURE_APP_OPTS = {
-  location: "East US",
-  entrypointDir: __dirname,
-};
-
 test("create a bucket", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
+  const app = new AzureApp();
   new Bucket(app, "my_bucket");
   const output = app.synth();
 
@@ -35,7 +29,7 @@ test("create a bucket", () => {
 
 test("create multiple buckets", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
+  const app = new AzureApp();
   new Bucket(app, "my_bucket");
   new Bucket(app, "my_bucket2");
   const output = app.synth();
@@ -53,7 +47,7 @@ test("create multiple buckets", () => {
 
 test("bucket is public", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
+  const app = new AzureApp();
   new Bucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
@@ -70,7 +64,7 @@ test("bucket is public", () => {
 
 test("bucket with two preflight objects", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
+  const app = new AzureApp();
   const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
@@ -90,7 +84,7 @@ test("bucket with two preflight objects", () => {
 
 test("bucket with two preflight files", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
+  const app = new AzureApp();
   const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.addFile("file1.txt", "../test-files/test1.txt");
   bucket.addFile("file2.txt", "../test-files/test2.txt");
@@ -110,7 +104,7 @@ test("bucket with two preflight files", () => {
 
 test("bucket name valid", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
+  const app = new AzureApp();
   const bucket = new Bucket(app, "The-Uncanny-Bucket");
   const output = app.synth();
 
@@ -152,7 +146,7 @@ test("bucket onEvent is not implemented yet", () => {
   // GIVEN
   let error;
   try {
-    const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
+    const app = new AzureApp();
     const bucket = new Bucket(app, "my_bucket", { public: true });
     bucket.onEvent(inflight(async () => {}));
     app.synth();

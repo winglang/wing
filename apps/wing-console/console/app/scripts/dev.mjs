@@ -45,7 +45,23 @@ const options = parseArgs({
     async requireSignIn() {
       return options.requireSignIn ?? false;
     },
+    async getEndpointWarningAccepted() {
+      return options.getEndpointWarningAccepted ?? true;
+    },
   });
+
+  let closing = false;
+  const events = ["beforeExit", "SIGINT", "SIGTERM", "SIGHUP"];
+  for (const event of events) {
+    process.on(event, async () => {
+      if (closing) {
+        return;
+      }
+      closing = true;
+      await consoleServer.close();
+      process.exit();
+    });
+  }
 
   const vite = await createViteServer({
     ...viteConfig,

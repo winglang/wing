@@ -1,3 +1,4 @@
+import escape from "lodash.escape";
 import { memo, useEffect, useState } from "react";
 
 import type { Theme } from "./theme-provider.js";
@@ -21,14 +22,7 @@ const palette = {
 const CHAR_LIMIT = 100_000;
 
 const highlightJson = (value: string, theme: Theme) => {
-  let formatted;
-  try {
-    formatted = JSON.stringify(JSON.parse(value), undefined, 2);
-  } catch {
-    return;
-  }
-
-  return `${formatted
+  return `${value
     .slice(0, CHAR_LIMIT)
     .replaceAll(
       /("(\\u[\dA-Za-z]{4}|\\[^u]|[^"\\])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[Ee][+\-]?\d+)?)/g,
@@ -41,9 +35,9 @@ const highlightJson = (value: string, theme: Theme) => {
         } else if (/null/.test(match)) {
           className = palette.null;
         }
-        return `<span class="${className}">${match}</span>`;
+        return `<span class="${className}">${escape(match)}</span>`;
       },
-    )}${formatted.slice(CHAR_LIMIT)}`;
+    )}${value.slice(CHAR_LIMIT)}`;
 };
 
 export const TextHighlight = memo(

@@ -3,8 +3,10 @@ import { join } from "path";
 import { onTestFailed } from "vitest";
 import { directorySnapshot, mkdtemp } from "./util";
 import { Function, IFunctionClient, IFunctionHandler } from "../src/cloud";
+import { ClassFactory } from "../src/core";
 import { Simulator } from "../src/simulator";
 import { App } from "../src/target-sim/app";
+import { Platform } from "../src/target-sim/platform";
 
 /**
  * @see AppProps
@@ -32,11 +34,19 @@ export class SimApp extends App {
 
   constructor(props: SimAppProps = {}) {
     const { isTestEnvironment, rootConstruct, outdir } = props;
+
+    const platform = new Platform();
+    const classFactory = new ClassFactory(
+      [platform.newInstance.bind(platform)],
+      [platform.resolveType.bind(platform)]
+    );
+
     super({
       outdir: outdir ?? mkdtemp(),
       entrypointDir: __dirname,
       isTestEnvironment,
       rootConstruct,
+      classFactory,
     });
 
     // symlink the node_modules so we can test imports and stuffs

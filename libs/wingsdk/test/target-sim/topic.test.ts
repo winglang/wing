@@ -15,7 +15,6 @@ test("create a topic", async () => {
   expect(s.getResourceConfig("/my_topic")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_topic",
     addr: expect.any(String),
