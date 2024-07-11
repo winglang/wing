@@ -7,7 +7,6 @@ import type { Simulator } from "../../wingsdk.js";
 import { formatTraceError } from "../format-wing-error.js";
 
 import { createSimulatorManager } from "./simulator-manager.js";
-import { createTestStateManager } from "./test-state-manager.js";
 
 export type TestStatus = "success" | "error" | "idle" | "running";
 
@@ -115,6 +114,36 @@ const executeTest = async (
   }
   result.time = Date.now() - startTime;
   return result;
+};
+
+const createTestStateManager = ({
+  onTestsChange,
+}: {
+  onTestsChange: (testId?: string) => void;
+}) => {
+  let tests: TestItem[] = [];
+
+  return {
+    getTests: () => {
+      return tests;
+    },
+    getTest: (testId: string) => {
+      return tests.find((t) => t.id === testId);
+    },
+    setTests: (newTests: TestItem[]) => {
+      tests = newTests;
+      onTestsChange();
+    },
+    setTest: (test: TestItem) => {
+      const index = tests.findIndex((t) => t.id === test.id);
+      if (index === -1) {
+        tests.push(test);
+      } else {
+        tests[index] = test;
+      }
+      onTestsChange(test.id);
+    },
+  };
 };
 
 export const createTestRunner = ({
