@@ -1,23 +1,15 @@
 import classNames from "classnames";
 import type { PropsWithChildren } from "react";
 
-import { trpc } from "./trpc.js";
+import { trpc } from "../../trpc.js";
 
-export const createHtmlLink = (
-  error: string,
-  className: string,
-  expanded: boolean = false,
-) => {
-  return error
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll(
-      /--&gt;\s*([\w./-]+\.w):(\d+):(\d+)/g,
-      (match, path, line, column) => {
-        return `<a class="${className}" path="${path}" line="${line}" column="${column}" >${match}</a>`;
-      },
-    )
-    .replaceAll(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
+export const createHtmlLink = (text: string, className: string) => {
+  return text.replaceAll(
+    /([\w./-]+\.w):(\d+):(\d+)/g,
+    (match, path, line, column) => {
+      return `<a class="${className}" path="${path}" line="${line}" column="${column}" >${match}</a>`;
+    },
+  );
 };
 
 export const OpenFileInEditorButton = ({
