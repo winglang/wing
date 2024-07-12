@@ -4609,7 +4609,8 @@
     },
     {
       "type": "PATTERN",
-      "value": "[\\s\\p{Zs}\\uFEFF\\u2060\\u200B]"
+      "value": "[\\s\\p{Zs}\\uFEFF\\u2060\\u200B]",
+      "flags": "u"
     }
   ],
   "conflicts": [

@@ -561,6 +561,9 @@ importers:
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
+      framer-motion:
+        specifier: ^10.18.0
+        version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
       lodash.escape:
         specifier: ^4.0.1
         version: 4.0.1
@@ -770,6 +773,9 @@ importers:
       '@trpc/server':
         specifier: ^10.45.2
         version: 10.45.2
+      '@types/lodash.escape':
+        specifier: ^4.0.9
+        version: 4.0.9
       '@wingconsole/design-system':
         specifier: workspace:^
         version: link:../design-system
@@ -794,6 +800,9 @@ importers:
       lodash.debounce:
         specifier: ^4.0.8
         version: 4.0.8
+      lodash.escape:
+        specifier: ^4.0.1
+        version: 4.0.1
       lodash.throttle:
         specifier: ^4.1.1
         version: 4.1.1
@@ -10823,7 +10832,6 @@ packages:
     resolution: {integrity: sha512-YR9R6RU9D36OWrhVZ+r4fY8mMXQtofnLXAcE6CkKIxdH66uiCdEjkhxx/eiJnYpxjOFmPbWBUUvdv8lckO823Q==}
     dependencies:
       '@types/lodash': 4.17.5
-    dev: true
 
   /@types/lodash.once@4.1.9:
     resolution: {integrity: sha512-nvZ7GYfyZB6CUmXL+7HSXg53rFpc49FsKuRmMiCIGhgJB/yyTip8uHk4mxGyVJOl87dXPlf3qy42WsjOcIrnmg==}
@@ -10851,7 +10859,6 @@ packages:
 
   /@types/lodash@4.17.5:
     resolution: {integrity: sha512-MBIOHVZqVqgfro1euRDWX7OO0fBVUUMrN6Pwm8LQsz8cWhEpihlvR70ENj3f40j58TNxZaWv2ndSkInykNBBJw==}
-    dev: true
 
   /@types/long@4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
@@ -14359,7 +14366,7 @@ packages:
     dependencies:
       semver: 7.6.2
       shelljs: 0.8.5
-      typescript: 5.6.0-dev.20240703
+      typescript: 5.6.0-dev.20240711
     dev: true
 
   /dset@3.1.3:
@@ -22677,8 +22684,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.6.0-dev.20240703:
-    resolution: {integrity: sha512-AAOGWtykhMpxB4l+5CwojT2aBVAszalz9guzYaZMavmKHWxm3HciR+cIcKqDgR22hR7fPBJHtOti7uFCo4mt4A==}
+  /typescript@5.6.0-dev.20240711:
+    resolution: {integrity: sha512-7P96lBbF9T4qBB2IseUQBz/IakXa9a0zLOywLmWTZQB6EFbRnRMlwa7103Q44mwI8tfvdXRmed3ICuxHxSNUwA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
