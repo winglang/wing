@@ -48,7 +48,6 @@ const base = {
         warnOnUnassignedImports: true,
       },
     ],
-    "react/display-name": ["off"],
     "@typescript-eslint/consistent-type-imports": "error",
   },
 };
@@ -70,6 +69,7 @@ module.exports = {
     browser: {
       ...base,
       env: { ...base.env, browser: true },
+      plugins: [...base.plugins, "eslint-plugin-react-compiler"],
       extends: [
         ...base.extends,
         "plugin:react/recommended",
@@ -80,6 +80,8 @@ module.exports = {
       rules: {
         ...base.rules,
         "react/prop-types": ["off"],
+        "react/display-name": ["off"],
+        "react-compiler/react-compiler": "error",
       },
     },
   },
