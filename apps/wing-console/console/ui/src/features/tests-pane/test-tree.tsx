@@ -19,31 +19,14 @@ import type { TestItem, TestRunnerStatus } from "@wingconsole/server";
 import classNames from "classnames";
 import { memo, useMemo } from "react";
 
-export interface TestTreeProps {
-  status: TestRunnerStatus;
-  testList: TestItem[];
-  handleRunAllTests: () => void;
-  handleRunTest: (testPath: string) => void;
-  onSelectedItemsChange?: (ids: string[]) => void;
-  selectedItemId?: string;
-}
-
-export const TestTree = ({
-  status,
-  testList,
-  handleRunTest,
-  handleRunAllTests,
-  onSelectedItemsChange,
-  selectedItemId,
-}: TestTreeProps) => {
-  const { theme } = useTheme();
-
-  const selectedItems = useMemo(
-    () => (selectedItemId ? [selectedItemId] : undefined),
-    [selectedItemId],
-  );
-
-  const TestTreeItem = memo(({ test }: { test: TestItem }) => {
+const TestTreeItem = memo(
+  ({
+    test,
+    handleRunTest,
+  }: {
+    test: TestItem;
+    handleRunTest: (testPath: string) => void;
+  }) => {
     const { theme } = useTheme();
 
     return (
@@ -94,7 +77,32 @@ export const TestTree = ({
         }}
       />
     );
-  });
+  },
+);
+
+export interface TestTreeProps {
+  status: TestRunnerStatus;
+  testList: TestItem[];
+  handleRunAllTests: () => void;
+  handleRunTest: (testPath: string) => void;
+  onSelectedItemsChange?: (ids: string[]) => void;
+  selectedItemId?: string;
+}
+
+export const TestTree = ({
+  status,
+  testList,
+  handleRunTest,
+  handleRunAllTests,
+  onSelectedItemsChange,
+  selectedItemId,
+}: TestTreeProps) => {
+  const { theme } = useTheme();
+
+  const selectedItems = useMemo(
+    () => (selectedItemId ? [selectedItemId] : undefined),
+    [selectedItemId],
+  );
 
   return (
     <div
@@ -159,7 +167,11 @@ export const TestTree = ({
                   onSelectedItemsChange={onSelectedItemsChange}
                 >
                   {testList.map((test) => (
-                    <TestTreeItem key={test.id} test={test} />
+                    <TestTreeItem
+                      key={test.id}
+                      test={test}
+                      handleRunTest={handleRunTest}
+                    />
                   ))}
                 </TreeView>
               )}

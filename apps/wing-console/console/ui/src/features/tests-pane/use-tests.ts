@@ -17,22 +17,25 @@ export const useTests = () => {
 
   const testListQuery = trpc["test.list"].useQuery();
 
-  const runAllTestsMutation = trpc["test.runAll"].useMutation();
+  const { mutate: runAllTestsMutation } = trpc["test.runAll"].useMutation();
 
-  const runTestMutation = trpc["test.run"].useMutation();
+  const { mutate: runTestMutation } = trpc["test.run"].useMutation();
 
   useEffect(() => {
     setTestList(testListQuery.data || []);
     setTestsExists(!!testListQuery.data && testListQuery.data.length > 0);
   }, [setTestsExists, testListQuery.data]);
 
-  const runAllTests = () => {
-    runAllTestsMutation.mutate();
-  };
+  const runAllTests = useCallback(() => {
+    runAllTestsMutation();
+  }, [runAllTestsMutation]);
 
-  const runTest = (resourcePath: string) => {
-    runTestMutation.mutate({ resourcePath });
-  };
+  const runTest = useCallback(
+    (resourcePath: string) => {
+      runTestMutation({ resourcePath });
+    },
+    [runTestMutation],
+  );
 
   return {
     status,
