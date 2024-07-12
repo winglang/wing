@@ -86,11 +86,9 @@ export const createSimulatorManager = ({
     });
     try {
       const result = await callback(simulator);
-      simulator.stop();
       return result;
-    } catch (error) {
+    } finally {
       simulator.stop();
-      throw error;
     }
   };
 
