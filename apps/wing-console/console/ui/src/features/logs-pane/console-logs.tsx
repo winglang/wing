@@ -218,7 +218,7 @@ const LogEntryRow = memo(
                 }}
               >
                 <TextHighlight
-                  className="inline-block"
+                  className="inline"
                   text={logText(log, expanded) ?? ""}
                 />
               </Linkify>
