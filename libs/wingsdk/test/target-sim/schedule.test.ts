@@ -19,7 +19,6 @@ test("create a schedule", async () => {
   expect(s.getResourceConfig("/my_schedule")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_schedule",
     addr: expect.any(String),
@@ -67,7 +66,6 @@ test("schedule with one task using rate of 10m", async () => {
   expect(s.getResourceConfig("/my_schedule")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_schedule",
     addr: expect.any(String),
@@ -96,7 +94,6 @@ test("schedule with one task using rate of 3h", async () => {
   expect(s.getResourceConfig("/my_schedule")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_schedule",
     addr: expect.any(String),

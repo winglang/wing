@@ -321,6 +321,9 @@
         },
         "function_name": "OnCreate-OnMessage0-c8740b4b",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Bucket_OnCreate-OnMessage0_IamRole_D3BF2935.arn}",
@@ -356,6 +359,9 @@
         },
         "function_name": "OnCreate-OnMessage1-c8347a52",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Bucket_OnCreate-OnMessage1_IamRole_0E855131.arn}",
@@ -391,6 +397,9 @@
         },
         "function_name": "OnDelete-OnMessage0-c8e711ef",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Bucket_OnDelete-OnMessage0_IamRole_A52E721B.arn}",
@@ -426,6 +435,9 @@
         },
         "function_name": "OnDelete-OnMessage1-c8905f5b",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Bucket_OnDelete-OnMessage1_IamRole_AA3A5721.arn}",
@@ -461,6 +473,9 @@
         },
         "function_name": "OnUpdate-OnMessage0-c81b9fec",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Bucket_OnUpdate-OnMessage0_IamRole_96499EB9.arn}",
@@ -496,6 +511,9 @@
         },
         "function_name": "OnUpdate-OnMessage1-c8513427",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Bucket_OnUpdate-OnMessage1_IamRole_7B19D23F.arn}",

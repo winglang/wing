@@ -2,18 +2,11 @@ import { readdirSync, readFileSync, existsSync } from "fs";
 import { join } from "path";
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { GcpApp } from "./gcp-util";
 import { Function } from "../../src/cloud";
 import { inflight } from "../../src/core";
 import { Duration } from "../../src/std";
-import * as tfgcp from "../../src/target-tf-gcp";
-import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
-
-const GCP_APP_OPTS = {
-  projectId: "my-project",
-  region: "us-central1",
-  entrypointDir: __dirname,
-  zone: "us-central1",
-};
+import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const INFLIGHT_CODE = inflight(async (_, name) => {
   console.log("Hello, " + name);
@@ -21,7 +14,7 @@ const INFLIGHT_CODE = inflight(async (_, name) => {
 
 test("basic function", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
 
   // WHEN
   new Function(app, "Function", INFLIGHT_CODE);
@@ -46,8 +39,6 @@ test("basic function", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "google_cloudfunctions_function",
-    "google_project_iam_custom_role",
-    "google_project_iam_member",
     "google_project_service",
     "google_service_account",
     "google_storage_bucket",
@@ -60,7 +51,7 @@ test("basic function", () => {
 
 test("basic function with environment variables", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
 
   // WHEN
   new Function(app, "Function", INFLIGHT_CODE, {
@@ -90,7 +81,7 @@ test("basic function with environment variables", () => {
 
 test("basic function with timeout explicitly set", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
 
   // WHEN
   new Function(app, "Function", INFLIGHT_CODE, {
@@ -114,7 +105,7 @@ test("basic function with timeout explicitly set", () => {
 
 test("basic function with timeout beyond the allowed range", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
 
   // WHEN
   expect(() => {
@@ -126,7 +117,7 @@ test("basic function with timeout beyond the allowed range", () => {
 
 test("basic function with memory size specified", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
 
   // WHEN
   new Function(app, "Function", INFLIGHT_CODE, {
@@ -150,7 +141,7 @@ test("basic function with memory size specified", () => {
 
 test("basic function with memory beyond the allowed range", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
 
   // WHEN
   expect(() => {

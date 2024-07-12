@@ -1,10 +1,10 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import * as cloud from "../../src/cloud";
 import { inflight } from "../../src/core";
 import * as std from "../../src/std";
-import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const CODE_LOG_EVENT = inflight(async (_, event) => {
   console.log("Received: ", event);
@@ -12,7 +12,7 @@ const CODE_LOG_EVENT = inflight(async (_, event) => {
 
 test("schedule behavior with rate", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     rate: std.Duration.fromMinutes(2),
   });
@@ -47,7 +47,7 @@ test("schedule behavior with rate", () => {
 
 test("schedule behavior with cron", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * * * *",
@@ -83,7 +83,7 @@ test("schedule behavior with cron", () => {
 
 test("convert single dayOfWeek from Unix to AWS", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1",
   });
@@ -118,7 +118,7 @@ test("convert single dayOfWeek from Unix to AWS", () => {
 
 test("convert the range of dayOfWeek from Unix to AWS", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1-7",
   });
@@ -153,7 +153,7 @@ test("convert the range of dayOfWeek from Unix to AWS", () => {
 
 test("convert the list of dayOfWeek from Unix to AWS", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1,3,5,7",
   });
@@ -188,7 +188,7 @@ test("convert the list of dayOfWeek from Unix to AWS", () => {
 
 test("schedule with two functions", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * * * *",
   });
@@ -215,7 +215,7 @@ test("schedule with two functions", () => {
 
 test("schedule with rate and cron simultaneously", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   // THEN
   expect(
@@ -229,7 +229,7 @@ test("schedule with rate and cron simultaneously", () => {
 
 test("cron with more than five values", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   // THEN
   expect(
@@ -242,7 +242,7 @@ test("cron with more than five values", () => {
 
 test("schedule without rate or cron", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   // THEN
   expect(() => new cloud.Schedule(app, "Schedule")).toThrow(
@@ -252,7 +252,7 @@ test("schedule without rate or cron", () => {
 
 test("schedule with rate less than 1 minute", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   // THEN
   expect(
@@ -265,7 +265,7 @@ test("schedule with rate less than 1 minute", () => {
 
 test("cron with day of month and day of week configured at the same time", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   // THEN
   expect(

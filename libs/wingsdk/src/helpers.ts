@@ -189,7 +189,9 @@ export function bringJs(
         Object.entries(v).forEach(([key, value]) => {
           const otherValue = outPreflightTypesObject[key];
           if (key in outPreflightTypesObject && otherValue !== value) {
-            throw new Error(`Key collision (${key} is both ${value.name} and ${otherValue.name}) in preflight types map`);
+            throw new Error(
+              `Key collision (${key} is both ${value.name} and ${otherValue.name}) in preflight types map`
+            );
           }
         });
         Object.assign(outPreflightTypesObject, v);

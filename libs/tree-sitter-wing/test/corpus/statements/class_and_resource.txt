@@ -17,7 +17,7 @@ inflight class A {
 (source
   (class_definition
     modifiers: (class_modifiers
-      (inflight_specifier))
+      (phase_specifier))
     name: (identifier)
     implementation: (class_implementation
       (initializer
@@ -25,7 +25,7 @@ inflight class A {
         block: (block))
       (method_definition
         modifiers: (method_modifiers
-          (inflight_specifier))
+          (phase_specifier))
         name: (identifier)
         parameter_list: (parameter_list)
         block: (block))
@@ -66,7 +66,7 @@ inflight class A extends B {}
 (source
   (class_definition
     modifiers: (class_modifiers
-      (inflight_specifier))
+      (phase_specifier))
     name: (identifier)
     parent: (custom_type
       object: (type_identifier))
@@ -103,7 +103,7 @@ class A {
         parameter_list: (parameter_list)
         block: (block))
       (initializer
-        inflight: (inflight_specifier)
+        phase_specifier: (phase_specifier)
         parameter_list: (parameter_list)
         block: (block))
       (method_definition
@@ -118,14 +118,14 @@ class A {
         block: (block))
       (method_definition
         modifiers: (method_modifiers
-          (inflight_specifier))
+          (phase_specifier))
         name: (identifier)
         parameter_list: (parameter_list)
         block: (block))
       (method_definition
         modifiers: (method_modifiers
           (access_modifier)
-          (inflight_specifier))
+          (phase_specifier))
         name: (identifier)
         parameter_list: (parameter_list)
         type: (builtin_type)
@@ -133,7 +133,7 @@ class A {
       (method_definition
         modifiers: (method_modifiers
           (access_modifier)
-          (inflight_specifier))
+          (phase_specifier))
         name: (identifier)
         parameter_list: (parameter_list)
         type: (builtin_type)
@@ -148,33 +148,33 @@ class A {
         type: (builtin_type))
       (class_field
         modifiers: (field_modifiers
-          (inflight_specifier))
+          (phase_specifier))
         name: (identifier)
         type: (builtin_type))
       (class_field
         modifiers: (field_modifiers
           (access_modifier)
-          (inflight_specifier)
+          (phase_specifier)
           (reassignable))
         name: (identifier)
         type: (builtin_type))
       (class_field
         modifiers: (field_modifiers
           (access_modifier)
-          (inflight_specifier)
+          (phase_specifier)
           (reassignable))
         name: (identifier)
         type: (builtin_type))
       (class_field
         modifiers: (field_modifiers
           (static)
-          (inflight_specifier))
+          (phase_specifier))
         name: (identifier)
         type: (builtin_type))
       (method_definition
         modifiers: (method_modifiers
           (static)
-          (inflight_specifier))
+          (phase_specifier))
         name: (identifier)
         parameter_list: (parameter_list)
         block: (block)))))
@@ -214,18 +214,19 @@ pub inflight interface A extends B, C {
   (interface_definition
     modifiers: (interface_modifiers
       (access_modifier)
-      (inflight_specifier))
+      (phase_specifier))
     name: (identifier)
     extends: (custom_type
       object: (type_identifier))
     extends: (custom_type
       object: (type_identifier))
     implementation: (interface_implementation
-      (method_signature
+      (method_definition
         name: (identifier)
         parameter_list: (parameter_list))
-      (inflight_method_signature
-        phase_modifier: (inflight_specifier)
+      (method_definition
+        modifiers: (method_modifiers
+          (phase_specifier))
         name: (identifier)
         parameter_list: (parameter_list
           (parameter_definition

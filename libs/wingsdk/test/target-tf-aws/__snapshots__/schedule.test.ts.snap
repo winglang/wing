@@ -50,6 +50,9 @@ exports[`convert single dayOfWeek from Unix to AWS 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -333,6 +336,9 @@ exports[`convert the list of dayOfWeek from Unix to AWS 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -616,6 +622,9 @@ exports[`convert the range of dayOfWeek from Unix to AWS 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -899,6 +908,9 @@ exports[`schedule behavior with cron 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -1182,6 +1194,9 @@ exports[`schedule behavior with rate 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
@@ -1465,6 +1480,9 @@ exports[`schedule with two functions 1`] = `
         },
         "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",

@@ -34,7 +34,10 @@ const createTreeMenuItemFromExplorerTreeItem = (
     ) : undefined,
     expanded: item.display?.expanded,
     secondaryLabel: (
-      <RunningStateIndicator runningState={item.hierarchichalRunningState} />
+      <RunningStateIndicator
+        runningState={item.hierarchichalRunningState}
+        className="size-1.5"
+      />
     ),
     children: item.childItems?.map((item) =>
       createTreeMenuItemFromExplorerTreeItem(item),

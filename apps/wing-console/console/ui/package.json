@@ -23,6 +23,7 @@
   "scripts": {
     "compile": "tsup",
     "tsc": "tsc --build",
+    "test": "vitest --passWithNoTests",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -36,6 +37,7 @@
     "@trpc/client": "^10.45.2",
     "@trpc/react-query": "^10.45.2",
     "@trpc/server": "^10.45.2",
+    "@types/lodash.escape": "^4.0.9",
     "@wingconsole/design-system": "workspace:^",
     "classnames": "^2.5.1",
     "elkjs": "^0.8.2",
@@ -44,6 +46,7 @@
     "linkify-react": "^4.1.3",
     "linkifyjs": "^4.1.3",
     "lodash.debounce": "^4.0.8",
+    "lodash.escape": "^4.0.1",
     "lodash.throttle": "^4.1.1",
     "lodash.uniqby": "^4.7.0",
     "nanoid": "^4.0.2",

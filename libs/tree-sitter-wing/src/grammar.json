@@ -291,9 +291,18 @@
         }
       ]
     },
-    "inflight_specifier": {
-      "type": "STRING",
-      "value": "inflight"
+    "phase_specifier": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "unphased"
+        },
+        {
+          "type": "STRING",
+          "value": "inflight"
+        }
+      ]
     },
     "_statement": {
       "type": "CHOICE",
@@ -1082,7 +1091,7 @@
           },
           {
             "type": "SYMBOL",
-            "name": "inflight_specifier"
+            "name": "phase_specifier"
           }
         ]
       }
@@ -1259,7 +1268,7 @@
           },
           {
             "type": "SYMBOL",
-            "name": "inflight_specifier"
+            "name": "phase_specifier"
           },
           {
             "type": "SYMBOL",
@@ -1341,7 +1350,7 @@
           },
           {
             "type": "SYMBOL",
-            "name": "inflight_specifier"
+            "name": "phase_specifier"
           }
         ]
       }
@@ -1459,11 +1468,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "method_signature"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "inflight_method_signature"
+                "name": "method_definition"
               },
               {
                 "type": "SYMBOL",
@@ -1993,10 +1998,6 @@
     "expression": {
       "type": "CHOICE",
       "members": [
-        {
-          "type": "SYMBOL",
-          "name": "unwrap_or"
-        },
         {
           "type": "SYMBOL",
           "name": "binary_expression"
@@ -2822,10 +2823,10 @@
             "members": [
               {
                 "type": "FIELD",
-                "name": "inflight",
+                "name": "phase_specifier",
                 "content": {
                   "type": "SYMBOL",
-                  "name": "inflight_specifier"
+                  "name": "phase_specifier"
                 }
               },
               {
@@ -2956,10 +2957,10 @@
           "members": [
             {
               "type": "FIELD",
-              "name": "inflight",
+              "name": "phase_specifier",
               "content": {
                 "type": "SYMBOL",
-                "name": "inflight_specifier"
+                "name": "phase_specifier"
               }
             },
             {
@@ -3010,43 +3011,6 @@
       "type": "SYMBOL",
       "name": "_type_annotation"
     },
-    "method_signature": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "FIELD",
-          "name": "name",
-          "content": {
-            "type": "SYMBOL",
-            "name": "identifier"
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "parameter_list",
-          "content": {
-            "type": "SYMBOL",
-            "name": "parameter_list"
-          }
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "_return_type"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_semicolon"
-        }
-      ]
-    },
     "method_modifiers": {
       "type": "REPEAT1",
       "content": {
@@ -3066,7 +3030,7 @@
           },
           {
             "type": "SYMBOL",
-            "name": "inflight_specifier"
+            "name": "phase_specifier"
           }
         ]
       }
@@ -3134,51 +3098,6 @@
               "name": "_semicolon"
             }
           ]
-        }
-      ]
-    },
-    "inflight_method_signature": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "FIELD",
-          "name": "phase_modifier",
-          "content": {
-            "type": "SYMBOL",
-            "name": "inflight_specifier"
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "name",
-          "content": {
-            "type": "SYMBOL",
-            "name": "identifier"
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "parameter_list",
-          "content": {
-            "type": "SYMBOL",
-            "name": "parameter_list"
-          }
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "_return_type"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_semicolon"
         }
       ]
     },
@@ -3420,39 +3339,6 @@
           "value": ">"
         }
       ]
-    },
-    "unwrap_or": {
-      "type": "PREC_RIGHT",
-      "value": 80,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "FIELD",
-            "name": "left",
-            "content": {
-              "type": "SYMBOL",
-              "name": "expression"
-            }
-          },
-          {
-            "type": "FIELD",
-            "name": "op",
-            "content": {
-              "type": "STRING",
-              "value": "??"
-            }
-          },
-          {
-            "type": "FIELD",
-            "name": "right",
-            "content": {
-              "type": "SYMBOL",
-              "name": "expression"
-            }
-          }
-        ]
-      }
     },
     "optional_unwrap": {
       "type": "PREC_RIGHT",
@@ -4048,6 +3934,39 @@
               }
             ]
           }
+        },
+        {
+          "type": "PREC_RIGHT",
+          "value": 80,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "left",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "op",
+                "content": {
+                  "type": "STRING",
+                  "value": "??"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "right",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              }
+            ]
+          }
         }
       ]
     },
@@ -4058,7 +3977,7 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "inflight_specifier"
+            "name": "phase_specifier"
           }
         ]
       }
@@ -4690,7 +4609,8 @@
     },
     {
       "type": "PATTERN",
-      "value": "[\\s\\p{Zs}\\uFEFF\\u2060\\u200B]"
+      "value": "[\\s\\p{Zs}\\uFEFF\\u2060\\u200B]",
+      "flags": "u"
     }
   ],
   "conflicts": [
@@ -4710,10 +4630,6 @@
       "class_modifiers",
       "closure_modifiers",
       "interface_modifiers"
-    ],
-    [
-      "inflight_method_signature",
-      "field_modifiers"
     ]
   ],
   "precedences": [

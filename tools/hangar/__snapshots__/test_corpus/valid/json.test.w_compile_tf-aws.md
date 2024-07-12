@@ -66,6 +66,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -228,10 +229,10 @@ class $Root extends $stdlib.std.Resource {
     const mapStruct = ({["1"]: ({"foo": "", "stuff": []})});
     const deepCollectionStruct = ({["1"]: [new Set([({"foo": "", "stuff": []})])]});
     const notJsonMissingField = ({"foo": "bar", "stuff": []});
-    const notJsonWithInnerArray = ({"foo": "bar", "stuff": [], "buckets": [this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "B1InList")]});
+    const notJsonWithInnerArray = ({"foo": "bar", "stuff": [], "buckets": [globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "B1InList")]});
     const notJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
     let mutableJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
-    const hasBucket = ({"a": ({"a": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket")})});
+    const hasBucket = ({"a": ({"a": globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket")})});
     const numVar = 1;
     const strVar = "s";
     const punnedJson1 = ({"numVar": numVar, "strVar": strVar});
@@ -245,7 +246,6 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(structToPunFromJson.strVar, "s"), "structToPunFromJson.strVar == \"s\"");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "json.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

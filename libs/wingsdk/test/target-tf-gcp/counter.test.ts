@@ -1,15 +1,9 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { GcpApp } from "./gcp-util";
 import { Counter, CounterInflightMethods, Function } from "../../src/cloud";
 import { lift } from "../../src/core";
-import { App } from "../../src/target-tf-gcp";
-import {
-  mkdtemp,
-  sanitizeCode,
-  tfResourcesOf,
-  tfSanitize,
-  treeJsonOf,
-} from "../util";
+import { sanitizeCode, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const GCP_APP_OPTS = {
   projectId: "my-project",
@@ -24,24 +18,19 @@ function checkDatastorePermissions(
   expectedPermissions: string[]
 ) {
   const outputObject = JSON.parse(output);
-  const customRoleName = Object.keys(
-    outputObject.resource.google_project_iam_custom_role
-  ).find((name) => name.startsWith("Function_CustomRole"));
-  const customRole =
-    outputObject.resource.google_project_iam_custom_role[customRoleName!];
+  const membersRoles = (
+    Object.values(outputObject.resource.google_project_iam_member) as {
+      role: string;
+    }[]
+  ).map((e) => e.role);
 
-  const datastorePermissions = customRole.permissions.filter((perm) =>
-    perm.startsWith("datastore.entities.")
-  );
-  expect(datastorePermissions).toEqual(
-    expect.arrayContaining(expectedPermissions)
-  );
-  expect(datastorePermissions).toHaveLength(expectedPermissions.length);
+  expect(membersRoles).toEqual(expect.arrayContaining(expectedPermissions));
+  expect(membersRoles).toHaveLength(expectedPermissions.length);
 }
 
 test("counter name valid", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "The.Amazing-Counter_01");
   const output = app.synth();
 
@@ -64,10 +53,9 @@ test("counter name valid", () => {
 
 test("replace invalid character from counter name", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "The*Amazing%Counter@01");
   const output = app.synth();
-  console.log(output);
 
   // THEN
   expect(
@@ -88,7 +76,7 @@ test("replace invalid character from counter name", () => {
 
 test("default counter behavior", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   new Counter(app, "Counter");
   const output = app.synth();
 
@@ -102,7 +90,7 @@ test("default counter behavior", () => {
 
 test("counter with initial value", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   new Counter(app, "Counter", {
     initial: 9991,
   });
@@ -119,7 +107,7 @@ test("counter with initial value", () => {
 
 test("function with a counter binding", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "Counter");
   const handler = lift({ my_counter: counter })
     .grant({ my_counter: [CounterInflightMethods.INC] })
@@ -136,7 +124,6 @@ test("function with a counter binding", () => {
   expect(tfResourcesOf(output)).toEqual([
     "google_cloudfunctions_function",
     "google_firestore_database",
-    "google_project_iam_custom_role",
     "google_project_iam_member",
     "google_project_service",
     "google_service_account",
@@ -150,7 +137,7 @@ test("function with a counter binding", () => {
 
 test("inc() IAM permissions", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "Counter");
   const handler = lift({ my_counter: counter })
     .grant({ my_counter: [CounterInflightMethods.INC] })
@@ -163,18 +150,14 @@ test("inc() IAM permissions", () => {
   const output = app.synth();
 
   // THEN
-  checkDatastorePermissions(output, [
-    "datastore.entities.get",
-    "datastore.entities.create",
-    "datastore.entities.update",
-  ]);
+  checkDatastorePermissions(output, ["roles/datastore.user"]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("dec() IAM permissions", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "Counter");
   const handler = lift({ my_counter: counter })
     .grant({ my_counter: [CounterInflightMethods.DEC] })
@@ -187,18 +170,14 @@ test("dec() IAM permissions", () => {
   const output = app.synth();
 
   // THEN
-  checkDatastorePermissions(output, [
-    "datastore.entities.get",
-    "datastore.entities.create",
-    "datastore.entities.update",
-  ]);
+  checkDatastorePermissions(output, ["roles/datastore.user"]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("peek() IAM permissions", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "Counter");
 
   const handler = lift({ my_counter: counter })
@@ -212,17 +191,14 @@ test("peek() IAM permissions", () => {
   const output = app.synth();
 
   // THEN
-  checkDatastorePermissions(output, [
-    "datastore.entities.get",
-    "datastore.entities.create",
-  ]);
+  checkDatastorePermissions(output, ["roles/datastore.user"]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("set() IAM permissions", () => {
   // GIVEN
-  const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const counter = new Counter(app, "Counter");
   const handler = lift({ my_counter: counter })
     .grant({ my_counter: [CounterInflightMethods.SET] })
@@ -235,10 +211,7 @@ test("set() IAM permissions", () => {
   const output = app.synth();
 
   // THEN
-  checkDatastorePermissions(output, [
-    "datastore.entities.create",
-    "datastore.entities.update",
-  ]);
+  checkDatastorePermissions(output, ["roles/datastore.user"]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

@@ -194,6 +194,11 @@ impl<'a> JSifier<'a> {
 		));
 
 		if is_entrypoint {
+			output.line(format!(
+				"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
+				PLATFORMS_VAR
+			));
+
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}({SCOPE_PARAM}, $id) {{"));
@@ -214,10 +219,6 @@ impl<'a> JSifier<'a> {
 			root_class.close("}");
 
 			output.add_code(root_class);
-			output.line(format!(
-				"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
-				PLATFORMS_VAR
-			));
 			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
 				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
@@ -573,46 +574,21 @@ impl<'a> JSifier<'a> {
 
 				let fqn = class_type.fqn.clone();
 
-				let scope_arg = if fqn.is_none() {
-					scope.clone()
-				} else {
-					match scope.clone() {
-						None => None,
-						Some(scope) => Some(if scope == "this" {
-							"this".to_string()
-						} else {
-							SCOPE_PARAM.to_string()
-						}),
-					}
-				};
+				let scope_arg = if fqn.is_none() { scope.clone() } else { scope.clone() };
 
 				let args = self.jsify_arg_list(&arg_list, scope_arg, id, ctx);
 
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
-					// determine the scope to use for finding the root object
-					let node_scope = if let Some(scope) = scope {
-						scope
-					} else {
-						"this".to_string()
-					};
-
-					// if a scope is defined, use it to find the root object, otherwise use "this"
-					if node_scope != "this" {
-						new_code!(
-							expr_span,
-							format!("({SCOPE_PARAM} => {SCOPE_PARAM}.node.root.new(\""),
-							fqn,
-							"\", ",
-							ctor,
-							", ",
-							args,
-							"))(",
-							node_scope,
-							")"
-						)
-					} else {
-						new_code!(expr_span, "this.node.root.new(\"", fqn, "\", ", ctor, ", ", args, ")")
-					}
+					new_code!(
+						expr_span,
+						"globalThis.$ClassFactory.new(\"",
+						fqn,
+						"\", ",
+						ctor,
+						", ",
+						args,
+						")"
+					)
 				} else {
 					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
 					// make sure it's called before we return the object.
@@ -1803,7 +1779,7 @@ impl<'a> JSifier<'a> {
 				if let Some(fqn) = &parent_type.as_class().unwrap().fqn {
 					code.append(new_code!(
 						&class.name.span,
-						" extends (this?.node?.root?.typeForFqn(\"",
+						" extends (globalThis.$ClassFactory.resolveType(\"",
 						fqn,
 						"\") ?? ",
 						self.jsify_user_defined_type(parent, ctx),
