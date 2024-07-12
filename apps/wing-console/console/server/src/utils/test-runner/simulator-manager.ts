@@ -51,7 +51,7 @@ export const createSimulatorManager = ({
     });
   });
 
-  const createSimulatorInstance = async () => {
+  const createSimulator = async () => {
     const stateDir = await mkdtemp(join(tmpdir(), "wing-console-test"));
 
     return new simulator.Simulator({
@@ -64,7 +64,7 @@ export const createSimulatorManager = ({
   const useSimulatorInstance = async <T>(
     callback: (simulator: Simulator) => Promise<T>,
   ): Promise<T> => {
-    const simulator = await createSimulatorInstance();
+    const simulator = await createSimulator();
 
     try {
       await simulator.start();
@@ -75,7 +75,7 @@ export const createSimulatorManager = ({
   };
 
   const getTests = async () => {
-    const simulator = await createSimulatorInstance();
+    const simulator = await createSimulator();
 
     const { tree } = simulator.tree().rawData();
 
