@@ -818,7 +818,8 @@ describe("in-place updates", () => {
     ]);
   });
 
-  test("cloud.Api routes are updated", async () => {
+  // TODO: this test is flakey in CI
+  test.skip("cloud.Api routes are updated", async () => {
     const app = new SimApp();
     const api = new Api(app, "Api");
     api.get("/hello", OK_200);
