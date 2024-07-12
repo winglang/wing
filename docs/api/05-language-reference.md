@@ -656,6 +656,7 @@ For example (continuing the `Bucket` example above):
 
 ```TS
 let bucket = new Bucket();
+
 // OK! We are calling a preflight method from a preflight context
 bucket.allowPublicAccess();
 // ERROR: Cannot call into inflight phase while preflight
@@ -680,8 +681,8 @@ let handler2 = inflight() => {
 }
 ```
 
-Bridge between preflight and inflight is crossed with the help of immutable data
-structures, "structs" (user definable and `Struct`), and the capture mechanism.
+The bridge between preflight and inflight is crossed with the help of immutable data
+structures, user-defined structs, resources, and the capture mechanism.
 
 Preflight class methods and constructors can receive an inflight function as an argument. This
 enables preflight classes to define code that will be executed on a cloud compute platform such as
