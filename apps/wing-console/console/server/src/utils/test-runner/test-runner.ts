@@ -93,13 +93,16 @@ const executeTest = async (
     );
   } catch (error: any) {
     let output = await formatTraceError(error?.message);
+
+    const { default: prettyMs } = await import("pretty-ms");
+
     logger.log(output, "console", {
       messageType: "fail",
     });
     logger.log(
-      `Test "${getTestName(resourcePath)}" failed (${
-        Date.now() - startTime
-      }ms)`,
+      `Test "${getTestName(resourcePath)}" failed (${prettyMs(
+        Date.now() - startTime,
+      )})`,
       "console",
       {
         messageType: "fail",
