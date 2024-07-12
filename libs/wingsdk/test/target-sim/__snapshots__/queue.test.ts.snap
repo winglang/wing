@@ -77,14 +77,6 @@ exports[`create a queue 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -693,14 +685,6 @@ exports[`push rejects empty message 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -861,14 +845,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
@@ -1199,14 +1175,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -1500,14 +1468,6 @@ exports.handler = async function(event) {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
       "@winglang/sdk.sim.Container": {
         "className": "Container",

@@ -82,7 +82,6 @@ const project = new cdk.JsiiProject({
     "nanoid@^3.3.7",
     "cron-parser",
     // shared client dependencies
-    "ioredis",
     "ajv",
     "cron-validator",
     // fs module dependency

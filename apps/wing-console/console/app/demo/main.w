@@ -1,5 +1,4 @@
 bring cloud;
-bring ex;
 bring ui;
 bring util;
 bring sim;
@@ -92,26 +91,6 @@ topic.onMessage(inflight (message: str): str => {
   log("Topic subscriber #1: {message}");
   return message;
 });
-
-// let r = new ex.Redis();
-// new cloud.Function(inflight (message :str) :str => {
-//   log("{r.url()}");
-//   r.set("wing", message);
-//   let value = r.get("wing");
-//   log("{value}");
-//   return r.url();
-// }) as "Redis interaction";
-
-let table = new ex.Table(
-  name: "simple-table",
-  primaryKey: "id",
-  columns: {
-    "id" => ex.ColumnType.STRING,
-    "name" => ex.ColumnType.STRING,
-    "date" => ex.ColumnType.DATE,
-    "active" => ex.ColumnType.BOOLEAN,
-  },
-);
 
 let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
   rate: 5m

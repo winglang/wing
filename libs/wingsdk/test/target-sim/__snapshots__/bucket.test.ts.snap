@@ -151,14 +151,6 @@ exports[`can add file in preflight 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -322,14 +314,6 @@ exports[`can add object in preflight 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -477,14 +461,6 @@ exports[`create a bucket 1`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
@@ -643,14 +619,6 @@ exports[`get invalid object throws an error 2`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
@@ -866,8 +834,8 @@ exports[`update an object in bucket 1`] = `
   "InvokeAsync (payload="1.txt").",
   "Publish (messages=1.txt).",
   "Put (key=1.txt).",
-  "Put (key=1.txt).",
   "I am done",
+  "Put (key=1.txt).",
   "root/my_bucket/Policy stopped",
   "root/my_bucket stopped",
   "root/my_bucket/OnCreate/Policy stopped",

@@ -3684,8 +3684,7 @@ Duration <DURATION>"
 `;
 
 exports[`panic.test.w 1`] = `
-"error: Compiler bug during type-checking ('panicked at libs/wingc/src/type_check.rs:LINE:COL:
-User invoked panic'), please report at https://www.winglang.io/contributing/start-here/bugs
+"error: Compiler bug during type-checking ('panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL'), please report at https://www.winglang.io/contributing/start-here/bugs
   --> ../../../examples/tests/invalid/panic.test.w:6:1
   |
 6 | 😱;

@@ -6,7 +6,6 @@ export * from "./function";
 export * from "./inflight-host";
 export * from "./queue";
 export * from "./secret";
-export * from "./table";
 export * from "./topic";
 export * from "./types";
 export * from "./website";

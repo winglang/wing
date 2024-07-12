@@ -27,7 +27,6 @@ export * from "./notification.js";
 export * from "./pill.js";
 export * from "./input.js";
 export * from "./row-input.js";
-export * from "./table-row.js";
 export * from "./tree.js";
 export * from "./attribute.js";
 export * from "./left-resizable-widget.js";
@@ -39,7 +38,6 @@ export * from "./response-input.js";
 export * from "./json-response-input.js";
 export * from "./file-preview.js";
 
-export * from "./icons/redis-icon.js";
 export * from "./icons/wing-icon.js";
 export * from "./icons/spinner-icon.js";
 export * from "./icons/arrow-long-right-icon.js";
