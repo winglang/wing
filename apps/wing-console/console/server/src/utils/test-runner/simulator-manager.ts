@@ -6,26 +6,33 @@ import { simulator } from "@winglang/sdk";
 
 import type { Simulator } from "../../wingsdk.js";
 import { createCompiler } from "../compiler.js";
+import type { ConstructTreeNode } from "../construct-tree.js";
 
-const createSimulatorInstance = async ({
-  simfile,
-  start = true,
-}: {
-  simfile: string;
-  start?: boolean;
-}) => {
+const createSimulatorInstance = async (simfile: string) => {
   const stateDir = await mkdtemp(join(tmpdir(), "wing-console-test"));
 
-  const instance = new simulator.Simulator({
+  return new simulator.Simulator({
     simfile,
     stateDir,
   });
+};
 
-  if (start) {
-    await instance.start();
+const getTestPaths = (node: ConstructTreeNode) => {
+  let tests: string[] = [];
+  if (node.constructInfo?.fqn === "@winglang/sdk.std.Test") {
+    for (const child of Object.values(node.children ?? {})) {
+      if (child.id === "Handler") {
+        tests.push(node.path);
+        break;
+      }
+    }
   }
-
-  return instance;
+  if (node.children) {
+    for (const child of Object.values(node.children)) {
+      tests.push(...getTestPaths(child));
+    }
+  }
+  return tests;
 };
 
 /**
@@ -40,51 +47,27 @@ export const createSimulatorManager = ({
   platform?: string[];
   watchGlobs?: string[];
 }) => {
-  let simfilePath: string | undefined;
-
   const testCompiler = createCompiler({
     wingfile,
     platform,
     watchGlobs,
     testing: true,
   });
-  testCompiler.on("compiled", async ({ simfile }) => {
-    simfilePath = simfile;
-  });
 
-  const getSimulator = async ({
-    simfile,
-    start = true,
-  }: {
-    simfile?: string;
-    start?: boolean;
-  } = {}) => {
-    const path = simfile || simfilePath;
-    if (path) {
-      return await createSimulatorInstance({ simfile: path, start });
-    }
-
-    return new Promise<Simulator>(async (resolve) => {
-      testCompiler.on("compiled", async ({ simfile }) => {
-        simfilePath = simfile;
-        resolve(
-          await getSimulator({
-            simfile,
-            start,
-          }),
-        );
-      });
+  const simfilePath = new Promise<string>((resolve) => {
+    testCompiler.on("compiled", async ({ simfile }) => {
+      resolve(simfile);
     });
-  };
+  });
 
   // Run a callback with a simulator instance.
   const useSimulatorInstance = async <T>(
     callback: (simulator: Simulator) => Promise<T>,
   ): Promise<T> => {
-    const simulator = await getSimulator({
-      simfile: simfilePath,
-    });
+    const simulator = await createSimulatorInstance(await simfilePath);
+
     try {
+      await simulator.start();
       const result = await callback(simulator);
       return result;
     } finally {
@@ -92,12 +75,20 @@ export const createSimulatorManager = ({
     }
   };
 
+  const getTests = async () => {
+    const simulator = await createSimulatorInstance(await simfilePath);
+
+    const { tree } = simulator.tree().rawData();
+
+    return getTestPaths(tree);
+  };
+
   const forceStop = () => {
     testCompiler?.stop();
   };
 
   return {
-    getSimulator,
+    getTests,
     useSimulatorInstance,
     forceStop,
   };

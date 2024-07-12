@@ -4,7 +4,6 @@ import { TraceType } from "@winglang/sdk/lib/std/test-runner.js";
 import type { ConsoleLogger } from "../../consoleLogger.js";
 import type { InternalTestResult } from "../../router/test.js";
 import type { Simulator } from "../../wingsdk.js";
-import type { ConstructTreeNode } from "../construct-tree.js";
 import { formatTraceError } from "../format-wing-error.js";
 
 import { createSimulatorManager } from "./simulator-manager.js";
@@ -50,24 +49,6 @@ export interface CreateTestRunnerProps {
   watchGlobs?: string[];
   logger: ConsoleLogger;
 }
-
-const getTestPaths = (node: ConstructTreeNode) => {
-  let tests: string[] = [];
-  if (node.constructInfo?.fqn === "@winglang/sdk.std.Test") {
-    for (const child of Object.values(node.children ?? {})) {
-      if (child.id === "Handler") {
-        tests.push(node.path);
-        break;
-      }
-    }
-  }
-  if (node.children) {
-    for (const child of Object.values(node.children)) {
-      tests.push(...getTestPaths(child));
-    }
-  }
-  return tests;
-};
 
 const getTestName = (testPath: string) => {
   const test = testPath.split("/").pop() ?? testPath;
@@ -190,20 +171,9 @@ export const createTestRunner = ({
   });
 
   const initialize = async () => {
-    testRunnerState = "uninitialized";
+    const tests = await simulatorManager.getTests();
 
-    // Notify initialization started.
-    onTestsChange();
-
-    const simulator = await simulatorManager.getSimulator({ start: false });
-
-    const { tree } = simulator.tree().rawData();
-
-    const tests = getTestPaths(tree);
-
-    // Notify initialization completed.
     testRunnerState = "idle";
-    onTestsChange();
 
     testsState.setTests(
       tests.map((testId) => ({
