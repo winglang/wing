@@ -18,7 +18,7 @@ use crate::ast::{
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{
-	report_diagnostic, Diagnostic, DiagnosticResult, WingLocation, WingSpan, ERR_EXPECTED_SEMICOLON,
+	report_diagnostic, Diagnostic, DiagnosticBuilder, Message, WingLocation, WingSpan, ERR_EXPECTED_SEMICOLON,
 };
 use crate::file_graph::FileGraph;
 use crate::files::Files;
@@ -343,13 +343,17 @@ fn parse_wing_directory(
 			// before we add the path, we need to check that directory names are valid
 			if path.is_dir() {
 				if !check_valid_wing_dir_name(&path) {
-					report_diagnostic(Diagnostic::new(
+					let diag = Diagnostic::builder()
+					.with_message(
 						format!(
 							"Cannot bring Wing directories that contain sub-directories with invalid characters: \"{}\"",
 							path.file_name().unwrap()
 						),
-						source_ref,
-					).hint("Directory names must start with a letter or underscore and contain only letters, numbers, and underscores."));
+					)
+					.with_span(source_ref)
+					.with_hint("Directory names must start with a letter or underscore and contain only letters, numbers, and underscores.")
+					.build();
+					report_diagnostic(diag);
 				}
 			}
 			files_and_dirs.push((path, source_ref.clone()));
@@ -375,6 +379,67 @@ fn parse_wing_directory(
 	dependent_wing_paths
 }
 
+pub struct ParseResult<T>(Option<T>, Vec<ParseError>);
+
+impl<T> ParseResult<T> {
+	pub fn ok(output: T) -> ParseResult<T> {
+		ParseResult(Some(output), vec![])
+	}
+
+	pub fn ok_with_errors(output: T, errors: Vec<ParseError>) -> ParseResult<T> {
+		ParseResult(Some(output), errors)
+	}
+
+	pub fn err(errors: Vec<ParseError>) -> ParseResult<T> {
+		ParseResult(None, errors)
+	}
+
+	pub fn into_errors(self) -> Vec<ParseError> {
+		self.1
+	}
+
+	pub fn map<U>(self, f: impl FnOnce(T) -> U) -> ParseResult<U> {
+		match self {
+			ParseResult(Some(v), errs) => ParseResult::ok_with_errors(f(v), errs),
+			ParseResult(None, errs) => ParseResult::err(errs),
+		}
+	}
+
+	pub fn map_or<U>(self, f: impl FnOnce(T) -> U, default: U) -> U {
+		match self {
+			ParseResult(Some(v), _) => f(v),
+			ParseResult(None, _) => default,
+		}
+	}
+}
+
+/// A macro that combines the errors from a ParseResult with a local error list,
+/// and returns the output if it is successful. If the output is not successful,
+/// it returns the errors and exits the function, like a `?` operator.
+///
+/// Example usage:
+///
+/// ```ignore
+/// let mut errors = vec![];
+/// let condition = combine_errors!(parse_condition(), errors);
+/// let then_block = combine_errors!(parse_block(), errors);
+/// let else_block = combine_errors!(parse_block(), errors);
+/// ```
+macro_rules! merge_errs {
+	($result:expr, $errors:expr) => {
+		match $result {
+			ParseResult(Some(v), errs) => {
+				$errors.extend(errs);
+				v
+			}
+			ParseResult(None, errs) => {
+				$errors.extend(errs);
+				return ParseResult::err($errors);
+			}
+		}
+	};
+}
+
 /// Parses a single Wing source file.
 pub struct Parser<'a> {
 	/// Source code of the file being parsed
@@ -390,29 +455,41 @@ pub struct Parser<'a> {
 	referenced_wing_paths: RefCell<Vec<(Utf8PathBuf, WingSpan)>>,
 }
 
+/// A diagnostic that is also associated with a specific node in the tree-sitter AST.
+///
+/// After the tree has been parsed by us, we go through each tree-sitter node and check for error nodes. If an error
+/// node and doesn't have any ParseError's associated with it, we emit a default diagnostic for that node like "Unknown
+/// parser error". See also `error_nodes` in `Parser`.
+struct ParseError {
+	diagnostic: Diagnostic,
+	node_id: usize,
+}
+
 struct ParseErrorBuilder<'s> {
-	node: &'s Node<'s>,
-	diag: Diagnostic,
+	diagnostic_builder: DiagnosticBuilder<Message>,
+	node_id: usize,
 	parser: &'s Parser<'s>,
 }
 
 impl<'a> ParseErrorBuilder<'a> {
 	fn new(message: impl ToString, node: &'a Node, parser: &'a Parser) -> Self {
 		Self {
-			node,
-			diag: Diagnostic::new(message, &parser.node_span(node)),
+			diagnostic_builder: DiagnosticBuilder::new().with_message(message),
+			node_id: node.id(),
 			parser,
 		}
 	}
 
-	fn with_annotation(mut self, message: impl ToString, span: impl Spanned) -> Self {
-		self.diag.add_anotation(message, span);
+	fn with_annotation(mut self, message: impl ToString, span: &impl Spanned) -> Self {
+		self.diagnostic_builder = self.diagnostic_builder.with_annotation(message, span);
 		self
 	}
 
-	fn report(self) {
-		self.diag.report();
-		self.parser.error_nodes.borrow_mut().insert(self.node.id());
+	fn build(self) -> ParseError {
+		ParseError {
+			diagnostic: self.diagnostic_builder.build(),
+			node_id: self.node_id,
+		}
 	}
 }
 
@@ -443,10 +520,11 @@ impl<'s> Parser<'s> {
 		if !is_entrypoint_file(&self.source_name) {
 			for stmt in &scope.statements {
 				if !is_valid_module_statement(&stmt) {
-					Diagnostic::new(
+					let diag = Diagnostic::new(
 						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` or `.test.w` to make this an entrypoint file.",
-						stmt,
-					).report();
+						&stmt,
+					);
+					report_diagnostic(diag);
 				}
 			}
 		}
@@ -456,24 +534,16 @@ impl<'s> Parser<'s> {
 		(scope, self.referenced_wing_paths.into_inner())
 	}
 
-	fn add_error(&self, message: impl ToString, node: &Node) {
-		self.build_error(message, node).report();
+	fn add_error<'a>(&'a self, message: impl ToString, node: &'a Node, errors: &mut Vec<ParseError>) {
+		errors.push(self.build_error(message, node));
 	}
 
-	fn build_error<'a>(&'a self, message: impl ToString, node: &'a Node) -> ParseErrorBuilder {
-		ParseErrorBuilder::new(message, node, self)
+	fn build_error<'a>(&'a self, message: impl ToString, node: &'a Node) -> ParseError {
+		ParseErrorBuilder::new(message, node, self).build()
 	}
 
-	fn with_error<T>(&self, message: impl ToString, node: &Node) -> Result<T, ()> {
-		self.with_error_builder::<T>(self.build_error(message, node))
-	}
-
-	fn with_error_builder<T>(&self, error_builder: ParseErrorBuilder) -> Result<T, ()> {
-		error_builder.report();
-
-		// TODO: Seems to me like we should avoid using Rust's Result and `?` semantics here since we actually just want to "log"
-		// the error and continue parsing.
-		Err(())
+	fn with_error<T>(&self, message: impl ToString, node: &Node) -> ParseResult<T> {
+		ParseResult::err(vec![self.build_error(message, node)])
 	}
 
 	fn report_unimplemented_grammar<T>(
@@ -481,7 +551,7 @@ impl<'s> Parser<'s> {
 		grammar_element: &str,
 		grammar_context: &str,
 		node: &Node,
-	) -> DiagnosticResult<T> {
+	) -> ParseResult<T> {
 		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
 			self.with_error(
 				format!(
@@ -489,9 +559,9 @@ impl<'s> Parser<'s> {
 					grammar_context, grammar_element, entry
 				),
 				node,
-			)?
+			)
 		} else {
-			self.with_error(format!("Unexpected {} \"{}\"", grammar_context, grammar_element), node)?
+			self.with_error(format!("Unexpected {} \"{}\"", grammar_context, grammar_element), node)
 		}
 	}
 
@@ -503,16 +573,19 @@ impl<'s> Parser<'s> {
 		return str::from_utf8(&self.source[byte_range]).unwrap();
 	}
 
-	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
+	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> ParseResult<Node> {
 		if node.is_error() {
 			self.with_error(format!("Expected {}", expected), &node)
 		} else {
-			Ok(node)
+			ParseResult::ok(node)
 		}
 	}
 
-	fn get_child_field<'a>(&'a self, node: &'a Node<'a>, field: &str) -> DiagnosticResult<Node> {
-		let checked_node = self.check_error(*node, field)?;
+	fn get_child_field<'a>(&'a self, node: &'a Node<'a>, field: &str) -> ParseResult<Node> {
+		let checked_node = match self.check_error(*node, field) {
+			ParseResult(Some(node), _) => node,
+			ParseResult(None, errors) => return ParseResult::err(errors),
+		};
 		let child = get_actual_child_by_field_name(checked_node, field);
 		if let Some(child) = child {
 			self.check_error(child, field)
@@ -521,18 +594,23 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn node_symbol(&self, node: &Node) -> DiagnosticResult<Symbol> {
-		let checked_node = self.check_error(*node, "symbol")?;
-		Ok(Symbol {
-			span: self.node_span(&checked_node),
-			name: self.node_text(&checked_node).to_string(),
-		})
+	fn node_symbol(&self, node: &Node) -> ParseResult<Symbol> {
+		let mut errors = vec![];
+		let checked_node = merge_errs!(self.check_error(*node, "symbol"), errors);
+		ParseResult::ok_with_errors(
+			Symbol {
+				span: self.node_span(&checked_node),
+				name: self.node_text(&checked_node).to_string(),
+			},
+			errors,
+		)
 	}
 
-	fn build_duration(&self, node: &Node) -> DiagnosticResult<Expr> {
-		let value = self.check_error(node.named_child(0).unwrap(), "duration")?;
+	fn build_duration(&self, node: &Node) -> ParseResult<Expr> {
+		let mut errors = vec![];
+		let value = merge_errs!(self.check_error(node.named_child(0).unwrap(), "duration"), errors);
 		let value_literal = self
-			.node_text(&self.get_child_field(&value, "value")?)
+			.node_text(&merge_errs!(self.get_child_field(&value, "value"), errors))
 			.parse::<f64>()
 			.expect("Duration string");
 
@@ -544,12 +622,13 @@ impl<'s> Parser<'s> {
 			"days" => value_literal * 86400_f64,
 			"months" => value_literal * 2628000_f64,
 			"years" => value_literal * 31536000_f64,
-			"ERROR" => self.with_error("Expected duration type", &node)?,
-			other => self.report_unimplemented_grammar(other, "duration type", node)?,
+			"ERROR" => merge_errs!(self.with_error("Expected duration type", &node), errors),
+			other => merge_errs!(self.report_unimplemented_grammar(other, "duration type", node), errors),
 		};
 		let span = self.node_span(node);
+
 		// represent duration literals as the AST equivalent of `duration.fromSeconds(value)`
-		Ok(Expr::new(
+		ParseResult::ok(Expr::new(
 			ExprKind::Call {
 				callee: CalleeKind::Expr(Box::new(Expr::new(
 					ExprKind::Reference(Reference::InstanceMember {
@@ -589,13 +668,15 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_scope(&self, scope_node: &Node, phase: Phase) -> Scope {
+	fn build_scope(&self, scope_node: &Node, phase: Phase) -> ParseResult<Scope> {
 		let span = self.node_span(scope_node);
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let mut cursor = scope_node.walk();
 
 		let mut statements = vec![];
 		let mut doc_builder = DocBuilder::new(self);
+
+		let mut errors = vec![];
 
 		for child in scope_node.named_children(&mut cursor) {
 			let DocBuilderResult::Done(doc) = doc_builder.process_node(&child) else {
@@ -605,26 +686,23 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 
-			if let Ok(stmt) = self.build_statement(&child, statements.len(), phase, doc) {
+			let parsed_stmt = self.build_statement(&child, statements.len(), phase, doc);
+			if let ParseResult(Some(stmt), _) = parsed_stmt {
 				statements.push(stmt);
 			}
+			errors.push(parsed_stmt.into_errors());
 		}
-		Scope::new(statements, span)
+
+		ParseResult::ok_with_errors(Scope::new(statements, span), errors)
 	}
 
-	fn build_statement(
-		&self,
-		statement_node: &Node,
-		idx: usize,
-		phase: Phase,
-		doc: Option<String>,
-	) -> DiagnosticResult<Stmt> {
+	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase, doc: Option<String>) -> ParseResult<Stmt> {
 		let span = self.node_span(statement_node);
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let stmt_kind = match statement_node.kind() {
-			"import_statement" => self.build_bring_statement(statement_node)?,
+			"import_statement" => self.build_bring_statement(statement_node),
 
-			"variable_definition_statement" => self.build_variable_def_statement(statement_node, phase)?,
+			"variable_definition_statement" => self.build_variable_def_statement(statement_node, phase),
 			"variable_assignment_statement" => {
 				let kind = match self.node_text(&statement_node.child_by_field_name("operator").unwrap()) {
 					"=" => AssignmentKind::Assign,
@@ -633,34 +711,34 @@ impl<'s> Parser<'s> {
 					other => return self.report_unimplemented_grammar(other, "assignment operator", statement_node),
 				};
 
-				self.build_assignment_statement(statement_node, phase, kind)?
+				self.build_assignment_statement(statement_node, phase, kind)
 			}
-			"expression_statement" => {
-				StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap(), phase)?)
-			}
-			"block" => StmtKind::Scope(self.build_scope(statement_node, phase)),
-			"if_statement" => self.build_if_statement(statement_node, phase)?,
-			"if_let_statement" => self.build_if_let_statement(statement_node, phase)?,
-			"for_in_loop" => self.build_for_statement(statement_node, phase)?,
-			"while_statement" => self.build_while_statement(statement_node, phase)?,
-			"break_statement" => self.build_break_statement(statement_node)?,
-			"continue_statement" => self.build_continue_statement(statement_node)?,
-			"return_statement" => self.build_return_statement(statement_node, phase)?,
-			"throw_statement" => self.build_throw_statement(statement_node, phase)?,
-			"class_definition" => self.build_class_statement(statement_node, phase)?,
-			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
-			"enum_definition" => self.build_enum_statement(statement_node)?,
-			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
-			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
-			"test_statement" => self.build_test_statement(statement_node)?,
-			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
-			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase)?,
-			"lift_statement" => self.build_lift_statement(statement_node, phase)?,
+			"expression_statement" => self
+				.build_expression(&statement_node.named_child(0).unwrap(), phase)
+				.map(StmtKind::Expression),
+			"block" => self.build_scope(statement_node, phase).map(StmtKind::Scope),
+			"if_statement" => self.build_if_statement(statement_node, phase),
+			"if_let_statement" => self.build_if_let_statement(statement_node, phase),
+			"for_in_loop" => self.build_for_statement(statement_node, phase),
+			"while_statement" => self.build_while_statement(statement_node, phase),
+			"break_statement" => self.build_break_statement(statement_node),
+			"continue_statement" => self.build_continue_statement(statement_node),
+			"return_statement" => self.build_return_statement(statement_node, phase),
+			"throw_statement" => self.build_throw_statement(statement_node, phase),
+			"class_definition" => self.build_class_statement(statement_node, phase),
+			"interface_definition" => self.build_interface_statement(statement_node, phase),
+			"enum_definition" => self.build_enum_statement(statement_node),
+			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase),
+			"struct_definition" => self.build_struct_definition_statement(statement_node, phase),
+			"test_statement" => self.build_test_statement(statement_node),
+			"compiler_dbg_env" => ParseResult::ok(StmtKind::CompilerDebugEnv),
+			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase),
+			"lift_statement" => self.build_lift_statement(statement_node, phase),
 			"ERROR" => return self.with_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
 
-		Ok(Stmt {
+		stmt_kind.map(|stmt_kind| Stmt {
 			kind: stmt_kind,
 			span,
 			idx,
@@ -668,14 +746,18 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_lift_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
-		// Lift statements are only legal in inflight
+	fn build_lift_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
 		if phase != Phase::Inflight {
 			return self.with_error("Lift blocks are only allowed in inflight code blocks", statement_node);
 		}
 
+		let mut errors = vec![];
+
 		let lift_qualifications_node = statement_node.child_by_field_name("lift_qualifications").unwrap();
-		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+		let statements = merge_errs!(
+			self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase),
+			errors
+		);
 
 		let mut qualifications = vec![];
 
@@ -685,37 +767,53 @@ impl<'s> Parser<'s> {
 			.walk();
 
 		for qual_node in lift_qualifications_node.named_children(&mut qual_cursor) {
-			let obj = self.build_expression(&qual_node.child_by_field_name("obj").unwrap(), phase)?;
+			let obj = merge_errs!(
+				self.build_expression(&qual_node.child_by_field_name("obj").unwrap(), phase),
+				errors
+			);
 			let mut ops = vec![];
 			for op_node in get_actual_children_by_field_name(qual_node, "ops") {
-				ops.push(self.node_symbol(&op_node)?);
+				ops.push(merge_errs!(self.node_symbol(&op_node), errors));
 			}
 			qualifications.push(LiftQualification { obj, ops });
 		}
 
-		Ok(StmtKind::ExplicitLift(ExplicitLift {
-			qualifications,
-			statements,
-		}))
+		ParseResult::ok_with_errors(
+			StmtKind::ExplicitLift(ExplicitLift {
+				qualifications,
+				statements,
+			}),
+			errors,
+		)
 	}
 
-	fn build_try_catch_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
-		let try_statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+	fn build_try_catch_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+
+		let try_statements = merge_errs!(
+			self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase),
+			errors
+		);
+
 		let catch_block = if let Some(catch_block) = statement_node.child_by_field_name("catch_block") {
 			if let Some(parenthesized_identifier) = statement_node.child_by_field_name("parenthesized_exception_identifier") {
-				return self.with_error::<StmtKind>(
+				self.add_error(
 					format!(
 						"Unexpected parentheses in catch block. Use 'catch {}' instead of 'catch {}'.",
 						self.node_text(&parenthesized_identifier.child(1).expect("no identifier found")),
 						self.node_text(&parenthesized_identifier)
 					),
 					&parenthesized_identifier,
+					&mut errors,
 				);
 			}
+
+			let statements = merge_errs!(self.build_scope(&catch_block, phase), errors);
+
 			Some(CatchBlock {
-				statements: self.build_scope(&catch_block, phase),
+				statements,
 				exception_var: if let Some(exception_var_node) = statement_node.child_by_field_name("exception_identifier") {
-					Some(self.check_reserved_symbol(&exception_var_node)?)
+					Some(merge_errs!(self.check_reserved_symbol(&exception_var_node), errors))
 				} else {
 					None
 				},
@@ -725,101 +823,154 @@ impl<'s> Parser<'s> {
 		};
 
 		let finally_statements = if let Some(finally_node) = statement_node.child_by_field_name("finally_block") {
-			Some(self.build_scope(&finally_node, phase))
+			Some(merge_errs!(self.build_scope(&finally_node, phase), errors))
 		} else {
 			None
 		};
 
 		// If both catch and finally are missing, report an error
 		if catch_block.is_none() && finally_statements.is_none() {
-			return self.with_error::<StmtKind>(
-				String::from("Missing `catch` or `finally` blocks for this try statement"),
-				&statement_node,
+			self.add_error(
+				"Missing `catch` or `finally` blocks for this try statement",
+				statement_node,
+				&mut errors,
 			);
 		}
 
-		Ok(StmtKind::TryCatch {
-			try_statements,
-			catch_block,
-			finally_statements,
-		})
-	}
-
-	fn build_return_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
-		Ok(StmtKind::Return(
-			if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
-				Some(self.build_expression(&return_expression_node, phase)?)
-			} else {
-				None
+		ParseResult::ok_with_errors(
+			StmtKind::TryCatch {
+				try_statements,
+				catch_block,
+				finally_statements,
 			},
-		))
+			errors,
+		)
 	}
 
-	fn build_throw_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
-		let expr = self.build_expression(&statement_node.child_by_field_name("expression").unwrap(), phase)?;
-		Ok(StmtKind::Throw(expr))
+	fn build_return_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let maybe_exp = if let Some(expr_node) = statement_node.child_by_field_name("expression") {
+			Some(merge_errs!(self.build_expression(&expr_node, phase), errors))
+		} else {
+			None
+		};
+		ParseResult::ok_with_errors(StmtKind::Return(maybe_exp), errors)
+	}
+
+	fn build_throw_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let expr = merge_errs!(
+			self.build_expression(&statement_node.child_by_field_name("expression").unwrap(), phase),
+			errors
+		);
+		ParseResult::ok_with_errors(StmtKind::Throw(expr), errors)
 	}
 
 	/// Builds scope statements for a loop (while/for), and maintains the is_in_loop flag
 	/// for the duration of the loop. So that later break statements inside can be validated
 	/// without traversing the AST.
-	fn build_in_loop_scope(&self, scope_node: &Node, phase: Phase) -> Scope {
+	fn build_in_loop_scope(&self, scope_node: &Node, phase: Phase) -> ParseResult<Scope> {
 		let prev_is_in_loop = *self.is_in_loop.borrow();
 		*self.is_in_loop.borrow_mut() = true;
-		let scope = self.build_scope(scope_node, phase);
+		let scope_result = self.build_scope(scope_node, phase);
 		*self.is_in_loop.borrow_mut() = prev_is_in_loop;
-		scope
+		scope_result
 	}
 
-	fn build_while_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
-		Ok(StmtKind::While {
-			condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap(), phase)?,
-			statements: self.build_in_loop_scope(&statement_node.child_by_field_name("block").unwrap(), phase),
-		})
+	fn build_while_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let condition = merge_errs!(
+			self.build_expression(&statement_node.child_by_field_name("condition").unwrap(), phase),
+			errors
+		);
+		let statements = merge_errs!(
+			self.build_in_loop_scope(&statement_node.child_by_field_name("block").unwrap(), phase),
+			errors
+		);
+		ParseResult::ok_with_errors(StmtKind::While { condition, statements }, errors)
 	}
 
-	fn build_for_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
-		Ok(StmtKind::ForLoop {
-			iterator: self.check_reserved_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
-			iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap(), phase)?,
-			statements: self.build_in_loop_scope(&statement_node.child_by_field_name("block").unwrap(), phase),
-		})
+	fn build_for_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let iterator = merge_errs!(
+			self.check_reserved_symbol(&statement_node.child_by_field_name("iterator").unwrap()),
+			errors
+		);
+		let iterable = merge_errs!(
+			self.build_expression(&statement_node.child_by_field_name("iterable").unwrap(), phase),
+			errors
+		);
+		let statements = merge_errs!(
+			self.build_in_loop_scope(&statement_node.child_by_field_name("block").unwrap(), phase),
+			errors
+		);
+		ParseResult::ok_with_errors(
+			StmtKind::ForLoop {
+				iterator,
+				iterable,
+				statements,
+			},
+			errors,
+		)
 	}
 
-	fn build_break_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+	fn build_break_statement(&self, statement_node: &Node) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
 		if !*self.is_in_loop.borrow() {
-			return self.with_error::<StmtKind>(
+			self.add_error(
 				"Expected break statement to be inside of a loop (while/for)",
 				statement_node,
+				&mut errors,
 			);
 		}
-		Ok(StmtKind::Break)
+		ParseResult::ok_with_errors(StmtKind::Break, errors)
 	}
 
-	fn build_continue_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+	fn build_continue_statement(&self, statement_node: &Node) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
 		if !*self.is_in_loop.borrow() {
-			return self.with_error::<StmtKind>(
+			self.add_error(
 				"Expected continue statement to be inside of a loop (while/for)",
 				statement_node,
+				&mut errors,
 			);
 		}
-		Ok(StmtKind::Continue)
+		ParseResult::ok_with_errors(StmtKind::Continue, errors)
 	}
 
-	fn build_if_let_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
-		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+	fn build_if_let_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let if_block = merge_errs!(
+			self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase),
+			errors
+		);
 		let reassignable = statement_node.child_by_field_name("reassignable").is_some();
-		let value = self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?;
-		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+		let value = merge_errs!(
+			self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase),
+			errors
+		);
+		let name = merge_errs!(
+			self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap()),
+			errors
+		);
 
 		let mut elif_vec = vec![];
 		let mut cursor = statement_node.walk();
 		for node in statement_node.children(&mut cursor) {
 			match node.kind() {
 				"elif_let_block" => {
-					let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
-					let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
-					let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
+					let statements = merge_errs!(
+						self.build_scope(&node.child_by_field_name("block").unwrap(), phase),
+						errors
+					);
+					let value = merge_errs!(
+						self.build_expression(&node.child_by_field_name("value").unwrap(), phase),
+						errors
+					);
+					let name = merge_errs!(
+						self.check_reserved_symbol(&node.child_by_field_name("name").unwrap()),
+						errors
+					);
 					let elif = Elifs::ElifLetBlock(ElifLetBlock {
 						reassignable: node.child_by_field_name("reassignable").is_some(),
 						statements: statements,
@@ -829,10 +980,16 @@ impl<'s> Parser<'s> {
 					elif_vec.push(elif);
 				}
 				"elif_block" => {
-					let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap(), phase);
-					let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
+					let conditions = merge_errs!(
+						self.build_expression(&node.child_by_field_name("condition").unwrap(), phase),
+						errors
+					);
+					let statements = merge_errs!(
+						self.build_scope(&node.child_by_field_name("block").unwrap(), phase),
+						errors
+					);
 					let elif = Elifs::ElifBlock(ElifBlock {
-						condition: conditions.unwrap(),
+						condition: conditions,
 						statements: statements,
 					});
 					elif_vec.push(elif);
@@ -842,44 +999,62 @@ impl<'s> Parser<'s> {
 		}
 
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
-			Some(self.build_scope(&else_block, phase))
+			Some(merge_errs!(self.build_scope(&else_block, phase), errors))
 		} else {
 			None
 		};
-		Ok(StmtKind::IfLet(IfLet {
-			var_name: name,
-			reassignable,
-			value,
-			statements: if_block,
-			elif_statements: elif_vec,
-			else_statements: else_block,
-		}))
+
+		ParseResult::ok_with_errors(
+			StmtKind::IfLet(IfLet {
+				var_name: name,
+				reassignable,
+				value,
+				statements: if_block,
+				elif_statements: elif_vec,
+				else_statements: else_block,
+			}),
+			errors,
+		)
 	}
 
-	fn build_if_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
-		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+	fn build_if_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let condition = merge_errs!(
+			self.build_expression(&statement_node.child_by_field_name("condition").unwrap(), phase),
+			errors
+		);
+		let if_block = merge_errs!(
+			self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase),
+			errors
+		);
 		let mut elif_vec = vec![];
 		let mut cursor = statement_node.walk();
 		for node in statement_node.children_by_field_name("elif_block", &mut cursor) {
-			let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap(), phase);
-			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
-			let elif = ElifBlock {
-				condition: conditions.unwrap(),
-				statements: statements,
-			};
+			let condition = merge_errs!(
+				self.build_expression(&node.child_by_field_name("condition").unwrap(), phase),
+				errors
+			);
+			let statements = merge_errs!(
+				self.build_scope(&node.child_by_field_name("block").unwrap(), phase),
+				errors
+			);
+			let elif = ElifBlock { condition, statements };
 			elif_vec.push(elif);
 		}
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
-			Some(self.build_scope(&else_block, phase))
+			Some(merge_errs!(self.build_scope(&else_block, phase), errors))
 		} else {
 			None
 		};
-		Ok(StmtKind::If {
-			condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap(), phase)?,
-			statements: if_block,
-			elif_statements: elif_vec,
-			else_statements: else_block,
-		})
+		ParseResult::ok_with_errors(
+			StmtKind::If {
+				condition,
+				statements: if_block,
+				elif_statements: elif_vec,
+				else_statements: else_block,
+			},
+			errors,
+		)
 	}
 
 	fn build_assignment_statement(
@@ -887,28 +1062,42 @@ impl<'s> Parser<'s> {
 		statement_node: &Node,
 		phase: Phase,
 		kind: AssignmentKind,
-	) -> DiagnosticResult<StmtKind> {
-		let reference = self.build_reference(&statement_node.child_by_field_name("name").unwrap(), phase)?;
+	) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let reference = merge_errs!(
+			self.build_reference(&statement_node.child_by_field_name("name").unwrap(), phase),
+			errors
+		);
 
 		if let ExprKind::Reference(r) = reference.kind {
-			Ok(StmtKind::Assignment {
-				kind: kind,
-				variable: r,
-				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?,
-			})
+			let value = merge_errs!(
+				self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase),
+				errors
+			);
+			ParseResult::ok_with_errors(
+				StmtKind::Assignment {
+					kind,
+					variable: r,
+					value,
+				},
+				errors,
+			)
 		} else {
-			self.with_error(
+			errors.push(self.build_error(
 				"Expected a reference on the left hand side of an assignment",
 				statement_node,
-			)
+			));
+			ParseResult::err(errors)
 		}
 	}
 
-	fn build_struct_definition_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
-		let name = self.check_reserved_symbol(&self.get_child_field(&statement_node, "name")?)?;
+	fn build_struct_definition_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let name_node = merge_errs!(self.get_child_field(&statement_node, "name"), errors);
+		let name = merge_errs!(self.check_reserved_symbol(&name_node), errors);
 
 		let mut cursor = statement_node.walk();
-		let mut members = vec![];
+		let mut fields = vec![];
 
 		let mut doc_builder = DocBuilder::new(self);
 
@@ -919,76 +1108,89 @@ impl<'s> Parser<'s> {
 			if field_node.kind() != "struct_field" {
 				continue;
 			}
-			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
-			let type_ = self.get_child_field(&field_node, "type").ok();
+			let field_name_node = merge_errs!(self.get_child_field(&field_node, "name"), errors);
+			let identifier = merge_errs!(self.node_symbol(&field_name_node), errors);
+			let type_node = merge_errs!(self.get_child_field(&field_node, "type"), errors);
+			let member_type = merge_errs!(self.build_type_annotation(Some(type_node), phase), errors);
 			let f = StructField {
 				name: identifier,
-				member_type: self.build_type_annotation(type_, phase)?,
+				member_type,
 				doc,
 			};
-			members.push(f);
+			fields.push(f);
 		}
 
 		let mut extends = vec![];
 		for super_node in get_actual_children_by_field_name(*statement_node, "extends") {
-			let super_type = self.build_type_annotation(Some(super_node), phase)?;
+			let super_type = merge_errs!(self.build_type_annotation(Some(super_node), phase), errors);
 			match super_type.kind {
 				TypeAnnotationKind::UserDefined(t) => {
 					extends.push(t);
 				}
 				_ => {
-					self.with_error::<Node>(
+					errors.push(self.build_error(
 						format!("Extended type must be a user defined type, found {}", super_type),
 						&super_node,
-					)?;
+					));
 				}
 			}
 		}
 
-		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(&access_modifier_node);
+		let access_modifier_node = merge_errs!(self.get_child_field(&statement_node, "access_modifier"), errors);
+		let access = self.build_access_modifier(&Some(access_modifier_node));
 		if access == AccessModifier::Protected {
-			self.with_error::<Node>(
-				"Structs must be public (\"pub\") or private",
-				&access_modifier_node.expect("access modifier node"),
-			)?;
+			errors.push(self.build_error("Structs must be public (\"pub\") or private", &access_modifier_node));
 		}
 
-		Ok(StmtKind::Struct(Struct {
-			name,
-			extends,
-			fields: members,
-			access,
-		}))
+		ParseResult::ok_with_errors(
+			StmtKind::Struct(Struct {
+				name,
+				extends,
+				fields,
+				access,
+			}),
+			errors,
+		)
 	}
 
-	fn build_variable_def_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+	fn build_variable_def_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let var_name_node = merge_errs!(self.get_child_field(&statement_node, "name"), errors);
+		let var_name = merge_errs!(self.check_reserved_symbol(&var_name_node), errors);
 		let type_ = if let Some(type_node) = get_actual_child_by_field_name(*statement_node, "type") {
-			Some(self.build_type_annotation(Some(type_node), phase)?)
+			Some(merge_errs!(self.build_type_annotation(Some(type_node), phase), errors))
 		} else {
 			None
 		};
-		Ok(StmtKind::Let {
-			reassignable: statement_node.child_by_field_name("reassignable").is_some(),
-			var_name: self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?,
-			initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?,
-			type_,
-		})
+		let initial_value_node = merge_errs!(self.get_child_field(&statement_node, "value"), errors);
+		let initial_value = merge_errs!(self.build_expression(&initial_value_node, phase), errors);
+		let reassignable = statement_node.child_by_field_name("reassignable").is_some();
+		ParseResult::ok_with_errors(
+			StmtKind::Let {
+				reassignable,
+				var_name,
+				initial_value,
+				type_,
+			},
+			errors,
+		)
 	}
 
-	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+	fn build_bring_statement(&self, statement_node: &Node) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
 		let Some(module_name_node) = statement_node.child_by_field_name("module_name") else {
-			return self.with_error(
+			errors.push(self.build_error(
 				"Expected module specification (see https://www.winglang.io/docs/libraries)",
 				&statement_node
 					.child(statement_node.child_count() - 1)
 					.unwrap_or(*statement_node),
-			);
+			));
+			return ParseResult::err(errors);
 		};
 
-		let module_name = self.node_symbol(&module_name_node)?;
+		let module_name = merge_errs!(self.node_symbol(&module_name_node), errors);
 		let alias = if let Some(identifier) = statement_node.child_by_field_name("alias") {
-			Some(self.check_reserved_symbol(&identifier)?)
+			Some(merge_errs!(self.check_reserved_symbol(&identifier), errors))
 		} else {
 			None
 		};
@@ -1000,35 +1202,40 @@ impl<'s> Parser<'s> {
 		};
 
 		if is_absolute_path(&module_path) {
-			return self.with_error(
+			errors.push(self.build_error(
 				format!("Cannot bring \"{}\" since it is not a relative path", module_path),
 				&module_name_node,
-			);
+			));
+			return ParseResult::err(errors);
 		}
 
 		if module_name.name.starts_with("\".") && module_name.name.ends_with("\"") {
 			let source_path = normalize_path(module_path, Some(&Utf8Path::new(&self.source_name)));
 			if source_path == Utf8Path::new(&self.source_name) {
-				return self.with_error("Cannot bring a module into itself", &module_name_node);
+				errors.push(self.build_error("Cannot bring a module into itself", &module_name_node));
+				return ParseResult::err(errors);
 			}
 			if !source_path.exists() {
-				return self.with_error(format!("Cannot find module \"{}\"", module_path), &module_name_node);
+				errors.push(self.build_error(format!("Cannot find module \"{}\"", module_path), &module_name_node));
+				return ParseResult::err(errors);
 			}
 
 			// case: .w file
 			if is_entrypoint_file(&source_path) {
-				return self.with_error(
+				errors.push(self.build_error(
 					format!("Cannot bring module \"{}\" since it is an entrypoint file", module_path),
 					&module_name_node,
-				);
+				));
+				return ParseResult::err(errors);
 			}
 
 			if source_path.is_file() {
 				if source_path.extension() != Some("w") {
-					return self.with_error(
+					errors.push(self.build_error(
 						format!("Cannot bring \"{}\": not a recognized file type", module_path),
 						&module_name_node,
-					);
+					));
+					return ParseResult::err(errors);
 				}
 
 				self
@@ -1037,21 +1244,24 @@ impl<'s> Parser<'s> {
 					.push((source_path.clone(), module_name.span()));
 
 				// parse error if no alias is provided
-				let module = if let Some(alias) = alias {
-					Ok(StmtKind::Bring {
-						source: BringSource::WingFile(source_path),
-						identifier: Some(alias),
-					})
+				return if let Some(alias) = alias {
+					ParseResult::ok_with_errors(
+						StmtKind::Bring {
+							source: BringSource::WingFile(source_path),
+							identifier: Some(alias),
+						},
+						errors,
+					)
 				} else {
-					self.with_error::<StmtKind>(
+					errors.push(self.build_error(
 						format!(
 							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
 							module_name
 						),
 						statement_node,
-					)
+					));
+					ParseResult::err(errors)
 				};
-				return module;
 			}
 
 			// case: directory
@@ -1062,28 +1272,32 @@ impl<'s> Parser<'s> {
 					.push((source_path.clone(), module_name.span()));
 
 				// parse error if no alias is provided
-				let module = if let Some(alias) = alias {
-					Ok(StmtKind::Bring {
-						source: BringSource::Directory(source_path),
-						identifier: Some(alias),
-					})
+				return if let Some(alias) = alias {
+					ParseResult::ok_with_errors(
+						StmtKind::Bring {
+							source: BringSource::Directory(source_path),
+							identifier: Some(alias),
+						},
+						errors,
+					)
 				} else {
-					self.with_error::<StmtKind>(
+					errors.push(self.build_error(
 						format!(
 							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
 							module_name
 						),
 						statement_node,
-					)
+					));
+					ParseResult::err(errors)
 				};
-				return module;
 			}
 
 			// case: path does not satisfy is_file or is_dir (is this possible?)
-			return self.with_error(
+			errors.push(self.build_error(
 				format!("Cannot bring \"{}\": not a recognized file type", module_path),
 				&module_name_node,
-			);
+			));
+			return ParseResult::err(errors);
 		}
 
 		if module_name.name.starts_with("\"") && module_name.name.ends_with("\"") {
@@ -1091,18 +1305,19 @@ impl<'s> Parser<'s> {
 			// first, find where the package.json is located
 			let module_name_parsed = module_name.name[1..module_name.name.len() - 1].to_string();
 			let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
-			let module_dir = wingii::util::package_json::find_dependency_directory(&module_name_parsed, &source_dir)
-				.ok_or_else(|| {
-					self
-						.with_error::<Node>(
-							format!(
-								"Unable to load {}: Module not found in \"{}\"",
-								module_name, self.source_name
-							),
-							&statement_node,
-						)
-						.err();
-				})?;
+			let module_dir = match wingii::util::package_json::find_dependency_directory(&module_name_parsed, &source_dir) {
+				Some(dir) => dir,
+				None => {
+					errors.push(self.build_error(
+						format!(
+							"Unable to load {}: Module not found in \"{}\"",
+							module_name, self.source_name
+						),
+						&statement_node,
+					));
+					return ParseResult::err(errors);
+				}
+			};
 
 			// If the package.json has a `wing` field, then we treat it as a Wing library
 			if is_wing_library(&Utf8Path::new(&module_dir)) {
@@ -1113,71 +1328,83 @@ impl<'s> Parser<'s> {
 						.borrow_mut()
 						.push((module_dir.clone(), module_name.span()));
 
-					Ok(StmtKind::Bring {
-						source: BringSource::WingLibrary(
-							Symbol {
-								name: module_name_parsed,
-								span: module_name.span,
-							},
-							module_dir,
-						),
-						identifier: Some(alias),
-					})
+					ParseResult::ok_with_errors(
+						StmtKind::Bring {
+							source: BringSource::WingLibrary(
+								Symbol {
+									name: module_name_parsed,
+									span: module_name.span,
+								},
+								module_dir,
+							),
+							identifier: Some(alias),
+						},
+						errors,
+					)
 				} else {
-					self.with_error::<StmtKind>(
+					errors.push(self.build_error(
 						format!(
 							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
 							module_name
 						),
 						statement_node,
-					)
+					));
+					ParseResult::err(errors)
 				};
 			}
 
 			// otherwise, we treat it as a JSII library
 			return if let Some(alias) = alias {
-				Ok(StmtKind::Bring {
-					source: BringSource::JsiiModule(Symbol {
-						name: module_name_parsed,
-						span: module_name.span,
-					}),
-					identifier: Some(alias),
-				})
+				ParseResult::ok_with_errors(
+					StmtKind::Bring {
+						source: BringSource::JsiiModule(Symbol {
+							name: module_name_parsed,
+							span: module_name.span,
+						}),
+						identifier: Some(alias),
+					},
+					errors,
+				)
 			} else {
-				self.with_error::<StmtKind>(
+				errors.push(self.build_error(
 					format!(
 						"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
 						module_name
 					),
 					statement_node,
-				)
+				));
+				ParseResult::err(errors)
 			};
 		}
 
 		if WINGSDK_BRINGABLE_MODULES.contains(&module_name.name.as_str()) || module_name.name == WINGSDK_STD_MODULE {
-			return Ok(StmtKind::Bring {
-				source: BringSource::BuiltinModule(module_name),
-				identifier: alias,
-			});
+			return ParseResult::ok_with_errors(
+				StmtKind::Bring {
+					source: BringSource::BuiltinModule(module_name),
+					identifier: alias,
+				},
+				errors,
+			);
 		}
 
 		// check if a trusted library exists with this name
 		let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
-		let module_dir = wingii::util::package_json::find_dependency_directory(
+		let module_dir = match wingii::util::package_json::find_dependency_directory(
 			&format!("{}/{}", TRUSTED_LIBRARY_NPM_NAMESPACE, module_name.name),
 			&source_dir,
-		)
-		.ok_or_else(|| {
-			self
-				.with_error::<Node>(
+		) {
+			Some(dir) => dir,
+			None => {
+				errors.push(self.build_error(
 					format!(
 						"Could not find a trusted library \"{}/{}\" installed. Did you mean to run `npm i {}/{}`?",
 						TRUSTED_LIBRARY_NPM_NAMESPACE, module_name, TRUSTED_LIBRARY_NPM_NAMESPACE, module_name
 					),
 					&statement_node,
-				)
-				.err();
-		})?;
+				));
+				return ParseResult::err(errors);
+			}
+		};
 
 		// make sure the trusted library is also parsed
 		self
@@ -1185,25 +1412,25 @@ impl<'s> Parser<'s> {
 			.borrow_mut()
 			.push((module_dir.clone(), module_name.span()));
 
-		Ok(StmtKind::Bring {
-			source: BringSource::TrustedModule(
-				Symbol {
-					name: module_name.name,
-					span: module_name.span,
-				},
-				module_dir,
-			),
-			identifier: alias,
-		})
+		ParseResult::ok_with_errors(
+			StmtKind::Bring {
+				source: BringSource::TrustedModule(
+					Symbol {
+						name: module_name.name,
+						span: module_name.span,
+					},
+					module_dir,
+				),
+				identifier: alias,
+			},
+			errors,
+		)
 	}
 
-	fn build_enum_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("enum_name").unwrap());
-		if name.is_err() {
-			self
-				.with_error::<Node>(String::from("Invalid enum name"), &statement_node)
-				.err();
-		}
+	fn build_enum_statement(&self, statement_node: &Node) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let name_node = merge_errs!(self.get_child_field(&statement_node, "enum_name"), errors);
+		let name = merge_errs!(self.check_reserved_symbol(&name_node), errors);
 
 		let mut cursor = statement_node.walk();
 		let mut values = IndexMap::<Symbol, Option<String>>::new();
@@ -1217,41 +1444,37 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 
-			let diagnostic = self.node_symbol(&node);
-			if diagnostic.is_err() {
-				self.with_error::<Node>(String::from("Invalid enum value"), &node).err();
-				continue;
-			}
+			let symbol = merge_errs!(self.node_symbol(&node), errors);
 
-			let symbol = diagnostic.unwrap();
 			if values.insert(symbol.clone(), value_doc).is_some() {
-				self
-					.with_error::<Node>(format!("Duplicated enum value {}", symbol.name), &node)
-					.err();
+				errors.push(self.build_error(format!("Duplicated enum value {}", symbol.name), &node));
 			}
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
 		let access = self.build_access_modifier(&access_modifier_node);
 		if access == AccessModifier::Protected {
-			self.with_error::<Node>(
+			errors.push(self.build_error(
 				"Enums must be public (\"pub\") or private",
 				&access_modifier_node.expect("access modifier node"),
-			)?;
+			));
 		}
 
-		Ok(StmtKind::Enum(Enum {
-			name: name.unwrap(),
-			values,
-			access,
-		}))
+		ParseResult::ok_with_errors(
+			StmtKind::Enum(Enum {
+				name: name,
+				values,
+				access,
+			}),
+			errors,
+		)
 	}
 
-	fn get_modifier<'a>(&'a self, modifier: &str, maybe_modifiers: &'a Option<Node>) -> DiagnosticResult<Option<Node>> {
+	fn get_modifier<'a>(&'a self, modifier: &str, maybe_modifiers: &'a Option<Node>) -> ParseResult<Option<Node>> {
 		let modifiers_node = if let Some(modifiers_node) = maybe_modifiers {
 			modifiers_node
 		} else {
-			return Ok(None);
+			return ParseResult::ok(None);
 		};
 
 		let found_modifiers = modifiers_node
@@ -1260,21 +1483,20 @@ impl<'s> Parser<'s> {
 			.collect_vec();
 
 		if found_modifiers.len() > 1 {
-			let mut err = self.build_error("Multiple or ambiguous modifiers found", modifiers_node);
+			let mut err_builder = ParseErrorBuilder::new("Multiple or ambiguous modifiers found", modifiers_node, self);
 			for m in found_modifiers.iter() {
-				err = err.with_annotation("possible redundant modifier", self.node_span(m));
+				err_builder = err_builder.with_annotation("possible redundant modifier", &self.node_span(m));
 			}
-
-			self.with_error_builder::<_>(err)
+			ParseResult::err(vec![err_builder.build()])
 		} else {
-			Ok(found_modifiers.first().map(|x| *x))
+			ParseResult::ok(found_modifiers.first().map(|x| *x))
 		}
 	}
 
 	/// Builds a class field from a class_field node
 	///
 	/// If a class's phase isn't specified, it falls back to the phase of the scope.
-	fn build_class_statement(&self, statement_node: &Node, scope_phase: Phase) -> DiagnosticResult<StmtKind> {
+	fn build_class_statement(&self, statement_node: &Node, scope_phase: Phase) -> ParseResult<StmtKind> {
 		let class_modifiers = statement_node.child_by_field_name("modifiers");
 
 		let class_phase = if let Some(phase) = self.get_phase_specifier(&class_modifiers)? {
@@ -1324,7 +1546,8 @@ impl<'s> Parser<'s> {
 					// make sure all the parameters have type annotations
 					for param in &func_def.signature.parameters {
 						if matches!(param.type_annotation.kind, TypeAnnotationKind::Inferred) {
-							Diagnostic::new("Missing required type annotation for method signature", &param.name).report();
+							let diag = Diagnostic::new("Missing required type annotation for method signature", &param.name);
+							report_diagnostic(diag);
 						}
 					}
 
@@ -1437,11 +1660,11 @@ impl<'s> Parser<'s> {
 
 		for method in &methods {
 			if method.0.name == "constructor" {
-				Diagnostic::new(
+				let diag = Diagnostic::new(
 					"Reserved method name. Constructors are declared with a method named \"new\"",
 					&method.0,
-				)
-				.report();
+				);
+				report_diagnostic(diag);
 			}
 		}
 
@@ -1592,7 +1815,7 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_interface_statement(&self, statement_node: &Node, scope_phase: Phase) -> DiagnosticResult<StmtKind> {
+	fn build_interface_statement(&self, statement_node: &Node, scope_phase: Phase) -> ParseResult<StmtKind> {
 		let mut cursor = statement_node.walk();
 		let mut extends = vec![];
 		let mut methods = vec![];
@@ -1710,11 +1933,7 @@ impl<'s> Parser<'s> {
 		}))
 	}
 
-	fn build_interface_method(
-		&self,
-		interface_element: Node,
-		phase: Phase,
-	) -> DiagnosticResult<(Symbol, FunctionSignature)> {
+	fn build_interface_method(&self, interface_element: Node, phase: Phase) -> ParseResult<(Symbol, FunctionSignature)> {
 		// Make sure there's no statements block for interface methods
 		if let Some(body) = &interface_element.child_by_field_name("block") {
 			self
@@ -1734,7 +1953,7 @@ impl<'s> Parser<'s> {
 		func_sig_node: &Node,
 		phase: Phase,
 		require_annotations: bool,
-	) -> DiagnosticResult<FunctionSignature> {
+	) -> ParseResult<FunctionSignature> {
 		let parameters = self.build_parameter_list(
 			&func_sig_node.child_by_field_name("parameter_list").unwrap(),
 			phase,
@@ -1767,7 +1986,7 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_anonymous_closure(&self, anon_closure_node: &Node, scope_phase: Phase) -> DiagnosticResult<Expr> {
+	fn build_anonymous_closure(&self, anon_closure_node: &Node, scope_phase: Phase) -> ParseResult<Expr> {
 		Ok(Expr::new(
 			ExprKind::FunctionClosure(self.build_function_definition(None, anon_closure_node, scope_phase, false, None)?),
 			self.node_span(&anon_closure_node),
@@ -1781,7 +2000,7 @@ impl<'s> Parser<'s> {
 		scope_phase: Phase,
 		require_annotations: bool,
 		doc: Option<String>,
-	) -> DiagnosticResult<FunctionDefinition> {
+	) -> ParseResult<FunctionDefinition> {
 		let modifiers = func_def_node.child_by_field_name("modifiers");
 
 		let phase = match self.get_phase_specifier(&modifiers)? {
@@ -1810,10 +2029,11 @@ impl<'s> Parser<'s> {
 
 			// Make sure there's no statements block for extern functions
 			if let Some(body) = &func_def_node.child_by_field_name("block") {
-				self
-					.build_error("Extern functions cannot have a body", &external)
-					.with_annotation("Body defined here", self.node_span(body))
-					.report();
+				let diag = Diagnostic::builder()
+					.with_message("Extern functions cannot have a body")
+					.with_annotation("Body defined here", &self.node_span(body))
+					.build();
+				report_diagnostic(diag);
 			}
 
 			FunctionBody::External(file_path)
@@ -1842,7 +2062,7 @@ impl<'s> Parser<'s> {
 		parameter_list_node: &Node,
 		phase: Phase,
 		require_annotations: bool,
-	) -> DiagnosticResult<Vec<FunctionParameter>> {
+	) -> ParseResult<Vec<FunctionParameter>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for definition_node in parameter_list_node.named_children(&mut cursor) {
@@ -1866,8 +2086,7 @@ impl<'s> Parser<'s> {
 
 		Ok(res)
 	}
-
-	fn build_udt(&self, type_node: &Node) -> DiagnosticResult<UserDefinedType> {
+	fn build_udt(&self, type_node: &Node) -> ParseResult<UserDefinedType> {
 		match type_node.kind() {
 			"custom_type" => {
 				// check if last node is a "."
@@ -1914,7 +2133,7 @@ impl<'s> Parser<'s> {
 	}
 
 	/// Get the phase specifier from an elements (closure/class/field/method) modifiers node (from a list of multiple modifiers)
-	fn get_phase_specifier(&self, modifiers: &Option<Node>) -> DiagnosticResult<Option<Phase>> {
+	fn get_phase_specifier(&self, modifiers: &Option<Node>) -> ParseResult<Option<Phase>> {
 		Ok(self.build_phase(&self.get_modifier("phase_specifier", modifiers)?))
 	}
 
@@ -1931,7 +2150,7 @@ impl<'s> Parser<'s> {
 	}
 
 	/// Get the access modifier an elements (closure/class/field/method) modifiers node (from a list of multiple modifiers)
-	fn get_access_modifier(&self, modifiers: &Option<Node>) -> DiagnosticResult<AccessModifier> {
+	fn get_access_modifier(&self, modifiers: &Option<Node>) -> ParseResult<AccessModifier> {
 		Ok(self.build_access_modifier(&self.get_modifier("access_modifier", modifiers)?))
 	}
 
@@ -1947,7 +2166,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_type_annotation(&self, type_node: Option<Node>, scope_phase: Phase) -> DiagnosticResult<TypeAnnotation> {
+	fn build_type_annotation(&self, type_node: Option<Node>, scope_phase: Phase) -> ParseResult<TypeAnnotation> {
 		let type_node = &match type_node {
 			Some(node) => node,
 			None => {
@@ -2085,7 +2304,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_nested_identifier(&self, nested_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
+	fn build_nested_identifier(&self, nested_node: &Node, phase: Phase) -> ParseResult<Expr> {
 		if nested_node.has_error() {
 			return self.with_error("Syntax error", &nested_node);
 		}
@@ -2133,7 +2352,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_udt_annotation(&self, nested_node: &Node) -> DiagnosticResult<TypeAnnotation> {
+	fn build_udt_annotation(&self, nested_node: &Node) -> ParseResult<TypeAnnotation> {
 		// check if last node is a "."
 		let last_child = nested_node
 			.child(nested_node.child_count() - 1)
@@ -2158,37 +2377,45 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_reference(&self, reference_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
+	fn build_reference(&self, reference_node: &Node, phase: Phase) -> ParseResult<Expr> {
 		let actual_node = reference_node.named_child(0).unwrap();
 		let actual_node_span = self.node_span(&actual_node);
 		match actual_node.kind() {
-			"reference_identifier" => Ok(Expr::new(
-				ExprKind::Reference(Reference::Identifier(self.node_symbol(&actual_node)?)),
-				actual_node_span,
-			)),
-			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node, phase)?),
-			"structured_access_expression" => Ok(self.build_structured_access_expression(&actual_node, phase)?),
+			"reference_identifier" => {
+				let mut errors = vec![];
+				let id = merge_errs!(self.node_symbol(&actual_node), errors);
+				ParseResult::ok_with_errors(
+					Expr::new(ExprKind::Reference(Reference::Identifier(id)), actual_node_span),
+					errors,
+				)
+			}
+			"nested_identifier" => self.build_nested_identifier(&actual_node, phase),
+			"structured_access_expression" => self.build_structured_access_expression(&actual_node, phase),
 			other => self.with_error(format!("Expected reference, got {other}"), &actual_node),
 		}
 	}
 
-	fn build_structured_access_expression(&self, structured_access_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
+	fn build_structured_access_expression(&self, structured_access_node: &Node, phase: Phase) -> ParseResult<Expr> {
+		let mut errors = vec![];
 		let object_expr = structured_access_node.named_child(0).unwrap();
-		let object_expr = self.build_expression(&object_expr, phase)?;
+		let object_expr = merge_errs!(self.build_expression(&object_expr, phase), errors);
 
 		let index_expr = structured_access_node.named_child(1).unwrap();
-		let index_expr = self.build_expression(&index_expr, phase)?;
+		let index_expr = merge_errs!(self.build_expression(&index_expr, phase), errors);
 
-		Ok(Expr::new(
-			ExprKind::Reference(Reference::ElementAccess {
-				object: Box::new(object_expr),
-				index: Box::new(index_expr),
-			}),
-			self.node_span(structured_access_node),
-		))
+		ParseResult::ok_with_errors(
+			Expr::new(
+				ExprKind::Reference(Reference::ElementAccess {
+					object: Box::new(object_expr),
+					index: Box::new(index_expr),
+				}),
+				self.node_span(structured_access_node),
+			),
+			errors,
+		)
 	}
 
-	fn build_arg_list(&self, arg_list_node: &Node, phase: Phase) -> DiagnosticResult<ArgList> {
+	fn build_arg_list(&self, arg_list_node: &Node, phase: Phase) -> ParseResult<ArgList> {
 		let span = self.node_span(arg_list_node);
 		let mut pos_args = vec![];
 		let mut named_args = IndexMap::new();
@@ -2226,10 +2453,16 @@ impl<'s> Parser<'s> {
 		Ok(ArgList::new(pos_args, named_args, span))
 	}
 
-	fn build_expression(&self, exp_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
+	fn build_expression(&self, exp_node: &Node, phase: Phase) -> ParseResult<Expr> {
 		let expression_span = self.node_span(exp_node);
 		CompilationContext::set(CompilationPhase::Parsing, &expression_span);
-		let expression_node = &self.check_error(*exp_node, "expression")?;
+		let expression_node = match self.check_error(*exp_node, "expression") {
+			ParseResult(Some(node), errs) => {
+				assert!(errs.is_empty(), "Unexpected errors in expression node");
+				node
+			}
+			ParseResult(None, errs) => return ParseResult::err(errs),
+		};
 		match expression_node.kind() {
 			"new_expression" => self.build_new_expression(&expression_node, phase),
 			"binary_expression" => self.build_binary_expression(&expression_node, phase),
@@ -2257,7 +2490,7 @@ impl<'s> Parser<'s> {
 			"compiler_dbg_panic" => {
 				// Handle the debug panic expression (during parsing)
 				dbg_panic!();
-				Ok(Expr::new(ExprKind::CompilerDebugPanic, expression_span))
+				ParseResult::ok(Expr::new(ExprKind::CompilerDebugPanic, expression_span))
 			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
@@ -2542,16 +2775,16 @@ impl<'s> Parser<'s> {
 					let s = s[1..s.len() - 1].to_string();
 					Symbol::new(s, self.node_span(&key_node))
 				}
-				"identifier" => self.node_symbol(&key_node)?,
+				"identifier" => merge_errs!(self.node_symbol(&key_node), errors),
 				other => panic!("Unexpected map key type {} at {:?}", other, key_node),
 			};
 			let value = if let Some(value_node) = field_node.named_child(1) {
-				self.build_expression(&value_node, phase)?
+				merge_errs!(self.build_expression(&value_node, phase), errors)
 			} else {
 				Expr::new(ExprKind::Reference(Reference::Identifier(key.clone())), key.span())
 			};
 			if fields.contains_key(&key) {
-				self.add_error(format!("Duplicate key {} in json object literal", key), &key_node);
+				errors.push(self.build_error(format!("Duplicate key {} in json object literal", key), &key_node));
 			} else {
 				fields.insert(key, value);
 			}
@@ -2690,17 +2923,18 @@ impl<'s> Parser<'s> {
 			let key_node = field_node.named_child(0).unwrap();
 			let value_node = field_node.named_child(1).unwrap();
 			fields.push((
-				self.build_expression(&key_node, phase)?,
-				self.build_expression(&value_node, phase)?,
+				merge_errs!(self.build_expression(&key_node, phase), errors),
+				merge_errs!(self.build_expression(&value_node, phase), errors),
 			));
 		}
-		Ok(fields)
+		ParseResult::ok_with_errors(fields, errors)
 	}
 
-	fn build_set_literal(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+	fn build_set_literal(&self, expression_node: &Node, phase: Phase) -> ParseResult<Expr> {
+		let mut errors = vec![];
 		let expression_span = self.node_span(expression_node);
 		let set_type = if let Some(type_node) = get_actual_child_by_field_name(*expression_node, "type") {
-			self.build_type_annotation(Some(type_node), phase).ok()
+			Some(merge_errs!(self.build_type_annotation(Some(type_node), phase), errors))
 		} else {
 			None
 		};
@@ -2708,24 +2942,25 @@ impl<'s> Parser<'s> {
 		let mut items = Vec::new();
 		let mut cursor = expression_node.walk();
 		for element_node in expression_node.children_by_field_name("element", &mut cursor) {
-			items.push(self.build_expression(&element_node, phase)?);
+			items.push(merge_errs!(self.build_expression(&element_node, phase), errors));
 		}
-		Ok(Expr::new(
-			ExprKind::SetLiteral { items, type_: set_type },
-			expression_span,
-		))
+		ParseResult::ok_with_errors(
+			Expr::new(ExprKind::SetLiteral { items, type_: set_type }, expression_span),
+			errors,
+		)
 	}
 
 	/// Build a Symbol from a node, add error diagnostic if the node is a reserved word
-	fn check_reserved_symbol(&self, node: &Node) -> DiagnosticResult<Symbol> {
-		let node_symbol = self.node_symbol(node);
-		if let Ok(sym) = &node_symbol {
-			if RESERVED_WORDS.contains(&sym.name) {
-				self.add_error("Reserved word", node);
+	fn check_reserved_symbol(&self, node: &Node) -> ParseResult<Symbol> {
+		match self.node_symbol(node) {
+			ParseResult(None, errors) => ParseResult(None, errors),
+			ParseResult(Some(sym), mut errors) => {
+				if RESERVED_WORDS.contains(&sym.name) {
+					errors.push(self.build_error("Reserved word", node));
+				}
+				ParseResult(Some(sym), errors)
 			}
 		}
-
-		node_symbol
 	}
 	/// Given a node, returns the last non-extra node before it.
 	fn last_non_extra(node: Node) -> Node {
@@ -2804,15 +3039,17 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_super_constructor_statement(&self, statement_node: &Node, phase: Phase) -> Result<StmtKind, ()> {
-		let arg_node = statement_node.child_by_field_name("args").unwrap();
-		let arg_list = self.build_arg_list(&arg_node, phase)?;
-
-		Ok(StmtKind::SuperConstructor { arg_list })
+	fn build_super_constructor_statement(&self, statement_node: &Node, phase: Phase) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let arg_node = merge_errs!(self.get_child_field(statement_node, "args"), errors);
+		let arg_list = merge_errs!(self.build_arg_list(&arg_node, phase), errors);
+		ParseResult::ok_with_errors(StmtKind::SuperConstructor { arg_list }, errors)
 	}
 
-	fn build_test_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
-		let name_node = statement_node.child_by_field_name("name").unwrap();
+	fn build_test_statement(&self, statement_node: &Node) -> ParseResult<StmtKind> {
+		let mut errors = vec![];
+		let span = self.node_span(statement_node);
+		let name_node = merge_errs!(self.get_child_field(statement_node, "name"), errors);
 		let name_text = self.node_text(&name_node);
 		let test_id = Box::new(Expr::new(
 			ExprKind::Literal(Literal::String(format!(
@@ -2821,9 +3058,9 @@ impl<'s> Parser<'s> {
 			))),
 			self.node_span(&name_node),
 		));
-		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), Phase::Inflight);
-		let statements_span = statements.span.clone();
-		let span = self.node_span(statement_node);
+
+		let statements_node = merge_errs!(self.get_child_field(statement_node, "block"), errors);
+		let statements = merge_errs!(self.build_scope(&statements_node, Phase::Inflight), errors);
 
 		let inflight_closure = Expr::new(
 			ExprKind::FunctionClosure(FunctionDefinition {
@@ -2838,27 +3075,30 @@ impl<'s> Parser<'s> {
 					phase: Phase::Inflight,
 				},
 				is_static: true,
-				span: statements_span.clone(),
+				span: statements.span.clone(),
 				access: AccessModifier::Public,
 				doc: None,
 			}),
-			statements_span.clone(),
+			statements.span.clone(),
 		);
 
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
-		Ok(StmtKind::Expression(Expr::new(
-			ExprKind::New(New {
-				class: UserDefinedType {
-					root: Symbol::global(WINGSDK_STD_MODULE),
-					fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
-					span: type_span.clone(),
-				},
-				obj_id: Some(test_id),
-				obj_scope: None,
-				arg_list: ArgList::new(vec![inflight_closure], IndexMap::new(), type_span.clone()),
-			}),
-			span,
-		)))
+		ParseResult::ok_with_errors(
+			StmtKind::Expression(Expr::new(
+				ExprKind::New(New {
+					class: UserDefinedType {
+						root: Symbol::global(WINGSDK_STD_MODULE),
+						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
+						span: type_span.clone(),
+					},
+					obj_id: Some(test_id),
+					obj_scope: None,
+					arg_list: ArgList::new(vec![inflight_closure], IndexMap::new(), type_span.clone()),
+				}),
+				span,
+			)),
+			errors,
+		)
 	}
 }
 
@@ -2887,7 +3127,7 @@ impl<'a> DocBuilder<'a> {
 				self
 					.parser
 					.get_child_field(&node, "content")
-					.map_or("", |n| self.parser.node_text(&n)),
+					.map_or(|n| self.parser.node_text(&n), ""),
 			);
 			DocBuilderResult::Continue
 		} else if node.is_extra() {

@@ -226,15 +226,15 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				&& v.ctx.current_property().is_some()
 				&& v.in_disable_lift_qual_err == 0
 			{
-				Diagnostic::new(
-					format!(
+				let diag = Diagnostic::builder()
+					.with_message(format!(
 						"Expression of type \"{expr_type}\" references an unknown preflight object, can't qualify its capabilities"
-					),
-					node,
-				)
-				.hint("Use a `lift` block to explicitly qualify the preflight object and disable this error")
-				.hint("For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification")
-				.report();
+					))
+					.with_span(node)
+					.with_hint("Use a `lift` block to explicitly qualify the preflight object and disable this error")
+					.with_hint("For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification")
+					.build();
+				report_diagnostic(diag);
 			}
 
 			//---------------

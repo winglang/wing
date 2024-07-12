@@ -10,7 +10,7 @@ use serde::Serialize;
 use crate::ast::Spanned;
 
 pub type FileId = String;
-type Diagnostics = Vec<Diagnostic>;
+
 pub type DiagnosticResult<T> = Result<T, ()>;
 
 // error constant
@@ -284,6 +284,10 @@ pub struct Diagnostic {
 }
 
 impl Diagnostic {
+	pub fn builder() -> DiagnosticBuilder<NoMessage> {
+		DiagnosticBuilder::new()
+	}
+
 	pub fn new(msg: impl ToString, span: &impl Spanned) -> Self {
 		Self {
 			message: msg.to_string(),
@@ -292,32 +296,75 @@ impl Diagnostic {
 			hints: vec![],
 		}
 	}
+}
 
-	pub fn add_anotation(&mut self, msg: impl ToString, span: impl Spanned) {
-		self.annotations.push(DiagnosticAnnotation {
-			message: msg.to_string(),
-			span: span.span(),
-		});
+/// A builder for constructing a diagnostic.
+///
+/// The builder requires a message to be set before the diagnostic can be built.
+#[derive(Debug)]
+pub struct DiagnosticBuilder<M> {
+	pub message: M,
+	pub annotations: Vec<DiagnosticAnnotation>,
+	pub span: Option<WingSpan>,
+	pub hints: Vec<String>,
+}
+
+#[derive(Default)]
+pub struct NoMessage;
+pub struct Message(String);
+
+impl DiagnosticBuilder<NoMessage> {
+	pub fn new() -> Self {
+		Self {
+			message: NoMessage,
+			annotations: vec![],
+			span: None,
+			hints: vec![],
+		}
+	}
+}
+
+impl<M> DiagnosticBuilder<M> {
+	// TODO: change to impl Into<String> ?
+	pub fn with_message(self, message: impl ToString) -> DiagnosticBuilder<Message> {
+		let Self {
+			annotations,
+			span,
+			hints,
+			..
+		} = self;
+		DiagnosticBuilder {
+			message: Message(message.to_string()),
+			annotations,
+			span,
+			hints,
+		}
 	}
 
-	pub fn add_hint(&mut self, hint: impl ToString) {
+	pub fn with_span(mut self, spanned: &impl Spanned) -> Self {
+		self.span = Some(spanned.span());
+		self
+	}
+
+	pub fn with_annotation(mut self, message: impl ToString, span: &impl Spanned) -> Self {
+		self.annotations.push(DiagnosticAnnotation::new(message, span));
+		self
+	}
+
+	pub fn with_hint(mut self, hint: impl ToString) -> Self {
 		self.hints.push(hint.to_string());
+		self
 	}
+}
 
-	pub fn annotate(self, msg: impl ToString, span: impl Spanned) -> Self {
-		let mut new = self;
-		new.add_anotation(msg, span);
-		new
-	}
-
-	pub fn hint(self, hint: impl ToString) -> Self {
-		let mut new = self;
-		new.add_hint(hint);
-		new
-	}
-
-	pub fn report(self) {
-		report_diagnostic(self);
+impl DiagnosticBuilder<Message> {
+	pub fn build(self) -> Diagnostic {
+		Diagnostic {
+			message: self.message.0,
+			annotations: self.annotations,
+			span: self.span,
+			hints: self.hints,
+		}
 	}
 }
 
@@ -374,7 +421,7 @@ impl PartialOrd for Diagnostic {
 }
 
 thread_local! {
-	pub static DIAGNOSTICS: RefCell<Diagnostics> = RefCell::new(Diagnostics::new());
+	pub static DIAGNOSTICS: RefCell<Vec<Diagnostic>> = RefCell::new(Vec::new());
 }
 
 /// Report a compilation diagnostic
