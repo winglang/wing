@@ -9,12 +9,6 @@ export const useTests = () => {
   const [testList, setTestList] = useState<TestItem[]>([]);
   const { setTestsExists } = useContext(TestsContext);
 
-  const testStatusQuery = trpc["test.status"].useQuery();
-  const status = useMemo(
-    () => testStatusQuery.data || "uninitialized",
-    [testStatusQuery.data],
-  );
-
   const testListQuery = trpc["test.list"].useQuery();
 
   const { mutate: runAllTestsMutation } = trpc["test.runAll"].useMutation();
@@ -38,7 +32,6 @@ export const useTests = () => {
   );
 
   return {
-    status,
     testList,
     runAllTests,
     runTest,

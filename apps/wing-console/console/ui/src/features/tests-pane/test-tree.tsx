@@ -8,16 +8,15 @@ import {
 import {
   PlayAllIcon,
   ScrollableArea,
-  SpinnerLoader,
   Toolbar,
   ToolbarButton,
   TreeItem,
   TreeView,
   useTheme,
 } from "@wingconsole/design-system";
-import type { TestItem, TestRunnerStatus } from "@wingconsole/server";
+import type { TestItem } from "@wingconsole/server";
 import classNames from "classnames";
-import { memo, useCallback, useMemo } from "react";
+import { memo, useMemo } from "react";
 
 import { useTests } from "./use-tests.js";
 
@@ -92,7 +91,7 @@ export const TestTree = ({
   selectedItemId,
 }: TestTreeProps) => {
   const { theme } = useTheme();
-  const { status, testList, runAllTests, runTest } = useTests();
+  const { testList, runAllTests, runTest } = useTests();
 
   const selectedItems = useMemo(
     () => (selectedItemId ? [selectedItemId] : undefined),
@@ -125,38 +124,28 @@ export const TestTree = ({
             )}
           >
             <div className="flex flex-col">
-              {(status === "uninitialized" || testList.length === 0) && (
+              {testList.length === 0 && (
                 <div
                   className={classNames(
                     theme.text2,
                     "flex flex-col text-xs px-3 py-2 items-center",
                   )}
                 >
-                  {status === "uninitialized" && (
-                    <div className="flex items-center gap-2">
-                      <SpinnerLoader size="xs" />
-                      <div>Loading... </div>
-                    </div>
-                  )}
-                  {status !== "uninitialized" && (
-                    <>
-                      <div>There are no tests.</div>
-                      <div>
-                        <span>Learn how to add tests </span>
-                        <a
-                          className="text-sky-500 hover:text-sky-600"
-                          href="https://www.winglang.io/docs/concepts/tests"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          here.
-                        </a>
-                      </div>
-                    </>
-                  )}
+                  <div>There are no tests.</div>
+                  <div>
+                    <span>Learn how to add tests </span>
+                    <a
+                      className="text-sky-500 hover:text-sky-600"
+                      href="https://www.winglang.io/docs/concepts/tests"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      here.
+                    </a>
+                  </div>
                 </div>
               )}
-              {status !== "uninitialized" && testList.length > 0 && (
+              {testList.length > 0 && (
                 <TreeView
                   selectedItems={selectedItems}
                   onSelectedItemsChange={onSelectedItemsChange}

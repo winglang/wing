@@ -11,8 +11,6 @@ import { createSimulatorManager } from "./simulator-manager.js";
 
 export type TestStatus = "success" | "error" | "idle" | "running";
 
-export type TestRunnerStatus = TestStatus | "uninitialized";
-
 export interface TestItem {
   id: string;
   label: string;
@@ -24,9 +22,6 @@ export interface TestItem {
 export interface TestRunner {
   // List of all of the tests and their status.
   listTests(): Array<TestItem>;
-
-  // Status of the test runner as a whole.
-  status(): TestRunnerStatus;
 
   // Run a single test.
   runTest(testId: string): void;
@@ -151,7 +146,6 @@ export const createTestRunner = ({
   watchGlobs,
   logger,
 }: CreateTestRunnerProps): TestRunner => {
-  let testRunnerState: TestRunnerStatus = "uninitialized";
   const testCompiler = createCompiler({
     wingfile,
     platform,
@@ -175,8 +169,6 @@ export const createTestRunner = ({
   testCompiler.on("compiled", async () => {
     const tests = await simulatorManager.getTests();
 
-    testRunnerState = "idle";
-
     testsState.setTests(
       tests.map((testId) => ({
         id: testId,
@@ -186,31 +178,6 @@ export const createTestRunner = ({
       })),
     );
   });
-
-  const status = (): TestRunnerStatus => {
-    if (testRunnerState === "uninitialized") {
-      return testRunnerState;
-    }
-
-    const tests = testsState.getTests();
-    for (const test of tests) {
-      if (test.status === "running") {
-        testRunnerState = "running";
-        return testRunnerState;
-      }
-      if (test.status === "error") {
-        testRunnerState = "error";
-        return testRunnerState;
-      }
-      if (test.status === "idle") {
-        testRunnerState = "idle";
-        return testRunnerState;
-      }
-    }
-
-    testRunnerState = "success";
-    return testRunnerState;
-  };
 
   const runTest = async (testId: string) => {
     const test = testsState.getTest(testId);
@@ -280,16 +247,10 @@ export const createTestRunner = ({
     });
   };
 
-  const listTests = () => {
-    if (testRunnerState === "uninitialized") {
-      return [];
-    }
-    return testsState.getTests();
-  };
-
   return {
-    listTests,
-    status,
+    listTests: () => {
+      return testsState.getTests();
+    },
     runTest,
     runAllTests,
     onTestsChange: (callback: (testId?: string) => void) => {
