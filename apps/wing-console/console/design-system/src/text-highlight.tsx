@@ -19,8 +19,6 @@ const palette = {
   null: "text-red-600 dark:text-red-400",
 };
 
-const backgroundColorJson = "italic";
-
 const CHAR_LIMIT = 100_000;
 
 const highlightJson = (value: string, theme: Theme) => {
@@ -29,7 +27,7 @@ const highlightJson = (value: string, theme: Theme) => {
     .replaceAll(
       /{(?:[^"\\{}]|"(?:\\.|[^"\\])*"|{(?:[^"\\{}]|"(?:\\.|[^"\\])*")*})*}/g,
       (match) => {
-        return `<span class="${backgroundColorJson}">${match.replaceAll(
+        return `<span class="italic">${match.replaceAll(
           /("(\\u[\dA-Za-z]{4}|\\[^u]|[^"\\])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[Ee][+\-]?\d+)?)/g,
           (match) => {
             let className = palette.number;
