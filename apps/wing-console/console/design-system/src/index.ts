@@ -26,7 +26,6 @@ export * from "./modal.js";
 export * from "./notification.js";
 export * from "./pill.js";
 export * from "./input.js";
-export * from "./row-input.js";
 export * from "./tree.js";
 export * from "./attribute.js";
 export * from "./left-resizable-widget.js";
