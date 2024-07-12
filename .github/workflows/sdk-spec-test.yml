@@ -1,9 +1,9 @@
 name: SDK Spec Tests
-run-name: SDK Spec Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
+run-name: SDK Spec Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}}) for ${{inputs.target || 'all'}}
 on:
-  # release: #TODO: uncomment to enable unstable targets, at this moment there are none
-  # types:
-  # - published # runs only unstable targets
+  release:
+    types:
+      - published # runs only unstable targets
   workflow_call: {}
   workflow_dispatch:
     inputs:
@@ -26,6 +26,12 @@ on:
           - tf-aws
           - tf-azure
           - sim
+          - tf-gcp
+
+permissions:
+  contents: read
+  id-token: write
+
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "20.11.1"
@@ -39,8 +45,9 @@ env:
   TARGET: ${{ inputs.target || (github.workflow == 'build' && 'all-stable') || (github.event_name == 'release' && 'all-unstable')  || 'all' }} #the build runs only stable targets, realease only unstable
   PNPM_VERSION: "8.15.1"
   AZURE_LOCATION: "East US"
-  GOOGLE_PROJECT_ID: "sdk-spec-tests" # for the future
-  GOOGLE_REGION: "us-central1" # for the future
+  CDK_STACK_NAME: "sdk-spec-tests"
+  GOOGLE_PROJECT_ID: "sdk-spec-tests"
+  GOOGLE_REGION: "us-central1"
 
 jobs:
   setup:
@@ -77,11 +84,11 @@ jobs:
         id: settargets
         run: |
           if [ "${{env.TARGET}}" = "all" ]; then
-            target='["tf-aws", "tf-azure"]'
+            target='["tf-aws", "tf-azure", "tf-gcp"]'
           elif [ "${{env.TARGET}}" = "all-stable" ]; then
             target='["tf-aws", "sim", "tf-azure"]'
           elif [ "${{env.TARGET}}" = "all-unstable" ]; then
-            target='[]'
+            target='["tf-gcp"]'
           else
            target='["${{env.TARGET}}"]'
           fi
@@ -149,7 +156,6 @@ jobs:
         run: |
           cd examples/tests/sdk_tests
           npm install
-
       - name: Configure AWS credentials
         if: ${{ matrix.target == 'tf-aws' }}
         uses: aws-actions/configure-aws-credentials@v4
@@ -162,7 +168,24 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: pnpm insall
+
+      - name: Configure gcp credentials
+        id: gcp-auth
+        if: ${{ matrix.target == 'tf-gcp' }}
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: "projects/833985639028/locations/global/workloadIdentityPools/gh-action/providers/gh-action-provider"
+          service_account: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
+
+      - name: Set-up gcloud
+        if: ${{ matrix.target == 'tf-gcp' }}
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: export gcloud token
+        if: ${{ matrix.target == 'tf-gcp' }}
+        run: echo "GCP_ID_TOKEN=$(gcloud auth print-identity-token --impersonate-service-account=gh-action@sdk-spec-tests.iam.gserviceaccount.com)" >> $GITHUB_ENV
+
+      - name: Installing local dependencies
         if: ${{ env.MANUAL == 'true' }}
         uses: nick-fields/retry@v3
         env:
@@ -194,7 +217,7 @@ jobs:
             echo $COMPATIBILITY
           fi
           cd ${{ matrix.test.directory }}
-          $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} -p ${{ (matrix.target == 'tf-azure' && 2 ) || 10 }} --retry 3 $COMPATIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
+          $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} -p ${{ (matrix.target == 'tf-azure' && 2 ) || (matrix.target == 'tf-gcp' && 5) || 10 }} --retry 3 $COMPATIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
 
       - name: Upload Artifacts
         if: ${{ env.LOCAL_BUILD ==  'true' }}

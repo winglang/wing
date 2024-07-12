@@ -62,7 +62,7 @@ fn check_ts_to_completions(interesting_node: &Node) -> bool {
 		"class" | "struct" | "interface" | "test" => true,
 
 		// Starting an inflight closure
-		"inflight_specifier" => true,
+		"phase_specifier" => true,
 
 		// No completions are valid immediately following a closing brace
 		")" | "}" | "]" => true,

@@ -75,7 +75,7 @@ export class Util {
     const matches = regex.test(actual);
     if (!matches) {
       throw new nodeAssert.AssertionError({
-        message: `The input did not match the regular expression ${expected}`,
+        message: `The input "${actual}" did not match the regular expression ${expected}`,
       });
     }
   }
