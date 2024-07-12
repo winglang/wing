@@ -25,17 +25,22 @@ const highlightJson = (value: string, theme: Theme) => {
   return `${value
     .slice(0, CHAR_LIMIT)
     .replaceAll(
-      /("(\\u[\dA-Za-z]{4}|\\[^u]|[^"\\])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[Ee][+\-]?\d+)?)/g,
+      /{(?:[^"\\{}]|"(?:\\.|[^"\\])*"|{(?:[^"\\{}]|"(?:\\.|[^"\\])*")*})*}/g,
       (match) => {
-        let className = palette.number;
-        if (match.startsWith('"')) {
-          className = match.endsWith(":") ? theme.text1 : palette.string;
-        } else if (/true|false/.test(match)) {
-          className = palette.boolean;
-        } else if (/null/.test(match)) {
-          className = palette.null;
-        }
-        return `<span class="${className}">${escape(match)}</span>`;
+        return `<span class="italic">${match.replaceAll(
+          /("(\\u[\dA-Za-z]{4}|\\[^u]|[^"\\])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[Ee][+\-]?\d+)?)/g,
+          (match) => {
+            let className = palette.number;
+            if (match.startsWith('"')) {
+              className = match.endsWith(":") ? theme.text1 : palette.string;
+            } else if (/true|false/.test(match)) {
+              className = palette.boolean;
+            } else if (/null/.test(match)) {
+              className = palette.null;
+            }
+            return `<span class="${className}">${escape(match)}</span>`;
+          },
+        )}</span>`;
       },
     )}${value.slice(CHAR_LIMIT)}`;
 };
