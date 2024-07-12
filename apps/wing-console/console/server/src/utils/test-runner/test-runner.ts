@@ -4,6 +4,7 @@ import { TraceType } from "@winglang/sdk/lib/std/test-runner.js";
 import type { ConsoleLogger } from "../../consoleLogger.js";
 import type { InternalTestResult } from "../../router/test.js";
 import type { Simulator } from "../../wingsdk.js";
+import { createCompiler } from "../compiler.js";
 import { formatTraceError } from "../format-wing-error.js";
 
 import { createSimulatorManager } from "./simulator-manager.js";
@@ -36,9 +37,6 @@ export interface TestRunner {
   // Register a callback to be called when the tests change.
   onTestsChange(callback: (testId?: string) => void): void;
 
-  // Initialize the test runner.
-  initialize(): void;
-
   // Stop the test runner.
   forceStop(): void;
 }
@@ -63,6 +61,7 @@ const executeTest = async (
   const client = simulator.getResource(
     "root/cloud.TestRunner",
   ) as ITestRunnerClient;
+
   let result: InternalTestResult = {
     response: "",
     error: "",
@@ -153,6 +152,12 @@ export const createTestRunner = ({
   logger,
 }: CreateTestRunnerProps): TestRunner => {
   let testRunnerState: TestRunnerStatus = "uninitialized";
+  const testCompiler = createCompiler({
+    wingfile,
+    platform,
+    watchGlobs,
+    testing: true,
+  });
 
   // Callbacks to be called when the tests change.
   const onTestsChangeCallbacks: Array<() => void> = [];
@@ -165,12 +170,9 @@ export const createTestRunner = ({
   const testsState = createTestStateManager({ onTestsChange });
 
   const simulatorManager = createSimulatorManager({
-    wingfile,
-    platform,
-    watchGlobs,
+    compiler: testCompiler,
   });
-
-  const initialize = async () => {
+  testCompiler.on("compiled", async () => {
     const tests = await simulatorManager.getTests();
 
     testRunnerState = "idle";
@@ -183,7 +185,7 @@ export const createTestRunner = ({
         datetime: Date.now(),
       })),
     );
-  };
+  });
 
   const status = (): TestRunnerStatus => {
     if (testRunnerState === "uninitialized") {
@@ -293,9 +295,8 @@ export const createTestRunner = ({
     onTestsChange: (callback: (testId?: string) => void) => {
       onTestsChangeCallbacks.push(callback);
     },
-    initialize,
     forceStop: () => {
-      simulatorManager.forceStop();
+      testCompiler.stop();
     },
   };
 };

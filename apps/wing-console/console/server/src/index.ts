@@ -188,7 +188,6 @@ export const createConsoleServer = async ({
   simulator.on("started", () => {
     appState = "success";
 
-    testRunner.initialize();
     invalidateQuery(undefined);
     isStarting = false;
   });

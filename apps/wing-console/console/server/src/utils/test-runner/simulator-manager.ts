@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { simulator } from "@winglang/sdk";
 
 import type { Simulator } from "../../wingsdk.js";
-import { createCompiler } from "../compiler.js";
+import type { Compiler } from "../compiler.js";
 import type { ConstructTreeNode } from "../construct-tree.js";
 
 const getTestPaths = (node: ConstructTreeNode) => {
@@ -30,23 +30,12 @@ const getTestPaths = (node: ConstructTreeNode) => {
  * Create a simulator manager that can be used to run tests.
  */
 export const createSimulatorManager = ({
-  wingfile,
-  platform,
-  watchGlobs,
+  compiler,
 }: {
-  wingfile: string;
-  platform?: string[];
-  watchGlobs?: string[];
+  compiler: Compiler;
 }) => {
-  const testCompiler = createCompiler({
-    wingfile,
-    platform,
-    watchGlobs,
-    testing: true,
-  });
-
   const simfile = new Promise<string>((resolve) => {
-    testCompiler.on("compiled", async ({ simfile }) => {
+    compiler.on("compiled", async ({ simfile }) => {
       resolve(simfile);
     });
   });
@@ -82,13 +71,8 @@ export const createSimulatorManager = ({
     return getTestPaths(tree);
   };
 
-  const forceStop = () => {
-    testCompiler?.stop();
-  };
-
   return {
     getTests,
     useSimulatorInstance,
-    forceStop,
   };
 };
