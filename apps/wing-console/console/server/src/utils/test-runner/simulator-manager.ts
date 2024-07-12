@@ -34,17 +34,11 @@ export const createSimulatorManager = ({
 }: {
   compiler: Compiler;
 }) => {
-  const simfile = new Promise<string>((resolve) => {
-    compiler.on("compiled", async ({ simfile }) => {
-      resolve(simfile);
-    });
-  });
-
   const createSimulator = async () => {
     const stateDir = await mkdtemp(join(tmpdir(), "wing-console-test"));
 
     return new simulator.Simulator({
-      simfile: await simfile,
+      simfile: await compiler.getSimfile(),
       stateDir,
     });
   };
