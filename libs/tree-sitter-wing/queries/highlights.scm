@@ -82,7 +82,7 @@
   "class"
   "let"
   "new"
-  (inflight_specifier)
+  (phase_specifier)
 ] @keyword
 
 [
