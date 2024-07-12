@@ -246,6 +246,7 @@ export const createTestRunner = ({
     const message = `Tests completed: ${testPassed.length}/${
       testList.length
     } passed. (${prettyMs(time)})`;
+
     logger.log(message, "console", {
       messageType: "summary",
     });
