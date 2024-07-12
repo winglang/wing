@@ -23,7 +23,8 @@
     "codespan-wasm": "^0.4.0",
     "debug": "^4.3.5",
     "launch-editor": "^2.8.0",
-    "ms": "^2.1.3"
+    "ms": "^2.1.3",
+    "pretty-ms": "^9.0.0"
   },
   "devDependencies": {
     "@trpc/server": "^10.45.2",

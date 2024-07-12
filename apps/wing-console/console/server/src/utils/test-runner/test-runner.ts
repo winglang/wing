@@ -241,7 +241,11 @@ export const createTestRunner = ({
 
     const testPassed = result.filter((r) => r.pass);
     const time = Date.now() - startTime;
-    const message = `Tests completed: ${testPassed.length}/${testList.length} passed. (${time}ms)`;
+
+    const { default: prettyMs } = await import("pretty-ms");
+    const message = `Tests completed: ${testPassed.length}/${
+      testList.length
+    } passed. (${prettyMs(time)})`;
     logger.log(message, "console", {
       messageType: "summary",
     });
