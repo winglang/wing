@@ -8,15 +8,6 @@ import type { Simulator } from "../../wingsdk.js";
 import { createCompiler } from "../compiler.js";
 import type { ConstructTreeNode } from "../construct-tree.js";
 
-const createSimulatorInstance = async (simfile: string) => {
-  const stateDir = await mkdtemp(join(tmpdir(), "wing-console-test"));
-
-  return new simulator.Simulator({
-    simfile,
-    stateDir,
-  });
-};
-
 const getTestPaths = (node: ConstructTreeNode) => {
   let tests: string[] = [];
   if (node.constructInfo?.fqn === "@winglang/sdk.std.Test") {
@@ -60,23 +51,31 @@ export const createSimulatorManager = ({
     });
   });
 
+  const createSimulatorInstance = async () => {
+    const stateDir = await mkdtemp(join(tmpdir(), "wing-console-test"));
+
+    return new simulator.Simulator({
+      simfile: await simfilePath,
+      stateDir,
+    });
+  };
+
   // Run a callback with a simulator instance.
   const useSimulatorInstance = async <T>(
     callback: (simulator: Simulator) => Promise<T>,
   ): Promise<T> => {
-    const simulator = await createSimulatorInstance(await simfilePath);
+    const simulator = await createSimulatorInstance();
 
     try {
       await simulator.start();
-      const result = await callback(simulator);
-      return result;
+      return await callback(simulator);
     } finally {
       simulator.stop();
     }
   };
 
   const getTests = async () => {
-    const simulator = await createSimulatorInstance(await simfilePath);
+    const simulator = await createSimulatorInstance();
 
     const { tree } = simulator.tree().rawData();
 
