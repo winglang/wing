@@ -110,11 +110,7 @@ const executeTest = async (
   return result;
 };
 
-const createTestStateManager = ({
-  onTestsChange,
-}: {
-  onTestsChange: (testId?: string) => void;
-}) => {
+const createTestStateManager = () => {
   let tests: TestItem[] = [];
 
   return {
@@ -126,7 +122,6 @@ const createTestStateManager = ({
     },
     setTests: (newTests: TestItem[]) => {
       tests = newTests;
-      onTestsChange();
     },
     setTest: (test: TestItem) => {
       const index = tests.findIndex((t) => t.id === test.id);
@@ -135,7 +130,6 @@ const createTestStateManager = ({
       } else {
         tests[index] = test;
       }
-      onTestsChange(test.id);
     },
   };
 };
@@ -161,7 +155,7 @@ export const createTestRunner = ({
     }
   };
 
-  const testsState = createTestStateManager({ onTestsChange });
+  const testsState = createTestStateManager();
 
   const simulatorManager = createSimulatorManager({
     compiler: testCompiler,
@@ -177,6 +171,7 @@ export const createTestRunner = ({
         datetime: Date.now(),
       })),
     );
+    onTestsChange();
   });
 
   const runTest = async (testId: string) => {
@@ -190,6 +185,7 @@ export const createTestRunner = ({
       ...test,
       status: "running",
     });
+    onTestsChange();
 
     await simulatorManager.useSimulatorInstance(
       async (simulator: Simulator) => {
@@ -200,6 +196,7 @@ export const createTestRunner = ({
           time: response.time,
           datetime: Date.now(),
         });
+        onTestsChange();
       },
     );
   };
@@ -220,7 +217,9 @@ export const createTestRunner = ({
         status: "running",
       });
     }
+    onTestsChange();
 
+    const startTime = Date.now();
     const result = await simulatorManager.useSimulatorInstance(
       async (simulator: Simulator) => {
         const promises = testList.map(async (test) => {
@@ -232,6 +231,7 @@ export const createTestRunner = ({
             time: response.time,
             datetime: Date.now(),
           });
+          onTestsChange();
 
           return response;
         });
@@ -240,7 +240,7 @@ export const createTestRunner = ({
     );
 
     const testPassed = result.filter((r) => r.pass);
-    const time = result.reduce((accumulator, r) => accumulator + r.time, 0);
+    const time = Date.now() - startTime;
     const message = `Tests completed: ${testPassed.length}/${testList.length} passed. (${time}ms)`;
     logger.log(message, "console", {
       messageType: "summary",
