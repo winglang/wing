@@ -2085,6 +2085,36 @@ matching name (without any case conversion).
 
 Extern methods do not support access to class's members through `this`, so they must be declared `static`.
 
+If an extern function is declared as `unphased`, a preflight and inflight implementation must be provided, by providing two separate functions in the JavaScript module: one for each phase.
+Each function must be suffixed with `__preflight` or `__inflight` to indicate the phase it is intended for.
+
+This can be useful when the implementation of the function is different in preflight and inflight phases (for example, inflight functions are allowed to be async).
+
+```TS
+// main.w
+class Util {
+  extern "./helper.js" static unphased randomHex(length: num): str;
+}
+
+// helper.js
+const { promisify } = require("node:util");
+const crypto = require("node:crypto");
+
+const randomFillAsync = promisify(crypto.randomFill);
+
+exports.randomHex__inflight = async function (length) {
+  const buffer = Buffer.alloc(length);
+  const bytes = await randomFillAsync(buffer);
+  return bytes.toString("hex");
+}
+
+exports.randomHex__preflight = function (length) {
+  const buffer = Buffer.alloc(length);
+  crypto.randomFillSync(buffer);
+  return buffer.toString("hex");
+}
+```
+
 ### 5.2.1 Type model
 
 The table below shows the mapping between Wing types and JavaScript values, shown with TypeScript types.
