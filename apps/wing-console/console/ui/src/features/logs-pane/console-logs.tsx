@@ -171,7 +171,7 @@ const LogEntryRow = memo(
             </div>
           )}
           <div
-            className={classNames("min-w-0 text-left grow", "items-start", {
+            className={classNames("min-w-0 text-left grow", {
               truncate: !expanded,
               "ml-2": log.timestamp && !log.ctx?.hideTimestamp,
             })}
