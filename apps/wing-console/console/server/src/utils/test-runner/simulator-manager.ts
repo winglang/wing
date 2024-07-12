@@ -9,20 +9,20 @@ import { createCompiler } from "../compiler.js";
 import type { ConstructTreeNode } from "../construct-tree.js";
 
 const getTestPaths = (node: ConstructTreeNode) => {
-  let tests: string[] = [];
-  if (node.constructInfo?.fqn === "@winglang/sdk.std.Test") {
-    for (const child of Object.values(node.children ?? {})) {
-      if (child.id === "Handler") {
-        tests.push(node.path);
-        break;
-      }
-    }
+  const tests: string[] = [];
+  const children = Object.values(node.children ?? {});
+
+  if (
+    node.constructInfo?.fqn === "@winglang/sdk.std.Test" &&
+    children.some((child) => child.id === "Handler")
+  ) {
+    tests.push(node.path);
   }
-  if (node.children) {
-    for (const child of Object.values(node.children)) {
-      tests.push(...getTestPaths(child));
-    }
+
+  for (const child of children) {
+    tests.push(...getTestPaths(child));
   }
+
   return tests;
 };
 
