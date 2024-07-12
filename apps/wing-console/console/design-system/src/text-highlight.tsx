@@ -67,16 +67,20 @@ export const TextHighlight = memo(
       setHighlightedText(highlightJson(text, theme));
     }, [text, json, theme]);
 
+    if (json && highlightedText) {
+      return (
+        <div
+          id={id}
+          className={className}
+          data-testid={dataTestid}
+          dangerouslySetInnerHTML={{ __html: highlightedText }}
+        />
+      );
+    }
+
     return (
       <div className={className} data-testid={dataTestid}>
-        {json && highlightedText ? (
-          <div
-            id={id}
-            dangerouslySetInnerHTML={{ __html: highlightedText }}
-          ></div>
-        ) : (
-          <div>{text}</div>
-        )}
+        {text}
       </div>
     );
   },
