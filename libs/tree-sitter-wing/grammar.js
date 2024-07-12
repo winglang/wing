@@ -21,7 +21,7 @@ const PREC = {
 module.exports = grammar({
   name: "wing",
 
-  extras: ($) => [$.comment, $.doc, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
+  extras: ($) => [$.comment, $.doc, /[\s\p{Zs}\uFEFF\u2060\u200B]/u],
 
   word: ($) => $.identifier,
 
