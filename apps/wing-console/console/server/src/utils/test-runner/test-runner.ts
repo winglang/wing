@@ -236,14 +236,21 @@ export const createTestRunner = ({
   };
 
   const runAllTests = async () => {
-    // Set all tests to running.
-    const testList = testsState.getTests();
-    testsState.setTests(
-      testList.map((test) => ({
+    // Filter out tests that are already running.
+    const testList = testsState
+      .getTests()
+      .filter((t) => t.status !== "running");
+
+    if (testList.length === 0) {
+      return;
+    }
+
+    for (const test of testList) {
+      testsState.setTest({
         ...test,
         status: "running",
-      })),
-    );
+      });
+    }
 
     const result = await simulatorManager.useSimulatorInstance(
       async (simulator: Simulator) => {

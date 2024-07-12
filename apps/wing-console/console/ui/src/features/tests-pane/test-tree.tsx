@@ -17,7 +17,9 @@ import {
 } from "@wingconsole/design-system";
 import type { TestItem, TestRunnerStatus } from "@wingconsole/server";
 import classNames from "classnames";
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
+
+import { useTests } from "./use-tests.js";
 
 const TestTreeItem = memo(
   ({
@@ -81,23 +83,16 @@ const TestTreeItem = memo(
 );
 
 export interface TestTreeProps {
-  status: TestRunnerStatus;
-  testList: TestItem[];
-  handleRunAllTests: () => void;
-  handleRunTest: (testPath: string) => void;
   onSelectedItemsChange?: (ids: string[]) => void;
   selectedItemId?: string;
 }
 
 export const TestTree = ({
-  status,
-  testList,
-  handleRunTest,
-  handleRunAllTests,
   onSelectedItemsChange,
   selectedItemId,
 }: TestTreeProps) => {
   const { theme } = useTheme();
+  const { status, testList, runAllTests, runTest } = useTests();
 
   const selectedItems = useMemo(
     () => (selectedItemId ? [selectedItemId] : undefined),
@@ -111,7 +106,7 @@ export const TestTree = ({
     >
       <Toolbar title="Tests">
         <ToolbarButton
-          onClick={handleRunAllTests}
+          onClick={runAllTests}
           title="Run All Tests"
           disabled={testList.length === 0}
         >
@@ -170,7 +165,7 @@ export const TestTree = ({
                     <TestTreeItem
                       key={test.id}
                       test={test}
-                      handleRunTest={handleRunTest}
+                      handleRunTest={runTest}
                     />
                   ))}
                 </TreeView>
