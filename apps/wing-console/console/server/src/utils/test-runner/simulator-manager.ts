@@ -45,7 +45,7 @@ export const createSimulatorManager = ({
     testing: true,
   });
 
-  const simfilePath = new Promise<string>((resolve) => {
+  const simfile = new Promise<string>((resolve) => {
     testCompiler.on("compiled", async ({ simfile }) => {
       resolve(simfile);
     });
@@ -55,7 +55,7 @@ export const createSimulatorManager = ({
     const stateDir = await mkdtemp(join(tmpdir(), "wing-console-test"));
 
     return new simulator.Simulator({
-      simfile: await simfilePath,
+      simfile: await simfile,
       stateDir,
     });
   };
