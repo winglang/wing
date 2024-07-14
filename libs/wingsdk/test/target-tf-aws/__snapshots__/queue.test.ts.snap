@@ -85,6 +85,9 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 1`]
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -110,6 +113,9 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 1`]
         },
         "function_name": "Handler-c85cfbef",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.QueueRef_AwsConsoleField_Handler_IamRole_0DD0004C.arn}",
@@ -134,6 +140,9 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 1`]
         },
         "function_name": "Handler-c8c3c90a",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.QueueRef_QueueArnField_Handler_IamRole_C121BD5E.arn}",
@@ -159,6 +168,9 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 1`]
         },
         "function_name": "Handler-c8ec121e",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.QueueRef_QueueUrlField_Handler_IamRole_709A15CB.arn}",
@@ -214,7 +226,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -225,7 +237,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Asset",
@@ -234,7 +246,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "CloudwatchLogGroup",
@@ -243,7 +255,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -252,7 +264,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "IamRole",
@@ -261,7 +273,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "IamRolePolicy",
@@ -270,7 +282,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "IamRolePolicyAttachment",
@@ -279,7 +291,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "S3Object",
@@ -317,7 +329,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "Asset": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformAsset",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "Asset",
@@ -326,7 +338,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "CloudwatchLogGroup": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "CloudwatchLogGroup",
@@ -335,7 +347,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "Default",
@@ -344,7 +356,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "IamRole": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "IamRole",
@@ -353,7 +365,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "IamRolePolicy": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "IamRolePolicy",
@@ -362,7 +374,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "IamRolePolicyAttachment": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "IamRolePolicyAttachment",
@@ -371,7 +383,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "S3Object": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "S3Object",
@@ -407,7 +419,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "Asset": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformAsset",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "Asset",
@@ -416,7 +428,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "CloudwatchLogGroup": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "CloudwatchLogGroup",
@@ -425,7 +437,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "Default",
@@ -434,7 +446,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "IamRole": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "IamRole",
@@ -443,7 +455,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "IamRolePolicy": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "IamRolePolicy",
@@ -452,7 +464,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "IamRolePolicyAttachment": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "IamRolePolicyAttachment",
@@ -461,7 +473,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "S3Object": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "S3Object",
@@ -497,7 +509,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "Asset": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformAsset",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "Asset",
@@ -506,7 +518,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "CloudwatchLogGroup": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "CloudwatchLogGroup",
@@ -515,7 +527,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "Default",
@@ -524,7 +536,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "IamRole": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "IamRole",
@@ -533,7 +545,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "IamRolePolicy": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "IamRolePolicy",
@@ -542,7 +554,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "IamRolePolicyAttachment": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "IamRolePolicyAttachment",
@@ -551,7 +563,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
                           "S3Object": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
                             "display": {},
                             "id": "S3Object",
@@ -613,7 +625,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -631,7 +643,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -640,7 +652,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -649,7 +661,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`]
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -686,7 +698,7 @@ exports[`default queue behavior 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -707,7 +719,7 @@ exports[`default queue behavior 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -725,7 +737,7 @@ exports[`default queue behavior 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -734,7 +746,7 @@ exports[`default queue behavior 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -743,7 +755,7 @@ exports[`default queue behavior 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -780,7 +792,7 @@ exports[`queue name valid 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -801,7 +813,7 @@ exports[`queue name valid 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -819,7 +831,7 @@ exports[`queue name valid 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -828,7 +840,7 @@ exports[`queue name valid 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -837,7 +849,7 @@ exports[`queue name valid 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -898,6 +910,9 @@ exports[`queue with a consumer function 2`] = `
         },
         "function_name": "Queue-SetConsumer0-c83c303c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
@@ -945,7 +960,7 @@ exports[`queue with a consumer function 3`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "Code",
@@ -967,7 +982,7 @@ exports[`queue with a consumer function 3`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -976,7 +991,7 @@ exports[`queue with a consumer function 3`] = `
                   "EventSourceMapping": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "EventSourceMapping",
@@ -999,7 +1014,7 @@ exports[`queue with a consumer function 3`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Asset",
@@ -1008,7 +1023,7 @@ exports[`queue with a consumer function 3`] = `
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "CloudwatchLogGroup",
@@ -1017,7 +1032,7 @@ exports[`queue with a consumer function 3`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -1026,7 +1041,7 @@ exports[`queue with a consumer function 3`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "IamRole",
@@ -1035,7 +1050,7 @@ exports[`queue with a consumer function 3`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "IamRolePolicy",
@@ -1044,7 +1059,7 @@ exports[`queue with a consumer function 3`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "IamRolePolicyAttachment",
@@ -1053,7 +1068,7 @@ exports[`queue with a consumer function 3`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "S3Object",
@@ -1074,7 +1089,7 @@ exports[`queue with a consumer function 3`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -1092,7 +1107,7 @@ exports[`queue with a consumer function 3`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -1101,7 +1116,7 @@ exports[`queue with a consumer function 3`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -1110,7 +1125,7 @@ exports[`queue with a consumer function 3`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -1147,7 +1162,7 @@ exports[`queue with custom retention 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -1168,7 +1183,7 @@ exports[`queue with custom retention 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -1186,7 +1201,7 @@ exports[`queue with custom retention 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -1195,7 +1210,7 @@ exports[`queue with custom retention 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -1204,7 +1219,7 @@ exports[`queue with custom retention 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -1241,7 +1256,7 @@ exports[`queue with custom timeout 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -1262,7 +1277,7 @@ exports[`queue with custom timeout 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -1280,7 +1295,7 @@ exports[`queue with custom timeout 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -1289,7 +1304,7 @@ exports[`queue with custom timeout 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -1298,7 +1313,7 @@ exports[`queue with custom timeout 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",
@@ -1335,7 +1350,7 @@ exports[`replace invalid character from queue name 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
                     "display": {},
                     "id": "Default",
@@ -1356,7 +1371,7 @@ exports[`replace invalid character from queue name 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
                 "display": {},
                 "id": "aws",
@@ -1374,7 +1389,7 @@ exports[`replace invalid character from queue name 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
             "display": {},
             "id": "backend",
@@ -1383,7 +1398,7 @@ exports[`replace invalid character from queue name 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
         "display": {},
         "id": "root",
@@ -1392,7 +1407,7 @@ exports[`replace invalid character from queue name 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
     "display": {},
     "id": "App",

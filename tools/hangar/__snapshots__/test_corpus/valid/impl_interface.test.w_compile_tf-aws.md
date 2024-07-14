@@ -243,8 +243,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -266,11 +265,15 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const jsii_fixture = require("jsii-fixture");
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const jsii_fixture = require("jsii-fixture");
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class A extends $stdlib.std.Resource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -626,6 +629,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    if ($preflightTypesMap[11]) { throw new Error("ImplInflightIfaceInInflightClass is already in type map"); }
+    $preflightTypesMap[11] = ImplInflightIfaceInInflightClass;
     class ImplInflightIfaceInPreflightClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -693,7 +698,7 @@ class $Root extends $stdlib.std.Resource {
       return new r(this, "r");
     })());
     $helpers.assert($helpers.eq((i3.method1(1)), 1), "i3.method1(1) == 1");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:can call inherited inflight interface method", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:can call inherited inflight interface method", new $Closure2(this, "$Closure2"));
     $helpers.assert($helpers.eq((i3.method3([1, 2, 3])), [1, 2, 3]), "i3.method3([1, 2, 3]) == [1, 2, 3]");
     const z = new Dog(this, "Dog");
     const w = new Terrier(this, "Terrier");
@@ -701,7 +706,6 @@ class $Root extends $stdlib.std.Resource {
     new $Closure4(this, "$Closure4");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "impl_interface.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

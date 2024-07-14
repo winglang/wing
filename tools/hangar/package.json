@@ -3,10 +3,12 @@
   "version": "0.0.0",
   "description": "wing test suite",
   "scripts": {
+    "vitest": "vitest run",
     "test": "vitest run --update",
     "test:generate": "tsx src/generate_tests.ts",
+    "test:doc_examples": "vitest run src/test_corpus/doc_examples",
     "test:watch": "vitest watch",
-    "bench": "vitest bench --run"
+    "bench": "vitest bench --run && tsx src/benchmarking/compare_script.ts"
   },
   "author": "Wing Cloud",
   "license": "Apache-2.0",
@@ -15,19 +17,19 @@
     "@wingconsole/design-system": "workspace:^",
     "@wingconsole/server": "workspace:^",
     "@wingconsole/ui": "workspace:^",
-    "@winglang/compiler": "workspace:^",
-    "@winglang/sdk": "workspace:^",
-    "@winglang/platform-awscdk": "workspace:^",
     "@winglang/compatibility-spy": "workspace:^",
-    "cdktf": "^0.20.3",
+    "@winglang/compiler": "workspace:^",
+    "@winglang/platform-awscdk": "workspace:^",
+    "@winglang/sdk": "workspace:^",
+    "cdktf": "^0.20.7",
     "execa": "^7.2.0",
-    "fflate": "^0.8.1",
-    "npm": "^9.8.1",
-    "octokit": "^3.1.2",
-    "tsx": "^4.7.0",
-    "vitest": "^0.34.6",
+    "fflate": "^0.8.2",
+    "npm": "^9.9.3",
+    "octokit": "^3.2.1",
+    "tsx": "^4.15.7",
+    "vitest": "^1.6.0",
     "winglang": "workspace:^",
-    "yaml": "^2.3.2"
+    "yaml": "^2.4.5"
   },
   "volta": {
     "extends": "../../package.json"

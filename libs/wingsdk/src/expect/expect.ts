@@ -1,4 +1,4 @@
-import nodeAssert, { AssertionError } from "node:assert/strict";
+import nodeAssert from "node:assert/strict";
 import { InflightClient } from "../core";
 import { Regex } from "../std";
 
@@ -74,8 +74,8 @@ export class Util {
     const regex = Regex.compile(expected);
     const matches = regex.test(actual);
     if (!matches) {
-      throw new AssertionError({
-        message: `The input did not match the regular expression ${expected}`,
+      throw new nodeAssert.AssertionError({
+        message: `The input "${actual}" did not match the regular expression ${expected}`,
       });
     }
   }
@@ -91,7 +91,7 @@ export class Util {
     const regex = Regex.compile(expected);
     const matches = regex.test(actual);
     if (matches) {
-      throw new AssertionError({
+      throw new nodeAssert.AssertionError({
         message: `The input should not match the regular expression ${expected}`,
       });
     }

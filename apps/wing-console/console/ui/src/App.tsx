@@ -5,11 +5,13 @@ import {
   buildTheme,
 } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
+import { PersistentStateProvider } from "@wingconsole/use-persistent-state";
 
-import type { LayoutType } from "./layout/layout-provider.js";
-import { LayoutProvider } from "./layout/layout-provider.js";
-import { trpc } from "./services/trpc.js";
-import { TestsContextProvider } from "./tests-context.js";
+import type { LayoutType } from "./features/layout/layout-provider.js";
+import { LayoutProvider } from "./features/layout/layout-provider.js";
+import { SelectionContextProvider } from "./features/selection-context/selection-context.js";
+import { TestsContextProvider } from "./features/tests-pane/tests-context.js";
+import { trpc } from "./trpc.js";
 
 export interface AppProps {
   layout?: LayoutType;
@@ -47,14 +49,18 @@ export const App = ({ layout, theme, color, onTrace }: AppProps) => {
     <ThemeProvider theme={buildTheme(color)}>
       <NotificationsProvider>
         <TestsContextProvider>
-          <LayoutProvider
-            layoutType={layout}
-            layoutProps={{
-              cloudAppState: appState.data ?? "compiling",
-              wingVersion: appDetails.data?.wingVersion,
-              layoutConfig: layoutConfig.data?.config,
-            }}
-          />
+          <SelectionContextProvider>
+            <PersistentStateProvider>
+              <LayoutProvider
+                layoutType={layout}
+                layoutProps={{
+                  cloudAppState: appState.data ?? "compiling",
+                  wingVersion: appDetails.data?.wingVersion,
+                  layoutConfig: layoutConfig.data?.config,
+                }}
+              />
+            </PersistentStateProvider>
+          </SelectionContextProvider>
         </TestsContextProvider>
       </NotificationsProvider>
     </ThemeProvider>

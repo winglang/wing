@@ -8,7 +8,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3"
+      "version": "0.20.7"
     },
     "outputs": {
     }
@@ -42,7 +42,7 @@
     "required_providers": {
       "aws": {
         "source": "aws",
-        "version": "5.31.0"
+        "version": "5.56.1"
       }
     }
   }

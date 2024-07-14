@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import { inflight } from "../../src/core";
-import * as tfaws from "../../src/target-tf-aws";
 import { Api, Function } from "../../src/target-tf-aws";
-import { mkdtemp, tfResourcesOfCount, tfSanitize } from "../util";
+import { tfResourcesOfCount, tfSanitize } from "../util";
 
 const INFLIGHT_CODE = inflight(async () => ({ body: "Hello, world" }));
 const INFLIGHT_CODE_2 = inflight(async () => ({ body: "Hello, Wing!" }));
@@ -18,7 +18,7 @@ const extractApiSpec = (output: any) => {
 
 test("api with GET route at root", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.get("/", INFLIGHT_CODE);
@@ -35,7 +35,7 @@ test("api with GET route at root", () => {
 
 test("api will be private when vpc_api_gateway is true", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const parameters = app.parameters;
   parameters._rawParameters["tf-aws"] = {
     vpc: "new",
@@ -68,7 +68,7 @@ test("api will be private when vpc_api_gateway is true", () => {
 
 test("api with multiple methods on same route", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.get("/", INFLIGHT_CODE);
@@ -86,7 +86,7 @@ test("api with multiple methods on same route", () => {
 
 test("api with GET routes with common prefix", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
@@ -102,7 +102,7 @@ test("api with GET routes with common prefix", () => {
 
 test("api with GET routes with different prefix", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
@@ -118,7 +118,7 @@ test("api with GET routes with different prefix", () => {
 
 test("api with multiple GET route and one lambda", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
@@ -135,7 +135,7 @@ test("api with multiple GET route and one lambda", () => {
 
 test("api with multiple methods and multiple lambda", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
@@ -151,7 +151,7 @@ test("api with multiple methods and multiple lambda", () => {
 
 test("api with multiple methods and one lambda", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
@@ -167,7 +167,7 @@ test("api with multiple methods and one lambda", () => {
 
 test("api with path parameter", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.get("/hello/:world", INFLIGHT_CODE);
@@ -182,7 +182,7 @@ test("api with path parameter", () => {
 
 test("api with 'name' parameter", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.get("/:name", INFLIGHT_CODE);
@@ -197,7 +197,7 @@ test("api with 'name' parameter", () => {
 
 test("api with 'name' & 'age' parameter", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.get("/:name/:age", INFLIGHT_CODE);
@@ -212,7 +212,7 @@ test("api with 'name' & 'age' parameter", () => {
 
 test("api with POST route", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.post("/", INFLIGHT_CODE);
@@ -229,7 +229,7 @@ test("api with POST route", () => {
 
 test("api with PUT route", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.put("/", INFLIGHT_CODE);
@@ -246,7 +246,7 @@ test("api with PUT route", () => {
 
 test("api with PATCH route", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.patch("/", INFLIGHT_CODE);
@@ -263,7 +263,7 @@ test("api with PATCH route", () => {
 
 test("api with DELETE route", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.delete("/", INFLIGHT_CODE);
@@ -280,7 +280,7 @@ test("api with DELETE route", () => {
 
 test("api with OPTIONS route", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.options("/", INFLIGHT_CODE);
@@ -297,7 +297,7 @@ test("api with OPTIONS route", () => {
 
 test("api with HEAD route", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.head("/", INFLIGHT_CODE);
@@ -314,7 +314,7 @@ test("api with HEAD route", () => {
 
 test("api with CONNECT route", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   api.connect("/", INFLIGHT_CODE);
@@ -331,7 +331,7 @@ test("api with CONNECT route", () => {
 
 test("api url can be used as environment variable", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api");
 
   new Function(app, "Fn", INFLIGHT_CODE, {
@@ -353,7 +353,7 @@ test("api url can be used as environment variable", () => {
 
 test("api configured for cors", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const api = new Api(app, "Api", { cors: true });
 
   api.get("/", INFLIGHT_CODE);

@@ -106,6 +106,7 @@ test("api.url is resolved in website config", async () => {
   expect(s.getResourceConfig("/website")).toEqual({
     attrs: {
       handle: expect.any(String),
+
       url: expect.any(String),
     },
     path: "root/website",
@@ -143,6 +144,7 @@ test("multiple tokens are resolved in website config", async () => {
   expect(s.getResourceConfig("/website")).toEqual({
     attrs: {
       handle: expect.any(String),
+
       url: expect.any(String),
     },
     path: "root/website",

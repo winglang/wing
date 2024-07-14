@@ -63,7 +63,11 @@ export const Button = forwardRef<
               theme.bgInputHover,
               theme.textInput,
             ],
-          transparent && [theme.bgInputHover, theme.textInput],
+          transparent && [
+            theme.bgInputHover,
+            theme.textInput,
+            theme.text1Hover,
+          ],
           !transparent && "border shadow-sm",
           {
             [theme.borderInput]: !primary,

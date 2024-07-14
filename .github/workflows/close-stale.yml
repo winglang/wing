@@ -16,6 +16,7 @@ jobs:
         with:
           days-before-issue-stale: 90
           days-before-pr-stale: 20
+          exempt-issue-labels: roadmap
           stale-issue-message: |
             Hi,
 

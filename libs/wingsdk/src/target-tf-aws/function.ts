@@ -58,6 +58,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   private subnets?: Set<string>;
   private vpcPermissionsAdded = false;
   private securityGroups?: Set<string>;
+  private layers?: Set<string>;
 
   /**
    * Qualified Function ARN
@@ -145,23 +146,23 @@ export class Function extends cloud.Function implements IAwsFunction {
         produce: () => {
           this.policyStatements = this.policyStatements ?? [];
 
-          if (this.policyStatements.length !== 0) {
+          if (this.policyStatements.length === 0) {
+            // policy must contain at least one statement, so include a no-op statement
             return JSON.stringify({
               Version: "2012-10-17",
-              Statement: this.policyStatements,
+              Statement: [
+                {
+                  Effect: "Allow",
+                  Action: "none:null",
+                  Resource: "*",
+                },
+              ],
             });
           }
 
-          // policy must contain at least one statement, so include a no-op statement
           return JSON.stringify({
             Version: "2012-10-17",
-            Statement: [
-              {
-                Effect: "Allow",
-                Action: "none:null",
-                Resource: "*",
-              },
-            ],
+            Statement: this.policyStatements,
           });
         },
       }),
@@ -201,6 +202,10 @@ export class Function extends cloud.Function implements IAwsFunction {
       runtime: "nodejs20.x",
       role: this.role.arn,
       publish: true,
+      layers: Lazy.listValue({
+        produce: () =>
+          this.layers ? Array.from(this.layers.values()) : undefined,
+      }),
       vpcConfig: {
         subnetIds: Lazy.listValue({
           produce: () =>
@@ -230,6 +235,9 @@ export class Function extends cloud.Function implements IAwsFunction {
         : Duration.fromMinutes(1).seconds,
       memorySize: props.memory ?? DEFAULT_MEMORY_SIZE,
       architectures: ["arm64"],
+      loggingConfig: {
+        logFormat: "JSON",
+      },
     });
 
     if (app.parameters.value("tf-aws/vpc_lambda") === true) {
@@ -317,6 +325,16 @@ export class Function extends cloud.Function implements IAwsFunction {
       "FunctionClient",
       [`process.env["${this.envName()}"], "${this.node.path}"`]
     );
+  }
+
+  /**
+   * Add a Lambda Layer to the function
+   */
+  public addLambdaLayer(layerArn: string): void {
+    if (!this.layers) {
+      this.layers = new Set();
+    }
+    this.layers.add(layerArn);
   }
 
   /**

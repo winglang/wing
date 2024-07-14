@@ -26,23 +26,22 @@ test "dec()" {
   let r3 = counter1.dec(0);
   expect.equal(r3, -2);
   expect.equal(counter1.peek(), -2);
-}
 
-test "dec() with custom key" {
+// "dec() with custom key" 
   let key = "custom-key";
 
   // explicit decrement (positive int)
-  let r1 = counter2.dec(5, key);
-  expect.equal(r1, -1);
+  let r4 = counter2.dec(5, key);
+  expect.equal(r4, -1);
   expect.equal(counter2.peek(key), -6);
 
   // explicit decrement (negative int)
-  let r2 = counter2.dec(-4, key);
-  expect.equal(r2, -6);
+  let r5 = counter2.dec(-4, key);
+  expect.equal(r5, -6);
   expect.equal(counter2.peek(key), -2);
 
   // explicit decrement (-0)
-  let r3 = counter2.dec(0, key);
-  expect.equal(r3, -2);
+  let r6 = counter2.dec(0, key);
+  expect.equal(r6, -2);
   expect.equal(counter2.peek(key), -2);
 }

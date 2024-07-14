@@ -1,13 +1,21 @@
 import { basename } from "path";
 import { bench, describe } from "vitest";
 import { runWingCommand } from "../utils";
-import { benchmarksTestDir, walkdir } from "../paths";
+import { join } from "path";
+import { rename } from "fs/promises";
+import { benchmarksTestDir, walkdir, resultsDir } from "../paths";
 
 describe("compile", async () => {
+  // if there is a report.json file in ../../results, rename it to report.previous.json
+  // this is so we can compare the current run with the last run
+  const currentReportPath = join(resultsDir, "report.json");
+  const lastReportPath = join(resultsDir, "report.previous.json");
+  await rename(currentReportPath, lastReportPath).catch(() => {});
+
   bench("version", async () => {
     await runWingCommand({
       cwd: benchmarksTestDir,
-      args: ["-V"],
+      args: ["--version"],
       expectFailure: false,
     });
   });

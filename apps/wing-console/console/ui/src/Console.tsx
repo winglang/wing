@@ -1,14 +1,21 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
+import {
+  httpBatchLink,
+  wsLink,
+  splitLink,
+  createWSClient,
+  httpLink,
+} from "@trpc/client";
 import type { Mode } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
 import { useEffect, useMemo, useState } from "react";
+import { useEvent } from "react-use";
 
 import { App } from "./App.js";
 import { AppContext } from "./AppContext.js";
-import { LayoutType } from "./layout/layout-provider.js";
-import { trpc } from "./services/trpc.js";
-import { WebSocketProvider } from "./services/use-websocket.js";
+import { LayoutType } from "./features/layout/layout-provider.js";
+import { WebSocketProvider } from "./features/websocket-state/use-websocket.js";
+import { trpc } from "./trpc.js";
 
 export const Console = ({
   trpcUrl,
@@ -54,6 +61,7 @@ export const Console = ({
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
+        // For subscriptions, use WebSocket.
         splitLink({
           condition(op) {
             return op.type === "subscription";
@@ -61,8 +69,26 @@ export const Console = ({
           true: wsLink({
             client: wsClient,
           }),
-          false: httpLink({
-            url: trpcUrl,
+          // For the `test.*` operations, use a single HTTP link. This is necessary
+          // to avoid a bug where the Console would not display the data until
+          // the app starts correctly. For example, starting a new application
+          // with compilation errors, the Console will be stuck.
+          //
+          // For the rest of the operations, use the batch HTTP link.
+          //
+          // We should be able to use batch HTTP links everywhere if we refactor
+          // the `test.*` operations so they don't wait until the Simulator
+          // instance is ready.
+          false: splitLink({
+            condition(op) {
+              return op.path.startsWith("test.");
+            },
+            true: httpLink({
+              url: trpcUrl,
+            }),
+            false: httpBatchLink({
+              url: trpcUrl,
+            }),
           }),
         }),
       ],
@@ -112,6 +138,22 @@ export const Console = ({
       window.removeEventListener("keydown", vscodeCommands);
     };
   }, [layout]);
+
+  // Prevent the default zoom behavior everywhere in the app.
+  // Since the explorer panel handles the zoom manually, sometimes
+  // users may end up zooming the whole app by mistake and end up
+  // with the explorer panel covering the whole screen. This is
+  // a big problem since users won't be able to zoom out of it.
+  useEvent(
+    "wheel",
+    (event) => {
+      if ((event as WheelEvent).ctrlKey) {
+        event.preventDefault();
+      }
+    },
+    document,
+    { passive: false },
+  );
 
   return (
     <AppContext.Provider

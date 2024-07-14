@@ -53,8 +53,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -115,7 +114,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
           "${aws_security_group.Redis_KEN21securityGroup_139152DE.id}",
-          "${aws_security_group.Redis_KEN24securityGroup_6EFFC29B.id}"
+          "${aws_security_group.Redis_KEN25securityGroup_D3232AB7.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.Redis_RedisSubnetGroup_E7D796E2.name}"
       },
@@ -134,8 +133,8 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.r2_KEN35securityGroup_DF1EB5F4.id}",
-          "${aws_security_group.r2_KEN38securityGroup_41F37500.id}"
+          "${aws_security_group.r2_KEN37securityGroup_BF109712.id}",
+          "${aws_security_group.r2_KEN41securityGroup_A4C819DF.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.r2_RedisSubnetGroup_C415566B.name}"
       }
@@ -254,6 +253,9 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "function_name": "Queue-SetConsumer0-c83c303c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
@@ -264,7 +266,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "vpc_config": {
           "security_group_ids": [
             "${aws_security_group.Redis_KEN21securityGroup_139152DE.id}",
-            "${aws_security_group.Redis_KEN24securityGroup_6EFFC29B.id}"
+            "${aws_security_group.Redis_KEN25securityGroup_D3232AB7.id}"
           ],
           "subnet_ids": [
             "${aws_subnet.PrivateSubnet.id}",
@@ -471,14 +473,14 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "to_port": 6379
           }
         ],
-        "name": "3542402a-securityGroup",
+        "name": "3542402a-${aws_subnet.PrivateSubnet.id}-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "Redis_KEN24securityGroup_6EFFC29B": {
+      "Redis_KEN25securityGroup_D3232AB7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Redis/KEN.24]}securityGroup",
-            "uniqueId": "Redis_KEN24securityGroup_6EFFC29B"
+            "path": "root/Default/Default/Redis/KEN.25]}securityGroup",
+            "uniqueId": "Redis_KEN25securityGroup_D3232AB7"
           }
         },
         "egress": [
@@ -511,14 +513,14 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "to_port": 6379
           }
         ],
-        "name": "3542402a-securityGroup",
+        "name": "3542402a-${aws_subnet.PrivateSubnet2.id}-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "r2_KEN35securityGroup_DF1EB5F4": {
+      "r2_KEN37securityGroup_BF109712": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/r2/KEN.35]}securityGroup",
-            "uniqueId": "r2_KEN35securityGroup_DF1EB5F4"
+            "path": "root/Default/Default/r2/KEN.37]}securityGroup",
+            "uniqueId": "r2_KEN37securityGroup_BF109712"
           }
         },
         "egress": [
@@ -551,14 +553,14 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "to_port": 6379
           }
         ],
-        "name": "30c8c4ae-securityGroup",
+        "name": "30c8c4ae-${aws_subnet.PrivateSubnet.id}-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "r2_KEN38securityGroup_41F37500": {
+      "r2_KEN41securityGroup_A4C819DF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/r2/KEN.38]}securityGroup",
-            "uniqueId": "r2_KEN38securityGroup_41F37500"
+            "path": "root/Default/Default/r2/KEN.41]}securityGroup",
+            "uniqueId": "r2_KEN41securityGroup_A4C819DF"
           }
         },
         "egress": [
@@ -591,7 +593,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "to_port": 6379
           }
         ],
-        "name": "30c8c4ae-securityGroup",
+        "name": "30c8c4ae-${aws_subnet.PrivateSubnet2.id}-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       }
     },
@@ -682,12 +684,16 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
-const ex = $stdlib.ex;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    const ex = $stdlib.ex;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -753,11 +759,13 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
             [queue, ["push"]],
             [r, ["get"]],
             [r2, [].concat(["set"], ["get"])],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [queue, []],
             [r, []],
             [r2, []],
@@ -765,14 +773,13 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const r = this.node.root.new("@winglang/sdk.ex.Redis", ex.Redis, this, "Redis");
-    const r2 = this.node.root.new("@winglang/sdk.ex.Redis", ex.Redis, this, "r2");
-    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
+    const r = globalThis.$ClassFactory.new("@winglang/sdk.ex.Redis", ex.Redis, this, "Redis");
+    const r2 = globalThis.$ClassFactory.new("@winglang/sdk.ex.Redis", ex.Redis, this, "r2");
+    const queue = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
     (queue.setConsumer(new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(3)) }));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:testing Redis", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:testing Redis", new $Closure2(this, "$Closure2"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "redis.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

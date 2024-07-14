@@ -64,7 +64,7 @@
     },
     {
       "name": "cdktf-cli",
-      "version": "0.20.3",
+      "version": "0.20.7",
       "type": "build"
     },
     {
@@ -119,7 +119,7 @@
     },
     {
       "name": "jsii",
-      "version": "~5.3.11",
+      "version": "~5.3.39",
       "type": "build"
     },
     {
@@ -167,6 +167,11 @@
     },
     {
       "name": "@aws-sdk/client-dynamodb",
+      "version": "3.577.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/client-ecs",
       "version": "3.577.0",
       "type": "bundled"
     },
@@ -225,7 +230,7 @@
     },
     {
       "name": "@azure/identity",
-      "version": "4.0.1",
+      "version": "4.3.0",
       "type": "bundled"
     },
     {
@@ -268,7 +273,7 @@
     },
     {
       "name": "cdktf",
-      "version": "0.20.3",
+      "version": "0.20.7",
       "type": "bundled"
     },
     {
@@ -310,7 +315,7 @@
     },
     {
       "name": "nanoid",
-      "version": "^3.3.6",
+      "version": "^3.3.7",
       "type": "bundled"
     },
     {

@@ -1,14 +1,15 @@
 import { JsonFile, cdk, javascript, DependencyType } from "projen";
 
 const JSII_DEPS = ["constructs@^10.3"];
-const CDKTF_VERSION = "0.20.3";
+const CDKTF_VERSION = "0.20.7";
 const AWS_SDK_VERSION = "3.577.0";
 
 const CDKTF_PROVIDERS = [
-  "aws@~>5.31.0",
+  "aws@~>5.56.1",
   "random@~>3.5.1",
   "azurerm@~>3.96.0",
   "google@~>5.10.0",
+  "kreuzwerker/docker@~>3.0.2",
 ];
 
 // defines the list of dependencies required for each compilation target that is not built into the
@@ -50,6 +51,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-dynamodb",
     "@aws-sdk/client-elasticache",
     "@aws-sdk/client-lambda",
+    "@aws-sdk/client-ecs",
     "@aws-sdk/client-s3",
     "@aws-sdk/client-secrets-manager",
     "@aws-sdk/client-sns",
@@ -66,7 +68,7 @@ const project = new cdk.JsiiProject({
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/data-tables@13.2.2",
-    "@azure/identity@4.0.1",
+    "@azure/identity@4.3.0",
     "@azure/core-paging",
     // gcp client dependencies
     "@google-cloud/storage@6.9.5",
@@ -77,7 +79,7 @@ const project = new cdk.JsiiProject({
     "express",
     "uuid",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
-    "nanoid@^3.3.6",
+    "nanoid@^3.3.7",
     "cron-parser",
     // shared client dependencies
     "ioredis",
@@ -132,7 +134,7 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "~5.3.11",
+  jsiiVersion: "~5.3.39",
 });
 project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
 project.deps.removeDependency("ts-node");

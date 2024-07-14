@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -182,6 +181,9 @@
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -209,11 +211,14 @@
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Handler-c89bc30b",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_15": "${jsonencode(aws_lambda_function.Function.arn)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_16": "${jsonencode(aws_lambda_function.Function.arn)}"
           }
         },
         "function_name": "Handler-c89bc30b",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.FunctionRef_AwsConsoleField_Handler_IamRole_8EE0F0F7.arn}",
@@ -241,11 +246,14 @@
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Handler-c8f37d21",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_15": "${jsonencode(aws_lambda_function.Function.arn)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_16": "${jsonencode(aws_lambda_function.Function.arn)}"
           }
         },
         "function_name": "Handler-c8f37d21",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.FunctionRef_FunctionArnField_Handler_IamRole_87E7076C.arn}",

@@ -20,7 +20,7 @@ The `cloud.Counter` resource represents a stateful container for one or more num
 
 ### Defining a counter
 
-```js
+```js example
 bring cloud;
 
 let counter = new cloud.Counter(
@@ -30,7 +30,7 @@ let counter = new cloud.Counter(
 
 ### Using a counter inflight
 
-```js playground
+```js playground example
 bring cloud;
 
 let counter = new cloud.Counter();
@@ -51,7 +51,7 @@ new cloud.Function(counterFunc);
 
 ### Using keys to manage multiple counter values
 
-```js playground
+```js playground example
 bring cloud;
 
 let counter = new cloud.Counter(initial: 100);

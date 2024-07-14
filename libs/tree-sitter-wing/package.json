@@ -51,7 +51,7 @@
     "extends": "../../package.json"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0",
+    "nodemon": "^3.1.4",
     "tree-sitter-cli": "0.22.5"
   }
 }

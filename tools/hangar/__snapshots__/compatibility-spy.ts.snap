@@ -160,111 +160,83 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
+              "message": "dec(5, "custom-key")",
+              "result": "-1",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("custom-key")",
+              "result": "-6",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "dec(-4, "custom-key")",
+              "result": "-6",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("custom-key")",
+              "result": "-2",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "dec(0, "custom-key")",
+              "result": "-2",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("custom-key")",
+              "result": "-2",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
               "message": "Invoke (payload=undefined).",
               "status": "success",
             },
             "level": "verbose",
             "sourcePath": "root/env0/test:dec()/Handler",
-            "sourceType": "@winglang/sdk.cloud.Function",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-        ],
-      },
-      "dec() with custom key": {
-        "args": {
-          "methods": {
-            "Counter": [
-              "dec",
-              "peek",
-            ],
-            "TestRunner": [
-              "findTests",
-            ],
-          },
-        },
-        "pass": true,
-        "path": "root/env1/test:dec() with custom key",
-        "traces": [
-          {
-            "data": {
-              "message": "dec(5, \\"custom-key\\")",
-              "result": "-1",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"custom-key\\")",
-              "result": "-6",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "dec(-4, \\"custom-key\\")",
-              "result": "-6",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"custom-key\\")",
-              "result": "-2",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "dec(0, \\"custom-key\\")",
-              "result": "-2",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"custom-key\\")",
-              "result": "-2",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "Invoke (payload=undefined).",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/test:dec() with custom key/Handler",
             "sourceType": "@winglang/sdk.cloud.Function",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -398,111 +370,83 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
+              "message": "inc(5, "custom-key")",
+              "result": "-1",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("custom-key")",
+              "result": "4",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "inc(-4, "custom-key")",
+              "result": "4",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("custom-key")",
+              "result": "0",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "inc(0, "custom-key")",
+              "result": "0",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("custom-key")",
+              "result": "0",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
               "message": "Invoke (payload=undefined).",
               "status": "success",
             },
             "level": "verbose",
             "sourcePath": "root/env0/test:inc()/Handler",
-            "sourceType": "@winglang/sdk.cloud.Function",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-        ],
-      },
-      "inc() with custom key": {
-        "args": {
-          "methods": {
-            "Counter": [
-              "inc",
-              "peek",
-            ],
-            "TestRunner": [
-              "findTests",
-            ],
-          },
-        },
-        "pass": true,
-        "path": "root/env1/test:inc() with custom key",
-        "traces": [
-          {
-            "data": {
-              "message": "inc(5, \\"custom-key\\")",
-              "result": "-1",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"custom-key\\")",
-              "result": "4",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "inc(-4, \\"custom-key\\")",
-              "result": "4",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"custom-key\\")",
-              "result": "0",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "inc(0, \\"custom-key\\")",
-              "result": "0",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"custom-key\\")",
-              "result": "0",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "Invoke (payload=undefined).",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/test:inc() with custom key/Handler",
             "sourceType": "@winglang/sdk.cloud.Function",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -523,7 +467,7 @@ exports[`initial.test.w 1`] = `
   ],
   "results": {
     "counter/initial.test.w": {
-      "initial:default": {
+      "initial": {
         "args": {
           "methods": {
             "Counter": [
@@ -536,7 +480,7 @@ exports[`initial.test.w 1`] = `
           },
         },
         "pass": true,
-        "path": "root/env0/test:initial:default",
+        "path": "root/env0/test:initial",
         "traces": [
           {
             "data": {
@@ -552,32 +496,16 @@ exports[`initial.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "peek()",
+              "result": "500",
               "status": "success",
             },
             "level": "verbose",
-            "sourcePath": "root/env0/test:initial:default/Handler",
-            "sourceType": "@winglang/sdk.cloud.Function",
+            "sourcePath": "root/env0/counterB/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
-        ],
-      },
-      "initial:negative-value": {
-        "args": {
-          "methods": {
-            "Counter": [
-              "initial",
-              "peek",
-            ],
-            "TestRunner": [
-              "findTests",
-            ],
-          },
-        },
-        "pass": true,
-        "path": "root/env2/test:initial:negative-value",
-        "traces": [
           {
             "data": {
               "message": "peek()",
@@ -585,7 +513,7 @@ exports[`initial.test.w 1`] = `
               "status": "success",
             },
             "level": "verbose",
-            "sourcePath": "root/env2/counterC/Resource",
+            "sourcePath": "root/env0/counterC/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -596,47 +524,7 @@ exports[`initial.test.w 1`] = `
               "status": "success",
             },
             "level": "verbose",
-            "sourcePath": "root/env2/test:initial:negative-value/Handler",
-            "sourceType": "@winglang/sdk.cloud.Function",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-        ],
-      },
-      "initial:positive-value": {
-        "args": {
-          "methods": {
-            "Counter": [
-              "initial",
-              "peek",
-            ],
-            "TestRunner": [
-              "findTests",
-            ],
-          },
-        },
-        "pass": true,
-        "path": "root/env1/test:initial:positive-value",
-        "traces": [
-          {
-            "data": {
-              "message": "peek()",
-              "result": "500",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counterB/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "Invoke (payload=undefined).",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/test:initial:positive-value/Handler",
+            "sourcePath": "root/env0/test:initial/Handler",
             "sourceType": "@winglang/sdk.cloud.Function",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -657,82 +545,6 @@ exports[`peek.test.w 1`] = `
   ],
   "results": {
     "counter/peek.test.w": {
-      "key peek": {
-        "args": {
-          "methods": {
-            "Counter": [
-              "peek",
-              "inc",
-            ],
-            "TestRunner": [
-              "findTests",
-            ],
-          },
-        },
-        "pass": true,
-        "path": "root/env1/test:key peek",
-        "traces": [
-          {
-            "data": {
-              "message": "peek(\\"my-key\\")",
-              "result": "0",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/Counter/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"my-key\\")",
-              "result": "0",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/Counter/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "inc(nil, \\"my-key\\")",
-              "result": "0",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/Counter/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"my-key\\")",
-              "result": "1",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/Counter/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "Invoke (payload=undefined).",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/test:key peek/Handler",
-            "sourceType": "@winglang/sdk.cloud.Function",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-        ],
-      },
       "peek": {
         "args": {
           "methods": {
@@ -787,6 +599,54 @@ exports[`peek.test.w 1`] = `
           {
             "data": {
               "message": "peek()",
+              "result": "1",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/Counter/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("my-key")",
+              "result": "0",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/Counter/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("my-key")",
+              "result": "0",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/Counter/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "inc(nil, "my-key")",
+              "result": "0",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/Counter/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("my-key")",
               "result": "1",
               "status": "success",
             },
@@ -909,108 +769,80 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
+              "message": "set(42, "custom-key")",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("custom-key")",
+              "result": "42",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "set(-100, "custom-key")",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("custom-key")",
+              "result": "-100",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "set(0, "custom-key")",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "peek("custom-key")",
+              "result": "0",
+              "status": "success",
+            },
+            "level": "verbose",
+            "sourcePath": "root/env0/counter2/Resource",
+            "sourceType": "@winglang/sdk.sim.Resource",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
               "message": "Invoke (payload=undefined).",
               "status": "success",
             },
             "level": "verbose",
             "sourcePath": "root/env0/test:set()/Handler",
-            "sourceType": "@winglang/sdk.cloud.Function",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-        ],
-      },
-      "set() with custom key": {
-        "args": {
-          "methods": {
-            "Counter": [
-              "set",
-              "peek",
-            ],
-            "TestRunner": [
-              "findTests",
-            ],
-          },
-        },
-        "pass": true,
-        "path": "root/env1/test:set() with custom key",
-        "traces": [
-          {
-            "data": {
-              "message": "set(42, \\"custom-key\\")",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"custom-key\\")",
-              "result": "42",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "set(-100, \\"custom-key\\")",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"custom-key\\")",
-              "result": "-100",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "set(0, \\"custom-key\\")",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "peek(\\"custom-key\\")",
-              "result": "0",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2/Resource",
-            "sourceType": "@winglang/sdk.sim.Resource",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-          {
-            "data": {
-              "message": "Invoke (payload=undefined).",
-              "status": "success",
-            },
-            "level": "verbose",
-            "sourcePath": "root/env1/test:set() with custom key/Handler",
             "sourceType": "@winglang/sdk.cloud.Function",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",

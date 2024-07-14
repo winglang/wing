@@ -41,6 +41,8 @@ export interface CreateConsoleAppOptions {
   stateDir?: string;
   open?: boolean;
   watchGlobs?: string[];
+  getEndpointWarningAccepted?: boolean;
+  notifyEndpointWarningAccepted?: () => void;
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -65,8 +67,8 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     analyticsAnonymousId: analyticsStorage.getAnonymousId(),
     analytics,
     async requireSignIn() {
-      if (options.requireSignIn === false) {
-        return false;
+      if (options.requireSignIn !== undefined) {
+        return options.requireSignIn;
       }
 
       // The VSCode extension for Wing will use this to determine whether to show the sign in prompt.
@@ -78,6 +80,12 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     },
     async notifySignedIn() {
       analyticsStorage.notifySignedIn();
+    },
+    async getEndpointWarningAccepted() {
+      return analyticsStorage.getEndpointWarningAccepted();
+    },
+    async notifyEndpointWarningAccepted() {
+      analyticsStorage.notifyEndpointWarningAccepted();
     },
     onExpressCreated(app) {
       app.use(express.static(staticDir));
