@@ -95,6 +95,9 @@ const project = new cdk.JsiiProject({
     // tunnels
     "@winglang/wingtunnels@workspace:^",
     "glob",
+    // env
+    "dotenv",
+    "dotenv-expand",
   ],
   devDeps: [
     `@cdktf/provider-aws@^19`, // only for testing Wing plugins

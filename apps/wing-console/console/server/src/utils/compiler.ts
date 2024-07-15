@@ -1,6 +1,7 @@
 import path from "node:path";
 
 import * as wing from "@winglang/compiler";
+import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import chokidar from "chokidar";
 import Emittery from "emittery";
 
@@ -37,6 +38,7 @@ export const createCompiler = ({
   stateDir,
   watchGlobs,
 }: CreateCompilerProps): Compiler => {
+  const dirname = path.dirname(wingfile);
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
   let shouldCompileAgain = false;
@@ -47,6 +49,8 @@ export const createCompiler = ({
       shouldCompileAgain = true;
       return;
     }
+
+    loadEnvVariables({ cwd: dirname });
 
     try {
       isCompiling = true;
@@ -81,13 +85,12 @@ export const createCompiler = ({
     }
   };
 
-  const dirname = path.dirname(wingfile);
-
   const pathsToWatch = [
     `!**/node_modules/**`,
     `!**/.git/**`,
     `!${dirname}/target/**`,
     dirname,
+    `${dirname}/.env`,
     ...(watchGlobs ?? []),
   ];
 
