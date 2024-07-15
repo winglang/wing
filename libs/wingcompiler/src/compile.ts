@@ -347,6 +347,7 @@ async function runPreflightCodeInWorkerThread(
         stdio: "pipe",
       });
       worker.stdout?.on("data", onStdout);
+      worker.stderr?.on("data", onStdout);
       worker.on("message", reject);
       worker.on("error", reject);
       worker.on("exit", (code) => {
