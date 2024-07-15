@@ -12,7 +12,7 @@ import {
   useState,
 } from "react";
 
-import { useAppLocalStorage } from "../../use-localstorage.js";
+import { useAppLocalStorage } from "../localstorage-context/use-localstorage.js";
 
 export interface SelectionItem {
   id: string;

@@ -3,12 +3,15 @@ import {
   NotificationsProvider,
   type Mode,
   buildTheme,
+  Loader,
 } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
 import { PersistentStateProvider } from "@wingconsole/use-persistent-state";
+import { useMemo } from "react";
 
 import type { LayoutType } from "./features/layout/layout-provider.js";
 import { LayoutProvider } from "./features/layout/layout-provider.js";
+import { AppLocalStorageProvider } from "./features/localstorage-context/localstorage-context.js";
 import { SelectionContextProvider } from "./features/selection-context/selection-context.js";
 import { TestsContextProvider } from "./features/tests-pane/tests-context.js";
 import { trpc } from "./trpc.js";
@@ -44,23 +47,32 @@ export const App = ({ layout, theme, color, onTrace }: AppProps) => {
   const layoutConfig = trpc["app.layoutConfig"].useQuery();
   const appDetails = trpc["app.details"].useQuery();
   const appState = trpc["app.state"].useQuery();
+  const wingfileQuery = trpc["app.wingfile"].useQuery();
+  const wingfile = useMemo(() => {
+    return wingfileQuery.data;
+  }, [wingfileQuery.data]);
 
   return (
     <ThemeProvider theme={buildTheme(color)}>
       <NotificationsProvider>
         <TestsContextProvider>
-          <SelectionContextProvider>
-            <PersistentStateProvider>
-              <LayoutProvider
-                layoutType={layout}
-                layoutProps={{
-                  cloudAppState: appState.data ?? "compiling",
-                  wingVersion: appDetails.data?.wingVersion,
-                  layoutConfig: layoutConfig.data?.config,
-                }}
-              />
-            </PersistentStateProvider>
-          </SelectionContextProvider>
+          <AppLocalStorageProvider storageKey={wingfile}>
+            {!wingfile && <Loader />}
+            {wingfile && (
+              <SelectionContextProvider>
+                <PersistentStateProvider>
+                  <LayoutProvider
+                    layoutType={layout}
+                    layoutProps={{
+                      cloudAppState: appState.data ?? "compiling",
+                      wingVersion: appDetails.data?.wingVersion,
+                      layoutConfig: layoutConfig.data?.config,
+                    }}
+                  />
+                </PersistentStateProvider>
+              </SelectionContextProvider>
+            )}
+          </AppLocalStorageProvider>
         </TestsContextProvider>
       </NotificationsProvider>
     </ThemeProvider>

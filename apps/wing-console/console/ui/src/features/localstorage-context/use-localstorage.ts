@@ -6,12 +6,10 @@ import {
   useRef,
   useLayoutEffect,
   useEffect,
-  useMemo,
+  useContext,
 } from "react";
 
-import { trpc } from "./trpc.js";
-
-const noop = () => {};
+import { AppLocalStorageContext } from "./localstorage-context.js";
 
 export const useLocalStorage = <T>(
   key: string,
@@ -70,10 +68,10 @@ export const useAppLocalStorage = <T>(
   key: string,
   initialValue: T,
 ): [T, Dispatch<SetStateAction<T>>, boolean, () => void] => {
-  const wingfileQuery = trpc["app.path"].useQuery();
-  const wingfile = useMemo(() => {
-    return wingfileQuery.data;
-  }, [wingfileQuery.data]);
+  const { storageKey } = useContext(AppLocalStorageContext);
+  if (!storageKey) {
+    throw new Error("AppLocalStorageContext.storageKey is not provided");
+  }
 
-  return useLocalStorage(wingfile ? `${wingfile}.${key}` : key, initialValue);
+  return useLocalStorage(`${storageKey}.${key}`, initialValue);
 };

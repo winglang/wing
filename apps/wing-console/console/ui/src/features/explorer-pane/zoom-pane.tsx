@@ -15,7 +15,7 @@ import type { DetailedHTMLProps, HTMLAttributes } from "react";
 import type { ReactNode } from "react";
 import { useEvent } from "react-use";
 
-import { useAppLocalStorage } from "../../use-localstorage.js";
+import { useAppLocalStorage } from "../localstorage-context/use-localstorage.js";
 
 import { MapControls } from "./map-controls.js";
 

@@ -8,7 +8,7 @@ import classNames from "classnames";
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 
 import { trpc } from "../../trpc.js";
-import { useLocalStorage, useAppLocalStorage } from "../../use-localstorage.js";
+import { useAppLocalStorage } from "../localstorage-context/use-localstorage.js";
 
 import {
   ConsoleLogsFilters,
@@ -23,10 +23,8 @@ export interface LogsWidgetProps {
 export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
   const { theme } = useTheme();
 
-  const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useLocalStorage(
-    "logsWidget.selectedLogTypeFilters",
-    DEFAULT_LOG_LEVELS,
-  );
+  const [selectedLogTypeFilters, setSelectedLogTypeFilters] =
+    useAppLocalStorage("logsWidget.selectedLogTypeFilters", DEFAULT_LOG_LEVELS);
   const [searchText, setSearchText] = useAppLocalStorage(
     "logsWidget.searchText",
     "",
