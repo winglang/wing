@@ -90,7 +90,7 @@ export class Json {
   /**
    * Formats Json as string
    *
-   * @macro ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($args$)
+   * @macro ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(...$args$)
    *
    * @param json to format as string
    * @returns string representation of the Json
