@@ -31,17 +31,24 @@ The following example shows a complete REST API implementation using `cloud.Api`
 
 ```ts playground example
 bring cloud;
+bring ex;
 
 let api = new cloud.Api();
 // Used for generating unique id
 let counter = new cloud.Counter();
-// our employee data
-let store = new cloud.Bucket();
+// our employee database
+let db = new ex.Table(
+  name: "employees",
+  primaryKey: "id",
+  columns: {
+    "name" => ex.ColumnType.STRING
+  }
+);
 
 api.get("/employees", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
   let result = MutJson [];
   let var i = 0;
-  for employee in store.list() {
+  for employee in db.list() {
     result.setAt(i, employee);
     i = i + 1;
   }
@@ -53,7 +60,7 @@ api.get("/employees", inflight (request: cloud.ApiRequest): cloud.ApiResponse =>
 
 
 api.get("/employees/:id", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
-  let employee = store.get(request.vars.get("id"));
+  let employee = db.get(request.vars.get("id"));
   return cloud.ApiResponse {
     status: 200,
     body: Json.stringify(employee)
@@ -64,7 +71,7 @@ api.post("/employees", inflight (request: cloud.ApiRequest): cloud.ApiResponse =
    if let body = request.body {
     let employeeData = Json.parse(body);
     let id = "{counter.inc()}";
-    store.putJson(id, employeeData);
+    db.insert(id, employeeData);
     return cloud.ApiResponse {
       status: 201,
       body: id
@@ -76,7 +83,7 @@ api.put("/employees/:id", inflight (request: cloud.ApiRequest): cloud.ApiRespons
   if let body = request.body {
     let employeeData = Json.parse(body);
     let id = request.vars.get("id");
-    store.putJson(id, employeeData);
+    db.update(id, employeeData);
     return cloud.ApiResponse {
       status: 200,
       body: Json.stringify(employeeData)
@@ -86,7 +93,7 @@ api.put("/employees/:id", inflight (request: cloud.ApiRequest): cloud.ApiRespons
 
 api.delete("/employees/:id", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
   let id = request.vars.get("id");
-  store.delete(id);
+  db.delete(id);
   return cloud.ApiResponse {
     status: 204
   };

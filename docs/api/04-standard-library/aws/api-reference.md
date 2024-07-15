@@ -1182,52 +1182,6 @@ The queue consumer handler.
 
 
 
-### Table <a name="Table" id="@winglang/sdk.aws.Table"></a>
-
-A helper class for working with AWS tables.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Table.Initializer"></a>
-
-```wing
-bring aws;
-
-new aws.Table();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.Table.from">from</a></code> | If the table is an AWS DynamoDB, return a helper interface for working with it. |
-
----
-
-##### `from` <a name="from" id="@winglang/sdk.aws.Table.from"></a>
-
-```wing
-bring aws;
-
-aws.Table.from(table: Table);
-```
-
-If the table is an AWS DynamoDB, return a helper interface for working with it.
-
-###### `table`<sup>Required</sup> <a name="table" id="@winglang/sdk.aws.Table.from.parameter.table"></a>
-
-- *Type:* <a href="#@winglang/sdk.ex.Table">Table</a>
-
-The ex.Table.
-
----
-
-
-
 ### Topic <a name="Topic" id="@winglang/sdk.aws.Topic"></a>
 
 A helper class for working with AWS topics.
@@ -1747,6 +1701,8 @@ Add a Lambda layer to the function.
 
 - *Type:* str
 
+The ARN of the layer.
+
 ---
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1912,46 +1868,6 @@ queueUrl: str;
 - *Type:* str
 
 AWS Queue url.
-
----
-
-### IAwsTable <a name="IAwsTable" id="@winglang/sdk.aws.IAwsTable"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsTable">IAwsTable</a>
-
-A shared interface for AWS tables.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsTable.property.dynamoTableArn">dynamoTableArn</a></code> | <code>str</code> | AWS Table arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsTable.property.dynamoTableName">dynamoTableName</a></code> | <code>str</code> | AWS Table name. |
-
----
-
-##### `dynamoTableArn`<sup>Required</sup> <a name="dynamoTableArn" id="@winglang/sdk.aws.IAwsTable.property.dynamoTableArn"></a>
-
-```wing
-dynamoTableArn: str;
-```
-
-- *Type:* str
-
-AWS Table arn.
-
----
-
-##### `dynamoTableName`<sup>Required</sup> <a name="dynamoTableName" id="@winglang/sdk.aws.IAwsTable.property.dynamoTableName"></a>
-
-```wing
-dynamoTableName: str;
-```
-
-- *Type:* str
-
-AWS Table name.
 
 ---
 
