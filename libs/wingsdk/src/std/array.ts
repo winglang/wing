@@ -66,7 +66,7 @@ export class Array {
   /**
    * Checks if this array includes searchElement.
    *
-   * @macro $self$?.includes($args$)
+   * @macro $self$.includes($args$)
    *
    * @param searchElement to search for.
    * @returns true if this array includes searchElement.
@@ -190,7 +190,7 @@ export class MutArray {
   /**
    * Checks if this array includes searchElement.
    *
-   * @macro $self$?.includes($args$)
+   * @macro $self$.includes($args$)
    *
    * @param searchElement to search for.
    * @returns true if this array includes searchElement.
