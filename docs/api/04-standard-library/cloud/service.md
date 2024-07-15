@@ -119,7 +119,10 @@ Within the context of the simulator, services are just spawned processes ran wit
 
 ### AWS (`tf-aws` and `awscdk`)
 
-🚧 Not supported yet (tracking issue: [#1306](https://github.com/winglang/wing/issues/1306))
+Within the context of AWS, services are created using AWS ECS, with a capacity provider of FARGATE. This also requires a VPC and a related resources
+such as security groups, subnets, and an internet gateway, etc. If a VPC is not specified in `wing.toml`, a default VPC will be created.
+
+The inflight closures are packaged up into a docker image and pushed to an AWS ECR repository.
 
 ### Azure (`tf-azure`)
 
