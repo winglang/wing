@@ -14,7 +14,6 @@ test "list" {
 
   let objs = b.list();
   let objs2 = b.list("file");
-  log(Json.stringify(objs));
 
   assert(objs.contains("file1.json"));
   assert(objs.contains("file2.txt"));
