@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $api_url, $expect_Util, $tokenLength, $urlRegex }) {
   class $Closure1 {
     constructor({  }) {
@@ -13,7 +14,7 @@ module.exports = function({ $api_url, $expect_Util, $tokenLength, $urlRegex }) {
     }
     async handle() {
       (await $expect_Util.equal((await $urlRegex.test($api_url)), true));
-      (await $expect_Util.equal($api_url.startsWith("http"), true));
+      (await $expect_Util.equal($macros.__String_startsWith(false, $api_url, "http"), true));
       (await $expect_Util.notEqual($api_url.length, $tokenLength));
     }
   }
@@ -130,6 +131,7 @@ module.exports = function({ $api_url, $expect_Util, $tokenLength, $urlRegex }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

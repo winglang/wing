@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Foo, $foo }) {
   class $Closure1 {
     constructor({  }) {
@@ -25,6 +26,7 @@ module.exports = function({ $Foo, $foo }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $util_Util }) {
   class Foo {
     constructor({  }) {
@@ -65,6 +67,7 @@ module.exports = function({ $util_Util }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
@@ -84,12 +87,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
       }
       onLift(host, ops) {
-        if (ops.includes("m1")) {
+        if ($macros.__Array_contains(false, ops, "m1")) {
           (host.addEnvironment("ABC", "123"));
         }
       }
       static onLiftType(host, ops) {
-        if (ops.includes("m2")) {
+        if ($macros.__Array_contains(false, ops, "m2")) {
           (host.addEnvironment("XYZ", "789"));
         }
       }
