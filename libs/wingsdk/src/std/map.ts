@@ -76,12 +76,15 @@ export class Map {
 
   /**
    * Returns a boolean indicating whether an element with the specified key exists or not.
+   *
+   * @macro ($args$ in ($self$))
+   *
    * @param key The key of the element to test for presence
    * @returns true if an element with the specified key exists in the map; otherwise false.
    */
   public has(key: string): boolean {
     key;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -220,19 +223,22 @@ export class MutMap {
 
   /**
    * Returns a boolean indicating whether an element with the specified key exists or not.
+   *
+   * @macro ($args$ in ($self$))
+   *
    * @param key The key of the element to test for presence
    * @returns true if an element with the specified key exists in the map; otherwise false.
    */
   public has(key: string): boolean {
     key;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
    * Adds or updates an entry in a Map object with a specified key and a value.
    *
    * TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
-   * @macro ((obj, args) => { obj[args[0]] = args[1]; })($self$, [$args$])
+   * @macro ((obj, key, value) => { obj[key] = value; })($self$, ...$args$)
    *
    * @param key The key of the element to add
    * @param value The value of the element to add

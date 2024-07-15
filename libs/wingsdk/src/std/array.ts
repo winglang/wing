@@ -253,7 +253,7 @@ export class MutArray {
   /**
    * Add values to end of array
    *
-   * @macro $self$.push($args$)
+   * @macro $self$.push(...$args$)
    *
    * @param values values to add
    */
