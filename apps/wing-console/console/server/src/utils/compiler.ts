@@ -54,6 +54,23 @@ export const createCompiler = ({
       simfile = await wing.compile(wingfile, {
         platform,
         testing,
+        log: testing
+          ? undefined
+          : (...arguments_) => {
+              console.log(
+                `[${new Intl.DateTimeFormat(undefined, {
+                  dateStyle: undefined,
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                  fractionalSecondDigits: 3,
+                  hour12: false,
+                }).format(new Date())}]`,
+                // testing ? "[testing]" : "[compiler]",
+                "[compiler]",
+                ...arguments_,
+              );
+            },
       });
       await events.emit("compiled", { simfile });
     } catch (error) {

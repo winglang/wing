@@ -24,10 +24,16 @@ const options = parseArgs({
       fileURLToPath(new URL("../demo/main.w", import.meta.url)),
     requestedPort: 1214,
     log: {
-      info: console.log,
-      error: console.error,
-      verbose: console.log,
+      info: (...arguments_) => console.log("[info]", ...arguments_),
+      error: (...arguments_) => console.error("[error]", ...arguments_),
+      verbose: (...arguments_) => console.log("[verbose]", ...arguments_),
     },
+    // log: {
+    //   info: () => {},
+    //   // error: () => {},
+    //   error: console.error,
+    //   verbose: () => {},
+    // },
     config: {
       addEventListener(event, listener) {},
       removeEventListener(event, listener) {},

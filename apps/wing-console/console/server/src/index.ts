@@ -120,6 +120,8 @@ export const createConsoleServer = async ({
     log,
   });
 
+  consoleLogger.log("Starting the console server...");
+
   const compiler = createCompiler({
     wingfile,
     platform,

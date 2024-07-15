@@ -136,16 +136,16 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   // create a unique temporary directory for the compilation
   const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
   const entrypointFile = resolve(entrypoint);
-  log?.("wing file: %s", entrypointFile);
+  // log?.("wing file: %s", entrypointFile);
   const wingDir = resolve(dirname(entrypointFile));
-  log?.("wing dir: %s", wingDir);
+  // log?.("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
-  log?.("testing: %s", testing);
+  // log?.("testing: %s", testing);
   const target = determineTargetFromPlatforms(options.platform);
   const synthDir = options.output ?? resolveSynthDir(targetdir, entrypointFile, target, testing);
-  log?.("synth dir: %s", synthDir);
+  // log?.("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, DOT_WING);
-  log?.("work dir: %s", workDir);
+  // log?.("work dir: %s", workDir);
 
   const nearestNodeModules = (dir: string): string => {
     let nodeModules = join(dir, "node_modules");
@@ -205,9 +205,12 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         delete preflightEnv.Path;
       }
     }
+
     await runPreflightCodeInWorkerThread(
       compileForPreflightResult.preflightEntrypoint,
-      preflightEnv
+      preflightEnv,
+      (data) => log?.(data.toString().trim())
+      // (data) => console.log("[compiler]", data.toString().trim())
     );
   }
   return synthDir;
@@ -290,7 +293,7 @@ npm i @wingcloud/framework
     const arg = `${normalPath(props.entrypointFile)};${normalPath(props.workDir)};${normalPath(
       props.wingDir
     )}`;
-    props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
+    // props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
     let compileSuccess: boolean;
     let compilerOutput: string | number = "";
     try {
@@ -332,7 +335,8 @@ function defaultValuesFile() {
 
 async function runPreflightCodeInWorkerThread(
   entrypoint: string,
-  env: Record<string, string | undefined>
+  env: Record<string, string | undefined>,
+  onStdout: (data: Buffer) => void
 ): Promise<void> {
   try {
     env.WING_PREFLIGHT_ENTRYPOINT = JSON.stringify(entrypoint);
@@ -340,8 +344,9 @@ async function runPreflightCodeInWorkerThread(
     await new Promise((resolve, reject) => {
       const worker = fork(join(__dirname, "..", "preflight.shim.cjs"), {
         env,
-        stdio: "inherit",
+        stdio: "pipe",
       });
+      worker.stdout?.on("data", onStdout);
       worker.on("message", reject);
       worker.on("error", reject);
       worker.on("exit", (code) => {
