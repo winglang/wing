@@ -24,9 +24,9 @@ const options = parseArgs({
       fileURLToPath(new URL("../demo/main.w", import.meta.url)),
     requestedPort: 1214,
     log: {
-      info: console.log,
-      error: console.error,
-      verbose: console.log,
+      info: () => {},
+      error: (...arguments_) => console.error("[error]", ...arguments_),
+      verbose: () => {},
     },
     config: {
       addEventListener(event, listener) {},

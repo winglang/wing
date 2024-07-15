@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useMemo, type FunctionComponent } from "react";
 
 export interface RunningStateIndicatorProps {
-  runningState: ResourceRunningState;
+  runningState: ResourceRunningState | undefined;
   className?: string;
 }
 

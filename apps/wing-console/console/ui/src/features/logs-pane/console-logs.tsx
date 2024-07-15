@@ -27,6 +27,7 @@ const shortDateTimeFormat = new Intl.DateTimeFormat(undefined, {
   minute: "2-digit",
   second: "2-digit",
   fractionalSecondDigits: 3,
+  hour12: false,
 });
 
 const longDateTimeFormat = new Intl.DateTimeFormat(undefined, {
@@ -37,6 +38,7 @@ const longDateTimeFormat = new Intl.DateTimeFormat(undefined, {
   minute: "2-digit",
   second: "2-digit",
   fractionalSecondDigits: 3,
+  hour12: false,
 });
 
 interface LogEntryProps {
@@ -127,7 +129,7 @@ const LogEntryRow = memo(
         {/*eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions*/}
         <div
           className={classNames(
-            "group w-full flex",
+            "group w-full",
             "flex min-w-0",
             "justify-between",
             theme.border4,
@@ -173,7 +175,7 @@ const LogEntryRow = memo(
           <div
             className={classNames("min-w-0 text-left grow", {
               truncate: !expanded,
-              "ml-2": log.timestamp && !log.ctx?.hideTimestamp,
+              "ml-4": log.timestamp && !log.ctx?.hideTimestamp,
             })}
           >
             {canBeExpanded && (
@@ -208,6 +210,11 @@ const LogEntryRow = memo(
               )}
               ref={expandableRef}
             >
+              {log.source === "compiler" && (
+                <span className="bg-slate-450 text-white dark:bg-slate-550 rounded inline px-1 select-none pointer-events-none mr-2">
+                  Compiler
+                </span>
+              )}
               <Linkify
                 options={{
                   className: "text-sky-500 underline hover:text-sky-800",

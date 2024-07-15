@@ -1,4 +1,5 @@
-import type { PropsWithChildren } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState, type PropsWithChildren } from "react";
 
 import { InspectorSectionHeading } from "./inspector-section-heading.js";
 import type { IconComponent } from "./resource-icon.js";
@@ -23,6 +24,10 @@ export const InspectorSection = ({
   bold = true,
   headingClassName,
 }: PropsWithChildren<InspectorSectionProps>) => {
+  const [initialRender, setInitialRender] = useState(true);
+  useEffect(() => {
+    setInitialRender(false);
+  }, []);
   return (
     <>
       <InspectorSectionHeading
@@ -34,7 +39,19 @@ export const InspectorSection = ({
         className={headingClassName}
         bold={bold}
       />
-      {open && children}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            role="group"
+            style={{ overflow: "hidden" }}
+            initial={initialRender ? undefined : { opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

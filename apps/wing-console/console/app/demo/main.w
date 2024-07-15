@@ -324,3 +324,5 @@ class ApiUsersService {
 }
 
 new ApiUsersService();
+
+log("hello from inflight");
