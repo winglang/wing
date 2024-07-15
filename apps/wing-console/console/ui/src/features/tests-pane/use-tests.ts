@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import type { TestItem } from "@wingconsole/server";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { trpc } from "../../trpc.js";
 
-import type { TestItem, TestStatus } from "./test-item.js";
 import { TestsContext } from "./tests-context.js";
 
 export const useTests = () => {
@@ -11,61 +11,25 @@ export const useTests = () => {
 
   const testListQuery = trpc["test.list"].useQuery();
 
-  const runAllTestsMutation = trpc["test.runAll"].useMutation({
-    onMutate: () => {
-      setAllTestStatus("running");
-    },
-  });
+  const { mutate: runAllTestsMutation } = trpc["test.runAll"].useMutation();
 
-  const runTestMutation = trpc["test.run"].useMutation({
-    onMutate: (data) => {
-      setTestStatus(data.resourcePath, "running");
-    },
-  });
+  const { mutate: runTestMutation } = trpc["test.run"].useMutation();
 
   useEffect(() => {
     setTestList(testListQuery.data || []);
     setTestsExists(!!testListQuery.data && testListQuery.data.length > 0);
   }, [setTestsExists, testListQuery.data]);
 
-  const runAllTests = () => {
-    runAllTestsMutation.mutate();
-  };
+  const runAllTests = useCallback(() => {
+    runAllTestsMutation();
+  }, [runAllTestsMutation]);
 
-  const runTest = (resourcePath: string) => {
-    runTestMutation.mutate({ resourcePath });
-  };
-
-  const setTestStatus = (
-    resourcePath: string,
-    status: TestStatus,
-    time?: number,
-  ) => {
-    setTestList((testList) => {
-      return testList.map((testItem) => {
-        if (testItem.id === resourcePath) {
-          return {
-            ...testItem,
-            status,
-            time: time || testItem.time,
-          };
-        }
-        return testItem;
-      });
-    });
-  };
-
-  const setAllTestStatus = (status: TestStatus, time?: number) => {
-    setTestList((testList) => {
-      return testList.map((testItem) => {
-        return {
-          ...testItem,
-          status,
-          time: time || testItem.time,
-        };
-      });
-    });
-  };
+  const runTest = useCallback(
+    (resourcePath: string) => {
+      runTestMutation({ resourcePath });
+    },
+    [runTestMutation],
+  );
 
   return {
     testList,
