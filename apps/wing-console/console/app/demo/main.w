@@ -3,15 +3,14 @@ bring ui;
 bring util;
 bring sim;
 
-let errorService = new cloud.Service(inflight () => {}) as "ErrorService";
+// let errorService = new cloud.Service(inflight () => {}) as "ErrorService";
 
-let errorResource = new sim.Resource(inflight () => {
-  util.sleep(5s);
-  throw "Oops";
-}) as "ErrorResource" in errorService;
+// let errorResource = new sim.Resource(inflight () => {
+//   throw "Oops";
+// }) as "ErrorResource" in errorService;
 
 // @see https://github.com/winglang/wing/issues/4237 it crashes the Console preview env.
-//let secret = new cloud.Secret(name: "my-secret");
+// let secret = new cloud.Secret(name: "my-secret");
 
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
@@ -103,7 +102,6 @@ rateSchedule.onTick(inflight () => {
 
 new cloud.Service(
   inflight () => {
-    log("start!");
     return inflight () => {
       log("stop!");
     };
@@ -305,3 +303,5 @@ class ApiUsersService {
 }
 
 new ApiUsersService();
+
+log("hello from inflight");

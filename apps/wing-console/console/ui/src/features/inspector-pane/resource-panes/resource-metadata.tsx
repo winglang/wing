@@ -16,7 +16,6 @@ import {
 import type { NodeDisplay } from "@wingconsole/server";
 import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/simulator.js";
 import classNames from "classnames";
-import type { FunctionComponent } from "react";
 import { memo, useCallback, useMemo, useState } from "react";
 
 import { trpc } from "../../../trpc.js";
@@ -29,26 +28,6 @@ import { FunctionMetadata } from "./function-metadata.js";
 import { QueueMetadataView } from "./queue-metadata-view.js";
 import { ResourceInteractionView } from "./resource-interaction-view.js";
 import { ScheduleMetadata } from "./schedule-metadata.js";
-
-const runningStateToText = (runningState: ResourceRunningState) => {
-  switch (runningState) {
-    case "error": {
-      return "Error";
-    }
-    case "started": {
-      return "Started";
-    }
-    case "starting": {
-      return "Starting";
-    }
-    case "stopped": {
-      return "Stopped";
-    }
-    case "stopping": {
-      return "Stopping";
-    }
-  }
-};
 
 interface AttributeGroup {
   groupName: string;
@@ -83,7 +62,7 @@ export interface MetadataNode {
         [key: string]: any;
       }
     | undefined;
-  hierarchichalRunningState: ResourceRunningState;
+  hierarchichalRunningState?: ResourceRunningState | undefined;
 }
 
 export interface MetadataProps {

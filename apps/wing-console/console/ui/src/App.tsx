@@ -6,6 +6,7 @@ import {
 } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
 import { PersistentStateProvider } from "@wingconsole/use-persistent-state";
+import { MotionConfig } from "framer-motion";
 
 import type { LayoutType } from "./features/layout/layout-provider.js";
 import { LayoutProvider } from "./features/layout/layout-provider.js";
@@ -51,14 +52,16 @@ export const App = ({ layout, theme, color, onTrace }: AppProps) => {
         <TestsContextProvider>
           <SelectionContextProvider>
             <PersistentStateProvider>
-              <LayoutProvider
-                layoutType={layout}
-                layoutProps={{
-                  cloudAppState: appState.data ?? "compiling",
-                  wingVersion: appDetails.data?.wingVersion,
-                  layoutConfig: layoutConfig.data?.config,
-                }}
-              />
+              <MotionConfig transition={{ duration: 0.15 }}>
+                <LayoutProvider
+                  layoutType={layout}
+                  layoutProps={{
+                    cloudAppState: appState.data ?? "compiling",
+                    wingVersion: appDetails.data?.wingVersion,
+                    layoutConfig: layoutConfig.data?.config,
+                  }}
+                />
+              </MotionConfig>
             </PersistentStateProvider>
           </SelectionContextProvider>
         </TestsContextProvider>

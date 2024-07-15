@@ -169,7 +169,6 @@ export const TreeItem = ({
         initial={{ opacity: 0, height: 0 }}
         animate={{ opacity: expanded ? 1 : 0, height: expanded ? "auto" : 0 }}
         exit={{ opacity: 0, height: 0 }}
-        transition={{ duration: 0.15 }}
       >
         <treeItemContext.Provider
           value={{ itemId, indentation: indentation + 1 }}
