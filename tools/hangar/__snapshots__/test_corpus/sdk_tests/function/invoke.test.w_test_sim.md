@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+log preflight
 [INFO] invoke | log inside test
 [INFO] invoke | log inside function
 [INFO] invoke | contains 2 lines

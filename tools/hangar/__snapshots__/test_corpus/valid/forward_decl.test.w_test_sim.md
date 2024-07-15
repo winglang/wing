@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+hi
 pass ─ forward_decl.test.wsim (no tests)
 
 Tests 1 passed (1)
