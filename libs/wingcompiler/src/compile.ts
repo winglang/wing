@@ -133,7 +133,8 @@ export function determineTargetFromPlatforms(platforms: string[]): string {
  * @returns the output directory
  */
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
-  const { log, preflightLog } = options;
+  const { log } = options;
+  const preflightLog = options.preflightLog ?? console.log;
   // create a unique temporary directory for the compilation
   const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
   const entrypointFile = resolve(entrypoint);
