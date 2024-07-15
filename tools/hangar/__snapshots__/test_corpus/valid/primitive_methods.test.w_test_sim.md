@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+1:60
 pass ─ primitive_methods.test.wsim (no tests)
 
 Tests 1 passed (1)

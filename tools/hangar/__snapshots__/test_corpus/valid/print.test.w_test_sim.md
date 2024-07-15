@@ -2,6 +2,8 @@
 
 ## stdout.log
 ```log
+preflight log
+preflight log
 [INFO] log1 | inflight log 1.1
 [INFO] log1 | inflight log 1.2
 [INFO] log2 | inflight log 2.1
