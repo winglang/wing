@@ -18,15 +18,14 @@ import type {
   FileLink,
   LayoutConfig,
   RouterContext,
-  TestsStateManager,
 } from "./utils/createRouter.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
 import type { LogInterface } from "./utils/LogInterface.js";
+import type { TestRunner } from "./utils/test-runner/test-runner.js";
 
 export interface CreateExpressServerOptions {
   simulatorInstance(): simulator.Simulator;
   restartSimulator(): Promise<void>;
-  testSimulatorInstance(): Promise<simulator.Simulator>;
   consoleLogger: ConsoleLogger;
   errorMessage(): string | undefined;
   emitter: Emittery<{
@@ -47,17 +46,18 @@ export interface CreateExpressServerOptions {
   layoutConfig?: LayoutConfig;
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
-  testsStateManager: () => TestsStateManager;
+  getTestRunner: () => TestRunner;
   analyticsAnonymousId?: string;
   analytics?: Analytics;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
+  getEndpointWarningAccepted?: () => Promise<boolean>;
+  notifyEndpointWarningAccepted?: () => Promise<void>;
 }
 
 export const createExpressServer = async ({
   simulatorInstance,
   restartSimulator,
-  testSimulatorInstance,
   consoleLogger,
   errorMessage,
   emitter,
@@ -74,11 +74,13 @@ export const createExpressServer = async ({
   layoutConfig,
   getSelectedNode,
   setSelectedNode,
-  testsStateManager,
+  getTestRunner,
   analyticsAnonymousId,
   analytics,
   requireSignIn,
   notifySignedIn,
+  getEndpointWarningAccepted,
+  notifyEndpointWarningAccepted,
 }: CreateExpressServerOptions) => {
   const app = expressApp ?? express();
   app.use(cors());
@@ -91,9 +93,6 @@ export const createExpressServer = async ({
       },
       async restartSimulator() {
         return await restartSimulator();
-      },
-      async testSimulator() {
-        return await testSimulatorInstance();
       },
       async appDetails() {
         return {
@@ -114,11 +113,13 @@ export const createExpressServer = async ({
       layoutConfig,
       getSelectedNode,
       setSelectedNode,
-      testsStateManager,
+      getTestRunner,
       analyticsAnonymousId,
       analytics,
       requireSignIn,
       notifySignedIn,
+      getEndpointWarningAccepted,
+      notifyEndpointWarningAccepted,
     };
   };
   app.use(

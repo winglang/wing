@@ -33,7 +33,7 @@ export interface ExplorerItem {
   type?: string;
   childItems?: ExplorerItem[];
   display?: NodeDisplay;
-  hierarchichalRunningState: ResourceRunningState;
+  hierarchichalRunningState: ResourceRunningState | undefined;
 }
 
 export interface MapItem extends ConstructTreeNode {

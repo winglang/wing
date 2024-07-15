@@ -11,7 +11,7 @@ let docCounter = 0;
 const ANSI_LINE_CLEAR = "\x1b[1A\x1b[2K";
 
 const rootDir = fileURLToPath(new URL("../", import.meta.url));
-const docsDir = join(rootDir, "..", "..", "docs", "docs");
+const docsDir = join(rootDir, "..", "..", "docs", "api");
 const WING_LANGUAGE = Language.fromString("wing");
 
 const SDK_DOCS = await Documentation.forProject(rootDir);

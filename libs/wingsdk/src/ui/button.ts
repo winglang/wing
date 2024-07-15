@@ -2,8 +2,8 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, UIComponent } from "../core";
-import { IInflight } from "../std";
+import { UIComponent } from "../core";
+import { IInflight, Resource } from "../std";
 
 /**
  * Global identifier for `Button`.
@@ -25,7 +25,7 @@ export class Button extends VisualComponent {
     label: string,
     handler: IButtonHandler
   ): Button {
-    return App.of(scope).newAbstract(BUTTON_FQN, scope, id, label, handler);
+    return Resource._newFromFactory(BUTTON_FQN, scope, id, label, handler);
   }
 
   private readonly fn: Function;

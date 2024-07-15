@@ -8,8 +8,8 @@ import { useTheme } from "./theme-provider.js";
 
 export interface TreeItemProps {
   itemId: string;
-  label: ReactNode | (() => JSX.Element);
-  secondaryLabel?: ReactNode | (() => JSX.Element);
+  label: ReactNode | (() => ReactNode);
+  secondaryLabel?: ReactNode | (() => ReactNode);
   icon?: ReactNode;
   title?: string;
   selectable?: boolean;
@@ -72,7 +72,9 @@ export const TreeItem = memo(
                 event.stopPropagation();
                 item.toggleExpanded();
               }}
-              title={`Toggle ${label} expanded`}
+              title={`Toggle ${
+                typeof label === "function" ? label() : label
+              } expanded`}
             >
               <ChevronRightIcon
                 className={classNames("w-4 h-4", "transition-transform", {

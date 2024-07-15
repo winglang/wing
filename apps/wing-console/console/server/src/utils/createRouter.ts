@@ -9,6 +9,7 @@ import type { State, Trace } from "../types.js";
 import type { Updater } from "../updater.js";
 
 import type { Analytics } from "./analytics.js";
+import type { TestRunner } from "./test-runner/test-runner.js";
 
 export type QueryNames = {
   query:
@@ -55,22 +56,6 @@ export interface LayoutConfig {
   };
 }
 
-export type TestStatus = "pending" | "running" | "success" | "error";
-
-export interface TestItem {
-  id: string;
-  label: string;
-  status: TestStatus;
-  datetime: number;
-  time?: number;
-}
-
-export interface TestsStateManager {
-  getTests: () => TestItem[];
-  setTests: (tests: TestItem[]) => void;
-  setTest: (test: TestItem) => void;
-}
-
 export interface FileLink {
   path: string;
   line?: number;
@@ -87,7 +72,6 @@ export interface RouterMeta {
 export interface RouterContext {
   simulator(): Promise<simulator.Simulator>;
   restartSimulator(): Promise<void>;
-  testSimulator(): Promise<simulator.Simulator>;
   appDetails(): Promise<{
     wingVersion: string | undefined;
   }>;
@@ -107,11 +91,13 @@ export interface RouterContext {
   layoutConfig?: LayoutConfig;
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
-  testsStateManager: () => TestsStateManager;
+  getTestRunner: () => TestRunner;
   analyticsAnonymousId?: string;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
   analytics?: Analytics;
+  getEndpointWarningAccepted?: () => Promise<boolean>;
+  notifyEndpointWarningAccepted?: () => Promise<void>;
 }
 
 const t = initTRPC.context<RouterContext>().meta<RouterMeta>().create();

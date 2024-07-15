@@ -79,6 +79,7 @@
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "3.577.0",
     "@aws-sdk/client-dynamodb": "3.577.0",
+    "@aws-sdk/client-ecs": "3.577.0",
     "@aws-sdk/client-elasticache": "3.577.0",
     "@aws-sdk/client-lambda": "3.577.0",
     "@aws-sdk/client-s3": "3.577.0",
@@ -103,6 +104,8 @@
     "constructs": "^10.3",
     "cron-parser": "^4.9.0",
     "cron-validator": "^1.3.1",
+    "dotenv": "^16.4.5",
+    "dotenv-expand": "^10.0.0",
     "express": "^4.19.2",
     "glob": "^8.1.0",
     "google-auth-library": "^8.9.0",
@@ -123,6 +126,7 @@
   "bundledDependencies": [
     "@aws-sdk/client-cloudwatch-logs",
     "@aws-sdk/client-dynamodb",
+    "@aws-sdk/client-ecs",
     "@aws-sdk/client-elasticache",
     "@aws-sdk/client-lambda",
     "@aws-sdk/client-s3",
@@ -146,6 +150,8 @@
     "cdktf",
     "cron-parser",
     "cron-validator",
+    "dotenv",
+    "dotenv-expand",
     "express",
     "glob",
     "google-auth-library",

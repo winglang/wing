@@ -5,10 +5,11 @@ const CDKTF_VERSION = "0.20.7";
 const AWS_SDK_VERSION = "3.577.0";
 
 const CDKTF_PROVIDERS = [
-  "aws@~>5.31.0",
+  "aws@~>5.56.1",
   "random@~>3.5.1",
   "azurerm@~>3.96.0",
   "google@~>5.10.0",
+  "kreuzwerker/docker@~>3.0.2",
 ];
 
 // defines the list of dependencies required for each compilation target that is not built into the
@@ -50,6 +51,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-dynamodb",
     "@aws-sdk/client-elasticache",
     "@aws-sdk/client-lambda",
+    "@aws-sdk/client-ecs",
     "@aws-sdk/client-s3",
     "@aws-sdk/client-secrets-manager",
     "@aws-sdk/client-sns",
@@ -93,6 +95,9 @@ const project = new cdk.JsiiProject({
     // tunnels
     "@winglang/wingtunnels@workspace:^",
     "glob",
+    // env
+    "dotenv",
+    "dotenv-expand",
   ],
   devDeps: [
     `@cdktf/provider-aws@^19`, // only for testing Wing plugins

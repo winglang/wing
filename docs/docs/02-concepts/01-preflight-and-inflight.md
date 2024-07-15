@@ -9,7 +9,7 @@ keywords: [Inflights, Inflight functions, Preflight, Preflight code]
 
 <div style={{ textAlign: "center" }}>
   <img
-    src={require('./preflight-inflight-visual.png').default}
+    src="/img/preflight-inflight-visual.png"
     width="500"
   />
 </div>
@@ -36,7 +36,7 @@ let bucket = new cloud.Bucket();
 
 **There is no special annotation to define that this is preflight code because preflight is Wing's default execution phase.**
 
-Compiling the program with the [Wing CLI](../tools/cli) will synthesize the configuration files which can be used to create the bucket and initialize its contents on a cloud provider.
+Compiling the program with the [Wing CLI](/docs/api/cli) will synthesize the configuration files which can be used to create the bucket and initialize its contents on a cloud provider.
 
 Preflight code can be also used to configure services or set up more complex event listeners.
 
@@ -279,7 +279,7 @@ inflight () => {
 ```
 
 During the lifting process the compiler tries to figure out in what way the lifted objects are being used. 
-This is how Winglang generates least privilage permissions. Consider the case of lifting a [`cloud.Bucket`](../04-standard-library/cloud/bucket.md) object:
+This is how Winglang generates least privilage permissions. Consider the case of lifting a [`cloud.Bucket`](/docs/api/standard-library/cloud/bucket) object:
 
 ```js playground example
 bring cloud;
@@ -289,7 +289,7 @@ new cloud.Function(inflight () => {
 });
 ```
 
-In this example the compiler generates the correct _write_ access permissions for the [`cloud.Function`](../04-standard-library/cloud/function.md) on `bucket` based on the fact we're `put`ing into it. We say `bucket`'s lift is qualified with `put`. 
+In this example the compiler generates the correct _write_ access permissions for the [`cloud.Function`](/docs/api/standard-library/cloud/function) on `bucket` based on the fact we're `put`ing into it. We say `bucket`'s lift is qualified with `put`. 
 
 #### Explicit lift qualification
 In some cases the compiler can't figure out (yet) the lift qualifications, and therefore will report an error:

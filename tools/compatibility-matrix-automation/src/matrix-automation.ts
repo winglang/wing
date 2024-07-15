@@ -6,7 +6,7 @@ import { CompatibilityMatrix, CompatibilitySets } from "./types";
 export const SKIPPED_RESOURCES = ["TestRunner", "State"];
 export const MATRIX_PATH = join(
   __dirname,
-  "../../../docs/docs/04-standard-library/compatibility/compatibility.json"
+  "../../../docs/api/04-standard-library/compatibility/compatibility.json"
 );
 export const OUT_PATH = join(__dirname, "../../../out.json");
 

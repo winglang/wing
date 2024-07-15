@@ -17,6 +17,7 @@ exports[`create a table 1`] = `
             "zone": "us-central1-a",
           },
         ],
+        "deletion_protection": false,
         "name": "aac8dce022",
       },
     },

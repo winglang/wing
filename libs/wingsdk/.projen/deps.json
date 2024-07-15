@@ -171,6 +171,11 @@
       "type": "bundled"
     },
     {
+      "name": "@aws-sdk/client-ecs",
+      "version": "3.577.0",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/client-elasticache",
       "version": "3.577.0",
       "type": "bundled"
@@ -277,6 +282,14 @@
     },
     {
       "name": "cron-validator",
+      "type": "bundled"
+    },
+    {
+      "name": "dotenv",
+      "type": "bundled"
+    },
+    {
+      "name": "dotenv-expand",
       "type": "bundled"
     },
     {

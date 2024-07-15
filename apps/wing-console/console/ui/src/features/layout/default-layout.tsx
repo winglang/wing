@@ -11,7 +11,7 @@ import classNames from "classnames";
 import { useCallback, useEffect, useMemo } from "react";
 
 import { BlueScreenOfDeath } from "../blue-screen-of-death/blue-screen-of-death.js";
-import { EndpointsTreeView } from "../endpoints-pane/endpoints-tree-view.js";
+import { EndpointTree } from "../endpoints-pane/endpoint-tree.js";
 import { Explorer } from "../explorer-pane/explorer.js";
 import { Hierarchy } from "../hierarchy-pane/hierarchy.js";
 import { Inspector } from "../inspector-pane/inspector.js";
@@ -19,7 +19,7 @@ import { LogsWidget } from "../logs-pane/logs.js";
 import { useSelectionContext } from "../selection-context/selection-context.js";
 import { SignInModal } from "../sign-in/sign-in.js";
 import { StatusBar } from "../status-bar/status-bar.js";
-import { TestsTreeView } from "../tests-pane/tests-tree-view.js";
+import { TestTree } from "../tests-pane/test-tree.js";
 import { WebSocketState } from "../websocket-state/websocket-state.js";
 
 import { useLayout } from "./use-layout.js";
@@ -121,7 +121,7 @@ export const DefaultLayout = ({
         }
         case "tests": {
           return (
-            <TestsTreeView
+            <TestTree
               key={component.type}
               onSelectedItemsChange={onTestsSelectedItemsChange}
               selectedItemId={showTests ? selectedItemId : undefined}
@@ -142,7 +142,7 @@ export const DefaultLayout = ({
           );
         }
         case "endpoints": {
-          return <EndpointsTreeView key={component.type} />;
+          return <EndpointTree key={component.type} />;
         }
       }
     },

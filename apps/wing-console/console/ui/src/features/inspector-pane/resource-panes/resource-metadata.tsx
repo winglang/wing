@@ -16,7 +16,6 @@ import {
 import type { NodeDisplay } from "@wingconsole/server";
 import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/simulator.js";
 import classNames from "classnames";
-import type { FunctionComponent } from "react";
 import { memo, useCallback, useMemo, useState } from "react";
 
 import { trpc } from "../../../trpc.js";
@@ -29,26 +28,6 @@ import { FunctionMetadata } from "./function-metadata.js";
 import { QueueMetadataView } from "./queue-metadata-view.js";
 import { ResourceInteractionView } from "./resource-interaction-view.js";
 import { ScheduleMetadata } from "./schedule-metadata.js";
-
-const runningStateToText = (runningState: ResourceRunningState) => {
-  switch (runningState) {
-    case "error": {
-      return "Error";
-    }
-    case "started": {
-      return "Started";
-    }
-    case "starting": {
-      return "Starting";
-    }
-    case "stopped": {
-      return "Stopped";
-    }
-    case "stopping": {
-      return "Stopping";
-    }
-  }
-};
 
 interface AttributeGroup {
   groupName: string;
@@ -83,7 +62,7 @@ export interface MetadataNode {
         [key: string]: any;
       }
     | undefined;
-  hierarchichalRunningState: ResourceRunningState;
+  hierarchichalRunningState?: ResourceRunningState | undefined;
 }
 
 export interface MetadataProps {
@@ -273,13 +252,22 @@ export const ResourceMetadata = memo(
         <div className="flex flex-col gap-2 py-2">
           <div className="flex items-center gap-2 px-2 ">
             <div className="flex-shrink-0">
-              <ResourceIcon
-                className="w-6 h-6"
-                resourceType={node.type}
-                resourcePath={node.path}
-                color={node.display?.color}
-                icon={node.display?.icon}
-              />
+              <div className="relative">
+                <ResourceIcon
+                  className="size-6"
+                  resourceType={node.type}
+                  resourcePath={node.path}
+                  color={node.display?.color}
+                  icon={node.display?.icon}
+                />
+
+                <div className="absolute -right-0.5 bottom-0">
+                  <RunningStateIndicator
+                    runningState={node.hierarchichalRunningState}
+                    className="size-2 outline outline-2 outline-slate-100 dark:outline-slate-700"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col min-w-0">
@@ -288,19 +276,6 @@ export const ResourceMetadata = memo(
                 <Pill>{node.type}</Pill>
               </div>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 px-2">
-            <Attribute className="grow" name="Running Status">
-              <div className="flex gap-2 items-center">
-                <span>
-                  {runningStateToText(node.hierarchichalRunningState)}
-                </span>
-                <RunningStateIndicator
-                  runningState={node.hierarchichalRunningState}
-                />
-              </div>
-            </Attribute>
           </div>
         </div>
 

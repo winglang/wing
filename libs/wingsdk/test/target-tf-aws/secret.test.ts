@@ -1,11 +1,11 @@
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import * as cloud from "../../src/cloud";
-import * as tfaws from "../../src/target-tf-aws";
-import { tfResourcesOf, tfSanitize, treeJsonOf, mkdtemp } from "../util";
+import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default secret behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new cloud.Secret(app, "Secret");
   const output = app.synth();
 
@@ -17,7 +17,7 @@ test("default secret behavior", () => {
 
 test("secret with a name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new cloud.Secret(app, "Secret", {
     name: "my-secret",
   });

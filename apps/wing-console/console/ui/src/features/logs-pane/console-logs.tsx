@@ -3,18 +3,42 @@ import {
   ChevronRightIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
-import { useTheme, ResourceIcon } from "@wingconsole/design-system";
+import {
+  useTheme,
+  ResourceIcon,
+  TextHighlight,
+} from "@wingconsole/design-system";
 import type { LogEntry } from "@wingconsole/server";
 import classNames from "classnames";
 import Linkify from "linkify-react";
 import throttle from "lodash.throttle";
-import { Fragment, memo, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
+const shortDateTimeFormat = new Intl.DateTimeFormat(undefined, {
   hour: "2-digit",
   minute: "2-digit",
   second: "2-digit",
   fractionalSecondDigits: 3,
+  hour12: false,
+});
+
+const longDateTimeFormat = new Intl.DateTimeFormat(undefined, {
+  year: "2-digit",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  fractionalSecondDigits: 3,
+  hour12: false,
 });
 
 interface LogEntryProps {
@@ -22,6 +46,7 @@ interface LogEntryProps {
   onResourceClick?: (log: LogEntry) => void;
   onRowClick?: (log: LogEntry) => void;
   showIcons?: boolean;
+  useLongDateFormat?: boolean;
 }
 
 function logText(log: LogEntry, expanded: boolean) {
@@ -37,7 +62,13 @@ function nodePathParentName(nodePath: string) {
 }
 
 const LogEntryRow = memo(
-  ({ log, showIcons = true, onRowClick, onResourceClick }: LogEntryProps) => {
+  ({
+    log,
+    showIcons = true,
+    onRowClick,
+    onResourceClick,
+    useLongDateFormat,
+  }: LogEntryProps) => {
     const { theme } = useTheme();
 
     const [expanded, setExpanded] = useState(false);
@@ -83,13 +114,22 @@ const LogEntryRow = memo(
       [log.ctx?.sourcePath],
     );
 
+    const formattedDate = useMemo(() => {
+      const date = new Date(log.timestamp ?? Date.now());
+
+      if (useLongDateFormat) {
+        return longDateTimeFormat.format(date);
+      }
+      return shortDateTimeFormat.format(date);
+    }, [log.timestamp, useLongDateFormat]);
+
     return (
       <Fragment>
         {/*TODO: Fix a11y*/}
         {/*eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions*/}
         <div
           className={classNames(
-            "group w-full flex",
+            "group w-full",
             "flex min-w-0",
             "justify-between",
             theme.border4,
@@ -129,13 +169,13 @@ const LogEntryRow = memo(
                 "flex-shrink-0 select-none pointer-events-none",
               )}
             >
-              {dateTimeFormat.format(log.timestamp)}
+              {formattedDate}
             </div>
           )}
           <div
             className={classNames("min-w-0 text-left grow", {
               truncate: !expanded,
-              "ml-2": log.timestamp && !log.ctx?.hideTimestamp,
+              "ml-4": log.timestamp && !log.ctx?.hideTimestamp,
             })}
           >
             {canBeExpanded && (
@@ -170,6 +210,11 @@ const LogEntryRow = memo(
               )}
               ref={expandableRef}
             >
+              {log.source === "compiler" && (
+                <span className="bg-slate-450 text-white dark:bg-slate-550 rounded inline px-1 select-none pointer-events-none mr-2">
+                  Compiler
+                </span>
+              )}
               <Linkify
                 options={{
                   className: "text-sky-500 underline hover:text-sky-800",
@@ -179,7 +224,10 @@ const LogEntryRow = memo(
                   },
                 }}
               >
-                {logText(log, expanded)}
+                <TextHighlight
+                  className="inline"
+                  text={logText(log, expanded) ?? ""}
+                />
               </Linkify>
             </pre>
           </div>
@@ -234,6 +282,18 @@ export const ConsoleLogs = memo(
   }: ConsoleLogsProps) => {
     const { theme } = useTheme();
 
+    const [useLongDateFormat, setUseLongDateFormat] = useState(false);
+
+    useEffect(() => {
+      if (!logs[0]?.timestamp || useLongDateFormat) {
+        return;
+      }
+      const now = new Date();
+      const logDate = new Date(logs[0].timestamp);
+
+      setUseLongDateFormat(logDate.getDate() !== now.getDate());
+    }, [logs, useLongDateFormat]);
+
     return (
       <div
         className="w-full h-full gap-x-2 text-2xs font-mono select-text"
@@ -246,6 +306,7 @@ export const ConsoleLogs = memo(
             onResourceClick={onResourceClick}
             onRowClick={onRowClick}
             showIcons={showIcons}
+            useLongDateFormat={useLongDateFormat}
           />
         ))}
         {logs.length === 0 && hiddenLogs === 0 && (
