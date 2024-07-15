@@ -120,14 +120,15 @@ export const createConsoleServer = async ({
     log,
   });
 
-  consoleLogger.log("Starting the console server...");
-
   const compiler = createCompiler({
     wingfile,
     platform,
     testing: false,
     stateDir,
     watchGlobs,
+    preflightLog(data) {
+      consoleLogger.log(data, "compiler");
+    },
   });
   let isStarting = false;
   let isStopping = false;

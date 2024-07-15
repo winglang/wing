@@ -57,6 +57,7 @@ export interface CompileOptions {
    */
   readonly testing?: boolean;
   readonly log?: (...args: any[]) => void;
+  readonly preflightLog?: (...args: any[]) => void;
 
   /// Enable/disable color output for the compiler (subject to terminal detection)
   readonly color?: boolean;
@@ -132,20 +133,20 @@ export function determineTargetFromPlatforms(platforms: string[]): string {
  * @returns the output directory
  */
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
-  const { log } = options;
+  const { log, preflightLog } = options;
   // create a unique temporary directory for the compilation
   const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
   const entrypointFile = resolve(entrypoint);
-  // log?.("wing file: %s", entrypointFile);
+  log?.("wing file: %s", entrypointFile);
   const wingDir = resolve(dirname(entrypointFile));
-  // log?.("wing dir: %s", wingDir);
+  log?.("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
-  // log?.("testing: %s", testing);
+  log?.("testing: %s", testing);
   const target = determineTargetFromPlatforms(options.platform);
   const synthDir = options.output ?? resolveSynthDir(targetdir, entrypointFile, target, testing);
-  // log?.("synth dir: %s", synthDir);
+  log?.("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, DOT_WING);
-  // log?.("work dir: %s", workDir);
+  log?.("work dir: %s", workDir);
 
   const nearestNodeModules = (dir: string): string => {
     let nodeModules = join(dir, "node_modules");
@@ -209,8 +210,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     await runPreflightCodeInWorkerThread(
       compileForPreflightResult.preflightEntrypoint,
       preflightEnv,
-      (data) => log?.(data.toString().trim())
-      // (data) => console.log("[compiler]", data.toString().trim())
+      (data) => preflightLog?.(data.toString().trim())
     );
   }
   return synthDir;
