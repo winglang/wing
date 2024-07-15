@@ -290,6 +290,14 @@
       "type": "bundled"
     },
     {
+      "name": "dotenv",
+      "type": "bundled"
+    },
+    {
+      "name": "dotenv-expand",
+      "type": "bundled"
+    },
+    {
       "name": "express",
       "type": "bundled"
     },

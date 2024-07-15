@@ -2,12 +2,12 @@ import { promises as fsPromise } from "fs";
 import { dirname, relative, resolve } from "path";
 
 import * as wingCompiler from "@winglang/compiler";
+import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
 import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import debug from "debug";
 import { glob } from "glob";
-import { loadEnvVariables } from "../env";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)

@@ -1,6 +1,7 @@
 import path from "node:path";
 
 import * as wing from "@winglang/compiler";
+import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import chokidar from "chokidar";
 import Emittery from "emittery";
 
@@ -19,6 +20,7 @@ export interface Compiler {
     event: T,
     listener: (event: CompilerEvents[T]) => void | Promise<void>,
   ): void;
+  getSimfile(): Promise<string>;
 }
 
 export interface CreateCompilerProps {
@@ -36,19 +38,24 @@ export const createCompiler = ({
   stateDir,
   watchGlobs,
 }: CreateCompilerProps): Compiler => {
+  const dirname = path.dirname(wingfile);
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
   let shouldCompileAgain = false;
+  let simfile: string | undefined;
+
   const recompile = async () => {
     if (isCompiling) {
       shouldCompileAgain = true;
       return;
     }
 
+    loadEnvVariables({ cwd: dirname });
+
     try {
       isCompiling = true;
       await events.emit("compiling");
-      const simfile = await wing.compile(wingfile, {
+      simfile = await wing.compile(wingfile, {
         platform,
         testing,
       });
@@ -78,13 +85,12 @@ export const createCompiler = ({
     }
   };
 
-  const dirname = path.dirname(wingfile);
-
   const pathsToWatch = [
     `!**/node_modules/**`,
     `!**/.git/**`,
     `!${dirname}/target/**`,
     dirname,
+    `${dirname}/.env`,
     ...(watchGlobs ?? []),
   ];
 
@@ -115,6 +121,14 @@ export const createCompiler = ({
     },
     on(event, listener) {
       events.on(event, listener);
+    },
+    async getSimfile() {
+      if (simfile) {
+        return simfile;
+      }
+
+      const compiled = await events.once("compiled");
+      return compiled.simfile;
     },
   };
 };
