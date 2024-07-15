@@ -146,6 +146,14 @@
         }
       ]
     },
+    "generate-macros": {
+      "name": "generate-macros",
+      "steps": [
+        {
+          "exec": "tsx scripts/generate-macros.mts"
+        }
+      ]
+    },
     "install": {
       "name": "install",
       "description": "Install project dependencies and update lockfile (non-frozen)",
@@ -195,6 +203,9 @@
       "name": "post-compile",
       "description": "Runs after successful compilation",
       "steps": [
+        {
+          "spawn": "generate-macros"
+        },
         {
           "spawn": "api-check"
         },
