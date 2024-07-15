@@ -293,7 +293,7 @@ npm i @wingcloud/framework
     const arg = `${normalPath(props.entrypointFile)};${normalPath(props.workDir)};${normalPath(
       props.wingDir
     )}`;
-    // props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
+    props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
     let compileSuccess: boolean;
     let compilerOutput: string | number = "";
     try {
