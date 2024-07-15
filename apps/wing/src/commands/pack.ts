@@ -5,10 +5,10 @@ import * as path from "path";
 import { resolve } from "path";
 import Arborist from "@npmcli/arborist";
 import { BuiltinPlatform } from "@winglang/compiler";
+import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import packlist from "npm-packlist";
 import * as tar from "tar";
 import { compile } from "./compile";
-import { loadEnvVariables } from "../env";
 
 // TODO: add --dry-run option?
 // TODO: let the user specify library's supported targets in package.json, and compile to each before packaging

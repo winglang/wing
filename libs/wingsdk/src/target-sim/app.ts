@@ -74,8 +74,7 @@ export class App extends core.App {
   private synthed = false;
 
   constructor(props: core.AppProps) {
-    // doesn't allow customize the root id- as used hardcoded in the code
-    super(undefined as any, "root", props);
+    super(undefined as any, props.rootId ?? "root", props);
     this.outdir = props.outdir ?? ".";
     registerTokenResolver(new SimTokens());
 

@@ -105,9 +105,6 @@ export async function linkBundledTransitiveDeps(
   }
 
   const linkedKeys = Object.keys(depsToLink);
-  console.log(
-    `Linked ${linkedKeys.length} transitive bundled deps for:\t ${project.manifest.name}`
-  );
 
   await fs.writeJSON(
     path.join(project.dir, "node_modules", ".modulelinks"),

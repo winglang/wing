@@ -1,7 +1,12 @@
+/*\
+args:
+  - --rootId
+  - root
+\*/
+
 bring expect;
 
 // Play around with "this"
-
 let path = nodeof(this).path;
 
 for c in nodeof(this).children {

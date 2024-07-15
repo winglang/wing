@@ -14,12 +14,13 @@ export async function compileTest(
   wingFile: string,
   env?: Record<string, string>,
   includeJavaScriptInSnapshots: boolean = true,
-  skipMarkdownSnapshot: boolean = false
+  skipMarkdownSnapshot: boolean = false,
+  commandArgs: string[] = []
 ) {
   const fileMap: Record<string, string> = {};
   const wingBasename = basename(wingFile);
   const platforms = ["tf-aws"];
-  const args = ["compile"];
+  const args = ["compile", ...commandArgs];
   const targetDir = join(
     sourceDir,
     "target",
@@ -73,9 +74,13 @@ export async function compileTest(
   }
 
   if (!skipMarkdownSnapshot) {
-    await createMarkdownSnapshot(fileMap, absoluteWingPath, "compile", "tf-aws");
+    await createMarkdownSnapshot(
+      fileMap,
+      absoluteWingPath,
+      "compile",
+      "tf-aws"
+    );
   }
-  
 }
 
 export async function testTest(
