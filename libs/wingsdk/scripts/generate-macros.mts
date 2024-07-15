@@ -26,8 +26,9 @@ for (const file of sourceFiles) {
     for (const mtd of cls.getMethods()) {
       const macro = extractJSDocs(mtd);
       if (macro) {
+        const spreadArgs = macro.match(/...\$args\$)/gm) ? "..." : "";
         macroFileContent += `
-        exports.__${cls.getName()}_${mtd.getName()} = (skipIfNil, $self$, $args$) => {
+        exports.__${cls.getName()}_${mtd.getName()} = (skipIfNil, $self$, ${spreadArgs}$args$) => {
           if (skipIfNil && $self$ === undefined) return $self$;
           return ${macro}
         }
