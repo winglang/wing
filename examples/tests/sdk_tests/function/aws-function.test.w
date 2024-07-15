@@ -5,8 +5,6 @@ bring util;
 
 let target = util.env("WING_TARGET");
 
-let lambda = new cloud.Function(inflight () => {}) as "aws-wing-function";
-
 let getFunctionInfo = (f: cloud.Function): Map<str>? => {
   if let lambda = aws.Function.from(f) {
     return {
@@ -16,10 +14,6 @@ let getFunctionInfo = (f: cloud.Function): Map<str>? => {
   }
   return nil;
 };
-
-let functionInfo = getFunctionInfo(lambda);
-
-
 
 let fn = new cloud.Function(inflight (msg: Json?) => {
   if msg == "error" {
@@ -39,35 +33,38 @@ let fn = new cloud.Function(inflight (msg: Json?) => {
   }
 
   return msg;
-}) as "FunctionAccessingContext";
+}) as "aws-wing-function";
 
+let fnInfo = getFunctionInfo(fn);
 
 test "AWS Function" {
-  //  "validates the AWS Function"
-  if let lambda = functionInfo {
-    if target == "tf-aws" {      
-      assert(lambda.get("functionArn").contains("arn:aws:lambda:"));
-      assert(lambda.get("functionArn").contains(":function:"));
-      assert(lambda.get("functionArn").contains("aws-wing-function"));
-      assert(lambda.get("functionName").contains("aws-wing-function"));
-    } else { // If it's not a 'tf-aws' target, it's an 'awscdk'
-      assert(lambda.get("functionArn").contains("arn:aws:lambda:"));
-      assert(lambda.get("functionArn").contains(":function:"));
-      assert(lambda.get("functionArn").contains("awswingfunction"));
-      assert(lambda.get("functionName").contains("awswingfunction"));
+  if let info = fnInfo {
+    if target == "tf-aws" {
+      assert(info.get("functionArn").contains("arn:aws:lambda:"));
+      assert(info.get("functionArn").contains(":function:"));
+      assert(info.get("functionArn").contains("aws-wing-function"));
+      assert(info.get("functionName").contains("aws-wing-function"));
+    } elif target == "awscdk" {
+      assert(info.get("functionArn").contains("arn:aws:lambda:"));
+      assert(info.get("functionArn").contains(":function:"));
+      assert(info.get("functionArn").contains("awswingfunction"));
+      assert(info.get("functionName").contains("awswingfunction"));
+    } else {
+      expect.fail("Unexpected target " + target);
     }
   } else {
     // If the test is not on AWS, it should not fail, so I am returning true.
     assert(true);
   }
 
-
-// "can access lambda context" 
   let result = fn.invoke("hello");
   expect.equal(result, "hello");
 
   let result2 = fn.invoke("hello2");
   expect.equal(result2, "hello2");
+
+  let result3 = fn.invoke();
+  expect.equal(result3, nil);
 
   let var msg = "";
   try {

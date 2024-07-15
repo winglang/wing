@@ -21,10 +21,23 @@ export class FunctionClient implements IFunctionClient {
         requestOptions
       );
 
+      const resText = await res.text();
+
       if (!res.ok) {
-        throw new Error((await res.text()) || "Invocation Error");
+        throw new Error(resText ?? "Invocation Error");
       }
-      return Json._fromAny(res.json()) || undefined;
+
+      if (resText === "") {
+        return undefined;
+      }
+
+      // If the response is not valid JSON, we'll assume it's string data and return it as is
+      try {
+        let resJson = JSON.parse(resText);
+        return resJson;
+      } catch (error) {
+        return Json._fromAny(resText);
+      }
     } catch (error) {
       throw new Error(
         `Error while invoking the function ${this.functionName}: ${
