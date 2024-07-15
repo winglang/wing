@@ -303,7 +303,7 @@ project.tasks
 const macros = project.addTask("generate-macros", {
   exec: "tsx scripts/generate-macros.mts",
 });
-project.postCompileTask.prependSpawn(macros);
+project.compileTask.prependSpawn(macros);
 
 // --------------- docs -----------------
 

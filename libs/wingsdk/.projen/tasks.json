@@ -103,6 +103,9 @@
       "description": "Only compile",
       "steps": [
         {
+          "spawn": "generate-macros"
+        },
+        {
           "exec": "jsii --silence-warnings=reserved-word"
         }
       ]
@@ -203,9 +206,6 @@
       "name": "post-compile",
       "description": "Runs after successful compilation",
       "steps": [
-        {
-          "spawn": "generate-macros"
-        },
         {
           "spawn": "api-check"
         },
