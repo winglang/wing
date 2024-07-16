@@ -4,7 +4,6 @@ export const VISIBLE_SUBMODULES = [
   "fs",
   "std",
   "util",
-  "redis",
   "http",
   "math",
 ];

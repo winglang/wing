@@ -334,6 +334,83 @@ Within the first clause of the `lift` block, a list of qualifications on preflig
 Statements within a `lift` block are exempt from the compiler's analyzer that tries to determine preflight object usage automatically.
 If an inflight method is directly or indirectly called within a `lift` block without sufficient resource qualifications, it may result in errors at runtime.
 
+## Inflight hosts
+
+Compute environments where inflight code is executed are called **inflight hosts**.
+For example, [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html), [Fly.io machines](https://fly.io/docs/machines/), and [Fargate containers](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html) are all examples of compute environments that can run inflight code.
+
+In order to run a piece of inflight code, the inflight host may need additional configuration.
+For example, to run an inflight function that reads from a [storage bucket](https://www.winglang.io/docs/standard-library/cloud/bucket), the inflight host may require permissions to read from the bucket, or may require certain environment variables to be set, or may require network policies must be configured.
+
+Preflight classes can be used to encapsulate these requirements.
+Any preflight class can implement a method named [`onLift`](../04-standard-library/std/resource.md#@winglang/sdk.std.IHostedLiftable.onLift) that is called when the class is used in inflight code, where requirements can be added to the inflight host.
+
+Here's an example where a class named `Model` requires an AWS Lambda function to have permission to invoke a model inference:
+
+```js playground example
+bring aws;
+
+pub class Model {
+  modelId: str;
+  new(modelId: str) {
+    this.modelId = modelId;
+  }
+
+  pub inflight invoke(body: Json): Json {
+    // call the AWS SDK to invoke the model...
+    return "success";
+  }
+
+  pub inflight printModelId() {
+    log("Model ID: {this.modelId}");
+  }
+
+  pub onLift(host: std.IInflightHost, ops: Array<str>) {
+    if ops.contains("invoke") {
+      if let lambda = aws.Function.from(host) {
+        lambda.addPolicyStatements({
+          actions: ["bedrock:InvokeModel"],
+          effect: aws.Effect.ALLOW,
+          resources: [
+            "arn:aws:bedrock:*::foundation-model/{this.modelId}"
+          ],
+        });
+      } else {
+        throw "Unsupported inflight host type";
+      }
+    } else {
+      // no requirements for other operations
+    }
+  }
+}
+```
+
+`Model` has two public inflight methods, `invoke` and `printModelId`.
+Inside the `onLift` method, the class checks if the "invoke" method was one of the operations requested by the inflight host.
+It then checks if inflight host is an AWS Lambda function, and if so, it adds a [policy statement](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) to the Lambda function that allows it to invoke the model.
+
+Under the hood, the compiler will call `onLift` on the `Model` class once for each inflight host that uses it.
+`onLift` should not be called directly.
+
+If you want to associate requirements with the static methods of a class, you must define a static method named `onLiftType` instead:
+
+```js
+pub class Model {
+  pub static inflight myStaticMethod() {
+    // ...
+  }
+
+  pub static onLiftType(host: std.IInflightHost, ops: Array<str>) {
+    if ops.contains("myStaticMethod") {
+      // ...
+    }
+  }
+}
+```
+
+The kinds of requirements that can be added to an inflight host depend on the type of host.
+Check the documentation for the specific inflight host you're using to see what requirements can be added.
+
 ## Phase-independent code
 
 The global functions `log`, `assert`, and `throw` can all be used in both preflight and inflight code.
