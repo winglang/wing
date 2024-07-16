@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -24,6 +25,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $api_url, $expect_Util, $http_Util }) {
   class $Closure2 {
     constructor({  }) {
@@ -35,11 +37,11 @@ module.exports = function({ $api_url, $expect_Util, $http_Util }) {
       const response = (await $http_Util.get(($api_url + "/users")));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 200));
-      (await $expect_Util.equal((headers)["access-control-allow-origin"], "winglang.io"));
-      (await $expect_Util.equal((headers)["access-control-allow-credentials"], "true"));
-      (await $expect_Util.equal((headers)["access-control-expose-headers"], "Content-Type"));
-      (await $expect_Util.nil((headers)["access-control-allow-headers"]));
-      (await $expect_Util.nil((headers)["access-control-allow-methods"]));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-origin"), "winglang.io"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-credentials"), "true"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-expose-headers"), "Content-Type"));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-allow-headers")));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-allow-methods")));
     }
   }
   return $Closure2;
@@ -51,6 +53,7 @@ module.exports = function({ $api_url, $expect_Util, $http_Util }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure3 {
     constructor({  }) {
@@ -62,11 +65,11 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS})));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 204));
-      (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
-      (await $expect_Util.equal((headers)["access-control-allow-headers"], "Content-Type,Authorization,X-Custom-Header"));
-      (await $expect_Util.equal((headers)["access-control-allow-origin"], "winglang.io"));
-      (await $expect_Util.nil((headers)["access-control-expose-headers"]));
-      (await $expect_Util.nil((headers)["access-control-allow-credentials"]));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-methods"), "GET,POST,OPTIONS"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-headers"), "Content-Type,Authorization,X-Custom-Header"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-origin"), "winglang.io"));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-expose-headers")));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-allow-credentials")));
     }
   }
   return $Closure3;
@@ -78,6 +81,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure4 {
     constructor({  }) {
@@ -89,9 +93,9 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS, "headers": ({"Access-Control-Request-Method": "PUT", "Access-Control-Request-Headers": "Content-Type,Authorization,X-Custom-Foo"})})));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 204));
-      (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
-      (await $expect_Util.equal((headers)["access-control-allow-headers"], "Content-Type,Authorization,X-Custom-Header"));
-      (await $expect_Util.equal((headers)["access-control-allow-origin"], "winglang.io"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-methods"), "GET,POST,OPTIONS"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-headers"), "Content-Type,Authorization,X-Custom-Header"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-origin"), "winglang.io"));
     }
   }
   return $Closure4;
@@ -329,6 +333,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

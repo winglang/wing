@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $foo }) {
   class $Closure1 {
     constructor({  }) {
@@ -25,6 +26,7 @@ module.exports = function({ $foo }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $foo }) {
   class $Closure2 {
     constructor({  }) {
@@ -46,6 +48,7 @@ module.exports = function({ $foo }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
   class $Closure3 {
     constructor({  }) {
@@ -74,6 +77,7 @@ module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $foo, $std_Duration, $util_Util }) {
   class $Closure4 {
     constructor({  }) {
@@ -96,6 +100,7 @@ module.exports = function({ $foo, $std_Duration, $util_Util }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $fn3, $std_Duration, $util_Util }) {
   class $Closure5 {
     constructor({  }) {
@@ -118,6 +123,7 @@ module.exports = function({ $fn3, $std_Duration, $util_Util }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -437,6 +443,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

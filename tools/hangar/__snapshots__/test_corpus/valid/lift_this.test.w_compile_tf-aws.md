@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $f, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
@@ -25,6 +26,7 @@ module.exports = function({ $f, $util_Util }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -66,6 +68,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
@@ -85,7 +88,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
       }
       onLift(host, ops) {
-        if (ops.includes("bar")) {
+        if ($macros.__Array_contains(false, ops, "bar")) {
           (host.addEnvironment("BAR", "123"));
         }
       }
