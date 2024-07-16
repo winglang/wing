@@ -19,6 +19,7 @@ import { State } from "../../src/target-sim";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
 
+describe("lock mechanism", () => {
 test("locks the state dir so only one simulator can be active at a time", async () => {
   const app = new SimApp();
 
@@ -26,7 +27,7 @@ test("locks the state dir so only one simulator can be active at a time", async 
 
   const sim1 = await app.startSimulator(stateDir);
   await expect(app.startSimulator(stateDir)).rejects.toThrow(
-    "Another instance of the simulator is already running"
+      "Another instance of the simulator is already running. Please stop the current simulation before starting a new one."
   );
   await sim1.stop();
 });
@@ -45,6 +46,7 @@ test("releases the lock after stopping the simulator", async () => {
       await sim2.stop();
     })()
   ).resolves.not.toThrow();
+  });
 });
 
 const NOOP = inflight(async () => {});
