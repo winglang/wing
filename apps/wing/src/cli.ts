@@ -141,8 +141,8 @@ async function main() {
     .command("run")
     .alias("it")
     .description("Runs a Wing program in the Wing Console")
-    .argument("[entrypoint]", "program .w entrypoint")
-    .option("-p, --port <port>", "specify port")
+    .argument("[entrypoint]", "Program .w entrypoint")
+    .option("-p, --port <port>", "Specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
     .option(
       "-w, --watch <globs...>",
@@ -154,6 +154,7 @@ async function main() {
       collectPlatformVariadic,
       DEFAULT_PLATFORM
     )
+    .option("--statedir <dir>", "Directory for the resource's state")
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("run"));
 

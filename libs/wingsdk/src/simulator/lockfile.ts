@@ -26,7 +26,7 @@ export class Lockfile {
   private lockfile: FileHandle | undefined;
   private timeout: NodeJS.Timeout | undefined;
   private lastMtime: number | undefined;
-  private onCompromised: (() => void) | undefined;
+  private onCompromised: ((reason: string) => void) | undefined;
 
   public constructor(props: LockfileProps) {
     this.path = props.path;
@@ -76,10 +76,6 @@ export class Lockfile {
           if (this.lastMtime) {
             try {
               const stats = await fs.stat(this.path);
-              console.log({
-                statsMtimeMs: stats.mtimeMs,
-                lastMtime: this.lastMtime,
-              });
               if (stats.mtimeMs !== this.lastMtime) {
                 this.markAsCompromised(
                   "Lockfile was updated by another process"
@@ -123,8 +119,7 @@ export class Lockfile {
   }
 
   private markAsCompromised(reason: string) {
-    console.log(`Lockfile compromised: ${reason}`);
     this.lockfile = undefined;
-    this.onCompromised?.();
+    this.onCompromised?.(reason);
   }
 }
