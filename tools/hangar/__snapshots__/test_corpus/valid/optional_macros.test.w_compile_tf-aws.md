@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $expect_Util }) {
   class $Closure1 {
     constructor({  }) {
@@ -13,20 +14,27 @@ module.exports = function({ $expect_Util }) {
     }
     async handle() {
       const result = ({});
-      (await $expect_Util.equal((result.item === undefined ? undefined : (result.item)?.["id"]), undefined));
-      (await $expect_Util.equal((result.item === undefined ? undefined : ((obj, key) => { return obj.hasOwnProperty(key); })(result.item,"id")), undefined));
-      (await $expect_Util.equal((result.items?.at(0) === undefined ? undefined : (result.items?.at(0))?.["id"]), undefined));
-      (await $expect_Util.equal((result.items?.at(0) === undefined ? undefined : ((obj, key) => { return obj.hasOwnProperty(key); })(result.items?.at(0),"id")), undefined));
-      (await $expect_Util.equal((result.mapItem === undefined ? undefined : (result.mapItem)["a"]), undefined));
-      (await $expect_Util.equal((result.mapItem === undefined ? undefined : ("id" in (result.mapItem))), undefined));
-      (await $expect_Util.equal((result.mapItems?.at(0) === undefined ? undefined : (result.mapItems?.at(0))["id"]), undefined));
-      (await $expect_Util.equal((result.mapItems?.at(0) === undefined ? undefined : ("id" in (result.mapItems?.at(0)))), undefined));
+      (await $expect_Util.equal($macros.__Json_tryGet(true, result.item, "id"), undefined));
+      (await $expect_Util.equal($macros.__Json_has(true, result.item, "id"), undefined));
+      (await $expect_Util.equal($macros.__Json_tryGet(true, $macros.__Array_tryAt(true, result.items, 0), "id"), undefined));
+      (await $expect_Util.equal($macros.__Json_has(true, $macros.__Array_tryAt(true, result.items, 0), "id"), undefined));
+      (await $expect_Util.equal($macros.__Map_tryGet(true, result.mapItem, "a"), undefined));
+      (await $expect_Util.equal($macros.__Map_has(true, result.mapItem, "id"), undefined));
+      (await $expect_Util.equal($macros.__Map_tryGet(true, $macros.__Array_tryAt(true, result.mapItems, 0), "id"), undefined));
+      (await $expect_Util.equal($macros.__Map_has(true, $macros.__Array_tryAt(true, result.mapItems, 0), "id"), undefined));
       (await $expect_Util.equal(result.setItem?.size, undefined));
       (await $expect_Util.equal((await result.setItem?.has?.(6)), undefined));
-      (await $expect_Util.equal((result.setItems === undefined ? undefined : result.setItems?.at(0))?.size, undefined));
-      (await $expect_Util.equal((await (result.setItems === undefined ? undefined : result.setItems?.at(0))?.has?.(6)), undefined));
+      (await $expect_Util.equal($macros.__Array_tryAt(true, result.setItems, 0)?.size, undefined));
+      (await $expect_Util.equal((await $macros.__Array_tryAt(true, result.setItems, 0)?.has?.(6)), undefined));
       (await $expect_Util.equal(result.structItem?.item, undefined));
-      (await $expect_Util.equal((result.structItems === undefined ? undefined : result.structItems?.at(0))?.item, undefined));
+      (await $expect_Util.equal($macros.__Array_tryAt(true, result.structItems, 0)?.item, undefined));
+      let calls = 0;
+      const makeArray = (async () => {
+        calls = (calls + 1);
+        return [1, 2, 3];
+      });
+      (await $expect_Util.ok(($macros.__Array_contains(true, (await makeArray()), 2) ?? false)));
+      (await $expect_Util.equal(calls, 1));
     }
   }
   return $Closure1;
@@ -56,16 +64,21 @@ module.exports = function({ $expect_Util }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const expect = $stdlib.expect;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const expect = $stdlib.expect;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -93,16 +106,39 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), [].concat(["equal"], ["ok"])],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
           ],
         });
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:optional chaining macros", new $Closure1(this, "$Closure1"));
+    const result = ({});
+    (expect.Util.equal($macros.__Json_tryGet(true, result.item, "id"), undefined));
+    (expect.Util.equal($macros.__Json_has(true, result.item, "id"), undefined));
+    (expect.Util.equal($macros.__Json_tryGet(true, $macros.__Array_tryAt(true, result.items, 0), "id"), undefined));
+    (expect.Util.equal($macros.__Json_has(true, $macros.__Array_tryAt(true, result.items, 0), "id"), undefined));
+    (expect.Util.equal($macros.__Map_tryGet(true, result.mapItem, "a"), undefined));
+    (expect.Util.equal($macros.__Map_has(true, result.mapItem, "id"), undefined));
+    (expect.Util.equal($macros.__Map_tryGet(true, $macros.__Array_tryAt(true, result.mapItems, 0), "id"), undefined));
+    (expect.Util.equal($macros.__Map_has(true, $macros.__Array_tryAt(true, result.mapItems, 0), "id"), undefined));
+    (expect.Util.equal(result.setItem?.size, undefined));
+    (expect.Util.equal((result.setItem?.has?.(6)), undefined));
+    (expect.Util.equal($macros.__Array_tryAt(true, result.setItems, 0)?.size, undefined));
+    (expect.Util.equal(($macros.__Array_tryAt(true, result.setItems, 0)?.has?.(6)), undefined));
+    (expect.Util.equal(result.structItem?.item, undefined));
+    (expect.Util.equal($macros.__Array_tryAt(true, result.structItems, 0)?.item, undefined));
+    let calls = 0;
+    const makeArray = (() => {
+      calls = (calls + 1);
+      return [1, 2, 3];
+    });
+    (expect.Util.ok(($macros.__Array_contains(true, (makeArray()), 2) ?? false)));
+    (expect.Util.equal(calls, 1));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:optional chaining macros", new $Closure1(this, "$Closure1"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "optional_macros.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b }) {
   class $Closure1 {
     constructor({  }) {
@@ -18,11 +19,11 @@ module.exports = function({ $b }) {
       (await $b.put("foo/bar/", "text"));
       (await $b.put("foo/bar/baz", "text"));
       const objs = (await $b.list());
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 0), "foo"), "objs.at(0) == \"foo\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 1), "foo/"), "objs.at(1) == \"foo/\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 2), "foo/bar"), "objs.at(2) == \"foo/bar\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 3), "foo/bar/"), "objs.at(3) == \"foo/bar/\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 4), "foo/bar/baz"), "objs.at(4) == \"foo/bar/baz\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, objs, 0), "foo"), "objs.at(0) == \"foo\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, objs, 1), "foo/"), "objs.at(1) == \"foo/\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, objs, 2), "foo/bar"), "objs.at(2) == \"foo/bar\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, objs, 3), "foo/bar/"), "objs.at(3) == \"foo/bar/\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, objs, 4), "foo/bar/baz"), "objs.at(4) == \"foo/bar/baz\"");
     }
   }
   return $Closure1;
@@ -66,6 +67,7 @@ module.exports = function({ $b }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
