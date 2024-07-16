@@ -1747,6 +1747,8 @@ Add a Lambda layer to the function.
 
 - *Type:* str
 
+The ARN of the layer.
+
 ---
 
 #### Properties <a name="Properties" id="Properties"></a>
