@@ -1,18 +1,14 @@
 import { existsSync } from "fs";
-import {
-  mkdir,
-  rm,
-  open as openFileHandle,
-  type FileHandle,
-} from "fs/promises";
+import { mkdir, rm } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join, resolve } from "path";
 import { makeSimulatorClient } from "./client";
 import { Graph } from "./graph";
+import { Lockfile } from "./lockfile.js";
 import { deserialize, serialize } from "./serialization";
 import { resolveTokens } from "./tokens";
 import { Tree } from "./tree";
-import { exists, isNodeError } from "./util";
+import { exists } from "./util";
 import { SDK_VERSION } from "../constants";
 import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
@@ -230,13 +226,12 @@ export class Simulator {
   // keeps the running state of all resources.
   private runningState: Record<string, ResourceRunningState> = {};
 
-  private lockfileFilename: string;
-  private lockfile: FileHandle | undefined;
+  private lockfile: Lockfile;
 
   constructor(props: SimulatorProps) {
     const simdir = resolve(props.simfile);
     this.statedir = props.stateDir ?? join(simdir, ".state");
-    this.lockfileFilename = join(this.statedir, "lock");
+    this.lockfile = new Lockfile({ path: join(this.statedir, ".lock") });
 
     this._running = "stopped";
     this._handles = new HandleManager();
@@ -313,7 +308,8 @@ export class Simulator {
     this._running = "starting";
 
     try {
-      await this.acquireStateLock();
+      // await this.acquireStateLock();
+      await this.lockfile.lock();
       await this.startServer();
       await this.startResources();
     } catch (err: any) {
@@ -321,34 +317,6 @@ export class Simulator {
       this._running = "stopped";
       throw err;
     }
-  }
-
-  private async acquireStateLock() {
-    if (this.lockfile) {
-      return; // already locked
-    }
-
-    await mkdir(this.statedir, { recursive: true });
-    try {
-      this.lockfile = await openFileHandle(this.lockfileFilename, "wx");
-    } catch (error) {
-      if (isNodeError(error) && error.code === "EEXIST") {
-        throw new Error(
-          "Another instance of the simulator is already running. Please stop the current simulation before starting a new one."
-        );
-      }
-      throw error;
-    }
-  }
-
-  private async releaseStateLock() {
-    if (!this.lockfile) {
-      return; // not locked
-    }
-
-    await this.lockfile.close();
-    await rm(this.lockfileFilename);
-    this.lockfile = undefined;
   }
 
   private async startResources() {
@@ -450,7 +418,8 @@ export class Simulator {
 
     this.stopServer();
 
-    await this.releaseStateLock();
+    // await this.releaseStateLock();
+    await this.lockfile.release();
 
     this._handles.reset();
     this._running = "stopped";
