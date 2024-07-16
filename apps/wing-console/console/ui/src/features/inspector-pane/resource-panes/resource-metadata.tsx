@@ -144,25 +144,9 @@ export const ResourceMetadata = memo(
 
             break;
           }
-          case "@winglang/sdk.ex.Table": {
-            resourceGroup = {
-              groupName: "Table",
-              icon,
-            };
-
-            break;
-          }
           case "@winglang/sdk.cloud.Schedule": {
             resourceGroup = {
               groupName: "Schedule",
-              icon,
-            };
-
-            break;
-          }
-          case "@winglang/sdk.ex.Redis": {
-            resourceGroup = {
-              groupName: "Redis",
               icon,
             };
 
@@ -304,9 +288,7 @@ export const ResourceMetadata = memo(
             </InspectorSection>
           )}
 
-          {(node.type.startsWith("@winglang/sdk.cloud") ||
-            node.type.startsWith("@winglang/sdk.redis") ||
-            node.type.startsWith("@winglang/sdk.ex")) && (
+          {node.type.startsWith("@winglang/sdk.cloud") && (
             <>
               <InspectorSection
                 text={resourceGroup?.groupName || "Interact"}

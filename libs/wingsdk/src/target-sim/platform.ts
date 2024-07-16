@@ -10,12 +10,10 @@ import { Endpoint } from "./endpoint";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
-import { Redis } from "./redis";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Service } from "./service";
 import { State, STATE_FQN } from "./state";
-import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 import { Website } from "./website";
@@ -34,7 +32,6 @@ import {
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
-import { REDIS_FQN, TABLE_FQN } from "../ex";
 import { IPlatform } from "../platform";
 import { TEST_RUNNER_FQN } from "../std";
 
@@ -91,9 +88,6 @@ export class Platform implements IPlatform {
       case QUEUE_FQN:
         return Queue;
 
-      case REDIS_FQN:
-        return Redis;
-
       case SCHEDULE_FQN:
         return Schedule;
 
@@ -105,9 +99,6 @@ export class Platform implements IPlatform {
 
       case STATE_FQN:
         return State;
-
-      case TABLE_FQN:
-        return Table;
 
       case TEST_RUNNER_FQN:
         return TestRunner;

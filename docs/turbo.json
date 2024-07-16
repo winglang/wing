@@ -4,7 +4,7 @@
   "pipeline": {
     "compile": {
       "inputs": [
-        "docs/**/*.md"
+        "**/*.md"
       ],
       "outputs": [
         "../examples/tests/doc_examples/**/*.w"

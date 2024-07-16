@@ -305,10 +305,6 @@
       "type": "bundled"
     },
     {
-      "name": "ioredis",
-      "type": "bundled"
-    },
-    {
       "name": "jiti",
       "type": "bundled"
     },

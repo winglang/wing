@@ -4,7 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $std_Json, $usersTable }) {
+module.exports = function({ $std_Json, $userData }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ $std_Json, $usersTable }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"users": (await $usersTable.list())})), "status": 200});
+      return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"users": (await $userData.list())})), "status": 200});
     }
   }
   return $Closure1;
@@ -24,7 +24,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $std_Json, $usersTable }) {
+module.exports = function({ $std_Json, $userData }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -36,7 +36,7 @@ module.exports = function({ $std_Json, $usersTable }) {
       if ((($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "name"), "") || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "age"), "")) || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id"), ""))) {
         return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"error": "incomplete details"})), "status": 400});
       }
-      (await $usersTable.insert(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")), body));
+      (await $userData.putJson(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")), body));
       return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"user": ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")})), "status": 201});
     }
   }
@@ -328,28 +328,6 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         "retention_in_days": 30
       }
     },
-    "aws_dynamodb_table": {
-      "Table": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Table/Default",
-            "uniqueId": "Table"
-          }
-        },
-        "attribute": [
-          {
-            "name": "id",
-            "type": "S"
-          }
-        ],
-        "billing_mode": "PAY_PER_REQUEST",
-        "hash_key": "id",
-        "name": "users-tableTable-c89b2d37",
-        "point_in_time_recovery": {
-          "enabled": true
-        }
-      }
-    },
     "aws_iam_role": {
       "Api_get_users0_IamRole_950ACE40": {
         "//": {
@@ -378,7 +356,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
             "uniqueId": "Api_get_users0_IamRolePolicy_1C96E6D8"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.Bucket.arn}\",\"${aws_s3_bucket.Bucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.Api_get_users0_IamRole_950ACE40.name}"
       },
       "Api_post_users0_IamRolePolicy_32ED25A9": {
@@ -388,7 +366,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
             "uniqueId": "Api_post_users0_IamRolePolicy_32ED25A9"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.Bucket.arn}\",\"${aws_s3_bucket.Bucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.Api_post_users0_IamRole_B6E18B7C.name}"
       }
     },
@@ -427,9 +405,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "id",
+            "BUCKET_NAME_1357ca3a": "${aws_s3_bucket.Bucket.bucket}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "get_users0-c82bfbcd",
             "WING_TARGET": "tf-aws"
@@ -464,9 +440,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "id",
+            "BUCKET_NAME_1357ca3a": "${aws_s3_bucket.Bucket.bucket}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "post_users0-c8ae30d9",
             "WING_TARGET": "tf-aws"
@@ -519,6 +493,16 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       }
     },
     "aws_s3_bucket": {
+      "Bucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
+          }
+        },
+        "bucket_prefix": "bucket-c88fdc5f-",
+        "force_destroy": false
+      },
       "Code": {
         "//": {
           "metadata": {
@@ -641,7 +625,6 @@ class $Root extends $stdlib.std.Resource {
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
     const cloud = $stdlib.cloud;
-    const ex = $stdlib.ex;
     const http = $stdlib.http;
     const expect = $stdlib.expect;
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
@@ -655,7 +638,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
-            $usersTable: ${$stdlib.core.liftObject(usersTable)},
+            $userData: ${$stdlib.core.liftObject(userData)},
           })
         `;
       }
@@ -674,11 +657,11 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
-            [usersTable, ["list"]],
+            [userData, ["list"]],
           ],
           "$inflight_init": [
             [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
-            [usersTable, []],
+            [userData, []],
           ],
         });
       }
@@ -693,7 +676,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
-            $usersTable: ${$stdlib.core.liftObject(usersTable)},
+            $userData: ${$stdlib.core.liftObject(userData)},
           })
         `;
       }
@@ -712,11 +695,11 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), [].concat(["parse"], ["stringify"])],
-            [usersTable, ["insert"]],
+            [userData, ["putJson"]],
           ],
           "$inflight_init": [
             [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
-            [usersTable, []],
+            [userData, []],
           ],
         });
       }
@@ -811,7 +794,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const api = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api", { cors: true, corsOptions: ({"allowOrigin": "*", "allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS], "allowHeaders": ["Content-Type"], "allowCredentials": false, "exposeHeaders": ["Content-Type"], "maxAge": (std.Duration.fromSeconds(600))}) });
     const website = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Website", cloud.Website, this, "Website", { path: "./website_with_api" });
-    const usersTable = globalThis.$ClassFactory.new("@winglang/sdk.ex.Table", ex.Table, this, "Table", { name: "users-table", primaryKey: "id", columns: ({["id"]: ex.ColumnType.STRING, ["name"]: ex.ColumnType.STRING, ["age"]: ex.ColumnType.NUMBER}) });
+    const userData = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const getHandler = new $Closure1(this, "$Closure1");
     const postHandler = new $Closure2(this, "$Closure2");
     (api.get("/users", getHandler));
