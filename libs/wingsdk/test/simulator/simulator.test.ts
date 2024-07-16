@@ -20,32 +20,32 @@ import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
 
 describe("lock mechanism", () => {
-test("locks the state dir so only one simulator can be active at a time", async () => {
-  const app = new SimApp();
+  test("locks the state dir so only one simulator can be active at a time", async () => {
+    const app = new SimApp();
 
-  const stateDir = mkdtemp();
+    const stateDir = mkdtemp();
 
-  const sim1 = await app.startSimulator(stateDir);
-  await expect(app.startSimulator(stateDir)).rejects.toThrow(
+    const sim1 = await app.startSimulator(stateDir);
+    await expect(app.startSimulator(stateDir)).rejects.toThrow(
       "Another instance of the simulator is already running. Please stop the current simulation before starting a new one."
-  );
-  await sim1.stop();
-});
+    );
+    await sim1.stop();
+  });
 
-test("releases the lock after stopping the simulator", async () => {
-  const app = new SimApp();
+  test("releases the lock after stopping the simulator", async () => {
+    const app = new SimApp();
 
-  const stateDir = mkdtemp();
+    const stateDir = mkdtemp();
 
-  const sim1 = await app.startSimulator(stateDir);
-  await sim1.stop();
+    const sim1 = await app.startSimulator(stateDir);
+    await sim1.stop();
 
-  await expect(
-    (async () => {
-      const sim2 = await app.startSimulator(stateDir);
-      await sim2.stop();
-    })()
-  ).resolves.not.toThrow();
+    await expect(
+      (async () => {
+        const sim2 = await app.startSimulator(stateDir);
+        await sim2.stop();
+      })()
+    ).resolves.not.toThrow();
   });
 });
 

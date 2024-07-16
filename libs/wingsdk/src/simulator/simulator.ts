@@ -231,7 +231,12 @@ export class Simulator {
   constructor(props: SimulatorProps) {
     const simdir = resolve(props.simfile);
     this.statedir = props.stateDir ?? join(simdir, ".state");
-    this.lockfile = new Lockfile({ path: join(this.statedir, ".lock") });
+    this.lockfile = new Lockfile({
+      path: join(this.statedir, ".lock"),
+      onCompromised: () => {
+        this.stop().catch(() => {});
+      },
+    });
 
     this._running = "stopped";
     this._handles = new HandleManager();
@@ -308,7 +313,6 @@ export class Simulator {
     this._running = "starting";
 
     try {
-      // await this.acquireStateLock();
       await this.lockfile.lock();
       await this.startServer();
       await this.startResources();
@@ -418,7 +422,6 @@ export class Simulator {
 
     this.stopServer();
 
-    // await this.releaseStateLock();
     await this.lockfile.release();
 
     this._handles.reset();

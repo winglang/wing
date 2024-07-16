@@ -18,16 +18,19 @@ const STALE_THRESHOLD = 5000;
 
 export interface LockfileProps {
   readonly path: string;
+  readonly onCompromised?: () => void;
 }
 
 export class Lockfile {
   private path: string;
   private lockfile: FileHandle | undefined;
   private timeout: NodeJS.Timeout | undefined;
-  //   private lastMtime: number | undefined;
+  private lastMtime: number | undefined;
+  private onCompromised: (() => void) | undefined;
 
   public constructor(props: LockfileProps) {
     this.path = props.path;
+    this.onCompromised = props.onCompromised;
   }
 
   public async lock() {
@@ -42,11 +45,10 @@ export class Lockfile {
       try {
         const stats = await fs.stat(this.path);
         if (Date.now() - stats.mtimeMs > STALE_THRESHOLD) {
-          console.log("Removing stale lockfile");
           await fs.rm(this.path);
         }
       } catch (error) {
-        console.error("Error checking lockfile mtime:", error);
+        throw new Error("Failed to check lockfile status: " + error);
       }
     }
 
@@ -64,12 +66,40 @@ export class Lockfile {
     const updateLockfileUtimes = () => {
       this.timeout = setTimeout(() => {
         void (async () => {
-          const mtime = new Date(Math.ceil(Date.now() / 1000) * 1000 + 5);
+          // Check if the lockfile got compromised because we were too late to update it.
+          if (this.lastMtime && Date.now() > this.lastMtime + STALE_THRESHOLD) {
+            this.markAsCompromised("Lockfile was not updated in time");
+            return;
+          }
+
+          // Check if the lockfile got compromised because access was lost or something else updated it.
+          if (this.lastMtime) {
+            try {
+              const stats = await fs.stat(this.path);
+              console.log({
+                statsMtimeMs: stats.mtimeMs,
+                lastMtime: this.lastMtime,
+              });
+              if (stats.mtimeMs !== this.lastMtime) {
+                this.markAsCompromised(
+                  "Lockfile was updated by another process"
+                );
+                return;
+              }
+            } catch (_error) {
+              this.markAsCompromised("Failed to check lockfile status");
+              return;
+            }
+          }
+
+          // Update mtime.
           try {
-            console.log("Updating lockfile mtime", mtime);
+            const mtime = new Date(Math.ceil(Date.now() / 1000) * 1000 + 5);
             await fs.utimes(this.path, mtime, mtime);
-          } catch (error) {
-            console.error("Error updating lockfile mtime:", error);
+            this.lastMtime = mtime.getTime();
+          } catch (_error) {
+            this.markAsCompromised("Failed to update lockfile mtime");
+            return;
           }
           updateLockfileUtimes();
         })();
@@ -90,5 +120,11 @@ export class Lockfile {
     await this.lockfile.close();
     await fs.rm(this.path);
     this.lockfile = undefined;
+  }
+
+  private markAsCompromised(reason: string) {
+    console.log(`Lockfile compromised: ${reason}`);
+    this.lockfile = undefined;
+    this.onCompromised?.();
   }
 }
