@@ -1,4 +1,5 @@
 bring expect; 
+bring math;
 
 struct Result {
   item: Json?;
@@ -80,4 +81,11 @@ test "optional chaining macros" {
 }
 
 
+test "nesting and chaining" {
+  let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let randomChar = characters.at(math.floor(math.random() * characters.length));
+  // could not assert a real random in snapshot test so duplicated with fixed value
+  let fixedChar = characters.at(math.floor(0.67 * characters.length));
+  expect.equal(fixedChar, "Y");
 
+}
