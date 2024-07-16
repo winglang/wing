@@ -233,8 +233,8 @@ export class Simulator {
     this.statedir = props.stateDir ?? join(simdir, ".state");
     this.lockfile = new Lockfile({
       path: join(this.statedir, ".lock"),
-      onCompromised: () => {
-        this.stop().catch(() => {});
+      onCompromised: async () => {
+        await this.stop();
       },
     });
 

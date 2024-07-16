@@ -13,12 +13,19 @@ const exists = async (path: PathLike) => {
   }
 };
 
+/**
+ * How often to update the lockfile's mtime.
+ */
 const UPDATE_INTERVAL = 1000;
+
+/**
+ * How long the lockfile can be stale before we consider it compromised.
+ */
 const STALE_THRESHOLD = 5000;
 
 export interface LockfileProps {
   readonly path: string;
-  readonly onCompromised?: () => void;
+  readonly onCompromised?: (reason: string) => void | Promise<void>;
 }
 
 export class Lockfile {
@@ -26,7 +33,7 @@ export class Lockfile {
   private lockfile: FileHandle | undefined;
   private timeout: NodeJS.Timeout | undefined;
   private lastMtime: number | undefined;
-  private onCompromised: ((reason: string) => void) | undefined;
+  private onCompromised?: (reason: string) => void | Promise<void>;
 
   public constructor(props: LockfileProps) {
     this.path = props.path;
@@ -44,7 +51,7 @@ export class Lockfile {
     if (await exists(this.path)) {
       try {
         const stats = await fs.stat(this.path);
-        if (Date.now() - stats.mtimeMs > STALE_THRESHOLD) {
+        if (Date.now() > stats.mtimeMs + STALE_THRESHOLD) {
           await fs.rm(this.path);
         }
       } catch (error) {
@@ -63,46 +70,48 @@ export class Lockfile {
       throw error;
     }
 
-    const updateLockfileUtimes = () => {
-      this.timeout = setTimeout(() => {
-        void (async () => {
+    // Start updating the lockfile's mtime.
+    this.updateLockfileLater();
+  }
+
+  private updateLockfileLater() {
+    this.timeout = setTimeout(() => {
+      void (async () => {
+        // If we already updated our lockfile once, we need to check if it got compromised.
+        if (this.lastMtime) {
           // Check if the lockfile got compromised because we were too late to update it.
-          if (this.lastMtime && Date.now() > this.lastMtime + STALE_THRESHOLD) {
+          if (Date.now() > this.lastMtime + STALE_THRESHOLD) {
             this.markAsCompromised("Lockfile was not updated in time");
             return;
           }
 
           // Check if the lockfile got compromised because access was lost or something else updated it.
-          if (this.lastMtime) {
-            try {
-              const stats = await fs.stat(this.path);
-              if (stats.mtimeMs !== this.lastMtime) {
-                this.markAsCompromised(
-                  "Lockfile was updated by another process"
-                );
-                return;
-              }
-            } catch (_error) {
-              this.markAsCompromised("Failed to check lockfile status");
+          try {
+            const stats = await fs.stat(this.path);
+            if (stats.mtimeMs !== this.lastMtime) {
+              this.markAsCompromised("Lockfile was updated by another process");
               return;
             }
-          }
-
-          // Update mtime.
-          try {
-            const mtime = new Date(Math.ceil(Date.now() / 1000) * 1000 + 5);
-            await fs.utimes(this.path, mtime, mtime);
-            this.lastMtime = mtime.getTime();
           } catch (_error) {
-            this.markAsCompromised("Failed to update lockfile mtime");
+            this.markAsCompromised("Failed to check lockfile status");
             return;
           }
-          updateLockfileUtimes();
-        })();
-      }, UPDATE_INTERVAL);
-    };
+        }
 
-    updateLockfileUtimes();
+        // Update lockfile's mtime.
+        try {
+          const mtime = new Date(Math.ceil(Date.now() / 1000) * 1000);
+          await fs.utimes(this.path, mtime, mtime);
+          this.lastMtime = mtime.getTime();
+        } catch (_error) {
+          this.markAsCompromised("Failed to update lockfile mtime");
+          return;
+        }
+
+        // Lockfile wasn't compromised. Schedule the next update.
+        this.updateLockfileLater();
+      })();
+    }, UPDATE_INTERVAL);
   }
 
   public async release() {
@@ -120,6 +129,11 @@ export class Lockfile {
 
   private markAsCompromised(reason: string) {
     this.lockfile = undefined;
-    this.onCompromised?.(reason);
+    this.onCompromised?.(reason)?.catch((error) => {
+      console.error(
+        "Unexpected error in Lockfile.onCompromised callback:",
+        error
+      );
+    });
   }
 }
