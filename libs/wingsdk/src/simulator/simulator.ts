@@ -12,7 +12,7 @@ import { Graph } from "./graph";
 import { deserialize, serialize } from "./serialization";
 import { resolveTokens } from "./tokens";
 import { Tree } from "./tree";
-import { exists } from "./util";
+import { exists, isNodeError } from "./util";
 import { SDK_VERSION } from "../constants";
 import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
@@ -332,9 +332,7 @@ export class Simulator {
     try {
       this.lockfile = await openFileHandle(this.lockfileFilename, "wx");
     } catch (error) {
-      if (
-        error instanceof Error // && error.code === "EEXIST"
-      ) {
+      if (isNodeError(error) && error.code === "EEXIST") {
         throw new Error(
           "Another instance of the simulator is already running. Please stop the current simulation before starting a new one."
         );
