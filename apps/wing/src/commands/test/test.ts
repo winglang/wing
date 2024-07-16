@@ -192,6 +192,10 @@ async function testOne(
   // determine snapshot behavior
   const snapshotMode = determineSnapshotMode(target, options);
   const shouldExecute = snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.DEPLOY;
+  const testOptions = {
+    ...options,
+    rootId: options.rootId ?? target === BuiltinPlatform.SIM ? "root" : `Test.${nanoid(10)}`,
+  };
 
   let results: std.TestResult[] = [];
   if (shouldExecute) {
@@ -199,13 +203,12 @@ async function testOne(
       `Compiling ${renderTestName(entrypoint)} to ${target}...`,
       async () =>
         compile(entrypoint, {
-          ...options,
-          rootId: options.rootId ?? `Test.${nanoid(10)}`,
+          ...testOptions,
           testing: true,
         })
     );
 
-    results = await executeTest(synthDir, target, options);
+    results = await executeTest(synthDir, target, testOptions);
   }
 
   // if one of the tests failed, return the results without updating any snapshots.
@@ -503,7 +506,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     throw e;
   }
 
-  const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
+  const testRunner = s.getResource(`${options.rootId}/cloud.TestRunner`) as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
   const filteredTests = filterTests(tests, testFilter);
 

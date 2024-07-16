@@ -1,6 +1,11 @@
 import * as path from "path";
 import { test } from "vitest";
-import { invalidDocExampleWingFiles, invalidTestDir, invalidWingFiles, tmpDir } from "./paths";
+import {
+  invalidDocExampleWingFiles,
+  invalidTestDir,
+  invalidWingFiles,
+  tmpDir,
+} from "./paths";
 import { runWingCommand } from "./utils";
 import { parseMetaCommentFromPath } from "./meta_comment";
 
@@ -46,12 +51,12 @@ invalidDocExampleWingFiles.forEach((wingFile) => {
       wingFile: relativeWingFile,
       platforms,
       args,
-      expectFailure: true
+      expectFailure: true,
     });
 
     expect(out.stdout).toMatchSnapshot();
   });
-})
+});
 
 const invalidLibDir = path.join(invalidTestDir, "lib");
 test("invalid compile directory", async ({ expect }) => {
