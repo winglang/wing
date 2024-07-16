@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -16,13 +17,13 @@ module.exports = function({  }) {
       let i = 10;
       class Inner {
         async dang() {
-          y.push(2);
+          $macros.__MutArray_push(false, y, 2);
           i = (i + 1);
-          return (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(y, 0) + 10);
+          return ($macros.__MutArray_at(false, y, 0) + 10);
         }
       }
       $helpers.assert($helpers.eq((await (await (async () => {const o = new Inner(); await o.$inflight_init?.(); return o; })()).dang()), 11), "new Inner().dang() == 11");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(y, 1), 2), "y.at(1) == 2");
+      $helpers.assert($helpers.eq($macros.__MutArray_at(false, y, 1), 2), "y.at(1) == 2");
       $helpers.assert($helpers.eq(i, 11), "i == 11");
     }
   }
@@ -53,6 +54,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

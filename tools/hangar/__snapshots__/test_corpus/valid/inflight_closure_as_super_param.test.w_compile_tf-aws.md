@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -24,6 +25,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $c_h }) {
   class $Closure2 {
     constructor({  }) {
@@ -44,6 +46,7 @@ module.exports = function({ $c_h }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Base {
     constructor({  }) {
@@ -58,6 +61,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Base }) {
   class Derived extends $Base {
     constructor({  }) {
@@ -73,6 +77,7 @@ module.exports = function({ $Base }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -105,6 +110,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
@@ -274,8 +280,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const c = new Derived(this, "derived");
-    $helpers.assert($helpers.nodeof(c.f).path.endsWith("derived/in_derived"), "nodeof(c.f).path.endsWith(\"derived/in_derived\")");
-    $helpers.assert((!$helpers.nodeof(c.f_base).path.endsWith("derived/in_root")), "!nodeof(c.f_base).path.endsWith(\"derived/in_root\")");
+    $helpers.assert($macros.__String_endsWith(false, $helpers.nodeof(c.f).path, "derived/in_derived"), "nodeof(c.f).path.endsWith(\"derived/in_derived\")");
+    $helpers.assert((!$macros.__String_endsWith(false, $helpers.nodeof(c.f_base).path, "derived/in_root")), "!nodeof(c.f_base).path.endsWith(\"derived/in_root\")");
     const appPath = $helpers.nodeof(this).path;
     $helpers.assert($helpers.eq($helpers.nodeof(c.f_base).path, String.raw({ raw: ["", "/in_root"] }, appPath)), "nodeof(c.f_base).path == \"{appPath}/in_root\"");
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:boom!", new $Closure2(this, "$Closure2"));

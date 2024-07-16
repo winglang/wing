@@ -126,6 +126,9 @@ export const createConsoleServer = async ({
     testing: false,
     stateDir,
     watchGlobs,
+    preflightLog(data) {
+      consoleLogger.log(data, "compiler");
+    },
   });
   let isStarting = false;
   let isStopping = false;

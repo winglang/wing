@@ -29,6 +29,7 @@ export interface CreateCompilerProps {
   testing?: boolean;
   stateDir?: string;
   watchGlobs?: string[];
+  preflightLog?: (message: string) => void;
 }
 
 export const createCompiler = ({
@@ -37,6 +38,7 @@ export const createCompiler = ({
   testing = false,
   stateDir,
   watchGlobs,
+  preflightLog,
 }: CreateCompilerProps): Compiler => {
   const dirname = path.dirname(wingfile);
   const events = new Emittery<CompilerEvents>();
@@ -58,6 +60,7 @@ export const createCompiler = ({
       simfile = await wing.compile(wingfile, {
         platform,
         testing,
+        preflightLog,
       });
       await events.emit("compiled", { simfile });
     } catch (error) {
