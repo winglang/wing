@@ -28,6 +28,7 @@ pub class ParentClass impl ClassInterface {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class ParentClass {
     constructor({  }) {
@@ -43,6 +44,7 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
@@ -63,6 +65,7 @@ export * from "./preflight.lib-1.cjs"
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
