@@ -76,7 +76,7 @@ export class Json {
   /**
    * Deletes a key in a given Json
    *
-   * @macro ((json, key) => { delete json[key]; })($args$)
+   * @macro ((json, key) => { delete json[key]; })(...$args$)
    *
    * @param json to delete key from
    * @param key the key to delete
