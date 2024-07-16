@@ -95,26 +95,6 @@
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
         "name": "wing-counter-Counter-c824ef62"
-      },
-      "Table": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Table/Default",
-            "uniqueId": "Table"
-          }
-        },
-        "attribute": [
-          {
-            "name": "_id",
-            "type": "S"
-          }
-        ],
-        "billing_mode": "PAY_PER_REQUEST",
-        "hash_key": "_id",
-        "name": "key-historyTable-c89b2d37",
-        "point_in_time_recovery": {
-          "enabled": true
-        }
       }
     },
     "aws_iam_role": {
@@ -181,7 +161,7 @@
             "uniqueId": "Bucket_OnCreate-OnMessage0_IamRolePolicy_9749552C"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.Bucket_OnCreate-OnMessage0_IamRole_D3BF2935.name}"
       },
       "Bucket_OnCreate-OnMessage1_IamRolePolicy_975FD372": {
@@ -191,7 +171,7 @@
             "uniqueId": "Bucket_OnCreate-OnMessage1_IamRolePolicy_975FD372"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.Bucket_OnCreate-OnMessage1_IamRole_0E855131.name}"
       },
       "Bucket_OnDelete-OnMessage0_IamRolePolicy_A027DCBC": {
@@ -201,7 +181,7 @@
             "uniqueId": "Bucket_OnDelete-OnMessage0_IamRolePolicy_A027DCBC"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.Bucket_OnDelete-OnMessage0_IamRole_A52E721B.name}"
       },
       "Bucket_OnDelete-OnMessage1_IamRolePolicy_07F086F7": {
@@ -211,7 +191,7 @@
             "uniqueId": "Bucket_OnDelete-OnMessage1_IamRolePolicy_07F086F7"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.Bucket_OnDelete-OnMessage1_IamRole_AA3A5721.name}"
       },
       "Bucket_OnUpdate-OnMessage0_IamRolePolicy_DAF73AB9": {
@@ -221,7 +201,7 @@
             "uniqueId": "Bucket_OnUpdate-OnMessage0_IamRolePolicy_DAF73AB9"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.Bucket_OnUpdate-OnMessage0_IamRole_96499EB9.name}"
       },
       "Bucket_OnUpdate-OnMessage1_IamRolePolicy_E38714A4": {
@@ -231,7 +211,7 @@
             "uniqueId": "Bucket_OnUpdate-OnMessage1_IamRolePolicy_E38714A4"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.Bucket_OnUpdate-OnMessage1_IamRole_7B19D23F.name}"
       }
     },
@@ -310,10 +290,8 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "OnCreate-OnMessage0-c8740b4b",
             "WING_TARGET": "tf-aws"
@@ -348,10 +326,8 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "OnCreate-OnMessage1-c8347a52",
             "WING_TARGET": "tf-aws"
@@ -386,10 +362,8 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "OnDelete-OnMessage0-c8e711ef",
             "WING_TARGET": "tf-aws"
@@ -424,10 +398,8 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "OnDelete-OnMessage1-c8905f5b",
             "WING_TARGET": "tf-aws"
@@ -462,10 +434,8 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "OnUpdate-OnMessage0-c81b9fec",
             "WING_TARGET": "tf-aws"
@@ -500,10 +470,8 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "OnUpdate-OnMessage1-c8513427",
             "WING_TARGET": "tf-aws"
@@ -620,6 +588,16 @@
           }
         },
         "bucket_prefix": "code-c84a50b1-"
+      },
+      "LogHistory": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/LogHistory/Default",
+            "uniqueId": "LogHistory"
+          }
+        },
+        "bucket_prefix": "loghistory-c817bcb3-",
+        "force_destroy": false
       }
     },
     "aws_s3_bucket_notification": {

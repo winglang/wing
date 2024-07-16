@@ -1,5 +1,4 @@
 bring cloud;
-bring ex;
 bring http;
 bring expect;
 
@@ -17,20 +16,11 @@ let api = new cloud.Api(
 );
 
 let website = new cloud.Website(path: "./website_with_api");
-
-let usersTable = new ex.Table(
-  name: "users-table",
-  primaryKey: "id",
-  columns: {
-    "id" => ex.ColumnType.STRING,
-    "name" => ex.ColumnType.STRING,
-    "age" => ex.ColumnType.NUMBER,
-  }
-);
+let userData = new cloud.Bucket();
 
 let getHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
-    body: Json.stringify({ users: usersTable.list() }),
+    body: Json.stringify({ users: userData.list() }),
     status: 200
   };
 };
@@ -43,7 +33,7 @@ let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       status: 400
     };
   }
-  usersTable.insert(Json.stringify(body.get("id")), body);
+  userData.putJson(body.get("id").asStr(), body);
   return cloud.ApiResponse {
     body: Json.stringify({ user: body.get("id") }),
     status: 201
