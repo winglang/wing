@@ -902,7 +902,7 @@ export class Simulator {
    * Stop the simulator server.
    */
   private stopServer() {
-    this._server!.close();
+    this._server?.close();
   }
 
   /**
