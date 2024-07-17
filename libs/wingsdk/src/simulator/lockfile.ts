@@ -1,17 +1,6 @@
-import type { PathLike } from "fs";
 import fs, { type FileHandle } from "fs/promises";
 import path from "path";
 import { isNodeError } from "./util.js";
-
-// eslint-disable-next-line @typescript-eslint/no-shadow
-const exists = async (path: PathLike) => {
-  try {
-    await fs.stat(path);
-    return true;
-  } catch {
-    return false;
-  }
-};
 
 /**
  * How often to update the lockfile's mtime.
