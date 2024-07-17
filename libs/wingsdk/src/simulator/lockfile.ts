@@ -24,8 +24,18 @@ const UPDATE_INTERVAL = 1000;
 const STALE_THRESHOLD = 5000;
 
 export interface LockfileProps {
+  /**
+   * Path to the lockfile.
+   */
   readonly path: string;
-  readonly onCompromised?: (reason: string) => void | Promise<void>;
+
+  /**
+   * Callback to call when the lockfile is compromised.
+   */
+  readonly onCompromised?: (
+    reason: string,
+    error?: unknown
+  ) => void | Promise<void>;
 }
 
 export class Lockfile {
@@ -33,7 +43,10 @@ export class Lockfile {
   private lockfile: FileHandle | undefined;
   private timeout: NodeJS.Timeout | undefined;
   private lastMtime: number | undefined;
-  private onCompromised?: (reason: string) => void | Promise<void>;
+  private onCompromised?: (
+    reason: string,
+    error?: unknown
+  ) => void | Promise<void>;
 
   public constructor(props: LockfileProps) {
     this.path = props.path;
@@ -47,15 +60,20 @@ export class Lockfile {
 
     await fs.mkdir(path.dirname(this.path), { recursive: true });
 
-    // If lockfile exists but it's stale, remove it.
-    if (await exists(this.path)) {
-      try {
-        const stats = await fs.stat(this.path);
-        if (Date.now() > stats.mtimeMs + STALE_THRESHOLD) {
-          await fs.rm(this.path);
-        }
-      } catch (error) {
-        throw new Error("Failed to check lockfile status: " + error);
+    try {
+      // If lockfile exists but it's stale, remove it.
+      const stats = await fs.stat(this.path);
+      if (Date.now() > stats.mtimeMs + STALE_THRESHOLD) {
+        await fs.rm(this.path);
+      }
+    } catch (error) {
+      if (isNodeError(error) && error.code === "ENOENT") {
+        // Lockfile was removed by another process, so we ignore this error.
+      } else if (error instanceof Error) {
+        // Lockfile exists but we failed to check its status, or to remove it.
+        throw new Error(`Failed to check or remove lockfile: ${error.message}`);
+      } else {
+        throw error;
       }
     }
 
@@ -92,8 +110,8 @@ export class Lockfile {
               this.markAsCompromised("Lockfile was updated by another process");
               return;
             }
-          } catch (_error) {
-            this.markAsCompromised("Failed to check lockfile status");
+          } catch (error) {
+            this.markAsCompromised("Failed to check lockfile status", error);
             return;
           }
         }
@@ -103,8 +121,8 @@ export class Lockfile {
           const mtime = new Date(Math.ceil(Date.now() / 1000) * 1000);
           await fs.utimes(this.path, mtime, mtime);
           this.lastMtime = mtime.getTime();
-        } catch (_error) {
-          this.markAsCompromised("Failed to update lockfile mtime");
+        } catch (error) {
+          this.markAsCompromised("Failed to update lockfile mtime", error);
           return;
         }
 
@@ -127,12 +145,12 @@ export class Lockfile {
     this.lockfile = undefined;
   }
 
-  private markAsCompromised(reason: string) {
+  private markAsCompromised(reason: string, error?: unknown) {
     this.lockfile = undefined;
-    this.onCompromised?.(reason)?.catch((error) => {
+    this.onCompromised?.(reason, error)?.catch((callbackError) => {
       console.error(
         "Unexpected error in Lockfile.onCompromised callback:",
-        error
+        callbackError
       );
     });
   }

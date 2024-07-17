@@ -233,7 +233,12 @@ export class Simulator {
     this.statedir = props.stateDir ?? join(simdir, ".state");
     this.lockfile = new Lockfile({
       path: join(this.statedir, ".lock"),
-      onCompromised: async () => {
+      onCompromised: async (reason, error) => {
+        console.error(
+          "Lockfile compromised. Stopping simulation.",
+          reason,
+          error
+        );
         await this.stop();
       },
     });
