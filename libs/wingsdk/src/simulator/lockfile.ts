@@ -71,7 +71,7 @@ export class Lockfile {
     } catch (error) {
       if (isNodeError(error) && error.code === "EEXIST") {
         throw new Error(
-          "Another instance of the simulator is already running. Please stop the current simulation before starting a new one."
+          "Another instance of the simulator is already running on the same state directory."
         );
       }
       throw error;
