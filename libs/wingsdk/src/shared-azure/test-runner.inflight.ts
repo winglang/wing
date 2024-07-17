@@ -30,7 +30,7 @@ export class TestRunnerClient implements ITestRunnerClient {
     let error: string | undefined;
 
     try {
-      const [_, functionTraces] = await client.invokeWithLogs("");
+      const [_, functionTraces] = await client.invokeWithLogs();
       traces.push(...functionTraces);
       pass = true;
     } catch (e: any) {

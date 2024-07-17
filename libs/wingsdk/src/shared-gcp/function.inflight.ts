@@ -1,7 +1,7 @@
 import { GoogleAuth } from "google-auth-library";
 import { IFunctionClient } from "../cloud";
 import { RequestRedirect, Util as http } from "../http";
-import { Trace } from "../std";
+import { Trace, Json } from "../std";
 
 export class FunctionClient implements IFunctionClient {
   constructor(
@@ -44,7 +44,7 @@ export class FunctionClient implements IFunctionClient {
    * Invoke the function, passing the given payload as an argument.
    *  @returns the function returned payload only
    */
-  public async invoke(payload?: string): Promise<string | undefined> {
+  public async invoke(payload?: Json): Promise<Json | undefined> {
     try {
       const auth = new GoogleAuth();
       const client = await auth.getIdTokenClient(this.functionURL);
@@ -65,7 +65,7 @@ export class FunctionClient implements IFunctionClient {
           },
         },
       });
-      return (res.data as string) || undefined;
+      return (res.data as Json | undefined) ?? undefined;
     } catch (error) {
       throw new Error(
         `Error while invoking the function ${this.functionName}:\n${
@@ -75,7 +75,7 @@ export class FunctionClient implements IFunctionClient {
     }
   }
 
-  public async invokeAsync(_payload?: string): Promise<void> {
+  public async invokeAsync(_payload?: Json): Promise<void> {
     throw new Error("invokeAsync not implemented");
   }
 

@@ -1,4 +1,4 @@
-import { inflight, lift, main, cloud } from "@wingcloud/framework";
+import { inflight, lift, main, cloud, asJson } from "@wingcloud/framework";
 import * as winglib from "@winglibs/testfixture";
 import * as assert from "node:assert";
 import { deepStrictEqual } from "node:assert";
@@ -15,7 +15,7 @@ main((app, test) => {
         assert.strictEqual("", "");
         await bucket.put("hi", "stuff");
         console.log("hi from function");
-        return "hi";
+        return asJson("hi");
       })
   );
 
@@ -42,7 +42,7 @@ main((app, test) => {
 
         console.log("hi from test");
         await inf();
-        await f.invoke("me");
+        await f.invoke(asJson("me"));
         await store.set("wing");
       })
   );

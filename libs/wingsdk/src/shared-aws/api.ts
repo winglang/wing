@@ -97,7 +97,7 @@ export class ApiEndpointHandler {
         request as unknown as APIGatewayProxyEvent,
         ctx.handler,
         ctx.headers
-      ) as unknown as string;
+      );
     });
   }
 }

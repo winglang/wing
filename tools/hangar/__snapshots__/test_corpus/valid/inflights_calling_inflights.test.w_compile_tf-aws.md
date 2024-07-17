@@ -33,7 +33,7 @@ module.exports = function({ $storeInBucket }) {
     }
     async handle(event) {
       {
-        const $if_let_value = event;
+        const $if_let_value = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(event);
         if ($if_let_value != undefined) {
           const event = $if_let_value;
           (await $storeInBucket(event, "file1"));
