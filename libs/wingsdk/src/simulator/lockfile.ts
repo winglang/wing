@@ -88,7 +88,7 @@ export class Lockfile {
         if (this.lastMtime) {
           // Check if the lockfile got compromised because we were too late to update it.
           if (Date.now() > this.lastMtime + STALE_THRESHOLD) {
-            this.markAsCompromised("Lockfile was not updated in time");
+            await this.markAsCompromised("Lockfile was not updated in time");
             return;
           }
 
@@ -96,11 +96,16 @@ export class Lockfile {
           try {
             const stats = await fs.stat(this.path);
             if (stats.mtimeMs !== this.lastMtime) {
-              this.markAsCompromised("Lockfile was updated by another process");
+              await this.markAsCompromised(
+                "Lockfile was updated by another process"
+              );
               return;
             }
           } catch (error) {
-            this.markAsCompromised("Failed to check lockfile status", error);
+            await this.markAsCompromised(
+              "Failed to check lockfile status",
+              error
+            );
             return;
           }
         }
@@ -111,7 +116,10 @@ export class Lockfile {
           await fs.utimes(this.path, mtime, mtime);
           this.lastMtime = mtime.getTime();
         } catch (error) {
-          this.markAsCompromised("Failed to update lockfile mtime", error);
+          await this.markAsCompromised(
+            "Failed to update lockfile mtime",
+            error
+          );
           return;
         }
 
@@ -134,13 +142,16 @@ export class Lockfile {
     this.lockfile = undefined;
   }
 
-  private markAsCompromised(reason: string, error?: unknown) {
+  private async markAsCompromised(reason: string, error?: unknown) {
+    await this.lockfile?.close();
     this.lockfile = undefined;
-    this.onCompromised?.(reason, error)?.catch((callbackError) => {
+    try {
+      await this.onCompromised?.(reason, error);
+    } catch (callbackError) {
       console.error(
         "Unexpected error in Lockfile.onCompromised callback:",
         callbackError
       );
-    });
+    }
   }
 }
