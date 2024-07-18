@@ -4,7 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $echo }) {
+module.exports = function({ $echo, $expect_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ $echo }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $echo("message")), "message"), "echo(\"message\") == \"message\"");
+      (await $expect_Util.equal((await $echo("message")), "message"));
     }
   }
   return $Closure1;
@@ -39,6 +39,26 @@ module.exports = function({ $func, $funcFunction }) {
   return $Closure2;
 }
 //# sourceMappingURL=inflight.$Closure2-2.cjs.map
+```
+
+## inflight.$Closure3-2.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $defaultMessage, $expect_Util }) {
+  class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $expect_Util.equal((await $defaultMessage()), "message"));
+    }
+  }
+  return $Closure3;
+}
+//# sourceMappingURL=inflight.$Closure3-2.cjs.map
 ```
 
 ## inflight.Bar-1.cjs
@@ -377,6 +397,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-2.cjs")({
             $echo: ${$stdlib.core.liftObject(echo)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
           })
         `;
       }
@@ -394,9 +415,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [echo, ["handle"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
             [echo, []],
           ],
         });
@@ -440,6 +463,44 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class $Closure3 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-2.cjs")({
+            $defaultMessage: ${$stdlib.core.liftObject(defaultMessage)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure3Client = ${$Closure3._toInflightType()};
+            const client = new $Closure3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
+            [defaultMessage, ["handle"]],
+          ],
+          "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [defaultMessage, []],
+          ],
+        });
+      }
+    }
     const path = "SHOULD_IGNORE";
     const filename = "intrinsics.test.w";
     const currentFile = (fs.Util.join($helpers.resolveDirname(__dirname, "../../.."), filename));
@@ -451,8 +512,10 @@ class $Root extends $stdlib.std.Resource {
     const example = new Example(this, "Example");
     const funcFunction = $stdlib.core.importInflight(`require('../../../inflight_ts/example2.ts')["main"]`, [({ obj: example, alias: "example" }), ({ obj: example, ops: ["getMessage", ], alias: "exampleCopy" }), ({ obj: [1, 2, 3], alias: "numbers" })]);
     const func = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", funcFunction);
+    const defaultMessage = $stdlib.core.importInflight(`require('../../../inflight_ts/example3.ts')["default"]`, [({ obj: example, alias: "example" })]);
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke default function", new $Closure1(this, "$Closure1"));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke inflight function", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke default with lift", new $Closure3(this, "$Closure3"));
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "intrinsics.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
