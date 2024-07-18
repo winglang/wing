@@ -159,7 +159,7 @@ export class Json {
   /**
    * Checks if a Json object has a given key
    *
-   * @macro ((obj, key) => { return obj?.hasOwnProperty(key); })($self$,$args$)
+   * @macro ((obj, key) => { return obj.hasOwnProperty(key); })($self$,$args$)
    *
    * @param key The key to check
    * @returns Boolean value corresponding to whether the key exists
