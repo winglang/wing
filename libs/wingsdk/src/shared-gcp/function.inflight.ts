@@ -65,7 +65,7 @@ export class FunctionClient implements IFunctionClient {
           },
         },
       });
-      /// The gcp call return "" even for an undefined call
+      /// The gcp call returns "" even for an undefined call
       return (res.data as undefined | Json) || undefined;
     } catch (error) {
       throw new Error(
