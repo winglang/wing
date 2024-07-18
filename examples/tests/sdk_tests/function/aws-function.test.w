@@ -37,7 +37,7 @@ let fn = new cloud.Function(inflight (msg: Json?) => {
 
 let fnInfo = getFunctionInfo(fn);
 
-test "AWS Function" {
+new std.Test(inflight () => {
   if let info = fnInfo {
     if target == "tf-aws" {
       assert(info.get("functionArn").contains("arn:aws:lambda:"));
@@ -73,4 +73,4 @@ test "AWS Function" {
     msg = err;
   }
   expect.ok(msg.contains("fake error"), "Expected fake error message");
-}
+}, timeout: 3m) as "AWS Function";
