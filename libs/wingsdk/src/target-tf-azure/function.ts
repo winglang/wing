@@ -291,7 +291,12 @@ export class Function extends cloud.Function {
     lines.push(
       `try {  
         const body = await (${inflightClient}).handle(context.req.body);
-        context.res = { body };
+        context.res = {
+          body,
+          headers: {
+            "Content-Type": "application/json"
+          },
+        };
      } catch (error) {
         context.res = { body: error.message, status: 500 };
     }`

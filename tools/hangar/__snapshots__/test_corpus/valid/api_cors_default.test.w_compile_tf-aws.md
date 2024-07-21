@@ -321,7 +321,6 @@ class $Root extends $stdlib.std.Resource {
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
     const cloud = $stdlib.cloud;
-    const ex = $stdlib.ex;
     const http = $stdlib.http;
     const expect = $stdlib.expect;
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;

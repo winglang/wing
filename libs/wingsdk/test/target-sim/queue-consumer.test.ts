@@ -3,7 +3,7 @@ import { test, expect } from "vitest";
 import { waitUntilTrace } from "./util";
 import * as cloud from "../../src/cloud";
 import { inflight, lift } from "../../src/core";
-import { TraceType } from "../../src/std";
+import { Json, TraceType } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 test("pushing messages through a queue", async () => {
@@ -43,10 +43,10 @@ test("pushing messages through a queue", async () => {
   ) as cloud.IFunctionClient;
 
   // warm up the consumer so timing is more predictable
-  await consumer.invoke(JSON.stringify({ messages: [] }));
+  await consumer.invoke(Json._fromAny({ messages: [] }));
 
   // WHEN
-  await pusher.invoke("foo");
+  await pusher.invoke(Json._fromAny("foo"));
   await waitUntilTrace(s, (t) => t.data.message === "Received foo");
 
   // THEN

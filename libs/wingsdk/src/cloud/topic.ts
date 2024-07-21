@@ -104,7 +104,7 @@ export interface ITopicOnMessageHandlerClient {
    * Function that will be called when a message is received from the topic.
    * @inflight
    */
-  handle(event: string): Promise<void>;
+  handle(message: string): Promise<void>;
 }
 
 /**

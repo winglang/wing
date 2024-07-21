@@ -1,5 +1,4 @@
 bring cloud;
-bring ex;
 bring util;
 
 enum Source {
@@ -9,21 +8,10 @@ enum Source {
 
 let b = new cloud.Bucket();
 let idsCounter = new cloud.Counter();
-let table = new ex.Table(
-  name: "key-history",
-  primaryKey: "_id",
-  columns: {
-    "_id" => ex.ColumnType.STRING,
-    "key" => ex.ColumnType.STRING,
-    "operation" => ex.ColumnType.STRING,
-    "source" => ex.ColumnType.STRING,
-  }
-);
-
-
+let logs = new cloud.Bucket() as "LogHistory";
 
 let logHistory = inflight (key: str, operation: str, source: Source) => {
-  table.insert("{idsCounter.inc()}", Json { key: key, operation: operation, source: "{source}"  });
+  logs.putJson("{idsCounter.inc()}", Json { key: key, operation: operation, source: "{source}"  });
 };
 
 
@@ -55,8 +43,9 @@ let checkHitCount = inflight (opts: CheckHitCountOptions): void => {
   util.waitUntil(inflight () => {
     let var count = 0;
 
-    for u in table.list() {
-      if (u.get("key") == opts.key && u.get("operation") == opts.type && u.get("source") == "{opts.source}") {
+    for u in logs.list() {
+      let data = logs.getJson(u);
+      if (data.get("key") == opts.key && data.get("operation") == opts.type && data.get("source") == "{opts.source}") {
         count = count + 1;
       }
     }
