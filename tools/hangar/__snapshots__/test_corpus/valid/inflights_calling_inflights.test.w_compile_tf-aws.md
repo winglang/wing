@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $globalBucket }) {
   class $Closure1 {
     constructor({  }) {
@@ -24,6 +25,7 @@ module.exports = function({ $globalBucket }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $storeInBucket }) {
   class $Closure2 {
     constructor({  }) {
@@ -33,7 +35,7 @@ module.exports = function({ $storeInBucket }) {
     }
     async handle(event) {
       {
-        const $if_let_value = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(event);
+        const $if_let_value = $macros.__Json_tryAsStr(true, event, );
         if ($if_let_value != undefined) {
           const event = $if_let_value;
           (await $storeInBucket(event, "file1"));
@@ -50,6 +52,7 @@ module.exports = function({ $storeInBucket }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $func1, $globalBucket }) {
   class $Closure3 {
     constructor({  }) {
@@ -71,6 +74,7 @@ module.exports = function({ $func1, $globalBucket }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $globalBucket }) {
   class $Closure4 {
     constructor({  }) {
@@ -92,6 +96,7 @@ module.exports = function({ $globalBucket }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $x }) {
   class $Closure5 {
     constructor({  }) {
@@ -113,6 +118,7 @@ module.exports = function({ $x }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class MyResource {
     constructor({ $this_closure }) {
@@ -269,6 +275,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

@@ -22,7 +22,7 @@ String.
 | <code><a href="#@winglang/sdk.std.String.endsWith">endsWith</a></code> | Does this string end with the given searchString? |
 | <code><a href="#@winglang/sdk.std.String.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchString found. |
 | <code><a href="#@winglang/sdk.std.String.lowercase">lowercase</a></code> | Returns this string in lower case. |
-| <code><a href="#@winglang/sdk.std.String.replace">replace</a></code> | Replaces the first occurence of a substring within a string. |
+| <code><a href="#@winglang/sdk.std.String.replace">replace</a></code> | Replaces the first occurrence of a substring within a string. |
 | <code><a href="#@winglang/sdk.std.String.replaceAll">replaceAll</a></code> | Replaces all occurrences of a substring within a string. |
 | <code><a href="#@winglang/sdk.std.String.split">split</a></code> | Splits string by separator. |
 | <code><a href="#@winglang/sdk.std.String.startsWith">startsWith</a></code> | Does this string start with the given searchString? |
@@ -126,7 +126,7 @@ Returns this string in lower case.
 replace(searchString: str, replaceString: str): str
 ```
 
-Replaces the first occurence of a substring within a string.
+Replaces the first occurrence of a substring within a string.
 
 ###### `searchString`<sup>Required</sup> <a name="searchString" id="@winglang/sdk.std.String.replace.parameter.searchString"></a>
 

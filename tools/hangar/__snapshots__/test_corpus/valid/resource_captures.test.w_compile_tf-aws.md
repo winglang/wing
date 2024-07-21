@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -34,6 +35,7 @@ module.exports = function({ $r }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Another {
     constructor({  }) {
@@ -54,6 +56,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class First {
     constructor({  }) {
@@ -68,6 +71,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class MyResource {
     constructor({ $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr, $this_extBucket, $this_extNum, $this_mapOfNum, $this_myBool, $this_myNum, $this_myOptStr, $this_myQueue, $this_myResource, $this_myStr, $this_setOfStr }) {
@@ -93,10 +97,10 @@ module.exports = function({  }) {
     }
     async testCaptureCollectionsOfData() {
       $helpers.assert($helpers.eq(this.$this_arrayOfStr.length, 2), "this.arrayOfStr.length == 2");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.$this_arrayOfStr, 0), "s1"), "this.arrayOfStr.at(0) == \"s1\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.$this_arrayOfStr, 1), "s2"), "this.arrayOfStr.at(1) == \"s2\"");
-      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.$this_mapOfNum, "k1"), 11), "this.mapOfNum.get(\"k1\") == 11");
-      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.$this_mapOfNum, "k2"), 22), "this.mapOfNum.get(\"k2\") == 22");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, this.$this_arrayOfStr, 0), "s1"), "this.arrayOfStr.at(0) == \"s1\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, this.$this_arrayOfStr, 1), "s2"), "this.arrayOfStr.at(1) == \"s2\"");
+      $helpers.assert($helpers.eq($macros.__Map_get(false, this.$this_mapOfNum, "k1"), 11), "this.mapOfNum.get(\"k1\") == 11");
+      $helpers.assert($helpers.eq($macros.__Map_get(false, this.$this_mapOfNum, "k2"), 22), "this.mapOfNum.get(\"k2\") == 22");
       $helpers.assert((await this.$this_setOfStr.has("s1")), "this.setOfStr.has(\"s1\")");
       $helpers.assert((await this.$this_setOfStr.has("s2")), "this.setOfStr.has(\"s2\")");
       $helpers.assert((!(await this.$this_setOfStr.has("s3"))), "!this.setOfStr.has(\"s3\")");
@@ -234,6 +238,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
