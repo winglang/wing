@@ -22,6 +22,7 @@
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
@@ -37,7 +38,7 @@ class $Root extends $stdlib.std.Resource {
     const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{foo:{type:"string"},meaningOfLife:{type:"number"},},required:["meaningOfLife",]});
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const app = $helpers.nodeof(this).app;
-    const myParams = MyParams._fromJson((app.parameters.read({ schema: MyParams })));
+    const myParams = $macros.__Struct_fromJson(false, MyParams, (app.parameters.read({ schema: $macros.__Struct_schema(false, MyParams, ) })));
     {
       const $if_let_value = myParams.foo;
       if ($if_let_value != undefined) {

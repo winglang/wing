@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $res }) {
   class $Closure1 {
     constructor({  }) {
@@ -24,6 +25,7 @@ module.exports = function({ $res }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Another }) {
   class $Closure2 {
     constructor({  }) {
@@ -44,6 +46,7 @@ module.exports = function({ $Another }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $globalCounter }) {
   class Another {
     constructor({  }) {
@@ -68,6 +71,7 @@ module.exports = function({ $globalCounter }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class First {
     constructor({  }) {
@@ -82,6 +86,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Another, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalArrayOfStr, $globalBool, $globalBucket, $globalMapOfNum, $globalNum, $globalSetOfStr, $globalStr, $util_Util }) {
   class MyResource {
     constructor({ $this_localCounter, $this_localTopic }) {
@@ -94,8 +99,8 @@ module.exports = function({ $Another, $globalAnother, $globalAnother_first_myRes
       $helpers.assert($helpers.eq($globalStr, "hello"), "globalStr == \"hello\"");
       $helpers.assert($helpers.eq($globalBool, true), "globalBool == true");
       $helpers.assert($helpers.eq($globalNum, 42), "globalNum == 42");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($globalArrayOfStr, 0), "hello"), "globalArrayOfStr.at(0) == \"hello\"");
-      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })($globalMapOfNum, "a"), (-5)), "globalMapOfNum.get(\"a\") == -5");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, $globalArrayOfStr, 0), "hello"), "globalArrayOfStr.at(0) == \"hello\"");
+      $helpers.assert($helpers.eq($macros.__Map_get(false, $globalMapOfNum, "a"), (-5)), "globalMapOfNum.get(\"a\") == -5");
       $helpers.assert((await $globalSetOfStr.has("a")), "globalSetOfStr.has(\"a\")");
       $helpers.assert($helpers.eq($globalAnother_myField, "hello!"), "globalAnother.myField == \"hello!\"");
       (await $globalAnother_first_myResource.put("key", "value"));
@@ -115,6 +120,7 @@ module.exports = function({ $Another, $globalAnother, $globalAnother_first_myRes
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
     constructor({  }) {
@@ -359,6 +365,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

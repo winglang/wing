@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $std_Json, $userData }) {
   class $Closure1 {
     constructor({  }) {
@@ -12,7 +13,7 @@ module.exports = function({ $std_Json, $userData }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"users": (await $userData.list())})), "status": 200});
+      return ({"body": $macros.__Json_stringify(false, $std_Json, ({"users": (await $userData.list())})), "status": 200});
     }
   }
   return $Closure1;
@@ -24,6 +25,7 @@ module.exports = function({ $std_Json, $userData }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $std_Json, $userData }) {
   class $Closure2 {
     constructor({  }) {
@@ -32,12 +34,12 @@ module.exports = function({ $std_Json, $userData }) {
       return $obj;
     }
     async handle(req) {
-      const body = JSON.parse((req.body ?? ""));
-      if ((($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "name"), "") || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "age"), "")) || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id"), ""))) {
-        return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"error": "incomplete details"})), "status": 400});
+      const body = $macros.__Json_parse(false, $std_Json, (req.body ?? ""));
+      if ((($helpers.eq($macros.__Json_get(false, body, "name"), "") || $helpers.eq($macros.__Json_get(false, body, "age"), "")) || $helpers.eq($macros.__Json_get(false, body, "id"), ""))) {
+        return ({"body": $macros.__Json_stringify(false, $std_Json, ({"error": "incomplete details"})), "status": 400});
       }
-      (await $userData.putJson(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")), body));
-      return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"user": ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")})), "status": 201});
+      (await $userData.putJson($macros.__Json_asStr(false, $macros.__Json_get(false, body, "id"), ), body));
+      return ({"body": $macros.__Json_stringify(false, $std_Json, ({"user": $macros.__Json_get(false, body, "id")})), "status": 201});
     }
   }
   return $Closure2;
@@ -49,6 +51,7 @@ module.exports = function({ $std_Json, $userData }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure3 {
     constructor({  }) {
@@ -60,11 +63,11 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.GET, "headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 200));
-      (await $expect_Util.equal((headers)["access-control-allow-origin"], "*"));
-      (await $expect_Util.equal((headers)["access-control-expose-headers"], "Content-Type"));
-      (await $expect_Util.equal((headers)["access-control-allow-credentials"], "false"));
-      (await $expect_Util.nil((headers)["access-control-allow-headers"]));
-      (await $expect_Util.nil((headers)["access-control-allow-methods"]));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-origin"), "*"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-expose-headers"), "Content-Type"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-credentials"), "false"));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-allow-headers")));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-allow-methods")));
     }
   }
   return $Closure3;
@@ -76,6 +79,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure4 {
     constructor({  }) {
@@ -87,8 +91,8 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS, "headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 204));
-      (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
-      (await $expect_Util.equal((headers)["access-control-allow-headers"], "Content-Type"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-methods"), "GET,POST,OPTIONS"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-headers"), "Content-Type"));
     }
   }
   return $Closure4;
@@ -612,6 +616,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

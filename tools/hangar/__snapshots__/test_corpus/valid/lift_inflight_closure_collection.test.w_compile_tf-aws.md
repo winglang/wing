@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b1 }) {
   class $Closure1 {
     constructor({  }) {
@@ -24,6 +25,7 @@ module.exports = function({ $b1 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $f4 }) {
   class $Closure10 {
     constructor({  }) {
@@ -44,6 +46,7 @@ module.exports = function({ $f4 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b2 }) {
   class $Closure2 {
     constructor({  }) {
@@ -64,6 +67,7 @@ module.exports = function({ $b2 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $ar }) {
   class $Closure3 {
     constructor({  }) {
@@ -86,6 +90,7 @@ module.exports = function({ $ar }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $f1 }) {
   class $Closure4 {
     constructor({  }) {
@@ -106,6 +111,7 @@ module.exports = function({ $f1 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $map }) {
   class $Closure5 {
     constructor({  }) {
@@ -114,7 +120,7 @@ module.exports = function({ $map }) {
       return $obj;
     }
     async handle() {
-      for (const c of Object.values($map)) {
+      for (const c of $macros.__Map_values(false, $map, )) {
         (await c());
       }
     }
@@ -128,6 +134,7 @@ module.exports = function({ $map }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $f2 }) {
   class $Closure6 {
     constructor({  }) {
@@ -148,6 +155,7 @@ module.exports = function({ $f2 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $set }) {
   class $Closure7 {
     constructor({  }) {
@@ -170,6 +178,7 @@ module.exports = function({ $set }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $f3 }) {
   class $Closure8 {
     constructor({  }) {
@@ -190,6 +199,7 @@ module.exports = function({ $f3 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $complex }) {
   class $Closure9 {
     constructor({  }) {
@@ -200,7 +210,7 @@ module.exports = function({ $complex }) {
     async handle() {
       const i = 0;
       const k = "k1";
-      for (const c of ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($complex, i), k)) {
+      for (const c of $macros.__Map_get(false, $macros.__Array_at(false, $complex, i), k)) {
         (await c());
       }
     }
@@ -643,6 +653,7 @@ module.exports = function({ $complex }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

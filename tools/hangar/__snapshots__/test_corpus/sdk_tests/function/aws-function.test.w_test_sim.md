@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ aws-function.test.wsim » root/env0/test:AWS Function
+pass ─ aws-function.test.wsim » root/env0/AWS Function
 
 Tests 1 passed (1)
 Snapshots 1 skipped

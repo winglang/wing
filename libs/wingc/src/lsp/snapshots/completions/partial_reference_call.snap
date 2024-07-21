@@ -81,7 +81,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(searchString: str, replaceString: str): str"
   documentation:
     kind: markdown
-    value: "Replaces the first occurence of a substring within a string.\n\n#### Returns\nThe modified string after replacement."
+    value: "Replaces the first occurrence of a substring within a string.\n\n#### Returns\nThe modified string after replacement."
   sortText: ff|replace
   insertText: replace($1)
   insertTextFormat: 2

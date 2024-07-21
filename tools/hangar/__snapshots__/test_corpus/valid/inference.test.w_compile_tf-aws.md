@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -250,6 +251,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
@@ -309,13 +311,13 @@ class $Root extends $stdlib.std.Resource {
     const emptyArray = [];
     const num_array = emptyArray;
     const emptyArray2 = [];
-    const clonedArray2 = [...(emptyArray2)];
-    clonedArray2.push(1);
-    clonedArray2.push(2);
-    clonedArray2.push((((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 0) + ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 1)));
-    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2), 3), "clonedArray2.at(2) == 3");
-    const emptySet = new Set([((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2)]);
-    const clonedSet = new Set(emptySet);
+    const clonedArray2 = $macros.__Array_copyMut(false, emptyArray2, );
+    $macros.__MutArray_push(false, clonedArray2, 1);
+    $macros.__MutArray_push(false, clonedArray2, 2);
+    $macros.__MutArray_push(false, clonedArray2, ($macros.__MutArray_at(false, clonedArray2, 0) + $macros.__MutArray_at(false, clonedArray2, 1)));
+    $helpers.assert($helpers.eq($macros.__MutArray_at(false, clonedArray2, 2), 3), "clonedArray2.at(2) == 3");
+    const emptySet = new Set([$macros.__MutArray_at(false, clonedArray2, 2)]);
+    const clonedSet = $macros.__Set_copyMut(false, emptySet, );
     (clonedSet.add(4));
     const api = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
     const func = new $Closure1(this, "$Closure1");

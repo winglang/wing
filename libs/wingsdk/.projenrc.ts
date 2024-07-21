@@ -118,6 +118,7 @@ const project = new cdk.JsiiProject({
     "nanoid", // for ESM import test in target-sim/function.test.ts
     "chalk",
     "tsx",
+    "ts-morph@^23.0.0",
     ...JSII_DEPS,
   ],
   eslintOptions: {
@@ -295,6 +296,13 @@ project.tasks
 project.tasks
   .tryFind("unbump")!
   .reset("pnpm version 0.0.0 --allow-same-version");
+
+// --------------- macros -----------------
+
+const macros = project.addTask("generate-macros", {
+  exec: "tsx scripts/generate-macros.mts",
+});
+project.compileTask.prependSpawn(macros);
 
 // --------------- docs -----------------
 
