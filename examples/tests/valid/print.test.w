@@ -1,7 +1,12 @@
 bring cloud;
 
+class Process {
+  pub extern "./print-helpers.js" static write(s: str);
+}
 
 log("preflight log");
+Process.write("start ");
+Process.write("end\n");
 
 test "log1" {
   log("inflight log 1.1");
