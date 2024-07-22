@@ -10,7 +10,7 @@ const UPDATE_INTERVAL = 1000;
 /**
  * How long the lockfile can be stale before we consider it compromised.
  */
-const STALE_THRESHOLD = 5000;
+const STALE_THRESHOLD = 10_000;
 
 export interface LockfileProps {
   /**

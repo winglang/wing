@@ -235,10 +235,12 @@ export class Simulator {
       path: join(this.statedir, ".lock"),
       onCompromised: async (reason, error) => {
         console.error(
-          "Lockfile compromised. Stopping simulation.",
-          reason,
-          error
+          `Simulator lockfile compromised. Stopping simulation.`,
+          `Reason: ${reason}.`
         );
+        if (error) {
+          console.error(error);
+        }
         await this.stop();
       },
     });
