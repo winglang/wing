@@ -27,7 +27,7 @@ describe("lock mechanism", () => {
 
     const sim1 = await app.startSimulator(stateDir);
     await expect(app.startSimulator(stateDir)).rejects.toThrow(
-      "Another instance of the simulator is already running. Please stop the current simulation before starting a new one."
+      "Another instance of the simulator is already running on the same state directory."
     );
     await sim1.stop();
   });
