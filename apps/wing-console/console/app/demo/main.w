@@ -70,7 +70,7 @@ api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 });
 
-let handler = inflight (message: str): str => {
+let handler = inflight (message): str => {
    counter.inc();
   bucket.put("hello{counter.peek()}.txt", "Hello, {message}!");
   log("Hello, {message}!");
@@ -79,7 +79,7 @@ let handler = inflight (message: str): str => {
 
 queue.setConsumer(handler);
 
-new cloud.Function(inflight (message: str?): str? => {
+new cloud.Function(inflight (message: Json?) => {
   counter.inc();
   log("Counter is now {counter.inc(0)}");
   return message;
