@@ -116,10 +116,7 @@ export class Lockfile {
           await fs.utimes(this.path, mtime, mtime);
           this.lastMtime = mtime.getTime();
         } catch (error) {
-          await this.markAsCompromised(
-            "Failed to update lockfile mtime",
-            error
-          );
+          await this.markAsCompromised("Failed to update the lockfile", error);
           return;
         }
 
