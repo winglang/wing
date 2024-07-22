@@ -18,6 +18,7 @@ import type { ReactNode } from "react";
 import { useEvent } from "react-use";
 
 import { MapControls } from "./map-controls.js";
+import { useDetectTrackpad } from "./use-detect-trackpad.js";
 import { useRafThrottle } from "./use-raf-throttle.js";
 
 export interface Viewport {
@@ -104,6 +105,9 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   const [viewTransform, setViewTransform] = useState(IDENTITY_TRANSFORM);
   const containerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<HTMLDivElement>(null);
+
+  const { isTrackpad, isMouseWheel } = useDetectTrackpad(containerRef);
+
   useEffect(() => {
     const target = targetRef.current;
     if (!target) {
@@ -201,7 +205,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         }
       });
     },
-    [restrict],
+    [restrict, isTrackpad, isMouseWheel],
   );
   useEvent("wheel", onWheel as (event: Event) => void, containerRef.current, {
     // Use passive: false to prevent the default behavior of scrolling the page.
