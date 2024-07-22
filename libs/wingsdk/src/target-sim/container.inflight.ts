@@ -369,8 +369,6 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
             LogLevel.VERBOSE
           );
 
-          child.kill("SIGTERM");
-
           // if the process doesn't exit in 2 seconds, kill it
           const timeout = setTimeout(() => {
             self.addTrace(
@@ -404,6 +402,8 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
             clearTimeout(timeout);
             resolve();
           });
+
+          child.kill("SIGTERM");
         });
       },
       async join() {

@@ -36,6 +36,11 @@ export interface RunOptions {
    * Additional paths to watch or ignore for changes. Supports globs.
    */
   readonly watch?: string[];
+
+  /**
+   * Directory for the resource's state.
+   */
+  readonly statedir?: string;
 }
 
 /**
@@ -93,6 +98,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     requireAcceptTerms: !!process.stdin.isTTY,
     open: openBrowser,
     watchGlobs: options?.watch,
+    stateDir: options?.statedir,
   });
   const url = `http://localhost:${port}/`;
   console.log(`The Wing Console is running at ${url}`);

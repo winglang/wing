@@ -19,6 +19,36 @@ import { State } from "../../src/target-sim";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
 
+describe("lock mechanism", () => {
+  test("locks the state dir so only one simulator can be active at a time", async () => {
+    const app = new SimApp();
+
+    const stateDir = mkdtemp();
+
+    const sim1 = await app.startSimulator(stateDir);
+    await expect(app.startSimulator(stateDir)).rejects.toThrow(
+      "Another instance of the simulator is already running on the same state directory."
+    );
+    await sim1.stop();
+  });
+
+  test("releases the lock after stopping the simulator", async () => {
+    const app = new SimApp();
+
+    const stateDir = mkdtemp();
+
+    const sim1 = await app.startSimulator(stateDir);
+    await sim1.stop();
+
+    await expect(
+      (async () => {
+        const sim2 = await app.startSimulator(stateDir);
+        await sim2.stop();
+      })()
+    ).resolves.not.toThrow();
+  });
+});
+
 const NOOP = inflight(async () => {});
 const NOOP2 = inflight(async () => {
   console.log("noop2");
