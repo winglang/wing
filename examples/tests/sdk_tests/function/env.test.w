@@ -1,7 +1,7 @@
 bring cloud;
 bring util;
 
-let f1 = new cloud.Function(inflight (): str => {
+let f1 = new cloud.Function(inflight () => {
   assert(util.env("FOO1") == "bar");
   assert(util.env("FOO2") == "baz");
   return "ok";

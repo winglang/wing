@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $a, $aCloned, $m, $s }) {
   class $Closure1 {
     constructor({  }) {
@@ -14,7 +15,7 @@ module.exports = function({ $a, $aCloned, $m, $s }) {
     async handle() {
       $helpers.assert($helpers.eq($a.length, 1), "a.length == 1");
       $helpers.assert($helpers.eq($s.size, 1), "s.size == 1");
-      $helpers.assert($helpers.eq(Object.keys($m).length, 1), "m.size() == 1");
+      $helpers.assert($helpers.eq($macros.__Map_size(false, $m, ), 1), "m.size() == 1");
       $helpers.assert($helpers.eq($aCloned.length, 1), "aCloned.length == 1");
     }
   }
@@ -27,6 +28,7 @@ module.exports = function({ $a, $aCloned, $m, $s }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $handler }) {
   class $Closure2 {
     constructor({  }) {
@@ -65,6 +67,7 @@ module.exports = function({ $handler }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
@@ -160,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
     const a = ["hello"];
     const s = new Set([12]);
     const m = ({["hello"]: true});
-    const aCloned = [...(["hello"])];
+    const aCloned = $macros.__Array_copyMut(false, ["hello"], );
     const handler = new $Closure1(this, "$Closure1");
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:main", new $Closure2(this, "$Closure2"));
   }

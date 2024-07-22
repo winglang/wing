@@ -1075,12 +1075,12 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"error: Expected type to be "inflight (event: str?): str?", but got "preflight (name: str): str" instead
+"error: Expected type to be "inflight (event: Json?): Json?", but got "preflight (name: Json?): Json?" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
-3 |   new cloud.Function((name: str): str => {
+3 |   new cloud.Function((name: Json?): Json? => {
   | /--------------------^
-4 | |   return "Hello {name}";
+4 | |   return "Hello {name?.tryAsStr() ?? "world"}!";
 5 | | });
   | \\-^
   |  
@@ -4747,13 +4747,6 @@ error: "notAField" is not a field of "ApiResponse"
    | \\-^
 
 
-error: Expected type to be "inflight (event: str?): str?", but got "inflight (event: str): unknown" instead
-   --> ../../../examples/tests/invalid/struct_expansion.test.w:27:3
-   |
-27 |   handler, 
-   |   ^^^^^^^
-
-
 error: "file" is not a field of "BucketPutOptions"
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
    |
@@ -4956,13 +4949,6 @@ error: Cannot call super method because class Construct has no parent
    |
 26 |     super.method();
    |           ^^^^^^
-
-
-error: Expected type to be "inflight (event: str?): str?", but got "inflight (s: str): str" instead
-   --> ../../../examples/tests/invalid/super_call.test.w:55:31
-   |
-55 |     return new cloud.Function(inflight_closure);
-   |                               ^^^^^^^^^^^^^^^^
 
 
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474

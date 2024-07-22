@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -12,7 +13,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(m) {
-      return String.raw({ raw: ["Hello ", "!"] }, (m ?? "nil"));
+      return String.raw({ raw: ["Hello ", "!"] }, JSON.stringify((m ?? "nil")));
     }
   }
   return $Closure1;
@@ -24,7 +25,8 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $handler, $std_Json, $std_Number }) {
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({ $handler, $std_Number }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -32,10 +34,10 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
       return $obj;
     }
     async handle(x) {
-      const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })((x ?? "NaN"));
+      const xStr = (await $std_Number.fromJson((x ?? "NaN")));
       const y = (await $handler(xStr));
       const z = (await $handler(y));
-      return ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(z);
+      return z;
     }
   }
   return $Closure2;
@@ -47,6 +49,7 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -67,6 +70,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $f }) {
   class $Closure4 {
     constructor({  }) {
@@ -75,8 +79,8 @@ module.exports = function({ $f }) {
       return $obj;
     }
     async handle() {
-      const result = (await $f.invoke("2"));
-      $helpers.assert($helpers.eq(result, "8"), "result == \"8\"");
+      const result = (await $f.invoke(2));
+      $helpers.assert($helpers.eq(result, 8), "result == 8");
     }
   }
   return $Closure4;
@@ -88,6 +92,7 @@ module.exports = function({ $f }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Doubler {
     constructor({ $this_func }) {
@@ -108,6 +113,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Doubler2 {
     constructor({  }) {
@@ -135,58 +141,58 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "Doubler2_Function_CloudwatchLogGroup_53963378": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/Function/CloudwatchLogGroup",
-            "uniqueId": "Doubler2_Function_CloudwatchLogGroup_53963378"
+            "path": "root/Default/Default/Function/CloudwatchLogGroup",
+            "uniqueId": "Function_CloudwatchLogGroup_ABDCF4C4"
           }
         },
-        "name": "/aws/lambda/Function-c892ab6d",
+        "name": "/aws/lambda/Function-c852aba6",
         "retention_in_days": 30
       }
     },
     "aws_iam_role": {
-      "Doubler2_Function_IamRole_66AECEFB": {
+      "Function_IamRole_678BE84C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/Function/IamRole",
-            "uniqueId": "Doubler2_Function_IamRole_66AECEFB"
+            "path": "root/Default/Default/Function/IamRole",
+            "uniqueId": "Function_IamRole_678BE84C"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "Doubler2_Function_IamRolePolicy_B68B51AD": {
+      "Function_IamRolePolicy_E3B26607": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/Function/IamRolePolicy",
-            "uniqueId": "Doubler2_Function_IamRolePolicy_B68B51AD"
+            "path": "root/Default/Default/Function/IamRolePolicy",
+            "uniqueId": "Function_IamRolePolicy_E3B26607"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.Doubler2_Function_IamRole_66AECEFB.name}"
+        "role": "${aws_iam_role.Function_IamRole_678BE84C.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "Doubler2_Function_IamRolePolicyAttachment_4191B8F8": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/Function/IamRolePolicyAttachment",
-            "uniqueId": "Doubler2_Function_IamRolePolicyAttachment_4191B8F8"
+            "path": "root/Default/Default/Function/IamRolePolicyAttachment",
+            "uniqueId": "Function_IamRolePolicyAttachment_CACE1358"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.Doubler2_Function_IamRole_66AECEFB.name}"
+        "role": "${aws_iam_role.Function_IamRole_678BE84C.name}"
       }
     },
     "aws_lambda_function": {
-      "Doubler2_Function_235483AB": {
+      "Function": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/Function/Default",
-            "uniqueId": "Doubler2_Function_235483AB"
+            "path": "root/Default/Default/Function/Default",
+            "uniqueId": "Function"
           }
         },
         "architectures": [
@@ -195,21 +201,21 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "Function-c892ab6d",
+            "WING_FUNCTION_NAME": "Function-c852aba6",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Function-c892ab6d",
+        "function_name": "Function-c852aba6",
         "handler": "index.handler",
         "logging_config": {
           "log_format": "JSON"
         },
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.Doubler2_Function_IamRole_66AECEFB.arn}",
+        "role": "${aws_iam_role.Function_IamRole_678BE84C.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.Doubler2_Function_S3Object_4A795FD9.key}",
+        "s3_key": "${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -229,11 +235,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "Doubler2_Function_S3Object_4A795FD9": {
+      "Function_S3Object_C62A0C2D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/Function/S3Object",
-            "uniqueId": "Doubler2_Function_S3Object_4A795FD9"
+            "path": "root/Default/Default/Function/S3Object",
+            "uniqueId": "Function_S3Object_C62A0C2D"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -249,6 +255,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
@@ -333,7 +340,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      makeFunc(handler) {
+      static makeFunc($scope, handler) {
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
@@ -344,7 +351,6 @@ class $Root extends $stdlib.std.Resource {
             return `
               require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
                 $handler: ${$stdlib.core.liftObject(handler)},
-                $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
                 $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
               })
             `;
@@ -363,19 +369,17 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
-                [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
-                [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), ["fromStr"]],
+                [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), ["fromJson"]],
                 [handler, ["handle"]],
               ],
               "$inflight_init": [
-                [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
                 [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), []],
                 [handler, []],
               ],
             });
           }
         }
-        return globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", new $Closure2(this, "$Closure2"));
+        return globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, $scope, "Function", new $Closure2($scope, "$Closure2"));
       }
       static _toInflightType() {
         return `
@@ -469,8 +473,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const fn = new Doubler(this, "Doubler", new $Closure1(this, "$Closure1"));
-    const doubler2 = new Doubler2(this, "Doubler2");
-    const f = (doubler2.makeFunc(new $Closure3(this, "$Closure3")));
+    const f = (Doubler2.makeFunc(this, new $Closure3(this, "$Closure3")));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:f(2) == 8", new $Closure4(this, "$Closure4"));
   }
 }

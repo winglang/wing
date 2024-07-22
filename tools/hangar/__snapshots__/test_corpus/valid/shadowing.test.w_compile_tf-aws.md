@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $bar }) {
   class $Closure1 {
     constructor({  }) {
@@ -13,14 +14,14 @@ module.exports = function({ $bar }) {
     }
     async handle() {
       const result = [];
-      result.push($bar);
+      $macros.__MutArray_push(false, result, $bar);
       if (true) {
         const bar = "world";
-        result.push(bar);
+        $macros.__MutArray_push(false, result, bar);
       }
       const foo = "bang";
-      result.push(foo);
-      return [...(result)];
+      $macros.__MutArray_push(false, result, foo);
+      return $macros.__MutArray_copy(false, result, );
     }
   }
   return $Closure1;
@@ -32,6 +33,7 @@ module.exports = function({ $bar }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $fn }) {
   class $Closure2 {
     constructor({  }) {
@@ -42,9 +44,9 @@ module.exports = function({ $fn }) {
     async handle() {
       const result = (await $fn());
       $helpers.assert($helpers.eq(result.length, 3), "result.length == 3");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 0), "hola!"), "result.at(0) == \"hola!\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 1), "world"), "result.at(1) == \"world\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 2), "bang"), "result.at(2) == \"bang\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, result, 0), "hola!"), "result.at(0) == \"hola!\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, result, 1), "world"), "result.at(1) == \"world\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, result, 2), "bang"), "result.at(2) == \"bang\"");
     }
   }
   return $Closure2;
@@ -74,6 +76,7 @@ module.exports = function({ $fn }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

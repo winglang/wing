@@ -48,7 +48,7 @@ class ExtendedClass extends BaseClass {
     return "extended inflight m1";
   }
   get_func(): cloud.Function {
-    let inflight_closure = inflight (s:str): str => {
+    let inflight_closure = inflight (s: Json?): Json? => {
       return "this: {this.m1()}, super: {super.m1()}";
                                                //^^ `super` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
     };

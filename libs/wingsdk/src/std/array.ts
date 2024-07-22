@@ -129,7 +129,7 @@ export class Array {
   /**
    * Returns a shallow copy of a portion of the array.
    *
-   * @macro $self$.slice($args$)
+   * @macro $self$.slice(...$args$)
    *
    * @param start the beginning index of the slice, inclusive.
    * @param end the ending index of the slice, exclusive.
@@ -253,7 +253,7 @@ export class MutArray {
   /**
    * Add values to end of array
    *
-   * @macro $self$.push($args$)
+   * @macro $self$.push(...$args$)
    *
    * @param values values to add
    */
@@ -273,7 +273,7 @@ export class MutArray {
   /**
    * Removes value from the given index of an array
    *
-   * @macro ((obj, args) => { if (args[0] < 0 || args[0] >= $self$.length) throw new Error("Index out of bounds"); return obj.splice(args[0], 1)[0]; })($self$, [$args$])
+   * @macro ((obj, index) => { if (index < 0 || index >= $self$.length) throw new Error("Index out of bounds"); return obj.splice(index, 1)[0]; })($self$, $args$)
    *
    * @param index the index to remove the value at
    * @returns the value removed
@@ -287,7 +287,7 @@ export class MutArray {
   /**
    * Sets a new value at the given index of an array
    *
-   * @macro ((obj, args) => { if (args[0] < 0 || args[0] >= $self$.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })($self$, [$args$])
+   * @macro ((obj, index, value) => { if (index < 0 || index >= $self$.length) throw new Error("Index out of bounds"); obj[index] = value; })($self$, ...$args$)
    *
    * @param index the index to set the value at
    * @param value the value to set at the given index
@@ -302,7 +302,7 @@ export class MutArray {
   /**
    * Inserts a new value at the given index of an array
    *
-   * @macro ((obj, args) => { if (args[0] < 0 || args[0] > $self$.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })($self$, [$args$])
+   * @macro ((obj, index, value) => { if (index < 0 || index > $self$.length) throw new Error("Index out of bounds"); obj.splice(index, 0, value); })($self$, ...$args$)
    *
    * @param index the index to insert the value at
    * @param value the value to insert at the given index
@@ -317,7 +317,7 @@ export class MutArray {
   /**
    * Removes first occurrence of a given value in an array
    *
-   * @macro ((obj, args) => { if (obj.indexOf(args[0]) !== -1) { obj.splice(obj.indexOf(args[0]), 1); return true; } return false; })($self$, [$args$])
+   * @macro ((obj, index) => { if (obj.indexOf(index) !== -1) { obj.splice(obj.indexOf(index), 1); return true; } return false; })($self$, $args$)
    *
    * @param value the value to remove
    * @returns true if value was removed
@@ -330,7 +330,7 @@ export class MutArray {
   /**
    * Returns a shallow copy of a portion of the array.
    *
-   * @macro $self$.slice($args$)
+   * @macro $self$.slice(...$args$)
    *
    * @param start the beginning index of the slice, inclusive.
    * @param end the ending index of the slice, exclusive.

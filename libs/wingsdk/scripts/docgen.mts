@@ -38,7 +38,6 @@ const UNDOCUMENTED_STD_FILES = [
   "README",
   "index",
   "test-runner",
-  "resource",
   "test",
   "range",
   "generics",
@@ -47,7 +46,6 @@ const UNDOCUMENTED_STD_FILES = [
 // those will be skipped out of the docs
 const SKIPPED_MODULES = [
   "cloud",
-  "ex",
   "std",
   "simulator",
   "core",
@@ -172,12 +170,6 @@ for (const mod of publicModules) {
 await generateResourceApiDocs("cloud", {
   docsPath: getStdlibDocsDir("cloud"),
   excludedFiles: UNDOCUMENTED_CLOUD_FILES,
-  filter: DocumentationFilter.ALL_REQUIRE_MD,
-});
-
-await generateResourceApiDocs("ex", {
-  docsPath: getStdlibDocsDir("ex"),
-  excludedFiles: UNDOCUMENTED_EX_FILES,
   filter: DocumentationFilter.ALL_REQUIRE_MD,
 });
 

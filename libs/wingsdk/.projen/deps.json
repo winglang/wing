@@ -145,6 +145,11 @@
       "type": "build"
     },
     {
+      "name": "ts-morph",
+      "version": "^23.0.0",
+      "type": "build"
+    },
+    {
       "name": "tsx",
       "type": "build"
     },
@@ -302,10 +307,6 @@
     },
     {
       "name": "google-auth-library",
-      "type": "bundled"
-    },
-    {
-      "name": "ioredis",
       "type": "bundled"
     },
     {

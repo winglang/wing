@@ -800,7 +800,9 @@ pub struct FunctionSignature {
 	/// - `$self$`: The expression on which this function was called
 	/// - `$args$`: the arguments passed to this function call
 	/// - `$args_text$`: the original source text of the arguments passed to this function call, escaped
+	/// Those functions will be compiled into a separate file and retrieved when creating and running the js output.
 	pub js_override: Option<String>,
+	pub is_macro: bool,
 	pub docs: Docs,
 }
 
@@ -2036,6 +2038,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("console.log($args$)".to_string()),
+				is_macro: false,
 				docs: Docs::with_summary("Logs a value"),
 				implicit_scope_param: false,
 			}),
@@ -2062,6 +2065,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
+				is_macro: false,
 				docs: Docs::with_summary("Asserts that a condition is true"),
 				implicit_scope_param: false,
 			}),
@@ -2080,6 +2084,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: self.types.anything(),
 				phase: Phase::Independent,
 				js_override: Some("$args$".to_string()),
+				is_macro: false,
 				docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
 				implicit_scope_param: false,
 			}),
@@ -2108,6 +2113,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: std_node,
 				phase: Phase::Preflight,
 				js_override: Some("$helpers.nodeof($args$)".to_string()),
+				is_macro: false,
 				docs: Docs::with_summary("Obtain the tree node of a preflight resource."),
 				implicit_scope_param: false,
 			}),
@@ -2163,6 +2169,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			phase: Phase::Preflight,
 			// The emitted JS is dynamic
 			js_override: None,
+			is_macro: false,
 			docs: Docs::with_summary(
 				r#"Create an inflight function from the given file.
 The file must be a JavaScript or TypeScript file with a default export that matches the inferred return where `@inflight` is used.
@@ -4080,6 +4087,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					return_type: self.resolve_type_annotation(ast_sig.return_type.as_ref(), env),
 					phase: ast_sig.phase,
 					js_override: None,
+					is_macro: false,
 					docs: Docs::default(),
 					implicit_scope_param: false,
 				};
@@ -5892,6 +5900,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					return_type: new_return_type,
 					phase: if new_this_type.is_none() { env.phase } else { sig.phase },
 					js_override: sig.js_override.clone(),
+					is_macro: sig.is_macro,
 					docs: sig.docs.clone(),
 					implicit_scope_param: sig.implicit_scope_param,
 				};
@@ -7195,6 +7204,7 @@ mod tests {
 			return_type: ret,
 			phase,
 			js_override: None,
+			is_macro: false,
 			docs: Docs::default(),
 			implicit_scope_param: false,
 		})
