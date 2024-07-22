@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $ar, $math_Util }) {
   class $Closure1 {
     constructor({  }) {
@@ -12,14 +13,14 @@ module.exports = function({ $ar, $math_Util }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($ar, 0), 1), "ar.at(0) == 1");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, $ar, 0), 1), "ar.at(0) == 1");
       const i = (await $math_Util.floor(((await $math_Util.random()) * $ar.length)));
-      let x = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($ar, i);
+      let x = $macros.__Array_at(false, $ar, i);
       $helpers.assert(((x >= 1) && (x <= 3)), "x >= 1 && x <= 3");
-      x = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($ar, ((1 - 1) + i));
+      x = $macros.__Array_at(false, $ar, ((1 - 1) + i));
       $helpers.assert(((x >= 1) && (x <= 3)), "x >= 1 && x <= 3");
-      const mut_ar = [...($ar)];
-      mut_ar.push(4);
+      const mut_ar = $macros.__Array_copyMut(false, $ar, );
+      $macros.__MutArray_push(false, mut_ar, 4);
     }
   }
   return $Closure1;
@@ -49,6 +50,7 @@ module.exports = function({ $ar, $math_Util }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

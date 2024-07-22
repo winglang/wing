@@ -154,9 +154,9 @@ export class String {
   }
 
   /**
-   * Replaces the first occurence of a substring within a string.
+   * Replaces the first occurrence of a substring within a string.
    *
-   * @macro $self$.replace($args$)
+   * @macro $self$.replace(...$args$)
    *
    * @param searchString The substring to search for.
    * @param replaceString The replacement substring.
@@ -165,13 +165,13 @@ export class String {
   public replace(searchString: string, replaceString: string): string {
     searchString;
     replaceString;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
    * Replaces all occurrences of a substring within a string.
    *
-   * @macro $self$.replaceAll($args$)
+   * @macro $self$.replaceAll(...$args$)
    *
    * @param searchString The substring to search for.
    * @param replaceString The replacement substring.

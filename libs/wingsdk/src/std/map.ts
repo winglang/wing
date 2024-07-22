@@ -64,7 +64,7 @@ export class Map {
   /**
    * Optionally returns a specified element from the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ($self$)?.[$args$]
    *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
@@ -211,7 +211,7 @@ export class MutMap {
   /**
    * Optionally returns a specified element from the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ($self$)?.[$args$]
    *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
@@ -238,7 +238,7 @@ export class MutMap {
    * Adds or updates an entry in a Map object with a specified key and a value.
    *
    * TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
-   * @macro ((obj, args) => { obj[args[0]] = args[1]; })($self$, [$args$])
+   * @macro ((obj, key, value) => { obj[key] = value; })($self$, ...$args$)
    *
    * @param key The key of the element to add
    * @param value The value of the element to add

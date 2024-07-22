@@ -103,6 +103,9 @@
       "description": "Only compile",
       "steps": [
         {
+          "spawn": "generate-macros"
+        },
+        {
           "exec": "jsii --silence-warnings=reserved-word"
         }
       ]
@@ -143,6 +146,14 @@
       "steps": [
         {
           "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test scripts projenrc .projenrc.ts"
+        }
+      ]
+    },
+    "generate-macros": {
+      "name": "generate-macros",
+      "steps": [
+        {
+          "exec": "tsx scripts/generate-macros.mts"
         }
       ]
     },

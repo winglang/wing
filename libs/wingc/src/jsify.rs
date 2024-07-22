@@ -49,6 +49,7 @@ const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
 const PLATFORMS_VAR: &str = "$platforms";
 const HELPERS_VAR: &str = "$helpers";
+const MACROS_VAR: &str = "$macros";
 const EXTERN_VAR: &str = "$extern";
 
 const ROOT_CLASS: &str = "$Root";
@@ -173,6 +174,7 @@ impl<'a> JSifier<'a> {
 		output.line("\"use strict\";");
 
 		output.line(format!("const {STDLIB} = require('{STDLIB_MODULE}');"));
+		output.line(format!("const {MACROS_VAR} = require(\"@winglang/sdk/lib/macros\");"));
 
 		if is_entrypoint {
 			output.line(format!(
@@ -905,6 +907,7 @@ impl<'a> JSifier<'a> {
 					args_text_string = args_text_string[1..args_text_string.len() - 1].to_string();
 				}
 				let args_text_string = escape_javascript_string(&args_text_string);
+				let mut is_optional = false;
 
 				if let Some(function_sig) = function_sig {
 					if let Some(js_override) = &function_sig.js_override {
@@ -912,7 +915,12 @@ impl<'a> JSifier<'a> {
 							CalleeKind::Expr(expr) => match &expr.kind {
 								// for "loose" macros, e.g. `print()`, $self$ is the global object
 								ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
-								ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
+								ExprKind::Reference(Reference::InstanceMember {
+									object,
+									optional_accessor,
+									..
+								}) => {
+									is_optional = *optional_accessor;
 									self.jsify_expression(&object, ctx).to_string()
 								}
 								ExprKind::Reference(Reference::TypeMember { property, .. }) => {
@@ -930,10 +938,24 @@ impl<'a> JSifier<'a> {
 								"this".to_string()
 							}
 						};
-						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
-						let replace_with = &[self_string, args_string, args_text_string];
-						let ac = AhoCorasick::new(patterns).expect("Failed to create macro pattern");
-						return new_code!(expr_span, ac.replace_all(js_override, replace_with));
+						if function_sig.is_macro {
+							return new_code!(
+								expr_span,
+								format!(
+									"{}.{}({}, {}, {})",
+									MACROS_VAR,
+									js_override,
+									is_optional.to_string(),
+									self_string,
+									args_string
+								)
+							);
+						} else {
+							let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
+							let replace_with = &[self_string, args_string, args_text_string];
+							let ac = AhoCorasick::new(patterns).expect("Failed to create macro pattern");
+							return new_code!(expr_span, ac.replace_all(js_override, replace_with));
+						}
 					}
 
 					// If this function requires an implicit scope argument, we need to add it to the args string
@@ -2060,6 +2082,7 @@ impl<'a> JSifier<'a> {
 
 		code.line("\"use strict\";");
 		code.line(format!("const {HELPERS_VAR} = require(\"@winglang/sdk/lib/helpers\");"));
+		code.line(format!("const {MACROS_VAR} = require(\"@winglang/sdk/lib/macros\");"));
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));

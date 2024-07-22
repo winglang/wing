@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $counter, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
@@ -14,7 +15,7 @@ module.exports = function({ $counter, $std_Json }) {
     async handle(request) {
       const count = (await $counter.inc());
       const bodyResponse = ({"count": count});
-      const resp = ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(bodyResponse), "headers": ({["content-type"]: "application/json"}), "status": 200});
+      const resp = ({"body": $macros.__Json_stringify(false, $std_Json, bodyResponse), "headers": ({["content-type"]: "application/json"}), "status": 200});
       return resp;
     }
   }
@@ -27,6 +28,7 @@ module.exports = function({ $counter, $std_Json }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $api_url }) {
   class $Closure2 {
     constructor({  }) {
@@ -36,7 +38,7 @@ module.exports = function({ $api_url }) {
     }
     async handle() {
       const url = $api_url;
-      $helpers.assert(url.startsWith("http"), "url.startsWith(\"http\")");
+      $helpers.assert($macros.__String_startsWith(false, url, "http"), "url.startsWith(\"http\")");
     }
   }
   return $Closure2;
@@ -48,6 +50,7 @@ module.exports = function({ $api_url }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $__parent_this_3_api_url }) {
   class $Closure3 {
     constructor({  }) {
@@ -69,6 +72,7 @@ module.exports = function({ $__parent_this_3_api_url }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -476,6 +480,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

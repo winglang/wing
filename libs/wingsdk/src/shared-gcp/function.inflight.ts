@@ -65,7 +65,8 @@ export class FunctionClient implements IFunctionClient {
           },
         },
       });
-      return (res.data as Json | undefined) ?? undefined;
+      /// The gcp call returns "" even for an undefined call
+      return (res.data as undefined | Json) || undefined;
     } catch (error) {
       throw new Error(
         `Error while invoking the function ${this.functionName}:\n${

@@ -19,7 +19,7 @@ export class Struct {
   /**
    * Converts a Json to a Struct
    *
-   * @macro $self$._fromJson($args$)
+   * @macro $self$._fromJson(...$args$)
    */
   public static fromJson(json: Json, options?: JsonValidationOptions): T1 {
     json;
@@ -30,7 +30,7 @@ export class Struct {
   /**
    * Converts a Json to a Struct, returning nil if the Json is not valid
    *
-   * @macro $self$._tryFromJson($args$)
+   * @macro $self$._tryFromJson(...$args$)
    */
   public static tryFromJson(json: Json): T1 | undefined {
     json;
