@@ -134,7 +134,7 @@ export function determineTargetFromPlatforms(platforms: string[]): string {
  */
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
   const { log } = options;
-  const preflightLog = options.preflightLog ?? console.log;
+  const preflightLog = options.preflightLog ?? process.stdout.write.bind(process.stdout);
   // create a unique temporary directory for the compilation
   const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
   const entrypointFile = resolve(entrypoint);
@@ -211,7 +211,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     await runPreflightCodeInWorkerThread(
       compileForPreflightResult.preflightEntrypoint,
       preflightEnv,
-      (data) => preflightLog?.(data.toString().trim())
+      (data) => preflightLog?.(data.toString())
     );
   }
   return synthDir;
