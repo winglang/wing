@@ -325,6 +325,7 @@ export class Simulator {
       await this.startResources();
     } catch (err: any) {
       this.stopServer();
+      await this.lockfile.release();
       this._running = "stopped";
       throw err;
     }
