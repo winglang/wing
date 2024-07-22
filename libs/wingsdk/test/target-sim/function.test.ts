@@ -2,11 +2,10 @@ import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { inflight } from "../../src/core";
-import { Node } from "../../src/std";
+import { Json, Node } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = inflight(async (_, event) => {
-  event = JSON.parse(event);
   let msg: string;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
@@ -16,7 +15,7 @@ const INFLIGHT_CODE = inflight(async (_, event) => {
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return JSON.stringify({ msg });
+  return { msg };
 });
 
 const INFLIGHT_PANIC = inflight(async () => {
@@ -37,7 +36,6 @@ test("create a function", async () => {
   expect(s.getResourceConfig("/my_function")).toEqual({
     attrs: {
       handle: expect.any(String),
-      runningState: expect.any(String),
     },
     path: "root/my_function",
     addr: expect.any(String),
@@ -69,10 +67,10 @@ test("invoke function succeeds", async () => {
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
-  const response = await client.invoke(JSON.stringify(PAYLOAD));
+  const response = await client.invoke(Json._fromAny(PAYLOAD));
 
   // THEN
-  expect(response).toEqual(JSON.stringify({ msg: `Hello, ${PAYLOAD.name}!` }));
+  expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
@@ -125,14 +123,12 @@ test("invoke function with environment variables", async () => {
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
-  const response = await client.invoke(JSON.stringify(PAYLOAD));
+  const response = await client.invoke(Json._fromAny(PAYLOAD));
 
   // THEN
-  expect(response).toEqual(
-    JSON.stringify({
-      msg: `Ellohay, ${PAYLOAD.name}!`,
-    })
-  );
+  expect(response).toEqual({
+    msg: `Ellohay, ${PAYLOAD.name}!`,
+  });
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
@@ -149,7 +145,7 @@ test("invoke function fails", async () => {
 
   // WHEN
   const PAYLOAD = { name: "alice" };
-  await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
+  await expect(client.invoke(Json._fromAny(PAYLOAD))).rejects.toThrow(
     "Name must start with uppercase letter"
   );
 
@@ -212,8 +208,7 @@ test("invoke function with process.exit(1)", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
   // WHEN
-  const PAYLOAD = {};
-  await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
+  await expect(client.invoke()).rejects.toThrow(
     "Process exited with code 1, signal null"
   );
   // THEN

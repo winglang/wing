@@ -1,32 +1,16 @@
 import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
-import { Api } from "./api";
-import { Bucket } from "./bucket";
 import { SIM_CONTAINER_FQN } from "./container";
-import { Counter } from "./counter";
-import { Domain } from "./domain";
-import { Endpoint } from "./endpoint";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
-import { Function } from "./function";
-import { OnDeploy } from "./on-deploy";
-import { POLICY_FQN, Policy } from "./policy";
-import { Queue } from "./queue";
-import { Redis } from "./redis";
+import { POLICY_FQN } from "./policy";
 import { SIM_RESOURCE_FQN, isSimulatorResource } from "./resource";
-import { Schedule } from "./schedule";
-import { Secret } from "./secret";
-import { Service } from "./service";
-import { STATE_FQN, State } from "./state";
-import { Table } from "./table";
+import { STATE_FQN } from "./state";
 import { TestRunner } from "./test-runner";
 import { SimTokens } from "./tokens";
-import { Topic } from "./topic";
-import { Website } from "./website";
 import {
   API_FQN,
   BUCKET_FQN,
-  COUNTER_FQN,
   DOMAIN_FQN,
   ENDPOINT_FQN,
   FUNCTION_FQN,
@@ -42,7 +26,6 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { registerTokenResolver } from "../core/tokens";
-import { REDIS_FQN, TABLE_FQN } from "../ex";
 import {
   BaseResourceSchema,
   TypeSchema,
@@ -66,14 +49,12 @@ const SIMULATOR_CLASS_DATA = {
   [ON_DEPLOY_FQN]: "OnDeploy",
   [POLICY_FQN]: "Policy",
   [QUEUE_FQN]: "Queue",
-  [REDIS_FQN]: "Redis",
   [SCHEDULE_FQN]: "Schedule",
   [SECRET_FQN]: "Secret",
   [SERVICE_FQN]: "Service",
   [STATE_FQN]: "State",
   [SIM_CONTAINER_FQN]: "Container",
   [SIM_RESOURCE_FQN]: "Resource",
-  [TABLE_FQN]: "Table",
   [TEST_RUNNER_FQN]: "TestRunner",
   [TOPIC_FQN]: "Topic",
   [WEBSITE_FQN]: "Website",
@@ -90,8 +71,7 @@ export class App extends core.App {
   private synthed = false;
 
   constructor(props: core.AppProps) {
-    // doesn't allow customize the root id- as used hardcoded in the code
-    super(undefined as any, "root", props);
+    super(undefined as any, props.rootId ?? "root", props);
     this.outdir = props.outdir ?? ".";
     registerTokenResolver(new SimTokens());
 
@@ -128,9 +108,6 @@ export class App extends core.App {
       case QUEUE_FQN:
         return require.resolve("./queue.inflight");
 
-      case REDIS_FQN:
-        return require.resolve("./redis.inflight");
-
       case SCHEDULE_FQN:
         return require.resolve("./schedule.inflight");
 
@@ -142,9 +119,6 @@ export class App extends core.App {
 
       case STATE_FQN:
         return require.resolve("./state.inflight");
-
-      case TABLE_FQN:
-        return require.resolve("./table.inflight");
 
       case TEST_RUNNER_FQN:
         return require.resolve("./test-runner.inflight");
@@ -160,72 +134,6 @@ export class App extends core.App {
 
       case SIM_RESOURCE_FQN:
         return require.resolve("./resource.inflight");
-    }
-
-    return undefined;
-  }
-
-  protected typeForFqn(fqn: string): any {
-    switch (fqn) {
-      case API_FQN:
-        return Api;
-
-      case BUCKET_FQN:
-        return Bucket;
-
-      case COUNTER_FQN:
-        return Counter;
-
-      case DOMAIN_FQN:
-        return Domain;
-
-      case ENDPOINT_FQN:
-        return Endpoint;
-
-      // EVENT_MAPPING_FQN skipped - it's not a multi-target construct
-
-      case FUNCTION_FQN:
-        return Function;
-
-      case ON_DEPLOY_FQN:
-        return OnDeploy;
-
-      case POLICY_FQN:
-        return Policy;
-
-      case QUEUE_FQN:
-        return Queue;
-
-      case REDIS_FQN:
-        return Redis;
-
-      case SCHEDULE_FQN:
-        return Schedule;
-
-      case SECRET_FQN:
-        return Secret;
-
-      case SERVICE_FQN:
-        return Service;
-
-      case STATE_FQN:
-        return State;
-
-      case TABLE_FQN:
-        return Table;
-
-      case TEST_RUNNER_FQN:
-        return TestRunner;
-
-      case TOPIC_FQN:
-        return Topic;
-
-      case WEBSITE_FQN:
-        return Website;
-
-      // SIM_CONTAINER_FQN skipped - it's not a multi-target construct
-
-      // SIM_RESOURCE_FQN skipped - it's not a multi-target construct
     }
 
     return undefined;

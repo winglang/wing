@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b1 }) {
   class $Closure1 {
     constructor({  }) {
@@ -24,6 +25,7 @@ module.exports = function({ $b1 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $f4 }) {
   class $Closure10 {
     constructor({  }) {
@@ -44,6 +46,7 @@ module.exports = function({ $f4 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b2 }) {
   class $Closure2 {
     constructor({  }) {
@@ -64,6 +67,7 @@ module.exports = function({ $b2 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $ar }) {
   class $Closure3 {
     constructor({  }) {
@@ -86,6 +90,7 @@ module.exports = function({ $ar }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $f1 }) {
   class $Closure4 {
     constructor({  }) {
@@ -106,6 +111,7 @@ module.exports = function({ $f1 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $map }) {
   class $Closure5 {
     constructor({  }) {
@@ -114,7 +120,7 @@ module.exports = function({ $map }) {
       return $obj;
     }
     async handle() {
-      for (const c of Object.values($map)) {
+      for (const c of $macros.__Map_values(false, $map, )) {
         (await c());
       }
     }
@@ -128,6 +134,7 @@ module.exports = function({ $map }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $f2 }) {
   class $Closure6 {
     constructor({  }) {
@@ -148,6 +155,7 @@ module.exports = function({ $f2 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $set }) {
   class $Closure7 {
     constructor({  }) {
@@ -170,6 +178,7 @@ module.exports = function({ $set }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $f3 }) {
   class $Closure8 {
     constructor({  }) {
@@ -190,6 +199,7 @@ module.exports = function({ $f3 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $complex }) {
   class $Closure9 {
     constructor({  }) {
@@ -200,7 +210,7 @@ module.exports = function({ $complex }) {
     async handle() {
       const i = 0;
       const k = "k1";
-      for (const c of ((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($complex, i), k)) {
+      for (const c of $macros.__Map_get(false, $macros.__Array_at(false, $complex, i), k)) {
         (await c());
       }
     }
@@ -643,12 +653,14 @@ module.exports = function({ $complex }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -1006,27 +1018,26 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const b1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
+    const b1 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
     (b1.addObject("k", "v1"));
-    const b2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
+    const b2 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
     (b2.addObject("k", "v2"));
     const c1 = new $Closure1(this, "$Closure1");
     const c2 = new $Closure2(this, "$Closure2");
     const ar = [c1, c2];
-    const f1 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f1", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure array", new $Closure4(this, "$Closure4"));
+    const f1 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f1", new $Closure3(this, "$Closure3"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure array", new $Closure4(this, "$Closure4"));
     const map = ({["k1"]: c1, ["k2"]: c2});
-    const f2 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f2", new $Closure5(this, "$Closure5"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure map", new $Closure6(this, "$Closure6"));
+    const f2 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f2", new $Closure5(this, "$Closure5"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure map", new $Closure6(this, "$Closure6"));
     const set = new Set([c1, c2]);
-    const f3 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f3", new $Closure7(this, "$Closure7"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure set", new $Closure8(this, "$Closure8"));
+    const f3 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f3", new $Closure7(this, "$Closure7"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure set", new $Closure8(this, "$Closure8"));
     const complex = [({["k1"]: new Set([c1, c2])})];
-    const f4 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f4", new $Closure9(this, "$Closure9"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure in complex collection", new $Closure10(this, "$Closure10"));
+    const f4 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "f4", new $Closure9(this, "$Closure9"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:lift closure in complex collection", new $Closure10(this, "$Closure10"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "lift_inflight_closure_collection.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

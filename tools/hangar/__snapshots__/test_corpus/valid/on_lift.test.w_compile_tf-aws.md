@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Foo, $foo }) {
   class $Closure1 {
     constructor({  }) {
@@ -25,6 +26,7 @@ module.exports = function({ $Foo, $foo }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $util_Util }) {
   class Foo {
     constructor({  }) {
@@ -65,12 +67,14 @@ module.exports = function({ $util_Util }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -83,12 +87,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
       }
       onLift(host, ops) {
-        if (ops.includes("m1")) {
+        if ($macros.__Array_contains(false, ops, "m1")) {
           (host.addEnvironment("ABC", "123"));
         }
       }
       static onLiftType(host, ops) {
-        if (ops.includes("m2")) {
+        if ($macros.__Array_contains(false, ops, "m2")) {
           (host.addEnvironment("XYZ", "789"));
         }
       }
@@ -167,10 +171,9 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const foo = new Foo(this, "Foo");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:onLift and onLiftType allow capabilities to be granted to inflight hosts", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:onLift and onLiftType allow capabilities to be granted to inflight hosts", new $Closure1(this, "$Closure1"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "on_lift.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

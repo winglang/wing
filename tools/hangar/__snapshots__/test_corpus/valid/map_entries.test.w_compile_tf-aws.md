@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $map }) {
   class $Closure1 {
     constructor({  }) {
@@ -12,9 +13,9 @@ module.exports = function({ $map }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq(Object.keys($map).length, 1), "map.size() == 1");
-      $helpers.assert(("foo" in ($map)), "map.has(\"foo\")");
-      $helpers.assert((!("bar" in ($map))), "!map.has(\"bar\")");
+      $helpers.assert($helpers.eq($macros.__Map_size(false, $map, ), 1), "map.size() == 1");
+      $helpers.assert($macros.__Map_has(false, $map, "foo"), "map.has(\"foo\")");
+      $helpers.assert((!$macros.__Map_has(false, $map, "bar")), "!map.has(\"bar\")");
     }
   }
   return $Closure1;
@@ -26,6 +27,7 @@ module.exports = function({ $map }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $map }) {
   class $Closure2 {
     constructor({  }) {
@@ -34,7 +36,7 @@ module.exports = function({ $map }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })($map, "foo"), "hello"), "map.get(\"foo\") == \"hello\"");
+      $helpers.assert($helpers.eq($macros.__Map_get(false, $map, "foo"), "hello"), "map.get(\"foo\") == \"hello\"");
     }
   }
   return $Closure2;
@@ -46,6 +48,7 @@ module.exports = function({ $map }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $map }) {
   class $Closure3 {
     constructor({  }) {
@@ -54,8 +57,8 @@ module.exports = function({ $map }) {
       return $obj;
     }
     async handle() {
-      const entries = Object.entries($map).map(([key, value]) => ({ key, value }));
-      for (const x of Object.entries($map).map(([key, value]) => ({ key, value }))) {
+      const entries = $macros.__Map_entries(false, $map, );
+      for (const x of $macros.__Map_entries(false, $map, )) {
         $helpers.assert($helpers.eq(x.key, "foo"), "x.key == \"foo\"");
         $helpers.assert($helpers.eq(x.value, "hello"), "x.value == \"hello\"");
       }
@@ -70,6 +73,7 @@ module.exports = function({ $map }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure4 {
     constructor({  }) {
@@ -79,7 +83,7 @@ module.exports = function({  }) {
     }
     async handle() {
       const map = ({["foo"]: "hello", ["bar"]: "world"});
-      $helpers.assert($helpers.eq(Object.entries(map).map(([key, value]) => ({ key, value })).length, 2), "map.entries().length == 2");
+      $helpers.assert($helpers.eq($macros.__Map_entries(false, map, ).length, 2), "map.entries().length == 2");
     }
   }
   return $Closure4;
@@ -109,12 +113,14 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -259,13 +265,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const map = ({["foo"]: "hello"});
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:check if map has entries", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:get value from map", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:iterate map using entries() method", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:check entries() when map has multiple entries", new $Closure4(this, "$Closure4"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:check if map has entries", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:get value from map", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:iterate map using entries() method", new $Closure3(this, "$Closure3"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:check entries() when map has multiple entries", new $Closure4(this, "$Closure4"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "map_entries.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

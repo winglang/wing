@@ -59,5 +59,5 @@ export interface IInflight$Inflight extends IHostedLiftable$Inflight {
 /** A resource with an inflight "handle" method that can be used to create a `cloud.Function`. */
 export interface IFunctionHandler$Inflight extends IInflight$Inflight {
   /** Entrypoint function that will be called when the cloud function is invoked. */
-  readonly handle: (event?: (string) | undefined) => Promise<string | void>;
+  readonly handle: (event?: (Readonly<any>) | undefined) => Promise<Readonly<any> | void>;
 }

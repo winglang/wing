@@ -1,7 +1,5 @@
 import { CorsHeaders, HttpMethod, OpenApiSpec } from "../cloud/api";
-import { ColumnType } from "../ex";
 import { PolicyStatement } from "../simulator/simulator";
-import { Json } from "../std";
 
 export type ResourceHandle = string;
 
@@ -132,17 +130,6 @@ export interface TopicSubscriber extends EventSubscription {
   readonly functionHandle: ResourceHandle;
 }
 
-/** Properties for cloud.Table */
-export interface TableSchema {
-  readonly name: string;
-  readonly columns: { [key: string]: ColumnType };
-  readonly primaryKey: string;
-  readonly initialRows: Record<string, Json>;
-}
-
-/** Runtime attributes for cloud.Table */
-export interface TableAttributes {}
-
 /** Properties for cloud.Bucket */
 export interface BucketSchema {
   /** Whether the bucket should be publicly accessible. */
@@ -164,15 +151,6 @@ export interface TestRunnerSchema {
 
 /** Runtime attributes for cloud.TestRunner */
 export interface TestRunnerAttributes {}
-
-/** Properties for redis.Redis */
-export interface RedisSchema {
-  /** The port to run the Redis server on. */
-  readonly port: string;
-}
-
-/** Runtime attributes for ex.Redis */
-export interface RedisAttributes {}
 
 /**
  * Custom routes created in preflight.

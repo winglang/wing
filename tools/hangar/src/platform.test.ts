@@ -11,20 +11,20 @@ import { tmpdir } from "os";
 import { Testing } from "cdktf";
 
 describe("Multiple platforms", () => {
-  const app = "main.w";
+  const app = "example.main.w";
   const appFile = path.join(platformsDir, app);
 
   test("only first platform app is used", async () => {
     const args = ["compile"];
     const platforms = ["tf-aws", "tf-azure"];
-    const targetDir = path.join(platformsDir, "target", "main.tfaws");
+    const targetDir = path.join(platformsDir, "target", "example.main.tfaws");
 
     await runWingCommand({
       cwd: tmpDir,
       platforms,
       wingFile: appFile,
       args,
-      expectFailure: false
+      expectFailure: false,
     });
 
     const terraformOutput = sanitize_json_paths(
@@ -34,10 +34,12 @@ describe("Multiple platforms", () => {
     const terraformOutputString = JSON.stringify(terraformOutput);
 
     expect(terraformOutput).toMatchSnapshot();
-    expect(tfResourcesOfCount(terraformOutputString, "aws_s3_bucket")) // should be s3 since tf-aws
-    .toEqual(2);
+    // tf-azure does not have a Topic impl, so it falls back to tf-aws
+    expect(tfResourcesOfCount(terraformOutputString, "aws_sns_topic")).toEqual(
+      1
+    );
   });
-})
+});
 
 describe("Platform with parameters", () => {
   const platformParameters = {
@@ -53,29 +55,32 @@ describe("Platform with parameters", () => {
           seeNoEvil: { type: "boolean" },
           hearNoEvil: { type: "boolean" },
           speakNoEvil: {
-            type: "boolean"
+            type: "boolean",
           },
         },
         allOf: [
           {
-            "$comment": "If see no evil, then we need to know if we hear or speak evil",
+            $comment:
+              "If see no evil, then we need to know if we hear or speak evil",
             if: { properties: { seeNoEvil: { const: true } } },
-            then: { required: ["hearNoEvil", "speakNoEvil"] }
+            then: { required: ["hearNoEvil", "speakNoEvil"] },
           },
           {
-            "$comment": "If we hear or speak evil, then we need to know if we see or speak evil",
+            $comment:
+              "If we hear or speak evil, then we need to know if we see or speak evil",
             if: { properties: { hearNoEvil: { const: true } } },
-            then: { required: ["seeNoEvil", "speakNoEvil"] }
+            then: { required: ["seeNoEvil", "speakNoEvil"] },
           },
           {
-            "$comment": "If we see or speak evil, then we need to know if we speak or hear evil",
+            $comment:
+              "If we see or speak evil, then we need to know if we speak or hear evil",
             if: { properties: { seeNoEvil: { const: true } } },
-            then: { required: ["speakNoEvil", "hearNoEvil"] }
-          }
-        ]
-      }
-    }
-  }
+            then: { required: ["speakNoEvil", "hearNoEvil"] },
+          },
+        ],
+      },
+    },
+  };
 
   const platformCode = `
   exports.Platform = class Platform {
@@ -83,11 +88,14 @@ describe("Platform with parameters", () => {
   
     parameters = ${JSON.stringify(platformParameters)};
   }
-` 
+`;
   const app = "main.w";
   const appFile = path.join(platformsDir, app);
   const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
-  const platformWithParametersFile = path.join(tempdir, "platform-with-parameters.js");
+  const platformWithParametersFile = path.join(
+    tempdir,
+    "platform-with-parameters.js"
+  );
   fs.writeFileSync(platformWithParametersFile, platformCode);
 
   test("will compile if all required parameters are provided", async () => {
@@ -97,19 +105,19 @@ describe("Platform with parameters", () => {
       a: "some-value",
       b: 123,
       c: false,
-    }
+    };
     const paramFile = path.join(tempdir, "params.json");
     fs.writeFileSync(paramFile, JSON.stringify(params));
 
     const args = ["compile", "--values", paramFile];
-    
+
     // WHEN
     const output = await runWingCommand({
       cwd: tmpDir,
       platforms,
       wingFile: appFile,
       args,
-      expectFailure: false
+      expectFailure: false,
     });
 
     // THEN
@@ -120,14 +128,14 @@ describe("Platform with parameters", () => {
     // GIVEN
     const args = ["compile"];
     const platforms = ["tf-aws", platformWithParametersFile];
-    
+
     // WHEN
     const output = await runWingCommand({
       cwd: tmpDir,
       platforms,
       wingFile: appFile,
       args,
-      expectFailure: true
+      expectFailure: true,
     });
 
     // THEN
@@ -145,11 +153,11 @@ describe("Platform with parameters", () => {
       b: 123,
       c: false,
       optionals: {
-        seeNoEvil: true
-      }
-    }
+        seeNoEvil: true,
+      },
+    };
     const paramFile = path.join(tempdir, "params.json");
-    fs.writeFileSync(paramFile, JSON.stringify(params));    
+    fs.writeFileSync(paramFile, JSON.stringify(params));
     const args = ["compile", "--values", paramFile];
     // WHEN
     const output = await runWingCommand({
@@ -157,13 +165,15 @@ describe("Platform with parameters", () => {
       platforms,
       wingFile: appFile,
       args,
-      expectFailure: true
+      expectFailure: true,
     });
 
     // THEN
     expect(output.stderr).toContain("Parameter validation errors:");
     expect(output.stderr).toContain("must have required property 'hearNoEvil'");
-    expect(output.stderr).toContain("must have required property 'speakNoEvil'");
+    expect(output.stderr).toContain(
+      "must have required property 'speakNoEvil'"
+    );
   });
 });
 
@@ -173,7 +183,7 @@ describe("Platform examples", () => {
 
   describe("External platform", () => {
     const args = ["compile"];
-    const basePlatforms = ["@winglang/platform-awscdk"]
+    const basePlatforms = ["@winglang/platform-awscdk"];
     const targetDir = path.join(platformsDir, "target", "main.tfaws");
 
     test("compile awscdk", async () => {
@@ -183,15 +193,14 @@ describe("Platform examples", () => {
         platforms: [...basePlatforms],
         wingFile: appFile,
         args,
-        expectFailure: false
+        expectFailure: false,
       });
-    })
-
+    });
   });
 
   describe("Platform folder with relative dependencies", () => {
     const args = ["compile"];
-    const basePlatforms = ["tf-aws"]
+    const basePlatforms = ["tf-aws"];
 
     test("compile local package from folder", async () => {
       const platform = path.join(platformsDir, "local-package");
@@ -200,9 +209,9 @@ describe("Platform examples", () => {
         platforms: [...basePlatforms, platform],
         wingFile: appFile,
         args,
-        expectFailure: false
+        expectFailure: false,
       });
-    })
+    });
 
     test("compile local package from file", async () => {
       const platform = path.join(platformsDir, "local-package", "index.js");
@@ -211,14 +220,14 @@ describe("Platform examples", () => {
         platforms: [...basePlatforms, platform],
         wingFile: appFile,
         args,
-        expectFailure: false
+        expectFailure: false,
       });
-    })
+    });
   });
 
   describe("AWS target platform", () => {
     const args = ["compile"];
-    const basePlatforms = ["tf-aws"]
+    const basePlatforms = ["tf-aws"];
     const targetDir = path.join(platformsDir, "target", "main.tfaws");
 
     test("permission-boundary.js", async () => {
@@ -231,7 +240,7 @@ describe("Platform examples", () => {
         platforms: [...basePlatforms, platform],
         wingFile: appFile,
         args,
-        expectFailure: false
+        expectFailure: false,
       });
 
       const terraformOutput = sanitize_json_paths(
@@ -264,7 +273,7 @@ describe("Platform examples", () => {
         platforms: [...basePlatforms, platform],
         wingFile: appFile,
         args,
-        expectFailure: false
+        expectFailure: false,
       });
 
       const terraformOutput = sanitize_json_paths(
@@ -306,7 +315,7 @@ describe("Platform examples", () => {
           platforms: [...basePlatforms, platform],
           wingFile: appFile,
           args,
-          expectFailure: false
+          expectFailure: false,
         });
 
         const tfPath = path.join(targetDir, "main.tf.json");
@@ -340,7 +349,7 @@ describe("Platform examples", () => {
           platforms: [...basePlatforms, platform],
           wingFile: appFile,
           args,
-          expectFailure: false
+          expectFailure: false,
         });
 
         const tfPath = path.join(targetDir, "main.tf.json");
@@ -380,7 +389,7 @@ describe("Platform examples", () => {
           wingFile: appFile,
           platforms: [...basePlatforms, platform],
           args,
-          expectFailure: false
+          expectFailure: false,
         });
 
         const tfPath = path.join(targetDir, "main.tf.json");
@@ -409,10 +418,10 @@ describe("Implicit platform files", () => {
     properties: {
       foo: {
         type: "string",
-      }
+      },
     },
-    required: ["foo"]
-  }
+    required: ["foo"],
+  };
 
   // Simple platform with a required parameter
   const platformCode = `
@@ -420,7 +429,7 @@ describe("Implicit platform files", () => {
     target = "*";
     parameters = ${JSON.stringify(platformParameters)};
   }
-  `
+  `;
 
   describe("can be defined", () => {
     test("in the source directory", async () => {
@@ -429,10 +438,12 @@ describe("Implicit platform files", () => {
         bring cloud;
 
         let b = new cloud.Bucket();
-      `
+      `;
       const args = ["compile"];
-      const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
-      
+      const tempdir = fs.mkdtempSync(
+        path.join(tmpdir(), "platform-parameters")
+      );
+
       fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
       fs.writeFileSync(path.join(tempdir, "wplatform.js"), platformCode);
 
@@ -441,13 +452,13 @@ describe("Implicit platform files", () => {
         cwd: tempdir,
         wingFile: path.join(tempdir, "main.w"),
         args,
-        expectFailure: true
+        expectFailure: true,
       });
 
       // THEN
       expect(output.stderr).toContain("Parameter validation errors:");
       expect(output.stderr).toContain("- must have required property 'foo'");
-    })
+    });
 
     test("with a .wplatform.js extension", async () => {
       // GIVEN
@@ -455,19 +466,24 @@ describe("Implicit platform files", () => {
         bring cloud;
 
         let b = new cloud.Bucket();
-      `
+      `;
       const args = ["compile"];
-      const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
-      
+      const tempdir = fs.mkdtempSync(
+        path.join(tmpdir(), "platform-parameters")
+      );
+
       fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
-      fs.writeFileSync(path.join(tempdir, "whatever.wplatform.js"), platformCode);
+      fs.writeFileSync(
+        path.join(tempdir, "whatever.wplatform.js"),
+        platformCode
+      );
 
       // WHEN
       const output = await runWingCommand({
         cwd: tempdir,
         wingFile: path.join(tempdir, "main.w"),
         args,
-        expectFailure: true
+        expectFailure: true,
       });
 
       console.log("STDOUT: ", output.stdout);
@@ -485,10 +501,12 @@ describe("Implicit platform files", () => {
         bring "./lib" as myLib;
 
         let b = new cloud.Bucket();
-      `
-      
+      `;
+
       const args = ["compile"];
-      const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
+      const tempdir = fs.mkdtempSync(
+        path.join(tmpdir(), "platform-parameters")
+      );
       fs.mkdirSync(path.join(tempdir, "lib"));
       fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
       fs.writeFileSync(path.join(tempdir, "lib", "dummy.w"), "");
@@ -499,7 +517,7 @@ describe("Implicit platform files", () => {
         cwd: tempdir,
         wingFile: path.join(tempdir, "main.w"),
         args,
-        expectFailure: true
+        expectFailure: true,
       });
 
       // THEN
@@ -515,7 +533,7 @@ describe("Implicit platform files", () => {
         bring "./lib2" as myLib2;
 
         let b = new cloud.Bucket();
-      `
+      `;
       const otherPlatformCode = `
         exports.Platform = class Platform {
           target = "*";
@@ -529,24 +547,28 @@ describe("Implicit platform files", () => {
             required: ["bar"]
           }
         }
-      `
+      `;
       const args = ["compile"];
-      const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
+      const tempdir = fs.mkdtempSync(
+        path.join(tmpdir(), "platform-parameters")
+      );
       fs.mkdirSync(path.join(tempdir, "lib"));
       fs.mkdirSync(path.join(tempdir, "lib2"));
       fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
       fs.writeFileSync(path.join(tempdir, "lib", "dummy.w"), "");
       fs.writeFileSync(path.join(tempdir, "lib", "wplatform.js"), platformCode);
       fs.writeFileSync(path.join(tempdir, "lib2", "dummy.w"), "");
-      fs.writeFileSync(path.join(tempdir, "lib2", "wplatform.js"), otherPlatformCode);
-
+      fs.writeFileSync(
+        path.join(tempdir, "lib2", "wplatform.js"),
+        otherPlatformCode
+      );
 
       // WHEN
       const output = await runWingCommand({
         cwd: tempdir,
         wingFile: path.join(tempdir, "main.w"),
         args,
-        expectFailure: true
+        expectFailure: true,
       });
 
       // THEN
@@ -554,5 +576,5 @@ describe("Implicit platform files", () => {
       expect(output.stderr).toContain("- must have required property 'foo'");
       expect(output.stderr).toContain("- must have required property 'bar'");
     });
-  })
-})
+  });
+});

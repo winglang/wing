@@ -24,9 +24,9 @@ const options = parseArgs({
       fileURLToPath(new URL("../demo/main.w", import.meta.url)),
     requestedPort: 1214,
     log: {
-      info: console.log,
-      error: console.error,
-      verbose: console.log,
+      info: () => {},
+      error: (...arguments_) => console.error("[error]", ...arguments_),
+      verbose: () => {},
     },
     config: {
       addEventListener(event, listener) {},
@@ -49,6 +49,19 @@ const options = parseArgs({
       return options.getEndpointWarningAccepted ?? true;
     },
   });
+
+  let closing = false;
+  const events = ["beforeExit", "SIGINT", "SIGTERM", "SIGHUP"];
+  for (const event of events) {
+    process.on(event, async () => {
+      if (closing) {
+        return;
+      }
+      closing = true;
+      await consoleServer.close();
+      process.exit();
+    });
+  }
 
   const vite = await createViteServer({
     ...viteConfig,

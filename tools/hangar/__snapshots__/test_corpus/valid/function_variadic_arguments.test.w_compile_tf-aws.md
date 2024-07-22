@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -18,6 +19,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $A }) {
   class B extends $A {
     constructor({  }) {
@@ -85,12 +87,14 @@ module.exports = function({ $A }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -157,9 +161,9 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket1");
-    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket2");
-    const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket3");
+    const bucket1 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket1");
+    const bucket2 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket2");
+    const bucket3 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket3");
     ($helpers.nodeof(bucket3).addDependency(bucket1, bucket2));
     const funcBucket = ((...buckets) => {
       $helpers.assert($helpers.eq(buckets.length, 2), "buckets.length == 2");
@@ -172,8 +176,8 @@ class $Root extends $stdlib.std.Resource {
       for (const i of args) {
         $helpers.assert(((i > 0) && (i < 5)), "i > 0 && i < 5");
       }
-      args.push(10);
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(args, 4), 10), "args.at(4) == 10");
+      $macros.__MutArray_push(false, args, 10);
+      $helpers.assert($helpers.eq($macros.__MutArray_at(false, args, 4), 10), "args.at(4) == 10");
     });
     (func1(1, "something", 1, 2, 3, 4));
     (func1(1, undefined, 1, 2, 3, 4));
@@ -189,7 +193,7 @@ class $Root extends $stdlib.std.Resource {
     const arityFunc = ((n, b, ...events) => {
       let error = false;
       try {
-        ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, (-1));
+        $macros.__Array_at(false, events, (-1));
       }
       catch ($error_ex) {
         const ex = $error_ex.message;
@@ -199,19 +203,18 @@ class $Root extends $stdlib.std.Resource {
     });
     (arityFunc(1, true, "a", "b", "c", "d"));
     const subTypeFunc = ((...events) => {
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0).message, "this is A"), "events.at(0).message == \"this is A\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1).message, "this is B"), "events.at(1).message == \"this is B\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, events, 0).message, "this is A"), "events.at(0).message == \"this is A\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, events, 1).message, "this is B"), "events.at(1).message == \"this is B\"");
     });
     (subTypeFunc(new A(this, "A", "this is A"), new B(this, "B", "this is B")));
     const jsonCastingFunc = ((...events) => {
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0), "str"), "events.at(0) == \"str\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1), "json str"), "events.at(1) == \"json str\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, events, 0), "str"), "events.at(0) == \"str\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, events, 1), "json str"), "events.at(1) == \"json str\"");
     });
     const jsonStr = "json str";
     (jsonCastingFunc("str", jsonStr));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "function_variadic_arguments.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

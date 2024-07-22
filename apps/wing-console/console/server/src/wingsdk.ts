@@ -1,7 +1,6 @@
 import type { BaseResourceSchema } from "@winglang/sdk/lib/simulator/index.js";
 import type {
   ApiSchema as ApiSchema_,
-  TableSchema as TableSchema_,
   WebsiteSchema as WebsiteSchema_,
   EndpointSchema as EndpointSchema_,
 } from "@winglang/sdk/lib/target-sim/schema-resources.js";
@@ -27,13 +26,8 @@ export type {
 
 export type { ITestRunnerClient } from "@winglang/sdk/lib/std/index.js";
 
-export type { IRedisClient, ITableClient } from "@winglang/sdk/lib/ex/index.js";
-
 export type ApiSchema = BaseResourceSchema & {
   props: ApiSchema_;
-};
-export type TableSchema = BaseResourceSchema & {
-  props: TableSchema_;
 };
 export type WebsiteSchema = BaseResourceSchema & {
   props: WebsiteSchema_;

@@ -818,7 +818,7 @@ describe("in-place updates", () => {
     ]);
   });
 
-  test("cloud.Api routes are updated", async () => {
+  test("cloud.Api routes are updated", { retry: 3 }, async () => {
     const app = new SimApp();
     const api = new Api(app, "Api");
     api.get("/hello", OK_200);

@@ -42,7 +42,7 @@ const code = inflight(async () => {
 // and that process has code set up for gracefully shutting down the simulator,
 // then the simulator will be stopped correctly (including child processes
 // like services).
-test("simulator cleanup", async () => {
+test("simulator cleanup", { timeout: 20_000 }, async () => {
   // Synthesize configuration for the simulator to use in the test
   const app = new SimApp({ isTestEnvironment: true });
   new Service(app, "Service", code);

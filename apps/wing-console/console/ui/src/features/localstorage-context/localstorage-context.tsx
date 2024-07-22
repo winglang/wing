@@ -21,7 +21,7 @@ export const AppLocalStorageContext = createContext<{
 });
 
 export interface AppLocalStorageProviderProps extends PropsWithChildren {
-  storageKey: string;
+  storageKey: string | undefined;
 }
 
 export const AppLocalStorageProvider = (

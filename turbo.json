@@ -11,7 +11,8 @@
     "tools/bump-pack/**",
     "!tools/bump-pack/node_modules/**"
   ],
-  "pipeline": {
+  "ui": "stream",
+  "tasks": {
     "default": {
       "inputs": ["*.json", ".projenrc.ts"]
     },
@@ -118,7 +119,7 @@
       "inputs": ["*.md", "LICENSE"]
     },
     "topo": {
-      "inputs": ["**", "!node_modules/**", "!**/target/**"],
+      "inputs": ["**", "!node_modules/**", "!*/**/target/**"],
       "dependsOn": ["^topo"]
     },
     "dev": {

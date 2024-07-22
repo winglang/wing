@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -25,6 +26,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
     constructor({ $this_data_field0 }) {
@@ -61,12 +63,14 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -147,10 +151,10 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(y.field1, 1), "y.field1 == 1");
     $helpers.assert($helpers.eq(y.field3.field0, "foo"), "y.field3.field0 == \"foo\"");
     const s = ({"a": "Boom baby"});
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:struct definitions are phase independant", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:struct definitions are phase independant", new $Closure1(this, "$Closure1"));
     const aNode = ({"val": "someval"});
     const bNode = ({"val": "otherval", "next": aNode});
-    (expect.Util.equal(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(bNode), "{\"val\":\"otherval\",\"next\":{\"val\":\"someval\"\}\}"));
+    (expect.Util.equal($macros.__Json_stringify(false, std.Json, bNode), "{\"val\":\"otherval\",\"next\":{\"val\":\"someval\"\}\}"));
     const numField = 1337;
     const strField = "leet";
     const boolField = true;
@@ -162,7 +166,6 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(someStruct3.otherField, "good"), "someStruct3.otherField == \"good\"");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "structs.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

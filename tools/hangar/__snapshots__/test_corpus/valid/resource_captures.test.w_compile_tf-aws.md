@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -34,6 +35,7 @@ module.exports = function({ $r }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Another {
     constructor({  }) {
@@ -54,6 +56,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class First {
     constructor({  }) {
@@ -68,6 +71,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class MyResource {
     constructor({ $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr, $this_extBucket, $this_extNum, $this_mapOfNum, $this_myBool, $this_myNum, $this_myOptStr, $this_myQueue, $this_myResource, $this_myStr, $this_setOfStr }) {
@@ -93,10 +97,10 @@ module.exports = function({  }) {
     }
     async testCaptureCollectionsOfData() {
       $helpers.assert($helpers.eq(this.$this_arrayOfStr.length, 2), "this.arrayOfStr.length == 2");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.$this_arrayOfStr, 0), "s1"), "this.arrayOfStr.at(0) == \"s1\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.$this_arrayOfStr, 1), "s2"), "this.arrayOfStr.at(1) == \"s2\"");
-      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.$this_mapOfNum, "k1"), 11), "this.mapOfNum.get(\"k1\") == 11");
-      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.$this_mapOfNum, "k2"), 22), "this.mapOfNum.get(\"k2\") == 22");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, this.$this_arrayOfStr, 0), "s1"), "this.arrayOfStr.at(0) == \"s1\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, this.$this_arrayOfStr, 1), "s2"), "this.arrayOfStr.at(1) == \"s2\"");
+      $helpers.assert($helpers.eq($macros.__Map_get(false, this.$this_mapOfNum, "k1"), 11), "this.mapOfNum.get(\"k1\") == 11");
+      $helpers.assert($helpers.eq($macros.__Map_get(false, this.$this_mapOfNum, "k2"), 22), "this.mapOfNum.get(\"k2\") == 22");
       $helpers.assert((await this.$this_setOfStr.has("s1")), "this.setOfStr.has(\"s1\")");
       $helpers.assert((await this.$this_setOfStr.has("s2")), "this.setOfStr.has(\"s2\")");
       $helpers.assert((!(await this.$this_setOfStr.has("s3"))), "!this.setOfStr.has(\"s3\")");
@@ -234,12 +238,14 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -250,7 +256,7 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+        this.myResource = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
       }
       static _toInflightType() {
         return `
@@ -313,7 +319,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, externalBucket, externalNum) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+        this.myResource = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
         this.myStr = "myString";
         this.myNum = 42;
         this.myBool = true;
@@ -322,10 +328,10 @@ class $Root extends $stdlib.std.Resource {
         this.mapOfNum = ({["k1"]: 11, ["k2"]: 22});
         this.setOfStr = new Set(["s1", "s2", "s1"]);
         this.another = new Another(this, "Another");
-        this.myQueue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
+        this.myQueue = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
         this.extBucket = externalBucket;
         this.extNum = externalNum;
-        this.unusedResource = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+        this.unusedResource = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
       }
       helloPreflight() {
         return this.another;
@@ -457,12 +463,11 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const b = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const r = new MyResource(this, "MyResource", b, 12);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource_captures.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

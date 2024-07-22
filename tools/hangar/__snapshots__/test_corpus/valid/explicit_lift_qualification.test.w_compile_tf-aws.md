@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $foo }) {
   class $Closure1 {
     constructor({  }) {
@@ -24,6 +25,7 @@ module.exports = function({ $foo }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $bucket1 }) {
   class $Closure2 {
     constructor({  }) {
@@ -48,6 +50,7 @@ module.exports = function({ $bucket1 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $inflight_closure }) {
   class $Closure3 {
     constructor({  }) {
@@ -68,6 +71,7 @@ module.exports = function({ $inflight_closure }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $bar }) {
   class $Closure4 {
     constructor({  }) {
@@ -91,6 +95,7 @@ module.exports = function({ $bar }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $bucket1, $bucket2, $bucket3, $maybe_bucket }) {
   class Foo {
     constructor({  }) {
@@ -125,6 +130,7 @@ module.exports = function({ $bucket1, $bucket2, $bucket3, $maybe_bucket }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class PreflightClass {
     constructor({  }) {
@@ -207,12 +213,14 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -434,20 +442,19 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
+    const bucket1 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
     (bucket1.addObject("k", "value"));
-    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
-    const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b3");
+    const bucket2 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
+    const bucket3 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b3");
     const maybe_bucket = undefined;
     const foo = new Foo(this, "Foo");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit method lift qualification", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit method lift qualification", new $Closure1(this, "$Closure1"));
     const inflight_closure = new $Closure2(this, "$Closure2");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit closure lift qualification", new $Closure3(this, "$Closure3"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit closure lift qualification", new $Closure3(this, "$Closure3"));
     const bar = new PreflightClass(this, "PreflightClass");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit interface lift qualification", new $Closure4(this, "$Closure4"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit interface lift qualification", new $Closure4(this, "$Closure4"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "explicit_lift_qualification.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

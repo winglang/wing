@@ -800,7 +800,9 @@ pub struct FunctionSignature {
 	/// - `$self$`: The expression on which this function was called
 	/// - `$args$`: the arguments passed to this function call
 	/// - `$args_text$`: the original source text of the arguments passed to this function call, escaped
+	/// Those functions will be compiled into a separate file and retrieved when creating and running the js output.
 	pub js_override: Option<String>,
+	pub is_macro: bool,
 	pub docs: Docs,
 }
 
@@ -1264,7 +1266,6 @@ impl TypeRef {
 			Type::Inferred(..) => true,
 			Type::Array(v) => v.is_json_legal_value(),
 			Type::Map(v) => v.is_json_legal_value(),
-			Type::Optional(v) => v.is_json_legal_value(),
 			Type::Struct(ref s) => {
 				for t in s.fields(true).map(|(_, v)| v.type_) {
 					if !t.is_json_legal_value() {
@@ -1273,6 +1274,7 @@ impl TypeRef {
 				}
 				true
 			}
+			Type::Optional(v) => v.is_json_legal_value(),
 			Type::Json(Some(v)) => match &v.kind {
 				JsonDataKind::Type(SpannedTypeInfo { type_, .. }) => type_.is_json_legal_value(),
 				JsonDataKind::Fields(fields) => {
@@ -2036,6 +2038,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("console.log($args$)".to_string()),
+				is_macro: false,
 				docs: Docs::with_summary("Logs a value"),
 				implicit_scope_param: false,
 			}),
@@ -2062,6 +2065,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
+				is_macro: false,
 				docs: Docs::with_summary("Asserts that a condition is true"),
 				implicit_scope_param: false,
 			}),
@@ -2080,6 +2084,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: self.types.anything(),
 				phase: Phase::Independent,
 				js_override: Some("$args$".to_string()),
+				is_macro: false,
 				docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
 				implicit_scope_param: false,
 			}),
@@ -2108,6 +2113,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: std_node,
 				phase: Phase::Preflight,
 				js_override: Some("$helpers.nodeof($args$)".to_string()),
+				is_macro: false,
 				docs: Docs::with_summary("Obtain the tree node of a preflight resource."),
 				implicit_scope_param: false,
 			}),
@@ -2163,6 +2169,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			phase: Phase::Preflight,
 			// The emitted JS is dynamic
 			js_override: None,
+			is_macro: false,
 			docs: Docs::with_summary(
 				r#"Create an inflight function from the given file.
 The file must be a JavaScript or TypeScript file with a default export that matches the inferred return where `@inflight` is used.
@@ -3491,7 +3498,9 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 
 		// If the expected type is Json and the actual type is a Json legal value then we're good
 		if expected_types.iter().any(|t| t.maybe_unwrap_option().is_json()) {
-			if return_type.is_json_legal_value() {
+			// the actual type should be legal value, and match the optionality of the expected type
+			if return_type.is_json_legal_value() && (!expected_types.iter().any(|t| t.is_json()) || !return_type.is_option())
+			{
 				return return_type;
 			}
 		} else {
@@ -3524,7 +3533,11 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			));
 		}
 
-		if matches!(**return_type.maybe_unwrap_option(), Type::Json(None) | Type::MutJson) {
+		if matches!(**return_type.maybe_unwrap_option(), Type::Json(None) | Type::MutJson)
+			&& !matches!(
+				**first_expected_type.maybe_unwrap_option(),
+				Type::Json(None) | Type::MutJson
+			) {
 			// known json data is statically known
 			hints.push(format!(
 				"use {first_expected_type}.fromJson() to convert dynamic Json\""
@@ -4074,6 +4087,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					return_type: self.resolve_type_annotation(ast_sig.return_type.as_ref(), env),
 					phase: ast_sig.phase,
 					js_override: None,
+					is_macro: false,
 					docs: Docs::default(),
 					implicit_scope_param: false,
 				};
@@ -5332,6 +5346,8 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 	/// * `phase` - initializer phase
 	///
 	fn check_class_field_initialization(&mut self, scope: &Scope, fields: &[ClassField], phase: Phase) {
+		// Traverse the AST of the constructor (preflight or inflight) to find all initialized fields
+		// that were initialized during its execution.
 		let mut visit_init = VisitClassInit::default();
 		visit_init.analyze_statements(&scope.statements);
 		let initialized_fields = visit_init.fields;
@@ -5342,9 +5358,13 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			("Preflight", Phase::Inflight)
 		};
 
+		// For each field on the class...
 		for field in fields.iter() {
+			// Check if a field with that name was initialized in this phase's constructor...
 			let matching_field = initialized_fields.iter().find(|&s| &s.name == &field.name.name);
-			// inflight or static fields cannot be initialized in the initializer
+
+			// If the field is static or in the wrong phase, then it shouldn't have been initialized here,
+			// so we raise an error.
 			if field.phase == forbidden_phase || field.is_static {
 				if let Some(matching_field) = matching_field {
 					self.spanned_error(
@@ -5359,7 +5379,8 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				continue;
 			}
 
-			if matching_field == None {
+			// If the field does match the constructor's phase and it wasn't initialized, then we raise an error.
+			if field.phase == phase && matching_field == None {
 				self.spanned_error(
 					&field.name,
 					format!("{} field \"{}\" is not initialized", current_phase, field.name.name),
@@ -5879,6 +5900,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					return_type: new_return_type,
 					phase: if new_this_type.is_none() { env.phase } else { sig.phase },
 					js_override: sig.js_override.clone(),
+					is_macro: sig.is_macro,
 					docs: sig.docs.clone(),
 					implicit_scope_param: sig.implicit_scope_param,
 				};
@@ -7182,6 +7204,7 @@ mod tests {
 			return_type: ret,
 			phase,
 			js_override: None,
+			is_macro: false,
 			docs: Docs::default(),
 			implicit_scope_param: false,
 		})

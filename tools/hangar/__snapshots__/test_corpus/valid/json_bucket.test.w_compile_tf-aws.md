@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b, $fileName }) {
   class $Closure1 {
     constructor({  }) {
@@ -13,7 +14,7 @@ module.exports = function({ $b, $fileName }) {
     }
     async handle() {
       const x = (await $b.getJson($fileName));
-      $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(x, "persons"), 0), "fears"), 1), "failure"), "x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"");
+      $helpers.assert($helpers.eq($macros.__Json_getAt(false, $macros.__Json_get(false, $macros.__Json_getAt(false, $macros.__Json_get(false, x, "persons"), 0), "fears"), 1), "failure"), "x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"");
     }
   }
   return $Closure1;
@@ -25,6 +26,7 @@ module.exports = function({ $b, $fileName }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b, $fileName, $getJson, $j }) {
   class $Closure2 {
     constructor({  }) {
@@ -184,12 +186,14 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -279,14 +283,13 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const b = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const fileName = "file.json";
     const j = ({"persons": [({"age": 30, "name": "hasan", "fears": ["heights", "failure"]})]});
-    const getJson = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:put", new $Closure2(this, "$Closure2"));
+    const getJson = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:put", new $Closure2(this, "$Closure2"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "json_bucket.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

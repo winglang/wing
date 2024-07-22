@@ -161,6 +161,6 @@ export class Container extends Resource implements ISimulatorResource {
 export enum ContainerInflightMethods {}
 
 /**
- * Inflight interface for `Redis`.
+ * Inflight interface for `sim.Container`.
  */
 export interface IContainerClient {}

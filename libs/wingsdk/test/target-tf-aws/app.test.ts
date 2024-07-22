@@ -1,13 +1,13 @@
 import { existsSync, readdirSync } from "fs";
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import { Function } from "../../src/cloud";
 import { inflight } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp } from "../util";
 
 test("artifacts are located in app root level outdir", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const handler = inflight(async () => {});
   new Function(app, "Function", handler);
   new Function(app, "Function2", handler);
@@ -26,7 +26,7 @@ test("artifacts are located in app root level outdir", () => {
 
 test("no assets folder exists if app does synthesize asset producing resources", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new tfaws.Bucket(app, "Bucket", {});
   const expectedCdktfJson = `${app.outdir}/main.tf.json`;
   const expectedAssetsDir = `${app.outdir}/assets`;

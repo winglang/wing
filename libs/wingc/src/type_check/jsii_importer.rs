@@ -306,13 +306,22 @@ impl<'a> JsiiImporter<'a> {
 			})
 			.unwrap_or_default();
 
+		let is_macro = extract_docstring_tag(&first_method.docs, "macro")
+			.map(|s| s.to_string())
+			.is_some();
+
 		let wing_type = self.wing_types.add_type(Type::Function(FunctionSignature {
 			docs: Docs::from(&jsii_interface.docs),
 			this_type: None,
 			parameters,
 			return_type,
 			phase,
-			js_override: extract_docstring_tag(&first_method.docs, "macro").map(|s| s.to_string()),
+			js_override: if is_macro {
+				Some(format!("__{}_{}", &type_name, &first_method.name))
+			} else {
+				None
+			},
+			is_macro,
 			implicit_scope_param: false,
 		}));
 
@@ -542,6 +551,9 @@ impl<'a> JsiiImporter<'a> {
 						});
 					}
 				}
+
+				let is_macro = extract_docstring_tag(&m.docs, "macro").map(|s| s.to_string()).is_some();
+
 				let this_type = if is_static { None } else { Some(wing_type) };
 				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
 					docs: Docs::from(&m.docs),
@@ -549,7 +561,12 @@ impl<'a> JsiiImporter<'a> {
 					parameters: fn_params,
 					return_type,
 					phase: member_phase,
-					js_override: extract_docstring_tag(&m.docs, "macro").map(|s| s.to_string()),
+					js_override: if is_macro {
+						Some(format!("__{}_{}", &wing_type, &m.name))
+					} else {
+						None
+					},
+					is_macro,
 					implicit_scope_param: false,
 				}));
 				let sym = Self::jsii_name_to_symbol(&m.name, &m.location_in_module);
@@ -809,6 +826,7 @@ impl<'a> JsiiImporter<'a> {
 				return_type: new_type,
 				phase: member_phase,
 				js_override: None,
+				is_macro: false,
 				docs: Docs::from(&initializer.docs),
 				implicit_scope_param: false,
 			}));

@@ -45,18 +45,17 @@ cd wing
 pnpm install
 ```
 
-
 :::note Turbo Commands
 [Turbo] commands in this document are structured as
 
 ```sh
-pnpm turbo <task>
+turbo <task>
 # or
-pnpm turbo <task> --filter=<project> -- <args>
+turbo <task> -F <project> -- <args>
 ```
 
-- `pnpm` can be omitted if [Turbo] is installed globally
-- `--filter=<project>` may be used to filter to a specific project (and it's dependencies)
+- `pnpm turbo` can be used instead if [Turbo] is not installed globally
+- `-F <project>` may be used to filter to a specific project (and it's dependencies)
 - Running `turbo <task>` inside of a project directory will automatically filter to that project
 - We use [Turbo caching](https://turbo.build/repo/docs/core-concepts/caching) to speed up builds. If you want to force a rebuild, use `--force`.
 
@@ -104,9 +103,8 @@ export RUST_BACKTRACE=full
 Or if you just want to compile your changes and run a local version of the Wing CLI:
 
 ```sh
-pnpm compile --filter=winglang
+turbo compile -F winglang
 ```
-
 
 Now, you can edit a source file anywhere across the stack and run the compiler with arguments.
 For example:
@@ -149,10 +147,10 @@ wing](#-how-do-i-build-wing).
 To run the tests (and update snapshots), run the following command from anywhere in the monorepo:
 
 ```sh
-pnpm turbo wing:e2e
+turbo wing:e2e
 ```
 
-(This is a helpful shortcut for `pnpm turbo test --filter=hangar`)
+(This is a helpful shortcut for `turbo test -F hangar`)
 
 ### Test Meta-Comments
 
@@ -178,10 +176,10 @@ This is useful if, for example, the test requires docker. In our CI only linux s
 Benchmark files are located in `examples/tests/valid/benchmarks`. To run the benchmarks, run the following command from anywhere in the monorepo:
 
 ```sh
-pnpm turbo wing:bench
+turbo wing:bench
 ```
 
-(This is a helpful shortcut for `pnpm turbo bench --filter=hangar`)
+(This is a helpful shortcut for `turbo bench -F hangar`)
 
 In CI, if these benchmarks regress too far from the current `main` branch, the build will fail.
 
@@ -192,7 +190,7 @@ The following command runs the rust tests in wingc, including verification that 
 It will also make sure to update any snapshots.
 
 ```sh
-pnpm turbo test --filter=wingc
+turbo test -F @winglang/wingc
 ```
 
 The following command runs `wingc` on a file. This performs all the compilation steps. Run from the root.
@@ -206,7 +204,7 @@ You can find the compilation artifacts in the `apps/wing/target` folder.
 To check that your code passes all the lints, run:
 
 ```sh
-pnpm turbo lint --filter=wingc
+turbo lint -F @winglang/wingc
 ```
 
 ### Optional VSCode extensions for working on the compiler
@@ -227,20 +225,20 @@ Open the `.w` file you wish to debug compilation for (e.g. `${workspaceFolder}/e
 After making changes to `grammar.js`, run:
 
 ```sh
-pnpm turbo compile --filter=tree-sitter-wing
+turbo compile -F @winglang/tree-sitter-wing
 ```
 
 To run the grammar tests (that are located in the `test` folder):
 
 ```sh
-pnpm turbo test --filter=tree-sitter-wing
+turbo test -F @winglang/tree-sitter-wing
 ```
 
 To use the wasm grammar to run a web-based playground where you can explore the AST and test out
 highlight queries, run:
 
 ```sh
-pnpm turbo playground --filter=tree-sitter-wing
+turbo playground -F @winglang/tree-sitter-wing
 ```
 
 ## 🔨 How do I build the VSCode extension?
@@ -251,13 +249,13 @@ is located in the Wing CLI at `apps/wing/src/commands/lsp.ts`.
 To compile the extension (also creates an installable `.vsix` file):
 
 ```sh
-pnpm turbo compile --filter=vscode-wing
+turbo compile -F vscode-wing
 ```
 
 To run a new isolated VSCode instance with the extension installed:
 
 ```sh
-pnpm turbo dev --filter=vscode-wing
+turbo dev -F vscode-wing
 ```
 
 To modify the package.json, make sure to edit `.projenrc.ts` and rebuild.
@@ -269,7 +267,7 @@ Tip: if you want to print debug messages in your code while developing, you shou
 To lint Rust code, you can run the `lint` target on the `wingc` or `wingii` projects:
 
 ```sh
-pnpm turbo lint --filter=wingc
+turbo lint -F @winglang/wingc
 ```
 
 It's also possible to lint by running `cargo clippy` directly.
@@ -288,4 +286,4 @@ Adding a new template is straightforward!
 Each template is represented by a folder located at [project-templates](https://github.com/winglang/wing/tree/main/apps/wing/project-templates), containing all of the files that template should be initialized with.
 
 Create a new folder with the template name, and insert any code files that are needed to run it.
-Unit tests ran with `pnpm turbo test` (or in GitHub Actions once you make a pull request) will automatically validate that the template is valid.
+Unit tests ran with `turbo test` (or in GitHub Actions once you make a pull request) will automatically validate that the template is valid.

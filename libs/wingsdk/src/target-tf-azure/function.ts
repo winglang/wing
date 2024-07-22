@@ -67,6 +67,12 @@ export class Function extends cloud.Function {
     super(scope, id, inflight, props);
 
     const app = App.of(this) as App;
+    if (app._target !== "tf-azure") {
+      throw new Error(
+        `Bucket can only be created in a tf-azure app, got ${app._target}`
+      );
+    }
+
     this.storageAccount = app.storageAccount;
     this.resourceGroup = app.resourceGroup;
     this.servicePlan = app.servicePlan;
@@ -285,7 +291,12 @@ export class Function extends cloud.Function {
     lines.push(
       `try {  
         const body = await (${inflightClient}).handle(context.req.body);
-        context.res = { body };
+        context.res = {
+          body,
+          headers: {
+            "Content-Type": "application/json"
+          },
+        };
      } catch (error) {
         context.res = { body: error.message, status: 500 };
     }`

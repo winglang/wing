@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -24,6 +25,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_Util }) {
   class $Closure2 {
     constructor({  }) {
@@ -35,11 +37,11 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_Util }) {
       const response = (await $http_Util.get(($apiDefaultCors_url + "/users")));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 200));
-      (await $expect_Util.equal((headers)["access-control-allow-origin"], "*"));
-      (await $expect_Util.equal((headers)["access-control-allow-credentials"], "false"));
-      (await $expect_Util.equal((headers)["access-control-expose-headers"], ""));
-      (await $expect_Util.nil((headers)["access-control-allow-headers"]));
-      (await $expect_Util.nil((headers)["access-control-allow-methods"]));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-origin"), "*"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-credentials"), "false"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-expose-headers"), ""));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-allow-headers")));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-allow-methods")));
     }
   }
   return $Closure2;
@@ -51,6 +53,7 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_Util }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure3 {
     constructor({  }) {
@@ -62,11 +65,11 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_HttpMethod,
       const response = (await $http_Util.fetch(($apiDefaultCors_url + "/users"), ({"method": $http_HttpMethod.OPTIONS})));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 204));
-      (await $expect_Util.equal((headers)["access-control-allow-headers"], "Content-Type,Authorization,X-Requested-With"));
-      (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,PUT,DELETE,HEAD,OPTIONS"));
-      (await $expect_Util.equal((headers)["access-control-allow-origin"], "*"));
-      (await $expect_Util.nil((headers)["access-control-allow-credentials"]));
-      (await $expect_Util.nil((headers)["access-control-expose-headers"]));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-headers"), "Content-Type,Authorization,X-Requested-With"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-methods"), "GET,POST,PUT,DELETE,HEAD,OPTIONS"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-origin"), "*"));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-allow-credentials")));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-expose-headers")));
     }
   }
   return $Closure3;
@@ -304,19 +307,20 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_HttpMethod,
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
     const cloud = $stdlib.cloud;
-    const ex = $stdlib.ex;
     const http = $stdlib.http;
     const expect = $stdlib.expect;
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
@@ -437,13 +441,12 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const apiDefaultCors = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api", { cors: true });
+    const apiDefaultCors = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api", { cors: true });
     (apiDefaultCors.get("/users", new $Closure1(this, "$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users has default cors headers", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users has default cors headers", new $Closure3(this, "$Closure3"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users has default cors headers", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users has default cors headers", new $Closure3(this, "$Closure3"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api_cors_default.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

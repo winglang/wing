@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $payloadWithBucket_c, $payloadWithoutOptions_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -27,6 +28,7 @@ module.exports = function({ $payloadWithBucket_c, $payloadWithoutOptions_b }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Node {
     constructor({  }) {
@@ -41,6 +43,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Super }) {
   class Sub extends $Super {
     constructor({  }) {
@@ -56,6 +59,7 @@ module.exports = function({ $Super }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Sub }) {
   class SubSub extends $Sub {
     constructor({  }) {
@@ -71,6 +75,7 @@ module.exports = function({ $Sub }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Super {
     constructor({  }) {
@@ -117,12 +122,14 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -322,24 +329,24 @@ class $Root extends $stdlib.std.Resource {
       if ((parts.length < 1)) {
         return undefined;
       }
-      return ({"first": (parts.at(0) ?? ""), "last": (parts.at(1) ?? "")});
+      return ({"first": ($macros.__Array_tryAt(false, parts, 0) ?? ""), "last": ($macros.__Array_tryAt(false, parts, 1) ?? "")});
     });
     const json_obj = ({"ghost": "spooky"});
     let something_else = false;
     {
-      const $if_let_value = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+      const $if_let_value = $macros.__Json_tryAsBool(false, json_obj, );
       if ($if_let_value != undefined) {
         const y = $if_let_value;
         $helpers.assert(($helpers.eq(y, true) || $helpers.eq(y, false)), "y == true || y == false");
       }
       else {
-        const $elif_let_value0 = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+        const $elif_let_value0 = $macros.__Json_tryAsNum(false, json_obj, );
         if ($elif_let_value0 != undefined) {
           const y = $elif_let_value0;
           $helpers.assert($helpers.eq((y + 0), y), "y + 0 == y");
         }
         else {
-          const $elif_let_value1 = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+          const $elif_let_value1 = $macros.__Json_tryAsStr(false, json_obj, );
           if ($elif_let_value1 != undefined) {
             const y = $elif_let_value1;
             $helpers.assert((y.length >= 0), "y.length >= 0");
@@ -453,8 +460,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const payloadWithoutOptions = ({"a": "a"});
-    const payloadWithBucket = ({"a": "a", "c": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "orange bucket")});
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:t", new $Closure1(this, "$Closure1"));
+    const payloadWithBucket = ({"a": "a", "c": globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "orange bucket")});
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:t", new $Closure1(this, "$Closure1"));
     const str1 = undefined;
     const str2 = undefined;
     {
@@ -526,7 +533,7 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq($helpers.unwrap((maybeFn(true))), ["hi"]), "maybeFn(true)! == [\"hi\"]");
     const maybeVarBool = true;
     $helpers.assert($helpers.eq((!$helpers.unwrap(maybeVarBool)), false), "!maybeVarBool! == false");
-    const person = $helpers.unwrap(Person._tryParseJson(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"name": "john", "age": 30}))));
+    const person = $helpers.unwrap($macros.__Struct_tryParseJson(false, Person, $macros.__Json_stringify(false, std.Json, ({"name": "john", "age": 30}))));
     $helpers.assert(($helpers.eq(person.name, "john") && $helpers.eq(person.age, 30)), "person.name == \"john\" && person.age == 30");
     const maybeX = 0;
     $helpers.assert($helpers.eq($helpers.unwrap(maybeX), 0), "maybeX! == 0");
@@ -534,7 +541,6 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq($helpers.unwrap(maybeY), ""), "maybeY! == \"\"");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "optionals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

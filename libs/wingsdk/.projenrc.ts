@@ -9,6 +9,7 @@ const CDKTF_PROVIDERS = [
   "random@~>3.5.1",
   "azurerm@~>3.96.0",
   "google@~>5.10.0",
+  "kreuzwerker/docker@~>3.0.2",
 ];
 
 // defines the list of dependencies required for each compilation target that is not built into the
@@ -50,6 +51,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-dynamodb",
     "@aws-sdk/client-elasticache",
     "@aws-sdk/client-lambda",
+    "@aws-sdk/client-ecs",
     "@aws-sdk/client-s3",
     "@aws-sdk/client-secrets-manager",
     "@aws-sdk/client-sns",
@@ -80,7 +82,6 @@ const project = new cdk.JsiiProject({
     "nanoid@^3.3.7",
     "cron-parser",
     // shared client dependencies
-    "ioredis",
     "ajv",
     "cron-validator",
     // fs module dependency
@@ -93,6 +94,9 @@ const project = new cdk.JsiiProject({
     // tunnels
     "@winglang/wingtunnels@workspace:^",
     "glob",
+    // env
+    "dotenv",
+    "dotenv-expand",
   ],
   devDeps: [
     `@cdktf/provider-aws@^19`, // only for testing Wing plugins
@@ -114,6 +118,7 @@ const project = new cdk.JsiiProject({
     "nanoid", // for ESM import test in target-sim/function.test.ts
     "chalk",
     "tsx",
+    "ts-morph@^23.0.0",
     ...JSII_DEPS,
   ],
   eslintOptions: {
@@ -291,6 +296,13 @@ project.tasks
 project.tasks
   .tryFind("unbump")!
   .reset("pnpm version 0.0.0 --allow-same-version");
+
+// --------------- macros -----------------
+
+const macros = project.addTask("generate-macros", {
+  exec: "tsx scripts/generate-macros.mts",
+});
+project.compileTask.prependSpawn(macros);
 
 // --------------- docs -----------------
 
