@@ -137,6 +137,7 @@ export class Lockfile {
     await this.lockfile.close();
     await fs.rm(this.path);
     this.lockfile = undefined;
+    this.lastMtime = undefined;
   }
 
   private async markAsCompromised(reason: string, error?: unknown) {
