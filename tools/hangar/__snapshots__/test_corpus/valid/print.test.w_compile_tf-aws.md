@@ -44,6 +44,21 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
+## inflight.Process-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({  }) {
+  class Process {
+    constructor({  }) {
+    }
+  }
+  return Process;
+}
+//# sourceMappingURL=inflight.Process-1.cjs.map
+```
+
 ## main.tf.json
 ```json
 {
@@ -81,6 +96,37 @@ class $Root extends $stdlib.std.Resource {
     let $preflightTypesMap = {};
     const cloud = $stdlib.cloud;
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
+    class Process extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static write(s) {
+        return ($extern("../../../print-helpers.js")["write"])(s)
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.Process-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const ProcessClient = ${Process._toInflightType()};
+            const client = new ProcessClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -146,6 +192,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     console.log("preflight log");
+    (Process.write("start "));
+    (Process.write("end\n"));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:log1", new $Closure1(this, "$Closure1"));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:log2", new $Closure2(this, "$Closure2"));
   }
