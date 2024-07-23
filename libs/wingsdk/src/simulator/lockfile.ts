@@ -90,11 +90,7 @@ export class Lockfile {
       // the lockfile was released before this callback was called.
       //
       // Skip the update if that's the case.
-      if (
-        !this.lockfile ||
-        this.compromised
-        // || this.releasing
-      ) {
+      if (!this.lockfile || this.compromised) {
         return;
       }
 
