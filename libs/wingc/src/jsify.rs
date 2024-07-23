@@ -1860,7 +1860,7 @@ impl<'a> JSifier<'a> {
 			// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
 			// `_liftType`).
 			code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
-			code.add_code(self.jsify_lifted_fields(&class.name, class_type));
+			code.add_code(self.jsify_lifted_state(&class.name, class_type));
 
 			// emit `onLift` and `onLiftType` to bind permissions and environment variables to inflight hosts
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
@@ -1981,7 +1981,7 @@ impl<'a> JSifier<'a> {
 		res
 	}
 
-	fn jsify_lifted_fields(&self, class_name: &Symbol, class_type: TypeRef) -> CodeMaker {
+	fn jsify_lifted_state(&self, class_name: &Symbol, class_type: TypeRef) -> CodeMaker {
 		let mut code = CodeMaker::with_source(&class_name.span);
 		code.open("_liftedState() {");
 		code.open("return {");
