@@ -33,7 +33,6 @@ export const AppLocalStorageProvider = (
       return hash;
     }
   }, [props.storageKey]);
-  console.log("AppLocalStorageProvider", { key });
   return (
     <AppLocalStorageContext.Provider
       value={{
