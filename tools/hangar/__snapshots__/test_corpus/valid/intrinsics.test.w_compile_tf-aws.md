@@ -47,6 +47,7 @@ module.exports = function({ $func, $funcFunction }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $defaultMessage, $expect_Util }) {
   class $Closure3 {
     constructor({  }) {
