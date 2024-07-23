@@ -701,11 +701,26 @@ impl<'a> JSifier<'a> {
 					)
 				}
 				IntrinsicKind::Inflight => {
-					let arg_list = intrinsic.arg_list.as_ref().unwrap();
-
+					// Use statically known data to generate the type information needed
 					let mut export_name = new_code!(&expression.span, "\"default\"");
 					let mut lifts: IndexMap<String, (&Expr, Option<&Vec<Expr>>, CodeMaker)> = IndexMap::new();
-					for x in &arg_list.named_args {
+
+					let arg_list = intrinsic.arg_list.as_ref().unwrap();
+					let fields = if arg_list.named_args.is_empty() && arg_list.pos_args.len() == 2 {
+						// Trailing struct has been provided as a single positional argument, extract the named fields instead
+						let second_arg = arg_list.pos_args.get(1).unwrap();
+						match &second_arg.kind {
+							ExprKind::JsonLiteral { element, .. } => match &element.kind {
+								ExprKind::JsonMapLiteral { fields, .. } => fields,
+								_ => return CodeMaker::default(),
+							},
+							ExprKind::StructLiteral { fields, .. } => fields,
+							_ => return CodeMaker::default(),
+						}
+					} else {
+						&arg_list.named_args
+					};
+					for x in fields {
 						if x.0.name == "export" {
 							export_name = self.jsify_expression(&x.1, ctx);
 						} else if x.0.name == "lifts" {
@@ -852,7 +867,7 @@ impl<'a> JSifier<'a> {
 						lift_string.append("]`");
 					}
 
-					if arg_list.named_args.get("lifts").is_some() {
+					if !lifts.is_empty() {
 						let list = lifts
 							.iter()
 							.map(|(.., (.., expr_code))| expr_code.clone())
