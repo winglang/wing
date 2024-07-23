@@ -32,6 +32,7 @@ export class Lockfile {
   private lockfile: FileHandle | undefined;
   private timeout: NodeJS.Timeout | undefined;
   private lastMtime: number | undefined;
+  private compromised = false;
   private onCompromised?: (
     reason: string,
     error?: unknown
@@ -134,15 +135,22 @@ export class Lockfile {
     clearTimeout(this.timeout);
     this.timeout = undefined;
 
-    await this.lockfile.close();
-    await fs.rm(this.path);
+    await this.lockfile?.close();
     this.lockfile = undefined;
     this.lastMtime = undefined;
+
+    // If the lockfile was compromised, we won't remove
+    // it since it belongs to another process now.
+    if (!this.compromised) {
+      await fs.rm(this.path, { force: true });
+      this.compromised = false;
+    }
   }
 
   private async markAsCompromised(reason: string, error?: unknown) {
-    await this.lockfile?.close();
-    this.lockfile = undefined;
+    this.compromised = true;
+    await this.release();
+
     try {
       await this.onCompromised?.(reason, error);
     } catch (callbackError) {
