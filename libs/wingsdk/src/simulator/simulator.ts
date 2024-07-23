@@ -4,6 +4,7 @@ import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join, resolve } from "path";
 import { makeSimulatorClient } from "./client";
 import { Graph } from "./graph";
+import { Lockfile } from "./lockfile.js";
 import { deserialize, serialize } from "./serialization";
 import { resolveTokens } from "./tokens";
 import { Tree } from "./tree";
@@ -225,9 +226,24 @@ export class Simulator {
   // keeps the running state of all resources.
   private runningState: Record<string, ResourceRunningState> = {};
 
+  private lockfile: Lockfile;
+
   constructor(props: SimulatorProps) {
     const simdir = resolve(props.simfile);
     this.statedir = props.stateDir ?? join(simdir, ".state");
+    this.lockfile = new Lockfile({
+      path: join(this.statedir, ".lock"),
+      onCompromised: async (reason, error) => {
+        console.error(
+          `Simulator lockfile compromised. Stopping simulation.`,
+          `Reason: ${reason}.`
+        );
+        if (error) {
+          console.error(error);
+        }
+        await this.stop();
+      },
+    });
 
     this._running = "stopped";
     this._handles = new HandleManager();
@@ -303,12 +319,13 @@ export class Simulator {
     }
     this._running = "starting";
 
-    await this.startServer();
-
     try {
+      this.lockfile.lock();
+      await this.startServer();
       await this.startResources();
     } catch (err: any) {
       this.stopServer();
+      this.lockfile.release();
       this._running = "stopped";
       throw err;
     }
@@ -412,6 +429,8 @@ export class Simulator {
     }
 
     this.stopServer();
+
+    this.lockfile.release();
 
     this._handles.reset();
     this._running = "stopped";
@@ -861,7 +880,7 @@ export class Simulator {
    * Stop the simulator server.
    */
   private stopServer() {
-    this._server!.close();
+    this._server?.close();
   }
 
   /**

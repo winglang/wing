@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $std_Json }) {
   class $Closure1 {
     constructor({  }) {
@@ -12,8 +13,8 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      const issues = JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]");
-      return ({"status": 200, "headers": ({["Content-Type"]: "application/json"}), "body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(issues)});
+      const issues = $macros.__Json_parse(false, $std_Json, "[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]");
+      return ({"status": 200, "headers": ({["Content-Type"]: "application/json"}), "body": $macros.__Json_stringify(false, $std_Json, issues)});
     }
   }
   return $Closure1;
@@ -25,6 +26,7 @@ module.exports = function({ $std_Json }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
     constructor({  }) {
@@ -34,9 +36,9 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
     }
     async handle() {
       const res = (await $http_Util.get(($api_url + "/foo")));
-      const body = JSON.parse(res.body);
-      const a1 = ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(body, 0);
-      $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(a1, "foo"), "bar"), "a1.get(\"foo\") == \"bar\"");
+      const body = $macros.__Json_parse(false, $std_Json, res.body);
+      const a1 = $macros.__Json_getAt(false, body, 0);
+      $helpers.assert($helpers.eq($macros.__Json_get(false, a1, "foo"), "bar"), "a1.get(\"foo\") == \"bar\"");
     }
   }
   return $Closure2;
@@ -274,6 +276,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

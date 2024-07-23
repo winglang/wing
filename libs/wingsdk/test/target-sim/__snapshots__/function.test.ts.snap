@@ -7,7 +7,6 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (_, event) => {
-  event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
@@ -17,7 +16,7 @@ exports.handler = async function(event) {
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return JSON.stringify({ msg });
+  return { msg };
 }
   const $ctx = {
   
@@ -103,14 +102,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -169,7 +160,7 @@ exports.handler = async function(event) {
 exports[`invoke function fails 1`] = `
 [
   "root/my_function started",
-  "Error: Name must start with uppercase letter (Invoke (payload="{\\"name\\":\\"alice\\"}").)",
+  "Error: Name must start with uppercase letter (Invoke (payload={"name":"alice"}).)",
   "root/my_function stopped",
 ]
 `;
@@ -181,7 +172,6 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (_, event) => {
-  event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
@@ -191,7 +181,7 @@ exports.handler = async function(event) {
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return JSON.stringify({ msg });
+  return { msg };
 }
   const $ctx = {
   
@@ -274,14 +264,6 @@ exports.handler = async function(event) {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
@@ -341,7 +323,7 @@ exports.handler = async function(event) {
 exports[`invoke function succeeds 1`] = `
 [
   "root/my_function started",
-  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
+  "Invoke (payload={"name":"Alice"}).",
   "root/my_function stopped",
 ]
 `;
@@ -353,7 +335,6 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (_, event) => {
-  event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
@@ -363,7 +344,7 @@ exports.handler = async function(event) {
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return JSON.stringify({ msg });
+  return { msg };
 }
   const $ctx = {
   
@@ -447,14 +428,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -513,7 +486,7 @@ exports.handler = async function(event) {
 exports[`invoke function with environment variables 1`] = `
 [
   "root/my_function started",
-  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
+  "Invoke (payload={"name":"Alice"}).",
   "root/my_function stopped",
 ]
 `;
@@ -525,7 +498,6 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (_, event) => {
-  event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
@@ -535,7 +507,7 @@ exports.handler = async function(event) {
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return JSON.stringify({ msg });
+  return { msg };
 }
   const $ctx = {
   
@@ -621,14 +593,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -687,7 +651,7 @@ exports.handler = async function(event) {
 exports[`invoke function with process.exit(1) 1`] = `
 [
   "root/my_function started",
-  "Error: Process exited with code 1, signal null (Invoke (payload="{}").)",
+  "Error: Process exited with code 1, signal null (Invoke (payload=undefined).)",
   "root/my_function stopped",
 ]
 `;
@@ -782,14 +746,6 @@ exports.handler = async function(event) {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
@@ -1038,14 +994,6 @@ exports.handler = async function(event) {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
       "@winglang/sdk.sim.Container": {
         "className": "Container",

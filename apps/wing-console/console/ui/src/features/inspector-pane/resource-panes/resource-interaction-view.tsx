@@ -6,9 +6,7 @@ import { CounterInteractionView } from "./counter-interaction-view.js";
 import { EndpointInteractionView } from "./endpoint-interaction-view.js";
 import { FunctionInteractionView } from "./function-interaction-view.js";
 import { QueueInteractionView } from "./queue-interaction-view.js";
-import { RedisInteractionView } from "./redis-interaction-view.js";
 import { ScheduleInteractionView } from "./schedule-interaction-view.js";
-import { TableInteractionView } from "./table-interaction-view.js";
 import { TopicInteractionView } from "./topic-interaction-view.js";
 import { UnsupportedInteractionView } from "./unsupported-interaction-view.js";
 import { WebsiteInteractionView } from "./website-interaction-view.js";
@@ -40,14 +38,8 @@ export const ResourceInteractionView = memo(
         case "@winglang/sdk.cloud.Topic": {
           return <TopicInteractionView resourcePath={resourcePath} />;
         }
-        case "@winglang/sdk.ex.Table": {
-          return <TableInteractionView resourcePath={resourcePath} />;
-        }
         case "@winglang/sdk.cloud.Schedule": {
           return <ScheduleInteractionView resourcePath={resourcePath} />;
-        }
-        case "@winglang/sdk.ex.Redis": {
-          return <RedisInteractionView resourcePath={resourcePath} />;
         }
         case "@winglang/sdk.cloud.Website": {
           return <WebsiteInteractionView resourcePath={resourcePath} />;

@@ -1,14 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "extends": [
-    "//"
-  ],
-  "pipeline": {
+  "extends": ["//"],
+  "tasks": {
     "compile": {
-      "outputs": [
-        ".jsii",
-        "lib/**"
-      ]
+      "outputs": [".jsii", "lib/**"]
     }
   }
 }

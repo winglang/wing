@@ -18,6 +18,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $s }) {
   class $Closure1 {
     constructor({  }) {
@@ -26,7 +27,7 @@ module.exports = function({ $s }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })($s, "hello").length, 3), "s.get(\"hello\").length == 3");
+      $helpers.assert($helpers.eq($macros.__Map_get(false, $s, "hello").length, 3), "s.get(\"hello\").length == 3");
     }
   }
   return $Closure1;
@@ -39,6 +40,7 @@ module.exports = function({ $s }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";

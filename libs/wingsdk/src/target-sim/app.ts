@@ -26,7 +26,6 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { registerTokenResolver } from "../core/tokens";
-import { REDIS_FQN, TABLE_FQN } from "../ex";
 import {
   BaseResourceSchema,
   TypeSchema,
@@ -50,14 +49,12 @@ const SIMULATOR_CLASS_DATA = {
   [ON_DEPLOY_FQN]: "OnDeploy",
   [POLICY_FQN]: "Policy",
   [QUEUE_FQN]: "Queue",
-  [REDIS_FQN]: "Redis",
   [SCHEDULE_FQN]: "Schedule",
   [SECRET_FQN]: "Secret",
   [SERVICE_FQN]: "Service",
   [STATE_FQN]: "State",
   [SIM_CONTAINER_FQN]: "Container",
   [SIM_RESOURCE_FQN]: "Resource",
-  [TABLE_FQN]: "Table",
   [TEST_RUNNER_FQN]: "TestRunner",
   [TOPIC_FQN]: "Topic",
   [WEBSITE_FQN]: "Website",
@@ -74,8 +71,7 @@ export class App extends core.App {
   private synthed = false;
 
   constructor(props: core.AppProps) {
-    // doesn't allow customize the root id- as used hardcoded in the code
-    super(undefined as any, "root", props);
+    super(undefined as any, props.rootId ?? "root", props);
     this.outdir = props.outdir ?? ".";
     registerTokenResolver(new SimTokens());
 
@@ -112,9 +108,6 @@ export class App extends core.App {
       case QUEUE_FQN:
         return require.resolve("./queue.inflight");
 
-      case REDIS_FQN:
-        return require.resolve("./redis.inflight");
-
       case SCHEDULE_FQN:
         return require.resolve("./schedule.inflight");
 
@@ -126,9 +119,6 @@ export class App extends core.App {
 
       case STATE_FQN:
         return require.resolve("./state.inflight");
-
-      case TABLE_FQN:
-        return require.resolve("./table.inflight");
 
       case TEST_RUNNER_FQN:
         return require.resolve("./test-runner.inflight");

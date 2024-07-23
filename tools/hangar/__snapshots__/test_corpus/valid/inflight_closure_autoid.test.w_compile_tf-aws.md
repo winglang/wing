@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $i }) {
   class $Closure1 {
     constructor({  }) {
@@ -24,6 +25,7 @@ module.exports = function({ $i }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $inflights }) {
   class $Closure2 {
     constructor({  }) {
@@ -33,7 +35,7 @@ module.exports = function({ $inflights }) {
     }
     async handle() {
       for (const i of $helpers.range(0,5,false)) {
-        $helpers.assert($helpers.eq((await ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($inflights, i)()), i), "inflights.at(i)() == i");
+        $helpers.assert($helpers.eq((await $macros.__Array_at(false, $inflights, i)()), i), "inflights.at(i)() == i");
       }
     }
   }
@@ -64,6 +66,7 @@ module.exports = function({ $inflights }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
@@ -149,7 +152,7 @@ class $Root extends $stdlib.std.Resource {
           });
         }
       }
-      inflights.push(new $Closure1(this, "$Closure1"));
+      $macros.__MutArray_push(false, inflights, new $Closure1(this, "$Closure1"));
     }
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight closure auto id", new $Closure2(this, "$Closure2"));
   }

@@ -63,7 +63,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       lift({ queue })
         .grant({ queue: ["push"] })
         .inflight(async (ctx, event) => {
-          await ctx.queue.push(event as string);
+          await ctx.queue.push(event as unknown as string);
           return undefined;
         }),
       {}
@@ -129,7 +129,7 @@ export class TopicOnMessageHandler {
     handler: cloud.ITopicOnMessageHandler
   ): cloud.IFunctionHandler {
     return lift({ handler }).inflight(async (ctx, event) => {
-      await ctx.handler(event as string);
+      await ctx.handler(event as unknown as string);
       return undefined;
     });
   }

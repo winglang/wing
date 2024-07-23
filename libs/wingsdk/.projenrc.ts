@@ -82,7 +82,6 @@ const project = new cdk.JsiiProject({
     "nanoid@^3.3.7",
     "cron-parser",
     // shared client dependencies
-    "ioredis",
     "ajv",
     "cron-validator",
     // fs module dependency
@@ -95,6 +94,9 @@ const project = new cdk.JsiiProject({
     // tunnels
     "@winglang/wingtunnels@workspace:^",
     "glob",
+    // env
+    "dotenv",
+    "dotenv-expand",
   ],
   devDeps: [
     `@cdktf/provider-aws@^19`, // only for testing Wing plugins
@@ -116,6 +118,7 @@ const project = new cdk.JsiiProject({
     "nanoid", // for ESM import test in target-sim/function.test.ts
     "chalk",
     "tsx",
+    "ts-morph@^23.0.0",
     ...JSII_DEPS,
   ],
   eslintOptions: {
@@ -293,6 +296,13 @@ project.tasks
 project.tasks
   .tryFind("unbump")!
   .reset("pnpm version 0.0.0 --allow-same-version");
+
+// --------------- macros -----------------
+
+const macros = project.addTask("generate-macros", {
+  exec: "tsx scripts/generate-macros.mts",
+});
+project.compileTask.prependSpawn(macros);
 
 // --------------- docs -----------------
 

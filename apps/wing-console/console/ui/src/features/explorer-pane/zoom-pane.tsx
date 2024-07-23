@@ -17,6 +17,8 @@ import type { DetailedHTMLProps, HTMLAttributes } from "react";
 import type { ReactNode } from "react";
 import { useEvent } from "react-use";
 
+import { useAppLocalStorage } from "../localstorage-context/use-localstorage.js";
+
 import { MapControls } from "./map-controls.js";
 import { useRafThrottle } from "./use-raf-throttle.js";
 
@@ -86,6 +88,7 @@ export interface ZoomPaneProps
 
 export interface ZoomPaneRef {
   zoomToFit(viewport?: Viewport): void;
+  shouldDoInitialZoomToFit: boolean;
 }
 
 const context = createContext({
@@ -101,7 +104,8 @@ const boundaryPadding = 48;
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   const { boundingBox, children, className, onClick, ...divProps } = props;
 
-  const [viewTransform, setViewTransform] = useState(IDENTITY_TRANSFORM);
+  const [viewTransform, setViewTransform, viewTransformExists] =
+    useAppLocalStorage("zoomPane.viewTransform", IDENTITY_TRANSFORM);
   const containerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -425,9 +429,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     () => {
       return {
         zoomToFit,
+        shouldDoInitialZoomToFit: !viewTransformExists,
       };
     },
-    [zoomToFit],
+    [viewTransformExists, zoomToFit],
   );
 
   // Whether the bounding box is out of bounds of the transform view.
@@ -505,7 +510,6 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
           >
             <div
               className={classNames(

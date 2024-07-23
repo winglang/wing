@@ -10,8 +10,6 @@ import { createFileBrowserRouter } from "./file-browser.js";
 import { createFunctionRouter } from "./function.js";
 import { createHttpClientRouter } from "./http-client.js";
 import { createQueueRouter } from "./queue.js";
-import { createRedisRouter } from "./redis.js";
-import { createTableRouter } from "./table.js";
 import { createTestRouter } from "./test.js";
 import { createTopicRouter } from "./topic.js";
 import { createUiButtonRouter } from "./ui-button.js";
@@ -31,9 +29,7 @@ export const mergeAllRouters = () => {
     createTestRouter(),
     createTopicRouter(),
     createApiRouter(),
-    createTableRouter(),
     createUpdaterRouter(),
-    createRedisRouter(),
     createWebsiteRouter(),
     createConfigRouter(),
     createEndpointRouter(),

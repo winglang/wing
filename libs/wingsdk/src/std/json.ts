@@ -38,6 +38,14 @@ export class Json {
   }
 
   /**
+   * Helper for casting JavaScript values into Json.
+   * @internal
+   */
+  public static _fromAny(value: any): Json {
+    return value as unknown as Json;
+  }
+
+  /**
    * Returns the keys from the Json.
    *
    * @macro Object.keys($args$)
@@ -76,7 +84,7 @@ export class Json {
   /**
    * Deletes a key in a given Json
    *
-   * @macro ((json, key) => { delete json[key]; })($args$)
+   * @macro ((json, key) => { delete json[key]; })(...$args$)
    *
    * @param json to delete key from
    * @param key the key to delete
@@ -90,7 +98,7 @@ export class Json {
   /**
    * Formats Json as string
    *
-   * @macro ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($args$)
+   * @macro ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(...$args$)
    *
    * @param json to format as string
    * @returns string representation of the Json
@@ -334,7 +342,7 @@ export class MutJson {
   /**
    * Adds or updates an element in MutJson with a specific key and value
    *
-   * @macro ((obj, key, value) => { obj[key] = value; })($self$, $args$)
+   * @macro ((obj, key, value) => { obj[key] = value; })($self$, ...$args$)
    *
    * @param key The key of the element to add
    * @param value The value of the element to add
@@ -348,7 +356,7 @@ export class MutJson {
   /**
    * Set element in MutJson Array with a specific key and value
    *
-   * @macro ((obj, idx, value) => { obj[idx] = value; })($self$, $args$)
+   * @macro ((obj, idx, value) => { obj[idx] = value; })($self$, ...$args$)
    *
    * @param value The value of the element to set
    */
@@ -467,7 +475,7 @@ export class MutJson {
   /**
    * Checks if a Json object has a given key
    *
-   * @macro ((obj, key) => { return obj.hasOwnProperty(key); })($self$,$args$)
+   * @macro ((obj, key) => { return obj?.hasOwnProperty(key); })($self$,$args$)
    *
    * @param key The key to check
    * @returns Boolean value corresponding to whether the key exists

@@ -8,7 +8,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { LogLevel, TraceType } from "../std";
+import { LogLevel, Json, TraceType } from "../std";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly sourceCodeFile: string;
@@ -78,7 +78,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return UpdatePlan.SKIP;
   }
 
-  public async invoke(payload: string): Promise<string> {
+  public async invoke(payload: Json): Promise<Json> {
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
@@ -103,7 +103,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     });
   }
 
-  public async invokeAsync(payload: string): Promise<void> {
+  public async invokeAsync(payload: Json): Promise<void> {
     await this.context.withTrace({
       message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
       activity: async () => {

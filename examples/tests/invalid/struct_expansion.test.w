@@ -7,7 +7,7 @@ let bucket1 = new cloud.Bucket(bublic: false, public: true);
 let bucket2 = new cloud.Bucket(2, public: true);
                              //^^^^^^^^^^^^^^^ Expected between 0 and 1 arguments but got 2 when instantiating "Bucket"
 
-let handler = inflight (event: str) => {
+let handler = inflight (event: Json?) => {
   bucket1.put(file: "file.txt", "data");
             //^^^^^^^^^^^^^^^^ Named arguments must be after positional arguments
 };

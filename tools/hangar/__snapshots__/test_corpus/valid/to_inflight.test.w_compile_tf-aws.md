@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b }) {
   class $Closure1 {
     constructor({  }) {
@@ -56,6 +57,7 @@ module.exports = function({ $b }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
@@ -108,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
     const b = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const x = new $Closure1(this, "$Closure1");
     const js = (std.Resource.toInflight(x));
-    $helpers.assert(js.includes("client"), "js.contains(\"client\")");
+    $helpers.assert($macros.__String_contains(false, js, "client"), "js.contains(\"client\")");
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "to_inflight.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });

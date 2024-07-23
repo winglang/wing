@@ -88,7 +88,10 @@ export class SimApp extends App {
   public async startSimulator(stateDir?: string): Promise<Simulator> {
     this.synthIfNeeded();
     const simfile = this.synth();
-    const s = new Simulator({ simfile, stateDir });
+    const s = new Simulator({
+      simfile,
+      stateDir: stateDir ?? mkdtemp(),
+    });
     await s.start();
 
     // When tests fail, we still want to make sure the simulator is stopped

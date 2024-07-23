@@ -1,18 +1,16 @@
 bring cloud;
-bring ex;
 bring ui;
 bring util;
 bring sim;
 
-let errorService = new cloud.Service(inflight () => {}) as "ErrorService";
+// let errorService = new cloud.Service(inflight () => {}) as "ErrorService";
 
-let errorResource = new sim.Resource(inflight () => {
-  util.sleep(5s);
-  throw "Oops";
-}) as "ErrorResource" in errorService;
+// let errorResource = new sim.Resource(inflight () => {
+//   throw "Oops";
+// }) as "ErrorResource" in errorService;
 
 // @see https://github.com/winglang/wing/issues/4237 it crashes the Console preview env.
-//let secret = new cloud.Secret(name: "my-secret");
+// let secret = new cloud.Secret(name: "my-secret");
 
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
@@ -72,7 +70,7 @@ api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 });
 
-let handler = inflight (message: str): str => {
+let handler = inflight (message): str => {
    counter.inc();
   bucket.put("hello{counter.peek()}.txt", "Hello, {message}!");
   log("Hello, {message}!");
@@ -81,7 +79,7 @@ let handler = inflight (message: str): str => {
 
 queue.setConsumer(handler);
 
-new cloud.Function(inflight (message: str?): str? => {
+new cloud.Function(inflight (message: Json?) => {
   counter.inc();
   log("Counter is now {counter.inc(0)}");
   return message;
@@ -92,26 +90,6 @@ topic.onMessage(inflight (message: str): str => {
   log("Topic subscriber #1: {message}");
   return message;
 });
-
-// let r = new ex.Redis();
-// new cloud.Function(inflight (message :str) :str => {
-//   log("{r.url()}");
-//   r.set("wing", message);
-//   let value = r.get("wing");
-//   log("{value}");
-//   return r.url();
-// }) as "Redis interaction";
-
-let table = new ex.Table(
-  name: "simple-table",
-  primaryKey: "id",
-  columns: {
-    "id" => ex.ColumnType.STRING,
-    "name" => ex.ColumnType.STRING,
-    "date" => ex.ColumnType.DATE,
-    "active" => ex.ColumnType.BOOLEAN,
-  },
-);
 
 let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
   rate: 5m
@@ -124,7 +102,6 @@ rateSchedule.onTick(inflight () => {
 
 new cloud.Service(
   inflight () => {
-    log("start!");
     return inflight () => {
       log("stop!");
     };
@@ -326,3 +303,5 @@ class ApiUsersService {
 }
 
 new ApiUsersService();
+
+log("hello from inflight");

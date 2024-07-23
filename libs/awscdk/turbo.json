@@ -1,14 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "extends": [
-    "//"
-  ],
-  "pipeline": {
+  "extends": ["//"],
+  "tasks": {
     "compile": {
-      "outputs": [
-        "dist/**",
-        "lib/**"
-      ]
+      "outputs": ["dist/**", "lib/**"]
     },
     "test": {
       "dependsOn": ["compile"]

@@ -2,9 +2,9 @@ import { existsSync } from "fs";
 import { dirname, resolve } from "path";
 import { createConsoleApp } from "@wingconsole/app";
 import { BuiltinPlatform } from "@winglang/compiler";
+import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import { debug } from "debug";
 import { glob } from "glob";
-import { loadEnvVariables } from "../env";
 import { parseNumericString } from "../util";
 import { beforeShutdown } from "../util.before-shutdown.js";
 
@@ -36,6 +36,11 @@ export interface RunOptions {
    * Additional paths to watch or ignore for changes. Supports globs.
    */
   readonly watch?: string[];
+
+  /**
+   * Directory for the resource's state.
+   */
+  readonly statedir?: string;
 }
 
 /**
@@ -93,6 +98,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     requireAcceptTerms: !!process.stdin.isTTY,
     open: openBrowser,
     watchGlobs: options?.watch,
+    stateDir: options?.statedir,
   });
   const url = `http://localhost:${port}/`;
   console.log(`The Wing Console is running at ${url}`);

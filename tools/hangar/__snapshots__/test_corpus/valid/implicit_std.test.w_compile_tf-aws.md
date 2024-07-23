@@ -22,6 +22,7 @@
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
@@ -36,7 +37,7 @@ class $Root extends $stdlib.std.Resource {
     let $preflightTypesMap = {};
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const d = (std.Duration.fromMinutes(5));
-    const n = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })("12");
+    const n = $macros.__Number_fromStr(false, std.Number, "12");
     $helpers.assert($helpers.eq(d.seconds, (5 * 60)), "d.seconds == 5 * 60");
     $helpers.assert($helpers.eq(n, 12), "n == 12");
   }

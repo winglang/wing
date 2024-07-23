@@ -44,8 +44,6 @@
     "commander": "^10.0.1",
     "compare-versions": "^5.0.3",
     "debug": "^4.3.5",
-    "dotenv": "^16.4.5",
-    "dotenv-expand": "^10.0.0",
     "glob": "^10.4.2",
     "inquirer": "^8.2.6",
     "lodash.once": "^4.1.1",

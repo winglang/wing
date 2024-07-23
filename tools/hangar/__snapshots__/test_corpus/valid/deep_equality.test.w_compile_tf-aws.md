@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $numA, $numB, $strA, $strB }) {
   class $Closure1 {
     constructor({  }) {
@@ -27,6 +28,7 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $arrayA, $arrayB }) {
   class $Closure10 {
     constructor({  }) {
@@ -48,6 +50,7 @@ module.exports = function({ $arrayA, $arrayB }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $arrayA, $arrayB, $arrayC }) {
   class $Closure11 {
     constructor({  }) {
@@ -69,6 +72,7 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $cat1, $cat2 }) {
   class $Closure12 {
     constructor({  }) {
@@ -90,6 +94,7 @@ module.exports = function({ $cat1, $cat2 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $cat1, $cat2, $cat3 }) {
   class $Closure13 {
     constructor({  }) {
@@ -111,6 +116,7 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $numA, $numC, $strA, $strC }) {
   class $Closure2 {
     constructor({  }) {
@@ -132,6 +138,7 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $jsonA, $jsonB }) {
   class $Closure3 {
     constructor({  }) {
@@ -153,6 +160,7 @@ module.exports = function({ $jsonA, $jsonB }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $jsonA, $jsonB, $jsonC }) {
   class $Closure4 {
     constructor({  }) {
@@ -174,6 +182,7 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $std_Json }) {
   class $Closure5 {
     constructor({  }) {
@@ -183,7 +192,7 @@ module.exports = function({ $std_Json }) {
     }
     async handle() {
       const j = ({"hello": 123, "world": [1, 2, 3]});
-      $helpers.assert($helpers.eq(Object.values(j), [123, [1, 2, 3]]), "Json.values(j) == [Json 123, Json [1, 2, 3]]");
+      $helpers.assert($helpers.eq($macros.__Json_values(false, $std_Json, j), [123, [1, 2, 3]]), "Json.values(j) == [Json 123, Json [1, 2, 3]]");
     }
   }
   return $Closure5;
@@ -195,6 +204,7 @@ module.exports = function({ $std_Json }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $setA, $setB }) {
   class $Closure6 {
     constructor({  }) {
@@ -216,6 +226,7 @@ module.exports = function({ $setA, $setB }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $setA, $setB, $setC }) {
   class $Closure7 {
     constructor({  }) {
@@ -237,6 +248,7 @@ module.exports = function({ $setA, $setB, $setC }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $mapA, $mapB }) {
   class $Closure8 {
     constructor({  }) {
@@ -258,6 +270,7 @@ module.exports = function({ $mapA, $mapB }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $mapA, $mapB, $mapC }) {
   class $Closure9 {
     constructor({  }) {
@@ -297,6 +310,7 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
