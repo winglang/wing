@@ -34,7 +34,7 @@ class Foo extends (globalThis.$ClassFactory.resolveType("cdk8s.Chart") ?? cdk8s.
   static _toInflightType() {
     return `
       require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
-        $cdk8s_Chart: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart, "cdk8s", "Chart"))},
+        $cdk8s_Chart: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("cdk8s.Chart") ?? cdk8s.Chart, "cdk8s", "Chart"))},
       })
     `;
   }

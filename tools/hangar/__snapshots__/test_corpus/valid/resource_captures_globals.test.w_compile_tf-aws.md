@@ -499,7 +499,7 @@ class $Root extends $stdlib.std.Resource {
             $globalNum: ${$stdlib.core.liftObject(globalNum)},
             $globalSetOfStr: ${$stdlib.core.liftObject(globalSetOfStr)},
             $globalStr: ${$stdlib.core.liftObject(globalStr)},
-            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.util.Util") ?? util.Util, "@winglang/sdk/util", "Util"))},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.util.Util") ?? util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -513,7 +513,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "myPut": [
-            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.util.Util") ?? util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
             [Another, ["myStaticMethod"]],
             [globalAnother, ["myMethod"]],
             [globalAnother.first.myResource, ["put"]],
@@ -529,7 +529,7 @@ class $Root extends $stdlib.std.Resource {
             [this.localTopic, ["publish"]],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.util.Util") ?? util.Util, "@winglang/sdk/util", "Util"), []],
             [Another, []],
             [globalAnother, []],
             [globalAnother.first.myResource, []],

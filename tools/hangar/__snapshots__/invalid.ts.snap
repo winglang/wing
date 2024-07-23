@@ -5366,14 +5366,8 @@ Duration <DURATION>"
 `;
 
 exports[`unresolved_state.test.w 1`] = `
-"Error: $scope.node.root.typeForFqn is not a function
-   --> ../../../examples/tests/invalid/unresolved_state.test.w:10:3
-   | let state = new sim.State();
-   | 
-   | let fn = new cloud.Function(
-10 |   inflight (): Json => {
-   |   ^
-at get _liftMap [as _liftMap] <ABSOLUTE>/unresolved_state.test.w:10:3
+"[ERROR] (no test) | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/env0/State" referenced by "root/env0/Function"
+Failed to start resources: "root/env0/Function"
 
 Tests 1 failed (1)
 Snapshots 1 skipped
