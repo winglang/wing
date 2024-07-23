@@ -1985,17 +1985,23 @@ impl<'a> JSifier<'a> {
 	fn jsify_lifted_state(&self, class_name: &Symbol, class_type: TypeRef) -> CodeMaker {
 		let mut code = CodeMaker::with_source(&class_name.span);
 		code.open("_liftedState() {");
-		code.open("return {");
-		code.line("...(super._liftedState?.() ?? {}),");
 
 		// Get lifted fields from entire class ancestry
 		let lifts = Self::class_lifted_fields(class_type);
 
-		for (token, obj) in lifts {
-			code.line(format!("{token}: {STDLIB_CORE}.liftObject({obj}),"));
+		if lifts.len() == 0 {
+			code.line("return { ...(super._liftedState?.() ?? {}) };")
+		} else {
+			code.open("return {");
+			code.line("...(super._liftedState?.() ?? {}),");
+
+			for (token, obj) in lifts {
+				code.line(format!("{token}: {STDLIB_CORE}.liftObject({obj}),"));
+			}
+
+			code.close("};");
 		}
 
-		code.close("};");
 		code.close("}");
 		code
 	}

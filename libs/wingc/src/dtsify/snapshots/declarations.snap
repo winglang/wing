@@ -144,9 +144,7 @@ class InflightClass extends $stdlib.std.Resource {
     `;
   }
   _liftedState() {
-    return {
-      ...(super._liftedState?.() ?? {}),
-    };
+    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -173,9 +171,7 @@ class ParentClass extends $stdlib.std.Resource {
     `;
   }
   _liftedState() {
-    return {
-      ...(super._liftedState?.() ?? {}),
-    };
+    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -208,9 +204,7 @@ class Child extends ParentClass {
     `;
   }
   _liftedState() {
-    return {
-      ...(super._liftedState?.() ?? {}),
-    };
+    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return $stdlib.core.mergeLiftDeps(super._liftMap, {

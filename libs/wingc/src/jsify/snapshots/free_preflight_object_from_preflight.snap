@@ -63,9 +63,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _liftedState() {
-        return {
-          ...(super._liftedState?.() ?? {}),
-        };
+        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
