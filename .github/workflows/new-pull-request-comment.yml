@@ -25,21 +25,21 @@ jobs:
             | Topic                                               | Owner                                                         |
             |-----------------------------------------------------|---------------------------------------------------------------|
             | Wing SDK and utility APIs                           | `@chriscbr`
-            | Wing Console                                        | `@ainvoner`, `@skyrpex`, `@polamoros`
-            | JSON, structs, primitives and collections           | `@hasanaburayyan`
-            | Platforms and plugins                               | `@hasanaburayyan`
-            | Frontend resources (website, react, etc)            | `@tsuf239`
+            | Wing Console                                        | `@skyrpex`
+            | JSON, structs, primitives and collections           | `@chriscbr`
+            | Platforms and plugins                               | `@chriscbr`
+            | Frontend resources (website, react, etc)            | `@chriscbr`
             | Language design                                     | `@chriscbr`
-            | VSCode extension and language server                | `@markmcculloh`
-            | Compiler architecture, inflights, lifting           | `@yoav-steinberg`
-            | Wing Testing Framework                              | `@tsuf239`
-            | Wing CLI                                            | `@markmcculloh`
-            | Build system, dev environment, releases             | `@markmcculloh`
+            | VSCode extension and language server                | `@chriscbr`
+            | Compiler architecture, inflights, lifting           | `@chriscbr`
+            | Wing Testing Framework                              | `@chriscbr`
+            | Wing CLI                                            | `@chriscbr`
+            | Build system, dev environment, releases             | `@chriscbr`
             | Library Ecosystem                                   | `@chriscbr`
-            | Documentation                                       | `@hasanaburayyan`
-            | SDK test suite                                      | `@tsuf239` 
-            | Examples                                            | `@hasanaburayyan`
-            | Wing Playground                                     | `@eladcon`
+            | Documentation                                       | `@boyney123`
+            | SDK test suite                                      | `@chriscbr` 
+            | Examples                                            | `@boyney123`
+            | Wing Playground                                     | `@skyrpex`
 
           comment_tag: New PR
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
