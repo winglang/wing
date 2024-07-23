@@ -27,7 +27,7 @@ exports[`function with a function binding 2`] = `
   fn1: 
 (await (async () => {
   const klass = require("[REDACTED]/wingsdk/src/shared-aws/function.inflight.js").FunctionClient;
-  const client = new klass({$functionArn: process.env["FUNCTION_NAME_50735b21"], $constructPath: root/Default/Function1});
+  const client = new klass({$functionArn: process.env["FUNCTION_NAME_50735b21"], $constructPath: "root/Default/Function1"});
   if (client.$inflight_init) { await client.$inflight_init(); }
   return client;
 })())
