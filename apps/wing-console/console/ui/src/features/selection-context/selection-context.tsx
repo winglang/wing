@@ -12,6 +12,8 @@ import {
   useState,
 } from "react";
 
+import { useAppLocalStorage } from "../localstorage-context/use-localstorage.js";
+
 export interface SelectionItem {
   id: string;
   children?: SelectionItem[];
@@ -54,21 +56,30 @@ export const SelectionContextProvider: FunctionComponent<PropsWithChildren> = (
     () => new Array<SelectionItem>(),
   );
 
-  const [selectedItems, setSelectedItems] = useState(() => ["root"]);
-  const [expandedItems, setExpandedItems] = useState(() => new Array<string>());
+  const [selectedItems, setSelectedItems] = useAppLocalStorage(
+    "selectionContext.selectedItems",
+    ["root"],
+  );
+  const [expandedItems, setExpandedItems] = useAppLocalStorage(
+    "selectionContext.expandedItems",
+    new Array<string>(),
+  );
 
-  const toggle = useCallback((itemId: string) => {
-    setExpandedItems(([...openedMenuItems]) => {
-      const index = openedMenuItems.indexOf(itemId);
-      if (index !== -1) {
-        openedMenuItems.splice(index, 1);
+  const toggle = useCallback(
+    (itemId: string) => {
+      setExpandedItems(([...openedMenuItems]) => {
+        const index = openedMenuItems.indexOf(itemId);
+        if (index !== -1) {
+          openedMenuItems.splice(index, 1);
+          return openedMenuItems;
+        }
+
+        openedMenuItems.push(itemId);
         return openedMenuItems;
-      }
-
-      openedMenuItems.push(itemId);
-      return openedMenuItems;
-    });
-  }, []);
+      });
+    },
+    [setExpandedItems],
+  );
 
   const expandAll = useCallback(() => {
     const itemIds = [];
@@ -87,35 +98,41 @@ export const SelectionContextProvider: FunctionComponent<PropsWithChildren> = (
     }
 
     setExpandedItems(itemIds);
-  }, [availableItems]);
+  }, [availableItems, setExpandedItems]);
 
   const collapseAll = useCallback(() => {
     setExpandedItems([]);
-  }, []);
+  }, [setExpandedItems]);
 
-  const expand = useCallback((itemId: string) => {
-    setExpandedItems(([...openedMenuItems]) => {
-      const index = openedMenuItems.indexOf(itemId);
-      if (index !== -1) {
+  const expand = useCallback(
+    (itemId: string) => {
+      setExpandedItems(([...openedMenuItems]) => {
+        const index = openedMenuItems.indexOf(itemId);
+        if (index !== -1) {
+          return openedMenuItems;
+        }
+
+        openedMenuItems.push(itemId);
         return openedMenuItems;
-      }
+      });
+    },
+    [setExpandedItems],
+  );
 
-      openedMenuItems.push(itemId);
-      return openedMenuItems;
-    });
-  }, []);
+  const collapse = useCallback(
+    (itemId: string) => {
+      setExpandedItems(([...openedMenuItems]) => {
+        const index = openedMenuItems.indexOf(itemId);
+        if (index === -1) {
+          return openedMenuItems;
+        }
 
-  const collapse = useCallback((itemId: string) => {
-    setExpandedItems(([...openedMenuItems]) => {
-      const index = openedMenuItems.indexOf(itemId);
-      if (index === -1) {
+        openedMenuItems.splice(index, 1);
         return openedMenuItems;
-      }
-
-      openedMenuItems.splice(index, 1);
-      return openedMenuItems;
-    });
-  }, []);
+      });
+    },
+    [setExpandedItems],
+  );
 
   const [selectedEdgeId, setSelectedEdgeId] = useState<string>();
 
@@ -124,10 +141,13 @@ export const SelectionContextProvider: FunctionComponent<PropsWithChildren> = (
       value={{
         setAvailableItems,
         selectedItems,
-        setSelectedItems: useCallback((selectedItems) => {
-          setSelectedEdgeId(undefined);
-          setSelectedItems(selectedItems);
-        }, []),
+        setSelectedItems: useCallback(
+          (selectedItems) => {
+            setSelectedEdgeId(undefined);
+            setSelectedItems(selectedItems);
+          },
+          [setSelectedItems],
+        ),
         expandedItems,
         setExpandedItems,
         toggle,
@@ -136,10 +156,13 @@ export const SelectionContextProvider: FunctionComponent<PropsWithChildren> = (
         expand,
         collapse,
         selectedEdgeId,
-        setSelectedEdgeId: useCallback((edgeId) => {
-          setSelectedItems([]);
-          setSelectedEdgeId(edgeId);
-        }, []),
+        setSelectedEdgeId: useCallback(
+          (edgeId) => {
+            setSelectedItems([]);
+            setSelectedEdgeId(edgeId);
+          },
+          [setSelectedItems],
+        ),
       }}
       {...props}
     />

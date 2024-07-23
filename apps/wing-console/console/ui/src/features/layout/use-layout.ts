@@ -23,7 +23,7 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     if (!wingfile) {
       return "Wing Console";
     }
-    return `${wingfile} - Wing Console`;
+    return `${wingfile.split("/").pop()} - Wing Console`;
   }, [wingfile]);
 
   const { loading, setLoading } = useLoading({
