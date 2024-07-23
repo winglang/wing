@@ -33,8 +33,6 @@ export class Lockfile {
   private timeout: NodeJS.Timeout | undefined;
   private lastMtime: number | undefined;
   private compromised = false;
-  // private releasing = false;
-  // private lastTask: Promise<void> | undefined;
   private onCompromised?: (
     reason: string,
     error?: unknown
@@ -49,16 +47,6 @@ export class Lockfile {
     if (this.lockfile) {
       return;
     }
-
-    // if (this.releasing) {
-    //   throw new Error(
-    //     "Cannot lock the lockfile while it's being released. Please wait for the release to complete."
-    //   );
-    // }
-
-    // this.lastTask = new Promise(() => {
-
-    // });
 
     this.compromised = false;
 
@@ -151,28 +139,18 @@ export class Lockfile {
       return;
     }
 
-    // if (this.releasing) {
-    //   return;
-    // }
+    clearTimeout(this.timeout);
+    this.timeout = undefined;
 
-    try {
-      // this.releasing = true;
+    fs.closeSync(this.lockfile);
+    this.lockfile = undefined;
+    this.lastMtime = undefined;
 
-      clearTimeout(this.timeout);
-      this.timeout = undefined;
-
-      fs.closeSync(this.lockfile);
-      this.lockfile = undefined;
-      this.lastMtime = undefined;
-
-      // If the lockfile was compromised, we won't remove
-      // it since it belongs to another process now.
-      if (!this.compromised) {
-        fs.rmSync(this.path, { force: true });
-        this.compromised = false;
-      }
-    } finally {
-      // this.releasing = false;
+    // If the lockfile was compromised, we won't remove
+    // it since it belongs to another process now.
+    if (!this.compromised) {
+      fs.rmSync(this.path, { force: true });
+      this.compromised = false;
     }
   }
 
