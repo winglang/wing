@@ -66,7 +66,7 @@ export class Schedule extends cloud.Schedule {
     );
 
     // allow scheduler service account to invoke cron function
-    cronFunction._addPermissionToInvoke(schedulerServiceAccount);
+    cronFunction._addPermissionToInvoke(schedulerServiceAccount.email);
 
     // create scheduler
     new CloudSchedulerJob(this, "Scheduler", {
@@ -89,7 +89,7 @@ export class Schedule extends cloud.Schedule {
       sourceOp: cloud.ScheduleInflightMethods.TICK,
       target: cronFunction,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
-      name: "onTick()",
+      name: "tick",
     });
 
     return cronFunction;

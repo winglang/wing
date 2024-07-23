@@ -68,6 +68,7 @@ mod type_check_assert;
 mod valid_json_visitor;
 pub mod visit;
 mod visit_context;
+mod visit_stmt_before_super;
 mod visit_types;
 mod wasm_util;
 
@@ -79,7 +80,6 @@ const WINGSDK_UTIL_MODULE: &'static str = "util";
 const WINGSDK_HTTP_MODULE: &'static str = "http";
 const WINGSDK_MATH_MODULE: &'static str = "math";
 const WINGSDK_AWS_MODULE: &'static str = "aws";
-const WINGSDK_EX_MODULE: &'static str = "ex";
 const WINGSDK_EXPECT_MODULE: &'static str = "expect";
 const WINGSDK_REGEX_MODULE: &'static str = "regex";
 const WINGSDK_FS_MODULE: &'static str = "fs";
@@ -88,13 +88,12 @@ const WINGSDK_UI_MODULE: &'static str = "ui";
 
 pub const UTIL_CLASS_NAME: &'static str = "Util";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 11] = [
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 10] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
 	WINGSDK_MATH_MODULE,
 	WINGSDK_AWS_MODULE,
-	WINGSDK_EX_MODULE,
 	WINGSDK_EXPECT_MODULE,
 	WINGSDK_REGEX_MODULE,
 	WINGSDK_FS_MODULE,
@@ -125,6 +124,7 @@ const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!("{}.{}", WINGSDK_ASSEM
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
+const CONSTRUCT_NODE_PROPERTY: &'static str = "node";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
@@ -240,6 +240,7 @@ pub fn type_check(
 		None,
 	);
 	tc.add_builtins(scope);
+	tc.patch_constructs();
 
 	// If the file is an entrypoint file, we add "this" to its symbol environment
 	if is_entrypoint_file(file_path) {
@@ -354,7 +355,7 @@ pub fn compile(
 	asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
-			let mut reference_visitor = StructSchemaVisitor::new(&jsifier);
+			let mut reference_visitor = StructSchemaVisitor::new(&path, &jsifier);
 			reference_visitor.visit_scope(&scope);
 			(path, scope)
 		})

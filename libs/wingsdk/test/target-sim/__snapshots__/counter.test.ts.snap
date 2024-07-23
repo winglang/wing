@@ -10,9 +10,9 @@ exports[`create a counter 1`] = `
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = () => statedir;
-          ctx.resolveToken = (name, value) => attrs[name] = value;
-          ctx.log = (message, level) => {
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
           };
@@ -36,7 +36,7 @@ exports[`create a counter 1`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -170,14 +170,6 @@ exports[`create a counter 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -240,6 +232,7 @@ exports[`create a counter 1`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -269,9 +262,9 @@ exports[`dec 2`] = `
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = () => statedir;
-          ctx.resolveToken = (name, value) => attrs[name] = value;
-          ctx.log = (message, level) => {
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
           };
@@ -295,7 +288,7 @@ exports[`dec 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -429,14 +422,6 @@ exports[`dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -499,6 +484,7 @@ exports[`dec 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -528,9 +514,9 @@ exports[`inc 2`] = `
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = () => statedir;
-          ctx.resolveToken = (name, value) => attrs[name] = value;
-          ctx.log = (message, level) => {
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
           };
@@ -554,7 +540,7 @@ exports[`inc 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -688,14 +674,6 @@ exports[`inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -758,6 +736,7 @@ exports[`inc 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -787,9 +766,9 @@ exports[`key dec 2`] = `
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = () => statedir;
-          ctx.resolveToken = (name, value) => attrs[name] = value;
-          ctx.log = (message, level) => {
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
           };
@@ -813,7 +792,7 @@ exports[`key dec 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -947,14 +926,6 @@ exports[`key dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -1017,6 +988,7 @@ exports[`key dec 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1046,9 +1018,9 @@ exports[`key inc 2`] = `
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = () => statedir;
-          ctx.resolveToken = (name, value) => attrs[name] = value;
-          ctx.log = (message, level) => {
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
           };
@@ -1072,7 +1044,7 @@ exports[`key inc 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -1206,14 +1178,6 @@ exports[`key inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -1276,6 +1240,7 @@ exports[`key inc 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1303,9 +1268,9 @@ exports[`key set to new value 2`] = `
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = () => statedir;
-          ctx.resolveToken = (name, value) => attrs[name] = value;
-          ctx.log = (message, level) => {
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
           };
@@ -1329,7 +1294,7 @@ exports[`key set to new value 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -1463,14 +1428,6 @@ exports[`key set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -1533,6 +1490,7 @@ exports[`key set to new value 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1560,9 +1518,9 @@ exports[`set to new value 2`] = `
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = () => statedir;
-          ctx.resolveToken = (name, value) => attrs[name] = value;
-          ctx.log = (message, level) => {
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
           };
@@ -1586,7 +1544,7 @@ exports[`set to new value 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -1720,14 +1678,6 @@ exports[`set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -1790,6 +1740,7 @@ exports[`set to new value 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

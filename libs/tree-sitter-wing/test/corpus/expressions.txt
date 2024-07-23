@@ -225,7 +225,7 @@ inflight (): num => { return 1; };
   (expression_statement
     (closure
       modifiers: (closure_modifiers
-        (inflight_specifier))
+        (phase_specifier))
       parameter_list: (parameter_list)
       type: (builtin_type)
       block: (block
@@ -244,7 +244,7 @@ inflight () => { return 1; };
   (expression_statement
     (closure
       modifiers: (closure_modifiers
-        (inflight_specifier))
+        (phase_specifier))
       parameter_list: (parameter_list)
       block: (block
         (return_statement
@@ -262,7 +262,7 @@ inflight (arg1) => { log(arg1); };
   (expression_statement
     (closure
       modifiers: (closure_modifiers
-        (inflight_specifier))
+        (phase_specifier))
       parameter_list: (parameter_list
         (parameter_definition
           name: (identifier)))
@@ -304,12 +304,12 @@ maybeVal ?? "hi" ?? 2;
 
 (source
   (expression_statement
-    (unwrap_or
+    (binary_expression
       (reference
         (reference_identifier))
       (number)))
   (expression_statement
-    (unwrap_or
+    (binary_expression
       (reference
         (reference_identifier))
       (binary_expression
@@ -317,16 +317,16 @@ maybeVal ?? "hi" ?? 2;
         (number))))
   (expression_statement
     (binary_expression
-      (unwrap_or
+      (binary_expression
         (reference
           (reference_identifier))
         (number))
       (number)))
   (expression_statement
-    (unwrap_or
+    (binary_expression
       (reference
         (reference_identifier))
-      (unwrap_or
+      (binary_expression
         (string)
         (number)))))
 
@@ -487,46 +487,6 @@ let a = A { f1: 3, f2: true };
       fields: (struct_literal_member
         (identifier)
         (bool)))))
-
-================================================================================
-Optional test (and precedence)
-================================================================================
-a?;
-!a?;
-(!a)?;
-(a.b.c)?;
-
---------------------------------------------------------------------------------
-
-(source
-  (expression_statement
-    (optional_test
-      (reference
-        (reference_identifier))))
-  (expression_statement
-    (unary_expression
-      arg: (optional_test
-        (reference
-          (reference_identifier)))))
-  (expression_statement
-    (optional_test
-      (parenthesized_expression
-        (unary_expression
-          arg: (reference
-            (reference_identifier))))))
-  (expression_statement
-    (optional_test
-      (parenthesized_expression
-        (reference
-          (nested_identifier
-            object: (reference
-              (nested_identifier
-                object: (reference
-                  (reference_identifier))
-                accessor_type: (accessor)
-                property: (member_identifier)))
-            accessor_type: (accessor)
-            property: (member_identifier)))))))
 
 ================================================================================
 Nil

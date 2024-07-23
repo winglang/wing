@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $foo }) {
   class $Closure1 {
     constructor($args) {
@@ -26,6 +27,7 @@ module.exports = function({ $foo }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $foo }) {
   class $Closure2 {
     constructor($args) {
@@ -48,6 +50,7 @@ module.exports = function({ $foo }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
   class $Closure3 {
     constructor($args) {
@@ -77,6 +80,7 @@ module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $foo, $std_Duration, $util_Util }) {
   class $Closure4 {
     constructor($args) {
@@ -100,6 +104,7 @@ module.exports = function({ $foo, $std_Duration, $util_Util }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $fn3, $std_Duration, $util_Util }) {
   class $Closure5 {
     constructor($args) {
@@ -123,6 +128,7 @@ module.exports = function({ $fn3, $std_Duration, $util_Util }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
     constructor($args) {
@@ -150,8 +156,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -306,6 +311,9 @@ module.exports = function({  }) {
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -337,6 +345,9 @@ module.exports = function({  }) {
         },
         "function_name": "fn2-c892a4c6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.fn2_IamRole_DE8D96D2.arn}",
@@ -368,6 +379,9 @@ module.exports = function({  }) {
         },
         "function_name": "fn3-c856234e",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.fn3_IamRole_B0C65815.arn}",
@@ -435,18 +449,23 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const expect = $stdlib.expect;
-const util = $stdlib.util;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const expect = $stdlib.expect;
+    const util = $stdlib.util;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -557,11 +576,13 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [fn, ["invoke"]],
             [fn2, ["invoke"]],
             [sim, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
             [fn, []],
             [fn2, []],
             [sim, []],
@@ -592,9 +613,13 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"), ["fromSeconds"]],
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["sleep"]],
             [foo, [].concat(["inc"], ["get"])],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"), []],
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [foo, []],
           ],
         });
@@ -623,24 +648,27 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"), ["fromSeconds"]],
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["sleep"]],
             [fn3, [].concat(["invokeAsync"], ["invoke"])],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"), []],
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [fn3, []],
           ],
         });
       }
     }
     const foo = new Foo(this, "Foo");
-    const fn = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", new $Closure1(this, "$Closure1"));
-    const fn2 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn2", new $Closure2(this, "$Closure2"));
+    const fn = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", new $Closure1(this, "$Closure1"));
+    const fn2 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn2", new $Closure2(this, "$Closure2"));
     const sim = $helpers.eq((util.Util.env("WING_TARGET")), "sim");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:single instance of Foo", new $Closure3(this, "$Closure3"));
-    const fn3 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn3", new $Closure4(this, "$Closure4"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Foo state is not shared between function invocations", new $Closure5(this, "$Closure5"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:single instance of Foo", new $Closure3(this, "$Closure3"));
+    const fn3 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn3", new $Closure4(this, "$Closure4"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Foo state is not shared between function invocations", new $Closure5(this, "$Closure5"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_handler_singleton.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

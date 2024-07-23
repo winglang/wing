@@ -127,7 +127,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       sourceOp: cloud.QueueInflightMethods.PUSH,
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
-      name: "setConsumer()",
+      name: "consumer",
     });
 
     return fn;

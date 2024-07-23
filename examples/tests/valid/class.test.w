@@ -228,3 +228,34 @@ class DocClass {
   /// blah blah blah
   new() { this.docField = 0; }
 }
+
+// Extend a class and define an inner class that access its this and super before calling super()
+// this should be ok because the inner class doesn't need to be checked when searching for
+// this/super access before super() call.
+class BaseClassWithCtorArg {
+  pub x: num;
+  new(x: num) {
+    this.x = x;
+  }
+}
+
+class DerivedClassWithInnerClass extends BaseClassWithCtorArg {
+  new() {
+    class InnerBaseClass {
+      pub x: num;
+      new(x: num) {
+        this.x = x;
+      }
+      pub method() {}
+    }
+    class InnerDerivedClass extends InnerBaseClass {
+      new() {
+        super(1);
+        this.method();
+        super.method();
+        this.x;
+      }
+    }
+    super(1);
+  }
+}

@@ -77,14 +77,6 @@ exports[`create a queue 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -146,457 +138,7 @@ exports[`create a queue 1`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
-exports[`messages are not requeued if the function fails before timeout 1`] = `
-[
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.cloud.Queue created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "Push (messages=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-0).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
-  "Subscriber error - returning 1 messages to queue: ERROR",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Queue deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-]
-`;
-
-exports[`messages are not requeued if the function fails before timeout 2`] = `
-{
-  ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
-var $handler = undefined;
-exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-  if (message === \\"BAD MESSAGE\\") {
-    throw new Error(\\"ERROR\\");
-  }
-}
-};
-})())({
-
-}), args: {} }));
-  return await $handler.handle(event);
-};",
-  "connections.json": {
-    "connections": [
-      {
-        "name": "setConsumer()",
-        "source": "root/my_queue",
-        "target": "root/my_queue/SetConsumer0",
-      },
-    ],
-    "version": "connections-0.1",
-  },
-  "simulator.json": {
-    "resources": [
-      {
-        "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
-        "attrs": {},
-        "path": "root/my_queue/SetConsumer0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
-        "attrs": {},
-        "path": "root/my_queue",
-        "props": {
-          "retentionPeriod": 3600,
-          "timeout": 30,
-        },
-        "type": "@winglang/sdk.cloud.Queue",
-      },
-      {
-        "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
-        "attrs": {},
-        "path": "root/my_queue/QueueEventMapping0",
-        "props": {
-          "publisher": "\${wsim#root/my_queue#attrs.handle}",
-          "subscriber": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
-          "subscriptionProps": {
-            "batchSize": 1,
-          },
-        },
-        "type": "@winglang/sdk.sim.EventMapping",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-    "types": {
-      "@winglang/sdk.cloud.Api": {
-        "className": "Api",
-        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
-      },
-      "@winglang/sdk.cloud.Bucket": {
-        "className": "Bucket",
-        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
-      "@winglang/sdk.cloud.Domain": {
-        "className": "Domain",
-        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
-      },
-      "@winglang/sdk.cloud.Endpoint": {
-        "className": "Endpoint",
-        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
-      },
-      "@winglang/sdk.cloud.Function": {
-        "className": "Function",
-        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
-      },
-      "@winglang/sdk.cloud.OnDeploy": {
-        "className": "OnDeploy",
-        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
-      },
-      "@winglang/sdk.cloud.Queue": {
-        "className": "Queue",
-        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
-      },
-      "@winglang/sdk.cloud.Schedule": {
-        "className": "Schedule",
-        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
-      },
-      "@winglang/sdk.cloud.Secret": {
-        "className": "Secret",
-        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
-      },
-      "@winglang/sdk.cloud.Service": {
-        "className": "Service",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
-      "@winglang/sdk.cloud.Topic": {
-        "className": "Topic",
-        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
-      },
-      "@winglang/sdk.cloud.Website": {
-        "className": "Website",
-        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
-      "@winglang/sdk.sim.EventMapping": {
-        "className": "EventMapping",
-        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
-      },
-      "@winglang/sdk.sim.State": {
-        "className": "State",
-        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
-      },
-      "@winglang/sdk.std.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
-    },
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "my_queue": {
-          "children": {
-            "QueueEventMapping0": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "QueueEventMapping0",
-              "path": "root/my_queue/QueueEventMapping0",
-            },
-            "SetConsumer0": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
-              },
-              "id": "SetConsumer0",
-              "path": "root/my_queue/SetConsumer0",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.3.0",
-          },
-          "display": {
-            "description": "A distributed message queue",
-            "title": "Queue",
-          },
-          "id": "my_queue",
-          "path": "root/my_queue",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.3.0",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
-exports[`messages are requeued if the function fails after timeout 1`] = `
-[
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.cloud.Queue created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "Push (messages=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-0).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
-  "Subscriber error - returning 1 messages to queue: ERROR",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Queue deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "1 messages pushed back to queue after visibility timeout.",
-]
-`;
-
-exports[`messages are requeued if the function fails after timeout 2`] = `
-{
-  ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
-var $handler = undefined;
-exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-  if (message === \\"BAD MESSAGE\\") {
-    throw new Error(\\"ERROR\\");
-  }
-}
-};
-})())({
-
-}), args: {} }));
-  return await $handler.handle(event);
-};",
-  "connections.json": {
-    "connections": [
-      {
-        "name": "setConsumer()",
-        "source": "root/my_queue",
-        "target": "root/my_queue/SetConsumer0",
-      },
-    ],
-    "version": "connections-0.1",
-  },
-  "simulator.json": {
-    "resources": [
-      {
-        "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
-        "attrs": {},
-        "path": "root/my_queue/SetConsumer0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
-        "attrs": {},
-        "path": "root/my_queue",
-        "props": {
-          "retentionPeriod": 3600,
-          "timeout": 1,
-        },
-        "type": "@winglang/sdk.cloud.Queue",
-      },
-      {
-        "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
-        "attrs": {},
-        "path": "root/my_queue/QueueEventMapping0",
-        "props": {
-          "publisher": "\${wsim#root/my_queue#attrs.handle}",
-          "subscriber": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
-          "subscriptionProps": {
-            "batchSize": 1,
-          },
-        },
-        "type": "@winglang/sdk.sim.EventMapping",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-    "types": {
-      "@winglang/sdk.cloud.Api": {
-        "className": "Api",
-        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
-      },
-      "@winglang/sdk.cloud.Bucket": {
-        "className": "Bucket",
-        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
-      "@winglang/sdk.cloud.Domain": {
-        "className": "Domain",
-        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
-      },
-      "@winglang/sdk.cloud.Endpoint": {
-        "className": "Endpoint",
-        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
-      },
-      "@winglang/sdk.cloud.Function": {
-        "className": "Function",
-        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
-      },
-      "@winglang/sdk.cloud.OnDeploy": {
-        "className": "OnDeploy",
-        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
-      },
-      "@winglang/sdk.cloud.Queue": {
-        "className": "Queue",
-        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
-      },
-      "@winglang/sdk.cloud.Schedule": {
-        "className": "Schedule",
-        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
-      },
-      "@winglang/sdk.cloud.Secret": {
-        "className": "Secret",
-        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
-      },
-      "@winglang/sdk.cloud.Service": {
-        "className": "Service",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
-      "@winglang/sdk.cloud.Topic": {
-        "className": "Topic",
-        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
-      },
-      "@winglang/sdk.cloud.Website": {
-        "className": "Website",
-        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
-      "@winglang/sdk.sim.EventMapping": {
-        "className": "EventMapping",
-        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
-      },
-      "@winglang/sdk.sim.State": {
-        "className": "State",
-        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
-      },
-      "@winglang/sdk.std.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
-    },
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "my_queue": {
-          "children": {
-            "QueueEventMapping0": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "QueueEventMapping0",
-              "path": "root/my_queue/QueueEventMapping0",
-            },
-            "SetConsumer0": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
-              },
-              "id": "SetConsumer0",
-              "path": "root/my_queue/SetConsumer0",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.3.0",
-          },
-          "display": {
-            "description": "A distributed message queue",
-            "title": "Queue",
-          },
-          "id": "my_queue",
-          "path": "root/my_queue",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.3.0",
-      },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -692,14 +234,6 @@ exports[`push rejects empty message 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -761,6 +295,7 @@ exports[`push rejects empty message 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -860,14 +395,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -929,6 +456,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -945,20 +473,22 @@ exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx, event) => {
             const batchItemFailures = [];
-            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
-            if (!parsed.messages)
-                throw new Error('No "messages" field in event.');
-            for (const $message of parsed.messages) {
-                try {
-                    await ctx.handler($message.payload);
-                }
-                catch (error) {
-                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
-                    batchItemFailures.push($message);
+            const eventWithMessages = event;
+            if (eventWithMessages.messages) {
+                for (const $message of eventWithMessages.messages) {
+                    try {
+                        await ctx.handler($message.payload);
+                    }
+                    catch (error) {
+                        batchItemFailures.push($message);
+                    }
                 }
             }
+            else {
+                throw new Error('No "messages" field in event.');
+            }
             return batchItemFailures.length > 0
-                ? JSON.stringify(batchItemFailures)
+                ? batchItemFailures
                 : undefined;
         }
   const $ctx = {
@@ -1042,21 +572,21 @@ async pop(...args) { return this.backend.pop(...args); }
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/my_queue",
         "sourceOp": "push",
         "target": "root/my_queue/Consumer0",
         "targetOp": "invoke",
       },
       {
-        "name": "push",
+        "name": "call",
         "source": "root/my_queue_messages/Function",
         "sourceOp": "invoke",
         "target": "root/my_queue",
         "targetOp": "push",
       },
       {
-        "name": "push",
+        "name": "call",
         "source": "root/my_queue_messages/Function",
         "sourceOp": "invokeAsync",
         "target": "root/my_queue",
@@ -1209,14 +739,6 @@ async pop(...args) { return this.backend.pop(...args); }
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -1256,7 +778,7 @@ async pop(...args) { return this.backend.pop(...args); }
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
+                "title": "Consumer",
               },
               "id": "Consumer0",
               "path": "root/my_queue/Consumer0",
@@ -1329,6 +851,7 @@ async pop(...args) { return this.backend.pop(...args); }
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1345,20 +868,22 @@ exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx, event) => {
             const batchItemFailures = [];
-            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
-            if (!parsed.messages)
-                throw new Error('No "messages" field in event.');
-            for (const $message of parsed.messages) {
-                try {
-                    await ctx.handler($message.payload);
-                }
-                catch (error) {
-                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
-                    batchItemFailures.push($message);
+            const eventWithMessages = event;
+            if (eventWithMessages.messages) {
+                for (const $message of eventWithMessages.messages) {
+                    try {
+                        await ctx.handler($message.payload);
+                    }
+                    catch (error) {
+                        batchItemFailures.push($message);
+                    }
                 }
             }
+            else {
+                throw new Error('No "messages" field in event.');
+            }
             return batchItemFailures.length > 0
-                ? JSON.stringify(batchItemFailures)
+                ? batchItemFailures
                 : undefined;
         }
   const $ctx = {
@@ -1391,7 +916,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/my_queue",
         "sourceOp": "push",
         "target": "root/my_queue/Consumer0",
@@ -1510,14 +1035,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -1557,7 +1074,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
+                "title": "Consumer",
               },
               "id": "Consumer0",
               "path": "root/my_queue/Consumer0",
@@ -1603,6 +1120,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

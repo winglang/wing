@@ -29,13 +29,13 @@ A function can be invoked in two ways:
 * **invoke()** - Executes the function with a payload and waits for the result.
 * **invokeAsync()** - Kicks off the execution of the function with a payload and returns immediately while the function is running.
 
-```ts playground
+```ts playground example
 bring cloud;
 bring util;
 
 // defining a cloud.Function resource
-let countWords = new cloud.Function(inflight (s: str?): str => {
-  return "{s?.split(" ")?.length ?? 0}";
+let countWords = new cloud.Function(inflight (payload: Json?): Json => {
+  return "{payload?.tryAsStr()?.split(" ")?.length ?? 0}";
 }) as "countWords";
 
 let longTask = new cloud.Function(inflight () => {
@@ -61,7 +61,7 @@ It is possible to leverage this behavior to cache objects across function execut
 
 The following example reads the `bigdata.json` file once and reuses it every time `query()` is called.
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let big = new cloud.Bucket();
@@ -98,6 +98,8 @@ The sim implementation of `cloud.Function` runs the inflight code as a JavaScrip
 By default, a maximum of 10 workers can be processing requests sent to a `cloud.Function` concurrently, but this number can be adjusted with the `concurrency` property:
 
 ```ts playground
+bring cloud;
+
 new cloud.Function(inflight () => {
   // ... code that shouldn't run concurrently ...
 }, concurrency: 1);
@@ -107,9 +109,11 @@ new cloud.Function(inflight () => {
 
 The AWS implementation of `cloud.Function` uses [AWS Lambda](https://aws.amazon.com/lambda/).
 
+#### Adding custom IAM permissions
+
 To add extra IAM permissions to the function, you can use the `aws.Function` class as shown below.
 
-```ts playground
+```ts playground example
 bring aws;
 bring cloud;
 
@@ -127,9 +131,11 @@ if let lambdaFn = aws.Function.from(f) {
 }
 ```
 
-To access the AWS Lambda context object, you can use the `aws.Function` class as shown below.
+#### Accessing the Lambda context
 
-```ts playground
+To access the [AWS Lambda context object](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html), you can use the `aws.Function` class as shown below.
+
+```ts playground example
 bring aws;
 bring cloud;
 
@@ -145,6 +151,52 @@ let f = new cloud.Function(inflight () => {
 ```
 
 The `context()` method returns `nil` when ran on non-AWS targets.
+
+#### Adding Lambda layers
+
+To add a [Lambda layer](https://docs.aws.amazon.com/lambda/latest/dg/chapter-layers.html) to the function, you can use the `aws.Function` class as shown below.
+
+```ts playground example
+bring aws;
+bring cloud;
+
+let f = new cloud.Function(inflight () => {
+  log("Hello world!");
+});
+if let lambdaFn = aws.Function.from(f) {
+  lambdaFn.addLambdaLayer("arn:aws:lambda:us-west-2:123456789012:layer:my-layer:1");
+}
+```
+
+In some scenarios, you might want to a Lambda layer to be automatically added to all Lambda function's that use a class's inflight methods.
+You can achieve this by using the `onLift` or `onLiftType` hook.
+
+```ts playground example
+bring aws;
+bring cloud;
+
+class Datadog {
+  pub inflight fetchMetrics() {
+    // ...implementation...
+  }
+  pub onLift(host: std.IInflightHost, ops: Array<str>) {
+    // Note: the "ops" argument is an array of inflight methods that were used
+    // so you could conditionally add the layer based on the methods called
+    if let lambdaFn = aws.Function.from(host) {
+      lambdaFn.addLambdaLayer("arn:aws:lambda:us-west-2:123456789012:layer:datadog-layer:1");
+    }
+  }
+}
+
+let d = new Datadog();
+
+let api = new cloud.Api();
+api.get("/metrics", inflight () => {
+  d.fetchMetrics();
+});
+```
+
+In the previous example, a Lambda function is implicitly created for handling the "/metrics" endpoint, and the `datadog-layer` is automatically added to it.
 
 ### Azure (`tf-azure`)
 

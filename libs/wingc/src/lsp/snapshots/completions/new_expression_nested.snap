@@ -60,7 +60,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(): void;\n  inflight invoke(): str?;\n  inflight invokeAsync(): void;\n}\n```\n---\nA function."
+    value: "```wing\nclass Function impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(): void;\n  inflight invoke(): Json?;\n  inflight invokeAsync(): void;\n}\n```\n---\nA function."
   sortText: gg|Function
   insertText: Function($1)
   insertTextFormat: 2

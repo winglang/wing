@@ -18,14 +18,14 @@ import type {
   FileLink,
   LayoutConfig,
   RouterContext,
-  TestsStateManager,
 } from "./utils/createRouter.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
 import type { LogInterface } from "./utils/LogInterface.js";
+import type { TestRunner } from "./utils/test-runner/test-runner.js";
 
 export interface CreateExpressServerOptions {
-  simulatorInstance(): Promise<simulator.Simulator>;
-  testSimulatorInstance(): Promise<simulator.Simulator>;
+  simulatorInstance(): simulator.Simulator;
+  restartSimulator(): Promise<void>;
   consoleLogger: ConsoleLogger;
   errorMessage(): string | undefined;
   emitter: Emittery<{
@@ -46,16 +46,18 @@ export interface CreateExpressServerOptions {
   layoutConfig?: LayoutConfig;
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
-  testsStateManager: () => TestsStateManager;
+  getTestRunner: () => TestRunner;
   analyticsAnonymousId?: string;
   analytics?: Analytics;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
+  getEndpointWarningAccepted?: () => Promise<boolean>;
+  notifyEndpointWarningAccepted?: () => Promise<void>;
 }
 
 export const createExpressServer = async ({
   simulatorInstance,
-  testSimulatorInstance,
+  restartSimulator,
   consoleLogger,
   errorMessage,
   emitter,
@@ -72,11 +74,13 @@ export const createExpressServer = async ({
   layoutConfig,
   getSelectedNode,
   setSelectedNode,
-  testsStateManager,
+  getTestRunner,
   analyticsAnonymousId,
   analytics,
   requireSignIn,
   notifySignedIn,
+  getEndpointWarningAccepted,
+  notifyEndpointWarningAccepted,
 }: CreateExpressServerOptions) => {
   const app = expressApp ?? express();
   app.use(cors());
@@ -87,8 +91,8 @@ export const createExpressServer = async ({
       async simulator() {
         return await simulatorInstance();
       },
-      async testSimulator() {
-        return await testSimulatorInstance();
+      async restartSimulator() {
+        return await restartSimulator();
       },
       async appDetails() {
         return {
@@ -109,18 +113,19 @@ export const createExpressServer = async ({
       layoutConfig,
       getSelectedNode,
       setSelectedNode,
-      testsStateManager,
+      getTestRunner,
       analyticsAnonymousId,
       analytics,
       requireSignIn,
       notifySignedIn,
+      getEndpointWarningAccepted,
+      notifyEndpointWarningAccepted,
     };
   };
   app.use(
     "/trpc",
     trpcExpress.createExpressMiddleware({
       router,
-      batching: { enabled: false },
       createContext,
     }),
   );

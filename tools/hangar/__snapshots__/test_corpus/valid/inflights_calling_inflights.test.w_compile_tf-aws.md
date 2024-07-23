@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $globalBucket }) {
   class $Closure1 {
     constructor($args) {
@@ -25,6 +26,7 @@ module.exports = function({ $globalBucket }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $storeInBucket }) {
   class $Closure2 {
     constructor($args) {
@@ -35,7 +37,7 @@ module.exports = function({ $storeInBucket }) {
     }
     async handle(event) {
       {
-        const $if_let_value = event;
+        const $if_let_value = $macros.__Json_tryAsStr(true, event, );
         if ($if_let_value != undefined) {
           const event = $if_let_value;
           (await $storeInBucket(event, "file1"));
@@ -52,6 +54,7 @@ module.exports = function({ $storeInBucket }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $func1, $globalBucket }) {
   class $Closure3 {
     constructor($args) {
@@ -74,6 +77,7 @@ module.exports = function({ $func1, $globalBucket }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $globalBucket }) {
   class $Closure4 {
     constructor($args) {
@@ -96,6 +100,7 @@ module.exports = function({ $globalBucket }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $x }) {
   class $Closure5 {
     constructor($args) {
@@ -118,6 +123,7 @@ module.exports = function({ $x }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class MyResource {
     constructor($args) {
@@ -139,8 +145,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -218,6 +223,9 @@ module.exports = function({  }) {
         },
         "function_name": "func1-c899062d",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.func1_IamRole_31EC29DC.arn}",
@@ -273,16 +281,21 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -459,16 +472,15 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const globalBucket = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const storeInBucket = new $Closure1(this, "$Closure1");
     const handler1 = new $Closure2(this, "$Closure2");
-    const func1 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "func1", handler1);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflights can call other inflights", new $Closure3(this, "$Closure3"));
+    const func1 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "func1", handler1);
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflights can call other inflights", new $Closure3(this, "$Closure3"));
     const x = new MyResource(this, "MyResource");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:variable can be an inflight closure", new $Closure5(this, "$Closure5"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:variable can be an inflight closure", new $Closure5(this, "$Closure5"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflights_calling_inflights.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

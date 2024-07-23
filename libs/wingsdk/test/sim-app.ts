@@ -3,13 +3,20 @@ import { join } from "path";
 import { onTestFailed } from "vitest";
 import { directorySnapshot, mkdtemp } from "./util";
 import { Function, IFunctionClient, IFunctionHandler } from "../src/cloud";
+import { ClassFactory } from "../src/core";
 import { Simulator } from "../src/simulator";
 import { App } from "../src/target-sim/app";
+import { Platform } from "../src/target-sim/platform";
 
 /**
  * @see AppProps
  */
 export interface SimAppProps {
+  /**
+   * The output directory for the synthesized app.
+   * @default - a fresh temporary directory
+   */
+  readonly outdir?: string;
   readonly isTestEnvironment?: boolean;
   readonly rootConstruct?: any;
 }
@@ -26,19 +33,33 @@ export class SimApp extends App {
   private functionIndex: number = 0;
 
   constructor(props: SimAppProps = {}) {
-    const { isTestEnvironment, rootConstruct } = props;
+    const { isTestEnvironment, rootConstruct, outdir } = props;
+
+    const platform = new Platform();
+    const classFactory = new ClassFactory(
+      [platform.newInstance.bind(platform)],
+      [platform.resolveType.bind(platform)]
+    );
+
     super({
-      outdir: mkdtemp(),
+      outdir: outdir ?? mkdtemp(),
       entrypointDir: __dirname,
       isTestEnvironment,
       rootConstruct,
+      classFactory,
     });
 
     // symlink the node_modules so we can test imports and stuffs
-    fs.symlinkSync(
-      join(__dirname, "..", "node_modules"),
-      join(this.outdir, "node_modules")
-    );
+    try {
+      fs.symlinkSync(
+        join(__dirname, "..", "node_modules"),
+        join(this.outdir, "node_modules")
+      );
+    } catch (e) {
+      if (e.code !== "EEXIST") {
+        throw e;
+      }
+    }
   }
 
   /**
@@ -67,7 +88,10 @@ export class SimApp extends App {
   public async startSimulator(stateDir?: string): Promise<Simulator> {
     this.synthIfNeeded();
     const simfile = this.synth();
-    const s = new Simulator({ simfile, stateDir });
+    const s = new Simulator({
+      simfile,
+      stateDir: stateDir ?? mkdtemp(),
+    });
     await s.start();
 
     // When tests fail, we still want to make sure the simulator is stopped

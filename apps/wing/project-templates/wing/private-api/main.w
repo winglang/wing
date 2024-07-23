@@ -97,8 +97,8 @@ let noteService = new NoteService();
 
 // Consumer functions (not required for the app to work, but useful for testing)
 if util.env("WING_TARGET") == "tf-aws" {
-  new cloud.Function(inflight (event: str?) => {
-    if let event = event {
+  new cloud.Function(inflight (event) => {
+    if let event = event?.tryAsStr() {
       let parts = event.split(":");
       let name = parts.at(0);
       let note = parts.at(1);
@@ -112,8 +112,8 @@ if util.env("WING_TARGET") == "tf-aws" {
     return "event is required `NAME:NOTE`";
   }) as "Consumer-PUT";
   
-  new cloud.Function(inflight (event: str?) => {
-    if let event = event {
+  new cloud.Function(inflight (event) => {
+    if let event = event?.tryAsStr() {
       let response = http.delete("{noteService.api.url}/note/{event}");
       return response.body;
     }
@@ -121,8 +121,8 @@ if util.env("WING_TARGET") == "tf-aws" {
     return "event is required `NAME`";
   }) as "Consumer-DELETE";
   
-  new cloud.Function(inflight (event: str?) => {
-    if let event = event {
+  new cloud.Function(inflight (event) => {
+    if let event = event?.tryAsStr() {
       return http.get("{noteService.api.url}/note?name={event}").body;
     }
   

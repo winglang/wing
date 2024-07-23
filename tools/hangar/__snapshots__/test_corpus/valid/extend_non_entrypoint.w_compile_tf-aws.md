@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $cdk8s_Chart }) {
   class Foo extends $cdk8s_Chart {
     constructor($args) {
@@ -20,11 +21,13 @@ module.exports = function({ $cdk8s_Chart }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 const cdk8s = require("cdk8s");
-class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
+class Foo extends (globalThis.$ClassFactory.resolveType("cdk8s.Chart") ?? cdk8s.Chart) {
   constructor($scope, $id, ) {
     super($scope, $id);
   }
@@ -47,7 +50,7 @@ class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
     });
   }
 }
-module.exports = { Foo };
+module.exports = { $preflightTypesMap, Foo };
 //# sourceMappingURL=preflight.cjs.map
 ```
 

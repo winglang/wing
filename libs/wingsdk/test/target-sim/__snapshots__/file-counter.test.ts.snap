@@ -8,20 +8,22 @@ exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx, event) => {
             const batchItemFailures = [];
-            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
-            if (!parsed.messages)
-                throw new Error('No "messages" field in event.');
-            for (const $message of parsed.messages) {
-                try {
-                    await ctx.handler($message.payload);
-                }
-                catch (error) {
-                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
-                    batchItemFailures.push($message);
+            const eventWithMessages = event;
+            if (eventWithMessages.messages) {
+                for (const $message of eventWithMessages.messages) {
+                    try {
+                        await ctx.handler($message.payload);
+                    }
+                    catch (error) {
+                        batchItemFailures.push($message);
+                    }
                 }
             }
+            else {
+                throw new Error('No "messages" field in event.');
+            }
             return batchItemFailures.length > 0
-                ? JSON.stringify(batchItemFailures)
+                ? batchItemFailures
                 : undefined;
         }
   const $ctx = {
@@ -124,9 +126,9 @@ async rename(...args) { return this.backend.rename(...args); }
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = () => statedir;
-          ctx.resolveToken = (name, value) => attrs[name] = value;
-          ctx.log = (message, level) => {
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
           };
@@ -150,7 +152,7 @@ async rename(...args) { return this.backend.rename(...args); }
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -190,7 +192,7 @@ async rename(...args) { return this.backend.rename(...args); }
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/HelloWorld/Queue",
         "sourceOp": "push",
         "target": "root/HelloWorld/Queue/Consumer0",
@@ -225,28 +227,28 @@ async rename(...args) { return this.backend.rename(...args); }
         "targetOp": "call",
       },
       {
-        "name": "inc",
+        "name": "call",
         "source": "root/HelloWorld/Queue/Consumer0",
         "sourceOp": "invoke",
         "target": "root/HelloWorld/Counter",
         "targetOp": "inc",
       },
       {
-        "name": "put",
+        "name": "call",
         "source": "root/HelloWorld/Queue/Consumer0",
         "sourceOp": "invoke",
         "target": "root/HelloWorld/Bucket",
         "targetOp": "put",
       },
       {
-        "name": "inc",
+        "name": "call",
         "source": "root/HelloWorld/Queue/Consumer0",
         "sourceOp": "invokeAsync",
         "target": "root/HelloWorld/Counter",
         "targetOp": "inc",
       },
       {
-        "name": "put",
+        "name": "call",
         "source": "root/HelloWorld/Queue/Consumer0",
         "sourceOp": "invokeAsync",
         "target": "root/HelloWorld/Bucket",
@@ -415,14 +417,6 @@ async rename(...args) { return this.backend.rename(...args); }
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -519,7 +513,7 @@ async rename(...args) { return this.backend.rename(...args); }
                   "display": {
                     "description": "A cloud function (FaaS)",
                     "sourceModule": "@winglang/sdk",
-                    "title": "setConsumer()",
+                    "title": "Consumer",
                   },
                   "id": "Consumer0",
                   "path": "root/HelloWorld/Queue/Consumer0",
@@ -565,6 +559,7 @@ async rename(...args) { return this.backend.rename(...args); }
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "display": {},
           "id": "HelloWorld",
           "path": "root/HelloWorld",
         },
@@ -573,6 +568,7 @@ async rename(...args) { return this.backend.rename(...args); }
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

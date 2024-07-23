@@ -57,6 +57,7 @@ export interface CompileOptions {
    */
   readonly testing?: boolean;
   readonly log?: (...args: any[]) => void;
+  readonly preflightLog?: (...args: any[]) => void;
 
   /// Enable/disable color output for the compiler (subject to terminal detection)
   readonly color?: boolean;
@@ -133,6 +134,7 @@ export function determineTargetFromPlatforms(platforms: string[]): string {
  */
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
   const { log } = options;
+  const preflightLog = options.preflightLog ?? process.stdout.write.bind(process.stdout);
   // create a unique temporary directory for the compilation
   const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
   const entrypointFile = resolve(entrypoint);
@@ -205,9 +207,11 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         delete preflightEnv.Path;
       }
     }
+
     await runPreflightCodeInWorkerThread(
       compileForPreflightResult.preflightEntrypoint,
-      preflightEnv
+      preflightEnv,
+      (data) => preflightLog?.(data.toString())
     );
   }
   return synthDir;
@@ -332,7 +336,8 @@ function defaultValuesFile() {
 
 async function runPreflightCodeInWorkerThread(
   entrypoint: string,
-  env: Record<string, string | undefined>
+  env: Record<string, string | undefined>,
+  onStdout: (data: Buffer) => void
 ): Promise<void> {
   try {
     env.WING_PREFLIGHT_ENTRYPOINT = JSON.stringify(entrypoint);
@@ -340,8 +345,10 @@ async function runPreflightCodeInWorkerThread(
     await new Promise((resolve, reject) => {
       const worker = fork(join(__dirname, "..", "preflight.shim.cjs"), {
         env,
-        stdio: "inherit",
+        stdio: "pipe",
       });
+      worker.stdout?.on("data", onStdout);
+      worker.stderr?.on("data", onStdout);
       worker.on("message", reject);
       worker.on("error", reject);
       worker.on("exit", (code) => {

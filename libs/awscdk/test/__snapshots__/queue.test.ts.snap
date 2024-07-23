@@ -50,6 +50,7 @@ exports[`default queue behavior 1`] = `
 }
 `;
 
+<<<<<<< HEAD
 exports[`queue with a consumer function 1`] = `
 "
 (await (async () => {
@@ -60,6 +61,9 @@ exports[`queue with a consumer function 1`] = `
 })())
 "
 `;
+=======
+exports[`queue with a consumer function 1`] = `"new (require("[REDACTED]/awscdk/src/function.inflight")).FunctionClient(process.env["FUNCTION_NAME_27b8b1c8"], "my-project/Default/Queue-SetConsumer0")"`;
+>>>>>>> main
 
 exports[`queue with a consumer function 2`] = `
 {
@@ -102,6 +106,7 @@ exports[`queue with a consumer function 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "QueueSetConsumer0LogGroupC0386522",
           },

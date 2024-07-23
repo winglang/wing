@@ -15,7 +15,7 @@ import * as cloud from "../cloud";
 import { lift, LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
 import { ToSimulatorOutput } from "../simulator";
-import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
+import { Duration, IInflightHost, Json, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -96,7 +96,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     );
     const fnNode = Node.of(fn);
     fnNode.sourceModule = SDK_SOURCE_MODULE;
-    fnNode.title = "setConsumer()";
+    fnNode.title = "Consumer";
 
     const mapping = new EventMapping(
       this,
@@ -122,7 +122,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       sourceOp: cloud.QueueInflightMethods.PUSH,
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
-      name: "setConsumer()",
+      name: "consumer",
     });
 
     return fn;
@@ -171,18 +171,24 @@ export class QueueSetConsumerHandler {
   ): cloud.IFunctionHandler {
     return lift({ handler }).inflight(async (ctx, event) => {
       const batchItemFailures = [];
-      let parsed = JSON.parse(event ?? "{}");
-      if (!parsed.messages) throw new Error('No "messages" field in event.');
-      for (const $message of parsed.messages) {
-        try {
-          await ctx.handler($message.payload);
-        } catch (error) {
-          // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
-          batchItemFailures.push($message);
+
+      const eventWithMessages = event as unknown as {
+        messages: { payload: string }[];
+      };
+      if (eventWithMessages.messages) {
+        for (const $message of eventWithMessages.messages) {
+          try {
+            await ctx.handler($message.payload);
+          } catch (error) {
+            batchItemFailures.push($message);
+          }
         }
+      } else {
+        throw new Error('No "messages" field in event.');
       }
+
       return batchItemFailures.length > 0
-        ? JSON.stringify(batchItemFailures)
+        ? (batchItemFailures as unknown as Json)
         : undefined;
     });
   }

@@ -17,3 +17,10 @@ export async function exists(filePath: string): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Check if an error looks like a NodeJS error.
+ */
+export const isNodeError = (error: unknown): error is NodeJS.ErrnoException => {
+  return error instanceof Error && "code" in error;
+};

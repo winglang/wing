@@ -4,7 +4,8 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $std_Json, $usersTable }) {
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({ $std_Json, $userData }) {
   class $Closure1 {
     constructor($args) {
       const {  } = $args;
@@ -13,7 +14,7 @@ module.exports = function({ $std_Json, $usersTable }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"users": (await $usersTable.list())})), "status": 200});
+      return ({"body": $macros.__Json_stringify(false, $std_Json, ({"users": (await $userData.list())})), "status": 200});
     }
   }
   return $Closure1;
@@ -25,7 +26,8 @@ module.exports = function({ $std_Json, $usersTable }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $std_Json, $usersTable }) {
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({ $std_Json, $userData }) {
   class $Closure2 {
     constructor($args) {
       const {  } = $args;
@@ -34,12 +36,12 @@ module.exports = function({ $std_Json, $usersTable }) {
       return $obj;
     }
     async handle(req) {
-      const body = JSON.parse((req.body ?? ""));
-      if ((($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "name"), "") || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "age"), "")) || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id"), ""))) {
-        return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"error": "incomplete details"})), "status": 400});
+      const body = $macros.__Json_parse(false, $std_Json, (req.body ?? ""));
+      if ((($helpers.eq($macros.__Json_get(false, body, "name"), "") || $helpers.eq($macros.__Json_get(false, body, "age"), "")) || $helpers.eq($macros.__Json_get(false, body, "id"), ""))) {
+        return ({"body": $macros.__Json_stringify(false, $std_Json, ({"error": "incomplete details"})), "status": 400});
       }
-      (await $usersTable.insert(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")), body));
-      return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"user": ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")})), "status": 201});
+      (await $userData.putJson($macros.__Json_asStr(false, $macros.__Json_get(false, body, "id"), ), body));
+      return ({"body": $macros.__Json_stringify(false, $std_Json, ({"user": $macros.__Json_get(false, body, "id")})), "status": 201});
     }
   }
   return $Closure2;
@@ -51,6 +53,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure3 {
     constructor($args) {
@@ -63,11 +66,11 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.GET, "headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 200));
-      (await $expect_Util.equal((headers)["access-control-allow-origin"], "*"));
-      (await $expect_Util.equal((headers)["access-control-expose-headers"], "Content-Type"));
-      (await $expect_Util.equal((headers)["access-control-allow-credentials"], "false"));
-      (await $expect_Util.nil((headers)["access-control-allow-headers"]));
-      (await $expect_Util.nil((headers)["access-control-allow-methods"]));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-origin"), "*"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-expose-headers"), "Content-Type"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-credentials"), "false"));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-allow-headers")));
+      (await $expect_Util.nil($macros.__Map_tryGet(false, headers, "access-control-allow-methods")));
     }
   }
   return $Closure3;
@@ -79,6 +82,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure4 {
     constructor($args) {
@@ -91,8 +95,8 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS, "headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 204));
-      (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
-      (await $expect_Util.equal((headers)["access-control-allow-headers"], "Content-Type"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-methods"), "GET,POST,OPTIONS"));
+      (await $expect_Util.equal($macros.__Map_tryGet(false, headers, "access-control-allow-headers"), "Content-Type"));
     }
   }
   return $Closure4;
@@ -106,8 +110,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {
       "root": {
@@ -333,28 +336,6 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         "retention_in_days": 30
       }
     },
-    "aws_dynamodb_table": {
-      "Table": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Table/Default",
-            "uniqueId": "Table"
-          }
-        },
-        "attribute": [
-          {
-            "name": "id",
-            "type": "S"
-          }
-        ],
-        "billing_mode": "PAY_PER_REQUEST",
-        "hash_key": "id",
-        "name": "users-tableTable-c89b2d37",
-        "point_in_time_recovery": {
-          "enabled": true
-        }
-      }
-    },
     "aws_iam_role": {
       "Api_get_users0_IamRole_950ACE40": {
         "//": {
@@ -383,7 +364,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
             "uniqueId": "Api_get_users0_IamRolePolicy_1C96E6D8"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.Bucket.arn}\",\"${aws_s3_bucket.Bucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.Api_get_users0_IamRole_950ACE40.name}"
       },
       "Api_post_users0_IamRolePolicy_32ED25A9": {
@@ -393,7 +374,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
             "uniqueId": "Api_post_users0_IamRolePolicy_32ED25A9"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.Bucket.arn}\",\"${aws_s3_bucket.Bucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.Api_post_users0_IamRole_B6E18B7C.name}"
       }
     },
@@ -432,9 +413,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "id",
+            "BUCKET_NAME_1357ca3a": "${aws_s3_bucket.Bucket.bucket}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "get_users0-c82bfbcd",
             "WING_TARGET": "tf-aws"
@@ -442,6 +421,9 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         },
         "function_name": "get_users0-c82bfbcd",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_users0_IamRole_950ACE40.arn}",
@@ -466,9 +448,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "id",
+            "BUCKET_NAME_1357ca3a": "${aws_s3_bucket.Bucket.bucket}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "post_users0-c8ae30d9",
             "WING_TARGET": "tf-aws"
@@ -476,6 +456,9 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         },
         "function_name": "post_users0-c8ae30d9",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_post_users0_IamRole_B6E18B7C.arn}",
@@ -518,6 +501,16 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       }
     },
     "aws_s3_bucket": {
+      "Bucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
+          }
+        },
+        "bucket_prefix": "bucket-c88fdc5f-",
+        "force_destroy": false
+      },
       "Code": {
         "//": {
           "metadata": {
@@ -627,19 +620,23 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const ex = $stdlib.ex;
-const http = $stdlib.http;
-const expect = $stdlib.expect;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const http = $stdlib.http;
+    const expect = $stdlib.expect;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -649,8 +646,13 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+<<<<<<< HEAD
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"))},
             $usersTable: ${$stdlib.core.liftObject(usersTable)},
+=======
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $userData: ${$stdlib.core.liftObject(userData)},
+>>>>>>> main
           })
         `;
       }
@@ -662,10 +664,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [usersTable, ["list"]],
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
+            [userData, ["list"]],
           ],
           "$inflight_init": [
-            [usersTable, []],
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
+            [userData, []],
           ],
         });
       }
@@ -679,8 +683,13 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
+<<<<<<< HEAD
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"))},
             $usersTable: ${$stdlib.core.liftObject(usersTable)},
+=======
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $userData: ${$stdlib.core.liftObject(userData)},
+>>>>>>> main
           })
         `;
       }
@@ -692,10 +701,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [usersTable, ["insert"]],
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), [].concat(["parse"], ["stringify"])],
+            [userData, ["putJson"]],
           ],
           "$inflight_init": [
-            [usersTable, []],
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
+            [userData, []],
           ],
         });
       }
@@ -724,9 +735,15 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), [].concat(["equal"], ["nil"])],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), ["GET"]],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), ["fetch"]],
             [api.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), []],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [api.url, []],
           ],
         });
@@ -756,27 +773,32 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), ["OPTIONS"]],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), ["fetch"]],
             [api.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), []],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [api.url, []],
           ],
         });
       }
     }
-    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api", { cors: true, corsOptions: ({"allowOrigin": "*", "allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS], "allowHeaders": ["Content-Type"], "allowCredentials": false, "exposeHeaders": ["Content-Type"], "maxAge": (std.Duration.fromSeconds(600))}) });
-    const website = this.node.root.new("@winglang/sdk.cloud.Website", cloud.Website, this, "Website", { path: "./website_with_api" });
-    const usersTable = this.node.root.new("@winglang/sdk.ex.Table", ex.Table, this, "Table", { name: "users-table", primaryKey: "id", columns: ({["id"]: ex.ColumnType.STRING, ["name"]: ex.ColumnType.STRING, ["age"]: ex.ColumnType.NUMBER}) });
+    const api = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api", { cors: true, corsOptions: ({"allowOrigin": "*", "allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS], "allowHeaders": ["Content-Type"], "allowCredentials": false, "exposeHeaders": ["Content-Type"], "maxAge": (std.Duration.fromSeconds(600))}) });
+    const website = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Website", cloud.Website, this, "Website", { path: "./website_with_api" });
+    const userData = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const getHandler = new $Closure1(this, "$Closure1");
     const postHandler = new $Closure2(this, "$Closure2");
     (api.get("/users", getHandler));
     (api.post("/users", postHandler));
     (website.addJson("config.json", ({"apiUrl": api.url})));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users", new $Closure4(this, "$Closure4"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users", new $Closure3(this, "$Closure3"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users", new $Closure4(this, "$Closure4"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "website_with_api.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

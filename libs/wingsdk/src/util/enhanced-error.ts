@@ -1,5 +1,5 @@
 import { stat } from "node:fs/promises";
-import { relative, resolve, sep, join } from "node:path";
+import { join, dirname } from "node:path/posix";
 import type Chalk from "chalk";
 import type StackTracey from "stacktracey";
 import { normalPath } from "../shared/misc";
@@ -16,6 +16,11 @@ export interface PrettyPrintErrorOptions {
    * If provided, ANSI color and format will be used.
    */
   chalk?: typeof Chalk;
+
+  /**
+   * If true, will force reload all sources.
+   */
+  resetCache?: boolean;
 }
 
 /**
@@ -35,6 +40,10 @@ export async function prettyPrintError(
   const fRed = (s: string) => (chalk ? chalk.red(s) : s);
   const fBold = (s: string) => (chalk ? chalk.bold(s) : s);
   const fDim = (s: string) => (chalk ? chalk.dim(s) : s);
+
+  if (options?.resetCache) {
+    StackTracey.resetCache();
+  }
 
   let st: StackTracey | undefined;
   let originalMessage = "";
@@ -90,6 +99,9 @@ export async function prettyPrintError(
   }
 
   let interestingRoot = options?.sourceEntrypoint;
+  if (interestingRoot !== undefined) {
+    interestingRoot = normalPath(interestingRoot);
+  }
 
   if (
     interestingRoot !== undefined &&
@@ -97,18 +109,18 @@ export async function prettyPrintError(
       .then((s) => !s.isDirectory())
       .catch(() => true))
   ) {
-    interestingRoot = resolve(interestingRoot, "..");
+    interestingRoot = dirname(interestingRoot);
   }
 
   if (interestingRoot !== undefined) {
-    interestingRoot = interestingRoot + sep;
+    interestingRoot = join(interestingRoot, "/");
   }
 
   if (interestingRoot !== undefined) {
     traceWithSources = traceWithSources.filter((item) =>
       (item.sourceFile?.path ?? item.file).startsWith(interestingRoot!)
     );
-    const targetDir = join(interestingRoot, "target") + sep;
+    const targetDir = join(interestingRoot, "target", "/");
     traceWithSources = traceWithSources.filter(
       (item) => !(item.sourceFile?.path ?? item.file).startsWith(targetDir)
     );
@@ -138,9 +150,8 @@ export async function prettyPrintError(
     // print line and its surrounding lines
     output.push(
       " ".repeat(maxDigits + 1) +
-        `--> ${relative(
-          process.cwd(),
-          sourceFile.path
+        `--> ${normalPath(
+          firstGoodItem.fileRelative
         )}:${originLine}:${originColumn}`
     );
 

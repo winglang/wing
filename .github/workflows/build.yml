@@ -6,12 +6,10 @@ on:
       - opened
       - synchronize
     paths-ignore:
-      - "docs/**"
       - "logo/**"
   push:
     branches:
       - main
-      - dev
   workflow_dispatch: {}
 
 concurrency:
@@ -251,7 +249,7 @@ jobs:
         working-directory: tools/hangar
         run: |
           pnpm test:generate
-          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '20' }}
+          pnpm run vitest --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '20' }}
 
       - name: Create mutation if needed
         # we only care about the diff in our standard dev env
@@ -310,7 +308,7 @@ jobs:
             flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest -o personal
             popd
           fi
-          flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
+          flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 1024 --strategy immediate
           flyctl scale count 1 --yes --app "$APP_NAME"
           echo "deploytime=$(TZ=UTC date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
 

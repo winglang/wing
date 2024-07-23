@@ -82,8 +82,9 @@ export class Counter extends cloud.Counter {
       throw new Error("counters can only be bound by tfgcp.Function for now");
     }
 
-    const permissions = calculateCounterPermissions(ops);
-    host.addPermissions(permissions);
+    for (const role of calculateCounterPermissions(ops)) {
+      host._addProjectIamMember(role);
+    }
 
     host.addEnvironment(this.envName(), this.database.name);
     super.onLift(host, ops);

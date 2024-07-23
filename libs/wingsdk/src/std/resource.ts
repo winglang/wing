@@ -1,5 +1,5 @@
 import { Construct, IConstruct } from "constructs";
-import { App, InflightClient, LiftMap } from "../core";
+import { App, InflightClient, LiftMap, ClassFactory } from "../core";
 import { Node } from "../std";
 
 /**
@@ -99,8 +99,9 @@ export interface IHostedLiftable extends ILiftable {
    * use this object inflight. The list of requested inflight methods
    * needed by the inflight host are given by `ops`.
    *
-   * This method is commonly used for adding permissions, environment variables, or
-   * other capabilities to the inflight host.
+   * Any preflight class can implement this instance method to add permissions,
+   * environment variables, or other capabilities to the inflight host when
+   * one or more of its methods are called.
    */
   onLift(host: IInflightHost, ops: string[]): void;
 }
@@ -176,9 +177,9 @@ export abstract class Resource extends Construct implements IResource {
     fqn: string,
     scope: Construct,
     id: string,
-    ...props: any[]
+    ...args: any[]
   ): TResource {
-    return App.of(scope).newAbstract(fqn, scope, id, ...props);
+    return ClassFactory.of(scope).new(fqn, undefined, scope, id, ...args);
   }
 
   /**
@@ -242,7 +243,7 @@ function addConnectionsFromLiftMap(
             sourceOp: baseOp ?? op,
             target: dep,
             targetOp: depOp,
-            name: depOp,
+            name: "call",
           });
         }
       } else if (hasLiftMap(dep)) {
@@ -258,6 +259,7 @@ function addConnectionsFromLiftMap(
  * Used by the Wing compiler to generate unique ids for auto generated resources
  * from inflight function closures.
  * @noinflight
+ * @skipDocs
  */
 export abstract class AutoIdResource extends Resource {
   constructor(scope: Construct, idPrefix: string = "") {
@@ -294,7 +296,9 @@ export interface LiftAnnotation {
   readonly ops?: string[];
 }
 
-/** Options for the `@inflight` intrinsic */
+/**
+ * Options for the `@inflight` intrinsic
+ */
 export interface ImportInflightOptions {
   /**
    * Name of exported function

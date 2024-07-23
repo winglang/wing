@@ -6,7 +6,6 @@ exports[`Multiple platforms > only first platform app is used 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -36,7 +35,7 @@ exports[`Multiple platforms > only first platform app is used 1`] = `
             "uniqueId": "Queue-SetConsumer0_IamRole_7F9ED9ED",
           },
         },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
@@ -47,7 +46,7 @@ exports[`Multiple platforms > only first platform app is used 1`] = `
             "uniqueId": "Queue-SetConsumer0_IamRolePolicy_0299B5AB",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.Bucket.arn}\\",\\"\${aws_s3_bucket.Bucket.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"},{"Action":["sns:Publish"],"Resource":["\${aws_sns_topic.Topic.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
       },
     },
@@ -92,14 +91,17 @@ exports[`Multiple platforms > only first platform app is used 1`] = `
         ],
         "environment": {
           "variables": {
-            "BUCKET_NAME_1357ca3a": "\${aws_s3_bucket.Bucket.bucket}",
             "NODE_OPTIONS": "--enable-source-maps",
+            "TOPIC_ARN_ea6bd1a2": "\${aws_sns_topic.Topic.arn}",
             "WING_FUNCTION_NAME": "Queue-SetConsumer0-c83c303c",
             "WING_TARGET": "tf-aws",
           },
         },
         "function_name": "Queue-SetConsumer0-c83c303c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
@@ -114,16 +116,6 @@ exports[`Multiple platforms > only first platform app is used 1`] = `
       },
     },
     "aws_s3_bucket": {
-      "Bucket": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Bucket/Default",
-            "uniqueId": "Bucket",
-          },
-        },
-        "bucket_prefix": "bucket-c88fdc5f-",
-        "force_destroy": false,
-      },
       "Code": {
         "//": {
           "metadata": {
@@ -145,6 +137,17 @@ exports[`Multiple platforms > only first platform app is used 1`] = `
         "bucket": "\${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
+      },
+    },
+    "aws_sns_topic": {
+      "Topic": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Topic/Default",
+            "uniqueId": "Topic",
+          },
+        },
+        "name": "Topic-c8228fb7",
       },
     },
     "aws_sqs_queue": {
@@ -170,7 +173,6 @@ exports[`Platform examples > AWS target platform > permission-boundary.js 1`] = 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -200,7 +202,7 @@ exports[`Platform examples > AWS target platform > permission-boundary.js 1`] = 
             "uniqueId": "Queue-SetConsumer0_IamRole_7F9ED9ED",
           },
         },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
         "permissions_boundary": "some:fake:arn:SUPERADMIN",
       },
     },
@@ -212,7 +214,7 @@ exports[`Platform examples > AWS target platform > permission-boundary.js 1`] = 
             "uniqueId": "Queue-SetConsumer0_IamRolePolicy_0299B5AB",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.Bucket.arn}\\",\\"\${aws_s3_bucket.Bucket.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"},{"Action":["s3:PutObject*","s3:Abort*"],"Resource":["\${aws_s3_bucket.Bucket.arn}","\${aws_s3_bucket.Bucket.arn}/*"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
       },
     },
@@ -265,6 +267,9 @@ exports[`Platform examples > AWS target platform > permission-boundary.js 1`] = 
         },
         "function_name": "Queue-SetConsumer0-c83c303c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
@@ -335,7 +340,6 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -366,7 +370,7 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
           },
         },
         "name": "some-prefix\${aws_s3_bucket.Bucket.bucket}",
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.Bucket.arn}\\",\\"\${aws_s3_bucket.Bucket.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.Bucket.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.Bucket_ReplicaDefault_F9F29351.arn}/*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["s3:GetReplicationConfiguration","s3:ListBucket"],"Effect":"Allow","Resource":["\${aws_s3_bucket.Bucket.arn}","\${aws_s3_bucket.Bucket.arn}/*"]},{"Action":["s3:GetObjectVersionForReplication","s3:GetObjectVersionAcl","s3:GetObjectVersionTagging"],"Effect":"Allow","Resource":"\${aws_s3_bucket.Bucket.arn}/*"},{"Action":["s3:ReplicateObject","s3:ReplicateDelete","s3:ReplicateTags"],"Effect":"Allow","Resource":"\${aws_s3_bucket.Bucket_ReplicaDefault_F9F29351.arn}/*"}]}",
       },
       "ReplicaCodePolicy": {
         "//": {
@@ -376,7 +380,7 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
           },
         },
         "name": "some-prefix\${aws_s3_bucket.Code.bucket}",
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetReplicationConfiguration\\",\\"s3:ListBucket\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":[\\"\${aws_s3_bucket.Code.arn}\\",\\"\${aws_s3_bucket.Code.arn}/*\\"]},{\\"Action\\":[\\"s3:GetObjectVersionForReplication\\",\\"s3:GetObjectVersionAcl\\",\\"s3:GetObjectVersionTagging\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.Code.arn}/*\\"},{\\"Action\\":[\\"s3:ReplicateObject\\",\\"s3:ReplicateDelete\\",\\"s3:ReplicateTags\\"],\\"Effect\\":\\"Allow\\",\\"Resource\\":\\"\${aws_s3_bucket.ReplicaCode.arn}/*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["s3:GetReplicationConfiguration","s3:ListBucket"],"Effect":"Allow","Resource":["\${aws_s3_bucket.Code.arn}","\${aws_s3_bucket.Code.arn}/*"]},{"Action":["s3:GetObjectVersionForReplication","s3:GetObjectVersionAcl","s3:GetObjectVersionTagging"],"Effect":"Allow","Resource":"\${aws_s3_bucket.Code.arn}/*"},{"Action":["s3:ReplicateObject","s3:ReplicateDelete","s3:ReplicateTags"],"Effect":"Allow","Resource":"\${aws_s3_bucket.ReplicaCode.arn}/*"}]}",
       },
     },
     "aws_iam_policy_attachment": {
@@ -415,7 +419,7 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
             "uniqueId": "Bucket_ReplicaDefaultRole_B700A568",
           },
         },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Effect\\":\\"Allow\\",\\"Sid\\":\\"AllowS3Replication\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"s3.amazonaws.com"},"Effect":"Allow","Sid":"AllowS3Replication"}]}",
         "name": "some-prefix\${aws_s3_bucket.Bucket.bucket}",
       },
       "Queue-SetConsumer0_IamRole_7F9ED9ED": {
@@ -425,7 +429,7 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
             "uniqueId": "Queue-SetConsumer0_IamRole_7F9ED9ED",
           },
         },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
       "ReplicaCodeRole": {
         "//": {
@@ -434,7 +438,7 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
             "uniqueId": "ReplicaCodeRole",
           },
         },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Effect\\":\\"Allow\\",\\"Sid\\":\\"AllowS3Replication\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"s3.amazonaws.com"},"Effect":"Allow","Sid":"AllowS3Replication"}]}",
         "name": "some-prefix\${aws_s3_bucket.Code.bucket}",
       },
     },
@@ -446,7 +450,7 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
             "uniqueId": "Queue-SetConsumer0_IamRolePolicy_0299B5AB",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.Bucket.arn}\\",\\"\${aws_s3_bucket.Bucket.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"},{"Action":["s3:PutObject*","s3:Abort*"],"Resource":["\${aws_s3_bucket.Bucket.arn}","\${aws_s3_bucket.Bucket.arn}/*"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
       },
     },
@@ -499,6 +503,9 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
         },
         "function_name": "Queue-SetConsumer0-c83c303c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
@@ -687,7 +694,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -717,7 +723,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
             "uniqueId": "Queue-SetConsumer0_IamRole_7F9ED9ED",
           },
         },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
@@ -728,7 +734,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
             "uniqueId": "Queue-SetConsumer0_IamRolePolicy_0299B5AB",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.Bucket.arn}\\",\\"\${aws_s3_bucket.Bucket.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"},{"Action":["s3:PutObject*","s3:Abort*"],"Resource":["\${aws_s3_bucket.Bucket.arn}","\${aws_s3_bucket.Bucket.arn}/*"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
       },
     },
@@ -781,6 +787,9 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
         },
         "function_name": "Queue-SetConsumer0-c83c303c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
@@ -851,7 +860,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -881,7 +889,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
             "uniqueId": "Queue-SetConsumer0_IamRole_7F9ED9ED",
           },
         },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
@@ -892,7 +900,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
             "uniqueId": "Queue-SetConsumer0_IamRolePolicy_0299B5AB",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.Bucket.arn}\\",\\"\${aws_s3_bucket.Bucket.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"},{"Action":["s3:PutObject*","s3:Abort*"],"Resource":["\${aws_s3_bucket.Bucket.arn}","\${aws_s3_bucket.Bucket.arn}/*"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
       },
     },
@@ -945,6 +953,9 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
         },
         "function_name": "Queue-SetConsumer0-c83c303c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
@@ -1015,7 +1026,6 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.20.3",
     },
     "outputs": {},
   },
@@ -1045,7 +1055,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
             "uniqueId": "Queue-SetConsumer0_IamRole_7F9ED9ED",
           },
         },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
@@ -1056,7 +1066,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
             "uniqueId": "Queue-SetConsumer0_IamRolePolicy_0299B5AB",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.Bucket.arn}\\",\\"\${aws_s3_bucket.Bucket.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"},{"Action":["s3:PutObject*","s3:Abort*"],"Resource":["\${aws_s3_bucket.Bucket.arn}","\${aws_s3_bucket.Bucket.arn}/*"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
       },
     },
@@ -1109,6 +1119,9 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
         },
         "function_name": "Queue-SetConsumer0-c83c303c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",

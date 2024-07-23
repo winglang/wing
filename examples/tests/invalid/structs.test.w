@@ -60,3 +60,12 @@ let inlineInflightStruct = inflight () => {
     name: str;
   }
 };
+
+
+struct SomeStruct1 {
+  numField: num;
+}
+let numField = "hello";
+let noSuchField = 1;
+SomeStruct1 { numField }; // Wrong type when using punning
+SomeStruct1 { noSuchField }; // Wrong field when using punning

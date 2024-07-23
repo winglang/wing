@@ -817,7 +817,6 @@ impl Scope {
 pub enum UnaryOperator {
 	Minus,
 	Not,
-	OptionalTest,
 	OptionalUnwrap,
 }
 

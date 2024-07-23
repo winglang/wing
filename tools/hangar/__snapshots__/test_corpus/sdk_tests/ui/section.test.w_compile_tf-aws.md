@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -144,6 +143,9 @@
         },
         "function_name": "Handler-c8ba9e97",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.WidgetService_Button_Handler_IamRole_B297B278.arn}",
@@ -177,6 +179,9 @@
         },
         "function_name": "Handler-c8fa6fbe",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.WidgetService_Field_Handler_IamRole_A196F9F2.arn}",

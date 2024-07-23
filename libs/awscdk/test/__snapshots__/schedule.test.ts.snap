@@ -68,6 +68,7 @@ exports[`convert single dayOfWeek from Unix to AWS 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "ScheduleOnTick0LogGroup389684B1",
           },
@@ -222,6 +223,7 @@ exports[`convert the list of dayOfWeek from Unix to AWS 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "ScheduleOnTick0LogGroup389684B1",
           },
@@ -376,6 +378,7 @@ exports[`convert the range of dayOfWeek from Unix to AWS 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "ScheduleOnTick0LogGroup389684B1",
           },
@@ -530,6 +533,7 @@ exports[`schedule behavior with cron 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "ScheduleOnTick0LogGroup389684B1",
           },
@@ -684,6 +688,7 @@ exports[`schedule behavior with rate 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "ScheduleOnTick0LogGroup389684B1",
           },
@@ -838,6 +843,7 @@ exports[`schedule with two functions 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "ScheduleOnTick0LogGroup389684B1",
           },

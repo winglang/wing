@@ -10,13 +10,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -60,6 +59,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -213,14 +218,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -283,7 +280,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -320,6 +316,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -337,7 +334,7 @@ exports[`api handler can read the request params 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/hello","query":{"foo":"bar","bar":"baz"},"vars":{}}).",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -358,13 +355,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -402,6 +398,12 @@ exports.handler = async function(event) {
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
       },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
+      },
     ],
     "version": "connections-0.1",
   },
@@ -540,14 +542,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -610,7 +604,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -647,6 +640,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -664,7 +658,7 @@ exports[`api handler can read the request path 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/hello","query":{},"vars":{}}).",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -685,13 +679,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -728,6 +721,12 @@ exports.handler = async function(event) {
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
       },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
+      },
     ],
     "version": "connections-0.1",
   },
@@ -866,14 +865,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -936,7 +927,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -973,6 +963,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -990,7 +981,7 @@ exports[`api handler can set response headers 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","foo":"bar","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/hello","query":{},"vars":{}}).",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -1011,13 +1002,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -1055,6 +1045,12 @@ exports.handler = async function(event) {
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
       },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
+      },
     ],
     "version": "connections-0.1",
   },
@@ -1193,14 +1189,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -1263,7 +1251,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1300,6 +1287,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1317,7 +1305,7 @@ exports[`api response returns Content-Type header from inflight 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/hello","query":{},"vars":{}}).",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -1338,13 +1326,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -1382,6 +1369,12 @@ exports.handler = async function(event) {
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
       },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
+      },
     ],
     "version": "connections-0.1",
   },
@@ -1520,14 +1513,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -1590,7 +1575,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1627,6 +1611,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1644,7 +1629,7 @@ exports[`api response returns default Content-Type header 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/hello","query":{},"vars":{}}).",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -1665,13 +1650,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -1709,6 +1693,12 @@ exports.handler = async function(event) {
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
       },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
+      },
     ],
     "version": "connections-0.1",
   },
@@ -1847,14 +1837,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -1917,7 +1899,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1954,6 +1935,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1971,25 +1953,25 @@ exports[`api supports every method type 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/hello","query":{},"vars":{}}).",
   "GET /hello - 200.",
   "Processing "POST /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate","content-length":"0"},"body":"","method":"POST","path":"/hello","query":{},"vars":{}}).",
   "POST /hello - 200.",
   "Processing "PUT /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"PUT\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate","content-length":"0"},"body":"","method":"PUT","path":"/hello","query":{},"vars":{}}).",
   "PUT /hello - 200.",
   "Processing "DELETE /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"DELETE\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"DELETE","path":"/hello","query":{},"vars":{}}).",
   "DELETE /hello - 200.",
   "Processing "GET /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"close\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"HEAD\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"close","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"HEAD","path":"/hello","query":{},"vars":{}}).",
   "GET /hello - 200.",
   "Processing "OPTIONS /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"OPTIONS\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"OPTIONS","path":"/hello","query":{},"vars":{}}).",
   "OPTIONS /hello - 200.",
   "Processing "PATCH /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate","content-length":"0"},"body":"","method":"PATCH","path":"/hello","query":{},"vars":{}}).",
   "PATCH /hello - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -2010,13 +1992,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -2094,6 +2075,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -2317,14 +2304,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -2387,7 +2366,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -2424,6 +2402,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -2441,7 +2420,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /:name/:age" params={"name":"akhil","age":"23"}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil/23\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/akhil/23","query":{},"vars":{"name":"akhil","age":"23"}}).",
   "GET /:name/:age - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -2462,13 +2441,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -2504,6 +2482,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -2660,14 +2644,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -2730,7 +2706,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /:name/:age",
               },
@@ -2767,6 +2742,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -2784,7 +2760,7 @@ exports[`api with 'name' parameter 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /:name" params={"name":"akhil"}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\"}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/akhil","query":{},"vars":{"name":"akhil"}}).",
   "GET /:name - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -2805,13 +2781,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -2847,6 +2822,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -2995,14 +2976,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -3065,7 +3038,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /:name",
               },
@@ -3102,6 +3074,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -3120,13 +3093,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -3170,6 +3142,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -3325,14 +3303,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -3395,7 +3365,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/foo",
               },
@@ -3432,6 +3401,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -3451,10 +3421,10 @@ exports[`api with multiple methods on same route 1`] = `
   "root/my_api/ApiEventMapping0 started",
   "root/my_api/ApiEventMapping1 started",
   "Processing "GET /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/hello","query":{},"vars":{}}).",
   "GET /hello - 200.",
   "Processing "POST /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate","content-length":"0"},"body":"","method":"POST","path":"/hello","query":{},"vars":{}}).",
   "POST /hello - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -3477,13 +3447,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -3519,13 +3488,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -3568,6 +3536,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler1",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -3755,14 +3729,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -3836,7 +3802,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -3850,7 +3815,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
@@ -3887,6 +3851,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -3906,10 +3871,10 @@ exports[`api with multiple routes 1`] = `
   "root/my_api/ApiEventMapping0 started",
   "root/my_api/ApiEventMapping1 started",
   "Processing "GET /hello/world" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/world\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/hello/world","query":{},"vars":{}}).",
   "GET /hello/world - 200.",
   "Processing "GET /hello/wingnuts" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/wingnuts\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/hello/wingnuts","query":{},"vars":{}}).",
   "GET /hello/wingnuts - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -3932,13 +3897,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -3974,13 +3938,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -4023,6 +3986,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler1",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -4212,14 +4181,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -4293,7 +4254,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/world",
               },
@@ -4307,7 +4267,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/wingnuts",
               },
@@ -4344,6 +4303,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -4361,7 +4321,7 @@ exports[`api with one GET route 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/hello","query":{},"vars":{}}).",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -4382,13 +4342,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -4424,6 +4383,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -4563,14 +4528,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -4633,7 +4590,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -4670,6 +4626,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -4687,7 +4644,7 @@ exports[`api with one GET route with request params 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /users/:name" params={"name":"tsuf"}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate"},"body":"","method":"GET","path":"/users/tsuf","query":{},"vars":{"name":"tsuf"}}).",
   "GET /users/:name - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -4708,13 +4665,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -4750,6 +4706,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -4898,14 +4860,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -4968,7 +4922,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /users/:name",
               },
@@ -5005,6 +4958,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -5022,7 +4976,7 @@ exports[`api with one POST route, with body 1`] = `
   "root/my_api/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "POST /hello" params={}).",
-  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/json\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"25\\"},\\"body\\":\\"{\\\\\\"message\\\\\\":\\\\\\"hello world\\\\\\"}\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
+  "Invoke (payload={"headers":{"host":"127.0.0.1:<port>","connection":"keep-alive","content-type":"application/json","accept":"*/*","accept-language":"*","sec-fetch-mode":"cors","user-agent":"node","accept-encoding":"gzip, deflate","content-length":"25"},"body":"{\\"message\\":\\"hello world\\"}","method":"POST","path":"/hello","query":{},"vars":{}}).",
   "POST /hello - 200.",
   "root/my_api/Endpoint stopped",
   "root/my_api/Policy stopped",
@@ -5043,13 +4997,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -5086,6 +5039,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -5225,14 +5184,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -5295,7 +5246,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
@@ -5332,6 +5282,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -5343,7 +5294,14 @@ exports.handler = async function(event) {
 exports[`create an api 1`] = `
 {
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -5429,14 +5387,6 @@ exports[`create an api 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -5511,6 +5461,7 @@ exports[`create an api 1`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

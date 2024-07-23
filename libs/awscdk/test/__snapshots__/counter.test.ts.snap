@@ -68,6 +68,7 @@ exports[`dec() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
+<<<<<<< HEAD
   my_counter: 
 (await (async () => {
   const klass = require(\\"[REDACTED]/awscdk/src/counter.inflight.ts\\").CounterClient;
@@ -76,6 +77,9 @@ exports[`dec() policy statement 1`] = `
   return client;
 })())
 
+=======
+  my_counter: new (require("[REDACTED]/awscdk/src/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], 0)
+>>>>>>> main
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -141,6 +145,7 @@ exports[`dec() policy statement 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -321,6 +326,7 @@ exports[`function with a counter binding 1`] = `
     console.log(val);
   }
   const $ctx = {
+<<<<<<< HEAD
   my_counter: 
 (await (async () => {
   const klass = require(\\"[REDACTED]/awscdk/src/counter.inflight.ts\\").CounterClient;
@@ -329,6 +335,9 @@ exports[`function with a counter binding 1`] = `
   return client;
 })())
 
+=======
+  my_counter: new (require("[REDACTED]/awscdk/src/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], 0)
+>>>>>>> main
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -394,6 +403,7 @@ exports[`function with a counter binding 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -513,6 +523,7 @@ exports[`inc() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
+<<<<<<< HEAD
   my_counter: 
 (await (async () => {
   const klass = require(\\"[REDACTED]/awscdk/src/counter.inflight.ts\\").CounterClient;
@@ -521,6 +532,9 @@ exports[`inc() policy statement 1`] = `
   return client;
 })())
 
+=======
+  my_counter: new (require("[REDACTED]/awscdk/src/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], 0)
+>>>>>>> main
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -586,6 +600,7 @@ exports[`inc() policy statement 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -705,6 +720,7 @@ exports[`peek() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
+<<<<<<< HEAD
   my_counter: 
 (await (async () => {
   const klass = require(\\"[REDACTED]/awscdk/src/counter.inflight.ts\\").CounterClient;
@@ -713,6 +729,9 @@ exports[`peek() policy statement 1`] = `
   return client;
 })())
 
+=======
+  my_counter: new (require("[REDACTED]/awscdk/src/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], 0)
+>>>>>>> main
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -778,6 +797,7 @@ exports[`peek() policy statement 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -897,6 +917,7 @@ exports[`set() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
+<<<<<<< HEAD
   my_counter: 
 (await (async () => {
   const klass = require(\\"[REDACTED]/awscdk/src/counter.inflight.ts\\").CounterClient;
@@ -905,6 +926,9 @@ exports[`set() policy statement 1`] = `
   return client;
 })())
 
+=======
+  my_counter: new (require("[REDACTED]/awscdk/src/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], 0)
+>>>>>>> main
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -970,6 +994,7 @@ exports[`set() policy statement 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },

@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $arr, $arrOfMap, $j, $myMap, $mySet }) {
   class $Closure1 {
     constructor($args) {
@@ -13,15 +14,15 @@ module.exports = function({ $arr, $arrOfMap, $j, $myMap, $mySet }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($arr, 0), "hello"), "arr.at(0) == \"hello\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($arr, 1), "world"), "arr.at(1) == \"world\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, $arr, 0), "hello"), "arr.at(0) == \"hello\"");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, $arr, 1), "world"), "arr.at(1) == \"world\"");
       $helpers.assert($helpers.eq($arr.length, 2), "arr.length == 2");
       $helpers.assert((await $mySet.has("my")), "mySet.has(\"my\")");
       $helpers.assert($helpers.eq($mySet.size, 2), "mySet.size == 2");
-      $helpers.assert(("world" in ($myMap)), "myMap.has(\"world\")");
-      $helpers.assert($helpers.eq(Object.keys($myMap).length, 2), "myMap.size() == 2");
-      $helpers.assert(("bang" in (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($arrOfMap, 0))), "arrOfMap.at(0).has(\"bang\")");
-      $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })($j, "b"), "world"), "j.get(\"b\") == \"world\"");
+      $helpers.assert($macros.__Map_has(false, $myMap, "world"), "myMap.has(\"world\")");
+      $helpers.assert($helpers.eq($macros.__Map_size(false, $myMap, ), 2), "myMap.size() == 2");
+      $helpers.assert($macros.__Map_has(false, $macros.__Array_at(false, $arrOfMap, 0), "bang"), "arrOfMap.at(0).has(\"bang\")");
+      $helpers.assert($helpers.eq($macros.__Json_get(false, $j, "b"), "world"), "j.get(\"b\") == \"world\"");
     }
   }
   return $Closure1;
@@ -35,8 +36,7 @@ module.exports = function({ $arr, $arrOfMap, $j, $myMap, $mySet }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -52,16 +52,21 @@ module.exports = function({ $arr, $arrOfMap, $j, $myMap, $mySet }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -108,10 +113,9 @@ class $Root extends $stdlib.std.Resource {
     const myMap = ({["hello"]: 123, ["world"]: 999});
     const arrOfMap = [({["bang"]: 123})];
     const j = ({"a": "hello", "b": "world"});
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:capture_containers", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:capture_containers", new $Closure1(this, "$Closure1"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "capture_containers.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

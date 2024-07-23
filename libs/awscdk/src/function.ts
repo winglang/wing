@@ -5,6 +5,8 @@ import {
   Function as CdkFunction,
   Code,
   Runtime,
+  LayerVersion,
+  LogFormat,
 } from "aws-cdk-lib/aws-lambda";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Asset } from "aws-cdk-lib/aws-s3-assets";
@@ -104,6 +106,15 @@ export class Function
     this.assetPath = asset.assetPath;
   }
 
+  public addLambdaLayer(layerArn: string): void {
+    const layer = LayerVersion.fromLayerVersionArn(
+      this,
+      `Layer${layerArn}`,
+      layerArn
+    );
+    this.function.addLayers(layer);
+  }
+
   /** @internal */
   public _preSynthesize(): void {
     super._preSynthesize();
@@ -190,6 +201,7 @@ export class Function
       memorySize: props.memory ?? 1024,
       architecture: Architecture.ARM_64,
       logGroup: logs,
+      logFormat: LogFormat.JSON,
     });
   }
 

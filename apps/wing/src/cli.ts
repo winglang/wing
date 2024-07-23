@@ -93,7 +93,7 @@ async function main() {
     showGlobalOptions: true,
   });
 
-  program.name("wing").version(PACKAGE_VERSION);
+  program.name("wing").version(PACKAGE_VERSION, "-v, --version, -V", "output the current version");
 
   program
     .option("--debug", "Enable debug logging (same as DEBUG=1)", () => {
@@ -141,8 +141,8 @@ async function main() {
     .command("run")
     .alias("it")
     .description("Runs a Wing program in the Wing Console")
-    .argument("[entrypoint]", "program .w entrypoint")
-    .option("-p, --port <port>", "specify port")
+    .argument("[entrypoint]", "Program .w entrypoint")
+    .option("-p, --port <port>", "Specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
     .option(
       "-w, --watch <globs...>",
@@ -154,6 +154,7 @@ async function main() {
       collectPlatformVariadic,
       DEFAULT_PLATFORM
     )
+    .option("--statedir <dir>", "Directory for the resource's state")
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("run"));
 
@@ -169,7 +170,7 @@ async function main() {
     .argument("[entrypoint]", "program .w entrypoint")
     .option(
       "-t, --platform <platform> --platform <platform>",
-      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp)",
       collectPlatformVariadic,
       DEFAULT_PLATFORM
     )

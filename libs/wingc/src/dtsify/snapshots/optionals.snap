@@ -28,6 +28,7 @@ pub class ParentClass impl ClassInterface {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class ParentClass {
     constructor($args) {
@@ -44,12 +45,13 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-module.exports = {
-  ...require("./preflight.lib-1.cjs"),
-};
+const $preflightTypesMap = {};
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.lib-1.cjs`, $preflightTypesMap));
+module.exports = { ...module.exports, $preflightTypesMap };
 //# sourceMappingURL=preflight.cjs.map
 ```
 
@@ -64,9 +66,11 @@ export * from "./preflight.lib-1.cjs"
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 class ParentClass extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -91,7 +95,7 @@ class ParentClass extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { ParentClass };
+module.exports = { $preflightTypesMap, ParentClass };
 //# sourceMappingURL=preflight.lib-1.cjs.map
 ```
 

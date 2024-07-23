@@ -5,7 +5,14 @@ import { fqnForType } from "../constants";
 import { App, Lifting } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
+import {
+  Duration,
+  IInflight,
+  IInflightHost,
+  Node,
+  Resource,
+  Json,
+} from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -190,14 +197,14 @@ export interface IFunctionClient {
    * @returns An optional response from the function
    * @inflight
    */
-  invoke(payload?: string): Promise<string | undefined>;
+  invoke(payload?: Json): Promise<Json | undefined>;
 
   /**
    * Kicks off the execution of the function with a payload and returns immediately while the function is running.
    * @param payload payload to pass to the function. If not defined, an empty string will be passed.
    * @inflight
    */
-  invokeAsync(payload?: string): Promise<void>;
+  invokeAsync(payload?: Json): Promise<void>;
 }
 
 /**
@@ -219,5 +226,5 @@ export interface IFunctionHandlerClient {
    * Entrypoint function that will be called when the cloud function is invoked.
    * @inflight
    */
-  handle(event?: string): Promise<string | undefined>;
+  handle(event?: Json): Promise<Json | undefined>;
 }

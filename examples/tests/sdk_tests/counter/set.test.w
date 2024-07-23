@@ -18,9 +18,8 @@ test "set()" {
   // set (0)
   counter1.set(0);
   expect.equal(counter1.peek(), 0);
-}
 
-test "set() with custom key" {
+// "set() with custom key" 
   let key = "custom-key";
 
   // set (positive int)

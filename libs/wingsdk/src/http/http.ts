@@ -1,5 +1,6 @@
 import { URL as NodeUrl, format } from "url";
 import { InflightClient } from "../core";
+import { Duration } from "../std";
 
 /**
  * The cache mode of the request.
@@ -91,6 +92,14 @@ export enum HttpMethod {
    * HEAD
    */
   HEAD = "HEAD",
+  /**
+   * CONNECT
+   */
+  CONNECT = "CONNECT",
+  /**
+   * TRACE
+   */
+  TRACE = "TRACE",
 }
 
 /**
@@ -126,6 +135,11 @@ export interface RequestOptions {
    * @default about:client
    */
   readonly referrer?: string;
+  /**
+   * Timeout for terminating a pending request. None if undefined.
+   * @default - no timeout
+   */
+  readonly timeout?: Duration;
 }
 /**
  * The response to a HTTP request.
@@ -243,8 +257,24 @@ export class Util {
     url: string,
     options?: RequestOptions
   ): Promise<Response> {
-    const res = await fetch(url, { ...defaultOptions, ...options });
-    return this._formatResponse(res);
+    if (options?.timeout) {
+      const abortController = new AbortController();
+      setTimeout(() => {
+        abortController.abort();
+      }, options.timeout.milliseconds);
+
+      return this._formatResponse(
+        await fetch(url, {
+          ...defaultOptions,
+          ...options,
+          signal: abortController.signal,
+        })
+      );
+    }
+
+    return this._formatResponse(
+      await fetch(url, { ...defaultOptions, ...options })
+    );
   }
   /**
    * Executes a GET request to a specified URL and provides a formatted response.
@@ -325,6 +355,40 @@ export class Util {
     return this.fetch(url, {
       ...options,
       method: HttpMethod.DELETE,
+    });
+  }
+
+  /**
+   * Executes a CONNECT request to a specified URL and provides a formatted response.
+   * @param url The target URL for the CONNECT request.
+   * @param options Optional parameters for customizing the CONNECT request.
+   * @inflight
+   * @returns the formatted response of the call
+   */
+  public static async connect(
+    url: string,
+    options?: RequestOptions
+  ): Promise<Response> {
+    return this.fetch(url, {
+      ...options,
+      method: HttpMethod.CONNECT,
+    });
+  }
+
+  /**
+   * Executes a TRACE request to a specified URL and provides a formatted response.
+   * @param url The target URL for the TRACE request.
+   * @param options Optional parameters for customizing the TRACE request.
+   * @inflight
+   * @returns the formatted response of the call
+   */
+  public static async trace(
+    url: string,
+    options?: RequestOptions
+  ): Promise<Response> {
+    return this.fetch(url, {
+      ...options,
+      method: HttpMethod.TRACE,
     });
   }
 

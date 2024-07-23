@@ -6,8 +6,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -18,64 +17,64 @@
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "Bucket_oncreate-OnMessage0_CloudwatchLogGroup_9ADBAD73": {
+      "Bucket_OnCreate-OnMessage0_CloudwatchLogGroup_6BF9DEA3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage0/CloudwatchLogGroup",
-            "uniqueId": "Bucket_oncreate-OnMessage0_CloudwatchLogGroup_9ADBAD73"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage0/CloudwatchLogGroup",
+            "uniqueId": "Bucket_OnCreate-OnMessage0_CloudwatchLogGroup_6BF9DEA3"
           }
         },
-        "name": "/aws/lambda/oncreate-OnMessage0-c87abc21",
+        "name": "/aws/lambda/OnCreate-OnMessage0-c8740b4b",
         "retention_in_days": 30
       },
-      "Bucket_oncreate-OnMessage1_CloudwatchLogGroup_37B9C8C4": {
+      "Bucket_OnCreate-OnMessage1_CloudwatchLogGroup_A09583DA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage1/CloudwatchLogGroup",
-            "uniqueId": "Bucket_oncreate-OnMessage1_CloudwatchLogGroup_37B9C8C4"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage1/CloudwatchLogGroup",
+            "uniqueId": "Bucket_OnCreate-OnMessage1_CloudwatchLogGroup_A09583DA"
           }
         },
-        "name": "/aws/lambda/oncreate-OnMessage1-c800fec8",
+        "name": "/aws/lambda/OnCreate-OnMessage1-c8347a52",
         "retention_in_days": 30
       },
-      "Bucket_ondelete-OnMessage0_CloudwatchLogGroup_5F88C98D": {
+      "Bucket_OnDelete-OnMessage0_CloudwatchLogGroup_682144EA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage0/CloudwatchLogGroup",
-            "uniqueId": "Bucket_ondelete-OnMessage0_CloudwatchLogGroup_5F88C98D"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage0/CloudwatchLogGroup",
+            "uniqueId": "Bucket_OnDelete-OnMessage0_CloudwatchLogGroup_682144EA"
           }
         },
-        "name": "/aws/lambda/ondelete-OnMessage0-c8a38b5a",
+        "name": "/aws/lambda/OnDelete-OnMessage0-c8e711ef",
         "retention_in_days": 30
       },
-      "Bucket_ondelete-OnMessage1_CloudwatchLogGroup_AE7AA81E": {
+      "Bucket_OnDelete-OnMessage1_CloudwatchLogGroup_ADB44727": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage1/CloudwatchLogGroup",
-            "uniqueId": "Bucket_ondelete-OnMessage1_CloudwatchLogGroup_AE7AA81E"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage1/CloudwatchLogGroup",
+            "uniqueId": "Bucket_OnDelete-OnMessage1_CloudwatchLogGroup_ADB44727"
           }
         },
-        "name": "/aws/lambda/ondelete-OnMessage1-c82792b8",
+        "name": "/aws/lambda/OnDelete-OnMessage1-c8905f5b",
         "retention_in_days": 30
       },
-      "Bucket_onupdate-OnMessage0_CloudwatchLogGroup_C8045188": {
+      "Bucket_OnUpdate-OnMessage0_CloudwatchLogGroup_9492CFAF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage0/CloudwatchLogGroup",
-            "uniqueId": "Bucket_onupdate-OnMessage0_CloudwatchLogGroup_C8045188"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage0/CloudwatchLogGroup",
+            "uniqueId": "Bucket_OnUpdate-OnMessage0_CloudwatchLogGroup_9492CFAF"
           }
         },
-        "name": "/aws/lambda/onupdate-OnMessage0-c835180c",
+        "name": "/aws/lambda/OnUpdate-OnMessage0-c81b9fec",
         "retention_in_days": 30
       },
-      "Bucket_onupdate-OnMessage1_CloudwatchLogGroup_D6757AF5": {
+      "Bucket_OnUpdate-OnMessage1_CloudwatchLogGroup_FA500C0F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage1/CloudwatchLogGroup",
-            "uniqueId": "Bucket_onupdate-OnMessage1_CloudwatchLogGroup_D6757AF5"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage1/CloudwatchLogGroup",
+            "uniqueId": "Bucket_OnUpdate-OnMessage1_CloudwatchLogGroup_FA500C0F"
           }
         },
-        "name": "/aws/lambda/onupdate-OnMessage1-c8826493",
+        "name": "/aws/lambda/OnUpdate-OnMessage1-c8513427",
         "retention_in_days": 30
       }
     },
@@ -96,214 +95,194 @@
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
         "name": "wing-counter-Counter-c824ef62"
-      },
-      "Table": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Table/Default",
-            "uniqueId": "Table"
-          }
-        },
-        "attribute": [
-          {
-            "name": "_id",
-            "type": "S"
-          }
-        ],
-        "billing_mode": "PAY_PER_REQUEST",
-        "hash_key": "_id",
-        "name": "key-historyTable-c89b2d37",
-        "point_in_time_recovery": {
-          "enabled": true
-        }
       }
     },
     "aws_iam_role": {
-      "Bucket_oncreate-OnMessage0_IamRole_0DECFA72": {
+      "Bucket_OnCreate-OnMessage0_IamRole_D3BF2935": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage0/IamRole",
-            "uniqueId": "Bucket_oncreate-OnMessage0_IamRole_0DECFA72"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage0/IamRole",
+            "uniqueId": "Bucket_OnCreate-OnMessage0_IamRole_D3BF2935"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "Bucket_oncreate-OnMessage1_IamRole_EAFD952E": {
+      "Bucket_OnCreate-OnMessage1_IamRole_0E855131": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage1/IamRole",
-            "uniqueId": "Bucket_oncreate-OnMessage1_IamRole_EAFD952E"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage1/IamRole",
+            "uniqueId": "Bucket_OnCreate-OnMessage1_IamRole_0E855131"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "Bucket_ondelete-OnMessage0_IamRole_50F5B4CA": {
+      "Bucket_OnDelete-OnMessage0_IamRole_A52E721B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage0/IamRole",
-            "uniqueId": "Bucket_ondelete-OnMessage0_IamRole_50F5B4CA"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage0/IamRole",
+            "uniqueId": "Bucket_OnDelete-OnMessage0_IamRole_A52E721B"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "Bucket_ondelete-OnMessage1_IamRole_BE60A7EC": {
+      "Bucket_OnDelete-OnMessage1_IamRole_AA3A5721": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage1/IamRole",
-            "uniqueId": "Bucket_ondelete-OnMessage1_IamRole_BE60A7EC"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage1/IamRole",
+            "uniqueId": "Bucket_OnDelete-OnMessage1_IamRole_AA3A5721"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "Bucket_onupdate-OnMessage0_IamRole_B95F0C0C": {
+      "Bucket_OnUpdate-OnMessage0_IamRole_96499EB9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage0/IamRole",
-            "uniqueId": "Bucket_onupdate-OnMessage0_IamRole_B95F0C0C"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage0/IamRole",
+            "uniqueId": "Bucket_OnUpdate-OnMessage0_IamRole_96499EB9"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "Bucket_onupdate-OnMessage1_IamRole_93BC24D8": {
+      "Bucket_OnUpdate-OnMessage1_IamRole_7B19D23F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage1/IamRole",
-            "uniqueId": "Bucket_onupdate-OnMessage1_IamRole_93BC24D8"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage1/IamRole",
+            "uniqueId": "Bucket_OnUpdate-OnMessage1_IamRole_7B19D23F"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "Bucket_oncreate-OnMessage0_IamRolePolicy_ED4BBB06": {
+      "Bucket_OnCreate-OnMessage0_IamRolePolicy_9749552C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage0/IamRolePolicy",
-            "uniqueId": "Bucket_oncreate-OnMessage0_IamRolePolicy_ED4BBB06"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage0/IamRolePolicy",
+            "uniqueId": "Bucket_OnCreate-OnMessage0_IamRolePolicy_9749552C"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.Bucket_oncreate-OnMessage0_IamRole_0DECFA72.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.Bucket_OnCreate-OnMessage0_IamRole_D3BF2935.name}"
       },
-      "Bucket_oncreate-OnMessage1_IamRolePolicy_555608BE": {
+      "Bucket_OnCreate-OnMessage1_IamRolePolicy_975FD372": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage1/IamRolePolicy",
-            "uniqueId": "Bucket_oncreate-OnMessage1_IamRolePolicy_555608BE"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage1/IamRolePolicy",
+            "uniqueId": "Bucket_OnCreate-OnMessage1_IamRolePolicy_975FD372"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.Bucket_oncreate-OnMessage1_IamRole_EAFD952E.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.Bucket_OnCreate-OnMessage1_IamRole_0E855131.name}"
       },
-      "Bucket_ondelete-OnMessage0_IamRolePolicy_EE79076B": {
+      "Bucket_OnDelete-OnMessage0_IamRolePolicy_A027DCBC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage0/IamRolePolicy",
-            "uniqueId": "Bucket_ondelete-OnMessage0_IamRolePolicy_EE79076B"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage0/IamRolePolicy",
+            "uniqueId": "Bucket_OnDelete-OnMessage0_IamRolePolicy_A027DCBC"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.Bucket_ondelete-OnMessage0_IamRole_50F5B4CA.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.Bucket_OnDelete-OnMessage0_IamRole_A52E721B.name}"
       },
-      "Bucket_ondelete-OnMessage1_IamRolePolicy_517C3979": {
+      "Bucket_OnDelete-OnMessage1_IamRolePolicy_07F086F7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage1/IamRolePolicy",
-            "uniqueId": "Bucket_ondelete-OnMessage1_IamRolePolicy_517C3979"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage1/IamRolePolicy",
+            "uniqueId": "Bucket_OnDelete-OnMessage1_IamRolePolicy_07F086F7"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.Bucket_ondelete-OnMessage1_IamRole_BE60A7EC.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.Bucket_OnDelete-OnMessage1_IamRole_AA3A5721.name}"
       },
-      "Bucket_onupdate-OnMessage0_IamRolePolicy_95CC8F41": {
+      "Bucket_OnUpdate-OnMessage0_IamRolePolicy_DAF73AB9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage0/IamRolePolicy",
-            "uniqueId": "Bucket_onupdate-OnMessage0_IamRolePolicy_95CC8F41"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage0/IamRolePolicy",
+            "uniqueId": "Bucket_OnUpdate-OnMessage0_IamRolePolicy_DAF73AB9"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.Bucket_onupdate-OnMessage0_IamRole_B95F0C0C.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.Bucket_OnUpdate-OnMessage0_IamRole_96499EB9.name}"
       },
-      "Bucket_onupdate-OnMessage1_IamRolePolicy_9C89E111": {
+      "Bucket_OnUpdate-OnMessage1_IamRolePolicy_E38714A4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage1/IamRolePolicy",
-            "uniqueId": "Bucket_onupdate-OnMessage1_IamRolePolicy_9C89E111"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage1/IamRolePolicy",
+            "uniqueId": "Bucket_OnUpdate-OnMessage1_IamRolePolicy_E38714A4"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.Table.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.Bucket_onupdate-OnMessage1_IamRole_93BC24D8.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.LogHistory.arn}\",\"${aws_s3_bucket.LogHistory.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.Bucket_OnUpdate-OnMessage1_IamRole_7B19D23F.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "Bucket_oncreate-OnMessage0_IamRolePolicyAttachment_1AE31BFB": {
+      "Bucket_OnCreate-OnMessage0_IamRolePolicyAttachment_B9851CC6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage0/IamRolePolicyAttachment",
-            "uniqueId": "Bucket_oncreate-OnMessage0_IamRolePolicyAttachment_1AE31BFB"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage0/IamRolePolicyAttachment",
+            "uniqueId": "Bucket_OnCreate-OnMessage0_IamRolePolicyAttachment_B9851CC6"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.Bucket_oncreate-OnMessage0_IamRole_0DECFA72.name}"
+        "role": "${aws_iam_role.Bucket_OnCreate-OnMessage0_IamRole_D3BF2935.name}"
       },
-      "Bucket_oncreate-OnMessage1_IamRolePolicyAttachment_FE0643F9": {
+      "Bucket_OnCreate-OnMessage1_IamRolePolicyAttachment_CAB55010": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage1/IamRolePolicyAttachment",
-            "uniqueId": "Bucket_oncreate-OnMessage1_IamRolePolicyAttachment_FE0643F9"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage1/IamRolePolicyAttachment",
+            "uniqueId": "Bucket_OnCreate-OnMessage1_IamRolePolicyAttachment_CAB55010"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.Bucket_oncreate-OnMessage1_IamRole_EAFD952E.name}"
+        "role": "${aws_iam_role.Bucket_OnCreate-OnMessage1_IamRole_0E855131.name}"
       },
-      "Bucket_ondelete-OnMessage0_IamRolePolicyAttachment_7C1D0962": {
+      "Bucket_OnDelete-OnMessage0_IamRolePolicyAttachment_9AC35049": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage0/IamRolePolicyAttachment",
-            "uniqueId": "Bucket_ondelete-OnMessage0_IamRolePolicyAttachment_7C1D0962"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage0/IamRolePolicyAttachment",
+            "uniqueId": "Bucket_OnDelete-OnMessage0_IamRolePolicyAttachment_9AC35049"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.Bucket_ondelete-OnMessage0_IamRole_50F5B4CA.name}"
+        "role": "${aws_iam_role.Bucket_OnDelete-OnMessage0_IamRole_A52E721B.name}"
       },
-      "Bucket_ondelete-OnMessage1_IamRolePolicyAttachment_A21F4631": {
+      "Bucket_OnDelete-OnMessage1_IamRolePolicyAttachment_EFA92AD6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage1/IamRolePolicyAttachment",
-            "uniqueId": "Bucket_ondelete-OnMessage1_IamRolePolicyAttachment_A21F4631"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage1/IamRolePolicyAttachment",
+            "uniqueId": "Bucket_OnDelete-OnMessage1_IamRolePolicyAttachment_EFA92AD6"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.Bucket_ondelete-OnMessage1_IamRole_BE60A7EC.name}"
+        "role": "${aws_iam_role.Bucket_OnDelete-OnMessage1_IamRole_AA3A5721.name}"
       },
-      "Bucket_onupdate-OnMessage0_IamRolePolicyAttachment_753AF495": {
+      "Bucket_OnUpdate-OnMessage0_IamRolePolicyAttachment_FAF69EA1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage0/IamRolePolicyAttachment",
-            "uniqueId": "Bucket_onupdate-OnMessage0_IamRolePolicyAttachment_753AF495"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage0/IamRolePolicyAttachment",
+            "uniqueId": "Bucket_OnUpdate-OnMessage0_IamRolePolicyAttachment_FAF69EA1"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.Bucket_onupdate-OnMessage0_IamRole_B95F0C0C.name}"
+        "role": "${aws_iam_role.Bucket_OnUpdate-OnMessage0_IamRole_96499EB9.name}"
       },
-      "Bucket_onupdate-OnMessage1_IamRolePolicyAttachment_A8068B10": {
+      "Bucket_OnUpdate-OnMessage1_IamRolePolicyAttachment_5CF4587E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage1/IamRolePolicyAttachment",
-            "uniqueId": "Bucket_onupdate-OnMessage1_IamRolePolicyAttachment_A8068B10"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage1/IamRolePolicyAttachment",
+            "uniqueId": "Bucket_OnUpdate-OnMessage1_IamRolePolicyAttachment_5CF4587E"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.Bucket_onupdate-OnMessage1_IamRole_93BC24D8.name}"
+        "role": "${aws_iam_role.Bucket_OnUpdate-OnMessage1_IamRole_7B19D23F.name}"
       }
     },
     "aws_lambda_function": {
-      "Bucket_oncreate-OnMessage0_64FDCB47": {
+      "Bucket_OnCreate-OnMessage0_4C972FB4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage0/Default",
-            "uniqueId": "Bucket_oncreate-OnMessage0_64FDCB47"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage0/Default",
+            "uniqueId": "Bucket_OnCreate-OnMessage0_4C972FB4"
           }
         },
         "architectures": [
@@ -311,34 +290,35 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "oncreate-OnMessage0-c87abc21",
+            "WING_FUNCTION_NAME": "OnCreate-OnMessage0-c8740b4b",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "oncreate-OnMessage0-c87abc21",
+        "function_name": "OnCreate-OnMessage0-c8740b4b",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.Bucket_oncreate-OnMessage0_IamRole_0DECFA72.arn}",
+        "role": "${aws_iam_role.Bucket_OnCreate-OnMessage0_IamRole_D3BF2935.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.Bucket_oncreate-OnMessage0_S3Object_F105B125.key}",
+        "s3_key": "${aws_s3_object.Bucket_OnCreate-OnMessage0_S3Object_3AC22680.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "Bucket_oncreate-OnMessage1_BC956365": {
+      "Bucket_OnCreate-OnMessage1_18599D01": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage1/Default",
-            "uniqueId": "Bucket_oncreate-OnMessage1_BC956365"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage1/Default",
+            "uniqueId": "Bucket_OnCreate-OnMessage1_18599D01"
           }
         },
         "architectures": [
@@ -346,34 +326,35 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "oncreate-OnMessage1-c800fec8",
+            "WING_FUNCTION_NAME": "OnCreate-OnMessage1-c8347a52",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "oncreate-OnMessage1-c800fec8",
+        "function_name": "OnCreate-OnMessage1-c8347a52",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.Bucket_oncreate-OnMessage1_IamRole_EAFD952E.arn}",
+        "role": "${aws_iam_role.Bucket_OnCreate-OnMessage1_IamRole_0E855131.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.Bucket_oncreate-OnMessage1_S3Object_F92E0B51.key}",
+        "s3_key": "${aws_s3_object.Bucket_OnCreate-OnMessage1_S3Object_24FED042.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "Bucket_ondelete-OnMessage0_31A1E9E4": {
+      "Bucket_OnDelete-OnMessage0_BBD3A051": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage0/Default",
-            "uniqueId": "Bucket_ondelete-OnMessage0_31A1E9E4"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage0/Default",
+            "uniqueId": "Bucket_OnDelete-OnMessage0_BBD3A051"
           }
         },
         "architectures": [
@@ -381,34 +362,35 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "ondelete-OnMessage0-c8a38b5a",
+            "WING_FUNCTION_NAME": "OnDelete-OnMessage0-c8e711ef",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "ondelete-OnMessage0-c8a38b5a",
+        "function_name": "OnDelete-OnMessage0-c8e711ef",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.Bucket_ondelete-OnMessage0_IamRole_50F5B4CA.arn}",
+        "role": "${aws_iam_role.Bucket_OnDelete-OnMessage0_IamRole_A52E721B.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.Bucket_ondelete-OnMessage0_S3Object_DE6CDD43.key}",
+        "s3_key": "${aws_s3_object.Bucket_OnDelete-OnMessage0_S3Object_555C9D08.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "Bucket_ondelete-OnMessage1_5BBC7743": {
+      "Bucket_OnDelete-OnMessage1_A17F4764": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage1/Default",
-            "uniqueId": "Bucket_ondelete-OnMessage1_5BBC7743"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage1/Default",
+            "uniqueId": "Bucket_OnDelete-OnMessage1_A17F4764"
           }
         },
         "architectures": [
@@ -416,34 +398,35 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "ondelete-OnMessage1-c82792b8",
+            "WING_FUNCTION_NAME": "OnDelete-OnMessage1-c8905f5b",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "ondelete-OnMessage1-c82792b8",
+        "function_name": "OnDelete-OnMessage1-c8905f5b",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.Bucket_ondelete-OnMessage1_IamRole_BE60A7EC.arn}",
+        "role": "${aws_iam_role.Bucket_OnDelete-OnMessage1_IamRole_AA3A5721.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.Bucket_ondelete-OnMessage1_S3Object_DE98D974.key}",
+        "s3_key": "${aws_s3_object.Bucket_OnDelete-OnMessage1_S3Object_DE01EBE1.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "Bucket_onupdate-OnMessage0_2FBE69C5": {
+      "Bucket_OnUpdate-OnMessage0_ABC5042C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage0/Default",
-            "uniqueId": "Bucket_onupdate-OnMessage0_2FBE69C5"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage0/Default",
+            "uniqueId": "Bucket_OnUpdate-OnMessage0_ABC5042C"
           }
         },
         "architectures": [
@@ -451,34 +434,35 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "onupdate-OnMessage0-c835180c",
+            "WING_FUNCTION_NAME": "OnUpdate-OnMessage0-c81b9fec",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "onupdate-OnMessage0-c835180c",
+        "function_name": "OnUpdate-OnMessage0-c81b9fec",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.Bucket_onupdate-OnMessage0_IamRole_B95F0C0C.arn}",
+        "role": "${aws_iam_role.Bucket_OnUpdate-OnMessage0_IamRole_96499EB9.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.Bucket_onupdate-OnMessage0_S3Object_B4B3C51E.key}",
+        "s3_key": "${aws_s3_object.Bucket_OnUpdate-OnMessage0_S3Object_45CBA374.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "Bucket_onupdate-OnMessage1_DDC08FAE": {
+      "Bucket_OnUpdate-OnMessage1_A9787FC1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage1/Default",
-            "uniqueId": "Bucket_onupdate-OnMessage1_DDC08FAE"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage1/Default",
+            "uniqueId": "Bucket_OnUpdate-OnMessage1_A9787FC1"
           }
         },
         "architectures": [
@@ -486,23 +470,24 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_76338bfb": "${aws_s3_bucket.LogHistory.bucket}",
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa": "${aws_dynamodb_table.Table.name}",
-            "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "_id",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "onupdate-OnMessage1-c8826493",
+            "WING_FUNCTION_NAME": "OnUpdate-OnMessage1-c8513427",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "onupdate-OnMessage1-c8826493",
+        "function_name": "OnUpdate-OnMessage1-c8513427",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.Bucket_onupdate-OnMessage1_IamRole_93BC24D8.arn}",
+        "role": "${aws_iam_role.Bucket_OnUpdate-OnMessage1_IamRole_7B19D23F.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.Bucket_onupdate-OnMessage1_S3Object_12D7055B.key}",
+        "s3_key": "${aws_s3_object.Bucket_OnUpdate-OnMessage1_S3Object_A8B89403.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -511,77 +496,77 @@
       }
     },
     "aws_lambda_permission": {
-      "Bucket_oncreate-OnMessage0_InvokePermission-c80311dcc4aadf68b1b7fbea8bf5da640f0dde68f4_DD3AB632": {
+      "Bucket_OnCreate-OnMessage0_InvokePermission-c8b721b0d6157aa6ade66017aa9bfcbb77f8df59d7_F5383BED": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage0/InvokePermission-c80311dcc4aadf68b1b7fbea8bf5da640f0dde68f4",
-            "uniqueId": "Bucket_oncreate-OnMessage0_InvokePermission-c80311dcc4aadf68b1b7fbea8bf5da640f0dde68f4_DD3AB632"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage0/InvokePermission-c8b721b0d6157aa6ade66017aa9bfcbb77f8df59d7",
+            "uniqueId": "Bucket_OnCreate-OnMessage0_InvokePermission-c8b721b0d6157aa6ade66017aa9bfcbb77f8df59d7_F5383BED"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.Bucket_oncreate-OnMessage0_64FDCB47.function_name}",
+        "function_name": "${aws_lambda_function.Bucket_OnCreate-OnMessage0_4C972FB4.function_name}",
         "principal": "sns.amazonaws.com",
-        "source_arn": "${aws_sns_topic.Bucket_oncreate_05DB4E53.arn}"
+        "source_arn": "${aws_sns_topic.Bucket_OnCreate_9682272C.arn}"
       },
-      "Bucket_oncreate-OnMessage1_InvokePermission-c80311dcc4aadf68b1b7fbea8bf5da640f0dde68f4_F6194849": {
+      "Bucket_OnCreate-OnMessage1_InvokePermission-c8b721b0d6157aa6ade66017aa9bfcbb77f8df59d7_C0F2EA79": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage1/InvokePermission-c80311dcc4aadf68b1b7fbea8bf5da640f0dde68f4",
-            "uniqueId": "Bucket_oncreate-OnMessage1_InvokePermission-c80311dcc4aadf68b1b7fbea8bf5da640f0dde68f4_F6194849"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage1/InvokePermission-c8b721b0d6157aa6ade66017aa9bfcbb77f8df59d7",
+            "uniqueId": "Bucket_OnCreate-OnMessage1_InvokePermission-c8b721b0d6157aa6ade66017aa9bfcbb77f8df59d7_C0F2EA79"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.Bucket_oncreate-OnMessage1_BC956365.function_name}",
+        "function_name": "${aws_lambda_function.Bucket_OnCreate-OnMessage1_18599D01.function_name}",
         "principal": "sns.amazonaws.com",
-        "source_arn": "${aws_sns_topic.Bucket_oncreate_05DB4E53.arn}"
+        "source_arn": "${aws_sns_topic.Bucket_OnCreate_9682272C.arn}"
       },
-      "Bucket_ondelete-OnMessage0_InvokePermission-c8d079b3d06057215794f77e7e4bf9c5113e5b753b_AFF2F4D8": {
+      "Bucket_OnDelete-OnMessage0_InvokePermission-c8951577e6e6b8b443e69cf3aa712434a41064d057_3C678F8E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage0/InvokePermission-c8d079b3d06057215794f77e7e4bf9c5113e5b753b",
-            "uniqueId": "Bucket_ondelete-OnMessage0_InvokePermission-c8d079b3d06057215794f77e7e4bf9c5113e5b753b_AFF2F4D8"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage0/InvokePermission-c8951577e6e6b8b443e69cf3aa712434a41064d057",
+            "uniqueId": "Bucket_OnDelete-OnMessage0_InvokePermission-c8951577e6e6b8b443e69cf3aa712434a41064d057_3C678F8E"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.Bucket_ondelete-OnMessage0_31A1E9E4.function_name}",
+        "function_name": "${aws_lambda_function.Bucket_OnDelete-OnMessage0_BBD3A051.function_name}",
         "principal": "sns.amazonaws.com",
-        "source_arn": "${aws_sns_topic.Bucket_ondelete_7F3A2B6C.arn}"
+        "source_arn": "${aws_sns_topic.Bucket_OnDelete_0EB7243C.arn}"
       },
-      "Bucket_ondelete-OnMessage1_InvokePermission-c8d079b3d06057215794f77e7e4bf9c5113e5b753b_ADE9F930": {
+      "Bucket_OnDelete-OnMessage1_InvokePermission-c8951577e6e6b8b443e69cf3aa712434a41064d057_DB38FC8F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage1/InvokePermission-c8d079b3d06057215794f77e7e4bf9c5113e5b753b",
-            "uniqueId": "Bucket_ondelete-OnMessage1_InvokePermission-c8d079b3d06057215794f77e7e4bf9c5113e5b753b_ADE9F930"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage1/InvokePermission-c8951577e6e6b8b443e69cf3aa712434a41064d057",
+            "uniqueId": "Bucket_OnDelete-OnMessage1_InvokePermission-c8951577e6e6b8b443e69cf3aa712434a41064d057_DB38FC8F"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.Bucket_ondelete-OnMessage1_5BBC7743.function_name}",
+        "function_name": "${aws_lambda_function.Bucket_OnDelete-OnMessage1_A17F4764.function_name}",
         "principal": "sns.amazonaws.com",
-        "source_arn": "${aws_sns_topic.Bucket_ondelete_7F3A2B6C.arn}"
+        "source_arn": "${aws_sns_topic.Bucket_OnDelete_0EB7243C.arn}"
       },
-      "Bucket_onupdate-OnMessage0_InvokePermission-c83c88094423e3602c58db2402f439eb720806a401_3F79E9CA": {
+      "Bucket_OnUpdate-OnMessage0_InvokePermission-c81749ea32d17e6c85fdd886350ce3ffe9fd7c0be7_026E0359": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage0/InvokePermission-c83c88094423e3602c58db2402f439eb720806a401",
-            "uniqueId": "Bucket_onupdate-OnMessage0_InvokePermission-c83c88094423e3602c58db2402f439eb720806a401_3F79E9CA"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage0/InvokePermission-c81749ea32d17e6c85fdd886350ce3ffe9fd7c0be7",
+            "uniqueId": "Bucket_OnUpdate-OnMessage0_InvokePermission-c81749ea32d17e6c85fdd886350ce3ffe9fd7c0be7_026E0359"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.Bucket_onupdate-OnMessage0_2FBE69C5.function_name}",
+        "function_name": "${aws_lambda_function.Bucket_OnUpdate-OnMessage0_ABC5042C.function_name}",
         "principal": "sns.amazonaws.com",
-        "source_arn": "${aws_sns_topic.Bucket_onupdate_658D07E4.arn}"
+        "source_arn": "${aws_sns_topic.Bucket_OnUpdate_E297838E.arn}"
       },
-      "Bucket_onupdate-OnMessage1_InvokePermission-c83c88094423e3602c58db2402f439eb720806a401_656518F7": {
+      "Bucket_OnUpdate-OnMessage1_InvokePermission-c81749ea32d17e6c85fdd886350ce3ffe9fd7c0be7_E1A5BEF6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage1/InvokePermission-c83c88094423e3602c58db2402f439eb720806a401",
-            "uniqueId": "Bucket_onupdate-OnMessage1_InvokePermission-c83c88094423e3602c58db2402f439eb720806a401_656518F7"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage1/InvokePermission-c81749ea32d17e6c85fdd886350ce3ffe9fd7c0be7",
+            "uniqueId": "Bucket_OnUpdate-OnMessage1_InvokePermission-c81749ea32d17e6c85fdd886350ce3ffe9fd7c0be7_E1A5BEF6"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.Bucket_onupdate-OnMessage1_DDC08FAE.function_name}",
+        "function_name": "${aws_lambda_function.Bucket_OnUpdate-OnMessage1_A9787FC1.function_name}",
         "principal": "sns.amazonaws.com",
-        "source_arn": "${aws_sns_topic.Bucket_onupdate_658D07E4.arn}"
+        "source_arn": "${aws_sns_topic.Bucket_OnUpdate_E297838E.arn}"
       }
     },
     "aws_s3_bucket": {
@@ -603,6 +588,16 @@
           }
         },
         "bucket_prefix": "code-c84a50b1-"
+      },
+      "LogHistory": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/LogHistory/Default",
+            "uniqueId": "LogHistory"
+          }
+        },
+        "bucket_prefix": "loghistory-c817bcb3-",
+        "force_destroy": false
       }
     },
     "aws_s3_bucket_notification": {
@@ -615,9 +610,9 @@
         },
         "bucket": "${aws_s3_bucket.Bucket.id}",
         "depends_on": [
-          "aws_sns_topic_policy.Bucket_ondelete_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_ABACCC4A",
-          "aws_sns_topic_policy.Bucket_onupdate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_CFB72F4E",
-          "aws_sns_topic_policy.Bucket_oncreate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_E0552A1A"
+          "aws_sns_topic_policy.Bucket_OnDelete_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_89434C6B",
+          "aws_sns_topic_policy.Bucket_OnUpdate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_9BF3340C",
+          "aws_sns_topic_policy.Bucket_OnCreate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_E9DA9F8C"
         ],
         "topic": [
           {
@@ -625,86 +620,86 @@
               "s3:ObjectRemoved:*"
             ],
             "id": "on-ondelete-notification",
-            "topic_arn": "${aws_sns_topic.Bucket_ondelete_7F3A2B6C.arn}"
+            "topic_arn": "${aws_sns_topic.Bucket_OnDelete_0EB7243C.arn}"
           },
           {
             "events": [
               "s3:ObjectCreated:Post"
             ],
             "id": "on-onupdate-notification",
-            "topic_arn": "${aws_sns_topic.Bucket_onupdate_658D07E4.arn}"
+            "topic_arn": "${aws_sns_topic.Bucket_OnUpdate_E297838E.arn}"
           },
           {
             "events": [
               "s3:ObjectCreated:Put"
             ],
             "id": "on-oncreate-notification",
-            "topic_arn": "${aws_sns_topic.Bucket_oncreate_05DB4E53.arn}"
+            "topic_arn": "${aws_sns_topic.Bucket_OnCreate_9682272C.arn}"
           }
         ]
       }
     },
     "aws_s3_object": {
-      "Bucket_oncreate-OnMessage0_S3Object_F105B125": {
+      "Bucket_OnCreate-OnMessage0_S3Object_3AC22680": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage0/S3Object",
-            "uniqueId": "Bucket_oncreate-OnMessage0_S3Object_F105B125"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage0/S3Object",
+            "uniqueId": "Bucket_OnCreate-OnMessage0_S3Object_3AC22680"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "Bucket_oncreate-OnMessage1_S3Object_F92E0B51": {
+      "Bucket_OnCreate-OnMessage1_S3Object_24FED042": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate-OnMessage1/S3Object",
-            "uniqueId": "Bucket_oncreate-OnMessage1_S3Object_F92E0B51"
+            "path": "root/Default/Default/Bucket/OnCreate-OnMessage1/S3Object",
+            "uniqueId": "Bucket_OnCreate-OnMessage1_S3Object_24FED042"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "Bucket_ondelete-OnMessage0_S3Object_DE6CDD43": {
+      "Bucket_OnDelete-OnMessage0_S3Object_555C9D08": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage0/S3Object",
-            "uniqueId": "Bucket_ondelete-OnMessage0_S3Object_DE6CDD43"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage0/S3Object",
+            "uniqueId": "Bucket_OnDelete-OnMessage0_S3Object_555C9D08"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "Bucket_ondelete-OnMessage1_S3Object_DE98D974": {
+      "Bucket_OnDelete-OnMessage1_S3Object_DE01EBE1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete-OnMessage1/S3Object",
-            "uniqueId": "Bucket_ondelete-OnMessage1_S3Object_DE98D974"
+            "path": "root/Default/Default/Bucket/OnDelete-OnMessage1/S3Object",
+            "uniqueId": "Bucket_OnDelete-OnMessage1_S3Object_DE01EBE1"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "Bucket_onupdate-OnMessage0_S3Object_B4B3C51E": {
+      "Bucket_OnUpdate-OnMessage0_S3Object_45CBA374": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage0/S3Object",
-            "uniqueId": "Bucket_onupdate-OnMessage0_S3Object_B4B3C51E"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage0/S3Object",
+            "uniqueId": "Bucket_OnUpdate-OnMessage0_S3Object_45CBA374"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "Bucket_onupdate-OnMessage1_S3Object_12D7055B": {
+      "Bucket_OnUpdate-OnMessage1_S3Object_A8B89403": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate-OnMessage1/S3Object",
-            "uniqueId": "Bucket_onupdate-OnMessage1_S3Object_12D7055B"
+            "path": "root/Default/Default/Bucket/OnUpdate-OnMessage1/S3Object",
+            "uniqueId": "Bucket_OnUpdate-OnMessage1_S3Object_A8B89403"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -713,132 +708,132 @@
       }
     },
     "aws_sns_topic": {
-      "Bucket_oncreate_05DB4E53": {
+      "Bucket_OnCreate_9682272C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate/Default",
-            "uniqueId": "Bucket_oncreate_05DB4E53"
+            "path": "root/Default/Default/Bucket/OnCreate/Default",
+            "uniqueId": "Bucket_OnCreate_9682272C"
           }
         },
-        "name": "oncreate-c80311dc"
+        "name": "OnCreate-c8b721b0"
       },
-      "Bucket_ondelete_7F3A2B6C": {
+      "Bucket_OnDelete_0EB7243C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete/Default",
-            "uniqueId": "Bucket_ondelete_7F3A2B6C"
+            "path": "root/Default/Default/Bucket/OnDelete/Default",
+            "uniqueId": "Bucket_OnDelete_0EB7243C"
           }
         },
-        "name": "ondelete-c8d079b3"
+        "name": "OnDelete-c8951577"
       },
-      "Bucket_onupdate_658D07E4": {
+      "Bucket_OnUpdate_E297838E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate/Default",
-            "uniqueId": "Bucket_onupdate_658D07E4"
+            "path": "root/Default/Default/Bucket/OnUpdate/Default",
+            "uniqueId": "Bucket_OnUpdate_E297838E"
           }
         },
-        "name": "onupdate-c83c8809"
+        "name": "OnUpdate-c81749ea"
       }
     },
     "aws_sns_topic_policy": {
-      "Bucket_oncreate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_E0552A1A": {
+      "Bucket_OnCreate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_E9DA9F8C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate/PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a",
-            "uniqueId": "Bucket_oncreate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_E0552A1A"
+            "path": "root/Default/Default/Bucket/OnCreate/PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a",
+            "uniqueId": "Bucket_OnCreate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_E9DA9F8C"
           }
         },
-        "arn": "${aws_sns_topic.Bucket_oncreate_05DB4E53.arn}",
-        "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"sns:Publish\",\"Resource\":\"${aws_sns_topic.Bucket_oncreate_05DB4E53.arn}\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"${aws_s3_bucket.Bucket.arn}\"}}}]}"
+        "arn": "${aws_sns_topic.Bucket_OnCreate_9682272C.arn}",
+        "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"sns:Publish\",\"Resource\":\"${aws_sns_topic.Bucket_OnCreate_9682272C.arn}\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"${aws_s3_bucket.Bucket.arn}\"}}}]}"
       },
-      "Bucket_ondelete_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_ABACCC4A": {
+      "Bucket_OnDelete_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_89434C6B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete/PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a",
-            "uniqueId": "Bucket_ondelete_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_ABACCC4A"
+            "path": "root/Default/Default/Bucket/OnDelete/PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a",
+            "uniqueId": "Bucket_OnDelete_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_89434C6B"
           }
         },
-        "arn": "${aws_sns_topic.Bucket_ondelete_7F3A2B6C.arn}",
-        "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"sns:Publish\",\"Resource\":\"${aws_sns_topic.Bucket_ondelete_7F3A2B6C.arn}\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"${aws_s3_bucket.Bucket.arn}\"}}}]}"
+        "arn": "${aws_sns_topic.Bucket_OnDelete_0EB7243C.arn}",
+        "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"sns:Publish\",\"Resource\":\"${aws_sns_topic.Bucket_OnDelete_0EB7243C.arn}\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"${aws_s3_bucket.Bucket.arn}\"}}}]}"
       },
-      "Bucket_onupdate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_CFB72F4E": {
+      "Bucket_OnUpdate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_9BF3340C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate/PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a",
-            "uniqueId": "Bucket_onupdate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_CFB72F4E"
+            "path": "root/Default/Default/Bucket/OnUpdate/PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a",
+            "uniqueId": "Bucket_OnUpdate_PublishPermission-c88fdc5f491a51d8438235500a4821fbc31357ca3a_9BF3340C"
           }
         },
-        "arn": "${aws_sns_topic.Bucket_onupdate_658D07E4.arn}",
-        "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"sns:Publish\",\"Resource\":\"${aws_sns_topic.Bucket_onupdate_658D07E4.arn}\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"${aws_s3_bucket.Bucket.arn}\"}}}]}"
+        "arn": "${aws_sns_topic.Bucket_OnUpdate_E297838E.arn}",
+        "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"sns:Publish\",\"Resource\":\"${aws_sns_topic.Bucket_OnUpdate_E297838E.arn}\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"${aws_s3_bucket.Bucket.arn}\"}}}]}"
       }
     },
     "aws_sns_topic_subscription": {
-      "Bucket_oncreate_TopicSubscription0_02705B37": {
+      "Bucket_OnCreate_TopicSubscription0_A2B42747": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate/TopicSubscription0",
-            "uniqueId": "Bucket_oncreate_TopicSubscription0_02705B37"
+            "path": "root/Default/Default/Bucket/OnCreate/TopicSubscription0",
+            "uniqueId": "Bucket_OnCreate_TopicSubscription0_A2B42747"
           }
         },
-        "endpoint": "${aws_lambda_function.Bucket_oncreate-OnMessage0_64FDCB47.arn}",
+        "endpoint": "${aws_lambda_function.Bucket_OnCreate-OnMessage0_4C972FB4.arn}",
         "protocol": "lambda",
-        "topic_arn": "${aws_sns_topic.Bucket_oncreate_05DB4E53.arn}"
+        "topic_arn": "${aws_sns_topic.Bucket_OnCreate_9682272C.arn}"
       },
-      "Bucket_oncreate_TopicSubscription1_CAD043F1": {
+      "Bucket_OnCreate_TopicSubscription1_8F485EA8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/oncreate/TopicSubscription1",
-            "uniqueId": "Bucket_oncreate_TopicSubscription1_CAD043F1"
+            "path": "root/Default/Default/Bucket/OnCreate/TopicSubscription1",
+            "uniqueId": "Bucket_OnCreate_TopicSubscription1_8F485EA8"
           }
         },
-        "endpoint": "${aws_lambda_function.Bucket_oncreate-OnMessage1_BC956365.arn}",
+        "endpoint": "${aws_lambda_function.Bucket_OnCreate-OnMessage1_18599D01.arn}",
         "protocol": "lambda",
-        "topic_arn": "${aws_sns_topic.Bucket_oncreate_05DB4E53.arn}"
+        "topic_arn": "${aws_sns_topic.Bucket_OnCreate_9682272C.arn}"
       },
-      "Bucket_ondelete_TopicSubscription0_4F3E33C7": {
+      "Bucket_OnDelete_TopicSubscription0_4D741190": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete/TopicSubscription0",
-            "uniqueId": "Bucket_ondelete_TopicSubscription0_4F3E33C7"
+            "path": "root/Default/Default/Bucket/OnDelete/TopicSubscription0",
+            "uniqueId": "Bucket_OnDelete_TopicSubscription0_4D741190"
           }
         },
-        "endpoint": "${aws_lambda_function.Bucket_ondelete-OnMessage0_31A1E9E4.arn}",
+        "endpoint": "${aws_lambda_function.Bucket_OnDelete-OnMessage0_BBD3A051.arn}",
         "protocol": "lambda",
-        "topic_arn": "${aws_sns_topic.Bucket_ondelete_7F3A2B6C.arn}"
+        "topic_arn": "${aws_sns_topic.Bucket_OnDelete_0EB7243C.arn}"
       },
-      "Bucket_ondelete_TopicSubscription1_575AD2C4": {
+      "Bucket_OnDelete_TopicSubscription1_8362A2BD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/ondelete/TopicSubscription1",
-            "uniqueId": "Bucket_ondelete_TopicSubscription1_575AD2C4"
+            "path": "root/Default/Default/Bucket/OnDelete/TopicSubscription1",
+            "uniqueId": "Bucket_OnDelete_TopicSubscription1_8362A2BD"
           }
         },
-        "endpoint": "${aws_lambda_function.Bucket_ondelete-OnMessage1_5BBC7743.arn}",
+        "endpoint": "${aws_lambda_function.Bucket_OnDelete-OnMessage1_A17F4764.arn}",
         "protocol": "lambda",
-        "topic_arn": "${aws_sns_topic.Bucket_ondelete_7F3A2B6C.arn}"
+        "topic_arn": "${aws_sns_topic.Bucket_OnDelete_0EB7243C.arn}"
       },
-      "Bucket_onupdate_TopicSubscription0_7ED55DE3": {
+      "Bucket_OnUpdate_TopicSubscription0_6ECDED15": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate/TopicSubscription0",
-            "uniqueId": "Bucket_onupdate_TopicSubscription0_7ED55DE3"
+            "path": "root/Default/Default/Bucket/OnUpdate/TopicSubscription0",
+            "uniqueId": "Bucket_OnUpdate_TopicSubscription0_6ECDED15"
           }
         },
-        "endpoint": "${aws_lambda_function.Bucket_onupdate-OnMessage0_2FBE69C5.arn}",
+        "endpoint": "${aws_lambda_function.Bucket_OnUpdate-OnMessage0_ABC5042C.arn}",
         "protocol": "lambda",
-        "topic_arn": "${aws_sns_topic.Bucket_onupdate_658D07E4.arn}"
+        "topic_arn": "${aws_sns_topic.Bucket_OnUpdate_E297838E.arn}"
       },
-      "Bucket_onupdate_TopicSubscription1_8652ABA3": {
+      "Bucket_OnUpdate_TopicSubscription1_3F3174F8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/onupdate/TopicSubscription1",
-            "uniqueId": "Bucket_onupdate_TopicSubscription1_8652ABA3"
+            "path": "root/Default/Default/Bucket/OnUpdate/TopicSubscription1",
+            "uniqueId": "Bucket_OnUpdate_TopicSubscription1_3F3174F8"
           }
         },
-        "endpoint": "${aws_lambda_function.Bucket_onupdate-OnMessage1_DDC08FAE.arn}",
+        "endpoint": "${aws_lambda_function.Bucket_OnUpdate-OnMessage1_A9787FC1.arn}",
         "protocol": "lambda",
-        "topic_arn": "${aws_sns_topic.Bucket_onupdate_658D07E4.arn}"
+        "topic_arn": "${aws_sns_topic.Bucket_OnUpdate_E297838E.arn}"
       }
     }
   }

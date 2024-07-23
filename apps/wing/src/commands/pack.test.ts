@@ -186,10 +186,18 @@ describe("wing pack", () => {
     await extractTarball(join(outdir, tarballPath), outdir);
 
     // symlink node_modules/@winglang/sdk to our version of the sdk so the import works
-    await fs.mkdir(join(outdir, "package", "node_modules", "@winglang"), { recursive: true });
+    await fs.mkdir(join(outdir, "package", "node_modules", "@winglang", "sdk", "lib"), {
+      recursive: true,
+    });
+
     await fs.symlink(
-      require.resolve("@winglang/sdk"),
-      join(outdir, "package", "node_modules", "@winglang", "sdk")
+      require.resolve("@winglang/sdk/lib/index.js"),
+      join(outdir, "package", "node_modules", "@winglang", "sdk", "index.js")
+    );
+
+    await fs.symlink(
+      require.resolve("@winglang/sdk/lib/macros.js"),
+      join(outdir, "package", "node_modules", "@winglang", "sdk", "lib", "macros.js")
     );
 
     const packagePath = join(outdir, "package");
@@ -200,6 +208,7 @@ describe("wing pack", () => {
     expect(mod).toBeDefined();
     expect(Object.keys(mod).sort()).toMatchInlineSnapshot(`
       [
+        "$preflightTypesMap",
         "FavoriteNumbers",
         "Store",
         "default",

@@ -41,16 +41,18 @@ exports[`counter name valid 2`] = `
                   "CloudFirestoreAPI": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudFirestoreAPI",
                     "path": "root/Default/The.Amazing-Counter_01/CloudFirestoreAPI",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/The.Amazing-Counter_01/Default",
                   },
@@ -69,16 +71,18 @@ exports[`counter name valid 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
@@ -87,30 +91,34 @@ exports[`counter name valid 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -159,16 +167,18 @@ exports[`counter with initial value 2`] = `
                   "CloudFirestoreAPI": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudFirestoreAPI",
                     "path": "root/Default/Counter/CloudFirestoreAPI",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
@@ -187,16 +197,18 @@ exports[`counter with initial value 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
@@ -205,30 +217,34 @@ exports[`counter with initial value 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -274,23 +290,11 @@ exports[`dec() IAM permissions 1`] = `
         "type": "DATASTORE_MODE",
       },
     },
-    "google_project_iam_custom_role": {
-      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
-        "permissions": [
-          "cloudfunctions.functions.get",
-          "datastore.entities.get",
-          "datastore.entities.create",
-          "datastore.entities.update",
-        ],
-        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
-      },
-    },
     "google_project_iam_member": {
-      "Function_ProjectIamMember_F891F2CD": {
+      "Function_project-iam-member-KEN45_78725E0C": {
         "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "project": "my-project",
-        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+        "role": "roles/datastore.user",
       },
     },
     "google_project_service": {
@@ -351,16 +355,18 @@ exports[`dec() IAM permissions 2`] = `
                   "CloudFirestoreAPI": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudFirestoreAPI",
                     "path": "root/Default/Counter/CloudFirestoreAPI",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
@@ -381,24 +387,18 @@ exports[`dec() IAM permissions 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
-                    },
-                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "DefaultFunction",
                     "path": "root/Default/Function/DefaultFunction",
                   },
@@ -407,24 +407,27 @@ exports[`dec() IAM permissions 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
                       },
                       "IamServiceAccountCredentialsApi": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "IamServiceAccountCredentialsApi",
                         "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Id",
                         "path": "root/Default/Function/FunctionBucket/Id",
                       },
@@ -443,26 +446,29 @@ exports[`dec() IAM permissions 2`] = `
                   "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "ProjectIamMember": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
-                    },
-                    "id": "ProjectIamMember",
-                    "path": "root/Default/Function/ProjectIamMember",
                   },
                   "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                     "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
+                  "project-iam-member-KEN.45]}": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "project-iam-member-KEN.45]}",
+                    "path": "root/Default/Function/project-iam-member-KEN.45]}",
                   },
                 },
                 "constructInfo": {
@@ -479,16 +485,18 @@ exports[`dec() IAM permissions 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
@@ -497,30 +505,34 @@ exports[`dec() IAM permissions 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -619,23 +631,11 @@ exports[`function with a counter binding 2`] = `
         "type": "DATASTORE_MODE",
       },
     },
-    "google_project_iam_custom_role": {
-      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
-        "permissions": [
-          "cloudfunctions.functions.get",
-          "datastore.entities.get",
-          "datastore.entities.create",
-          "datastore.entities.update",
-        ],
-        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
-      },
-    },
     "google_project_iam_member": {
-      "Function_ProjectIamMember_F891F2CD": {
+      "Function_project-iam-member-KEN17_2AC93708": {
         "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "project": "my-project",
-        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+        "role": "roles/datastore.user",
       },
     },
     "google_project_service": {
@@ -696,16 +696,18 @@ exports[`function with a counter binding 3`] = `
                   "CloudFirestoreAPI": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudFirestoreAPI",
                     "path": "root/Default/Counter/CloudFirestoreAPI",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
@@ -726,24 +728,18 @@ exports[`function with a counter binding 3`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
-                    },
-                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "DefaultFunction",
                     "path": "root/Default/Function/DefaultFunction",
                   },
@@ -752,24 +748,27 @@ exports[`function with a counter binding 3`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
                       },
                       "IamServiceAccountCredentialsApi": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "IamServiceAccountCredentialsApi",
                         "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Id",
                         "path": "root/Default/Function/FunctionBucket/Id",
                       },
@@ -788,26 +787,29 @@ exports[`function with a counter binding 3`] = `
                   "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "ProjectIamMember": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
-                    },
-                    "id": "ProjectIamMember",
-                    "path": "root/Default/Function/ProjectIamMember",
                   },
                   "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                     "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
+                  "project-iam-member-KEN.17]}": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "project-iam-member-KEN.17]}",
+                    "path": "root/Default/Function/project-iam-member-KEN.17]}",
                   },
                 },
                 "constructInfo": {
@@ -824,16 +826,18 @@ exports[`function with a counter binding 3`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
@@ -842,30 +846,34 @@ exports[`function with a counter binding 3`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -911,23 +919,11 @@ exports[`inc() IAM permissions 1`] = `
         "type": "DATASTORE_MODE",
       },
     },
-    "google_project_iam_custom_role": {
-      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
-        "permissions": [
-          "cloudfunctions.functions.get",
-          "datastore.entities.get",
-          "datastore.entities.create",
-          "datastore.entities.update",
-        ],
-        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
-      },
-    },
     "google_project_iam_member": {
-      "Function_ProjectIamMember_F891F2CD": {
+      "Function_project-iam-member-KEN31_651351B0": {
         "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "project": "my-project",
-        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+        "role": "roles/datastore.user",
       },
     },
     "google_project_service": {
@@ -988,16 +984,18 @@ exports[`inc() IAM permissions 2`] = `
                   "CloudFirestoreAPI": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudFirestoreAPI",
                     "path": "root/Default/Counter/CloudFirestoreAPI",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
@@ -1018,24 +1016,18 @@ exports[`inc() IAM permissions 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
-                    },
-                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "DefaultFunction",
                     "path": "root/Default/Function/DefaultFunction",
                   },
@@ -1044,24 +1036,27 @@ exports[`inc() IAM permissions 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
                       },
                       "IamServiceAccountCredentialsApi": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "IamServiceAccountCredentialsApi",
                         "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Id",
                         "path": "root/Default/Function/FunctionBucket/Id",
                       },
@@ -1080,26 +1075,29 @@ exports[`inc() IAM permissions 2`] = `
                   "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "ProjectIamMember": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
-                    },
-                    "id": "ProjectIamMember",
-                    "path": "root/Default/Function/ProjectIamMember",
                   },
                   "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                     "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
+                  "project-iam-member-KEN.31]}": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "project-iam-member-KEN.31]}",
+                    "path": "root/Default/Function/project-iam-member-KEN.31]}",
                   },
                 },
                 "constructInfo": {
@@ -1116,16 +1114,18 @@ exports[`inc() IAM permissions 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
@@ -1134,30 +1134,34 @@ exports[`inc() IAM permissions 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -1203,22 +1207,11 @@ exports[`peek() IAM permissions 1`] = `
         "type": "DATASTORE_MODE",
       },
     },
-    "google_project_iam_custom_role": {
-      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
-        "permissions": [
-          "cloudfunctions.functions.get",
-          "datastore.entities.get",
-          "datastore.entities.create",
-        ],
-        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
-      },
-    },
     "google_project_iam_member": {
-      "Function_ProjectIamMember_F891F2CD": {
+      "Function_project-iam-member-KEN59_3C6DFBFA": {
         "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "project": "my-project",
-        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+        "role": "roles/datastore.user",
       },
     },
     "google_project_service": {
@@ -1279,16 +1272,18 @@ exports[`peek() IAM permissions 2`] = `
                   "CloudFirestoreAPI": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudFirestoreAPI",
                     "path": "root/Default/Counter/CloudFirestoreAPI",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
@@ -1309,24 +1304,18 @@ exports[`peek() IAM permissions 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
-                    },
-                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "DefaultFunction",
                     "path": "root/Default/Function/DefaultFunction",
                   },
@@ -1335,24 +1324,27 @@ exports[`peek() IAM permissions 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
                       },
                       "IamServiceAccountCredentialsApi": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "IamServiceAccountCredentialsApi",
                         "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Id",
                         "path": "root/Default/Function/FunctionBucket/Id",
                       },
@@ -1371,26 +1363,29 @@ exports[`peek() IAM permissions 2`] = `
                   "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "ProjectIamMember": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
-                    },
-                    "id": "ProjectIamMember",
-                    "path": "root/Default/Function/ProjectIamMember",
                   },
                   "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                     "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
+                  "project-iam-member-KEN.59]}": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "project-iam-member-KEN.59]}",
+                    "path": "root/Default/Function/project-iam-member-KEN.59]}",
                   },
                 },
                 "constructInfo": {
@@ -1407,16 +1402,18 @@ exports[`peek() IAM permissions 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
@@ -1425,30 +1422,34 @@ exports[`peek() IAM permissions 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -1497,16 +1498,18 @@ exports[`replace invalid character from counter name 2`] = `
                   "CloudFirestoreAPI": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudFirestoreAPI",
                     "path": "root/Default/The*Amazing%Counter@01/CloudFirestoreAPI",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/The*Amazing%Counter@01/Default",
                   },
@@ -1525,16 +1528,18 @@ exports[`replace invalid character from counter name 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
@@ -1543,30 +1548,34 @@ exports[`replace invalid character from counter name 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -1612,22 +1621,11 @@ exports[`set() IAM permissions 1`] = `
         "type": "DATASTORE_MODE",
       },
     },
-    "google_project_iam_custom_role": {
-      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
-        "permissions": [
-          "cloudfunctions.functions.get",
-          "datastore.entities.create",
-          "datastore.entities.update",
-        ],
-        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
-      },
-    },
     "google_project_iam_member": {
-      "Function_ProjectIamMember_F891F2CD": {
+      "Function_project-iam-member-KEN73_73B1C2C2": {
         "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "project": "my-project",
-        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+        "role": "roles/datastore.user",
       },
     },
     "google_project_service": {
@@ -1688,16 +1686,18 @@ exports[`set() IAM permissions 2`] = `
                   "CloudFirestoreAPI": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "CloudFirestoreAPI",
                     "path": "root/Default/Counter/CloudFirestoreAPI",
                   },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
@@ -1718,24 +1718,18 @@ exports[`set() IAM permissions 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
-                  },
-                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
-                    },
-                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "DefaultFunction",
                     "path": "root/Default/Function/DefaultFunction",
                   },
@@ -1744,24 +1738,27 @@ exports[`set() IAM permissions 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
                       },
                       "IamServiceAccountCredentialsApi": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "IamServiceAccountCredentialsApi",
                         "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Id",
                         "path": "root/Default/Function/FunctionBucket/Id",
                       },
@@ -1780,26 +1777,29 @@ exports[`set() IAM permissions 2`] = `
                   "FunctionObjectBucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
-                  },
-                  "ProjectIamMember": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
-                    },
-                    "id": "ProjectIamMember",
-                    "path": "root/Default/Function/ProjectIamMember",
                   },
                   "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                     "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
+                  "project-iam-member-KEN.73]}": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "project-iam-member-KEN.73]}",
+                    "path": "root/Default/Function/project-iam-member-KEN.73]}",
                   },
                 },
                 "constructInfo": {
@@ -1816,16 +1816,18 @@ exports[`set() IAM permissions 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
@@ -1834,30 +1836,34 @@ exports[`set() IAM permissions 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },

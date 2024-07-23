@@ -1,5 +1,4 @@
-import { TerraformOutput } from "cdktf/lib/terraform-output";
-import { Lazy } from "cdktf/lib/tokens";
+import { TerraformOutput, Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { App as GCPApp } from "./app";
 import { Function as GcpFunction } from "./function";

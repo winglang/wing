@@ -50,7 +50,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = "onTick()";
+    Node.of(fn).title = "Tick";
 
     new EventMapping(this, App.of(this).makeId(this, "OnTickMapping"), {
       subscriber: fn,
@@ -63,7 +63,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       sourceOp: cloud.ScheduleInflightMethods.TICK,
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
-      name: "onTick()",
+      name: "tick",
     });
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
 

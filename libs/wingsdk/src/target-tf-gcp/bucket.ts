@@ -1,3 +1,4 @@
+import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as GCPFunction } from "./function";
@@ -207,8 +208,24 @@ export class Bucket extends cloud.Bucket {
       throw new Error("buckets can only be bound by tfgcp.Function for now");
     }
 
-    const permissions = calculateBucketPermissions(ops);
-    host.addPermissions(permissions);
+    if (ops.includes(cloud.BucketInflightMethods.SIGNED_URL)) {
+      host._addTokenCreator();
+    }
+
+    for (const role of calculateBucketPermissions(ops)) {
+      const bucketHash = Fn.sha256(this.bucket.name).slice(-8);
+      const permissionHash = Fn.sha256(role).slice(-8);
+
+      new StorageBucketIamMember(
+        this,
+        `bucket-iam-member-${bucketHash}-${permissionHash}`,
+        {
+          bucket: this.bucket.name,
+          role: role,
+          member: `serviceAccount:${host.serviceAccountEmail}`,
+        }
+      );
+    }
 
     host.addEnvironment(this.envName(), this.bucket.name);
     super.onLift(host, ops);

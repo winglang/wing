@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure1 {
     constructor($args) {
@@ -27,8 +28,7 @@ module.exports = function({  }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {
       "root": {
@@ -189,6 +189,9 @@ module.exports = function({  }) {
         },
         "function_name": "get_hello_world0-c8808650",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_hello_world0_IamRole_BE6EA0B6.arn}",
@@ -249,16 +252,21 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -298,15 +306,15 @@ class $Root extends $stdlib.std.Resource {
     const emptyArray = [];
     const num_array = emptyArray;
     const emptyArray2 = [];
-    const clonedArray2 = [...(emptyArray2)];
-    clonedArray2.push(1);
-    clonedArray2.push(2);
-    clonedArray2.push((((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 0) + ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 1)));
-    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2), 3), "clonedArray2.at(2) == 3");
-    const emptySet = new Set([((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2)]);
-    const clonedSet = new Set(emptySet);
+    const clonedArray2 = $macros.__Array_copyMut(false, emptyArray2, );
+    $macros.__MutArray_push(false, clonedArray2, 1);
+    $macros.__MutArray_push(false, clonedArray2, 2);
+    $macros.__MutArray_push(false, clonedArray2, ($macros.__MutArray_at(false, clonedArray2, 0) + $macros.__MutArray_at(false, clonedArray2, 1)));
+    $helpers.assert($helpers.eq($macros.__MutArray_at(false, clonedArray2, 2), 3), "clonedArray2.at(2) == 3");
+    const emptySet = new Set([$macros.__MutArray_at(false, clonedArray2, 2)]);
+    const clonedSet = $macros.__Set_copyMut(false, emptySet, );
     (clonedSet.add(4));
-    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
+    const api = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
     const func = new $Closure1(this, "$Closure1");
     (api.get("/hello/world", func));
     const argReturn = ((n) => {
@@ -340,7 +348,6 @@ class $Root extends $stdlib.std.Resource {
     })));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inference.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

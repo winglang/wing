@@ -38,28 +38,12 @@ exports[`create a schedule 1`] = `
       },
     },
     "google_cloudfunctions_function_iam_member": {
-      "Schedule_OnTick0_invoker-permission-KEN11_7990EE36": {
+      "Schedule_OnTick0_invoker-permission-OKEN8_2A051019": {
         "cloud_function": "\${google_cloudfunctions_function.Schedule_OnTick0_DefaultFunction_0D16428E.name}",
         "member": "serviceAccount:\${google_service_account.Schedule_SchedulerServiceAccount_C23742C8.email}",
         "project": "\${google_cloudfunctions_function.Schedule_OnTick0_DefaultFunction_0D16428E.project}",
         "region": "\${google_cloudfunctions_function.Schedule_OnTick0_DefaultFunction_0D16428E.region}",
         "role": "roles/cloudfunctions.invoker",
-      },
-    },
-    "google_project_iam_custom_role": {
-      "Schedule_OnTick0_CustomRolec8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a_383A478B": {
-        "permissions": [
-          "cloudfunctions.functions.get",
-        ],
-        "role_id": "cloudfunctions.customc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
-        "title": "Custom Role for Cloud Function c8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
-      },
-    },
-    "google_project_iam_member": {
-      "Schedule_OnTick0_ProjectIamMember_5C834109": {
-        "member": "serviceAccount:\${google_service_account.Schedule_OnTick0_ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a_904F6F8E.email}",
-        "project": "my-project",
-        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Schedule_OnTick0_CustomRolec8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a_383A478B.role_id}",
       },
     },
     "google_project_service": {
@@ -122,24 +106,18 @@ exports[`create a schedule 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "Asset",
                         "path": "root/Default/Schedule/OnTick0/Asset",
-                      },
-                      "CustomRolec8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "CustomRolec8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
-                        "path": "root/Default/Schedule/OnTick0/CustomRolec8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
                       },
                       "DefaultFunction": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "DefaultFunction",
                         "path": "root/Default/Schedule/OnTick0/DefaultFunction",
                       },
@@ -148,24 +126,27 @@ exports[`create a schedule 2`] = `
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
+                            "display": {},
                             "id": "Default",
                             "path": "root/Default/Schedule/OnTick0/FunctionBucket/Default",
                           },
                           "IamServiceAccountCredentialsApi": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
+                            "display": {},
                             "id": "IamServiceAccountCredentialsApi",
                             "path": "root/Default/Schedule/OnTick0/FunctionBucket/IamServiceAccountCredentialsApi",
                           },
                           "Id": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
+                              "version": "0.20.7",
                             },
+                            "display": {},
                             "id": "Id",
                             "path": "root/Default/Schedule/OnTick0/FunctionBucket/Id",
                           },
@@ -184,34 +165,29 @@ exports[`create a schedule 2`] = `
                       "FunctionObjectBucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "FunctionObjectBucket",
                         "path": "root/Default/Schedule/OnTick0/FunctionObjectBucket",
-                      },
-                      "ProjectIamMember": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "ProjectIamMember",
-                        "path": "root/Default/Schedule/OnTick0/ProjectIamMember",
                       },
                       "ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
+                        "display": {},
                         "id": "ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
                         "path": "root/Default/Schedule/OnTick0/ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a",
                       },
-                      "invoker-permission-KEN.11]}": {
+                      "invoker-permission-OKEN.8]}": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
+                          "version": "0.20.7",
                         },
-                        "id": "invoker-permission-KEN.11]}",
-                        "path": "root/Default/Schedule/OnTick0/invoker-permission-KEN.11]}",
+                        "display": {},
+                        "id": "invoker-permission-OKEN.8]}",
+                        "path": "root/Default/Schedule/OnTick0/invoker-permission-OKEN.8]}",
                       },
                     },
                     "constructInfo": {
@@ -228,16 +204,18 @@ exports[`create a schedule 2`] = `
                   "Scheduler": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "Scheduler",
                     "path": "root/Default/Schedule/Scheduler",
                   },
                   "SchedulerServiceAccount": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.20.3",
+                      "version": "0.20.7",
                     },
+                    "display": {},
                     "id": "SchedulerServiceAccount",
                     "path": "root/Default/Schedule/SchedulerServiceAccount",
                   },
@@ -256,16 +234,18 @@ exports[`create a schedule 2`] = `
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "google",
                 "path": "root/Default/google",
               },
               "random": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
+                  "version": "0.20.7",
                 },
+                "display": {},
                 "id": "random",
                 "path": "root/Default/random",
               },
@@ -274,30 +254,34 @@ exports[`create a schedule 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
+              "version": "0.20.7",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
+          "version": "0.20.7",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.20.3",
+      "version": "0.20.7",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },

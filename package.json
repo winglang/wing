@@ -5,7 +5,7 @@
     "@winglang/compatibility-spy": "workspace:^",
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
-    "turbo": "^1.13.3"
+    "turbo": "^2.0.7"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",
@@ -17,21 +17,23 @@
     "docs": "./scripts/docsite.sh",
     "install": "bash scripts/setup_wasi.sh",
     "postinstall": "link-bundles && generate-workspace",
-    "wing": "turbo compile --filter=winglang --output-logs=errors-only && ./apps/wing/bin/wing"
+    "wing": "turbo compile -F winglang --output-logs=new-only && ./apps/wing/bin/wing"
   },
   "volta": {
     "node": "20.11.1",
     "pnpm": "8.15.1"
   },
+  "packageManager": "pnpm@8.15.1",
   "pnpm": {
     "overrides": {
-      "mime": "^3.0.0"
+      "mime": "^3.0.0",
+      "axios@>=0.8.1 <0.28.0": ">=0.28.0"
     },
     "patchedDependencies": {
       "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
       "mime@3.0.0": "patches/mime@3.0.0.patch",
       "protobufjs@7.2.5": "patches/protobufjs@7.2.5.patch",
-      "jsii@5.3.11": "patches/jsii@5.3.11.patch"
+      "jsii@5.3.39": "patches/jsii@5.3.39.patch"
     }
   }
 }

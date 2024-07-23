@@ -74,16 +74,15 @@ export class Api extends cloud.Api implements ISimulatorResource {
     }
 
     const functionHandler = lift({ handler: inflight }).inflight(
-      async (ctx, event) => {
+      async (ctx, event: cloud.ApiRequest) => {
         if (!event) {
           throw new Error("invalid API request event");
         }
-        let req = JSON.parse(event) as cloud.ApiRequest;
-        const response = await ctx.handler(req);
+        const response = await ctx.handler(event);
         if (!response) {
           return undefined;
         } else {
-          return JSON.stringify(response);
+          return response;
         }
       }
     );
@@ -96,7 +95,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
     ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = `${method.toUpperCase()} ${pathPattern}`;
-    Node.of(fn).hidden = true;
 
     const eventMapping = new EventMapping(
       this,

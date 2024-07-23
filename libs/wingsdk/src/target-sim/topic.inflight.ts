@@ -12,7 +12,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { LogLevel, TraceType } from "../std";
+import { LogLevel, Json, TraceType } from "../std";
 
 export class Topic
   implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
@@ -58,7 +58,7 @@ export class Topic
         timestamp: new Date().toISOString(),
       });
 
-      await fnClient.invokeAsync(message);
+      await fnClient.invokeAsync(Json._fromAny(message));
     }
   }
 

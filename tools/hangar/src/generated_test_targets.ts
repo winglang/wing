@@ -13,12 +13,14 @@ export async function compileTest(
   sourceDir: string,
   wingFile: string,
   env?: Record<string, string>,
-  includeJavaScriptInSnapshots: boolean = true
+  includeJavaScriptInSnapshots: boolean = true,
+  skipMarkdownSnapshot: boolean = false,
+  commandArgs: string[] = []
 ) {
   const fileMap: Record<string, string> = {};
   const wingBasename = basename(wingFile);
   const platforms = ["tf-aws"];
-  const args = ["compile"];
+  const args = ["compile", ...commandArgs];
   const targetDir = join(
     sourceDir,
     "target",
@@ -71,13 +73,21 @@ export async function compileTest(
     fileMap[subpath] = fileContents;
   }
 
-  await createMarkdownSnapshot(fileMap, absoluteWingPath, "compile", "tf-aws");
+  if (!skipMarkdownSnapshot) {
+    await createMarkdownSnapshot(
+      fileMap,
+      absoluteWingPath,
+      "compile",
+      "tf-aws"
+    );
+  }
 }
 
 export async function testTest(
   sourceDir: string,
   wingFile: string,
-  env?: Record<string, string>
+  env?: Record<string, string>,
+  skipMarkdownSnapshot: boolean = false
 ) {
   const fileMap: Record<string, string> = {};
   const platforms = ["sim"];
@@ -106,8 +116,9 @@ export async function testTest(
 
   if (out.stderr) fileMap["stderr.log"] = out.stderr;
   if (out.stdout) fileMap["stdout.log"] = out.stdout;
-
-  await createMarkdownSnapshot(fileMap, absoluteWingPath, "test", "sim");
+  if (!skipMarkdownSnapshot) {
+    await createMarkdownSnapshot(fileMap, absoluteWingPath, "test", "sim");
+  }
 }
 
 function isEntrypointFile(path: string) {

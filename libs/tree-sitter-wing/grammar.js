@@ -11,7 +11,6 @@ const PREC = {
   ADD: 100,
   MULTIPLY: 110,
   UNARY: 120,
-  OPTIONAL_TEST: 130,
   POWER: 140,
   STRUCTURED_ACCESS: 150, // x[y]
   MEMBER: 160,
@@ -22,7 +21,7 @@ const PREC = {
 module.exports = grammar({
   name: "wing",
 
-  extras: ($) => [$.comment, $.doc, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
+  extras: ($) => [$.comment, $.doc, /[\s\p{Zs}\uFEFF\u2060\u200B]/u],
 
   word: ($) => $.identifier,
 
@@ -43,7 +42,6 @@ module.exports = grammar({
     // These modifier conflicts should be solved through GLR parsing
     [$.field_modifiers, $.method_modifiers],
     [$.class_modifiers, $.closure_modifiers, $.interface_modifiers],
-    [$.inflight_method_signature, $.field_modifiers],
   ],
 
   supertypes: ($) => [$.expression, $._literal],
@@ -55,7 +53,12 @@ module.exports = grammar({
       choice(braced(optional(repeat($._statement))), $.AUTOMATIC_BLOCK),
     _semicolon: ($) => choice(";", $.AUTOMATIC_SEMICOLON),
     comment: ($) =>
-      token(choice(seq(/\/\/[^\/]/, /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))),
+      token(
+        choice(
+          seq(/\/\/[^\/]/, /.*/),
+          seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/")
+        )
+      ),
 
     doc: ($) => seq("///", field("content", $.doc_content)),
     doc_content: ($) => /.*/,
@@ -69,6 +72,7 @@ module.exports = grammar({
       ),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
+    parenthesized_identifier: ($) => seq("(", $.identifier, ")"),
     _type_identifier: ($) => alias($.identifier, $.type_identifier),
     _member_identifier: ($) => alias($.identifier, $.member_identifier),
     _reference_identifier: ($) => alias($.identifier, $.reference_identifier),
@@ -103,7 +107,7 @@ module.exports = grammar({
 
     accessor: ($) => choice(".", "?."),
 
-    inflight_specifier: ($) => "inflight",
+    phase_specifier: ($) => choice("unphased", "inflight"),
 
     _statement: ($) =>
       choice(
@@ -127,7 +131,7 @@ module.exports = grammar({
         $.compiler_dbg_env,
         $.super_constructor_statement,
         $.throw_statement,
-        $.lift_statement,
+        $.lift_statement
       ),
 
     import_statement: ($) =>
@@ -164,11 +168,24 @@ module.exports = grammar({
       seq("throw", optional(field("expression", $.expression)), $._semicolon),
 
     lift_statement: ($) =>
-      seq("lift", field("lift_qualifications", $.lift_qualifications), field("block", $.block)),
+      seq(
+        "lift",
+        field("lift_qualifications", $.lift_qualifications),
+        field("block", $.block)
+      ),
 
-    lift_qualifications: ($) => seq("{", field("qualification", commaSep1($.lift_qualification)), "}"),
+    lift_qualifications: ($) =>
+      seq("{", field("qualification", commaSep1($.lift_qualification)), "}"),
 
-    lift_qualification: ($) => seq(field("obj", $.expression), ":", choice(field("ops", $.identifier), field("ops", seq("[", commaSep1($.identifier), "]")))),
+    lift_qualification: ($) =>
+      seq(
+        field("obj", $.expression),
+        ":",
+        choice(
+          field("ops", $.identifier),
+          field("ops", seq("[", commaSep1($.identifier), "]"))
+        )
+      ),
 
     assignment_operator: ($) => choice("=", "+=", "-="),
 
@@ -202,7 +219,7 @@ module.exports = grammar({
     // Classes
 
     class_modifiers: ($) =>
-      repeat1(choice($.access_modifier, $.inflight_specifier)),
+      repeat1(choice($.access_modifier, $.phase_specifier)),
 
     class_definition: ($) =>
       seq(
@@ -222,7 +239,7 @@ module.exports = grammar({
         choice(
           $.access_modifier,
           $.static,
-          $.inflight_specifier,
+          $.phase_specifier,
           $.reassignable
         )
       ),
@@ -239,7 +256,7 @@ module.exports = grammar({
     /// Interfaces
 
     interface_modifiers: ($) =>
-      repeat1(choice($.access_modifier, $.inflight_specifier)),
+      repeat1(choice($.access_modifier, $.phase_specifier)),
 
     interface_definition: ($) =>
       seq(
@@ -251,11 +268,7 @@ module.exports = grammar({
       ),
 
     interface_implementation: ($) =>
-      braced(
-        repeat(
-          choice($.method_signature, $.inflight_method_signature, $.class_field)
-        )
-      ),
+      braced(repeat(choice($.method_definition, $.class_field))),
 
     inclusive_range: ($) => "=",
 
@@ -334,7 +347,15 @@ module.exports = grammar({
         optional(
           seq(
             "catch",
-            optional(field("exception_identifier", $.identifier)),
+            optional(
+              choice(
+                field("exception_identifier", $.identifier),
+                field(
+                  "parenthesized_exception_identifier",
+                  $.parenthesized_identifier
+                )
+              )
+            ),
             field("catch_block", $.block)
           )
         ),
@@ -343,7 +364,6 @@ module.exports = grammar({
 
     expression: ($) =>
       choice(
-        $.unwrap_or,
         $.binary_expression,
         $.unary_expression,
         $.new_expression,
@@ -357,7 +377,6 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.json_literal,
         $.struct_literal,
-        $.optional_test,
         $.compiler_dbg_panic,
         $.optional_unwrap,
         $.intrinsic
@@ -444,9 +463,6 @@ module.exports = grammar({
         )
       ),
 
-    optional_test: ($) =>
-      prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
-
     compiler_dbg_panic: ($) => "😱",
     compiler_dbg_env: ($) => seq("🗺️", optional(";")),
 
@@ -510,7 +526,7 @@ module.exports = grammar({
     function_type: ($) =>
       prec.right(
         seq(
-          optional(field("inflight", $.inflight_specifier)),
+          optional(field("phase_specifier", $.phase_specifier)),
           field("parameter_types", $.parameter_type_list),
           seq(":", field("return_type", $._type))
         )
@@ -523,7 +539,7 @@ module.exports = grammar({
 
     initializer: ($) =>
       seq(
-        optional(field("inflight", $.inflight_specifier)),
+        optional(field("phase_specifier", $.phase_specifier)),
         field("ctor_name", "new"),
         field("parameter_list", $.parameter_list),
         field("block", $.block)
@@ -533,21 +549,13 @@ module.exports = grammar({
 
     _return_type: ($) => $._type_annotation,
 
-    method_signature: ($) =>
-      seq(
-        field("name", $.identifier),
-        field("parameter_list", $.parameter_list),
-        optional($._return_type),
-        $._semicolon
-      ),
-
     method_modifiers: ($) =>
       repeat1(
         choice(
           $.extern_modifier,
           $.access_modifier,
           $.static,
-          $.inflight_specifier
+          $.phase_specifier
         )
       ),
 
@@ -558,15 +566,6 @@ module.exports = grammar({
         field("parameter_list", $.parameter_list),
         optional($._return_type),
         choice(field("block", $.block), $._semicolon)
-      ),
-
-    inflight_method_signature: ($) =>
-      seq(
-        field("phase_modifier", $.inflight_specifier),
-        field("name", $.identifier),
-        field("parameter_list", $.parameter_list),
-        optional($._return_type),
-        $._semicolon
       ),
 
     access_modifier: ($) => choice("pub", "protected", "internal"),
@@ -603,16 +602,6 @@ module.exports = grammar({
     _container_value_type: ($) =>
       seq("<", field("type_parameter", $._type), ">"),
 
-    unwrap_or: ($) =>
-      prec.right(
-        PREC.UNWRAP_OR,
-        seq(
-          field("left", $.expression),
-          field("op", "??"),
-          field("right", $.expression)
-        )
-      ),
-
     optional_unwrap: ($) =>
       prec.right(PREC.OPTIONAL_UNWRAP, seq($.expression, "!")),
 
@@ -636,34 +625,36 @@ module.exports = grammar({
     },
 
     binary_expression: ($) => {
-      /** @type {Array<[RuleOrLiteral, number]>} */
+      /** @type {Array<[RuleOrLiteral, number, "left" | "right"]>} */
       const table = [
-        ["+", PREC.ADD],
-        ["-", PREC.ADD],
-        ["*", PREC.MULTIPLY],
-        ["/", PREC.MULTIPLY],
-        ["\\", PREC.MULTIPLY],
-        ["%", PREC.MULTIPLY],
-        ["**", PREC.POWER],
-        ["||", PREC.LOGICAL_OR],
-        ["&&", PREC.LOGICAL_AND],
-        //['|', PREC.INCLUSIVE_OR],
-        //['^', PREC.EXCLUSIVE_OR],
-        //['&', PREC.BITWISE_AND],
-        ["==", PREC.EQUAL],
-        ["!=", PREC.EQUAL],
-        [">", PREC.RELATIONAL],
-        [">=", PREC.RELATIONAL],
-        ["<=", PREC.RELATIONAL],
-        ["<", PREC.RELATIONAL],
-        //['<<', PREC.SHIFT],
-        //['>>', PREC.SHIFT],
-        //['>>>', PREC.SHIFT],
+        ["+", PREC.ADD, "left"],
+        ["-", PREC.ADD, "left"],
+        ["*", PREC.MULTIPLY, "left"],
+        ["/", PREC.MULTIPLY, "left"],
+        ["\\", PREC.MULTIPLY, "left"],
+        ["%", PREC.MULTIPLY, "left"],
+        ["**", PREC.POWER, "left"],
+        ["||", PREC.LOGICAL_OR, "left"],
+        ["&&", PREC.LOGICAL_AND, "left"],
+        //['|', PREC.INCLUSIVE_OR, "left"],
+        //['^', PREC.EXCLUSIVE_OR, "left"],
+        //['&', PREC.BITWISE_AND, "left"],
+        ["==", PREC.EQUAL, "left"],
+        ["!=", PREC.EQUAL, "left"],
+        [">", PREC.RELATIONAL, "left"],
+        [">=", PREC.RELATIONAL, "left"],
+        ["<=", PREC.RELATIONAL, "left"],
+        ["<", PREC.RELATIONAL, "left"],
+        //['<<', PREC.SHIFT, "left"],
+        //['>>', PREC.SHIFT, "left"],
+        //['>>>', PREC.SHIFT, "left"],
+        ["??", PREC.UNWRAP_OR, "right"],
       ];
 
       return choice(
-        ...table.map(([operator, precedence]) => {
-          return prec.left(
+        ...table.map(([operator, precedence, associativity]) => {
+          const precFn = associativity === "left" ? prec.left : prec.right;
+          return precFn(
             precedence,
             seq(
               field("left", $.expression),
@@ -675,7 +666,7 @@ module.exports = grammar({
       );
     },
 
-    closure_modifiers: ($) => repeat1(choice($.inflight_specifier)),
+    closure_modifiers: ($) => repeat1(choice($.phase_specifier)),
 
     closure: ($) =>
       seq(
@@ -708,7 +699,7 @@ module.exports = grammar({
       ),
 
     map_literal_member: ($) => seq($.expression, "=>", $.expression),
-    struct_literal_member: ($) => seq($.identifier, ":", $.expression),
+    struct_literal_member: ($) => choice($.identifier, seq($.identifier, ":", $.expression)),
     structured_access_expression: ($) =>
       prec.right(
         PREC.STRUCTURED_ACCESS,
@@ -727,8 +718,7 @@ module.exports = grammar({
     json_map_literal: ($) =>
       braced(commaSep(field("member", $.json_literal_member))),
     json_literal_member: ($) =>
-      seq(choice($.identifier, $.string), ":", $.expression),
-
+      choice($.identifier, seq(choice($.identifier, $.string), ":", $.expression)),
     json_container_type: ($) => $._json_types,
 
     _json_types: ($) => choice("Json", "MutJson"),

@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class $Closure1 {
     constructor($args) {
@@ -68,6 +69,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $c5 }) {
   class $Closure2 {
     constructor($args) {
@@ -92,6 +94,7 @@ module.exports = function({ $c5 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $student_hrlyWage, $student_major, $student_name }) {
   class $Closure3 {
     constructor($args) {
@@ -115,6 +118,7 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $ta_hrlyWage }) {
   class $Closure4 {
     constructor($args) {
@@ -136,6 +140,7 @@ module.exports = function({ $ta_hrlyWage }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $B }) {
   class $Closure5 {
     constructor($args) {
@@ -158,6 +163,7 @@ module.exports = function({ $B }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class A {
     constructor(sound){
@@ -175,6 +181,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $A }) {
   class B extends $A {
     constructor(sound){
@@ -194,6 +201,7 @@ module.exports = function({ $A }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Boom }) {
   class Bam extends $Boom {
     constructor($args) {
@@ -210,6 +218,7 @@ module.exports = function({ $Boom }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Bar {
     constructor($args) {
@@ -221,10 +230,26 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.Bar-1.cjs.map
 ```
 
+## inflight.BaseClassWithCtorArg-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({  }) {
+  class BaseClassWithCtorArg {
+    constructor({  }) {
+    }
+  }
+  return BaseClassWithCtorArg;
+}
+//# sourceMappingURL=inflight.BaseClassWithCtorArg-1.cjs.map
+```
+
 ## inflight.Baz-1.cjs
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Bar }) {
   class Baz extends $Bar {
     constructor($args) {
@@ -241,6 +266,7 @@ module.exports = function({ $Bar }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Boom {
     constructor($args) {
@@ -256,6 +282,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class C1 {
     constructor($args) {
@@ -271,6 +298,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $C1 }) {
   class C1Ext1 extends $C1 {
     constructor($args) {
@@ -287,6 +315,7 @@ module.exports = function({ $C1 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $C1Ext1 }) {
   class C1Ext2 extends $C1Ext1 {
     constructor($args) {
@@ -303,6 +332,7 @@ module.exports = function({ $C1Ext1 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $C1Ext2 }) {
   class C1Ext3 extends $C1Ext2 {
     constructor($args) {
@@ -319,6 +349,7 @@ module.exports = function({ $C1Ext2 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class C2 {
     constructor($args) {
@@ -334,6 +365,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $C2 }) {
   class C2Ext1 extends $C2 {
     constructor($args) {
@@ -350,6 +382,7 @@ module.exports = function({ $C2 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $C2 }) {
   class C2Ext2 extends $C2 {
     constructor($args) {
@@ -366,6 +399,7 @@ module.exports = function({ $C2 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $C2 }) {
   class C2Ext3 extends $C2 {
     constructor($args) {
@@ -382,6 +416,7 @@ module.exports = function({ $C2 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class C3 {
     constructor($args) {
@@ -397,6 +432,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class C4 {
     constructor($args) {
@@ -412,6 +448,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class C5 {
     constructor($args) {
@@ -430,10 +467,27 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.C5-1.cjs.map
 ```
 
+## inflight.DerivedClassWithInnerClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({ $BaseClassWithCtorArg }) {
+  class DerivedClassWithInnerClass extends $BaseClassWithCtorArg {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return DerivedClassWithInnerClass;
+}
+//# sourceMappingURL=inflight.DerivedClassWithInnerClass-1.cjs.map
+```
+
 ## inflight.DocClass-1.cjs
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class DocClass {
     constructor($args) {
@@ -449,6 +503,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Bar }) {
   class Foo extends $Bar {
     constructor($args) {
@@ -463,10 +518,42 @@ module.exports = function({ $Bar }) {
 //# sourceMappingURL=inflight.Foo-1.cjs.map
 ```
 
+## inflight.InnerBaseClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({  }) {
+  class InnerBaseClass {
+    constructor({  }) {
+    }
+  }
+  return InnerBaseClass;
+}
+//# sourceMappingURL=inflight.InnerBaseClass-1.cjs.map
+```
+
+## inflight.InnerDerivedClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({ $InnerBaseClass }) {
+  class InnerDerivedClass extends $InnerBaseClass {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return InnerDerivedClass;
+}
+//# sourceMappingURL=inflight.InnerDerivedClass-1.cjs.map
+```
+
 ## inflight.PaidStudent-1.cjs
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Student }) {
   class PaidStudent extends $Student {
     constructor($args) {
@@ -483,6 +570,7 @@ module.exports = function({ $Student }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Person {
     constructor($args) {
@@ -498,6 +586,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Person }) {
   class Student extends $Person {
     constructor($args) {
@@ -514,6 +603,7 @@ module.exports = function({ $Person }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $PaidStudent }) {
   class TeacherAid extends $PaidStudent {
     constructor($args) {
@@ -532,8 +622,7 @@ module.exports = function({ $PaidStudent }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -549,16 +638,21 @@ module.exports = function({ $PaidStudent }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class C1 extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -1060,6 +1154,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    if ($preflightTypesMap[20]) { throw new Error("A is already in type map"); }
+    $preflightTypesMap[20] = A;
     class B extends A {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -1083,6 +1179,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    if ($preflightTypesMap[21]) { throw new Error("B is already in type map"); }
+    $preflightTypesMap[21] = B;
     class $Closure5 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -1104,8 +1202,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$helpers.preflightClassSingleton(this, 21), ["sound"]],
+            [B, []],
           ],
           "$inflight_init": [
+            [$helpers.preflightClassSingleton(this, 21), []],
+            [B, []],
           ],
         });
       }
@@ -1250,6 +1352,127 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class BaseClassWithCtorArg extends $stdlib.std.Resource {
+      constructor($scope, $id, x) {
+        super($scope, $id);
+        this.x = x;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.BaseClassWithCtorArg-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const BaseClassWithCtorArgClient = ${BaseClassWithCtorArg._toInflightType()};
+            const client = new BaseClassWithCtorArgClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class DerivedClassWithInnerClass extends BaseClassWithCtorArg {
+      constructor($scope, $id, ) {
+        class InnerBaseClass extends $stdlib.std.Resource {
+          constructor($scope, $id, x) {
+            super($scope, $id);
+            this.x = x;
+          }
+          method() {
+          }
+          static _toInflightType() {
+            return `
+              require("${$helpers.normalPath(__dirname)}/inflight.InnerBaseClass-1.cjs")({
+              })
+            `;
+          }
+          _toInflight() {
+            return `
+              (await (async () => {
+                const InnerBaseClassClient = ${InnerBaseClass._toInflightType()};
+                const client = new InnerBaseClassClient({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `;
+          }
+          get _liftMap() {
+            return ({
+              "$inflight_init": [
+              ],
+            });
+          }
+        }
+        class InnerDerivedClass extends InnerBaseClass {
+          constructor($scope, $id, ) {
+            super($scope, $id, 1);
+            (this.method());
+            (super.method());
+            this.x;
+          }
+          static _toInflightType() {
+            return `
+              require("${$helpers.normalPath(__dirname)}/inflight.InnerDerivedClass-1.cjs")({
+                $InnerBaseClass: ${$stdlib.core.liftObject(InnerBaseClass)},
+              })
+            `;
+          }
+          _toInflight() {
+            return `
+              (await (async () => {
+                const InnerDerivedClassClient = ${InnerDerivedClass._toInflightType()};
+                const client = new InnerDerivedClassClient({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `;
+          }
+          get _liftMap() {
+            return $stdlib.core.mergeLiftDeps(super._liftMap, {
+              "$inflight_init": [
+              ],
+            });
+          }
+        }
+        super($scope, $id, 1);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.DerivedClassWithInnerClass-1.cjs")({
+            $BaseClassWithCtorArg: ${$stdlib.core.liftObject(BaseClassWithCtorArg)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const DerivedClassWithInnerClassClient = ${DerivedClassWithInnerClass._toInflightType()};
+            const client = new DerivedClassWithInnerClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
     new C1(this, "C1");
     const c2 = new C2(this, "C2");
     $helpers.assert($helpers.eq(c2.x, 1), "c2.x == 1");
@@ -1259,23 +1482,22 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(c2Ext2.x, 1), "c2Ext2.x == 1");
     const c2Ext3 = new C2Ext3(this, "C2Ext3");
     $helpers.assert($helpers.eq(c2Ext3.x, 1), "c2Ext3.x == 1");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight classes with no ctor or ctor args", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight classes with no ctor or ctor args", new $Closure1(this, "$Closure1"));
     const c3 = new C3(this, "C3", 1, 2);
     $helpers.assert($helpers.eq(c3.x, 1), "c3.x == 1");
     $helpers.assert($helpers.eq(c3.y, 2), "c3.y == 2");
     $helpers.assert($helpers.eq((C4.m(this)), 1), "C4.m() == 1");
     const c5 = new C5(this, "C5");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access inflight field", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:access inflight field", new $Closure2(this, "$Closure2"));
     const student = new PaidStudent(this, "PaidStudent", "Tom", "MySpace", 38);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:check derived class instance variables", new $Closure3(this, "$Closure3"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:check derived class instance variables", new $Closure3(this, "$Closure3"));
     const ta = new TeacherAid(this, "TeacherAid", "John", "Rock'n Roll", 50);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:devived class init body happens after super", new $Closure4(this, "$Closure4"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight super constructor", new $Closure5(this, "$Closure5"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:devived class init body happens after super", new $Closure4(this, "$Closure4"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight super constructor", new $Closure5(this, "$Closure5"));
     new Foo(this, "Foo");
     new Baz(this, "Baz");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "class.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

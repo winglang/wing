@@ -97,7 +97,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE_ASYNC,
-      name: "onMessage()",
+      name: "subscriber",
     });
 
     return fn;

@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $res }) {
   class $Closure1 {
     constructor($args) {
@@ -25,6 +26,7 @@ module.exports = function({ $res }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Another }) {
   class $Closure2 {
     constructor($args) {
@@ -46,6 +48,7 @@ module.exports = function({ $Another }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $globalCounter }) {
   class Another {
     constructor($args) {
@@ -71,6 +74,7 @@ module.exports = function({ $globalCounter }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class First {
     constructor($args) {
@@ -86,6 +90,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Another, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalArrayOfStr, $globalBool, $globalBucket, $globalMapOfNum, $globalNum, $globalSetOfStr, $globalStr, $util_Util }) {
   class MyResource {
     constructor($args) {
@@ -99,8 +104,8 @@ module.exports = function({ $Another, $globalAnother, $globalAnother_first_myRes
       $helpers.assert($helpers.eq($globalStr, "hello"), "globalStr == \"hello\"");
       $helpers.assert($helpers.eq($globalBool, true), "globalBool == true");
       $helpers.assert($helpers.eq($globalNum, 42), "globalNum == 42");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($globalArrayOfStr, 0), "hello"), "globalArrayOfStr.at(0) == \"hello\"");
-      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })($globalMapOfNum, "a"), (-5)), "globalMapOfNum.get(\"a\") == -5");
+      $helpers.assert($helpers.eq($macros.__Array_at(false, $globalArrayOfStr, 0), "hello"), "globalArrayOfStr.at(0) == \"hello\"");
+      $helpers.assert($helpers.eq($macros.__Map_get(false, $globalMapOfNum, "a"), (-5)), "globalMapOfNum.get(\"a\") == -5");
       $helpers.assert((await $globalSetOfStr.has("a")), "globalSetOfStr.has(\"a\")");
       $helpers.assert($helpers.eq($globalAnother_myField, "hello!"), "globalAnother.myField == \"hello!\"");
       (await $globalAnother_first_myResource.put("key", "value"));
@@ -120,6 +125,7 @@ module.exports = function({ $Another, $globalAnother, $globalAnother_first_myRes
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
     constructor($args) {
@@ -144,8 +150,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -260,6 +265,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         },
         "function_name": "Topic-OnMessage0-c8bb74dc",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.MyResource_Topic-OnMessage0_IamRole_CFB3A523.arn}",
@@ -363,21 +371,26 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+        this.myResource = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
       }
       static _toInflightType() {
         return `
@@ -436,8 +449,8 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.localTopic = this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "Topic");
-        this.localCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+        this.localTopic = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "Topic");
+        this.localCounter = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
         const $parentThis = this;
         class R extends $stdlib.std.Resource {
           _id = $stdlib.core.closureId();
@@ -500,6 +513,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "myPut": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
             [Another, ["myStaticMethod"]],
             [globalAnother, ["myMethod"]],
             [globalAnother.first.myResource, ["put"]],
@@ -515,6 +529,7 @@ class $Root extends $stdlib.std.Resource {
             [this.localTopic, ["publish"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [Another, []],
             [globalAnother, []],
             [globalAnother.first.myResource, []],
@@ -590,8 +605,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
-    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+    const globalBucket = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const globalCounter = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
     const globalStr = "hello";
     const globalBool = true;
     const globalNum = 42;
@@ -600,11 +615,10 @@ class $Root extends $stdlib.std.Resource {
     const globalSetOfStr = new Set(["a", "b"]);
     const globalAnother = new Another(this, "Another");
     const res = new MyResource(this, "MyResource");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access cloud resource through static methods only", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:access cloud resource through static methods only", new $Closure2(this, "$Closure2"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource_captures_globals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

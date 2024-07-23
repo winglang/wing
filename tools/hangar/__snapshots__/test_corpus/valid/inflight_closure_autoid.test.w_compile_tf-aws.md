@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $i }) {
   class $Closure1 {
     constructor($args) {
@@ -25,6 +26,7 @@ module.exports = function({ $i }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $inflights }) {
   class $Closure2 {
     constructor($args) {
@@ -35,7 +37,7 @@ module.exports = function({ $inflights }) {
     }
     async handle() {
       for (const i of $helpers.range(0,5,false)) {
-        $helpers.assert($helpers.eq((await ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($inflights, i)()), i), "inflights.at(i)() == i");
+        $helpers.assert($helpers.eq((await $macros.__Array_at(false, $inflights, i)()), i), "inflights.at(i)() == i");
       }
     }
   }
@@ -50,8 +52,7 @@ module.exports = function({ $inflights }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -67,15 +68,20 @@ module.exports = function({ $inflights }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -136,12 +142,11 @@ class $Root extends $stdlib.std.Resource {
           });
         }
       }
-      inflights.push(new $Closure1(this, "$Closure1"));
+      $macros.__MutArray_push(false, inflights, new $Closure1(this, "$Closure1"));
     }
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight closure auto id", new $Closure2(this, "$Closure2"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight closure auto id", new $Closure2(this, "$Closure2"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_closure_autoid.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map

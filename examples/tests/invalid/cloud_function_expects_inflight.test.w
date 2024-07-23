@@ -1,7 +1,7 @@
 bring cloud;
 
-new cloud.Function((name: str): str => {
-  return "Hello {name}";
+new cloud.Function((name: Json?): Json? => {
+  return "Hello {name?.tryAsStr() ?? "world"}!";
 });
 // ^ Expected type to be "inflight (any): any", but got "preflight (str): str" instead
 

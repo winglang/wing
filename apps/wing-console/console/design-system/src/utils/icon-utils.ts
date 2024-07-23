@@ -1,8 +1,6 @@
 import * as OutlineHeroIcons from "@heroicons/react/24/outline";
 import * as SolidHeroIcons from "@heroicons/react/24/solid";
 
-import { RedisIcon } from "../icons/redis-icon.js";
-
 import type { Colors } from "./colors.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -64,20 +62,17 @@ export const getResourceIconComponent = (
     case "@winglang/sdk.cloud.Api": {
       return iconSet.CloudIcon;
     }
-    case "@winglang/sdk.ex.Table": {
-      return iconSet.TableCellsIcon;
-    }
     case "@winglang/sdk.cloud.Schedule": {
       return iconSet.ClockIcon;
-    }
-    case "@winglang/sdk.ex.Redis": {
-      return RedisIcon;
     }
     case "@winglang/sdk.std.Test": {
       return iconSet.BeakerIcon;
     }
     case "@winglang/sdk.cloud.Secret": {
       return iconSet.KeyIcon;
+    }
+    case "@winglang/sdk.cloud.Endpoint": {
+      return iconSet.LinkIcon;
     }
     default: {
       return iconSet.CubeIcon;
@@ -214,25 +209,11 @@ export const getResourceIconColors = (options: {
         options.forceDarken && colors.amber.forceDarken,
       ];
     }
-    case "@winglang/sdk.ex.Table": {
-      return [
-        colors.cyan.default,
-        options.darkenOnGroupHover && colors.cyan.groupHover,
-        options.forceDarken && colors.cyan.forceDarken,
-      ];
-    }
     case "@winglang/sdk.cloud.Schedule": {
       return [
         colors.purple.default,
         options.darkenOnGroupHover && colors.purple.groupHover,
         options.forceDarken && colors.purple.forceDarken,
-      ];
-    }
-    case "@winglang/sdk.ex.Redis": {
-      return [
-        colors.red.default,
-        options.darkenOnGroupHover && colors.red.groupHover,
-        options.forceDarken && colors.red.forceDarken,
       ];
     }
     case "@winglang/sdk.cloud.Website": {

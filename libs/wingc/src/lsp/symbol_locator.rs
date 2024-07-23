@@ -225,7 +225,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			return;
 		}
 
-		self.ctx.push_stmt(node.idx);
+		self.ctx.push_stmt(node);
 
 		// Handle situations where symbols are actually defined in inner scopes
 		match &node.kind {
@@ -302,7 +302,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			return;
 		}
 
-		self.ctx.push_expr(node.id);
+		self.ctx.push_expr(&node);
 
 		match &node.kind {
 			ExprKind::New(new_expr) => 'new_expr: {

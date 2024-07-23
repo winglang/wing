@@ -1,5 +1,4 @@
-import { TerraformOutput } from "cdktf/lib/terraform-output";
-import { Lazy } from "cdktf/lib/tokens";
+import { TerraformOutput, Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { Function as AzureFunction } from "./function";
 import * as core from "../core";

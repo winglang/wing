@@ -76,14 +76,6 @@ exports[`create a schedule 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -145,6 +137,7 @@ exports[`create a schedule 1`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -191,7 +184,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "onTick()",
+        "name": "tick",
         "source": "root/my_schedule",
         "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
@@ -302,14 +295,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -349,7 +334,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "onTick()",
+                "title": "Tick",
               },
               "id": "OnTick0",
               "path": "root/my_schedule/OnTick0",
@@ -395,6 +380,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -441,7 +427,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "onTick()",
+        "name": "tick",
         "source": "root/my_schedule",
         "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
@@ -552,14 +538,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -599,7 +577,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "onTick()",
+                "title": "Tick",
               },
               "id": "OnTick0",
               "path": "root/my_schedule/OnTick0",
@@ -645,6 +623,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -691,7 +670,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "onTick()",
+        "name": "tick",
         "source": "root/my_schedule",
         "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
@@ -802,14 +781,6 @@ exports.handler = async function(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
       "@winglang/sdk.sim.Container": {
         "className": "Container",
         "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
@@ -849,7 +820,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "onTick()",
+                "title": "Tick",
               },
               "id": "OnTick0",
               "path": "root/my_schedule/OnTick0",
@@ -895,6 +866,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

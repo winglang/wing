@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $cdk8s_Chart }) {
   class Foo extends $cdk8s_Chart {
     constructor($args) {
@@ -22,8 +23,7 @@ module.exports = function({ $cdk8s_Chart }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -39,20 +39,24 @@ module.exports = function({ $cdk8s_Chart }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const lib = require("./preflight.extendnonentrypoint-1.cjs");
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const lib = $helpers.bringJs(`${__dirname}/preflight.extendnonentrypoint-1.cjs`, $preflightTypesMap);
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const f = new lib.Foo(this, "Foo");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_extend_non_entry.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
@@ -62,11 +66,13 @@ $APP.synth();
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 const cdk8s = require("cdk8s");
-class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
+class Foo extends (globalThis.$ClassFactory.resolveType("cdk8s.Chart") ?? cdk8s.Chart) {
   constructor($scope, $id, ) {
     super($scope, $id);
   }
@@ -89,7 +95,7 @@ class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
     });
   }
 }
-module.exports = { Foo };
+module.exports = { $preflightTypesMap, Foo };
 //# sourceMappingURL=preflight.extendnonentrypoint-1.cjs.map
 ```
 
