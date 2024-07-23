@@ -315,7 +315,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.AnApi-1.cjs")({
-            $cloud_Api: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.cloud.Api") ?? cloud.Api, "@winglang/sdk/cloud", "Api"))},
+            $cloud_Api: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.cloud.Api") ?? cloud.Api, "@winglang/sdk/cloud", "Api"))},
           })
         `;
       }
@@ -367,7 +367,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $api_url: ${$stdlib.core.liftObject(api.url)},
-            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.http.Util") ?? http.Util, "@winglang/sdk/http", "Util"))},
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.http.Util") ?? http.Util, "@winglang/sdk/http", "Util"))},
           })
         `;
       }
@@ -379,11 +379,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), ["get"]],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.http.Util") ?? http.Util, "@winglang/sdk/http", "Util"), ["get"]],
             [api.url, []],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.http.Util") ?? http.Util, "@winglang/sdk/http", "Util"), []],
             [api.url, []],
           ],
         });

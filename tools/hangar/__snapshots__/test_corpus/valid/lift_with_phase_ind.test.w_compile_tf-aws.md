@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $ar: ${$stdlib.core.liftObject(ar)},
-            $math_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.math.Util") ?? math.Util, "@winglang/sdk/math", "Util"))},
+            $math_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.math.Util") ?? math.Util, "@winglang/sdk/math", "Util"))},
           })
         `;
       }
@@ -88,11 +88,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"), [].concat(["floor"], ["random"])],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.math.Util") ?? math.Util, "@winglang/sdk/math", "Util"), [].concat(["floor"], ["random"])],
             [ar, [].concat(["at"], ["length"], ["copyMut"])],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.math.Util") ?? math.Util, "@winglang/sdk/math", "Util"), []],
             [ar, []],
           ],
         });

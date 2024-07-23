@@ -89,7 +89,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $greeting: ${$stdlib.core.liftObject(greeting)},
-            $stuff_HelloWorld: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("jsii-code-samples.HelloWorld") ?? stuff.HelloWorld, "jsii-code-samples", "HelloWorld"))},
+            $stuff_HelloWorld: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("jsii-code-samples.HelloWorld") ?? stuff.HelloWorld, "jsii-code-samples", "HelloWorld"))},
           })
         `;
       }
@@ -101,11 +101,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("jsii-code-samples.HelloWorld") ?? stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
             [greeting, []],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("jsii-code-samples.HelloWorld") ?? stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
             [greeting, []],
           ],
         });

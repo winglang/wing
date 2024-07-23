@@ -367,7 +367,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
-            $jsii_fixture_JsiiClass: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("jsii-fixture.JsiiClass") ?? jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"))},
+            $jsii_fixture_JsiiClass: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("jsii-fixture.JsiiClass") ?? jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"))},
           })
         `;
       }
@@ -379,10 +379,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("jsii-fixture.JsiiClass") ?? jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"), []],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("jsii-fixture.JsiiClass") ?? jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"), []],
           ],
         });
       }

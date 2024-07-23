@@ -345,12 +345,7 @@ class $Root extends $stdlib.std.Resource {
             return `
               require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
                 $handler: ${$stdlib.core.liftObject(handler)},
-<<<<<<< HEAD
-                $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"))},
-                $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Number") ?? std.Number, "@winglang/sdk/std", "Number"))},
-=======
-                $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
->>>>>>> main
+                $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Number") ?? std.Number, "@winglang/sdk/std", "Number"))},
               })
             `;
           }
@@ -362,11 +357,11 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
-                [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), ["fromJson"]],
+                [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Number") ?? std.Number, "@winglang/sdk/std", "Number"), ["fromJson"]],
                 [handler, ["handle"]],
               ],
               "$inflight_init": [
-                [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), []],
+                [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Number") ?? std.Number, "@winglang/sdk/std", "Number"), []],
                 [handler, []],
               ],
             });

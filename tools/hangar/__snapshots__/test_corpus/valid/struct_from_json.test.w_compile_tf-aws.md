@@ -312,7 +312,7 @@ class $Root extends $stdlib.std.Resource {
             $expectedSchema: ${$stdlib.core.liftObject(expectedSchema)},
             $jMyStruct: ${$stdlib.core.liftObject(jMyStruct)},
             $schema: ${$stdlib.core.liftObject(schema)},
-            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"))},
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -324,14 +324,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
             [MyStruct, ["schema"]],
             [expectedSchema, []],
             [jMyStruct, []],
             [schema, ["asStr"]],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"), []],
             [MyStruct, []],
             [expectedSchema, []],
             [jMyStruct, []],
@@ -350,9 +350,9 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-2.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
-            $std_Boolean: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Boolean") ?? std.Boolean, "@winglang/sdk/std", "Boolean"))},
-            $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Number") ?? std.Number, "@winglang/sdk/std", "Number"))},
-            $std_String: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.String") ?? std.String, "@winglang/sdk/std", "String"))},
+            $std_Boolean: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Boolean") ?? std.Boolean, "@winglang/sdk/std", "Boolean"))},
+            $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Number") ?? std.Number, "@winglang/sdk/std", "Number"))},
+            $std_String: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.String") ?? std.String, "@winglang/sdk/std", "String"))},
           })
         `;
       }
@@ -364,15 +364,15 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"), ["fromJson"]],
-            [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), ["fromJson"]],
-            [$stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"), ["fromJson"]],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Boolean") ?? std.Boolean, "@winglang/sdk/std", "Boolean"), ["fromJson"]],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Number") ?? std.Number, "@winglang/sdk/std", "Number"), ["fromJson"]],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.String") ?? std.String, "@winglang/sdk/std", "String"), ["fromJson"]],
             [Student, ["fromJson"]],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"), []],
-            [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), []],
-            [$stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Boolean") ?? std.Boolean, "@winglang/sdk/std", "Boolean"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Number") ?? std.Number, "@winglang/sdk/std", "Number"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.String") ?? std.String, "@winglang/sdk/std", "String"), []],
             [Student, []],
           ],
         });

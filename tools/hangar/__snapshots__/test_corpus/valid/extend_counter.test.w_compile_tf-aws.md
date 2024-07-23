@@ -4,6 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $c, $expect_Util }) {
   class $Closure1 {
     constructor($args) {
@@ -28,6 +29,7 @@ module.exports = function({ $c, $expect_Util }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $cloud_Counter, $expect_Util, $global_value }) {
   class MyCounter extends $cloud_Counter {
     constructor($args) {
@@ -53,6 +55,7 @@ module.exports = function({ $cloud_Counter, $expect_Util, $global_value }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $MyCounter, $expect_Util, $global_value }) {
   class MySuperCounter extends $MyCounter {
     constructor($args) {
@@ -82,8 +85,7 @@ module.exports = function({ $MyCounter, $expect_Util, $global_value }) {
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "root",
-      "version": "0.20.3"
+      "stackName": "root"
     },
     "outputs": {}
   },
@@ -120,19 +122,24 @@ module.exports = function({ $MyCounter, $expect_Util, $global_value }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const $macros = require("@winglang/sdk/lib/macros");
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
-const expect = $stdlib.expect;
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class MyCounter extends (this?.node?.root?.typeForFqn("@winglang/sdk.cloud.Counter") ?? cloud.Counter) {
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const util = $stdlib.util;
+    const expect = $stdlib.expect;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
+    class MyCounter extends (globalThis.$ClassFactory.resolveType("@winglang/sdk.cloud.Counter") ?? cloud.Counter) {
       constructor($scope, $id, ) {
         super($scope, $id);
         this.field1 = 5;
@@ -140,8 +147,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.MyCounter-1.cjs")({
-            $cloud_Counter: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.cloud.Counter") ?? cloud.Counter, "@winglang/sdk/cloud", "Counter"))},
-            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
+            $cloud_Counter: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.cloud.Counter") ?? cloud.Counter, "@winglang/sdk/cloud", "Counter"))},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
             $global_value: ${$stdlib.core.liftObject(global_value)},
           })
         `;
@@ -155,12 +162,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "inc": [
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [global_value, []],
             [this.field1, []],
           ],
           "extra1": [
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), []],
             [global_value, []],
             [this.field1, []],
           ],
@@ -176,7 +185,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.MySuperCounter-1.cjs")({
             $MyCounter: ${$stdlib.core.liftObject(MyCounter)},
-            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
             $global_value: ${$stdlib.core.liftObject(global_value)},
           })
         `;
@@ -191,6 +200,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "inc": [
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [global_value, []],
             [this.field1, []],
             [this.field2, []],
@@ -198,6 +208,7 @@ class $Root extends $stdlib.std.Resource {
           "extra2": [
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), []],
             [global_value, []],
             [this.field1, []],
             [this.field2, []],
@@ -215,7 +226,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $c: ${$stdlib.core.liftObject(c)},
-            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
           })
         `;
       }
@@ -227,9 +238,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [c, [].concat(["inc"], ["peek"], ["extra1"], ["extra2"])],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), []],
             [c, []],
           ],
         });
@@ -237,10 +250,9 @@ class $Root extends $stdlib.std.Resource {
     }
     const global_value = "yo";
     const c = new MySuperCounter(this, "MySuperCounter");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:counter works", new $Closure1(this, "$Closure1"));
+    globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:counter works", new $Closure1(this, "$Closure1"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "extend_counter.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
