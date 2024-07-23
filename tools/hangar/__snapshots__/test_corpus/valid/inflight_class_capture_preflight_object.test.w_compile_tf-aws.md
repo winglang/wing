@@ -307,9 +307,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _liftedState() {
-        return {
-          ...(super._liftedState?.() ?? {}),
-        };
+        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -345,9 +343,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _liftedState() {
-        return {
-          ...(super._liftedState?.() ?? {}),
-        };
+        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -376,9 +372,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _liftedState() {
-        return {
-          ...(super._liftedState?.() ?? {}),
-        };
+        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -405,9 +399,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _liftedState() {
-        return {
-          ...(super._liftedState?.() ?? {}),
-        };
+        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -434,9 +426,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _liftedState() {
-        return {
-          ...(super._liftedState?.() ?? {}),
-        };
+        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -465,9 +455,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _liftedState() {
-        return {
-          ...(super._liftedState?.() ?? {}),
-        };
+        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -494,9 +482,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _liftedState() {
-        return {
-          ...(super._liftedState?.() ?? {}),
-        };
+        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -554,9 +540,7 @@ class Foo extends $stdlib.std.Resource {
     `;
   }
   _liftedState() {
-    return {
-      ...(super._liftedState?.() ?? {}),
-    };
+    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -594,9 +578,7 @@ class Bar extends $stdlib.std.Resource {
     `;
   }
   _liftedState() {
-    return {
-      ...(super._liftedState?.() ?? {}),
-    };
+    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -616,9 +598,7 @@ class Foo extends $stdlib.std.Resource {
     `;
   }
   _liftedState() {
-    return {
-      ...(super._liftedState?.() ?? {}),
-    };
+    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -651,9 +631,7 @@ class InflightClass extends $stdlib.std.Resource {
     `;
   }
   _liftedState() {
-    return {
-      ...(super._liftedState?.() ?? {}),
-    };
+    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -727,9 +705,7 @@ class Widget extends $stdlib.std.Resource {
     `;
   }
   _liftedState() {
-    return {
-      ...(super._liftedState?.() ?? {}),
-    };
+    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
