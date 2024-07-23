@@ -39,9 +39,7 @@ class Foo extends (globalThis.$ClassFactory.resolveType("cdk8s.Chart") ?? cdk8s.
     `;
   }
   _liftedState() {
-    return {
-      ...(super._liftedState?.() ?? {}),
-    };
+    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return $stdlib.core.mergeLiftDeps(super._liftMap, {
