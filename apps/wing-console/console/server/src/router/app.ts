@@ -56,7 +56,7 @@ export const createAppRouter = () => {
       return ctx.appDetails();
     }),
     "app.wingfile": createProcedure.query(({ ctx }) => {
-      return ctx.wingfile.split("/").pop();
+      return ctx.wingfile;
     }),
     "app.layoutConfig": createProcedure.query(async ({ ctx }) => {
       return {

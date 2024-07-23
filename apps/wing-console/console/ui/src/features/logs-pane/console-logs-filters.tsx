@@ -17,6 +17,7 @@ import uniqby from "lodash.uniqby";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 export const LOG_LEVELS: LogLevel[] = ["verbose", "info", "warn", "error"];
+export const DEFAULT_LOG_LEVELS: LogLevel[] = ["info", "warn", "error"].sort();
 
 const logLevelNames = {
   verbose: "Verbose",
@@ -75,19 +76,14 @@ export const ConsoleLogsFilters = memo(
       debouncedOnSearch(searchText);
     }, [debouncedOnSearch, searchText]);
 
-    const [defaultLogTypeSelection] = useState(selectedLogTypeFilters.sort());
     const resetFiltersDisabled = useMemo(() => {
       return (
-        selectedLogTypeFilters === defaultLogTypeSelection &&
+        selectedLogTypeFilters.sort().toString() ===
+          DEFAULT_LOG_LEVELS.toString() &&
         selectedResourceIds.length === 0 &&
         selectedResourceTypes.length === 0
       );
-    }, [
-      defaultLogTypeSelection,
-      selectedLogTypeFilters,
-      selectedResourceIds,
-      selectedResourceTypes,
-    ]);
+    }, [selectedLogTypeFilters, selectedResourceIds, selectedResourceTypes]);
 
     const renderResourceIdsLabel = useCallback(
       (selected?: string[]) => {
@@ -177,7 +173,7 @@ export const ConsoleLogsFilters = memo(
         return "All levels";
       } else if (
         selectedLogTypeFilters.sort().toString() ===
-        defaultLogTypeSelection.sort().toString()
+        DEFAULT_LOG_LEVELS.toString()
       ) {
         return "Default levels";
       } else if (selectedLogTypeFilters.length === 0) {
@@ -190,7 +186,7 @@ export const ConsoleLogsFilters = memo(
       } else {
         return "Custom levels";
       }
-    }, [selectedLogTypeFilters, defaultLogTypeSelection]);
+    }, [selectedLogTypeFilters]);
 
     const showIncompatibleResourceTypeWarning = useMemo(() => {
       if (!resources || selectedResourceTypes.length === 0) {
@@ -231,7 +227,7 @@ export const ConsoleLogsFilters = memo(
             }))}
             selected={selectedLogTypeFilters}
             onChange={setSelectedLogTypeFilters as any}
-            defaultSelection={defaultLogTypeSelection}
+            defaultSelection={DEFAULT_LOG_LEVELS}
           />
 
           <Listbox

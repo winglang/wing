@@ -54,7 +54,7 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
         return;
       }
 
-      if (initialZoomToFit) {
+      if (initialZoomToFit && zoomPaneRef.current?.shouldDoInitialZoomToFit) {
         zoomPaneRef.current?.zoomToFit();
       }
       setInitialZoomToFit(false);

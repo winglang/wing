@@ -3,16 +3,18 @@ import {
   USE_EXTERNAL_THEME_COLOR,
   useTheme,
 } from "@wingconsole/design-system";
-import type { LogEntry, LogLevel } from "@wingconsole/server";
+import type { LogEntry } from "@wingconsole/server";
 import classNames from "classnames";
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 
 import { trpc } from "../../trpc.js";
+import { useAppLocalStorage } from "../localstorage-context/use-localstorage.js";
 
-import { ConsoleLogsFilters } from "./console-logs-filters.js";
+import {
+  ConsoleLogsFilters,
+  DEFAULT_LOG_LEVELS,
+} from "./console-logs-filters.js";
 import { ConsoleLogs } from "./console-logs.js";
-
-const DEFAULT_LOG_LEVELS: LogLevel[] = ["info", "warn", "error"];
 
 export interface LogsWidgetProps {
   onResourceClick?: (path: string) => void;
@@ -21,17 +23,24 @@ export interface LogsWidgetProps {
 export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
   const { theme } = useTheme();
 
-  const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState(
-    () => DEFAULT_LOG_LEVELS,
-  );
-  const [searchText, setSearchText] = useState("");
-
-  const [selectedResourceIds, setSelectedResourceIds] = useState<string[]>([]);
-  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>(
-    [],
+  const [selectedLogTypeFilters, setSelectedLogTypeFilters] =
+    useAppLocalStorage("logsWidget.selectedLogTypeFilters", DEFAULT_LOG_LEVELS);
+  const [searchText, setSearchText] = useAppLocalStorage(
+    "logsWidget.searchText",
+    "",
   );
 
-  const [logsTimeFilter, setLogsTimeFilter] = useState(0);
+  const [selectedResourceIds, setSelectedResourceIds] = useAppLocalStorage<
+    string[]
+  >("logsWidget.selectedResourceIds", []);
+  const [selectedResourceTypes, setSelectedResourceTypes] = useAppLocalStorage<
+    string[]
+  >("logsWidget.selectedResourceTypes", []);
+
+  const [logsTimeFilter, setLogsTimeFilter] = useAppLocalStorage(
+    "logsWidget.logsTimeFilter",
+    0,
+  );
 
   const filters = trpc["app.logsFilters"].useQuery();
 
@@ -88,14 +97,22 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
     [onResourceClick],
   );
 
-  const clearLogs = useCallback(() => setLogsTimeFilter(Date.now()), []);
+  const clearLogs = useCallback(
+    () => setLogsTimeFilter(Date.now()),
+    [setLogsTimeFilter],
+  );
 
   const resetFilters = useCallback(() => {
     setSelectedLogTypeFilters(DEFAULT_LOG_LEVELS);
     setSelectedResourceIds([]);
     setSelectedResourceTypes([]);
     setSearchText("");
-  }, []);
+  }, [
+    setSearchText,
+    setSelectedLogTypeFilters,
+    setSelectedResourceIds,
+    setSelectedResourceTypes,
+  ]);
 
   return (
     <div className="relative h-full flex flex-col gap-2">
