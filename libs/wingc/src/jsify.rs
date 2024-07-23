@@ -60,9 +60,10 @@ const __DIRNAME: &str = "__dirname";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
-pub const SCOPE_PARAM: &str = "$scope";
 const PREFLIGHT_TYPES_MAP: &str = "$helpers.nodeof(this).root.$preflightTypesMap";
 const MODULE_PREFLIGHT_TYPES_MAP: &str = "$preflightTypesMap";
+
+const SCOPE_PARAM: &str = "$scope";
 
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
