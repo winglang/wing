@@ -24,20 +24,12 @@ jobs:
 
             | Topic                                               | Owner                                                         |
             |-----------------------------------------------------|---------------------------------------------------------------|
-            | Wing SDK and utility APIs                           | `@chriscbr`
+            | Wing SDK and standard library                       | `@chriscbr`
             | Wing Console                                        | `@skyrpex`
-            | JSON, structs, primitives and collections           | `@chriscbr`
-            | Platforms and plugins                               | `@chriscbr`
-            | Frontend resources (website, react, etc)            | `@chriscbr`
-            | Language design                                     | `@chriscbr`
+            | Wing compiler and language design                   | `@chriscbr`
             | VSCode extension and language server                | `@chriscbr`
-            | Compiler architecture, inflights, lifting           | `@chriscbr`
-            | Wing Testing Framework                              | `@chriscbr`
             | Wing CLI                                            | `@chriscbr`
-            | Build system, dev environment, releases             | `@chriscbr`
-            | Library Ecosystem                                   | `@chriscbr`
             | Documentation                                       | `@boyney123`
-            | SDK test suite                                      | `@chriscbr` 
             | Examples                                            | `@boyney123`
             | Wing Playground                                     | `@skyrpex`
 
