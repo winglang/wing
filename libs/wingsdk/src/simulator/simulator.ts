@@ -320,12 +320,12 @@ export class Simulator {
     this._running = "starting";
 
     try {
-      await this.lockfile.lock();
+      this.lockfile.lock();
       await this.startServer();
       await this.startResources();
     } catch (err: any) {
       this.stopServer();
-      await this.lockfile.release();
+      this.lockfile.release();
       this._running = "stopped";
       throw err;
     }
@@ -430,7 +430,7 @@ export class Simulator {
 
     this.stopServer();
 
-    await this.lockfile.release();
+    this.lockfile.release();
 
     this._handles.reset();
     this._running = "stopped";
