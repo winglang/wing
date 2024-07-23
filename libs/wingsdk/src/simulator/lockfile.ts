@@ -1,5 +1,5 @@
-import fs, { type FileHandle } from "fs/promises";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { isNodeError } from "./util.js";
 
 /**
@@ -29,9 +29,12 @@ export interface LockfileProps {
 
 export class Lockfile {
   private path: string;
-  private lockfile: FileHandle | undefined;
+  private lockfile: number | undefined;
   private timeout: NodeJS.Timeout | undefined;
   private lastMtime: number | undefined;
+  private compromised = false;
+  // private releasing = false;
+  // private lastTask: Promise<void> | undefined;
   private onCompromised?: (
     reason: string,
     error?: unknown
@@ -42,18 +45,30 @@ export class Lockfile {
     this.onCompromised = props.onCompromised;
   }
 
-  public async lock() {
+  public lock() {
     if (this.lockfile) {
-      return; // already locked
+      return;
     }
 
-    await fs.mkdir(path.dirname(this.path), { recursive: true });
+    // if (this.releasing) {
+    //   throw new Error(
+    //     "Cannot lock the lockfile while it's being released. Please wait for the release to complete."
+    //   );
+    // }
+
+    // this.lastTask = new Promise(() => {
+
+    // });
+
+    this.compromised = false;
+
+    fs.mkdirSync(path.dirname(this.path), { recursive: true });
 
     try {
       // If lockfile exists but it's stale, remove it.
-      const stats = await fs.stat(this.path);
+      const stats = fs.statSync(this.path);
       if (Date.now() > stats.mtimeMs + STALE_THRESHOLD) {
-        await fs.rm(this.path);
+        fs.rmSync(this.path, { force: true });
       }
     } catch (error) {
       if (isNodeError(error) && error.code === "ENOENT") {
@@ -67,7 +82,7 @@ export class Lockfile {
     }
 
     try {
-      this.lockfile = await fs.open(this.path, "wx");
+      this.lockfile = fs.openSync(this.path, "wx");
     } catch (error) {
       if (isNodeError(error) && error.code === "EEXIST") {
         throw new Error(
@@ -83,73 +98,87 @@ export class Lockfile {
 
   private updateLockfileLater() {
     this.timeout = setTimeout(() => {
-      void (async () => {
-        // If we already updated our lockfile once, we need to check if it got compromised.
-        if (this.lastMtime) {
-          // Check if the lockfile got compromised because we were too late to update it.
-          if (Date.now() > this.lastMtime + STALE_THRESHOLD) {
-            await this.markAsCompromised("Lockfile was not updated in time");
-            return;
-          }
+      // Due to the async nature of this timeout, it's possible that
+      // the lockfile was released before this callback was called.
+      //
+      // Skip the update if that's the case.
+      if (
+        !this.lockfile ||
+        this.compromised
+        // || this.releasing
+      ) {
+        return;
+      }
 
-          // Check if the lockfile got compromised because access was lost or something else updated it.
-          try {
-            const stats = await fs.stat(this.path);
-            if (stats.mtimeMs !== this.lastMtime) {
-              await this.markAsCompromised(
-                "Lockfile was updated by another process"
-              );
-              return;
-            }
-          } catch (error) {
-            await this.markAsCompromised(
-              "Failed to check lockfile status",
-              error
-            );
-            return;
-          }
-        }
-
-        // Update lockfile's mtime.
-        try {
-          const mtime = new Date(Math.ceil(Date.now() / 1000) * 1000);
-          await fs.utimes(this.path, mtime, mtime);
-          this.lastMtime = mtime.getTime();
-        } catch (error) {
-          await this.markAsCompromised("Failed to update the lockfile", error);
+      // If we already updated our lockfile once, we need to check if it got compromised.
+      if (this.lastMtime) {
+        // Check if the lockfile got compromised because we were too late to update it.
+        if (Date.now() > this.lastMtime + STALE_THRESHOLD) {
+          this.markAsCompromised("Lockfile was not updated in time");
           return;
         }
 
-        // Lockfile wasn't compromised. Schedule the next update.
-        this.updateLockfileLater();
-      })();
+        // Check if the lockfile got compromised because access was lost or something else updated it.
+        try {
+          const stats = fs.statSync(this.path);
+          if (stats.mtimeMs !== this.lastMtime) {
+            this.markAsCompromised("Lockfile was updated by another process");
+            return;
+          }
+        } catch (error) {
+          this.markAsCompromised("Failed to check lockfile status", error);
+          return;
+        }
+      }
+
+      // Update lockfile's mtime.
+      try {
+        const mtime = new Date(Math.ceil(Date.now() / 1000) * 1000);
+        fs.utimesSync(this.path, mtime, mtime);
+        this.lastMtime = mtime.getTime();
+      } catch (error) {
+        this.markAsCompromised("Failed to update the lockfile", error);
+        return;
+      }
+
+      // Lockfile wasn't compromised. Schedule the next update.
+      this.updateLockfileLater();
     }, UPDATE_INTERVAL);
   }
 
-  public async release() {
+  public release() {
     if (!this.lockfile) {
-      return; // not locked
+      return;
     }
 
-    clearTimeout(this.timeout);
-    this.timeout = undefined;
+    // if (this.releasing) {
+    //   return;
+    // }
 
-    await this.lockfile.close();
-    await fs.rm(this.path);
-    this.lockfile = undefined;
-    this.lastMtime = undefined;
+    try {
+      // this.releasing = true;
+
+      clearTimeout(this.timeout);
+      this.timeout = undefined;
+
+      fs.closeSync(this.lockfile);
+      this.lockfile = undefined;
+      this.lastMtime = undefined;
+
+      // If the lockfile was compromised, we won't remove
+      // it since it belongs to another process now.
+      if (!this.compromised) {
+        fs.rmSync(this.path, { force: true });
+        this.compromised = false;
+      }
+    } finally {
+      // this.releasing = false;
+    }
   }
 
-  private async markAsCompromised(reason: string, error?: unknown) {
-    await this.lockfile?.close();
-    this.lockfile = undefined;
-    try {
-      await this.onCompromised?.(reason, error);
-    } catch (callbackError) {
-      console.error(
-        "Unexpected error in Lockfile.onCompromised callback:",
-        callbackError
-      );
-    }
+  private markAsCompromised(reason: string, error?: unknown) {
+    this.compromised = true;
+    this.release();
+    void this.onCompromised?.(reason, error);
   }
 }
