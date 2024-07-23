@@ -237,7 +237,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class BaseClassWithCtorArg {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return BaseClassWithCtorArg;
@@ -474,8 +475,9 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $BaseClassWithCtorArg }) {
   class DerivedClassWithInnerClass extends $BaseClassWithCtorArg {
-    constructor({  }) {
-      super({  });
+    constructor($args) {
+      const {  } = $args;
+      super($args);
     }
   }
   return DerivedClassWithInnerClass;
@@ -525,7 +527,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class InnerBaseClass {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return InnerBaseClass;
@@ -540,8 +543,9 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $InnerBaseClass }) {
   class InnerDerivedClass extends $InnerBaseClass {
-    constructor({  }) {
-      super({  });
+    constructor($args) {
+      const {  } = $args;
+      super($args);
     }
   }
   return InnerDerivedClass;
@@ -1363,16 +1367,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const BaseClassWithCtorArgClient = ${BaseClassWithCtorArg._toInflightType()};
-            const client = new BaseClassWithCtorArgClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -1396,16 +1394,10 @@ class $Root extends $stdlib.std.Resource {
               })
             `;
           }
-          _toInflight() {
-            return `
-              (await (async () => {
-                const InnerBaseClassClient = ${InnerBaseClass._toInflightType()};
-                const client = new InnerBaseClassClient({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `;
+          _liftedState() {
+            return {
+              ...(super._liftedState?.() ?? {}),
+            };
           }
           get _liftMap() {
             return ({
@@ -1428,16 +1420,10 @@ class $Root extends $stdlib.std.Resource {
               })
             `;
           }
-          _toInflight() {
-            return `
-              (await (async () => {
-                const InnerDerivedClassClient = ${InnerDerivedClass._toInflightType()};
-                const client = new InnerDerivedClassClient({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `;
+          _liftedState() {
+            return {
+              ...(super._liftedState?.() ?? {}),
+            };
           }
           get _liftMap() {
             return $stdlib.core.mergeLiftDeps(super._liftMap, {
@@ -1455,16 +1441,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const DerivedClassWithInnerClassClient = ${DerivedClassWithInnerClass._toInflightType()};
-            const client = new DerivedClassWithInnerClassClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {

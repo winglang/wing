@@ -7,7 +7,7 @@ use crate::{
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic},
-	jsify::{JSifier, JSifyContext, SCOPE_PARAM},
+	jsify::{JSifier, JSifyContext},
 	type_check::{
 		get_udt_definition_phase,
 		lifts::{Liftable, Lifts},
@@ -170,12 +170,10 @@ impl<'a> LiftVisitor<'a> {
 				ResolveSource::ExternalModule(p) => p,
 			};
 			if let Some(fqn) = fqn {
-				// TODO: fall back to "this"?
-				format!("$stdlib.core.toLiftableModuleType({SCOPE_PARAM}.node.root.typeForFqn(\"{fqn}\") ?? {udt_js}, \"{module_path}\", \"{type_path}\")")
+				format!("$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType(\"{fqn}\") ?? {udt_js}, \"{module_path}\", \"{type_path}\")")
 			} else {
 				format!("$stdlib.core.toLiftableModuleType({udt_js}, \"{module_path}\", \"{type_path}\")")
 			}
-		// format!("$stdlib.core.toLiftableModuleType({udt_js}, \"{module_path}\", \"{type_path}\")")
 		} else {
 			// Non-namespaced reference, should be a wing type with a helper to lift it
 			udt_js
