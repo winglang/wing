@@ -46,9 +46,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class MyType {
-    constructor($args) {
-      const {  } = $args;
-    }
     static async myStaticMethod() {
       return "hi";
     }

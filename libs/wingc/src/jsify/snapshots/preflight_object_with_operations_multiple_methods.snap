@@ -28,9 +28,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
     async put() {
       (await $b.put("hello1", "world"));
     }

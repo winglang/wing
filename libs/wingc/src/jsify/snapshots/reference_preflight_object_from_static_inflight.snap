@@ -25,9 +25,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $q }) {
   class MyType {
-    constructor($args) {
-      const {  } = $args;
-    }
     static async addToQueue(m) {
       (await $q.push(m));
     }

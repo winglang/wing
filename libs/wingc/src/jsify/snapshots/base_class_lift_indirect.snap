@@ -57,10 +57,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Base }) {
   class Derived extends $Base {
-    constructor($args) {
-      const { $this_b } = $args;
-      super($args);
-    }
     async foo() {
       (await this.put());
     }

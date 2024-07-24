@@ -52,10 +52,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $ParentClass }) {
   class Child extends $ParentClass {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return Child;
 }
@@ -86,9 +82,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $InflightClass }) {
   class ParentClass {
-    constructor($args) {
-      const {  } = $args;
-    }
     static async static_method() {
       return (await (async () => {const o = new $InflightClass(); await o.$inflight_init?.(); return o; })());
     }

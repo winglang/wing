@@ -47,9 +47,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
     async bar() {
     }
   }

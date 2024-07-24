@@ -25,10 +25,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Foo }) {
   class Bar extends $Foo {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return Bar;
 }
@@ -43,9 +39,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Baz {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Baz;
 }
@@ -60,9 +53,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Foo;
 }

@@ -2120,6 +2120,20 @@ impl<'a> JSifier<'a> {
 			IndexSet::new()
 		};
 
+		let mut should_emit_constructor = false;
+
+		if lifted_fields.len() > 0 {
+			should_emit_constructor = true;
+		}
+
+		if class.closure_handle_method().is_some() {
+			should_emit_constructor = true;
+		}
+
+		if !should_emit_constructor {
+			return;
+		}
+
 		class_code.open(format!("{JS_CONSTRUCTOR}($args) {{",));
 		class_code.line(format!(
 			"const {{ {} }} = $args;",

@@ -59,9 +59,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b }) {
   class MyType {
-    constructor($args) {
-      const {  } = $args;
-    }
     static async putInBucket() {
       (await $b.put("in", "bucket"));
     }
@@ -79,9 +76,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $MyType }) {
   class YourType {
-    constructor($args) {
-      const {  } = $args;
-    }
     async putIndirect() {
       (await $MyType.putInBucket());
     }
