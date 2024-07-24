@@ -188,7 +188,7 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _toInflight(): string {
-    return InflightClient.forV2(this.constructor, this._liftedState());
+    return InflightClient.forV2(this.constructor, this._liftedState?.() ?? {});
   }
 
   /**

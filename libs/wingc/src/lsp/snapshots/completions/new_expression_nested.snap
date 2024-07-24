@@ -126,7 +126,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Topic {\n  onMessage(): Function;\n  subscribeQueue(): void;\n  inflight publish(): void;\n}\n```\n---\nA topic for pub/sub notifications."
+    value: "```wing\nclass Topic {\n  onMessage(): Function;\n  subscribeQueue(): void;\n  inflight publish(): void;\n}\n```\n---\nA topic."
   sortText: gg|Topic
   insertText: Topic($1)
   insertTextFormat: 2

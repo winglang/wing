@@ -1983,24 +1983,27 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_lifted_state(&self, class_name: &Symbol, class_type: TypeRef) -> CodeMaker {
-		let mut code = CodeMaker::with_source(&class_name.span);
-		code.open("_liftedState() {");
-
 		// Get lifted fields from entire class ancestry
 		let lifts = Self::class_lifted_fields(class_type);
 
+		// Currently the contract doesn't _liftedState to be implemented on every class
+		// in order to allow extending existing JSII classes, so not generating
+		// the method is OK if there's no lifted state.
 		if lifts.len() == 0 {
-			code.line("return { ...(super._liftedState?.() ?? {}) };")
-		} else {
-			code.open("return {");
-			code.line("...(super._liftedState?.() ?? {}),");
-
-			for (token, obj) in lifts {
-				code.line(format!("{token}: {STDLIB_CORE}.liftObject({obj}),"));
-			}
-
-			code.close("};");
+			return CodeMaker::default();
 		}
+
+		let mut code = CodeMaker::with_source(&class_name.span);
+		code.open("_liftedState() {");
+
+		code.open("return {");
+		code.line("...(super._liftedState?.() ?? {}),");
+
+		for (token, obj) in lifts {
+			code.line(format!("{token}: {STDLIB_CORE}.liftObject({obj}),"));
+		}
+
+		code.close("};");
 
 		code.close("}");
 		code
