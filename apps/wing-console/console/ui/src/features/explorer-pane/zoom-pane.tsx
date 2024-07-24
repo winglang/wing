@@ -205,7 +205,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         }
       });
     },
-    [restrict],
+    [restrict, setViewTransform],
   );
   useEvent("wheel", onWheel as (event: Event) => void, containerRef.current, {
     // Use passive: false to prevent the default behavior of scrolling the page.
@@ -286,7 +286,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
           });
         });
       },
-      [isSpacePressed, isDragging, restrict],
+      [isSpacePressed, isDragging, setViewTransform, restrict],
     ) as (event: Event) => void,
   );
 
@@ -316,7 +316,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     setViewTransform((viewTransform) => {
       return restrict(viewTransform);
     });
-  }, [restrict]);
+  }, [restrict, setViewTransform]);
 
   const throttledFixViewport = useRafThrottle(fixViewport);
 
@@ -358,7 +358,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         z: z,
       });
     });
-  }, [restrict]);
+  }, [restrict, setViewTransform]);
 
   const zoomOut = useCallback(() => {
     const container = containerRef.current;
@@ -385,7 +385,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         z: z,
       });
     });
-  }, [restrict]);
+  }, [restrict, setViewTransform]);
 
   const zoomToFit = useCallback(
     (viewport?: Viewport) => {
@@ -421,7 +421,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         };
       });
     },
-    [boundingBox],
+    [boundingBox?.height, boundingBox?.width, setViewTransform],
   );
 
   useImperativeHandle(
