@@ -51,9 +51,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $initCount }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
     async method() {
     }
     async $inflight_init() {
@@ -134,9 +131,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "method": [
@@ -189,9 +183,6 @@ class $Root extends $stdlib.std.Resource {
             $initCount: ${$stdlib.core.liftObject(initCount)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

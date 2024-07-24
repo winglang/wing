@@ -690,9 +690,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -721,9 +718,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -747,9 +741,6 @@ class $Root extends $stdlib.std.Resource {
             $headers: ${$stdlib.core.liftObject(headers)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

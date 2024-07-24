@@ -51,9 +51,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b }) {
   class Bar {
-    constructor($args) {
-      const {  } = $args;
-    }
     static async access_b() {
       (await $b.list());
     }
@@ -72,9 +69,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
     async access_b() {
       (await $b.list());
     }
@@ -148,9 +142,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "access_b": [
@@ -177,9 +168,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -201,9 +189,6 @@ class $Root extends $stdlib.std.Resource {
             $b: ${$stdlib.core.liftObject(b)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -234,9 +219,6 @@ class $Root extends $stdlib.std.Resource {
             $bar: ${$stdlib.core.liftObject(bar)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

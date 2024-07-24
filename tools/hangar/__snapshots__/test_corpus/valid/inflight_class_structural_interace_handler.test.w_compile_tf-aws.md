@@ -97,9 +97,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -123,9 +120,6 @@ class $Root extends $stdlib.std.Resource {
             $NotGoo: ${$stdlib.core.liftObject(NotGoo)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

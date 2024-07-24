@@ -51,9 +51,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $globalCounter }) {
   class Another {
-    constructor($args) {
-      const {  } = $args;
-    }
     async myMethod() {
       (await $globalCounter.inc());
       return (await $globalCounter.peek());
@@ -77,9 +74,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class First {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return First;
 }
@@ -398,9 +392,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -420,9 +411,6 @@ class $Root extends $stdlib.std.Resource {
             $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -460,9 +448,6 @@ class $Root extends $stdlib.std.Resource {
                 $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
               })
             `;
-          }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
           }
           get _liftMap() {
             return ({
@@ -554,9 +539,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -580,9 +562,6 @@ class $Root extends $stdlib.std.Resource {
             $Another: ${$stdlib.core.liftObject(Another)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

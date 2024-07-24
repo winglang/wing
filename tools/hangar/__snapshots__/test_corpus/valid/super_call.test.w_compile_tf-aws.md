@@ -52,9 +52,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class A {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return A;
 }
@@ -68,10 +65,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $A }) {
   class B extends $A {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return B;
 }
@@ -85,9 +78,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $b }) {
   class BaseClass {
-    constructor($args) {
-      const {  } = $args;
-    }
     async do() {
       return (await $b.get("k"));
     }
@@ -104,10 +94,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $B }) {
   class C extends $B {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return C;
 }
@@ -121,10 +107,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $C }) {
   class D extends $C {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return D;
 }
@@ -138,10 +120,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $D }) {
   class E extends $D {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return E;
 }
@@ -155,10 +133,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $BaseClass, $b }) {
   class ExtendedClass extends $BaseClass {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
     async do() {
       (await $b.put("k", "value"));
       return (await super.do());
@@ -264,9 +238,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -287,9 +258,6 @@ class $Root extends $stdlib.std.Resource {
             $A: ${$stdlib.core.liftObject(A)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
@@ -312,9 +280,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "$inflight_init": [
@@ -332,9 +297,6 @@ class $Root extends $stdlib.std.Resource {
             $C: ${$stdlib.core.liftObject(C)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
@@ -357,9 +319,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "$inflight_init": [
@@ -376,9 +335,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.InflightA-1.cjs")({
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -401,9 +357,6 @@ class $Root extends $stdlib.std.Resource {
             $InflightA: ${$stdlib.core.liftObject(InflightA)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
@@ -429,9 +382,6 @@ class $Root extends $stdlib.std.Resource {
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -459,9 +409,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "do": [
@@ -484,9 +431,6 @@ class $Root extends $stdlib.std.Resource {
             $b: ${$stdlib.core.liftObject(b)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
@@ -512,9 +456,6 @@ class $Root extends $stdlib.std.Resource {
             $extended: ${$stdlib.core.liftObject(extended)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

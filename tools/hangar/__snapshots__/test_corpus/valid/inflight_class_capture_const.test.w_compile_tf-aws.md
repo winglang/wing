@@ -87,9 +87,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "getValue": [
@@ -116,9 +113,6 @@ class $Root extends $stdlib.std.Resource {
             $myConst: ${$stdlib.core.liftObject(myConst)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

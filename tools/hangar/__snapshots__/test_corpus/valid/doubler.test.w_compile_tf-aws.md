@@ -121,9 +121,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Doubler2 {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Doubler2;
 }
@@ -316,9 +313,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -347,9 +341,6 @@ class $Root extends $stdlib.std.Resource {
               })
             `;
           }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
-          }
           get _liftMap() {
             return ({
               "handle": [
@@ -371,9 +362,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -392,9 +380,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.cjs")({
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -417,9 +402,6 @@ class $Root extends $stdlib.std.Resource {
             $f: ${$stdlib.core.liftObject(f)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

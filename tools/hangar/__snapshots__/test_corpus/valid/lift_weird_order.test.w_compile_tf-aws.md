@@ -30,9 +30,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class B {
-    constructor($args) {
-      const {  } = $args;
-    }
     async do() {
     }
   }
@@ -107,9 +104,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "do": [
@@ -160,9 +154,6 @@ class $Root extends $stdlib.std.Resource {
             $c: ${$stdlib.core.liftObject(c)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

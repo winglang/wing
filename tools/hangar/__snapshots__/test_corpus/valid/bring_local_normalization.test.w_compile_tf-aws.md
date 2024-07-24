@@ -7,9 +7,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Bar {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Bar;
 }
@@ -23,9 +20,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Baz {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Baz;
 }
@@ -39,9 +33,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Foo;
 }
@@ -104,9 +95,6 @@ class Bar extends $stdlib.std.Resource {
       })
     `;
   }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
-  }
   get _liftMap() {
     return ({
       "$inflight_init": [
@@ -123,9 +111,6 @@ class InflightBar extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.InflightBar-1.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -161,9 +146,6 @@ class Baz extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.Baz-2.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -238,9 +220,6 @@ class Foo extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.Foo-3.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({

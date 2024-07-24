@@ -92,9 +92,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "add": [
@@ -124,9 +121,6 @@ class $Root extends $stdlib.std.Resource {
             $BinaryOperation: ${$stdlib.core.liftObject(BinaryOperation)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

@@ -56,9 +56,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Util {
-    constructor($args) {
-      const {  } = $args;
-    }
     static async makeKeyInflight(name) {
       return (require("@winglibs/testfixture/util.js")["makeKeyInflight"])(name)
     }
@@ -136,9 +133,6 @@ class $Root extends $stdlib.std.Resource {
             $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -294,9 +288,6 @@ class Util extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.Util-1.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({

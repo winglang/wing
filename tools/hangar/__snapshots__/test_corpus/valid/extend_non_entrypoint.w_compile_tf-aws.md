@@ -7,10 +7,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $cdk8s_Chart }) {
   class Foo extends $cdk8s_Chart {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return Foo;
 }
@@ -37,9 +33,6 @@ class Foo extends (globalThis.$ClassFactory.resolveType("cdk8s.Chart") ?? cdk8s.
         $cdk8s_Chart: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("cdk8s.Chart") ?? cdk8s.Chart, "cdk8s", "Chart"))},
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return $stdlib.core.mergeLiftDeps(super._liftMap, {

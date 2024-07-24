@@ -7,9 +7,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class A {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return A;
 }
@@ -23,10 +20,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $A }) {
   class B extends $A {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return B;
 }
@@ -53,9 +46,6 @@ class A extends $stdlib.std.Resource {
       })
     `;
   }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
-  }
   get _liftMap() {
     return ({
       "$inflight_init": [
@@ -74,9 +64,6 @@ class B extends A {
         $A: ${$stdlib.core.liftObject(A)},
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return $stdlib.core.mergeLiftDeps(super._liftMap, {

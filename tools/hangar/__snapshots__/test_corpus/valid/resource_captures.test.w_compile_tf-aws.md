@@ -39,9 +39,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Another {
-    constructor($args) {
-      const {  } = $args;
-    }
     async meaningOfLife() {
       return 42;
     }
@@ -61,9 +58,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class First {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return First;
 }
@@ -268,9 +262,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -289,9 +280,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.Another-1.cjs")({
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -422,9 +410,6 @@ class $Root extends $stdlib.std.Resource {
             $r: ${$stdlib.core.liftObject(r)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

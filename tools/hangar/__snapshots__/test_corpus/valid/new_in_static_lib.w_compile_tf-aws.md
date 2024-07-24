@@ -7,9 +7,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Foo;
 }
@@ -23,9 +20,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class LibClass {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return LibClass;
 }
@@ -51,9 +45,6 @@ class Foo extends $stdlib.std.Resource {
       })
     `;
   }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
-  }
   get _liftMap() {
     return ({
       "$inflight_init": [
@@ -73,9 +64,6 @@ class LibClass extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.LibClass-1.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({

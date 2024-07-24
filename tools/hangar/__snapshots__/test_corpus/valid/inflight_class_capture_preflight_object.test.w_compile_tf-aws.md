@@ -149,9 +149,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Bar {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Bar;
 }
@@ -165,9 +162,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Foo;
 }
@@ -181,9 +175,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Foo;
 }
@@ -234,9 +225,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Widget {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Widget;
 }
@@ -306,9 +294,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "uploadToBucket": [
@@ -342,9 +327,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -371,9 +353,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -398,9 +377,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -424,9 +400,6 @@ class $Root extends $stdlib.std.Resource {
             $getFoo: ${$stdlib.core.liftObject(getFoo)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -454,9 +427,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -480,9 +450,6 @@ class $Root extends $stdlib.std.Resource {
             $subdir_InflightClass: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(subdir.InflightClass, "", "InflightClass"))},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -539,9 +506,6 @@ class Foo extends $stdlib.std.Resource {
       })
     `;
   }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
-  }
   get _liftMap() {
     return ({
       "$inflight_init": [
@@ -577,9 +541,6 @@ class Bar extends $stdlib.std.Resource {
       })
     `;
   }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
-  }
   get _liftMap() {
     return ({
       "$inflight_init": [
@@ -596,9 +557,6 @@ class Foo extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.Foo-3.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -629,9 +587,6 @@ class InflightClass extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.InflightClass-4.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -703,9 +658,6 @@ class Widget extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.Widget-1.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({

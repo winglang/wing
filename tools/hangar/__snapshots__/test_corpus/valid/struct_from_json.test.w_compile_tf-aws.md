@@ -151,9 +151,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class UsesStructInImportedFile {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return UsesStructInImportedFile;
 }
@@ -220,9 +217,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -249,9 +243,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -276,9 +267,6 @@ class $Root extends $stdlib.std.Resource {
             $jStudent1: ${$stdlib.core.liftObject(jStudent1)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -309,9 +297,6 @@ class $Root extends $stdlib.std.Resource {
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -347,9 +332,6 @@ class $Root extends $stdlib.std.Resource {
             $std_String: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.String") ?? std.String, "@winglang/sdk/std", "String"))},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -531,9 +513,6 @@ class UsesStructInImportedFile extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.UsesStructInImportedFile-1.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({

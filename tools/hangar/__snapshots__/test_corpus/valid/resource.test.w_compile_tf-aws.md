@@ -190,9 +190,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Dummy {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Dummy;
 }
@@ -237,9 +234,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class ScopeAndIdTestClass {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return ScopeAndIdTestClass;
 }
@@ -863,9 +857,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -902,9 +893,6 @@ class $Root extends $stdlib.std.Resource {
               })
             `;
           }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
-          }
           get _liftMap() {
             return ({
               "handle": [
@@ -931,9 +919,6 @@ class $Root extends $stdlib.std.Resource {
               })
             `;
           }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
-          }
           get _liftMap() {
             return ({
               "handle": [
@@ -959,9 +944,6 @@ class $Root extends $stdlib.std.Resource {
                 $__parent_this_4_q: ${$stdlib.core.liftObject(__parent_this_4.q)},
               })
             `;
-          }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
           }
           get _liftMap() {
             return ({
@@ -1024,9 +1006,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -1052,9 +1031,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.Dummy-1.cjs")({
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -1083,9 +1059,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.ScopeAndIdTestClass-1.cjs")({
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

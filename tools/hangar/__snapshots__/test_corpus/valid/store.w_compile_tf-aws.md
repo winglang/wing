@@ -49,9 +49,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Util {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Util;
 }
@@ -88,9 +85,6 @@ class Util extends $stdlib.std.Resource {
       })
     `;
   }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
-  }
   get _liftMap() {
     return ({
       "$inflight_init": [
@@ -115,9 +109,6 @@ class Store extends $stdlib.std.Resource {
             $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

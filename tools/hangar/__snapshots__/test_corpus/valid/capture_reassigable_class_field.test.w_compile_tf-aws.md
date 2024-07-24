@@ -187,9 +187,6 @@ class $Root extends $stdlib.std.Resource {
               })
             `;
           }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
-          }
           get _liftMap() {
             return ({
               "handle": [
@@ -246,9 +243,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -274,9 +268,6 @@ class $Root extends $stdlib.std.Resource {
             $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.util.Util") ?? util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

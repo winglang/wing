@@ -84,9 +84,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class A {
-    constructor($args) {
-      const {  } = $args;
-    }
     async goo() {
       return "a2";
     }
@@ -139,9 +136,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class E {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return E;
 }
@@ -213,9 +207,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "goo": [
@@ -234,9 +225,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.B-1.cjs")({
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -260,9 +248,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -289,9 +274,6 @@ class $Root extends $stdlib.std.Resource {
               })
             `;
           }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
-          }
           get _liftMap() {
             return ({
               "$inflight_init": [
@@ -310,9 +292,6 @@ class $Root extends $stdlib.std.Resource {
               require("${$helpers.normalPath(__dirname)}/inflight.F-1.cjs")({
               })
             `;
-          }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
           }
           get _liftMap() {
             return ({
@@ -337,9 +316,6 @@ class $Root extends $stdlib.std.Resource {
                 $F: ${$stdlib.core.liftObject(F)},
               })
             `;
-          }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
           }
           get _liftMap() {
             return ({
@@ -398,9 +374,6 @@ class $Root extends $stdlib.std.Resource {
             $innerD: ${$stdlib.core.liftObject(innerD)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

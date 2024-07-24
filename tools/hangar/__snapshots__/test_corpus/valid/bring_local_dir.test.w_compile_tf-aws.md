@@ -7,9 +7,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Bar {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Bar;
 }
@@ -23,9 +20,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Foo;
 }
@@ -39,9 +33,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Foo;
 }
@@ -71,9 +62,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Widget {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Widget;
 }
@@ -162,9 +150,6 @@ class Foo extends $stdlib.std.Resource {
       })
     `;
   }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
-  }
   get _liftMap() {
     return ({
       "$inflight_init": [
@@ -200,9 +185,6 @@ class Bar extends $stdlib.std.Resource {
       })
     `;
   }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
-  }
   get _liftMap() {
     return ({
       "$inflight_init": [
@@ -219,9 +201,6 @@ class Foo extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.Foo-3.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -252,9 +231,6 @@ class InflightClass extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.InflightClass-4.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({
@@ -326,9 +302,6 @@ class Widget extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.Widget-1.cjs")({
       })
     `;
-  }
-  _liftedState() {
-    return { ...(super._liftedState?.() ?? {}) };
   }
   get _liftMap() {
     return ({

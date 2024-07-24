@@ -102,9 +102,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $bucket1, $bucket2, $bucket3, $maybe_bucket }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
     async mehtod() {
       {
         const b1 = $bucket1;
@@ -138,9 +135,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class PreflightClass {
-    constructor($args) {
-      const {  } = $args;
-    }
     async method() {
       return "ahoy there";
     }
@@ -248,9 +242,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "mehtod": [
@@ -283,9 +274,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -309,9 +297,6 @@ class $Root extends $stdlib.std.Resource {
             $bucket1: ${$stdlib.core.liftObject(bucket1)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -337,9 +322,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -360,9 +342,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.PreflightClass-1.cjs")({
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -385,9 +364,6 @@ class $Root extends $stdlib.std.Resource {
             $bar: ${$stdlib.core.liftObject(bar)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

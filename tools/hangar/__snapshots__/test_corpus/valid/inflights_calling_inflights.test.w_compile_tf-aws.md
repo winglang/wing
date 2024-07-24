@@ -309,9 +309,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -335,9 +332,6 @@ class $Root extends $stdlib.std.Resource {
             $storeInBucket: ${$stdlib.core.liftObject(storeInBucket)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -363,9 +357,6 @@ class $Root extends $stdlib.std.Resource {
             $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -395,9 +386,6 @@ class $Root extends $stdlib.std.Resource {
                 $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
               })
             `;
-          }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
           }
           get _liftMap() {
             return ({
@@ -447,9 +435,6 @@ class $Root extends $stdlib.std.Resource {
             $x: ${$stdlib.core.liftObject(x)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

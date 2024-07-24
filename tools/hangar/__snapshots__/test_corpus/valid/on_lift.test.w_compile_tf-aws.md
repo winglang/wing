@@ -30,9 +30,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $util_Util }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
     async m1() {
       console.log("I'm expecting ABC to be set");
       $helpers.assert($helpers.eq((await $util_Util.env("ABC")), "123"), "util.env(\"ABC\") == \"123\"");
@@ -105,9 +102,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "m1": [
@@ -139,9 +133,6 @@ class $Root extends $stdlib.std.Resource {
             $foo: ${$stdlib.core.liftObject(foo)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

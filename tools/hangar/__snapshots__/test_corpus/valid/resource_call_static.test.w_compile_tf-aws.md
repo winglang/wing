@@ -29,9 +29,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $globalCounter }) {
   class Another {
-    constructor($args) {
-      const {  } = $args;
-    }
     static async myStaticMethod() {
       return (await $globalCounter.peek());
     }
@@ -110,9 +107,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -140,9 +134,6 @@ class $Root extends $stdlib.std.Resource {
             $Another: ${$stdlib.core.liftObject(Another)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

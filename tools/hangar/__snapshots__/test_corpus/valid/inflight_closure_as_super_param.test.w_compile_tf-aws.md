@@ -51,9 +51,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Base {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Base;
 }
@@ -67,10 +64,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Base }) {
   class Derived extends $Base {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return Derived;
 }
@@ -84,9 +77,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Foo {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Foo;
 }
@@ -139,9 +129,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -160,9 +147,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.Base-1.cjs")({
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
@@ -185,9 +169,6 @@ class $Root extends $stdlib.std.Resource {
               })
             `;
           }
-          _liftedState() {
-            return { ...(super._liftedState?.() ?? {}) };
-          }
           get _liftMap() {
             return ({
               "handle": [
@@ -206,9 +187,6 @@ class $Root extends $stdlib.std.Resource {
             $Base: ${$stdlib.core.liftObject(Base)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
@@ -229,9 +207,6 @@ class $Root extends $stdlib.std.Resource {
             $c_h: ${$stdlib.core.liftObject(c.h)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({

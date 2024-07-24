@@ -32,9 +32,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Node {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Node;
 }
@@ -48,10 +45,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Super }) {
   class Sub extends $Super {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return Sub;
 }
@@ -65,10 +58,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Sub }) {
   class SubSub extends $Sub {
-    constructor($args) {
-      const {  } = $args;
-      super($args);
-    }
   }
   return SubSub;
 }
@@ -82,9 +71,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Super {
-    constructor($args) {
-      const {  } = $args;
-    }
   }
   return Super;
 }
@@ -154,9 +140,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -176,9 +159,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "$inflight_init": [
@@ -197,9 +177,6 @@ class $Root extends $stdlib.std.Resource {
             $Sub: ${$stdlib.core.liftObject(Sub)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
@@ -221,9 +198,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -244,9 +218,6 @@ class $Root extends $stdlib.std.Resource {
             $payloadWithoutOptions_b: ${$stdlib.core.liftObject(payloadWithoutOptions.b)},
           })
         `;
-      }
-      _liftedState() {
-        return { ...(super._liftedState?.() ?? {}) };
       }
       get _liftMap() {
         return ({
