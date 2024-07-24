@@ -107,7 +107,8 @@ export const EndpointTreeItem = ({
               aria-disabled={isLoading}
               className={classNames(
                 " flex justify-between items-center gap-0.5",
-                !isLoading && "text-sky-600 hover:underline",
+                !isLoading &&
+                  "text-sky-500 hover:text-sky-600 dark:hover:text-sky-400",
                 isLoading &&
                   "text-slate-400 dark:text-slate-500 cursor-not-allowed",
               )}
