@@ -564,7 +564,7 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
 
       const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
       const { TestRunnerClient } = await import(testRunnerPath);
-      const runner = new TestRunnerClient(testArns);
+      const runner = new TestRunnerClient({ $tests: testArns });
 
       const allTests = await runner.listTests();
       const filteredTests = filterTests(allTests, testFilter);

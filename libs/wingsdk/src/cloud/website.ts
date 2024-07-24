@@ -13,6 +13,12 @@ import { Json, Node, Resource } from "../std";
 export const WEBSITE_FQN = fqnForType("cloud.Website");
 
 /**
+ * List of inflight operations available for `Website`.
+ * @internal
+ */
+export enum WebsiteInflightMethods {}
+
+/**
  * Options for `Website`
  */
 export interface WebsiteProps extends WebsiteOptions, WebsiteDomainOptions {}
@@ -53,6 +59,9 @@ export interface WebsiteDomainOptions {
  * @abstract
  */
 export class Website extends Resource implements IWebsite {
+  /** @internal */
+  public static _methods = [];
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: IWebsiteClient;
 

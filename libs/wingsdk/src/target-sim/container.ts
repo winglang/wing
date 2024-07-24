@@ -2,7 +2,11 @@ import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { ContainerSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import { fqnForType } from "../constants";
 import { App, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
@@ -90,6 +94,14 @@ export interface ContainerProps {
  */
 export class Container extends Resource implements ISimulatorResource {
   /** @internal */
+  public static _methods = [];
+
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Container", Container._methods);
+  }
+
+  /** @internal */
   public [INFLIGHT_SYMBOL]?: IContainerClient;
 
   private readonly imageTag: string;
@@ -139,7 +151,7 @@ export class Container extends Resource implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
@@ -149,8 +161,8 @@ export class Container extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  public _liftedState(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }
 

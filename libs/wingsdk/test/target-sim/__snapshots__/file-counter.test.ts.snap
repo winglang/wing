@@ -34,44 +34,72 @@ exports.handler = async function(event) {
             await ctx.bucket.put(key, event);
           }
   const $ctx = {
-  counter: (function() {
-  let handle = process.env.COUNTER_HANDLE_87e2e6cc;
-  if (!handle) {
-    throw new Error("Missing environment variable: COUNTER_HANDLE_87e2e6cc");
+  counter: 
+(await (async () => {
+  const klass = (function() {
+  class CounterClient {
+    constructor({ $handle }) {
+      const simulatorUrl = process.env.WING_SIMULATOR_URL;
+      if (!simulatorUrl) {
+        throw new Error("Missing environment variable: WING_SIMULATOR_URL");
+      }
+      const caller = process.env.WING_SIMULATOR_CALLER;
+      if (!caller) {
+        throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+      }
+      this.backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, $handle, caller);
+    }
+    async $inflight_init() {}
+    async inc(...args) { return this.backend.call("inc", args); }
+async dec(...args) { return this.backend.call("dec", args); }
+async peek(...args) { return this.backend.call("peek", args); }
+async set(...args) { return this.backend.call("set", args); }
   }
-  const simulatorUrl = process.env.WING_SIMULATOR_URL;
-  if (!simulatorUrl) {
-    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
-  }
-  const caller = process.env.WING_SIMULATOR_CALLER;
-  if (!caller) {
-    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
-  }
-  const backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
-  const client = new Proxy(backend, {
-    get: function(target, prop, receiver) {
-      return async function(...args) {
-        return backend.call(prop, args);
-      };
-    },
-  });
+  return CounterClient;
+})();
+  const client = new klass({$handle: process.env["RESOURCE_HANDLE_87e2e6cc"]});
+  if (client.$inflight_init) { await client.$inflight_init(); }
   return client;
-})(),
-bucket: (function() {
-  let handle = process.env.BUCKET_HANDLE_5f2a41c8;
-  if (!handle) {
-    throw new Error("Missing environment variable: BUCKET_HANDLE_5f2a41c8");
+})())
+,
+bucket: 
+(await (async () => {
+  const klass = (function() {
+  class BucketClient {
+    constructor({ $handle }) {
+      const simulatorUrl = process.env.WING_SIMULATOR_URL;
+      if (!simulatorUrl) {
+        throw new Error("Missing environment variable: WING_SIMULATOR_URL");
+      }
+      const caller = process.env.WING_SIMULATOR_CALLER;
+      if (!caller) {
+        throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+      }
+      this.backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, $handle, caller);
+    }
+    async $inflight_init() {}
+    async put(...args) { return this.backend.put(...args); }
+async get(...args) { return this.backend.get(...args); }
+async list(...args) { return this.backend.list(...args); }
+async delete(...args) { return this.backend.delete(...args); }
+async putJson(...args) { return this.backend.putJson(...args); }
+async getJson(...args) { return this.backend.getJson(...args); }
+async publicUrl(...args) { return this.backend.publicUrl(...args); }
+async exists(...args) { return this.backend.exists(...args); }
+async tryGet(...args) { return this.backend.tryGet(...args); }
+async tryGetJson(...args) { return this.backend.tryGetJson(...args); }
+async tryDelete(...args) { return this.backend.tryDelete(...args); }
+async metadata(...args) { return this.backend.metadata(...args); }
+async copy(...args) { return this.backend.copy(...args); }
+async rename(...args) { return this.backend.rename(...args); }
   }
-  const simulatorUrl = process.env.WING_SIMULATOR_URL;
-  if (!simulatorUrl) {
-    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
-  }
-  const caller = process.env.WING_SIMULATOR_CALLER;
-  if (!caller) {
-    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
-  }
-  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
-})()
+  return BucketClient;
+})();
+  const client = new klass({$handle: process.env["BUCKET_HANDLE_5f2a41c8"]});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -295,7 +323,6 @@ bucket: (function() {
           "concurrency": 100,
           "environmentVariables": {
             "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
-            "COUNTER_HANDLE_87e2e6cc": "\${wsim#root/HelloWorld/Counter/Resource#attrs.handle}",
             "RESOURCE_HANDLE_87e2e6cc": "\${wsim#root/HelloWorld/Counter/Resource#attrs.handle}",
           },
           "sourceCodeFile": ".wing/consumer0_c8a319bc.cjs",

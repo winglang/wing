@@ -7,7 +7,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $payloadWithBucket_c, $payloadWithoutOptions_b }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -31,8 +32,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Node {
-    constructor({  }) {
-    }
   }
   return Node;
 }
@@ -46,9 +45,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Super }) {
   class Sub extends $Super {
-    constructor({  }) {
-      super({  });
-    }
   }
   return Sub;
 }
@@ -62,9 +58,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Sub }) {
   class SubSub extends $Sub {
-    constructor({  }) {
-      super({  });
-    }
   }
   return SubSub;
 }
@@ -78,8 +71,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Super {
-    constructor({  }) {
-    }
   }
   return Super;
 }
@@ -149,17 +140,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const SuperClient = ${Super._toInflightType()};
-            const client = new SuperClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -179,17 +159,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const SubClient = ${Sub._toInflightType()};
-            const client = new SubClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "$inflight_init": [
@@ -207,17 +176,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.SubSub-1.cjs")({
             $Sub: ${$stdlib.core.liftObject(Sub)},
           })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const SubSubClient = ${SubSub._toInflightType()};
-            const client = new SubSubClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
         `;
       }
       get _liftMap() {
@@ -240,17 +198,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const NodeClient = ${Node._toInflightType()};
-            const client = new NodeClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -270,17 +217,6 @@ class $Root extends $stdlib.std.Resource {
             $payloadWithBucket_c: ${$stdlib.core.liftObject(payloadWithBucket.c)},
             $payloadWithoutOptions_b: ${$stdlib.core.liftObject(payloadWithoutOptions.b)},
           })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
         `;
       }
       get _liftMap() {

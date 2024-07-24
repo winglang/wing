@@ -7,7 +7,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $res }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -28,7 +29,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Another }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -49,8 +51,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $globalCounter }) {
   class Another {
-    constructor({  }) {
-    }
     async myMethod() {
       (await $globalCounter.inc());
       return (await $globalCounter.peek());
@@ -74,8 +74,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class First {
-    constructor({  }) {
-    }
   }
   return First;
 }
@@ -89,7 +87,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Another, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalArrayOfStr, $globalBool, $globalBucket, $globalMapOfNum, $globalNum, $globalSetOfStr, $globalStr, $util_Util }) {
   class MyResource {
-    constructor({ $this_localCounter, $this_localTopic }) {
+    constructor($args) {
+      const { $this_localCounter, $this_localTopic } = $args;
       this.$this_localCounter = $this_localCounter;
       this.$this_localTopic = $this_localTopic;
     }
@@ -123,7 +122,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -392,17 +392,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const FirstClient = ${First._toInflightType()};
-            const client = new FirstClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -421,17 +410,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.Another-1.cjs")({
             $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
           })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const AnotherClient = ${Another._toInflightType()};
-            const client = new AnotherClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
         `;
       }
       get _liftMap() {
@@ -471,17 +449,6 @@ class $Root extends $stdlib.std.Resource {
               })
             `;
           }
-          _toInflight() {
-            return `
-              (await (async () => {
-                const RClient = ${R._toInflightType()};
-                const client = new RClient({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `;
-          }
           get _liftMap() {
             return ({
               "handle": [
@@ -511,27 +478,21 @@ class $Root extends $stdlib.std.Resource {
             $globalNum: ${$stdlib.core.liftObject(globalNum)},
             $globalSetOfStr: ${$stdlib.core.liftObject(globalSetOfStr)},
             $globalStr: ${$stdlib.core.liftObject(globalStr)},
-            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.util.Util") ?? util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const MyResourceClient = ${MyResource._toInflightType()};
-            const client = new MyResourceClient({
-              $this_localCounter: ${$stdlib.core.liftObject(this.localCounter)},
-              $this_localTopic: ${$stdlib.core.liftObject(this.localTopic)},
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+          $this_localCounter: $stdlib.core.liftObject(this.localCounter),
+          $this_localTopic: $stdlib.core.liftObject(this.localTopic),
+        };
       }
       get _liftMap() {
         return ({
           "myPut": [
-            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.util.Util") ?? util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
             [Another, ["myStaticMethod"]],
             [globalAnother, ["myMethod"]],
             [globalAnother.first.myResource, ["put"]],
@@ -547,7 +508,7 @@ class $Root extends $stdlib.std.Resource {
             [this.localTopic, ["publish"]],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.util.Util") ?? util.Util, "@winglang/sdk/util", "Util"), []],
             [Another, []],
             [globalAnother, []],
             [globalAnother.first.myResource, []],
@@ -578,17 +539,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -611,17 +561,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $Another: ${$stdlib.core.liftObject(Another)},
           })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType()};
-            const client = new $Closure2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
         `;
       }
       get _liftMap() {

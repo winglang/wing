@@ -20,7 +20,7 @@ test("publish - happy path", async () => {
     .resolves({ $metadata: { httpStatusCode: 200 } });
 
   // WHEN
-  const client = new TopicClient(TOPIC_ARN);
+  const client = new TopicClient({ $topicArn: TOPIC_ARN });
   await client.publish(MESSAGE);
 
   // THEN
@@ -46,7 +46,7 @@ test("publish multiple messages", async () => {
     .resolves({ $metadata: { httpStatusCode: 200 } });
 
   // WHEN
-  const client = new TopicClient(TOPIC_ARN);
+  const client = new TopicClient({ $topicArn: TOPIC_ARN });
   await client.publish(FIRST_MESSAGE, SECOND_MESSAGE);
 
   // THEN

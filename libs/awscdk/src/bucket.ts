@@ -9,7 +9,7 @@ import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { LambdaDestination } from "aws-cdk-lib/aws-s3-notifications";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { cloud, core, std } from "@winglang/sdk";
+import { cloud, std } from "@winglang/sdk";
 import { calculateBucketPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsBucket } from "@winglang/sdk/lib/shared-aws/bucket";
 import {
@@ -17,7 +17,7 @@ import {
   addPolicyStatements,
   isAwsCdkFunction,
 } from "./function";
-import { LiftMap, lift } from "@winglang/sdk/lib/core";
+import { LiftMap, lift, InflightClient } from "@winglang/sdk/lib/core";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -31,6 +31,14 @@ const EVENTS = {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.Bucket implements IAwsBucket {
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("bucket", "bucket.inflight"),
+      "BucketClient"
+    );
+  }
+
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
   private bucketDeployment?: BucketDeployment;
@@ -59,7 +67,10 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions
   ): IAwsCdkFunction {
-    const functionHandler = lift({ handler: inflight, eventType: event }).inflight(async (ctx, event) => {
+    const functionHandler = lift({
+      handler: inflight,
+      eventType: event,
+    }).inflight(async (ctx, event) => {
       const record = event.Records[0];
       if (!record) {
         throw new Error("No record found in the S3 event");
@@ -112,7 +123,11 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions
   ): void {
-    const fn = this.onEventFunction(cloud.BucketEventType.CREATE, inflight, opts);
+    const fn = this.onEventFunction(
+      cloud.BucketEventType.CREATE,
+      inflight,
+      opts
+    );
 
     std.Node.of(this).addConnection({
       source: this,
@@ -130,7 +145,11 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnDeleteOptions
   ): void {
-    const fn = this.onEventFunction(cloud.BucketEventType.DELETE, inflight, opts);
+    const fn = this.onEventFunction(
+      cloud.BucketEventType.DELETE,
+      inflight,
+      opts
+    );
 
     std.Node.of(this).addConnection({
       source: this,
@@ -148,7 +167,11 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnUpdateOptions
   ): void {
-    const fn = this.onEventFunction(cloud.BucketEventType.UPDATE, inflight, opts);
+    const fn = this.onEventFunction(
+      cloud.BucketEventType.UPDATE,
+      inflight,
+      opts
+    );
 
     std.Node.of(this).addConnection({
       source: this,
@@ -189,15 +212,10 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "BucketClient", [
-      `process.env["${this.envName()}"]`,
-      `process.env["${this.isPublicEnvName()}"]`,
-    ]);
-  }
-
-  private isPublicEnvName(): string {
-    return `${this.envName()}_IS_PUBLIC`;
+  public _liftedState(): Record<string, string> {
+    return {
+      $url: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

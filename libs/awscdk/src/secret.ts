@@ -5,9 +5,9 @@ import {
 } from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
-import { cloud, core, std } from "@winglang/sdk";
+import { cloud, std } from "@winglang/sdk";
 import { calculateSecretPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { LiftMap } from "@winglang/sdk/lib/core";
+import { InflightClient, LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS Implemntation of `cloud.Secret`
@@ -15,6 +15,14 @@ import { LiftMap } from "@winglang/sdk/lib/core";
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret {
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("secret", "secret.inflight"),
+      "SecretClient"
+    );
+  }
+
   private readonly secret: ICdkSecret;
   private readonly arnForPolicies: string;
 
@@ -64,10 +72,10 @@ export class Secret extends cloud.Secret {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "SecretClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _liftedState(): Record<string, string> {
+    return {
+      $secretArn: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

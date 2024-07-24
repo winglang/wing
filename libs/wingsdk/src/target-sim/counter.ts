@@ -1,6 +1,10 @@
 import { Construct } from "constructs";
 import { Resource } from "./resource";
-import { bindSimulatorResource, makeSimulatorJsClientV2 } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientTypeProxy,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import * as cloud from "../cloud";
 import { LiftMap, lift } from "../core";
 import { Node, IInflightHost } from "../std";
@@ -11,6 +15,11 @@ import { Node, IInflightHost } from "../std";
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.Counter {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientTypeProxy("Counter", cloud.Counter._methods);
+  }
+
   public readonly initial: number;
   private readonly backend: Resource;
 
@@ -45,14 +54,14 @@ export class Counter extends cloud.Counter {
     };
   }
 
-  public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this.backend, host, ops);
-    super.onLift(host, ops);
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this.backend);
   }
 
-  /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClientV2(__filename, this.backend);
+  public onLift(host: IInflightHost, ops: string[]): void {
+    bindSimulatorResource(this.backend, host, ops);
+    super.onLift(host, ops);
   }
 }
 

@@ -25,6 +25,16 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.Counter implements IAwsCounter {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("counter", "counter.inflight"),
+      "CounterClient"
+    );
+  }
+
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
@@ -63,13 +73,11 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "CounterClient",
-      [`process.env["${this.envName()}"]`, `${this.initial}`]
-    );
+  public _liftedState(): Record<string, string> {
+    return {
+      $tableName: `process.env["${this.envName()}"]`,
+      $initial: `${this.initial}`,
+    };
   }
 
   private envName(): string {

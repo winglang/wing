@@ -5,14 +5,14 @@ export class TestRunnerClient implements ITestRunnerClient {
   // A map from test names to their corresponding function ARNs.
   private readonly tests: Map<string, string>;
 
-  constructor(tests: string) {
+  constructor({ $tests }: { $tests: string }) {
     // Expects a JSON string of the form:
     // [
     //   ["testPath1", "functionArn1"],
     //   ["testPath2", "functionArn2"],
     //   ...
     // ]
-    this.tests = new Map(JSON.parse(tests) as [string, string][]);
+    this.tests = new Map(JSON.parse($tests) as [string, string][]);
   }
 
   public async listTests(): Promise<string[]> {
@@ -24,7 +24,10 @@ export class TestRunnerClient implements ITestRunnerClient {
     if (!functionArn) {
       throw new Error(`No test found with path "${path}"`);
     }
-    const client = new FunctionClient(functionArn, path);
+    const client = new FunctionClient({
+      $functionArn: functionArn,
+      $constructPath: path,
+    });
     let traces: Trace[] = [];
     let pass = false;
     let error: string | undefined;

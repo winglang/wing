@@ -61,6 +61,14 @@ export interface IAwsBucketClient extends cloud.IBucketClient {
  */
 export class BucketRef extends Resource {
   /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("bucket", "bucket.inflight"),
+      "BucketClient"
+    );
+  }
+
+  /** @internal */
   public [INFLIGHT_SYMBOL]?: IAwsBucketClient;
 
   /**
@@ -97,10 +105,10 @@ export class BucketRef extends Resource {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return InflightClient.for(__dirname, __filename, "BucketClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _liftedState(): Record<string, string> {
+    return {
+      $bucketName: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

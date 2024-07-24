@@ -1,7 +1,11 @@
 import { ISimulatorResource } from "./resource";
 import { StateSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import { fqnForType } from "../constants";
 import { LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
@@ -12,6 +16,16 @@ import { IInflightHost, Json, Resource } from "../std";
  * Global identifier for `State`.
  */
 export const STATE_FQN = fqnForType("sim.State");
+
+/**
+ * List of inflight operations available for `State`.
+ * @internal
+ */
+export enum StateInflightMethods {
+  SET = "set",
+  GET = "get",
+  TRY_GET = "tryGet",
+}
 
 /**
  * Key/value in-memory state for the simulator.
@@ -28,6 +42,18 @@ export const STATE_FQN = fqnForType("sim.State");
  * @inflight `@winglang/sdk.sim.IStateClient`
  */
 export class State extends Resource implements ISimulatorResource {
+  /** @internal */
+  public static _methods = [
+    StateInflightMethods.SET,
+    StateInflightMethods.GET,
+    StateInflightMethods.TRY_GET,
+  ];
+
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("State", State._methods);
+  }
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: IStateClient;
 
@@ -49,13 +75,8 @@ export class State extends Resource implements ISimulatorResource {
     };
   }
 
-  /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
-  }
-
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
@@ -65,6 +86,11 @@ export class State extends Resource implements ISimulatorResource {
       type: STATE_FQN,
       props,
     };
+  }
+
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }
 
@@ -95,17 +121,4 @@ export interface IStateClient {
    * @inflight
    */
   tryGet(key: string): Promise<Json | undefined>;
-}
-
-/**
- * List of inflight operations available for `State`.
- * @internal
- */
-export enum StateInflightMethods {
-  /** `State.set` */
-  SET = "set",
-  /** `State.get` */
-  GET = "get",
-  /**`State.tryGet` */
-  TRY_GET = "tryGet",
 }

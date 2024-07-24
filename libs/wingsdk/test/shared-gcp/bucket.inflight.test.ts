@@ -21,7 +21,10 @@ test("put object to bucket", async () => {
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   await client.put(KEY, VALUE);
 
   // check that the object was put by ensuring it exists
@@ -36,7 +39,10 @@ test("putJson an object into the bucket", async () => {
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   await client.putJson(KEY, VALUE as any);
 
   // check that the object was put by ensuring it exists
@@ -52,7 +58,10 @@ test("get an object from bucket", async () => {
   const storage = new MockStorage();
   await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const data = await client.get(KEY);
 
   expect(data).toBe(VALUE);
@@ -64,7 +73,10 @@ test("get a non-existent object from the bucket", async () => {
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   await expect(() => client.get(NON_EXISTENT_KEY)).rejects.toThrowError(
     /Failed to get object \(key=NON_EXISTENT_KEY\)/
   );
@@ -78,7 +90,10 @@ test("getJson an object from the bucket", async () => {
   const storage = new MockStorage();
   await storage.bucket(BUCKET_NAME).put(KEY, JSON.stringify(VALUE));
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const res = await client.getJson(KEY);
 
   expect(res).toEqual(VALUE);
@@ -92,7 +107,10 @@ test("list objects in bucket", async () => {
   await storage.bucket(BUCKET_NAME).put("test-file-2", "test-content-2");
   await storage.bucket(BUCKET_NAME).put("test-file-3", "test-content-3");
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const res = await client.list();
 
   expect(res).toEqual(["test-file-1", "test-file-2", "test-file-3"]);
@@ -106,7 +124,10 @@ test("delete object from bucket", async () => {
   const storage = new MockStorage();
   await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   await client.delete(KEY);
 
   // check that the object was deleted by ensuring it doesn't exist
@@ -120,7 +141,10 @@ test("delete object from the bucket with mustExist option", async () => {
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
 
   await expect(() =>
     client.delete(NON_EXISTENT_KEY, { mustExist: true })
@@ -133,7 +157,10 @@ test("delete a non-existent object from the bucket with mustExist option", async
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
 
   await expect(() =>
     client.delete(NON_EXISTENT_KEY, { mustExist: true })
@@ -147,7 +174,10 @@ test("Given a non public bucket when reaching to a key public url it should thro
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   await client.put(KEY, VALUE);
 
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
@@ -161,7 +191,10 @@ test("Given a public bucket when reaching to a non existent key, public url it s
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
 
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
     `Failed to check if bucket is public. (bucket=${BUCKET_NAME})`
@@ -178,7 +211,13 @@ test("Given a public bucket, when giving one of its keys, we should get its publ
   const storage = new MockStorage();
   await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
-  const client = vi.fn(() => new BucketClient(BUCKET_NAME, storage as any));
+  const client = vi.fn(
+    () =>
+      new BucketClient({
+        $bucketName: BUCKET_NAME,
+        $storage: storage as any,
+      })
+  );
 
   // it should return the PUBLIC_URL but not by calling the publicUrl method
   client.mockImplementation(() => {
@@ -199,7 +238,10 @@ test("check that an object exists in the bucket", async () => {
   const storage = new MockStorage();
   await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const res = await client.exists(KEY);
 
   expect(res).toBe(true);
@@ -211,7 +253,10 @@ test("check that an object doesn't exist in the bucket", async () => {
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const res = await client.exists(KEY);
 
   expect(res).toBe(false);
@@ -225,7 +270,10 @@ test("tryGet an existing object from the bucket", async () => {
   const storage = new MockStorage();
   await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const res = await client.tryGet(KEY);
 
   expect(res).toBe(VALUE);
@@ -237,7 +285,10 @@ test("tryGet a non-existent object from the bucket", async () => {
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const res = await client.tryGet(NON_EXISTENT_KEY);
 
   expect(res).toBe(undefined);
@@ -251,7 +302,10 @@ test("tryGetJson an existing object from the bucket", async () => {
   const storage = new MockStorage();
   await storage.bucket(BUCKET_NAME).put(KEY, JSON.stringify(VALUE));
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const res = await client.tryGetJson(KEY);
 
   expect(res).toEqual(VALUE);
@@ -263,7 +317,10 @@ test("tryGetJson a non-existent object from the bucket", async () => {
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const res = await client.tryGetJson(NON_EXISTENT_KEY);
 
   expect(res).toBe(undefined);
@@ -277,7 +334,10 @@ test("tryGetJson an existing non-Json object from the bucket", async () => {
   const storage = new MockStorage();
   await storage.bucket(BUCKET_NAME).put(KEY, NON_JSON_VALUE);
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
 
   await expect(() => client.tryGetJson(KEY)).rejects.toThrowError(
     `Failed to tryGet JSON object. (key=${KEY})`
@@ -292,7 +352,10 @@ test("tryDelete an existing object from the bucket", async () => {
   const storage = new MockStorage();
   await storage.bucket(BUCKET_NAME).put(KEY, VALUE);
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const res = await client.tryDelete(KEY);
 
   expect(res).toBe(true);
@@ -304,7 +367,10 @@ test("tryDelete a non-existent object from the bucket", async () => {
 
   const storage = new MockStorage();
 
-  const client = new BucketClient(BUCKET_NAME, storage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: storage as any,
+  });
   const res = await client.tryDelete(NON_EXISTENT_KEY);
 
   expect(res).toBe(false);
@@ -356,7 +422,10 @@ test("get object's metadata from bucket", async () => {
     });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: mockStorage as any,
+  });
   const response = await client.metadata(KEY);
 
   // THEN
@@ -374,7 +443,10 @@ test("copy non-existing object", async () => {
   const mockStorage = new MockStorage();
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: mockStorage as any,
+  });
 
   // THEN
   await expect(client.copy(SRC_KEY, SRC_KEY)).rejects.toThrowError(
@@ -391,7 +463,10 @@ test("copy objects within the bucket", async () => {
   const mockStorage = new MockStorage();
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: mockStorage as any,
+  });
   await client.put(SRC_KEY, SRC_VALUE);
   const response1 = await client.copy(SRC_KEY, SRC_KEY);
   // THEN
@@ -415,7 +490,10 @@ test("rename valid object in the bucket", async () => {
   const mockStorage = new MockStorage();
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: mockStorage as any,
+  });
   await client.put(SRC_KEY, SRC_VALUE);
   const response = await client.rename(SRC_KEY, DST_KEY);
 
@@ -432,7 +510,10 @@ test("renaming an object to its current name should throw an error", async () =>
   const mockStorage = new MockStorage();
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: mockStorage as any,
+  });
 
   // THEN
   await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
@@ -448,7 +529,10 @@ test("rename non-existent object within the bucket", async () => {
   const mockStorage = new MockStorage();
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  const client = new BucketClient({
+    $bucketName: BUCKET_NAME,
+    $storage: mockStorage as any,
+  });
 
   // THEN
   await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(

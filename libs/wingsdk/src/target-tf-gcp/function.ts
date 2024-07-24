@@ -4,7 +4,6 @@ import { AssetType, Lazy, TerraformAsset, Fn } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket } from "./bucket";
-import { core } from "..";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
 import { ProjectIamMember } from "../.gen/providers/google/project-iam-member";
@@ -256,17 +255,12 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-gcp", "shared-gcp"),
-      __filename,
-      "FunctionClient",
-      [
-        `process.env["${this.envName()}"]`,
-        `process.env["${this.projectEnv()}"]`,
-        `process.env["${this.regionEnv()}"]`,
-      ]
-    );
+  public _liftedState(): Record<string, string> {
+    return {
+      $functionName: `process.env["${this.envName()}"]`,
+      $projectId: `process.env["${this.projectEnv()}"]`,
+      $region: `process.env["${this.regionEnv()}"]`,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

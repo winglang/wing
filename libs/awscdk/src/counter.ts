@@ -1,12 +1,12 @@
 import { RemovalPolicy } from "aws-cdk-lib";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
-import { cloud, core, std } from "@winglang/sdk";
+import { cloud, std } from "@winglang/sdk";
 import { COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/commons";
 import { calculateCounterPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsCounter } from "@winglang/sdk/lib/shared-aws/counter";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
-import { LiftMap } from "@winglang/sdk/lib/core";
+import { InflightClient, LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS implementation of `cloud.Counter`.
@@ -14,6 +14,14 @@ import { LiftMap } from "@winglang/sdk/lib/core";
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.Counter implements IAwsCounter {
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("counter", "counter.inflight"),
+      "CounterClient"
+    );
+  }
+
   private readonly table: Table;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
@@ -52,11 +60,11 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "CounterClient", [
-      `process.env["${this.envName()}"]`,
-      `${this.initial}`,
-    ]);
+  public _liftedState(): Record<string, string> {
+    return {
+      $tableName: `process.env["${this.envName()}"]`,
+      $initial: `${this.initial}`,
+    };
   }
 
   private envName(): string {

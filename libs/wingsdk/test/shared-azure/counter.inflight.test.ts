@@ -30,7 +30,11 @@ vi.stubEnv("dummyKey", "value");
 
 describe("no initial value", async () => {
   test("increment- no key", async () => {
-    const client = new CounterClient("dummyAccount", "dummyTable", "dummyKey");
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+    });
 
     expect(await client.inc()).toBe(0);
     expect(await client.inc(2)).toBe(1);
@@ -39,7 +43,11 @@ describe("no initial value", async () => {
   });
 
   test("increment- with a key", async () => {
-    const client = new CounterClient("dummyAccount", "dummyTable", "dummyKey");
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+    });
 
     expect(await client.inc(2, "testKey")).toBe(0);
     expect(await client.inc(-1, "testKey")).toBe(2);
@@ -47,7 +55,11 @@ describe("no initial value", async () => {
   });
 
   test("decrement - no key", async () => {
-    const client = new CounterClient("dummyAccount", "dummyTable", "dummyKey");
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+    });
 
     expect(await client.dec()).toBe(0);
     expect(await client.dec(2)).toBe(-1);
@@ -56,7 +68,11 @@ describe("no initial value", async () => {
   });
 
   test("decrement - with a key", async () => {
-    const client = new CounterClient("dummyAccount", "dummyTable", "dummyKey");
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+    });
 
     expect(await client.dec(2, "testKey")).toBe(0);
     expect(await client.dec(-1, "testKey")).toBe(-2);
@@ -64,7 +80,11 @@ describe("no initial value", async () => {
   });
 
   test("peeking", async () => {
-    const client = new CounterClient("dummyAccount", "dummyTable", "dummyKey");
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+    });
 
     expect(await client.peek()).toBe(0);
     expect(await client.peek("testKey")).toBe(0);
@@ -77,7 +97,11 @@ describe("no initial value", async () => {
   });
 
   test("setting", async () => {
-    const client = new CounterClient("dummyAccount", "dummyTable", "dummyKey");
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+    });
 
     expect(await client.set(150)).toBe(undefined);
     expect(await client.peek()).toBe(150);
@@ -89,12 +113,12 @@ describe("no initial value", async () => {
 
 describe("positive initial value", async () => {
   test("increment- no key", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      10
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: 10,
+    });
 
     expect(await client.inc()).toBe(10);
     expect(await client.inc(2)).toBe(11);
@@ -103,12 +127,12 @@ describe("positive initial value", async () => {
   });
 
   test("increment- with a key", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      10
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: 10,
+    });
 
     expect(await client.inc(2, "testKey")).toBe(10);
     expect(await client.inc(-1, "testKey")).toBe(12);
@@ -116,12 +140,12 @@ describe("positive initial value", async () => {
   });
 
   test("decrement - no key", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      10
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: 10,
+    });
 
     expect(await client.dec()).toBe(10);
     expect(await client.dec(2)).toBe(9);
@@ -130,12 +154,12 @@ describe("positive initial value", async () => {
   });
 
   test("decrement - with a key", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      10
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: 10,
+    });
 
     expect(await client.dec(2, "testKey")).toBe(10);
     expect(await client.dec(-1, "testKey")).toBe(8);
@@ -143,12 +167,12 @@ describe("positive initial value", async () => {
   });
 
   test("peeking", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      10
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: 10,
+    });
 
     expect(await client.peek()).toBe(10);
     expect(await client.peek("testKey")).toBe(10);
@@ -161,12 +185,12 @@ describe("positive initial value", async () => {
   });
 
   test("setting", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      10
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: 10,
+    });
 
     expect(await client.set(150)).toBe(undefined);
     expect(await client.peek()).toBe(150);
@@ -178,12 +202,12 @@ describe("positive initial value", async () => {
 
 describe("negative initial value", async () => {
   test("increment- no key", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      -5
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: -5,
+    });
 
     expect(await client.inc()).toBe(-5);
     expect(await client.inc(2)).toBe(-4);
@@ -192,12 +216,12 @@ describe("negative initial value", async () => {
   });
 
   test("increment- with a key", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      -5
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: -5,
+    });
 
     expect(await client.inc(2, "testKey")).toBe(-5);
     expect(await client.inc(-1, "testKey")).toBe(-3);
@@ -205,12 +229,12 @@ describe("negative initial value", async () => {
   });
 
   test("decrement - no key", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      -5
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: -5,
+    });
 
     expect(await client.dec()).toBe(-5);
     expect(await client.dec(2)).toBe(-6);
@@ -219,12 +243,12 @@ describe("negative initial value", async () => {
   });
 
   test("decrement - with a key", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      -5
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: -5,
+    });
 
     expect(await client.dec(2, "testKey")).toBe(-5);
     expect(await client.dec(-1, "testKey")).toBe(-7);
@@ -232,12 +256,12 @@ describe("negative initial value", async () => {
   });
 
   test("peeking", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      -5
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: -5,
+    });
 
     expect(await client.peek()).toBe(-5);
     expect(await client.peek("testKey")).toBe(-5);
@@ -250,12 +274,12 @@ describe("negative initial value", async () => {
   });
 
   test("setting", async () => {
-    const client = new CounterClient(
-      "dummyAccount",
-      "dummyTable",
-      "dummyKey",
-      -5
-    );
+    const client = new CounterClient({
+      $storageAccountName: "dummyAccount",
+      $storageTableName: "dummyTable",
+      $accountKeyVariable: "dummyKey",
+      $initial: -5,
+    });
 
     expect(await client.set(150)).toBe(undefined);
     expect(await client.peek()).toBe(150);

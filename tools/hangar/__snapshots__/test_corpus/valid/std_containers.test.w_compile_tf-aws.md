@@ -7,8 +7,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Animal {
-    constructor({  }) {
-    }
   }
   return Animal;
 }
@@ -22,9 +20,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Animal }) {
   class Cat extends $Animal {
-    constructor({  }) {
-      super({  });
-    }
   }
   return Cat;
 }
@@ -38,9 +33,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $Animal }) {
   class Dog extends $Animal {
-    constructor({  }) {
-      super({  });
-    }
   }
   return Dog;
 }
@@ -93,17 +85,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const AnimalClient = ${Animal._toInflightType()};
-            const client = new AnimalClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
       get _liftMap() {
         return ({
           "$inflight_init": [
@@ -122,17 +103,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const CatClient = ${Cat._toInflightType()};
-            const client = new CatClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "$inflight_init": [
@@ -149,17 +119,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.Dog-1.cjs")({
             $Animal: ${$stdlib.core.liftObject(Animal)},
           })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const DogClient = ${Dog._toInflightType()};
-            const client = new DogClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
         `;
       }
       get _liftMap() {

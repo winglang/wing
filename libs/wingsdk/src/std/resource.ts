@@ -1,6 +1,5 @@
 import { Construct, IConstruct } from "constructs";
-import { App, LiftMap, ClassFactory } from "../core";
-import { AbstractMemberError } from "../core/errors";
+import { App, InflightClient, LiftMap, ClassFactory } from "../core";
 import { Node } from "../std";
 
 /**
@@ -70,6 +69,14 @@ export interface ILiftable {
    * @internal
    */
   _toInflight(): string;
+
+  /**
+   * Return the fields that need to be passed to the inflight constructor as arguments.
+   * Each value should be a JavaScript code string.
+   *
+   * @internal
+   */
+  _liftedState?(): Record<string, string>;
 }
 
 /**
@@ -179,10 +186,17 @@ export abstract class Resource extends Construct implements IResource {
    * Return a code snippet that can be used to reference this resource inflight.
    *
    * @internal
-   * @abstract
    */
   public _toInflight(): string {
-    throw new AbstractMemberError();
+    return InflightClient.forV2(this.constructor, this._liftedState?.() ?? {});
+  }
+
+  /**
+   * @internal
+   * @abstract
+   */
+  public _liftedState(): Record<string, string> {
+    return {};
   }
 
   /**
@@ -251,6 +265,11 @@ export abstract class AutoIdResource extends Resource {
   constructor(scope: Construct, idPrefix: string = "") {
     const id = App.of(scope).makeId(scope, idPrefix ? `${idPrefix}_` : "");
     super(scope, id);
+  }
+
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return {};
   }
 }
 

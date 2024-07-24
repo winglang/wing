@@ -2,7 +2,10 @@ import { IFunctionClient } from "../cloud";
 import { Trace, Json } from "../std";
 
 export class FunctionClient implements IFunctionClient {
-  constructor(private functionName: string) {}
+  private readonly functionName: string;
+  constructor({ $functionName }: { $functionName: string }) {
+    this.functionName = $functionName;
+  }
 
   /**
    * Invoke the function, passing the given payload as an argument.

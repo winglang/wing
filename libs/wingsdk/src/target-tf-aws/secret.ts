@@ -22,6 +22,16 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("secret", "secret.inflight"),
+      "SecretClient"
+    );
+  }
+
   private readonly secret: DataAwsSecretsmanagerSecret | SecretsmanagerSecret;
 
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
@@ -66,13 +76,10 @@ export class Secret extends cloud.Secret {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "SecretClient",
-      [`process.env["${this.envName()}"]`]
-    );
+  public _liftedState(): Record<string, string> {
+    return {
+      $secretArn: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

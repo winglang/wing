@@ -29,7 +29,10 @@ test("invoke - happy path", async () => {
     });
 
   // WHEN
-  const client = new FunctionClient(FUNCTION_NAME, "root/Function");
+  const client = new FunctionClient({
+    $functionArn: FUNCTION_NAME,
+    $constructPath: "root/Function",
+  });
   const response = await client.invoke(PAYLOAD);
 
   // THEN
@@ -61,7 +64,10 @@ test("invoke - sad path", async () => {
     });
 
   // THEN
-  const client = new FunctionClient("FUNCTION_NAME", "root/Function");
+  const client = new FunctionClient({
+    $functionArn: FUNCTION_NAME,
+    $constructPath: "root/Function",
+  });
   await expect(client.invoke(PAYLOAD)).rejects.toThrow(
     /Invoke failed with message: "I don't like your input!"/
   );

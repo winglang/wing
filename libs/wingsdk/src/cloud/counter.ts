@@ -9,6 +9,17 @@ import { Node, Resource } from "../std";
 export const COUNTER_FQN = fqnForType("cloud.Counter");
 
 /**
+ * List of inflight operations available for `Counter`.
+ * @internal
+ */
+export enum CounterInflightMethods {
+  INC = "inc",
+  DEC = "dec",
+  PEEK = "peek",
+  SET = "set",
+}
+
+/**
  * Options for `Counter`.
  */
 export interface CounterProps {
@@ -25,6 +36,14 @@ export interface CounterProps {
  * @abstract
  */
 export class Counter extends Resource {
+  /** @internal */
+  public static _methods = [
+    CounterInflightMethods.INC,
+    CounterInflightMethods.DEC,
+    CounterInflightMethods.PEEK,
+    CounterInflightMethods.SET,
+  ];
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: ICounterClient;
 
@@ -86,19 +105,4 @@ export interface ICounterClient {
    * @inflight
    */
   set(value: number, key?: string): Promise<void>;
-}
-
-/**
- * List of inflight operations available for `Counter`.
- * @internal
- */
-export enum CounterInflightMethods {
-  /** `Counter.inc` */
-  INC = "inc",
-  /** `Counter.dec` */
-  DEC = "dec",
-  /** `Counter.peek` */
-  PEEK = "peek",
-  /** `Counter.set` */
-  SET = "set",
 }

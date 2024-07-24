@@ -8,6 +8,12 @@ import { Node, Resource } from "../std";
 export const DOMAIN_FQN = fqnForType("cloud.Domain");
 
 /**
+ * List of inflight operations available for `Domain`.
+ * @internal
+ */
+export enum DomainInflightMethods {}
+
+/**
  * Options for `Domain`.
  */
 export interface DomainProps {
@@ -24,6 +30,9 @@ export interface DomainProps {
  * @abstract
  */
 export class Domain extends Resource {
+  /** @internal */
+  public static _methods = [];
+
   /** @internal */
   protected _domain!: string;
 

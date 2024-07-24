@@ -5,7 +5,6 @@ import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import mime from "mime-types";
 import { createEncryptedBucket } from "./bucket";
-import { core } from "..";
 import { CloudfrontDistribution } from "../.gen/providers/aws/cloudfront-distribution";
 import { CloudfrontOriginAccessControl } from "../.gen/providers/aws/cloudfront-origin-access-control";
 import { DataAwsIamPolicyDocument } from "../.gen/providers/aws/data-aws-iam-policy-document";
@@ -225,16 +224,6 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
         this.uploadFile(filename);
       }
     }
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "WebsiteClient",
-      []
-    );
   }
 
   public get bucketArn(): string {

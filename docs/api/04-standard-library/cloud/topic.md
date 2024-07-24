@@ -123,7 +123,7 @@ AWS implementations of `cloud.Topic` use [AWS SNS](https://docs.aws.amazon.com/s
 
 ### Topic <a name="Topic" id="@winglang/sdk.cloud.Topic"></a>
 
-A topic.
+A topic for pub/sub notifications.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Topic.Initializer"></a>
 

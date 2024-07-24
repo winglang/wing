@@ -9,6 +9,16 @@ import { IInflightHost } from "../std";
  * AWS implementation of `cloud.Endpoint`.
  */
 export class Endpoint extends cloud.Endpoint {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("endpoint", "endpoint.inflight"),
+      "EndpointClient"
+    );
+  }
+
   constructor(
     scope: Construct,
     id: string,
@@ -29,13 +39,10 @@ export class Endpoint extends cloud.Endpoint {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "EndpointClient",
-      [`process.env["${this.urlEnvName()}"]`]
-    );
+  public _liftedState(): Record<string, string> {
+    return {
+      $url: `process.env["${this.urlEnvName()}"]`,
+    };
   }
 
   private urlEnvName(): string {

@@ -7,7 +7,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class R {
-    constructor({ $this_s1 }) {
+    constructor($args) {
+      const { $this_s1 } = $args;
       this.$this_s1 = $this_s1;
     }
     async foo() {
@@ -67,17 +68,11 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const RClient = ${R._toInflightType()};
-            const client = new RClient({
-              $this_s1: ${$stdlib.core.liftObject(this.s1)},
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+          $this_s1: $stdlib.core.liftObject(this.s1),
+        };
       }
       get _liftMap() {
         return ({

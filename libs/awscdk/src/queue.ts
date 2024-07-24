@@ -3,7 +3,7 @@ import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { std, core, cloud } from "@winglang/sdk";
+import { std, cloud } from "@winglang/sdk";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import {
   IAwsQueue,
@@ -11,7 +11,7 @@ import {
   QueueSetConsumerHandler,
 } from "@winglang/sdk/lib/shared-aws/queue";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
-import { LiftMap } from "@winglang/sdk/lib/core";
+import { InflightClient, LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -19,6 +19,14 @@ import { LiftMap } from "@winglang/sdk/lib/core";
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.Queue implements IAwsQueue {
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("queue", "queue.inflight"),
+      "QueueClient"
+    );
+  }
+
   private readonly queue: SQSQueue;
   private readonly timeout: std.Duration;
 
@@ -123,14 +131,14 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "QueueClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _liftedState(): Record<string, string> {
+    return {
+      $queueUrlOrArn: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {
-    return `SCHEDULE_EVENT_${this.node.addr.slice(-8)}`;
+    return `QUEUE_ARN_${this.node.addr.slice(-8)}`;
   }
 
   public get queueArn(): string {

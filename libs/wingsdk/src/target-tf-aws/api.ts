@@ -33,6 +33,16 @@ const NAME_OPTS: NameOptions = {
  * AWS Implementation of `cloud.Api`.
  */
 export class Api extends cloud.Api implements IAwsApi {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("api", "api.inflight"),
+      "ApiClient"
+    );
+  }
+
   private readonly api: WingRestApi;
   private readonly handlers: Record<string, Function> = {};
   private readonly endpoint: cloud.Endpoint;
@@ -80,7 +90,7 @@ export class Api extends cloud.Api implements IAwsApi {
 
     Node.of(this).addConnection({
       source: this,
-      sourceOp: cloud.ApiInflightMethods.REQUEST,
+      sourceOp: "request",
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: `${lowerMethod}()`,
@@ -250,13 +260,10 @@ export class Api extends cloud.Api implements IAwsApi {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "ApiClient",
-      [`process.env["${this.urlEnvName()}"]`]
-    );
+  public _liftedState(): Record<string, string> {
+    return {
+      $url: `process.env["${this.urlEnvName()}"]`,
+    };
   }
 
   private urlEnvName(): string {

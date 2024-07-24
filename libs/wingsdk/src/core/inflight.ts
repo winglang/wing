@@ -1,4 +1,3 @@
-import { basename } from "path";
 import { liftObject, LiftMap, INFLIGHT_INIT_METHOD_NAME } from "./lifting";
 import {
   AsyncFunction,
@@ -38,26 +37,36 @@ export interface InflightBinding {
  */
 export class InflightClient {
   /**
-   * Returns code for creating an inflight client.
-   */
-  public static for(
-    dirname: string,
-    filename: string,
-    clientClass: string,
-    args: string[]
-  ): string {
-    const inflightDir = dirname;
-    const inflightFile = basename(filename).split(".")[0] + ".inflight";
-    return `new (require("${normalPath(
-      `${inflightDir}/${inflightFile}`
-    )}")).${clientClass}(${args.join(", ")})`;
-  }
-
-  /**
    * Returns code for implementing `_toInflightType()`.
    */
   public static forType(filename: string, clientClass: string): string {
     return `require("${normalPath(filename)}").${clientClass}`;
+  }
+
+  /**
+   * Returns code for instantiating an inflight client from a class.
+   */
+  public static forV2(
+    klass: any,
+    liftedFields: Record<string, string>
+  ): string {
+    if (typeof klass !== "function") {
+      throw new Error("Invalid inflight class");
+    }
+    if (typeof klass._toInflightType !== "function") {
+      throw new Error("Class is missing _toInflightType static method");
+    }
+    const liftedFieldsStr = Object.keys(liftedFields)
+      .map((key) => `${key}: ${liftedFields[key]}`)
+      .join(", ");
+    return `
+(await (async () => {
+  const klass = ${klass._toInflightType()};
+  const client = new klass({${liftedFieldsStr}});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+`;
   }
 
   private constructor() {}

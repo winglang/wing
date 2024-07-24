@@ -135,6 +135,14 @@ export interface ILambdaContext {
  */
 export class FunctionRef extends Resource {
   /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("function", "function.inflight"),
+      "FunctionClient"
+    );
+  }
+
+  /** @internal */
   public [INFLIGHT_SYMBOL]?: IFunctionClient;
 
   /**
@@ -172,10 +180,11 @@ export class FunctionRef extends Resource {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return InflightClient.for(__dirname, __filename, "FunctionClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _liftedState(): Record<string, string> {
+    return {
+      $functionArn: `process.env["${this.envName()}"]`,
+      $constructPath: `"${this.node.path}"`,
+    };
   }
 
   private envName(): string {

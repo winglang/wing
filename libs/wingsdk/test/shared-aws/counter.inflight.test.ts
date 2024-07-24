@@ -30,7 +30,10 @@ test("inc(1)", async () => {
   });
 
   // WHEN
-  const client = new CounterClient(MOCK_TABLE_NAME);
+  const client = new CounterClient({
+    $tableName: MOCK_TABLE_NAME,
+    $initial: 0,
+  });
   const response = await client.inc();
 
   // THEN
@@ -48,7 +51,10 @@ test("inc(5)", async () => {
   });
 
   // WHEN
-  const client = new CounterClient(MOCK_TABLE_NAME);
+  const client = new CounterClient({
+    $tableName: MOCK_TABLE_NAME,
+    $initial: 0,
+  });
   const response = await client.inc(5);
 
   // THEN
@@ -67,7 +73,10 @@ test("key inc(1)", async () => {
   });
 
   // WHEN
-  const client = new CounterClient(MOCK_TABLE_NAME);
+  const client = new CounterClient({
+    $tableName: MOCK_TABLE_NAME,
+    $initial: 0,
+  });
   const response = await client.inc(undefined, "my-key");
 
   // THEN
@@ -86,7 +95,10 @@ test("key inc(5)", async () => {
   });
 
   // WHEN
-  const client = new CounterClient(MOCK_TABLE_NAME);
+  const client = new CounterClient({
+    $tableName: MOCK_TABLE_NAME,
+    $initial: 0,
+  });
   const response = await client.inc(5, "my-key");
 
   // THEN
@@ -105,7 +117,10 @@ test("set(0)", async () => {
   });
 
   // WHEN
-  const client = new CounterClient(MOCK_TABLE_NAME);
+  const client = new CounterClient({
+    $tableName: MOCK_TABLE_NAME,
+    $initial: 0,
+  });
   await client.set(0);
   const response = await client.peek();
 
@@ -127,7 +142,10 @@ test("set(10, 'my-key')", async () => {
   });
 
   // WHEN
-  const client = new CounterClient(MOCK_TABLE_NAME);
+  const client = new CounterClient({
+    $tableName: MOCK_TABLE_NAME,
+    $initial: 0,
+  });
   await client.set(10, "my-key");
   const response = await client.peek("my-key");
 
@@ -142,7 +160,10 @@ test("peek with initial value", async () => {
   });
 
   // WHEN
-  const client = new CounterClient(MOCK_TABLE_NAME);
+  const client = new CounterClient({
+    $tableName: MOCK_TABLE_NAME,
+    $initial: 0,
+  });
   const response = await client.peek();
 
   expect(response).toEqual(123);
@@ -154,7 +175,10 @@ test("peek without initial value", async () => {
   });
 
   // WHEN
-  const client = new CounterClient(MOCK_TABLE_NAME);
+  const client = new CounterClient({
+    $tableName: MOCK_TABLE_NAME,
+    $initial: 0,
+  });
   const response = await client.peek();
 
   expect(response).toEqual(0);
@@ -168,7 +192,10 @@ test("peek with value", async () => {
   });
 
   // WHEN
-  const client = new CounterClient(MOCK_TABLE_NAME);
+  const client = new CounterClient({
+    $tableName: MOCK_TABLE_NAME,
+    $initial: 0,
+  });
   const response = await client.peek("my-key");
 
   expect(response).toEqual(123);
@@ -181,7 +208,10 @@ test("key peek without value", async () => {
   });
 
   // WHEN
-  const client = new CounterClient(MOCK_TABLE_NAME);
+  const client = new CounterClient({
+    $tableName: MOCK_TABLE_NAME,
+    $initial: 0,
+  });
   const response = await client.peek("my-key");
 
   expect(response).toEqual(0);

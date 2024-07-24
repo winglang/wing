@@ -3,7 +3,7 @@ import { AwsInflightHost } from "./inflight-host";
 import { calculateQueuePermissions } from "./permissions";
 import { isValidArn } from "./util";
 import { cloud, ui } from "..";
-import { InflightClient, lift, LiftMap } from "../core";
+import { lift, LiftMap, InflightClient } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { IInflightHost, Node, Resource } from "../std";
 
@@ -70,6 +70,14 @@ export interface IAwsQueueClient extends cloud.IQueueClient {
  */
 export class QueueRef extends Resource {
   /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("queue", "queue.inflight"),
+      "QueueClient"
+    );
+  }
+
+  /** @internal */
   public [INFLIGHT_SYMBOL]?: IAwsQueueClient;
 
   /**
@@ -103,10 +111,10 @@ export class QueueRef extends Resource {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return InflightClient.for(__dirname, __filename, "QueueClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _liftedState(): Record<string, string> {
+    return {
+      $queueUrlOrArn: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

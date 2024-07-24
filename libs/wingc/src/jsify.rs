@@ -1861,7 +1861,7 @@ impl<'a> JSifier<'a> {
 			// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
 			// `_liftType`).
 			code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
-			code.add_code(self.jsify_to_inflight_method(&class.name, class_type));
+			code.add_code(self.jsify_lifted_state(&class.name, class_type));
 
 			// emit `onLift` and `onLiftType` to bind permissions and environment variables to inflight hosts
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
@@ -1982,39 +1982,28 @@ impl<'a> JSifier<'a> {
 		res
 	}
 
-	fn jsify_to_inflight_method(&self, class_name: &Symbol, class_type: TypeRef) -> CodeMaker {
-		let mut code = CodeMaker::with_source(&class_name.span);
-
-		code.open("_toInflight() {");
-
-		code.open("return `");
-
-		code.open("(await (async () => {");
-
-		code.line(format!(
-			"const {}Client = ${{{}._toInflightType()}};",
-			class_name.name, class_name.name,
-		));
-
-		code.open(format!("const client = new {}Client({{", class_name.name));
-
+	fn jsify_lifted_state(&self, class_name: &Symbol, class_type: TypeRef) -> CodeMaker {
 		// Get lifted fields from entire class ancestry
 		let lifts = Self::class_lifted_fields(class_type);
 
-		for (token, obj) in lifts {
-			code.line(format!("{token}: ${{{STDLIB_CORE}.liftObject({obj})}},"));
+		// Currently the contract doesn't _liftedState to be implemented on every class
+		// in order to allow extending existing JSII classes, so not generating
+		// the method is OK if there's no lifted state.
+		if lifts.len() == 0 {
+			return CodeMaker::default();
 		}
 
-		code.close("});");
+		let mut code = CodeMaker::with_source(&class_name.span);
+		code.open("_liftedState() {");
 
-		code.line(format!(
-			"if (client.{CLASS_INFLIGHT_INIT_NAME}) {{ await client.{CLASS_INFLIGHT_INIT_NAME}(); }}"
-		));
-		code.line("return client;");
+		code.open("return {");
+		code.line("...(super._liftedState?.() ?? {}),");
 
-		code.close("})())");
+		for (token, obj) in lifts {
+			code.line(format!("{token}: {STDLIB_CORE}.liftObject({obj}),"));
+		}
 
-		code.close("`;");
+		code.close("};");
 
 		code.close("}");
 		code
@@ -2131,8 +2120,23 @@ impl<'a> JSifier<'a> {
 			IndexSet::new()
 		};
 
-		class_code.open(format!(
-			"{JS_CONSTRUCTOR}({{ {} }}) {{",
+		let mut should_emit_constructor = false;
+
+		if lifted_fields.len() > 0 {
+			should_emit_constructor = true;
+		}
+
+		if class.closure_handle_method().is_some() {
+			should_emit_constructor = true;
+		}
+
+		if !should_emit_constructor {
+			return;
+		}
+
+		class_code.open(format!("{JS_CONSTRUCTOR}($args) {{",));
+		class_code.line(format!(
+			"const {{ {} }} = $args;",
 			lifted_fields
 				.union(&parent_fields)
 				.map(|token| { token.clone() })
@@ -2141,7 +2145,7 @@ impl<'a> JSifier<'a> {
 		));
 
 		if class.parent.is_some() {
-			class_code.line(format!("super({{ {} }});", parent_fields.iter().join(", ")));
+			class_code.line("super($args);");
 		}
 
 		for token in &lifted_fields {

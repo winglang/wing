@@ -52,9 +52,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $ParentClass }) {
   class Child extends $ParentClass {
-    constructor({  }) {
-      super({  });
-    }
   }
   return Child;
 }
@@ -85,8 +82,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $InflightClass }) {
   class ParentClass {
-    constructor({  }) {
-    }
     static async static_method() {
       return (await (async () => {const o = new $InflightClass(); await o.$inflight_init?.(); return o; })());
     }
@@ -141,17 +136,6 @@ class InflightClass extends $stdlib.std.Resource {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const InflightClassClient = ${InflightClass._toInflightType()};
-        const client = new InflightClassClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
-  }
   get _liftMap() {
     return ({
       "somethingFun": [
@@ -174,17 +158,6 @@ class ParentClass extends $stdlib.std.Resource {
       require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.cjs")({
         $InflightClass: ${$stdlib.core.liftObject(InflightClass)},
       })
-    `;
-  }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const ParentClassClient = ${ParentClass._toInflightType()};
-        const client = new ParentClassClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
     `;
   }
   get _liftMap() {
@@ -215,17 +188,6 @@ class Child extends ParentClass {
       require("${$helpers.normalPath(__dirname)}/inflight.Child-1.cjs")({
         $ParentClass: ${$stdlib.core.liftObject(ParentClass)},
       })
-    `;
-  }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const ChildClient = ${Child._toInflightType()};
-        const client = new ChildClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
     `;
   }
   get _liftMap() {
