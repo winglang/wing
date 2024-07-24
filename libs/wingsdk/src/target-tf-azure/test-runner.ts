@@ -13,7 +13,7 @@ const OUTPUT_TEST_RUNNER_FUNCTION_IDENTIFIERS =
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
 export class TestRunner extends std.TestRunner {
-  constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
+  constructor(scope: Construct, id: string, props: std.TestRunnerProps) {
     super(scope, id, props);
     // This output is created so the CLI's `wing test` command can obtain a list
     // of all names of test functions by running `terraform output`.

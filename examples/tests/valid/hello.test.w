@@ -1,8 +1,11 @@
 bring cloud;
 
 let bucket = new cloud.Bucket();
-let queue = new cloud.Queue();
 
-queue.setConsumer(inflight (message: str) => {
-  bucket.put("wing.txt", "Hello, {message}");
-});
+test "test1" {
+  bucket.put("key", "value");
+}
+
+test "test2" {
+  assert(bucket.list().length == 0, "Bucket should be empty");
+}

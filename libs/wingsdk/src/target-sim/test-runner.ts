@@ -13,7 +13,7 @@ import { IInflightHost } from "../std";
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
 export class TestRunner extends std.TestRunner implements ISimulatorResource {
-  constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
+  constructor(scope: Construct, id: string, props: std.TestRunnerProps) {
     super(scope, id, props);
   }
 

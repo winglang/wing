@@ -15,7 +15,9 @@ export const TEST_RUNNER_FQN = fqnForType("std.TestRunner");
  * Properties for `TestRunner`.
  * @skipDocs
  */
-export interface TestRunnerProps {}
+export interface TestRunnerProps {
+  readonly multipleSubtrees: boolean;
+}
 
 /**
  * A test engine.
@@ -30,9 +32,11 @@ export class TestRunner extends Resource {
    * on how many isolated environments are needed for testing.
    * @internal
    */
-  public static _createTree(app: App, Root: any) {
+  public static _createTree(app: App, Root: any, multipleSubtrees: boolean) {
     if (app.isTestEnvironment) {
-      app._testRunner = new TestRunner(app, "cloud.TestRunner");
+      app._testRunner = new TestRunner(app, "cloud.TestRunner", {
+        multipleSubtrees,
+      });
     }
 
     if (Root) {
@@ -40,7 +44,7 @@ export class TestRunner extends Resource {
       // Node.of(root).root
       Node._markRoot(Root);
 
-      if (app.isTestEnvironment) {
+      if (multipleSubtrees) {
         new Root(app, "env0");
         const tests = app._testRunner!.findTests();
         for (let i = 1; i < tests.length; i++) {
@@ -66,12 +70,16 @@ export class TestRunner extends Resource {
    */
   private _synthedTests: Set<string> = new Set();
 
-  constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
+  private readonly _multipleSubtrees!: boolean;
+
+  constructor(scope: Construct, id: string, props: TestRunnerProps) {
     if (new.target === TestRunner) {
       return Resource._newFromFactory(TEST_RUNNER_FQN, scope, id, props);
     }
 
     super(scope, id);
+
+    this._multipleSubtrees = props.multipleSubtrees;
 
     Node.of(this).hidden = true;
     Node.of(this).title = "TestRunner";
@@ -88,20 +96,27 @@ export class TestRunner extends Resource {
     inflight: IFunctionHandler,
     props: FunctionProps
   ): Function | undefined {
-    // searching exactly for `env${number}`
-    const testEnv = scope.node.path.match(/env[0-9]+/)?.at(0)!;
-    // searching for the rest of the path that appears after `env${number}`- this would be the test path
-    const testPath =
-      scope.node.path
-        .match(/env[\d]+\/.+/)
-        ?.at(0)!
-        .replace(`${testEnv}/`, "") +
-      "/" +
-      id;
+    if (this._multipleSubtrees) {
+      // searching exactly for `env${number}`
+      const testEnv = scope.node.path.match(/env[0-9]+/)?.at(0)!;
+      // searching for the rest of the path that appears after `env${number}`- this would be the test path
+      const testPath =
+        scope.node.path
+          .match(/env[\d]+\/.+/)
+          ?.at(0)!
+          .replace(`${testEnv}/`, "") +
+        "/" +
+        id;
 
-    if (!this._synthedEnvs.has(testEnv) && !this._synthedTests.has(testPath)) {
-      this._synthedEnvs.add(testEnv);
-      this._synthedTests.add(testPath);
+      if (
+        !this._synthedEnvs.has(testEnv) &&
+        !this._synthedTests.has(testPath)
+      ) {
+        this._synthedEnvs.add(testEnv);
+        this._synthedTests.add(testPath);
+        return new Function(scope, id, inflight, props);
+      }
+    } else {
       return new Function(scope, id, inflight, props);
     }
 
