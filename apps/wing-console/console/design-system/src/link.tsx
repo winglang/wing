@@ -12,9 +12,9 @@ export const Link = ({ className, children, ...props }: LinkProps) => {
   return (
     <a
       className={classNames(
-        "underline font-medium text-sky-500 hover:text-sky-600",
+        "text-sky-500 hover:text-sky-600 dark:hover:text-sky-400",
         "rounded",
-        "outline-none focus:ring ring-sky-600",
+        "outline-none focus:ring ring-sky-500/50",
         className,
       )}
       {...props}
