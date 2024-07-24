@@ -58,7 +58,7 @@ const options = parseArgs({
         return;
       }
       closing = true;
-      await consoleServer.close();
+      await Promise.allSettled([consoleServer.close(), vite.close()]).catch();
       process.exit();
     });
   }
