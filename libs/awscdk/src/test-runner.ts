@@ -11,7 +11,7 @@ const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WingTestRunnerFunctionArns";
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
 export class TestRunner extends std.TestRunner {
-  constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
+  constructor(scope: Construct, id: string, props: std.TestRunnerProps) {
     super(scope, id, props);
 
     // This output is created so the CLI's `wing test` command can obtain a list
@@ -62,7 +62,7 @@ export class TestRunner extends std.TestRunner {
     const arns = new Map<string, string>();
     for (const test of this.findTests()) {
       if (test._fn) {
-        if (!(isAwsCdkFunction(test._fn))) {
+        if (!isAwsCdkFunction(test._fn)) {
           throw new Error(
             `Unsupported test function type, ${test._fn.node.path} was not a tfaws.Function`
           );

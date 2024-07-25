@@ -1,4 +1,4 @@
-// this test will fail because no body is setting "my_unresolved_token" during deployment. 
+// this test will fail because nobody is setting "my_unresolved_token" during deployment. 
 
 bring sim;
 bring cloud;
@@ -14,3 +14,7 @@ let fn = new cloud.Function(
     FOO_VALUE: state.token("my_unresolved_token")
   }
 );
+
+test "" {
+  fn.invoke();
+}

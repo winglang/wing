@@ -16,6 +16,9 @@ export const TEST_RUNNER_FQN = fqnForType("std.TestRunner");
  * @skipDocs
  */
 export interface TestRunnerProps {
+  /**
+   * Whether multiple isolated environments have been created for testing.
+   */
   readonly multipleSubtrees: boolean;
 }
 

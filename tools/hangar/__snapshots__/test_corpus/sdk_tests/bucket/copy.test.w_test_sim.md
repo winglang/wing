@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ copy.test.wsim » root/env0/test:copy()
+pass ─ copy.test.wsim » root/Default/test:copy()
 
 Tests 1 passed (1)
 Snapshots 1 skipped

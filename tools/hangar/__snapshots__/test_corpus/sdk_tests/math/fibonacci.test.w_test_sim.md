@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ fibonacci.test.wsim » root/env0/test:inflight fibonacci
+pass ─ fibonacci.test.wsim » root/Default/test:inflight fibonacci
 
 Tests 1 passed (1)
 Snapshots 1 skipped

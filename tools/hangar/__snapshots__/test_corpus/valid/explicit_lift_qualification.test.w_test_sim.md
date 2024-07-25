@@ -2,9 +2,9 @@
 
 ## stdout.log
 ```log
-pass ─ explicit_lift_qualification.test.wsim » root/env0/test:explicit method lift qualification   
-pass ─ explicit_lift_qualification.test.wsim » root/env1/test:explicit closure lift qualification  
-pass ─ explicit_lift_qualification.test.wsim » root/env2/test:explicit interface lift qualification
+pass ─ explicit_lift_qualification.test.wsim » root/Default/test:explicit closure lift qualification  
+pass ─ explicit_lift_qualification.test.wsim » root/Default/test:explicit interface lift qualification
+pass ─ explicit_lift_qualification.test.wsim » root/Default/test:explicit method lift qualification   
 
 Tests 3 passed (3)
 Snapshots 1 skipped

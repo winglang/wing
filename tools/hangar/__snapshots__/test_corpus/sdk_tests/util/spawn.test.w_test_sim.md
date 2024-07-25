@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ spawn.test.wsim » root/env0/test:spawn()
+pass ─ spawn.test.wsim » root/Default/test:spawn()
 
 Tests 1 passed (1)
 Snapshots 1 skipped

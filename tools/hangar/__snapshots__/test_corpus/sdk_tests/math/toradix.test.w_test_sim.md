@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ toradix.test.wsim » root/env0/test:inflight base
+pass ─ toradix.test.wsim » root/Default/test:inflight base
 
 Tests 1 passed (1)
 Snapshots 1 skipped

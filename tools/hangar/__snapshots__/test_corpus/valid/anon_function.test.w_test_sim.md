@@ -5,7 +5,7 @@
 1
 2
 3
-pass ─ anon_function.test.wsim » root/env0/test:
+pass ─ anon_function.test.wsim » root/Default/test:
 
 Tests 1 passed (1)
 Snapshots 1 skipped

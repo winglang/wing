@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ yaml.test.wsim » root/env0/test:inflight yaml operations
+pass ─ yaml.test.wsim » root/Default/test:inflight yaml operations
 
 Tests 1 passed (1)
 Snapshots 1 skipped

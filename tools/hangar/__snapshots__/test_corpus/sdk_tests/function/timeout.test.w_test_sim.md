@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ timeout.test.wsim » root/env0/function invoke throws on timeout
+pass ─ timeout.test.wsim » root/Default/function invoke throws on timeout
 
 Tests 1 passed (1)
 Snapshots 1 skipped

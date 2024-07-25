@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ env.test.wsim » root/env0/test:addEnvironment
+pass ─ env.test.wsim » root/Default/test:addEnvironment
 
 Tests 1 passed (1)
 Snapshots 1 skipped
