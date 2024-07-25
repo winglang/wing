@@ -11,7 +11,14 @@ import type { ElkExtendedEdge } from "elkjs";
 import { type ElkPoint, type LayoutOptions } from "elkjs";
 import { motion } from "framer-motion";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { memo, useCallback, useMemo } from "react";
+import {
+  createContext,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
 import { useKeyPressEvent } from "react-use";
 
 import { RunningStateIndicator } from "../running-state-indicator/running-state-indicator.js";
@@ -43,8 +50,11 @@ const baseLayoutOptions: LayoutOptions = {
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
 };
 
+const MaxDepthContext = createContext(Number.POSITIVE_INFINITY);
+
 interface ConstructNodeProps {
   id: string;
+  parentsName?: string;
   name: string;
   fqn: string;
   inflights: {
@@ -57,6 +67,7 @@ interface ConstructNodeProps {
   hasChildNodes?: boolean;
   onSelectedNodeIdChange: (id: string | undefined) => void;
   color?: string;
+  collapsable?: boolean;
   onCollapse: (value: boolean) => void;
   collapsed: boolean;
   icon?: string;
@@ -68,6 +79,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
   memo(
     ({
       id,
+      parentsName,
       name,
       onSelectedNodeIdChange,
       highlight,
@@ -76,6 +88,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       children,
       hasChildNodes,
       color,
+      collapsable,
       onCollapse,
       collapsed,
       icon,
@@ -145,72 +158,107 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             }}
           >
             <div className="relative">
-              <div
-                className={clsx(
-                  "px-2.5 py-1 flex items-center gap-1.5",
-                  "transition-all",
-                )}
-              >
-                <div className="-ml-0.5">
-                  <div className="relative">
-                    <ResourceIcon
-                      className="size-4"
-                      resourceType={fqn}
-                      color={color}
-                      icon={icon}
-                    />
-                    <div className="absolute -right-0.5 bottom-0">
-                      <RunningStateIndicator
-                        runningState={hierarchichalRunningState}
-                        className={clsx(
-                          "size-1.5 outline outline-2",
-                          depth % 2 === 0 &&
-                            "outline-white dark:outline-slate-700",
-                          depth % 2 === 1 &&
-                            "outline-slate-50 dark:outline-slate-650",
-                        )}
+              <div className={clsx("px-2.5 py-1", "flex flex-col")}>
+                {/* {parentsName && (
+                  <span
+                    className={clsx("text-2xs leading-normal text-slate-450")}
+                  >
+                    {parentsName}/
+                  </span>
+                )} */}
+                <div className="flex items-center gap-1.5">
+                  {/* {parentsName && (
+                    <span
+                      className={clsx(
+                        "text-2xs leading-normal text-slate-450 font-light",
+                      )}
+                    >
+                      {parentsName}/
+                    </span>
+                  )} */}
+                  <div className="-ml-0.5">
+                    <div className="relative">
+                      <ResourceIcon
+                        className="size-4"
+                        resourceType={fqn}
+                        color={color}
+                        icon={icon}
                       />
+                      <div className="absolute -right-0.5 bottom-0">
+                        <RunningStateIndicator
+                          runningState={hierarchichalRunningState}
+                          className={clsx(
+                            "size-1.5 outline outline-2",
+                            depth % 2 === 0 &&
+                              "outline-white dark:outline-slate-700",
+                            depth % 2 === 1 &&
+                              "outline-slate-50 dark:outline-slate-650",
+                          )}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <span
-                  className={clsx(
-                    "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
-                    !highlight &&
-                      !hasError &&
-                      "text-slate-600 dark:text-slate-300",
-                    hasError && "text-red-600 dark:text-red-500",
-                    highlight && !hasError && "text-sky-600 dark:text-sky-300",
-                  )}
-                >
-                  {name}
-                </span>
-
-                {(hasChildNodes || collapsed) && (
-                  <>
-                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                    <div
-                      className="flex grow justify-end"
-                      onClick={() => {
-                        if (collapsed) {
-                          onCollapse(false);
-                        } else {
-                          onCollapse(true);
-                        }
-                      }}
-                    >
-                      <ChevronDownIcon
+                  <div className="flex flex-col">
+                    {/* {parentsName && (
+                      <span
                         className={clsx(
-                          collapsed && "-rotate-90",
-                          "size-4",
-                          "transition-all",
-                          "hover:text-sky-600 dark:hover:text-sky-300",
+                          "text-2xs leading-none tracking-tight text-slate-450 font-light",
                         )}
-                      />
-                    </div>
-                  </>
-                )}
+                      >
+                        {parentsName}/
+                      </span>
+                    )} */}
+                    <span
+                      className={clsx(
+                        "text-xs font-medium leading-tight tracking-wide whitespace-nowrap",
+                        !highlight &&
+                          !hasError &&
+                          "text-slate-600 dark:text-slate-300",
+                        hasError && "text-red-600 dark:text-red-500",
+                        highlight &&
+                          !hasError &&
+                          "text-sky-600 dark:text-sky-300",
+                      )}
+                    >
+                      {parentsName && (
+                        <span
+                          className={clsx(
+                            "text-2xs leading-normal tracking-tight text-slate-500 font-light",
+                          )}
+                        >
+                          {parentsName}/
+                        </span>
+                      )}
+                      {name}
+                    </span>
+                  </div>
+
+                  {(collapsable || collapsed) && (
+                    <>
+                      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                      <div
+                        className="flex grow justify-end"
+                        onClick={() => {
+                          if (collapsed) {
+                            onCollapse(false);
+                          } else {
+                            onCollapse(true);
+                          }
+                        }}
+                      >
+                        <ChevronDownIcon
+                          className={clsx(
+                            collapsed && "-rotate-90",
+                            "size-4",
+                            "transition-all",
+                            "hover:text-sky-600 dark:hover:text-sky-300",
+                          )}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
 
               <div className="flex justify-center">
@@ -538,71 +586,109 @@ const RenderNode = ({
   onCollapse: (path: string) => void;
   onExpand: (path: string) => void;
 }) => {
+  const maxDepth = useContext(MaxDepthContext);
+  const flatten = depth >= maxDepth;
+
   const node = constructTreeNode;
+
+  const fqn = node.constructInfo?.fqn;
+
+  const cloudResourceType = useMemo(() => fqn?.split(".").at(-1), [fqn]);
+
+  const parentsName = useMemo(() => {
+    const parts = node.path.split("/").slice(2);
+    return parts.slice(maxDepth, -1).join("/");
+  }, [node.path, maxDepth]);
+
+  const name = useMemo(() => {
+    if (flatten) {
+      return node.id;
+    }
+
+    return node.display?.title === cloudResourceType
+      ? node.id
+      : node.display?.title ?? node.id;
+  }, [flatten, node.display?.title, node.id, cloudResourceType]);
+
+  const info = useMemo(() => nodeInfo?.get(node.path), [nodeInfo, node.path]);
+
+  const childNodes = useMemo(() => {
+    return Object.values(node.children ?? {}).filter(
+      (node) => !isNodeHidden(node.path),
+    );
+  }, [isNodeHidden, node.children]);
+
+  const children = useMemo(
+    () => Object.values(node.children ?? {}),
+    [node.children],
+  );
+  const canBeExpanded = useMemo(
+    () => !!node.children && children.some((child) => !child.display?.hidden),
+    [children, node.children],
+  );
+  const collapsed = useMemo(() => {
+    return canBeExpanded && !expandedItems.includes(node.path);
+  }, [canBeExpanded, expandedItems, node.path]);
+
+  const toggleCollapse = useCallback(
+    (collapse: boolean) => {
+      if (collapse) {
+        onCollapse(node.path);
+      } else {
+        onExpand(node.path);
+      }
+    },
+    [node.path, onCollapse, onExpand],
+  );
+
+  const hasChildNodes = useMemo(() => childNodes.length > 0, [childNodes]);
+
   if (isNodeHidden(node.path)) {
     return <></>;
   }
 
-  const info = nodeInfo?.get(node.path);
   if (!info) {
     return <></>;
   }
 
-  const childNodes = Object.values(node.children ?? {}).filter(
-    (node) => !isNodeHidden(node.path),
-  );
-
-  const fqn = node.constructInfo?.fqn;
-
-  const cloudResourceType = fqn?.split(".").at(-1);
-
-  const name =
-    node.display?.title === cloudResourceType
-      ? node.id
-      : node.display?.title ?? node.id;
-
-  const children = Object.values(node.children ?? {});
-  const canBeExpanded =
-    !!node.children && children.some((child) => !child.display?.hidden);
-  const collapsed = canBeExpanded && !expandedItems.includes(node.path);
+  const renderedChildren = childNodes.map((child) => (
+    <RenderNode
+      key={child.id}
+      constructTreeNode={child}
+      selectedNodeId={selectedNodeId}
+      onSelectedNodeIdChange={onSelectedNodeIdChange}
+      isNodeHidden={isNodeHidden}
+      nodeInfo={nodeInfo}
+      expandedItems={expandedItems}
+      onCollapse={onCollapse}
+      onExpand={onExpand}
+      depth={flatten ? depth : depth + 1}
+    />
+  ));
 
   return (
-    <ConstructNode
-      id={node.path}
-      name={name ?? ""}
-      fqn={fqn ?? ""}
-      color={node.display?.color}
-      icon={node.display?.icon}
-      inflights={info.type === "construct" ? info.inflights : []}
-      onSelectedNodeIdChange={onSelectedNodeIdChange}
-      highlight={selectedNodeId === node.path}
-      hasChildNodes={childNodes.length > 0}
-      collapsed={collapsed}
-      onCollapse={(collapse) => {
-        if (collapse) {
-          onCollapse(node.path);
-        } else {
-          onExpand(node.path);
-        }
-      }}
-      hierarchichalRunningState={constructTreeNode.hierarchichalRunningState}
-      depth={depth}
-    >
-      {childNodes.map((child) => (
-        <RenderNode
-          key={child.id}
-          constructTreeNode={child}
-          selectedNodeId={selectedNodeId}
-          onSelectedNodeIdChange={onSelectedNodeIdChange}
-          isNodeHidden={isNodeHidden}
-          nodeInfo={nodeInfo}
-          expandedItems={expandedItems}
-          onCollapse={onCollapse}
-          onExpand={onExpand}
-          depth={depth + 1}
-        />
-      ))}
-    </ConstructNode>
+    <>
+      <ConstructNode
+        id={node.path}
+        parentsName={flatten ? parentsName : undefined}
+        name={name ?? ""}
+        fqn={fqn ?? ""}
+        color={node.display?.color}
+        icon={node.display?.icon}
+        inflights={info.type === "construct" ? info.inflights : []}
+        onSelectedNodeIdChange={onSelectedNodeIdChange}
+        highlight={selectedNodeId === node.path}
+        hasChildNodes={flatten ? false : hasChildNodes}
+        collapsable={hasChildNodes}
+        collapsed={collapsed}
+        onCollapse={toggleCollapse}
+        hierarchichalRunningState={constructTreeNode.hierarchichalRunningState}
+        depth={depth}
+      >
+        {!flatten && renderedChildren}
+      </ConstructNode>
+      {flatten && renderedChildren}
+    </>
   );
 };
 
@@ -699,19 +785,21 @@ export const MapView = memo(
                   })
                 }
               >
-                {rootNodes.map((node) => (
-                  <RenderNode
-                    key={node.id}
-                    constructTreeNode={node}
-                    selectedNodeId={selectedNodeId}
-                    onSelectedNodeIdChange={onSelectedNodeIdChange}
-                    isNodeHidden={isNodeHidden}
-                    expandedItems={expandedItems}
-                    nodeInfo={nodeInfo}
-                    onCollapse={onCollapse}
-                    onExpand={onExpand}
-                  />
-                ))}
+                <MaxDepthContext.Provider value={0}>
+                  {rootNodes.map((node) => (
+                    <RenderNode
+                      key={node.id}
+                      constructTreeNode={node}
+                      selectedNodeId={selectedNodeId}
+                      onSelectedNodeIdChange={onSelectedNodeIdChange}
+                      isNodeHidden={isNodeHidden}
+                      expandedItems={expandedItems}
+                      nodeInfo={nodeInfo}
+                      onCollapse={onCollapse}
+                      onExpand={onExpand}
+                    />
+                  ))}
+                </MaxDepthContext.Provider>
               </Graph>
             )}
           </div>
