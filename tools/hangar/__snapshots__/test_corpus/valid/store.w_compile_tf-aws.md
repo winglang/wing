@@ -7,7 +7,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -28,7 +29,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Store {
-    constructor({ $this_b }) {
+    constructor($args) {
+      const { $this_b } = $args;
       this.$this_b = $this_b;
     }
     async store(data) {
@@ -47,8 +49,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Util {
-    constructor({  }) {
-    }
   }
   return Util;
 }
@@ -85,17 +85,6 @@ class Util extends $stdlib.std.Resource {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const UtilClient = ${Util._toInflightType()};
-        const client = new UtilClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
-  }
   get _liftMap() {
     return ({
       "$inflight_init": [
@@ -121,17 +110,6 @@ class Store extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -151,17 +129,11 @@ class Store extends $stdlib.std.Resource {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const StoreClient = ${Store._toInflightType()};
-        const client = new StoreClient({
-          $this_b: ${$stdlib.core.liftObject(this.b)},
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
+  _liftedState() {
+    return {
+      ...(super._liftedState?.() ?? {}),
+      $this_b: $stdlib.core.liftObject(this.b),
+    };
   }
   get _liftMap() {
     return ({

@@ -6,7 +6,11 @@ import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import * as cloud from "../cloud";
 import { lift, LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
@@ -19,6 +23,11 @@ import { Duration, IInflightHost, Json, Node, SDK_SOURCE_MODULE } from "../std";
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.Queue implements ISimulatorResource {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Queue", cloud.Queue._methods);
+  }
+
   private readonly timeout: Duration;
   private readonly retentionPeriod: Duration;
   private readonly dlq?: cloud.DeadLetterQueueProps;
@@ -138,13 +147,13 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  public _liftedState(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }
 

@@ -7,8 +7,6 @@ beforeEach(() => {
   vi.restoreAllMocks();
 });
 
-const makeRequest = async (event: APIGatewayProxyEvent): Promise<any> => {};
-
 describe("ApiResponseMapper", () => {
   test("map'cloud.ApiResponse' response to 'APIGatewayProxyResult", async () => {
     // GIVEN

@@ -3,7 +3,11 @@ import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { BucketSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import * as cloud from "../cloud";
 import { LiftMap, lift } from "../core";
 import { ToSimulatorOutput } from "../simulator/simulator";
@@ -15,6 +19,11 @@ import { IInflightHost } from "../std";
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.Bucket implements ISimulatorResource {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Bucket", cloud.Bucket._methods);
+  }
+
   private readonly public: boolean;
   private readonly initialObjects: Record<string, string> = {};
   private readonly policy: Policy;
@@ -124,13 +133,13 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  public _liftedState(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }
 

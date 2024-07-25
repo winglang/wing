@@ -13,17 +13,23 @@ import {
 import { Datetime, Json } from "../std";
 
 export class BucketClient implements IBucketClient {
-  private bucketName: string;
-  private storage: Storage;
-  private bucket: Bucket;
+  private readonly bucketName: string;
+  private readonly storage: Storage;
+  private readonly bucket: Bucket;
 
-  constructor(
-    bucketName: string,
-    storage: Storage,
-    projectId: string = process.env.GCP_PROJECT_ID ?? "wingsdk-test"
-  ) {
-    this.bucketName = bucketName;
-    this.storage = storage ? storage : new Storage({ projectId });
+  constructor({
+    $bucketName,
+    $storage,
+    $projectId,
+  }: {
+    $bucketName: string;
+    $storage?: Storage;
+    $projectId?: string;
+  }) {
+    const projectId =
+      $projectId ?? process.env.GCP_PROJECT_ID ?? "wingsdk-test";
+    this.bucketName = $bucketName;
+    this.storage = $storage ?? new Storage({ projectId });
     this.bucket = this.storage.bucket(this.bucketName);
   }
 

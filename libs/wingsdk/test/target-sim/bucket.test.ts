@@ -77,6 +77,11 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   bucket.onEvent(testInflight);
 
   const s = await app.startSimulator();
+  s.onTrace({
+    callback: (trace) => {
+      console.log(trace);
+    },
+  });
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
   const logClient = s.getResource("/log_bucket") as cloud.IBucketClient;
 

@@ -10,6 +10,12 @@ import { IInflight, Node, Resource } from "../std";
 export const ON_DEPLOY_FQN = fqnForType("cloud.OnDeploy");
 
 /**
+ * List of inflight operations available for `OnDeploy`.
+ * @internal
+ */
+export enum OnDeployInflightMethods {}
+
+/**
  * Options for `OnDeploy`.
  */
 export interface OnDeployProps extends FunctionProps {
@@ -33,6 +39,9 @@ export interface OnDeployProps extends FunctionProps {
  * @abstract
  */
 export class OnDeploy extends Resource {
+  /** @internal */
+  public static _methods = [];
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: IOnDeployClient;
 

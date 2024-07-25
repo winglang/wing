@@ -7,8 +7,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Baz {
-    constructor({  }) {
-    }
   }
   return Baz;
 }
@@ -66,17 +64,6 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.Baz-1.cjs")({
           })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const BazClient = ${Baz._toInflightType()};
-            const client = new BazClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
         `;
       }
       get _liftMap() {

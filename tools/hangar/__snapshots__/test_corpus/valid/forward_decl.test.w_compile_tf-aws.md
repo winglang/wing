@@ -7,8 +7,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class R {
-    constructor({  }) {
-    }
   }
   return R;
 }
@@ -67,17 +65,6 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.R-1.cjs")({
           })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const RClient = ${R._toInflightType()};
-            const client = new RClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
         `;
       }
       get _liftMap() {

@@ -7,7 +7,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $ar, $math_Util }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -75,29 +76,18 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $ar: ${$stdlib.core.liftObject(ar)},
-            $math_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"))},
+            $math_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.math.Util") ?? math.Util, "@winglang/sdk/math", "Util"))},
           })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
         `;
       }
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"), [].concat(["floor"], ["random"])],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.math.Util") ?? math.Util, "@winglang/sdk/math", "Util"), [].concat(["floor"], ["random"])],
             [ar, [].concat(["at"], ["length"], ["copyMut"])],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.math.Util") ?? math.Util, "@winglang/sdk/math", "Util"), []],
             [ar, []],
           ],
         });

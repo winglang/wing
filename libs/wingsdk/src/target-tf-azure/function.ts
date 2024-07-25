@@ -49,6 +49,16 @@ export interface ScopedRoleAssignment {
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.Function {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-azure", "shared-azure")
+        .replace("function", "function.inflight"),
+      "FunctionClient"
+    );
+  }
+
   private readonly function: LinuxFunctionApp;
   private readonly servicePlan: ServicePlan;
   private readonly storageAccount: StorageAccount;
@@ -321,13 +331,10 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-azure", "shared-azure"),
-      __filename,
-      "FunctionClient",
-      [`process.env["${this.envName()}"]`]
-    );
+  public _liftedState(): Record<string, string> {
+    return {
+      $functionName: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

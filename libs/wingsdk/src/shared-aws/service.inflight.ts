@@ -6,11 +6,19 @@ import {
 import { IServiceClient } from "../cloud";
 
 export class ServiceClient implements IServiceClient {
-  constructor(
-    public readonly clusterName: string,
-    public readonly serviceName: string,
-    public readonly client = new ECSClient({})
-  ) {}
+  private readonly client = new ECSClient({});
+  private readonly clusterName: string;
+  private readonly serviceName: string;
+  constructor({
+    $clusterName,
+    $serviceName,
+  }: {
+    $clusterName: string;
+    $serviceName: string;
+  }) {
+    this.clusterName = $clusterName;
+    this.serviceName = $serviceName;
+  }
 
   public async start(): Promise<void> {
     const command = new UpdateServiceCommand({

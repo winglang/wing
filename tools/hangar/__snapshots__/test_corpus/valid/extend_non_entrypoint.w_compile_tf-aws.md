@@ -7,9 +7,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $cdk8s_Chart }) {
   class Foo extends $cdk8s_Chart {
-    constructor({  }) {
-      super({  });
-    }
   }
   return Foo;
 }
@@ -33,19 +30,8 @@ class Foo extends (globalThis.$ClassFactory.resolveType("cdk8s.Chart") ?? cdk8s.
   static _toInflightType() {
     return `
       require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
-        $cdk8s_Chart: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cdk8s.Chart, "cdk8s", "Chart"))},
+        $cdk8s_Chart: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("cdk8s.Chart") ?? cdk8s.Chart, "cdk8s", "Chart"))},
       })
-    `;
-  }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const FooClient = ${Foo._toInflightType()};
-        const client = new FooClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
     `;
   }
   get _liftMap() {

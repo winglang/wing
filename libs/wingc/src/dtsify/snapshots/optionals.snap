@@ -31,8 +31,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class ParentClass {
-    constructor({  }) {
-    }
   }
   return ParentClass;
 }
@@ -80,17 +78,6 @@ class ParentClass extends $stdlib.std.Resource {
     return `
       require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.cjs")({
       })
-    `;
-  }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const ParentClassClient = ${ParentClass._toInflightType()};
-        const client = new ParentClassClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
     `;
   }
   get _liftMap() {

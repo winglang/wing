@@ -33,7 +33,7 @@ test("push - happy path", async () => {
     .resolves(RESPONSE);
 
   // WHEN
-  const client = new QueueClient(QUEUE_URL);
+  const client = new QueueClient({ $queueUrlOrArn: QUEUE_URL });
   const response = await client.push(MESSAGE);
 
   // THEN
@@ -51,7 +51,7 @@ test("push batch - happy path", async () => {
   sqsMock.on(SendMessageCommand).resolves(RESPONSE);
 
   // WHEN
-  const client = new QueueClient(QUEUE_URL);
+  const client = new QueueClient({ $queueUrlOrArn: QUEUE_URL });
   const response = await client.push(...MESSAGES);
 
   // THEN
@@ -85,7 +85,7 @@ test("push - sad path invalid message", async () => {
     );
 
   // WHEN
-  const client = new QueueClient(QUEUE_URL);
+  const client = new QueueClient({ $queueUrlOrArn: QUEUE_URL });
 
   // THEN
   await expect(() => client.push(MESSAGE)).rejects.toThrowError(
@@ -98,7 +98,7 @@ test("push - sad path empty message", async () => {
   const MESSAGE = "";
 
   // WHEN
-  const client = new QueueClient(QUEUE_URL);
+  const client = new QueueClient({ $queueUrlOrArn: QUEUE_URL });
 
   // THEN
   await expect(() => client.push(MESSAGE)).rejects.toThrowError(
@@ -119,7 +119,7 @@ test("push - sad path unknown error", async () => {
     .rejects(new Error("unknown error"));
 
   // WHEN
-  const client = new QueueClient(QUEUE_URL);
+  const client = new QueueClient({ $queueUrlOrArn: QUEUE_URL });
 
   // THEN
   await expect(() => client.push(MESSAGE)).rejects.toThrowError(
@@ -134,7 +134,7 @@ test("purge - happy path", async () => {
   sqsMock.on(PurgeQueueCommand, { QueueUrl: QUEUE_URL }).resolves(RESPONSE);
 
   // WHEN
-  const client = new QueueClient(QUEUE_URL);
+  const client = new QueueClient({ $queueUrlOrArn: QUEUE_URL });
   const response = await client.purge();
 
   // THEN
@@ -153,7 +153,7 @@ test("approxSize - happy path", async () => {
     .resolves(GET_QUEUE_ATTRIBUTES_RESPONSE);
 
   // WHEN
-  const client = new QueueClient(QUEUE_URL);
+  const client = new QueueClient({ $queueUrlOrArn: QUEUE_URL });
   const response = await client.approxSize();
 
   // THEN
@@ -180,7 +180,7 @@ test("pop - happy path", async () => {
     .resolves(NO_MSG_RESPONSE);
 
   // WHEN
-  const client = new QueueClient(QUEUE_URL);
+  const client = new QueueClient({ $queueUrlOrArn: QUEUE_URL });
   const firstPopResponse = await client.pop();
   const secondPopResponse = await client.pop();
 
@@ -211,7 +211,7 @@ test("pop - happy path w/o message receipt", async () => {
     .resolves(NO_MSG_RESPONSE);
 
   // WHEN
-  const client = new QueueClient(QUEUE_URL);
+  const client = new QueueClient({ $queueUrlOrArn: QUEUE_URL });
   const firstPopResponse = await client.pop();
   const secondPopResponse = await client.pop();
 
@@ -231,7 +231,7 @@ test("pop - happy path w/ no message in the queue", async () => {
     .resolves(NO_MSG_RESPONSE);
 
   // WHEN
-  const client = new QueueClient(QUEUE_URL);
+  const client = new QueueClient({ $queueUrlOrArn: QUEUE_URL });
   const firstPopResponse = await client.pop();
   const secondPopResponse = await client.pop();
 
@@ -257,7 +257,7 @@ test("if a queue name is provided, the url is resolved", async () => {
     })
     .resolves({});
 
-  const client = new QueueClient(queueName);
+  const client = new QueueClient({ $queueUrlOrArn: queueName });
   await client.push("test");
 
   expect(sqsMock).toHaveReceivedCommandTimes(GetQueueUrlCommand, 1);

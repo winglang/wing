@@ -52,6 +52,16 @@ export interface FunctionPermissionsOptions {
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.Function implements IAwsFunction {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("function", "function.inflight"),
+      "FunctionClient"
+    );
+  }
+
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
@@ -318,13 +328,11 @@ export class Function extends cloud.Function implements IAwsFunction {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "FunctionClient",
-      [`process.env["${this.envName()}"], "${this.node.path}"`]
-    );
+  public _liftedState(): Record<string, string> {
+    return {
+      $functionArn: `process.env["${this.envName()}"]`,
+      $constructPath: `"${this.node.path}"`,
+    };
   }
 
   /**

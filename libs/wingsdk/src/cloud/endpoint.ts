@@ -8,6 +8,12 @@ import { Node, Resource } from "../std";
 export const ENDPOINT_FQN = fqnForType("cloud.Endpoint");
 
 /**
+ * List of inflight operations available for `Endpoint`.
+ * @internal
+ */
+export enum EndpointInflightMethods {}
+
+/**
  * Options for `Endpoint`.
  */
 export interface EndpointProps {
@@ -31,6 +37,9 @@ export interface EndpointProps {
  * @abstract
  */
 export class Endpoint extends Resource {
+  /** @internal */
+  public static _methods = [];
+
   /** @internal */
   private _url!: string;
 

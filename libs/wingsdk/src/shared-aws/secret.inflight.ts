@@ -6,12 +6,13 @@ import { GetSecretValueOptions, ISecretClient } from "../cloud";
 import { Json } from "../std";
 
 export class SecretClient implements ISecretClient {
+  private readonly client: SecretsManagerClient = new SecretsManagerClient({});
+  private readonly secretArn: string;
   private secretValue?: string;
 
-  constructor(
-    private readonly secretArn: string,
-    private readonly client: SecretsManagerClient = new SecretsManagerClient({})
-  ) {}
+  constructor({ $secretArn }: { $secretArn: string }) {
+    this.secretArn = $secretArn;
+  }
 
   public async value(options: GetSecretValueOptions = {}): Promise<string> {
     if ((options.cache ?? true) && this.secretValue) {

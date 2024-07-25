@@ -13,6 +13,12 @@ import { Node, Resource, Duration, IInflight } from "../std";
 export const API_FQN = fqnForType("cloud.Api");
 
 /**
+ * List of inflight operations available for `Api`.
+ * @internal
+ */
+export enum ApiInflightMethods {}
+
+/**
  * Cors Options for `Api`.
  */
 export interface ApiCorsOptions {
@@ -150,6 +156,9 @@ export interface CorsHeaders {
  */
 
 export class Api extends Resource {
+  /** @internal */
+  public static _methods = [];
+
   /**
    * Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`)
    * @param path The path to convert (assumes path is valid)
@@ -688,15 +697,6 @@ export interface ApiConnectOptions extends ApiEndpointOptions {}
  * Inflight methods and members of `cloud.Api`.
  */
 export interface IApiClient {}
-
-/**
- * List of inflight operations available for `Api`.
- * @internal
- */
-export enum ApiInflightMethods {
-  /** When the API endpoint receives a request. */
-  REQUEST = "request",
-}
 
 /**
  * Allowed HTTP methods for a endpoint.

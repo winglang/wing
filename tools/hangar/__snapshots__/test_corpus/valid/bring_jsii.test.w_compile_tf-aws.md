@@ -7,7 +7,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $greeting, $stuff_HelloWorld }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -30,8 +31,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class X {
-    constructor({  }) {
-    }
   }
   return X;
 }
@@ -87,29 +86,18 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $greeting: ${$stdlib.core.liftObject(greeting)},
-            $stuff_HelloWorld: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"))},
+            $stuff_HelloWorld: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("jsii-code-samples.HelloWorld") ?? stuff.HelloWorld, "jsii-code-samples", "HelloWorld"))},
           })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
         `;
       }
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("jsii-code-samples.HelloWorld") ?? stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
             [greeting, []],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("jsii-code-samples.HelloWorld") ?? stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
             [greeting, []],
           ],
         });
@@ -125,17 +113,6 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.X-1.cjs")({
           })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const XClient = ${X._toInflightType()};
-            const client = new XClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
         `;
       }
       get _liftMap() {

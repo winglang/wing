@@ -6,8 +6,9 @@ import { ISimulatorResource } from "./resource";
 import { ScheduleSchema } from "./schema-resources";
 import {
   bindSimulatorResource,
-  makeSimulatorJsClient,
   convertDurationToCronExpression,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
 } from "./util";
 import { Function } from "../cloud";
 import * as cloud from "../cloud";
@@ -21,6 +22,11 @@ import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
 export class Schedule extends cloud.Schedule implements ISimulatorResource {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Schedule", cloud.Schedule._methods);
+  }
+
   private readonly cronExpression: string;
   private readonly policy: Policy;
 
@@ -74,14 +80,14 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     };
   }
 
-  /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  public onLift(host: IInflightHost, ops: string[]): void {
+    bindSimulatorResource(this, host, ops);
+    super.onLift(host, ops);
   }
 
-  public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
-    super.onLift(host, ops);
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }
 

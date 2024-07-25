@@ -31,6 +31,16 @@ import { IInflightHost } from "../std";
  * on deployment. The service is then run as a Fargate task in an ECS cluster.
  */
 export class Service extends cloud.Service implements IAwsInflightHost {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("service", "service.inflight"),
+      "ServiceClient"
+    );
+  }
+
   private workdir: string;
   private wrapperEntrypoint: string;
   private policyStatments?: any[];
@@ -368,13 +378,11 @@ process.on('SIGINT', handleShutdown);
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "ServiceClient",
-      [`process.env["ECS_CLUSTER_NAME"]`, `process.env["${this.envName()}"]`]
-    );
+  public _liftedState(): Record<string, string> {
+    return {
+      $clusterName: `process.env["ECS_CLUSTER_NAME"]`,
+      $serviceName: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

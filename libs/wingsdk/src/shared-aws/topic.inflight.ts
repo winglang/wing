@@ -15,10 +15,11 @@ import { Util } from "../util/util";
 const CHUNK_SIZE = 10;
 
 export class TopicClient implements ITopicClient {
-  constructor(
-    private readonly topicArn: string,
-    private readonly client: SNSClient = new SNSClient({})
-  ) {}
+  private readonly client: SNSClient = new SNSClient({});
+  private readonly topicArn: string;
+  constructor({ $topicArn }: { $topicArn: string }) {
+    this.topicArn = $topicArn;
+  }
 
   public async publish(...messages: string[]): Promise<void> {
     if (messages.includes("")) {

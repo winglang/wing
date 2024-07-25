@@ -20,11 +20,19 @@ export class FunctionClient implements IFunctionClient {
     return obj;
   }
 
-  constructor(
-    private readonly functionArn: string,
-    private readonly constructPath: string,
-    private readonly lambdaClient = new LambdaClient({})
-  ) {}
+  private readonly lambdaClient = new LambdaClient({});
+  private readonly functionArn: string;
+  private readonly constructPath: string;
+  constructor({
+    $functionArn,
+    $constructPath,
+  }: {
+    $functionArn: string;
+    $constructPath: string;
+  }) {
+    this.functionArn = $functionArn;
+    this.constructPath = $constructPath;
+  }
 
   /**
    * Invokes the function with a payload and waits for the result.

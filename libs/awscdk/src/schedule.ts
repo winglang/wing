@@ -6,10 +6,12 @@ import {
 } from "aws-cdk-lib/aws-events-targets";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { cloud, core, std } from "@winglang/sdk";
-import { ScheduleOnTickHandler, convertUnixCronToAWSCron } from "@winglang/sdk/lib/shared-aws/schedule";
+import { cloud, std } from "@winglang/sdk";
+import {
+  ScheduleOnTickHandler,
+  convertUnixCronToAWSCron,
+} from "@winglang/sdk/lib/shared-aws/schedule";
 import { isAwsCdkFunction } from "./function";
-
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -29,11 +31,21 @@ export class Schedule extends cloud.Schedule {
       let cronOpt: { [k: string]: string } = {};
       const awsCron = convertUnixCronToAWSCron(cron);
       const cronArr = awsCron.split(" ");
-      if (cronArr[0] !== "*" && cronArr[0] !== "?") { cronOpt.minute = cronArr[0]; }
-      if (cronArr[1] !== "*" && cronArr[1] !== "?") { cronOpt.hour = cronArr[1]; }
-      if (cronArr[2] !== "*" && cronArr[2] !== "?") { cronOpt.day = cronArr[2]; }
-      if (cronArr[3] !== "*" && cronArr[3] !== "?") { cronOpt.month = cronArr[3]; }
-      if (cronArr[4] !== "*" && cronArr[4] !== "?") { cronOpt.weekDay = cronArr[4]; }
+      if (cronArr[0] !== "*" && cronArr[0] !== "?") {
+        cronOpt.minute = cronArr[0];
+      }
+      if (cronArr[1] !== "*" && cronArr[1] !== "?") {
+        cronOpt.hour = cronArr[1];
+      }
+      if (cronArr[2] !== "*" && cronArr[2] !== "?") {
+        cronOpt.day = cronArr[2];
+      }
+      if (cronArr[3] !== "*" && cronArr[3] !== "?") {
+        cronOpt.month = cronArr[3];
+      }
+      if (cronArr[4] !== "*" && cronArr[4] !== "?") {
+        cronOpt.weekDay = cronArr[4];
+      }
 
       this.scheduleExpression = EventSchedule.cron(cronOpt);
     } else {
@@ -63,7 +75,9 @@ export class Schedule extends cloud.Schedule {
     );
 
     if (!isAwsCdkFunction(fn)) {
-      throw new Error("Expected function to implement 'isAwsCdkFunction' method");
+      throw new Error(
+        "Expected function to implement 'isAwsCdkFunction' method"
+      );
     }
 
     this.rule.addTarget(new LambdaFunction(fn.awscdkFunction));
@@ -76,19 +90,5 @@ export class Schedule extends cloud.Schedule {
     });
 
     return fn;
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "ScheduleClient",
-      [`process.env["${this.envName()}"]`]
-    );
-  }
-
-  private envName(): string {
-    return `SCHEDULE_EVENT_${this.node.addr.slice(-8)}`;
   }
 }

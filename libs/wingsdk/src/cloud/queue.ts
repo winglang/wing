@@ -11,6 +11,17 @@ import { Duration, IInflight, Node, Resource } from "../std";
 export const QUEUE_FQN = fqnForType("cloud.Queue");
 
 /**
+ * List of inflight operations available for `Queue`.
+ * @internal
+ */
+export enum QueueInflightMethods {
+  PUSH = "push",
+  PURGE = "purge",
+  APPROX_SIZE = "approxSize",
+  POP = "pop",
+}
+
+/**
  * Dead-letter queue default retries
  */
 export const DEFAULT_DELIVERY_ATTEMPTS = 1;
@@ -61,6 +72,14 @@ export interface QueueProps {
  * @abstract
  */
 export class Queue extends Resource {
+  /** @internal */
+  public static _methods = [
+    QueueInflightMethods.PUSH,
+    QueueInflightMethods.PURGE,
+    QueueInflightMethods.APPROX_SIZE,
+    QueueInflightMethods.POP,
+  ];
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: IQueueClient;
 
@@ -153,19 +172,4 @@ export interface IQueueSetConsumerHandlerClient {
    * @inflight
    */
   handle(message: string): Promise<void>;
-}
-
-/**
- * List of inflight operations available for `Queue`.
- * @internal
- */
-export enum QueueInflightMethods {
-  /** `Queue.push` */
-  PUSH = "push",
-  /** `Queue.purge` */
-  PURGE = "purge",
-  /** `Queue.approxSize` */
-  APPROX_SIZE = "approxSize",
-  /** `Queue.pop` */
-  POP = "pop",
 }

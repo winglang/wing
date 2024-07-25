@@ -34,6 +34,16 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.Counter {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-gcp", "shared-gcp")
+        .replace("counter", "counter.inflight"),
+      "CounterClient"
+    );
+  }
+
   private readonly database: FirestoreDatabase;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
@@ -81,13 +91,11 @@ export class Counter extends cloud.Counter {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-gcp", "shared-gcp"),
-      __filename,
-      "CounterClient",
-      [`process.env["${this.envName()}"]`, `${this.initial}`]
-    );
+  public _liftedState(): Record<string, string> {
+    return {
+      $databaseName: `process.env["${this.envName()}"]`,
+      $initial: `${this.initial}`,
+    };
   }
 
   private envName(): string {

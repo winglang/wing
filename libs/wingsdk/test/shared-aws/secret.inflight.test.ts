@@ -22,7 +22,7 @@ beforeEach(() => {
 
 test("value", async () => {
   // WHEN
-  const client = new SecretClient(SECRET_ARN);
+  const client = new SecretClient({ $secretArn: SECRET_ARN });
   const secretValue = await client.value();
 
   // THEN
@@ -39,7 +39,7 @@ test("value", async () => {
 
 test("valueJson", async () => {
   // WHEN
-  const client = new SecretClient(SECRET_ARN);
+  const client = new SecretClient({ $secretArn: SECRET_ARN });
   const secretValue = await client.valueJson();
 
   // THEN
@@ -48,7 +48,7 @@ test("valueJson", async () => {
 
 test("caches the value", async () => {
   // WHEN
-  const client = new SecretClient(SECRET_ARN);
+  const client = new SecretClient({ $secretArn: SECRET_ARN });
   await client.value();
   await client.value();
 
@@ -61,7 +61,7 @@ test("caches the value", async () => {
 
 test("can bypass cache", async () => {
   // WHEN
-  const client = new SecretClient(SECRET_ARN);
+  const client = new SecretClient({ $secretArn: SECRET_ARN });
   await client.value();
   await client.value({ cache: false });
 

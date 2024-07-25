@@ -7,7 +7,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $fixture_Store }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -28,7 +29,8 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({ $myutil_Util }) {
   class Store {
-    constructor({ $this_data, $this_handlers }) {
+    constructor($args) {
+      const { $this_data, $this_handlers } = $args;
       this.$this_data = $this_data;
       this.$this_handlers = $this_handlers;
     }
@@ -54,8 +56,6 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
   class Util {
-    constructor({  }) {
-    }
     static async makeKeyInflight(name) {
       return (require("@winglibs/testfixture/util.js")["makeKeyInflight"])(name)
     }
@@ -134,17 +134,6 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
       get _liftMap() {
         return ({
           "handle": [
@@ -219,18 +208,12 @@ class Store extends $stdlib.std.Resource {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const StoreClient = ${Store._toInflightType()};
-        const client = new StoreClient({
-          $this_data: ${$stdlib.core.liftObject(this.data)},
-          $this_handlers: ${$stdlib.core.liftObject(this.handlers)},
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
+  _liftedState() {
+    return {
+      ...(super._liftedState?.() ?? {}),
+      $this_data: $stdlib.core.liftObject(this.data),
+      $this_handlers: $stdlib.core.liftObject(this.handlers),
+    };
   }
   get _liftMap() {
     return ({
@@ -304,17 +287,6 @@ class Util extends $stdlib.std.Resource {
     return `
       require("${$helpers.normalPath(__dirname)}/inflight.Util-1.cjs")({
       })
-    `;
-  }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const UtilClient = ${Util._toInflightType()};
-        const client = new UtilClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
     `;
   }
   get _liftMap() {

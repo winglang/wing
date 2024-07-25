@@ -12,6 +12,15 @@ import { Node } from "../std";
 export const TEST_RUNNER_FQN = fqnForType("std.TestRunner");
 
 /**
+ * List of inflight operations available for `TestRunner`.
+ * @internal
+ */
+export enum TestRunnerInflightMethods {
+  RUN_TEST = "runTest",
+  LIST_TESTS = "listTests",
+}
+
+/**
  * Properties for `TestRunner`.
  * @skipDocs
  */
@@ -30,6 +39,12 @@ export interface TestRunnerProps {
  * @abstract
  */
 export class TestRunner extends Resource {
+  /** @internal */
+  public static _methods = [
+    TestRunnerInflightMethods.LIST_TESTS,
+    TestRunnerInflightMethods.RUN_TEST,
+  ];
+
   /**
    * Instantiate one or more copies of a tree inside of an app based
    * on how many isolated environments are needed for testing.
@@ -292,15 +307,4 @@ export enum TraceType {
    * A trace representing a message emitted by the logger.
    */
   LOG = "log",
-}
-
-/**
- * List of inflight operations available for `TestRunner`.
- * @internal
- */
-export enum TestRunnerInflightMethods {
-  /** `TestRunner.runTest` */
-  RUN_TEST = "runTest",
-  /** `TestRunner.listTests` */
-  LIST_TESTS = "listTests",
 }
