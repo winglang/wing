@@ -357,16 +357,12 @@ export function filterTests(tests: Array<string>, regexString?: string): Array<s
 
 async function runTests(
   testRunner: std.ITestRunnerClient,
-  tests: string[],
-  sim?: simulator.Simulator
+  tests: string[]
 ): Promise<std.TestResult[]> {
   const results: std.TestResult[] = [];
 
   for (const testPath of tests) {
     const result = await testRunner.runTest(testPath);
-    if (sim) {
-      await sim.reload(true);
-    }
     results.push(result);
   }
 
@@ -503,20 +499,25 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     });
   }
 
+  const results = [];
+
   try {
-    await s.start();
+    const tests = s.tree().listTests();
+    const filteredTests = filterTests(tests, testFilter);
+    for (const t of filteredTests) {
+      await s.start();
+      const testRunner = s.getResource(
+        `${options.rootId}/cloud.TestRunner`
+      ) as std.ITestRunnerClient;
+      const result = await testRunner.runTest(t);
+      results.push(result);
+      await s.stop();
+      await s.resetState();
+    }
   } catch (e) {
     outputStream?.stopSpinner();
     throw e;
   }
-
-  const testRunner = s.getResource(`${options.rootId}/cloud.TestRunner`) as std.ITestRunnerClient;
-  const tests = await testRunner.listTests();
-  const filteredTests = filterTests(tests, testFilter);
-
-  const results = await runTests(testRunner, filteredTests, s);
-
-  await s.stop();
 
   if (options.stream) {
     await traceProcessor!.finish();
