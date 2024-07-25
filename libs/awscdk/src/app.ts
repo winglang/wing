@@ -92,8 +92,7 @@ export class App extends core.App {
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     registerTokenResolver(new CdkTokens());
 
-    new props.rootConstruct(this, "Default");
-    this._testRunner = new TestRunner(this, "cloud.TestRunner");
+    TestRunner._createTree(this, props.rootConstruct, this.isTestEnvironment);
   }
 
   /**
