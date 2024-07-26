@@ -145,7 +145,7 @@ export interface UITable {
   readonly putHandler: string;
   readonly updateHandler: string;
   readonly deleteHandler: string;
-  readonly geetHandler: string;
+  readonly getHandler: string;
   readonly scanHandler: string;
 }
 

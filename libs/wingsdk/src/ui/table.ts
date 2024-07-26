@@ -140,7 +140,7 @@ export class Table extends VisualComponent {
       putHandler: this.insertFn.node.path,
       updateHandler: this.updateFn.node.path,
       deleteHandler: this.deleteFn.node.path,
-      geetHandler: this.getFn.node.path,
+      getHandler: this.getFn.node.path,
       scanHandler: this.scanFn.node.path,
     };
   }
