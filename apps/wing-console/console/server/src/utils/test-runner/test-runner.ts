@@ -9,6 +9,8 @@ import { formatTraceError } from "../format-wing-error.js";
 
 import { createSimulatorManager } from "./simulator-manager.js";
 
+const TEST_BATCH_SIZE = 4;
+
 export type TestStatus = "success" | "error" | "idle" | "running";
 
 export interface TestItem {
@@ -223,26 +225,31 @@ export const createTestRunner = ({
     onTestsChange();
 
     const startTime = Date.now();
-    const result = await simulatorManager.useSimulatorInstance(
-      async (simulator: Simulator) => {
-        const promises = testList.map(async (test) => {
-          const response = await executeTest(simulator, test.id, logger);
 
-          testsState.setTest({
-            ...test,
-            status: response.error ? "error" : "success",
-            time: response.time,
-            datetime: Date.now(),
-          });
-          onTestsChange();
+    // Run all tests in batches.
+    const results = new Array<InternalTestResult>();
+    for (const testBatch of groupArrayItems(testList, TEST_BATCH_SIZE)) {
+      await Promise.allSettled(
+        testBatch.map(async (test) => {
+          await simulatorManager.useSimulatorInstance(
+            async (simulator: Simulator) => {
+              const result = await executeTest(simulator, test.id, logger);
+              results.push(result);
 
-          return response;
-        });
-        return await Promise.all(promises);
-      },
-    );
+              testsState.setTest({
+                ...test,
+                status: result.error ? "error" : "success",
+                time: result.time,
+                datetime: Date.now(),
+              });
+              onTestsChange();
+            },
+          );
+        }),
+      );
+    }
 
-    const testPassed = result.filter((r) => r.pass);
+    const testPassed = results.filter((r) => r.pass);
     const time = Date.now() - startTime;
 
     const { default: prettyMs } = await import("pretty-ms");
@@ -269,3 +276,14 @@ export const createTestRunner = ({
     },
   };
 };
+
+function groupArrayItems<T>(
+  array: Array<T>,
+  groupSize: number,
+): Array<Array<T>> {
+  const groups = [];
+  for (let index = 0; index < array.length; index += groupSize) {
+    groups.push(array.slice(index, index + groupSize));
+  }
+  return groups;
+}
