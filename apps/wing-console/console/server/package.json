@@ -20,6 +20,7 @@
   "dependencies": {
     "@winglang/compiler": "workspace:^",
     "@winglang/sdk": "workspace:^",
+    "@winglibs/dynamodb": "^0.1.19",
     "codespan-wasm": "^0.4.0",
     "debug": "^4.3.5",
     "launch-editor": "^2.8.0",

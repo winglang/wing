@@ -102,6 +102,7 @@ export type UIComponent =
   | UISection
   | UIButton
   | UIHttpClient
+  | UITable
   | UIFileBrowser;
 
 /** @internal */
@@ -135,6 +136,16 @@ export interface UIHttpClient {
   readonly label: string;
   readonly getUrlHandler: string;
   readonly getApiSpecHandler: string;
+}
+
+export interface UITable {
+  readonly kind: "table";
+  readonly label: string;
+  readonly putHandler: string;
+  readonly updateHandler: string;
+  readonly deleteHandler: string;
+  readonly geetHandler: string;
+  readonly scanHandler: string;
 }
 
 /** @internal */

@@ -5,6 +5,7 @@ import type {
   UISection,
   UIFileBrowser,
   UIHttpClient,
+  UITable,
 } from "@winglang/sdk/lib/core";
 
 import { CustomResourceFileBrowser } from "./custom-resource-file-browser.js";
@@ -33,6 +34,9 @@ const getUiComponent = (item: UIComponentLike) => {
   }
   if (item.kind === "http-client") {
     return item as unknown as UIHttpClient;
+  }
+  if (item.kind === "table") {
+    return item as unknown as UITable;
   }
   return item as UIComponent;
 };
