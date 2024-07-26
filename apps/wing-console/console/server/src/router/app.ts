@@ -5,6 +5,7 @@ import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/simulator
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
+import type { LogEntry } from "../consoleLogger.js";
 import type { Trace } from "../types.js";
 import type { ConstructTreeNode } from "../utils/construct-tree.js";
 import type {
@@ -150,7 +151,13 @@ export const createAppRouter = () => {
         });
 
         return {
-          logs: filteredLogs,
+          logs: filteredLogs.map(
+            (entry) =>
+              ({
+                ...entry,
+                message: entry.message.trim(),
+              } as LogEntry),
+          ),
           hiddenLogs: noVerboseLogsCount - filteredLogs.length,
         };
       }),
