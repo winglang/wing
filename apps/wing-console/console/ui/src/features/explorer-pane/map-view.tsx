@@ -224,7 +224,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                       {parentsName && (
                         <span
                           className={clsx(
-                            "text-2xs leading-normal tracking-tight text-slate-500 font-light",
+                            "text-2xs leading-normal tracking-tight text-slate-500 dark:text-slate-400 font-light",
                           )}
                         >
                           {parentsName}/
