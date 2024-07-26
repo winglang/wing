@@ -228,7 +228,7 @@ export const createTestRunner = ({
 
     // Run all tests in batches.
     const results = new Array<InternalTestResult>();
-    for (const testBatch of groupArrayItems(testList, TEST_BATCH_SIZE)) {
+    for (const testBatch of chunk(testList, TEST_BATCH_SIZE)) {
       await Promise.allSettled(
         testBatch.map(async (test) => {
           await simulatorManager.useSimulatorInstance(
@@ -277,10 +277,7 @@ export const createTestRunner = ({
   };
 };
 
-function groupArrayItems<T>(
-  array: Array<T>,
-  groupSize: number,
-): Array<Array<T>> {
+function chunk<T>(array: Array<T>, groupSize: number): Array<Array<T>> {
   const groups = [];
   for (let index = 0; index < array.length; index += groupSize) {
     groups.push(array.slice(index, index + groupSize));
