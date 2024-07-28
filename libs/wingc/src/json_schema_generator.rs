@@ -1,5 +1,7 @@
 use crate::{
-	docs::Documented, jsify::{codemaker::CodeMaker, JSifier}, type_check::{symbol_env::SymbolEnv, Struct, Type, UnsafeRef}
+	docs::Documented,
+	jsify::{codemaker::CodeMaker, JSifier},
+	type_check::{symbol_env::SymbolEnv, Struct, Type, UnsafeRef},
 };
 
 pub(crate) struct JsonSchemaGenerator;
@@ -82,7 +84,10 @@ impl JsonSchemaGenerator {
 		code.open("{");
 		code.line(format!("$id: \"/{}\",", struct_.name));
 		code.line("type: \"object\",".to_string());
-		code.line(format!("description: \"{}\",", struct_.docs.render().replace("\n", "\\n")));
+		code.line(format!(
+			"description: \"{}\",",
+			struct_.docs.render().replace("\n", "\\n")
+		));
 
 		code.open("properties: {");
 
