@@ -341,7 +341,7 @@ impl<'a> JSifier<'a> {
 
 			code.line(format!(
 				"const {flat_name} = $stdlib.std.Struct._createJsonSchema({});",
-				schema_code.to_string().replace("\n", "").replace(" ", "")
+				schema_code.to_string()
 			));
 		}
 		code
