@@ -82,6 +82,7 @@ impl JsonSchemaGenerator {
 		code.open("{");
 		code.line(format!("$id: \"/{}\",", struct_.name));
 		code.line("type: \"object\",".to_string());
+		code.line(format!("description: \"{}\",", struct_.docs.render().replace("\n", "\\n")));
 
 		code.open("properties: {");
 
