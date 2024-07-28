@@ -58,7 +58,7 @@ impl JsonSchemaGenerator {
 					code.line("uniqueItems: true,");
 				}
 
-				code.line(format!("items: {}", self.get_struct_schema_field(t)));
+				code.line(format!("items: {{ {} }}", self.get_struct_schema_field(t)));
 
 				code.to_string()
 			}
@@ -66,7 +66,7 @@ impl JsonSchemaGenerator {
 				let mut code = CodeMaker::default();
 				code.line("type: \"object\",");
 				code.line(format!(
-					"patternProperties: {{ \".*\": {} }}",
+					"patternProperties: {{ \".*\": {{ {} }} }}",
 					self.get_struct_schema_field(t)
 				));
 
