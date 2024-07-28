@@ -127,7 +127,19 @@ class $Root extends $stdlib.std.Resource {
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
     const cloud = $stdlib.cloud;
-    const Person = $stdlib.std.Struct._createJsonSchema({$id:"/Person",type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]});
+    const Person = $stdlib.std.Struct._createJsonSchema({
+      $id: "/Person",
+      type: "object",
+      description: "",
+      properties: {
+        age: {  type: "number" , "description": "```wing\nage: num\n```" },
+        name: {  type: "string" , "description": "```wing\nname: str\n```" },
+      },
+      required: [
+        "age",
+        "name",
+      ]
+    });
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Super extends $stdlib.std.Resource {
       constructor($scope, $id, ) {

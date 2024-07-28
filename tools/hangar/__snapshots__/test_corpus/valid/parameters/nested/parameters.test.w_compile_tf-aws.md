@@ -35,7 +35,35 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{houses:{type:"array",items:{type:"object",properties:{address:{type:"string"},residents:{type:"array",items:{type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]}},},required:["address","residents",]}},},required:["houses",]});
+    const MyParams = $stdlib.std.Struct._createJsonSchema({
+      $id: "/MyParams",
+      type: "object",
+      description: "",
+      properties: {
+        houses: { type: "array",
+        items: { type: "object",
+        properties: {
+          address: {  type: "string" , "description": "```wing\naddress: str\n```" },
+          residents: { type: "array",
+          items: { type: "object",
+          properties: {
+            age: {  type: "number" , "description": "```wing\nage: num\n```" },
+            name: {  type: "string" , "description": "```wing\nname: str\n```" },
+          },
+          required: [
+            "age",
+            "name",
+          ] }, "description": "```wing\nresidents: Array<Person>\n```" },
+        },
+        required: [
+          "address",
+          "residents",
+        ] }, "description": "```wing\nhouses: Array<House>\n```" },
+      },
+      required: [
+        "houses",
+      ]
+    });
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const app = $helpers.nodeof(this).app;
     const myParams = $macros.__Struct_fromJson(false, MyParams, (app.parameters.read({ schema: $macros.__Struct_schema(false, MyParams, ) })));

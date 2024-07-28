@@ -195,13 +195,186 @@ class $Root extends $stdlib.std.Resource {
     const cloud = $stdlib.cloud;
     const externalStructs = $helpers.bringJs(`${__dirname}/preflight.structs-1.cjs`, $preflightTypesMap);
     const otherExternalStructs = $helpers.bringJs(`${__dirname}/preflight.structs2-2.cjs`, $preflightTypesMap);
-    const Bar = $stdlib.std.Struct._createJsonSchema({$id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
-    const Foo = $stdlib.std.Struct._createJsonSchema({$id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
-    const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
-    const MyStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyStruct",type:"object",properties:{m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["m1","m2",]});
-    const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:["object","string","boolean","number","array"]},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
-    const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({$id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
-    const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
+    const Bar = $stdlib.std.Struct._createJsonSchema({
+      $id: "/Bar",
+      type: "object",
+      description: "",
+      properties: {
+        b: {  type: "number" , "description": "```wing\nb: num\n```" },
+        f: {  type: "string" , "description": "```wing\nf: str\n```" },
+      },
+      required: [
+        "b",
+        "f",
+      ]
+    });
+    const Foo = $stdlib.std.Struct._createJsonSchema({
+      $id: "/Foo",
+      type: "object",
+      description: "",
+      properties: {
+        f: {  type: "string" , "description": "```wing\nf: str\n```" },
+      },
+      required: [
+        "f",
+      ]
+    });
+    const Foosible = $stdlib.std.Struct._createJsonSchema({
+      $id: "/Foosible",
+      type: "object",
+      description: "",
+      properties: {
+        f: {  type: "string" , "description": "```wing\nf: str?\n```" },
+      },
+      required: [
+      ]
+    });
+    const MyStruct = $stdlib.std.Struct._createJsonSchema({
+      $id: "/MyStruct",
+      type: "object",
+      description: "",
+      properties: {
+        m1: { type: "object",
+        properties: {
+          val: {  type: "number" , "description": "```wing\nval: num\n```" },
+        },
+        required: [
+          "val",
+        ], "description": "```wing\nm1: struct MyStruct {\n  val: num;\n}\n```" },
+        m2: { type: "object",
+        properties: {
+          val: {  type: "string" , "description": "```wing\nval: str\n```" },
+        },
+        required: [
+          "val",
+        ], "description": "```wing\nm2: struct MyStruct {\n  val: str;\n}\n```" },
+      },
+      required: [
+        "m1",
+        "m2",
+      ]
+    });
+    const Student = $stdlib.std.Struct._createJsonSchema({
+      $id: "/Student",
+      type: "object",
+      description: "",
+      properties: {
+        additionalData: {  type: ["object", "string", "boolean", "number", "array"] , "description": "```wing\nadditionalData: Json?\n```" },
+        advisor: { type: "object",
+        properties: {
+          dob: { type: "object",
+          properties: {
+            day: {  type: "number" , "description": "```wing\nday: num\n```" },
+            month: {  type: "number" , "description": "```wing\nmonth: num\n```" },
+            year: {  type: "number" , "description": "```wing\nyear: num\n```" },
+          },
+          required: [
+            "day",
+            "month",
+            "year",
+          ], "description": "```wing\ndob: struct Date {\n  day: num;\n  month: num;\n  year: num;\n}\n```" },
+          employeeID: {  type: "string" , "description": "```wing\nemployeeID: str\n```" },
+          firstName: {  type: "string" , "description": "```wing\nfirstName: str\n```" },
+          lastName: {  type: "string" , "description": "```wing\nlastName: str\n```" },
+        },
+        required: [
+          "dob",
+          "employeeID",
+          "firstName",
+          "lastName",
+        ], "description": "```wing\nadvisor: struct Advisor extends Person {\n  dob: Date;\n  employeeID: str;\n  firstName: str;\n  lastName: str;\n}\n```" },
+        coursesTaken: { type: "array",
+        items: { type: "object",
+        properties: {
+          course: { type: "object",
+          properties: {
+            credits: {  type: "number" , "description": "```wing\ncredits: num\n```" },
+            name: {  type: "string" , "description": "```wing\nname: str\n```" },
+          },
+          required: [
+            "credits",
+            "name",
+          ], "description": "```wing\ncourse: struct Course {\n  credits: num;\n  name: str;\n}\n```" },
+          dateTaken: { type: "object",
+          properties: {
+            day: {  type: "number" , "description": "```wing\nday: num\n```" },
+            month: {  type: "number" , "description": "```wing\nmonth: num\n```" },
+            year: {  type: "number" , "description": "```wing\nyear: num\n```" },
+          },
+          required: [
+            "day",
+            "month",
+            "year",
+          ], "description": "```wing\ndateTaken: struct Date {\n  day: num;\n  month: num;\n  year: num;\n}\n```" },
+          grade: {  type: "string" , "description": "```wing\ngrade: str\n```" },
+        },
+        required: [
+          "course",
+          "dateTaken",
+          "grade",
+        ] }, "description": "```wing\ncoursesTaken: Array<CourseResults>?\n```" },
+        dob: { type: "object",
+        properties: {
+          day: {  type: "number" , "description": "```wing\nday: num\n```" },
+          month: {  type: "number" , "description": "```wing\nmonth: num\n```" },
+          year: {  type: "number" , "description": "```wing\nyear: num\n```" },
+        },
+        required: [
+          "day",
+          "month",
+          "year",
+        ], "description": "```wing\ndob: struct Date {\n  day: num;\n  month: num;\n  year: num;\n}\n```" },
+        enrolled: {  type: "boolean" , "description": "```wing\nenrolled: bool\n```" },
+        enrolledCourses: { type: "array",
+        uniqueItems: true,
+        items: { type: "object",
+        properties: {
+          credits: {  type: "number" , "description": "```wing\ncredits: num\n```" },
+          name: {  type: "string" , "description": "```wing\nname: str\n```" },
+        },
+        required: [
+          "credits",
+          "name",
+        ] }, "description": "```wing\nenrolledCourses: Set<Course>?\n```" },
+        firstName: {  type: "string" , "description": "```wing\nfirstName: str\n```" },
+        lastName: {  type: "string" , "description": "```wing\nlastName: str\n```" },
+        schoolId: {  type: "string" , "description": "```wing\nschoolId: str\n```" },
+      },
+      required: [
+        "dob",
+        "enrolled",
+        "firstName",
+        "lastName",
+        "schoolId",
+      ]
+    });
+    const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({
+      $id: "/BucketProps",
+      type: "object",
+      description: "Options for `Bucket`.",
+      properties: {
+        public: {  type: "boolean" , "description": "```wing\npublic: bool?\n```\n---\nWhether the bucket's objects should be publicly accessible." },
+      },
+      required: [
+      ]
+    });
+    const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({
+      $id: "/MyOtherStruct",
+      type: "object",
+      description: "",
+      properties: {
+        data: { type: "object",
+        properties: {
+          val: {  type: "number" , "description": "```wing\nval: num\n```" },
+        },
+        required: [
+          "val",
+        ], "description": "```wing\ndata: struct MyStruct {\n  val: num;\n}\n```" },
+      },
+      required: [
+        "data",
+      ]
+    });
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
@@ -464,7 +637,7 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(myStruct.m2.val, "10"), "myStruct.m2.val == \"10\"");
     const schema = $macros.__Struct_schema(false, MyStruct, );
     (schema.validate(jMyStruct));
-    const expectedSchema = ({"$id": "/MyStruct", "type": "object", "properties": ({"m1": ({"type": "object", "properties": ({"val": ({"type": "number"})}), "required": ["val"]}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"]})}), "required": ["m1", "m2"]});
+    const expectedSchema = ({"$id": "/MyStruct", "type": "object", "description": "", "properties": ({"m1": ({"type": "object", "properties": ({"val": ({"type": "number", "description": "```wing\nval: num\n```"})}), "required": ["val"], "description": "```wing\nm1: struct MyStruct {\n  val: num;\n}\n```"}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string", "description": "```wing\nval: str\n```"})}), "required": ["val"], "description": "```wing\nm2: struct MyStruct {\n  val: str;\n}\n```"})}), "required": ["m1", "m2"]});
     $helpers.assert($helpers.eq((schema.asStr()), $macros.__Json_stringify(false, std.Json, expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
     (std.String.fromJson(10, { unsafe: true }));
@@ -502,7 +675,17 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
-const SomeStruct = $stdlib.std.Struct._createJsonSchema({$id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",]});
+const SomeStruct = $stdlib.std.Struct._createJsonSchema({
+  $id: "/SomeStruct",
+  type: "object",
+  description: "",
+  properties: {
+    foo: {  type: "string" , "description": "```wing\nfoo: str\n```" },
+  },
+  required: [
+    "foo",
+  ]
+});
 class UsesStructInImportedFile extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
