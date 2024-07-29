@@ -38,27 +38,41 @@ class $Root extends $stdlib.std.Resource {
     const MyParams = $stdlib.std.Struct._createJsonSchema({
       $id: "/MyParams",
       type: "object",
-      description: "",
       properties: {
-        houses: { type: "array",
-        items: { type: "object",
+        "houses": { 
+          "type": "array",
+        items: { "type": "object",
         properties: {
-          address: {  type: "string" , "description": "```wing\naddress: str\n```" },
-          residents: { type: "array",
-          items: { type: "object",
+          "address": { 
+             "type": "string" , 
+             "description": "```wing\naddress: str\n```" ,
+          },
+          "residents": { 
+            "type": "array",
+          items: { "type": "object",
           properties: {
-            age: {  type: "number" , "description": "```wing\nage: num\n```" },
-            name: {  type: "string" , "description": "```wing\nname: str\n```" },
+            "age": { 
+               "type": "number" , 
+               "description": "```wing\nage: num\n```" ,
+            },
+            "name": { 
+               "type": "string" , 
+               "description": "```wing\nname: str\n```" ,
+            },
           },
           required: [
             "age",
             "name",
-          ] }, "description": "```wing\nresidents: Array<Person>\n```" },
+          ] }, 
+             "description": "```wing\nresidents: Array<Person>\n```" ,
+          },
         },
         required: [
           "address",
           "residents",
-        ] }, "description": "```wing\nhouses: Array<House>\n```" },
+        ] }, 
+           "description": "```wing\nhouses: Array<House>\n```" ,
+        },
       },
       required: [
         "houses",
