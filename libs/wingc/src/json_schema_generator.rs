@@ -1,5 +1,5 @@
 use crate::{
-	docs::{Documented},
+	docs::Documented,
 	jsify::{codemaker::CodeMaker, JSifier},
 	type_check::{symbol_env::SymbolEnv, Struct, Type, UnsafeRef},
 };
