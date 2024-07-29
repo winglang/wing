@@ -5,7 +5,7 @@ use std::{
 
 use strum::{Display, EnumString};
 
-use crate::diagnostic::{report_diagnostic, Diagnostic, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticSeverity, WingSpan};
 
 /// The different phases of compilation, used for tracking compilation context
 /// for diagnostic purposes. Feel free to add new phases as needed.
@@ -74,8 +74,8 @@ macro_rules! dbg_panic {
 		|| -> () {
 			// Get environment variable to see if we should panic or not
 			let Ok(dbg_panic) = std::env::var("WINGC_DEBUG_PANIC") else {
-				return;
-			};
+						return;
+					};
 
 			if dbg_panic == "1"
 				|| dbg_panic == "true"
@@ -109,6 +109,7 @@ pub fn set_custom_panic_hook() {
 			span: Some(CompilationContext::get_span()),
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		})
 	}));
 }

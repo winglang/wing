@@ -6,7 +6,7 @@ use crate::{
 		UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
-	diagnostic::{report_diagnostic, Diagnostic},
+	diagnostic::{report_diagnostic, Diagnostic, DiagnosticSeverity},
 	jsify::{JSifier, JSifyContext},
 	type_check::{
 		get_udt_definition_phase,
@@ -73,6 +73,7 @@ impl<'a> LiftVisitor<'a> {
 					message: format!("Cannot access \"{symbol}\" because it is shadowed by another symbol with the same name"),
 					annotations: vec![],
 					hints: vec![],
+					severity: DiagnosticSeverity::Error,
 				});
 			}
 		}

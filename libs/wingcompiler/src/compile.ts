@@ -177,6 +177,9 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     color: options.color,
     log,
   });
+  if (compileForPreflightResult.diagnostics.length > 0) {
+    throw new CompileError(compileForPreflightResult.diagnostics);
+  }
 
   if (isEntrypointFile(entrypoint)) {
     let preflightEnv: Record<string, string | undefined> = {
@@ -233,6 +236,7 @@ interface CompileForPreflightResult {
   readonly compilerOutput?: {
     imported_namespaces: string[];
   };
+  readonly diagnostics: wingCompiler.WingDiagnostic[];
 }
 
 async function compileForPreflight(props: {
@@ -244,22 +248,35 @@ async function compileForPreflight(props: {
   log?: (...args: any[]) => void;
 }): Promise<CompileForPreflightResult> {
   if (props.entrypointFile.endsWith(".ts")) {
-    const typescriptFramework = await import("@wingcloud/framework")
-      .then((m) => m.internal)
-      .catch((err) => {
-        throw new Error(`\
-Failed to load "@wingcloud/framework": ${err.message}
-
-To use Wing with TypeScript files, you must install "@wingcloud/framework" as a dependency of your project.
-npm i @wingcloud/framework
-`);
-      });
+    const diagnostics: wingCompiler.WingDiagnostic[] = [];
+    let typescriptFramework;
+    try {
+      typescriptFramework = (await import("@wingcloud/framework")).internal;
+    } catch (err) {
+      return {
+        preflightEntrypoint: "",
+        diagnostics: [
+          {
+            message: `\
+  Failed to load "@wingcloud/framework": ${(err as any).message}
+  
+  To use Wing with TypeScript files, you must install "@wingcloud/framework" as a dependency of your project.
+  npm i @wingcloud/framework
+  `,
+            severity: "error",
+            annotations: [],
+            hints: [],
+          },
+        ],
+      };
+    }
 
     return {
       preflightEntrypoint: await typescriptFramework.compile({
         workDir: props.workDir,
         entrypoint: props.entrypointFile,
       }),
+      diagnostics,
     };
   } else {
     let env: Record<string, string> = {
@@ -279,7 +296,7 @@ npm i @wingcloud/framework
       },
     });
 
-    const errors: wingCompiler.WingDiagnostic[] = [];
+    const diagnostics: wingCompiler.WingDiagnostic[] = [];
 
     function send_diagnostic(data_ptr: number, data_len: number) {
       const data_buf = Buffer.from(
@@ -288,31 +305,25 @@ npm i @wingcloud/framework
         data_len
       );
       const data_str = new TextDecoder().decode(data_buf);
-      errors.push(JSON.parse(data_str));
+      diagnostics.push(JSON.parse(data_str));
     }
 
     const arg = `${normalPath(props.entrypointFile)};${normalPath(props.workDir)};${normalPath(
       props.wingDir
     )}`;
     props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-    let compileSuccess: boolean;
     let compilerOutput: string | number = "";
     try {
       compilerOutput = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
-      compileSuccess = compilerOutput !== 0;
     } catch (error) {
       // This is a bug in the compiler, indicate a compilation failure.
       // The bug details should be part of the diagnostics handling below.
-      compileSuccess = false;
-    }
-    if (!compileSuccess) {
-      // This is a bug in the user's code. Print the compiler diagnostics.
-      throw new CompileError(errors);
     }
 
     return {
       preflightEntrypoint: join(props.workDir, WINGC_PREFLIGHT),
       compilerOutput: JSON.parse(compilerOutput as string),
+      diagnostics,
     };
   }
 }

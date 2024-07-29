@@ -12,7 +12,7 @@ use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use const_format::formatcp;
-use diagnostic::{found_errors, report_diagnostic, Diagnostic};
+use diagnostic::{found_errors, report_diagnostic, Diagnostic, DiagnosticSeverity};
 use dtsify::extern_dtsify::{is_extern_file, ExternDTSifier};
 use file_graph::FileGraph;
 use files::Files;
@@ -156,6 +156,23 @@ pub unsafe extern "C" fn wingc_malloc(size: usize) -> *mut u8 {
 	}
 }
 
+/// Check if the project has a pnpm or yarn or bun lockfile, and emit a warning if it does.
+fn emit_warning_for_unsupported_package_managers(project_dir: &Utf8Path) {
+	let lockfiles = ["pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb"];
+	for lockfile in &lockfiles {
+		let lockfile_path = project_dir.join(lockfile);
+		if lockfile_path.exists() {
+			report_diagnostic(Diagnostic {
+				message: "The current project has a pnpm/yarn/bun lockfile. Wing hasn't been tested with package managers besides npm, so it may be unable to resolve dependencies to Wing libraries when using these tools. See https://github.com/winglang/wing/issues/6129 for more details.".to_string(),
+				span: None,
+				annotations: vec![],
+				hints: vec![],
+				severity: DiagnosticSeverity::Warning,
+			});
+		}
+	}
+}
+
 /// Expose a deallocation function to the WASM host
 ///
 /// _This implementation is copied from wasm-bindgen_
@@ -190,6 +207,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 			span: None,
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 		return WASM_RETURN_ERROR;
 	}
@@ -206,6 +224,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 			span: None,
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 		return WASM_RETURN_ERROR;
 	}
@@ -272,6 +291,8 @@ pub fn compile(
 		&mut asts,
 	);
 
+	emit_warning_for_unsupported_package_managers(&project_dir);
+
 	// -- DESUGARING PHASE --
 
 	// Transform all inflight closures defined in preflight into single-method resources
@@ -328,6 +349,7 @@ pub fn compile(
 			span: None,
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 		return Err(());
 	}

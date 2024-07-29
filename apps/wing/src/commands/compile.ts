@@ -101,7 +101,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       const result = [];
 
       for (const diagnostic of diagnostics) {
-        const { message, span, annotations, hints } = diagnostic;
+        const { message, span, annotations, hints, severity } = diagnostic;
         const files: File[] = [];
         const labels: Label[] = [];
 
@@ -145,7 +145,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
           files,
           {
             message,
-            severity: "error",
+            severity,
             labels,
             notes: hints.map((hint) => `hint: ${hint}`),
           },
@@ -156,7 +156,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
         );
         result.push(diagnosticText);
       }
-      throw new Error(result.join("\n"));
+      throw new Error(result.join("\n").trimEnd());
     } else if (error instanceof wingCompiler.PreflightError) {
       let output = await prettyPrintError(error.causedBy, {
         chalk,

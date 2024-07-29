@@ -17,7 +17,7 @@ use crate::ast::{
 	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, DiagnosticSeverity, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::FileGraph;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
@@ -1563,6 +1563,7 @@ impl Types {
 					span: Some(span.clone()),
 					annotations: vec![],
 					hints: vec![],
+					severity: DiagnosticSeverity::Error,
 				});
 				existing_type_option.replace(error);
 				return;
@@ -1902,6 +1903,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(spanned.span()),
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 
 		(self.make_error_variable_info(), Phase::Independent)
@@ -1913,6 +1915,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(spanned.span()),
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 	}
 
@@ -1922,6 +1925,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(spanned.span()),
 			annotations: vec![],
 			hints: hints.iter().map(|h| h.to_string()).collect(),
+			severity: DiagnosticSeverity::Error,
 		});
 	}
 
@@ -1936,6 +1940,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(spanned.span()),
 			annotations,
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 	}
 
@@ -1945,6 +1950,7 @@ impl<'a> TypeChecker<'a> {
 			span: None,
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 	}
 
@@ -1960,6 +1966,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(span),
 			annotations,
 			hints,
+			severity: DiagnosticSeverity::Error,
 		});
 
 		self.types.error()
@@ -3638,6 +3645,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							span: None,
 							annotations: vec![],
 							hints: vec![],
+							severity: DiagnosticSeverity::Error,
 						}),
 					);
 					return;
@@ -3661,6 +3669,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							span: None,
 							annotations: vec![],
 							hints: vec![],
+							severity: DiagnosticSeverity::Error,
 						}),
 					);
 					return;
@@ -5477,6 +5486,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 											span: lookup.name.span.clone(),
 										}],
 										hints: vec![format!("Change type to match first declaration: {}", lookup.type_)],
+										severity: DiagnosticSeverity::Error,
 									});
 								}
 							} else {
@@ -6550,6 +6560,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							hints: vec![format!(
 								"the definition of \"{property}\" needs a broader access modifier like \"pub\" or \"protected\" to be used outside of \"{class}\"",
 							)],
+							severity: DiagnosticSeverity::Error,
 						});
 					}
 				}
@@ -6565,6 +6576,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							hints: vec![format!(
 								"the definition of \"{property}\" needs a broader access modifier like \"pub\" to be used outside of \"{class}\"",
 							)],
+							severity: DiagnosticSeverity::Error,
 						});
 					}
 				}

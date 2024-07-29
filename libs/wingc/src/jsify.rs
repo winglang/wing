@@ -18,7 +18,7 @@ use crate::{
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
-	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	diagnostic::{report_diagnostic, Diagnostic, DiagnosticSeverity, WingSpan},
 	dtsify::extern_dtsify::ExternDTSifier,
 	file_graph::FileGraph,
 	files::Files,
@@ -498,6 +498,7 @@ impl<'a> JSifier<'a> {
 						span: Some(expression.span.clone()),
 						annotations: vec![],
 						hints: vec![],
+						severity: DiagnosticSeverity::Error,
 					});
 
 					return new_code!(expr_span, "<ERROR>");
@@ -739,6 +740,7 @@ impl<'a> JSifier<'a> {
 										annotations: vec![],
 										hints: vec![],
 										span: Some(x.1.span.clone()),
+										severity: DiagnosticSeverity::Error,
 									});
 									continue;
 								}
@@ -752,6 +754,7 @@ impl<'a> JSifier<'a> {
 												annotations: vec![],
 												hints: vec![],
 												span: Some(item.span.clone()),
+												severity: DiagnosticSeverity::Error,
 											});
 											continue;
 										};
@@ -772,6 +775,7 @@ impl<'a> JSifier<'a> {
 													annotations: vec![],
 													hints: vec![],
 													span: Some(alias.span.clone()),
+													severity: DiagnosticSeverity::Error,
 												});
 												continue;
 											}
@@ -786,6 +790,7 @@ impl<'a> JSifier<'a> {
 															annotations: vec![],
 															hints: vec![],
 															span: Some(obj_expression.span.clone()),
+															severity: DiagnosticSeverity::Error,
 														});
 														continue;
 													}
@@ -796,6 +801,7 @@ impl<'a> JSifier<'a> {
 														annotations: vec![],
 														hints: vec![],
 														span: Some(obj_expression.span.clone()),
+														severity: DiagnosticSeverity::Error,
 													});
 													continue;
 												}
@@ -841,6 +847,7 @@ impl<'a> JSifier<'a> {
 							span: Some(arg_list.pos_args[0].span.clone()),
 							annotations: vec![],
 							hints: vec![],
+							severity: DiagnosticSeverity::Error,
 						});
 
 						return CodeMaker::default();
@@ -1730,6 +1737,7 @@ impl<'a> JSifier<'a> {
 					annotations: vec![],
 					hints: vec![],
 					span: Some(span.clone()),
+					severity: DiagnosticSeverity::Error,
 				});
 				return None;
 			}

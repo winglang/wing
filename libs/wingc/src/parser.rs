@@ -18,7 +18,7 @@ use crate::ast::{
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{
-	report_diagnostic, Diagnostic, DiagnosticResult, WingLocation, WingSpan, ERR_EXPECTED_SEMICOLON,
+	report_diagnostic, Diagnostic, DiagnosticResult, DiagnosticSeverity, WingLocation, WingSpan, ERR_EXPECTED_SEMICOLON,
 };
 use crate::file_graph::FileGraph;
 use crate::files::Files;
@@ -226,6 +226,7 @@ pub fn parse_wing_project(
 				span: None,
 				annotations: vec![],
 				hints: vec![],
+				severity: DiagnosticSeverity::Error,
 			});
 
 			// return a list of all files just so we can continue type-checking
@@ -1568,6 +1569,7 @@ impl<'s> Parser<'s> {
 				span: Some(self.node_span(&class_element)),
 				annotations: vec![],
 				hints: vec![],
+				severity: DiagnosticSeverity::Error,
 			});
 		}
 
@@ -2759,6 +2761,7 @@ impl<'s> Parser<'s> {
 					}),
 					annotations: vec![],
 					hints: vec![],
+					severity: DiagnosticSeverity::Error,
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
@@ -2777,6 +2780,7 @@ impl<'s> Parser<'s> {
 					}),
 					annotations: vec![],
 					hints: vec![],
+					severity: DiagnosticSeverity::Error,
 				};
 				report_diagnostic(diag);
 			} else if !self.error_nodes.borrow().contains(&node.id()) {
@@ -2797,6 +2801,7 @@ impl<'s> Parser<'s> {
 						span: Some(self.node_span(&target_node)),
 						annotations: vec![],
 						hints: vec![],
+						severity: DiagnosticSeverity::Error,
 					};
 					report_diagnostic(diag);
 				}
