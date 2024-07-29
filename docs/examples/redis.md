@@ -30,7 +30,7 @@ This basic pattern uses the [redis winglib](https://github.com/winglang/winglibs
 When the cloud function is invoked a value is set in the redis database using the redis inflight API.
 
 
-```js example
+```js
 bring redis;
 bring cloud;
 
