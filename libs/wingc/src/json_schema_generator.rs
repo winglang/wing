@@ -1,5 +1,5 @@
 use crate::{
-	docs::Documented,
+	docs::{self, Documented},
 	jsify::{codemaker::CodeMaker, JSifier},
 	type_check::{symbol_env::SymbolEnv, Struct, Type, UnsafeRef},
 };
@@ -15,11 +15,16 @@ impl JsonSchemaGenerator {
 		let mut code = CodeMaker::default();
 		for (field_name, entry) in env.symbol_map.iter() {
 			code.line(format!(
-				"{}: {{ {}, \"description\": \"{}\" }},",
-				field_name,
-				self.get_struct_schema_field(&entry.kind.as_variable().unwrap().type_),
-				entry.kind.render_docs().replace("\n", "\\n")
-			));
+				"\"{}\": {{ ",
+				field_name));
+			code.line(format!(
+				"  {}, ",
+				self.get_struct_schema_field(&entry.kind.as_variable().unwrap().type_)));
+			let docs = entry.kind.render_docs().replace("\n", "\\n");
+			if docs != "" {
+				code.line(format!("   \"description\": \"{}\" ,", docs));
+			}
+			code.line("},")
 		}
 		code
 	}
@@ -39,11 +44,11 @@ impl JsonSchemaGenerator {
 	fn get_struct_schema_field(&self, typ: &UnsafeRef<Type>) -> String {
 		match **typ {
 			Type::String | Type::Number | Type::Boolean => {
-				format!(" type: \"{}\" ", JSifier::jsify_type(typ).unwrap())
+				format!(" \"type\": \"{}\" ", JSifier::jsify_type(typ).unwrap())
 			}
 			Type::Struct(ref s) => {
 				let mut code = CodeMaker::default();
-				code.line("type: \"object\",");
+				code.line("\"type\": \"object\",");
 				code.open("properties: {");
 				code.add_code(self.get_struct_env_properties(&s.env));
 				code.close("},");
@@ -52,7 +57,7 @@ impl JsonSchemaGenerator {
 			}
 			Type::Array(ref t) | Type::Set(ref t) => {
 				let mut code = CodeMaker::default();
-				code.line("type: \"array\",");
+				code.line("\"type\": \"array\",");
 
 				if matches!(**typ, Type::Set(_)) {
 					code.line("uniqueItems: true,");
@@ -64,7 +69,7 @@ impl JsonSchemaGenerator {
 			}
 			Type::Map(ref t) => {
 				let mut code = CodeMaker::default();
-				code.line("type: \"object\",");
+				code.line("\"type\": \"object\",");
 				code.line(format!(
 					"patternProperties: {{ \".*\": {{ {} }} }}",
 					self.get_struct_schema_field(t)
@@ -73,8 +78,8 @@ impl JsonSchemaGenerator {
 				code.to_string()
 			}
 			Type::Optional(t) => self.get_struct_schema_field(&t),
-			Type::Json(_) => " type: [\"object\", \"string\", \"boolean\", \"number\", \"array\"] ".to_string(),
-			_ => " type: \"null\" ".to_string(),
+			Type::Json(_) => " \"type\": [\"object\", \"string\", \"boolean\", \"number\", \"array\"] ".to_string(),
+			_ => " \"type\": \"null\" ".to_string(),
 		}
 	}
 
@@ -84,10 +89,14 @@ impl JsonSchemaGenerator {
 		code.open("{");
 		code.line(format!("$id: \"/{}\",", struct_.name));
 		code.line("type: \"object\",".to_string());
-		code.line(format!(
-			"description: \"{}\",",
-			struct_.docs.render().replace("\n", "\\n")
-		));
+
+		let docs = struct_.docs.render().replace("\n", "\\n");
+		if docs != "" {
+			code.line(format!(
+				"description: \"{}\",",
+				docs
+			));
+		}
 
 		code.open("properties: {");
 

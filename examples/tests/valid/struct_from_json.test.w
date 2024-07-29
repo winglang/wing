@@ -282,7 +282,7 @@ assert(myStruct.m2.val == "10");
 let schema = MyStruct.schema();
 schema.validate(jMyStruct); // Should not throw exception
 
-let expectedSchema = {"$id":"/MyStruct","type":"object","description":"","properties":{"m1":{"type":"object","properties":{"val":{"type":"number","description":"```wing\nval: num\n```"}},"required":["val"],"description":"```wing\nm1: struct MyStruct \{\n  val: num;\n}\n```"},"m2":{"type":"object","properties":{"val":{"type":"string","description":"```wing\nval: str\n```"}},"required":["val"],"description":"```wing\nm2: struct MyStruct \{\n  val: str;\n}\n```"}},"required":["m1","m2"]};
+let expectedSchema = {"$id":"/MyStruct","type":"object","properties":{"m1":{"type":"object","properties":{"val":{"type":"number","description":"```wing\nval: num\n```"}},"required":["val"],"description":"```wing\nm1: struct MyStruct \{\n  val: num;\n}\n```"},"m2":{"type":"object","properties":{"val":{"type":"string","description":"```wing\nval: str\n```"}},"required":["val"],"description":"```wing\nm2: struct MyStruct \{\n  val: str;\n}\n```"}},"required":["m1","m2"]};
 
 assert(schema.asStr() == Json.stringify(expectedSchema));
 
