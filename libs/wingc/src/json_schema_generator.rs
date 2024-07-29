@@ -1,5 +1,5 @@
 use crate::{
-	docs::{self, Documented},
+	docs::{Documented},
 	jsify::{codemaker::CodeMaker, JSifier},
 	type_check::{symbol_env::SymbolEnv, Struct, Type, UnsafeRef},
 };
@@ -14,12 +14,11 @@ impl JsonSchemaGenerator {
 	fn get_struct_env_properties(&self, env: &SymbolEnv) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		for (field_name, entry) in env.symbol_map.iter() {
-			code.line(format!(
-				"\"{}\": {{ ",
-				field_name));
+			code.line(format!("\"{}\": {{ ", field_name));
 			code.line(format!(
 				"  {}, ",
-				self.get_struct_schema_field(&entry.kind.as_variable().unwrap().type_)));
+				self.get_struct_schema_field(&entry.kind.as_variable().unwrap().type_)
+			));
 			let docs = entry.kind.render_docs().replace("\n", "\\n");
 			if docs != "" {
 				code.line(format!("   \"description\": \"{}\" ,", docs));
@@ -92,10 +91,7 @@ impl JsonSchemaGenerator {
 
 		let docs = struct_.docs.render().replace("\n", "\\n");
 		if docs != "" {
-			code.line(format!(
-				"description: \"{}\",",
-				docs
-			));
+			code.line(format!("description: \"{}\",", docs));
 		}
 
 		code.open("properties: {");
