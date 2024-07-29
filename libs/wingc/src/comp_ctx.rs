@@ -74,8 +74,8 @@ macro_rules! dbg_panic {
 		|| -> () {
 			// Get environment variable to see if we should panic or not
 			let Ok(dbg_panic) = std::env::var("WINGC_DEBUG_PANIC") else {
-						return;
-					};
+				return;
+			};
 
 			if dbg_panic == "1"
 				|| dbg_panic == "true"
