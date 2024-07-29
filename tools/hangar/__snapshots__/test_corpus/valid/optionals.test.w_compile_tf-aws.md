@@ -130,10 +130,15 @@ class $Root extends $stdlib.std.Resource {
     const Person = $stdlib.std.Struct._createJsonSchema({
       $id: "/Person",
       type: "object",
-      description: "",
       properties: {
-        age: {  type: "number" , "description": "```wing\nage: num\n```" },
-        name: {  type: "string" , "description": "```wing\nname: str\n```" },
+        "age": { 
+           "type": "number" , 
+           "description": "```wing\nage: num\n```" ,
+        },
+        "name": { 
+           "type": "string" , 
+           "description": "```wing\nname: str\n```" ,
+        },
       },
       required: [
         "age",

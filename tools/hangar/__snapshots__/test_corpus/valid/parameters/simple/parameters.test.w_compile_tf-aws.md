@@ -38,10 +38,15 @@ class $Root extends $stdlib.std.Resource {
     const MyParams = $stdlib.std.Struct._createJsonSchema({
       $id: "/MyParams",
       type: "object",
-      description: "",
       properties: {
-        foo: {  type: "string" , "description": "```wing\nfoo: str?\n```" },
-        meaningOfLife: {  type: "number" , "description": "```wing\nmeaningOfLife: num\n```" },
+        "foo": { 
+           "type": "string" , 
+           "description": "```wing\nfoo: str?\n```" ,
+        },
+        "meaningOfLife": { 
+           "type": "number" , 
+           "description": "```wing\nmeaningOfLife: num\n```" ,
+        },
       },
       required: [
         "meaningOfLife",
