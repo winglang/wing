@@ -377,10 +377,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "compiler_dbg_env"
-        },
-        {
-          "type": "SYMBOL",
           "name": "super_constructor_statement"
         },
         {
@@ -2052,10 +2048,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "compiler_dbg_panic"
-        },
-        {
-          "type": "SYMBOL",
           "name": "optional_unwrap"
         },
         {
@@ -2461,31 +2453,6 @@
           }
         ]
       }
-    },
-    "compiler_dbg_panic": {
-      "type": "STRING",
-      "value": "😱"
-    },
-    "compiler_dbg_env": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "🗺️"
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": ";"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        }
-      ]
     },
     "call": {
       "type": "PREC_LEFT",

@@ -230,6 +230,7 @@ export interface WingDiagnostic {
     span: WingSpan;
   }[];
   hints: string[];
+  severity: "error" | "warning";
 }
 
 export interface WingSpan {

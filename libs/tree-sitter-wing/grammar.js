@@ -128,7 +128,6 @@ module.exports = grammar({
         $.struct_definition,
         $.enum_definition,
         $.try_catch_statement,
-        $.compiler_dbg_env,
         $.super_constructor_statement,
         $.throw_statement,
         $.lift_statement
@@ -377,7 +376,6 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.json_literal,
         $.struct_literal,
-        $.compiler_dbg_panic,
         $.optional_unwrap,
         $.intrinsic
       ),
@@ -462,9 +460,6 @@ module.exports = grammar({
           )
         )
       ),
-
-    compiler_dbg_panic: ($) => "😱",
-    compiler_dbg_env: ($) => seq("🗺️", optional(";")),
 
     call: ($) =>
       prec.left(

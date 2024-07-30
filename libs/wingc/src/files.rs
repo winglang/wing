@@ -8,7 +8,7 @@ use std::{
 
 use camino::{Utf8Path, Utf8PathBuf};
 
-use crate::diagnostic::Diagnostic;
+use crate::diagnostic::{Diagnostic, DiagnosticSeverity};
 
 #[derive(Debug)]
 pub enum FilesError {
@@ -32,6 +32,7 @@ impl From<FilesError> for Diagnostic {
 			span: None,
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		}
 	}
 }
