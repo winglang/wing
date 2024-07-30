@@ -144,6 +144,6 @@ describe("new", () => {
     await init(undefined as any);
 
     const files = await readdir(workdir);
-    expect(files).toEqual(["main.w", "package-lock.json", "package.json", "target"]);
+    expect(files).toEqual(["main.w", "package-lock.json", "package.json"]);
   });
 });
