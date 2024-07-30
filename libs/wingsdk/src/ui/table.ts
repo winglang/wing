@@ -4,7 +4,7 @@ import { Function } from "../cloud";
 import { fqnForType } from "../constants";
 import { UIComponent, lift } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
-import { IInflight, Resource } from "../std";
+import { IInflight, Json, Resource } from "../std";
 
 /**
  * Global identifier for `Table`.
@@ -16,13 +16,17 @@ export const TABLE_FQN = fqnForType("ui.Table");
  */
 export interface TableHandlers {
   /**
-   * Handler for inserting a row.
+   * Handler for getting the primary key.
    */
-  readonly insert: ITableputHandler;
+  readonly geetPrimaryKey: ITableGetPrimaryKeyHandler;
   /**
    * Handler for getting a row.
    */
   readonly get: ITableGetHandler;
+  /**
+   * Handler for putting a row.
+   */
+  readonly put: ITableputHandler;
   /**
    * Handler for updatete a row.
    */
@@ -55,7 +59,8 @@ export class Table extends VisualComponent {
     return Resource._newFromFactory(TABLE_FQN, scope, id, label, handlers);
   }
 
-  private readonly insertFn: Function;
+  private readonly getPrimaryKeyFn: Function;
+  private readonly putFn: Function;
   private readonly updateFn: Function;
   private readonly getFn: Function;
   private readonly deleteFn: Function;
@@ -71,6 +76,12 @@ export class Table extends VisualComponent {
     super(scope, id);
     this.label = label;
 
+    const getPrimaryKeyFn = lift({ handler: handlers.geetPrimaryKey }).inflight(
+      async (ctx) => {
+        return await ctx.handler();
+      }
+    );
+
     const getHandler = lift({ handler: handlers.get }).inflight(
       async (ctx, payload) => {
         try {
@@ -82,13 +93,13 @@ export class Table extends VisualComponent {
       }
     );
 
-    const putHandler = lift({ handler: handlers.insert }).inflight(
+    const putHandler = lift({ handler: handlers.put }).inflight(
       async (ctx, payload) => {
         try {
           const item = JSON.parse(payload);
           return await ctx.handler(item);
         } catch (e) {
-          throw new Error("Invalid payload for table insert handler client");
+          throw new Error("Invalid payload for table put handler client");
         }
       }
     );
@@ -125,8 +136,9 @@ export class Table extends VisualComponent {
       }
     );
 
+    this.getPrimaryKeyFn = new Function(this, "getPrimaryKey", getPrimaryKeyFn);
     this.getFn = new Function(this, "get", getHandler);
-    this.insertFn = new Function(this, "insert", putHandler);
+    this.putFn = new Function(this, "put", putHandler);
     this.updateFn = new Function(this, "update", updateHandler);
     this.deleteFn = new Function(this, "delete", deleteHandler);
     this.scanFn = new Function(this, "scan", scanHandler);
@@ -137,7 +149,8 @@ export class Table extends VisualComponent {
     return {
       kind: "table",
       label: this.label,
-      putHandler: this.insertFn.node.path,
+      getPrimaryKeyHandler: this.getPrimaryKeyFn.node.path,
+      putHandler: this.putFn.node.path,
       updateHandler: this.updateFn.node.path,
       deleteHandler: this.deleteFn.node.path,
       getHandler: this.getFn.node.path,
@@ -155,11 +168,11 @@ export class Table extends VisualComponent {
  * A resource with an inflight "handle" method that can be passed to
  * `ITable`.
  *
- * @inflight `@winglang/sdk.ui.ITableputHandlerClient`
+ * @inflight `@winglang/sdk.ui.ITablePutHandlerClient`
  */
 export interface ITableputHandler extends IInflight {
   /** @internal */
-  [INFLIGHT_SYMBOL]?: ITableputHandlerClient["handle"];
+  [INFLIGHT_SYMBOL]?: ITablePutHandlerClient["handle"];
 }
 
 /**
@@ -188,6 +201,17 @@ export interface ITableGetHandler extends IInflight {
  * A resource with an inflight "handle" method that can be passed to
  * `ITable`.
  *
+ * @inflight `@winglang/sdk.ui.ITableGetPrimaryKeyHandlerClient`
+ */
+export interface ITableGetPrimaryKeyHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: ITableGetPrimaryKeyHandlerClient["handle"];
+}
+
+/**
+ * A resource with an inflight "handle" method that can be passed to
+ * `ITable`.
+ *
  * @inflight `@winglang/sdk.ui.ITableScanHandlerClient`
  */
 export interface ITableScanHandler extends IInflight {
@@ -209,7 +233,7 @@ export interface ITableDeleteHandler extends IInflight {
 /**
  * Inflight client for `ITableVoidHandler`.
  */
-export interface ITableputHandlerClient {
+export interface ITablePutHandlerClient {
   /**
    * Function that performs an action.
    * @inflight
@@ -229,6 +253,17 @@ export interface ITableUpdateHandlerClient {
 }
 
 /**
+ * Inflight client for `ITableGetPrimaryKeyHandler`.
+ */
+export interface ITableGetPrimaryKeyHandlerClient {
+  /**
+   * Function that performs an action.
+   * @inflight
+   */
+  handle(): Promise<string>;
+}
+
+/**
  * Inflight client for `ITableGetHandler`.
  */
 export interface ITableGetHandlerClient {
@@ -236,7 +271,7 @@ export interface ITableGetHandlerClient {
    * Function that performs an action.
    * @inflight
    */
-  handle(key: string): Promise<string>;
+  handle(key: string): Promise<Json>;
 }
 
 /**
@@ -258,5 +293,5 @@ export interface ITableScanHandlerClient {
    * Function that performs an action.
    * @inflight
    */
-  handle(): Promise<string[]>;
+  handle(): Promise<Json[]>;
 }

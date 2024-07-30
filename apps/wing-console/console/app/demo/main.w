@@ -23,17 +23,26 @@ class TableStorage {
           attributes: [
               { name: "key", type: "S" },
           ],
-      );
+      ) as "dynamodb.Table";
       
 
       this.topic = new cloud.Topic();
       
       new ui.Table("Table", {
+        getPrimaryKey: inflight () => {
+          return "key";
+        },
         put: inflight (item: str) => {
             this.table.put(Item: Json.parse(item));
         },
         update: inflight (key: str, item: str) => {
-          
+          this.table.update({
+            Key: key,
+            UpdateExpression: "set contents = :contents",
+            ExpressionAttributeValues: {
+              ":contents": item,
+            },
+          });
         },
         delete: inflight (key: str) => {
           this.table.delete({
@@ -41,12 +50,15 @@ class TableStorage {
           });
         },
         get: inflight (key: str) => {
-          return this.table.get({
-          Key: key,
+          let item = this.table.get({
+            Key: key,
           });
+          
+          return item.Item ?? {};
         },
-        list: inflight () => {
-          return this.table.scan();
+        scan: inflight () => {
+          let output = this.table.scan();
+          return output.Items;
         },
       }
     );
@@ -78,4 +90,4 @@ class TableStorage {
   }
 }
 
-let tableStorage = new TableStorage();
+let tableStorage = new TableStorage() as "TableStorage";

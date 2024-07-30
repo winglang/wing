@@ -1,16 +1,33 @@
 import { useNotifications, Attribute } from "@wingconsole/design-system";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
-import type { Row, RowData } from "./table-interaction.js";
-import { TableInteraction } from "./table-interaction.js";
+import { trpc } from "../../../trpc.js";
+
+import {
+  TableInteraction,
+  type Row,
+  type RowData,
+} from "./table-interaction.js";
 import { useTable } from "./use-table.js";
 
-export interface TableInteractionViewProps {
+export interface CustomResourceTableProps {
+  label: string;
+  putHandler: string;
+  deleteHandler: string;
+  getHandler: string;
+  scanHandler: string;
   resourcePath: string;
 }
 
-export const TableInteractionView = memo(
-  ({ resourcePath }: TableInteractionViewProps) => {
+export const CustomResourceTable = memo(
+  ({
+    label,
+    putHandler,
+    deleteHandler,
+    getHandler,
+    scanHandler,
+    resourcePath,
+  }: CustomResourceTableProps) => {
     const notifications = useNotifications();
 
     const showError = useCallback(
@@ -23,9 +40,68 @@ export const TableInteractionView = memo(
       [notifications],
     );
 
-    const { table, editRow, removeRow, addRow, loading } = useTable({
-      resourcePath,
+    const tablePut = trpc["table.put"].useMutation({
+      resourcePath: putHandler,
     });
+
+    const tableUpdate = trpc["table.update"].useMutation({
+      resourcePath: putHandler,
+    });
+
+    const tableDelete = trpc["table.delete"].useMutation({
+      resourcePath: deleteHandler,
+    });
+
+    const tableScan = trpc["table.scan"].useQuery({
+      resourcePath: scanHandler,
+    });
+
+    const addRow = useCallback(
+      async (row: any) => {
+        await tablePut.mutateAsync({
+          resourcePath,
+          data: row,
+        });
+      },
+      [tablePut, resourcePath],
+    );
+
+    const removeRow = useCallback(
+      async (index: number) => {
+        if (!table.data?.rows[index]) {
+          return;
+        }
+        await tableDelete.mutateAsync({
+          resourcePath,
+          data: table.data.rows[index] || {},
+        });
+      },
+      [tableDelete, resourcePath, table.data?.rows],
+    );
+
+    const editRow = useCallback(
+      async (row: any) => {
+        await tableUpdate.mutateAsync({
+          resourcePath,
+          data: row,
+        });
+      },
+      [tableUpdate, resourcePath],
+    );
+
+    const loading = useMemo(() => {
+      return (
+        tableScan.isFetching ||
+        tablePut.isLoading ||
+        tableUpdate.isLoading ||
+        tableDelete.isLoading
+      );
+    }, [
+      tablePut.isLoading,
+      tableUpdate.isLoading,
+      tableDelete.isLoading,
+      tableScan.isFetching,
+    ]);
 
     const [rows, setRows] = useState<Row[]>([]);
 
@@ -90,8 +166,8 @@ export const TableInteractionView = memo(
     );
 
     useEffect(() => {
-      if (table.data?.rows) {
-        const rows = table.data.rows.map((row) => {
+      if (tableScan.data?.rows) {
+        const rows = tableScan.data.rows.map((row: RowData) => {
           return {
             data: row,
             error: "",
@@ -99,7 +175,7 @@ export const TableInteractionView = memo(
         });
         setRows(rows);
       }
-    }, [table.data?.rows]);
+    }, [tableScan.data?.rows]);
 
     return (
       <div className="h-full flex-1 flex flex-col text-sm">

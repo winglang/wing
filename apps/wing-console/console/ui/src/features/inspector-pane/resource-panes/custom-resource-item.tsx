@@ -10,6 +10,7 @@ import type {
 
 import { CustomResourceFileBrowser } from "./custom-resource-file-browser.js";
 import { CustomResourceHttpClientItem } from "./custom-resource-http-client.js";
+import { CustomResourceTable } from "./custom-resource-table.js";
 import { CustomResourceUiButtonItem } from "./custom-resource-ui-button.js";
 import { CustomResourceUiFieldItem } from "./custom-resource-ui-field.js";
 
@@ -72,6 +73,15 @@ export const CustomResourceUiItem = ({ item }: { item: UIComponentLike }) => {
           label={uiComponent.label}
           getUrlHandler={uiComponent.getUrlHandler}
           getApiSpecHandler={uiComponent.getApiSpecHandler}
+        />
+      )}
+      {uiComponent.kind === "table" && (
+        <CustomResourceTable
+          label={uiComponent.label}
+          putHandler={uiComponent.putHandler}
+          getHandler={uiComponent.getHandler}
+          scanHandler={uiComponent.scanHandler}
+          deleteHandler={uiComponent.deleteHandler}
         />
       )}
     </>
