@@ -4,8 +4,8 @@
 ```log
 [INFO] invoke() waits for function to finish | log inside fn
 [INFO] invokeAsync() returns without waiting for the function finishes | log inside fn
-pass ─ invoke_async.test.wsim » root/env0/test:invoke() waits for function to finish                          
-pass ─ invoke_async.test.wsim » root/env1/test:invokeAsync() returns without waiting for the function finishes
+pass ─ invoke_async.test.wsim » root/Default/test:invoke() waits for function to finish                          
+pass ─ invoke_async.test.wsim » root/Default/test:invokeAsync() returns without waiting for the function finishes
 
 Tests 2 passed (2)
 Snapshots 1 skipped

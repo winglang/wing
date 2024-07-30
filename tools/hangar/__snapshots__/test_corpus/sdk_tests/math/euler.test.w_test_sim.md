@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ euler.test.wsim » root/env0/test:EULER
+pass ─ euler.test.wsim » root/Default/test:EULER
 
 Tests 1 passed (1)
 Snapshots 1 skipped

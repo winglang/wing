@@ -47,7 +47,7 @@ export class App extends CdktfApp {
       public: [],
     };
 
-    TestRunner._createTree(this, props.rootConstruct);
+    TestRunner._createTree(this, props.rootConstruct, this.isTestEnvironment);
   }
 
   /**

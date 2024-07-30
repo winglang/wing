@@ -10,7 +10,7 @@
 [INFO] logging | log inside f1
 [INFO] logging | log inside f2
 [INFO] logging | log inside f1
-pass ─ logging.test.wsim » root/env0/test:logging
+pass ─ logging.test.wsim » root/Default/test:logging
 
 Tests 1 passed (1)
 Snapshots 1 skipped

@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ env.test.wsim » root/env0/test:can access env vars in handler
+pass ─ env.test.wsim » root/Default/test:can access env vars in handler
 
 Tests 1 passed (1)
 Snapshots 1 skipped

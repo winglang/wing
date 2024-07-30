@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ peek.test.wsim » root/env0/test:peek
+pass ─ peek.test.wsim » root/Default/test:peek
 
 Tests 1 passed (1)
 Snapshots 1 skipped

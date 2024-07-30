@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ exists.test.wsim » root/env0/test:exists
+pass ─ exists.test.wsim » root/Default/test:exists
 
 Tests 1 passed (1)
 Snapshots 1 skipped

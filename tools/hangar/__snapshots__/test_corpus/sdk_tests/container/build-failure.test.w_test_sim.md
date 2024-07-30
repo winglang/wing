@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] (no test) | Error: Failed to start container: Command "docker build" exited with non-zero code 1 (see verbose logs)
 pass ─ build-failure.test.wsim (no tests)
 
 Tests 1 passed (1)

@@ -5366,8 +5366,10 @@ Duration <DURATION>"
 `;
 
 exports[`unresolved_state.test.w 1`] = `
-"[ERROR] (no test) | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/env0/State" referenced by "root/env0/Function"
-Failed to start resources: "root/env0/Function"
+"[ERROR]  | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/Default/State" referenced by "root/Default/Function"
+[ERROR]  | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/Default/State" referenced by "root/Default/Function"
+[ERROR]  | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/Default/State" referenced by "root/Default/Function"
+Failed to start resources: "root/Default/Function", "root/Default/test:/Handler", "root/cloud.TestRunner"
 
 Tests 1 failed (1)
 Snapshots 1 skipped

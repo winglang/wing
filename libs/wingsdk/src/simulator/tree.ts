@@ -15,6 +15,14 @@ export class Tree {
   }
 
   /**
+   * Returns a list of all tests in the tree.
+   * @returns a list of all tests in the tree
+   */
+  public listTests(): string[] {
+    return getTestPaths(this.data.tree);
+  }
+
+  /**
    * Returns the raw data for a specific construct node.
    */
   public rawDataForNode(path: string): ConstructTreeNode | undefined {
@@ -31,3 +39,21 @@ export class Tree {
     return curr;
   }
 }
+
+const getTestPaths = (node: ConstructTreeNode) => {
+  const tests: string[] = [];
+  const children = Object.values(node.children ?? {});
+
+  if (
+    node.constructInfo?.fqn === "@winglang/sdk.std.Test" &&
+    children.some((child) => child.id === "Handler")
+  ) {
+    tests.push(node.path);
+  }
+
+  for (const child of children) {
+    tests.push(...getTestPaths(child));
+  }
+
+  return tests;
+};

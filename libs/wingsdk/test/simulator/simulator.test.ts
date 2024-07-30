@@ -180,9 +180,9 @@ describe("run all tests", () => {
     await sim.stop();
     expect(results.length).toEqual(3);
     expect(results.map((r) => r.path).sort()).toStrictEqual([
-      "root/env0/test",
-      "root/env1/test:bla",
-      "root/env2/test:blue",
+      "root/Default/test",
+      "root/Default/test:bla",
+      "root/Default/test:blue",
     ]);
   });
 
@@ -221,9 +221,9 @@ describe("run all tests", () => {
     await sim.stop();
     expect(results.length).toEqual(3);
     expect(results.map((r) => r.path).sort()).toStrictEqual([
-      "root/env0/test",
-      "root/env1/scope1/test",
-      "root/env2/scope2/test",
+      "root/Default/scope1/test",
+      "root/Default/scope2/test",
+      "root/Default/test",
     ]);
   });
 });

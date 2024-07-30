@@ -83,7 +83,7 @@ export class App extends CdktfApp {
   constructor(props: AppProps) {
     super(props);
     this.location = props.location ?? process.env.AZURE_LOCATION!;
-    TestRunner._createTree(this, props.rootConstruct);
+    TestRunner._createTree(this, props.rootConstruct, this.isTestEnvironment);
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.location === undefined) {

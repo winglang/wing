@@ -533,25 +533,25 @@ test "put" {
 
 const BUCKET_TEST_RESULT = [
   {
-    path: "root/env0/test:put",
+    path: "root/Default/test:put",
     pass: true,
     traces: [
       {
         data: { message: "Put (key=test1.txt).", status: "success" },
         type: "resource",
-        sourcePath: "root/env0/Bucket",
+        sourcePath: "root/Default/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
       },
       {
         data: { message: "Get (key=test1.txt).", status: "success", result: '"Foo"' },
         type: "resource",
-        sourcePath: "root/env0/Bucket",
+        sourcePath: "root/Default/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
       },
       {
         data: { message: "Invoke (payload=undefined).", status: "success" },
         type: "resource",
-        sourcePath: "root/env0/test:put/Handler",
+        sourcePath: "root/Default/test:put/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
       },
     ],
@@ -562,7 +562,7 @@ const OUTPUT_FILE = {
   results: {
     "test.test.w": {
       put: {
-        path: "root/env0/test:put",
+        path: "root/Default/test:put",
         pass: true,
         traces: [
           {
@@ -571,7 +571,7 @@ const OUTPUT_FILE = {
               status: "success",
             },
             type: "resource",
-            sourcePath: "root/env0/Bucket",
+            sourcePath: "root/Default/Bucket",
             sourceType: "@winglang/sdk.cloud.Bucket",
           },
           {
@@ -581,7 +581,7 @@ const OUTPUT_FILE = {
               result: '"Foo"',
             },
             type: "resource",
-            sourcePath: "root/env0/Bucket",
+            sourcePath: "root/Default/Bucket",
             sourceType: "@winglang/sdk.cloud.Bucket",
           },
           {
@@ -590,7 +590,7 @@ const OUTPUT_FILE = {
               status: "success",
             },
             type: "resource",
-            sourcePath: "root/env0/test:put/Handler",
+            sourcePath: "root/Default/test:put/Handler",
             sourceType: "@winglang/sdk.cloud.Function",
           },
         ],

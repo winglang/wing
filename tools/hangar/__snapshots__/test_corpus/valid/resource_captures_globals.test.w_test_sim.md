@@ -2,8 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ resource_captures_globals.test.wsim » root/env0/test:test                                             
-pass ─ resource_captures_globals.test.wsim » root/env1/test:access cloud resource through static methods only
+pass ─ resource_captures_globals.test.wsim » root/Default/test:access cloud resource through static methods only
+pass ─ resource_captures_globals.test.wsim » root/Default/test:test                                             
 
 Tests 2 passed (2)
 Snapshots 1 skipped

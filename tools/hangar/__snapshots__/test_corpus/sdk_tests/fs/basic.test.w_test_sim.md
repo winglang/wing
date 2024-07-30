@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ basic.test.wsim » root/env0/test:inflight file basic operations
+pass ─ basic.test.wsim » root/Default/test:inflight file basic operations
 
 Tests 1 passed (1)
 Snapshots 1 skipped

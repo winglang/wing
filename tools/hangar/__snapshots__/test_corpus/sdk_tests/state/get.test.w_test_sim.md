@@ -2,8 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ get.test.wsim » root/env0/test:state.get() returns the runtime value         
-pass ─ get.test.wsim » root/env1/test:state.tryGet() return nil if there is no value
+pass ─ get.test.wsim » root/Default/test:state.get() returns the runtime value         
+pass ─ get.test.wsim » root/Default/test:state.tryGet() return nil if there is no value
 
 Tests 2 passed (2)
 Snapshots 1 skipped
