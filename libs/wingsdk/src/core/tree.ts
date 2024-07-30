@@ -142,7 +142,7 @@ export interface UIHttpClient {
 export interface UITable {
   readonly kind: "table";
   readonly label: string;
-  readonly getPrimaryKeyHandler: string;
+  readonly primaryKeyHandler: string;
   readonly putHandler: string;
   readonly updateHandler: string;
   readonly deleteHandler: string;

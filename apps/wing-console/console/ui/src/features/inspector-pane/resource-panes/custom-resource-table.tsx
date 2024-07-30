@@ -8,7 +8,6 @@ import {
   type Row,
   type RowData,
 } from "./table-interaction.js";
-import { useTable } from "./use-table.js";
 
 export interface CustomResourceTableProps {
   label: string;
@@ -16,7 +15,7 @@ export interface CustomResourceTableProps {
   deleteHandler: string;
   getHandler: string;
   scanHandler: string;
-  resourcePath: string;
+  primaryKeyHandler: string;
 }
 
 export const CustomResourceTable = memo(
@@ -26,7 +25,7 @@ export const CustomResourceTable = memo(
     deleteHandler,
     getHandler,
     scanHandler,
-    resourcePath,
+    primaryKeyHandler,
   }: CustomResourceTableProps) => {
     const notifications = useNotifications();
 
@@ -39,6 +38,10 @@ export const CustomResourceTable = memo(
       },
       [notifications],
     );
+
+    const primaryKeyQuery = trpc["table.primaryKey"].useQuery({
+      resourcePath: primaryKeyHandler,
+    });
 
     const tablePut = trpc["table.put"].useMutation({
       resourcePath: putHandler,
@@ -59,11 +62,10 @@ export const CustomResourceTable = memo(
     const addRow = useCallback(
       async (row: any) => {
         await tablePut.mutateAsync({
-          resourcePath,
           data: row,
         });
       },
-      [tablePut, resourcePath],
+      [tablePut],
     );
 
     const removeRow = useCallback(
@@ -82,11 +84,10 @@ export const CustomResourceTable = memo(
     const editRow = useCallback(
       async (row: any) => {
         await tableUpdate.mutateAsync({
-          resourcePath,
           data: row,
         });
       },
-      [tableUpdate, resourcePath],
+      [tableUpdate],
     );
 
     const loading = useMemo(() => {
@@ -107,7 +108,7 @@ export const CustomResourceTable = memo(
 
     const handleError = useCallback(
       (row: RowData, error: string) => {
-        const primaryKey = table.data?.primaryKey;
+        const primaryKey = primaryKeyQuery?.data;
         if (!primaryKey) {
           return;
         }
@@ -129,7 +130,7 @@ export const CustomResourceTable = memo(
 
         showError(`Row "${row[primaryKey]}": ${error}`);
       },
-      [setRows, showError, rows, table.data?.primaryKey],
+      [setRows, showError, rows, primaryKeyQuery.data],
     );
 
     const onAddRow = useCallback(
@@ -137,14 +138,14 @@ export const CustomResourceTable = memo(
         try {
           await addRow(row);
         } catch (error: any) {
-          const primaryKey = table.data?.primaryKey;
+          const primaryKey = primaryKeyQuery?.data;
           if (!primaryKey) {
             return;
           }
           showError(error.message);
         }
       },
-      [addRow, showError, table.data?.primaryKey],
+      [addRow, showError, primaryKeyQuery.data],
     );
 
     const onRemoveRow = useCallback(
@@ -181,16 +182,12 @@ export const CustomResourceTable = memo(
       <div className="h-full flex-1 flex flex-col text-sm">
         <div className="flex flex-col gap-2">
           <div className="flex flex-col space-y-1">
-            <div className="w-full">
-              <Attribute name="Name" value={table.data?.name} noLeftPadding />
-            </div>
-
             <div className="flex items-center gap-2 justify-end">
               <TableInteraction
-                resourceId={resourcePath}
-                columns={table.data?.columns || []}
+                id={putHandler}
+                columns={[]}
                 rows={rows}
-                primaryKey={table.data?.primaryKey || ""}
+                primaryKey={primaryKeyQuery?.data || ""}
                 onAddRow={onAddRow}
                 onEditRow={onEditRow}
                 onRemoveRow={onRemoveRow}

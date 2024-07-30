@@ -18,7 +18,7 @@ export interface TableHandlers {
   /**
    * Handler for getting the primary key.
    */
-  readonly geetPrimaryKey: ITableGetPrimaryKeyHandler;
+  readonly primaryKey: ITablePrimaryKeyHandler;
   /**
    * Handler for getting a row.
    */
@@ -59,7 +59,7 @@ export class Table extends VisualComponent {
     return Resource._newFromFactory(TABLE_FQN, scope, id, label, handlers);
   }
 
-  private readonly getPrimaryKeyFn: Function;
+  private readonly primaryKeyFn: Function;
   private readonly putFn: Function;
   private readonly updateFn: Function;
   private readonly getFn: Function;
@@ -76,9 +76,9 @@ export class Table extends VisualComponent {
     super(scope, id);
     this.label = label;
 
-    const getPrimaryKeyFn = lift({ handler: handlers.geetPrimaryKey }).inflight(
+    const primaryKeyFn = lift({ handler: handlers.primaryKey }).inflight(
       async (ctx) => {
-        return await ctx.handler();
+        return ctx.handler();
       }
     );
 
@@ -136,7 +136,7 @@ export class Table extends VisualComponent {
       }
     );
 
-    this.getPrimaryKeyFn = new Function(this, "getPrimaryKey", getPrimaryKeyFn);
+    this.primaryKeyFn = new Function(this, "primaryKey", primaryKeyFn);
     this.getFn = new Function(this, "get", getHandler);
     this.putFn = new Function(this, "put", putHandler);
     this.updateFn = new Function(this, "update", updateHandler);
@@ -149,7 +149,7 @@ export class Table extends VisualComponent {
     return {
       kind: "table",
       label: this.label,
-      getPrimaryKeyHandler: this.getPrimaryKeyFn.node.path,
+      primaryKeyHandler: this.primaryKeyFn.node.path,
       putHandler: this.putFn.node.path,
       updateHandler: this.updateFn.node.path,
       deleteHandler: this.deleteFn.node.path,
@@ -201,11 +201,11 @@ export interface ITableGetHandler extends IInflight {
  * A resource with an inflight "handle" method that can be passed to
  * `ITable`.
  *
- * @inflight `@winglang/sdk.ui.ITableGetPrimaryKeyHandlerClient`
+ * @inflight `@winglang/sdk.ui.ITablePrimaryKeyHandlerClient`
  */
-export interface ITableGetPrimaryKeyHandler extends IInflight {
+export interface ITablePrimaryKeyHandler extends IInflight {
   /** @internal */
-  [INFLIGHT_SYMBOL]?: ITableGetPrimaryKeyHandlerClient["handle"];
+  [INFLIGHT_SYMBOL]?: ITablePrimaryKeyHandlerClient["handle"];
 }
 
 /**
@@ -253,9 +253,9 @@ export interface ITableUpdateHandlerClient {
 }
 
 /**
- * Inflight client for `ITableGetPrimaryKeyHandler`.
+ * Inflight client for `ITablePrimaryKeyHandler`.
  */
-export interface ITableGetPrimaryKeyHandlerClient {
+export interface ITablePrimaryKeyHandlerClient {
   /**
    * Function that performs an action.
    * @inflight

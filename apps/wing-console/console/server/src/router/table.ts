@@ -5,7 +5,7 @@ import type { IFunctionClient } from "../wingsdk.js";
 
 export const createtableRouter = () => {
   return createRouter({
-    "table.getPrimaryKey": createProcedure
+    "table.primaryKey": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),

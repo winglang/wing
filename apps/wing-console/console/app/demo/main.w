@@ -29,7 +29,7 @@ class TableStorage {
       this.topic = new cloud.Topic();
       
       new ui.Table("Table", {
-        getPrimaryKey: inflight () => {
+        primaryKey: inflight () => {
           return "key";
         },
         put: inflight (item: str) => {

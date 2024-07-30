@@ -18,7 +18,7 @@ export type Row = {
 };
 
 export interface TableInteractionProps {
-  resourceId: string;
+  id: string;
   primaryKey?: string;
   columns?: Column[];
   rows?: Row[];
@@ -32,7 +32,7 @@ export interface TableInteractionProps {
 
 export const TableInteraction = memo(
   ({
-    resourceId,
+    id,
     primaryKey = "",
     columns = [],
     rows = [],
@@ -44,7 +44,7 @@ export const TableInteraction = memo(
     loading = false,
   }: TableInteractionProps) => {
     const { theme } = useTheme();
-    const { usePersistentState } = createPersistentState(resourceId);
+    const { usePersistentState } = createPersistentState(id);
 
     const [newRow, setNewRow] = usePersistentState<Row>({
       data: {},
