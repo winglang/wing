@@ -9,7 +9,8 @@ platform:
   - "sim"
 language:
   - "wing"
-githubURL: "https://github.com/winglang/examples.git && cd examples/examples/api-basic-auth"
+githubURL: "https://github.com/winglang/examples.git"
+repoDirectory: "examples/api-basic-auth"
 coverImage: "/img/examples/basic-api-auth.png"
 coverImageInPage: true
 resources:

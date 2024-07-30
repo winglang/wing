@@ -9,7 +9,8 @@ platform:
   - "sim"
 language:
   - "wing"
-githubURL: "https://github.com/winglang/examples.git && cd examples/examples/hello-wing"
+githubURL: "https://github.com/winglang/examples.git"
+repoDirectory: "examples/hello-wing"
 coverImage: "/img/examples/basic-bucket-queue.png"
 coverImageInPage: true
 resources:
