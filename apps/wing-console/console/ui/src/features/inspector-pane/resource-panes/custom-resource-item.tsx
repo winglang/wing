@@ -78,8 +78,8 @@ export const CustomResourceUiItem = ({ item }: { item: UIComponentLike }) => {
       {uiComponent.kind === "table" && (
         <CustomResourceTable
           label={uiComponent.label}
+          primaryKeyHandler={uiComponent.primaryKeyHandler}
           putHandler={uiComponent.putHandler}
-          getHandler={uiComponent.getHandler}
           scanHandler={uiComponent.scanHandler}
           deleteHandler={uiComponent.deleteHandler}
         />

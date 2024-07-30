@@ -13,7 +13,6 @@ export interface CustomResourceTableProps {
   label: string;
   putHandler: string;
   deleteHandler: string;
-  getHandler: string;
   scanHandler: string;
   primaryKeyHandler: string;
 }
@@ -23,7 +22,6 @@ export const CustomResourceTable = memo(
     label,
     putHandler,
     deleteHandler,
-    getHandler,
     scanHandler,
     primaryKeyHandler,
   }: CustomResourceTableProps) => {
@@ -61,6 +59,7 @@ export const CustomResourceTable = memo(
 
     const addRow = useCallback(
       async (row: any) => {
+        console.log(row);
         await tablePut.mutateAsync({
           data: row,
         });
@@ -70,15 +69,11 @@ export const CustomResourceTable = memo(
 
     const removeRow = useCallback(
       async (index: number) => {
-        if (!table.data?.rows[index]) {
-          return;
-        }
         await tableDelete.mutateAsync({
-          resourcePath,
-          data: table.data.rows[index] || {},
+          data: tableScan?.data?.rows[index] || {},
         });
       },
-      [tableDelete, resourcePath, table.data?.rows],
+      [tableDelete, tableScan?.data?.rows],
     );
 
     const editRow = useCallback(
@@ -182,10 +177,12 @@ export const CustomResourceTable = memo(
       <div className="h-full flex-1 flex flex-col text-sm">
         <div className="flex flex-col gap-2">
           <div className="flex flex-col space-y-1">
+            <div className="w-full">
+              <Attribute name="Name" value={label} noLeftPadding />
+            </div>
             <div className="flex items-center gap-2 justify-end">
               <TableInteraction
                 id={putHandler}
-                columns={[]}
                 rows={rows}
                 primaryKey={primaryKeyQuery?.data || ""}
                 onAddRow={onAddRow}

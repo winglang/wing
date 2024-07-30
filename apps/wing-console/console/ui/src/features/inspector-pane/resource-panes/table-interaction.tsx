@@ -8,7 +8,7 @@ import {
 } from "@wingconsole/design-system";
 import { createPersistentState } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export type RowData = Record<string, any>;
 
@@ -20,7 +20,6 @@ export type Row = {
 export interface TableInteractionProps {
   id: string;
   primaryKey?: string;
-  columns?: Column[];
   rows?: Row[];
   onAddRow?: (row: RowData) => void;
   onRemoveRow?: (index: number) => void;
@@ -34,7 +33,6 @@ export const TableInteraction = memo(
   ({
     id,
     primaryKey = "",
-    columns = [],
     rows = [],
     onAddRow = (row: RowData) => {},
     onRemoveRow = (index: number) => {},
@@ -45,6 +43,22 @@ export const TableInteraction = memo(
   }: TableInteractionProps) => {
     const { theme } = useTheme();
     const { usePersistentState } = createPersistentState(id);
+
+    const columns = useMemo(() => {
+      const row = rows[0];
+      if (!row) {
+        return [
+          {
+            name: primaryKey,
+            type: "string",
+          },
+        ];
+      }
+      return Object.keys(row.data).map((name) => ({
+        name,
+        type: typeof row.data[name],
+      }));
+    }, [rows, primaryKey]);
 
     const [newRow, setNewRow] = usePersistentState<Row>({
       data: {},

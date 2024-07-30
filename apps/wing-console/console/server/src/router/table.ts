@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import type { IFunctionClient } from "../wingsdk.js";
+import { Json, type IFunctionClient } from "../wingsdk.js";
 
 export const createtableRouter = () => {
   return createRouter({
@@ -49,8 +49,7 @@ export const createtableRouter = () => {
       .input(
         z.object({
           resourcePath: z.string(),
-          key: z.string(),
-          row: z.string(),
+          data: z.record(z.any()),
         }),
       )
       .mutation(async ({ input, ctx }) => {
@@ -58,12 +57,9 @@ export const createtableRouter = () => {
         const client = simulator.getResource(
           input.resourcePath,
         ) as IFunctionClient;
-        return await client.invoke(
-          JSON.stringify({
-            key: input.key,
-            row: input.row,
-          }),
-        );
+
+        const data = JSON.stringify(input.data);
+        return await client.invoke(Json.parse(data));
       }),
 
     "table.delete": createProcedure
@@ -78,11 +74,7 @@ export const createtableRouter = () => {
         const client = simulator.getResource(
           input.resourcePath,
         ) as IFunctionClient;
-        return await client.invoke(
-          JSON.stringify({
-            key: input.key,
-          }),
-        );
+        return await client.invoke(input.key);
       }),
   });
 };
