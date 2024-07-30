@@ -8,7 +8,7 @@ log preflight
 [INFO] invoke | contains 2 lines
 [INFO] invoke | no event, no return!
 [INFO] invoke | bang!
-pass ─ invoke.test.wsim » root/env0/test:invoke
+pass ─ invoke.test.wsim » root/Default/test:invoke
 
 Tests 1 passed (1)
 Snapshots 1 skipped

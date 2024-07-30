@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ aws-queue.test.wsim » root/env0/test:validates the AWS queue name
+pass ─ aws-queue.test.wsim » root/Default/test:validates the AWS queue name
 
 Tests 1 passed (1)
 Snapshots 1 skipped

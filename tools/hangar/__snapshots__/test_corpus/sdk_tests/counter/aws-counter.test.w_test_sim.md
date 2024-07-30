@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ aws-counter.test.wsim » root/env0/test:validates the AWS counter name
+pass ─ aws-counter.test.wsim » root/Default/test:validates the AWS counter name
 
 Tests 1 passed (1)
 Snapshots 1 skipped

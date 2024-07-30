@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ subscribe-queue.test.wsim » root/env0/test:functions and queues receiving messages from the topic
+pass ─ subscribe-queue.test.wsim » root/Default/test:functions and queues receiving messages from the topic
 
 Tests 1 passed (1)
 Snapshots 1 skipped

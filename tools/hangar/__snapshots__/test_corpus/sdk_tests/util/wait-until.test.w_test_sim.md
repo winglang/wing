@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ wait-until.test.wsim » root/env0/test:waitUntil
+pass ─ wait-until.test.wsim » root/Default/test:waitUntil
 
 Tests 1 passed (1)
 Snapshots 1 skipped

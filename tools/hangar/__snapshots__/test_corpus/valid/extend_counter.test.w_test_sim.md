@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ extend_counter.test.wsim » root/env0/test:counter works
+pass ─ extend_counter.test.wsim » root/Default/test:counter works
 
 Tests 1 passed (1)
 Snapshots 1 skipped

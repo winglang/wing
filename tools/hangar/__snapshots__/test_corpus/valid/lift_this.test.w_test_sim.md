@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ lift_this.test.wsim » root/env0/test:test
+pass ─ lift_this.test.wsim » root/Default/test:test
 
 Tests 1 passed (1)
 Snapshots 1 skipped

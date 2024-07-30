@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ network.test.wsim » root/env0/test:container with host network
+pass ─ network.test.wsim » root/Default/test:container with host network
 
 Tests 1 passed (1)
 Snapshots 1 skipped

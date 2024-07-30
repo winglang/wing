@@ -19,7 +19,7 @@ export class TestRunner extends std.TestRunner {
     );
   }
 
-  constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
+  constructor(scope: Construct, id: string, props: std.TestRunnerProps) {
     super(scope, id, props);
 
     // This output is created so the CLI's `wing test` command can obtain a list

@@ -449,21 +449,10 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   let outputStream: SpinnerStream | undefined;
   let traceProcessor: TraceProcessor | undefined;
 
+  let currentTestName: string | undefined;
   if (options.stream) {
-    // As of this comment, each Wing test is associated with an isolated environment.
-    // (All resources for test #0 are in root/env0/..., etc.)
-    // This means we can use the environment number to map each environment # to a test name,
-    // so when we receive a trace from the simulator, we can infer which test it's associated with.
-    const testMappings = extractTestMappings(s.listResources());
-
     const printEvent = async (event: std.Trace) => {
-      const env = extractTestEnvFromPath(event.sourcePath);
-
-      let testName = "(no test)";
-      if (env !== undefined) {
-        testName = testMappings[env] ?? testName;
-      }
-
+      const testName = currentTestName ?? "(no test)";
       if (testFilter && !testName.includes(testFilter) && testName !== "(no test)") {
         // This test does not match the filter, so skip it.
         return;
@@ -499,20 +488,29 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     });
   }
 
+  const results = [];
+
   try {
-    await s.start();
+    const tests = s.tree().listTests();
+    const filteredTests = filterTests(tests, testFilter);
+    for (const t of filteredTests) {
+      // Set the currentTestName so all logs emitted during this test run are
+      // associated with the current test.
+      currentTestName = extractTestNameFromPath(t);
+
+      await s.start();
+      const testRunner = s.getResource(
+        `${options.rootId}/cloud.TestRunner`
+      ) as std.ITestRunnerClient;
+      const result = await testRunner.runTest(t);
+      results.push(result);
+      await s.stop();
+      await s.resetState();
+    }
   } catch (e) {
     outputStream?.stopSpinner();
     throw e;
   }
-
-  const testRunner = s.getResource(`${options.rootId}/cloud.TestRunner`) as std.ITestRunnerClient;
-  const tests = await testRunner.listTests();
-  const filteredTests = filterTests(tests, testFilter);
-
-  const results = await runTests(testRunner, filteredTests);
-
-  await s.stop();
 
   if (options.stream) {
     await traceProcessor!.finish();
@@ -747,20 +745,8 @@ function sortTests(a: std.TestResult, b: std.TestResult) {
   return a.path.localeCompare(b.path);
 }
 
-/**
- * Take a path like "root/env123/foo/bar" and return the environment number (123).
- */
-function extractTestEnvFromPath(path: string): number | undefined {
-  const parts = path.split("/");
-  const envPart = parts[1] ?? parts[0];
-  if (!envPart.startsWith("env")) {
-    return undefined;
-  }
-  return parseInt(envPart.substring(3));
-}
-
 /*
- * Take a path like "root/env123/foo/test:first test/bar" and return "first test".
+ * Take a path like "root/foo/bar/test:first test/baz" and return "first test".
  */
 function extractTestNameFromPath(path: string): string | undefined {
   const parts = path.split("/");
@@ -770,37 +756,6 @@ function extractTestNameFromPath(path: string): string | undefined {
     }
   }
   return undefined;
-}
-
-/*
- * Take a list of paths like:
- *
- * root/env0/foo
- * root/env0/test:first test        <-- this is a test
- * root/env1/bar/test:second test   <-- this is a test
- * root/env1/bar
- *
- * and extract the mapping from environment indices to test names:
- *
- * { 0: "first test", 1: "second test" }
- */
-function extractTestMappings(paths: string[]): Record<number, string> {
-  const mappings: Record<number, string> = {};
-  for (const path of paths) {
-    const parts = path.split("/");
-    if (parts.some((p) => p.startsWith("test:"))) {
-      const env = extractTestEnvFromPath(path);
-      if (env === undefined) {
-        continue;
-      }
-      const testName = extractTestNameFromPath(path);
-      if (testName === undefined) {
-        continue;
-      }
-      mappings[env] = testName;
-    }
-  }
-  return mappings;
 }
 
 const MAX_BUFFER = 10 * 1024 * 1024;

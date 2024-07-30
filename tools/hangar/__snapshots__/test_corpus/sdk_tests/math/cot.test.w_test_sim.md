@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ cot.test.wsim » root/env0/test:inflight cotangent
+pass ─ cot.test.wsim » root/Default/test:inflight cotangent
 
 Tests 1 passed (1)
 Snapshots 1 skipped

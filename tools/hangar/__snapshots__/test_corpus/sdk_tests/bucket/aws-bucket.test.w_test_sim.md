@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ aws-bucket.test.wsim » root/env0/test:validates the AWS Bucket
+pass ─ aws-bucket.test.wsim » root/Default/test:validates the AWS Bucket
 
 Tests 1 passed (1)
 Snapshots 1 skipped

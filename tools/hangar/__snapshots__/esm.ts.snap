@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`tests module package type 1`] = `
-"pass ─ module_type.test.wsim » root/env0/test:run extern
+"pass ─ module_type.test.wsim » root/Default/test:run extern
 
 Tests 1 passed (1)
 Snapshots 1 skipped

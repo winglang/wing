@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ cycle.test.wsim » root/env0/test:GET --my_url
+pass ─ cycle.test.wsim » root/Default/test:GET --my_url
 
 Tests 1 passed (1)
 Snapshots 1 skipped

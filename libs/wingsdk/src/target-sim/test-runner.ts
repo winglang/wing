@@ -22,7 +22,7 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
     return makeSimulatorJsClientType("TestRunner", std.TestRunner._methods);
   }
 
-  constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
+  constructor(scope: Construct, id: string, props: std.TestRunnerProps) {
     super(scope, id, props);
   }
 

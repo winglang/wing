@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ add_object.test.wsim » root/env0/test:addObject
+pass ─ add_object.test.wsim » root/Default/test:addObject
 
 Tests 1 passed (1)
 Snapshots 1 skipped

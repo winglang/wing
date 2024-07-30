@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ assert.test.wsim » root/env0/test:assert works inflight
+pass ─ assert.test.wsim » root/Default/test:assert works inflight
 
 Tests 1 passed (1)
 Snapshots 1 skipped

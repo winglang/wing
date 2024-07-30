@@ -73,6 +73,6 @@ export class App extends CdktfApp {
     });
     new RandomProvider(this, "random");
 
-    TestRunner._createTree(this, props.rootConstruct);
+    TestRunner._createTree(this, props.rootConstruct, this.isTestEnvironment);
   }
 }

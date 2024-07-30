@@ -4,11 +4,11 @@
 ```log
 [INFO] get echo | bang
 [INFO] get echo | 
+[WARNING] get echo | Timeout waiting for container root/Default/my-app to shutdown, removing forcefully
 [INFO] get app | Hello, Wingnuts!
-[WARNING] get echo | Timeout waiting for container root/env0/my-app to shutdown, removing forcefully
-[WARNING] get app | Timeout waiting for container root/env1/my-app to shutdown, removing forcefully
-pass ─ container.test.wsim » root/env0/test:get echo
-pass ─ container.test.wsim » root/env1/test:get app 
+[WARNING] get app | Timeout waiting for container root/Default/my-app to shutdown, removing forcefully
+pass ─ container.test.wsim » root/Default/test:get app 
+pass ─ container.test.wsim » root/Default/test:get echo
 
 Tests 2 passed (2)
 Snapshots 1 skipped

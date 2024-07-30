@@ -2,8 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ enums.test.wsim » root/env0/test:inflight      
-pass ─ enums.test.wsim » root/env1/test:toStr inflight
+pass ─ enums.test.wsim » root/Default/test:inflight      
+pass ─ enums.test.wsim » root/Default/test:toStr inflight
 
 Tests 2 passed (2)
 Snapshots 1 skipped
