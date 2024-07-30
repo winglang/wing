@@ -156,9 +156,12 @@ pub unsafe extern "C" fn wingc_malloc(size: usize) -> *mut u8 {
 	}
 }
 
-/// Check if the project has a pnpm or yarn or bun lockfile, and emit a warning if it does.
+const lockfiles: [&'static str; 4] = ["pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb"];
+
+/// Wing sometimes can't find dependencies if they're installed with pnpm/yarn/bun.
+/// Try to anticipate any issues that may arise from using pnpm/yarn/bun with winglibs
+/// by emitting a warning if dependencies were installed with any of these package managers.
 fn emit_warning_for_unsupported_package_managers(project_dir: &Utf8Path) {
-	let lockfiles = ["pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb"];
 	for lockfile in &lockfiles {
 		let lockfile_path = project_dir.join(lockfile);
 		if lockfile_path.exists() {
