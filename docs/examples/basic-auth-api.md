@@ -86,7 +86,7 @@ class BasicAuth {
   }
   // Returns the authorization header
   inflight authHeader(headers: Map<str>?): str {
-    if (this.authHeaderPresent(headers)) {
+    if this.authHeaderPresent(headers) {
       let authHeaderOptional = headers?.tryGet("authorization");
       let var authHeader = headers?.tryGet("Authorization");
 
