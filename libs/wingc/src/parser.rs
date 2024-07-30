@@ -24,7 +24,7 @@ use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::{
-	dbg_panic, is_absolute_path, TRUSTED_LIBRARY_NPM_NAMESPACE, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE,
+	is_absolute_path, TRUSTED_LIBRARY_NPM_NAMESPACE, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE,
 	WINGSDK_TEST_CLASS_NAME,
 };
 
@@ -654,7 +654,6 @@ impl<'s> Parser<'s> {
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
 			"test_statement" => self.build_test_statement(statement_node)?,
-			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
 			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase)?,
 			"lift_statement" => self.build_lift_statement(statement_node, phase)?,
 			"ERROR" => return self.with_error("Expected statement", statement_node),
@@ -2256,11 +2255,6 @@ impl<'s> Parser<'s> {
 			"json_literal" => self.build_json_literal(&expression_node, phase),
 			"struct_literal" => self.build_struct_literal(&expression_node, phase),
 			"optional_unwrap" => self.build_optional_unwrap_expression(&expression_node, phase),
-			"compiler_dbg_panic" => {
-				// Handle the debug panic expression (during parsing)
-				dbg_panic!();
-				Ok(Expr::new(ExprKind::CompilerDebugPanic, expression_span))
-			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
 	}
@@ -2973,7 +2967,6 @@ fn is_valid_module_statement(stmt: &Stmt) -> bool {
 		StmtKind::Interface(_) => true,
 		StmtKind::Struct { .. } => true,
 		StmtKind::Enum { .. } => true,
-		StmtKind::CompilerDebugEnv => true,
 		// --- these are all uncool ---
 		StmtKind::SuperConstructor { .. } => false,
 		StmtKind::If { .. } => false,

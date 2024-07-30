@@ -17,7 +17,6 @@ use crate::{
 		Phase, Reference, Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
-	dbg_panic,
 	diagnostic::{report_diagnostic, Diagnostic, DiagnosticSeverity, WingSpan},
 	dtsify::extern_dtsify::ExternDTSifier,
 	file_graph::FileGraph,
@@ -1089,11 +1088,6 @@ impl<'a> JSifier<'a> {
 				new_code!(expr_span, "new Set([", item_list, "])")
 			}
 			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, true, ctx),
-			ExprKind::CompilerDebugPanic => {
-				// Handle the debug panic expression (during jsifying)
-				dbg_panic!();
-				new_code!(expr_span, "")
-			}
 		}
 	}
 
@@ -1501,7 +1495,6 @@ impl<'a> JSifier<'a> {
 					code.close("}");
 				}
 			}
-			StmtKind::CompilerDebugEnv => {}
 			StmtKind::ExplicitLift(explicit_lift_block) => {
 				code.open("{");
 				code.add_code(self.jsify_scope_body(&explicit_lift_block.statements, ctx));
@@ -2368,7 +2361,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 				}
 			}
 			StmtKind::TryCatch { .. } => {}
-			StmtKind::CompilerDebugEnv => {}
 			StmtKind::ExplicitLift(_) => {}
 		}
 	}

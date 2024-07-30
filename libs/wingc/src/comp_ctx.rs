@@ -64,32 +64,6 @@ impl CompilationContext {
 	}
 }
 
-/// Macro used for explicit panics if the environment variable `WINGC_DEBUG_PANIC` is set.
-/// This can be used if we want to conditionally panic in certain situations.
-/// This is a macro and not a function so we can get the location of the caller
-/// in the panic message.
-#[macro_export]
-macro_rules! dbg_panic {
-	() => {{
-		|| -> () {
-			// Get environment variable to see if we should panic or not
-			let Ok(dbg_panic) = std::env::var("WINGC_DEBUG_PANIC") else {
-				return;
-			};
-
-			if dbg_panic == "1"
-				|| dbg_panic == "true"
-				|| (dbg_panic
-					.parse::<$crate::comp_ctx::CompilationPhase>()
-					.map(|p| p == $crate::comp_ctx::CompilationContext::get_phase())
-					.unwrap_or(false))
-			{
-				panic!("User invoked panic");
-			}
-		}();
-	}};
-}
-
 pub fn set_custom_panic_hook() {
 	std::panic::set_hook(Box::new(|pi| {
 		// Print backtrace if RUST_BACKTRACE=1

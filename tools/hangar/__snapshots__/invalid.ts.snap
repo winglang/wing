@@ -3557,17 +3557,6 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`panic.test.w 1`] = `
-"Unexpected end of JSON input
-
-Tests 1 failed (1)
-Snapshots 1 skipped
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`panic.test.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
-
 exports[`parameters.test.w 1`] = `
 "Error: Parameter validation errors:
 - must have required property 'foo'
