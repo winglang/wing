@@ -1,5 +1,7 @@
 import JSZip from "jszip";
 
+import { isText } from "./use-download-file.is-text.js";
+
 export interface File {
   filename: string;
   content: any;
@@ -7,20 +9,10 @@ export interface File {
 
 // TODO - once mime-types is added to the sdk, use it to determine the encoding
 export const getFileEncoding = (file: string): "base64" | "utf8" => {
-  const type = file.split(".").pop();
-  switch (type) {
-    case "txt":
-    case "json":
-    case "js":
-    case "html":
-    case "css":
-    case "md": {
-      return "utf8";
-    }
-    default: {
-      return "base64";
-    }
+  if (isText(file)) {
+    return "utf8";
   }
+  return "base64";
 };
 
 const getEncodedUrl = (file: string, content: string) => {
