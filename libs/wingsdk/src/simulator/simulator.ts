@@ -241,6 +241,18 @@ export class Simulator {
         if (error) {
           console.error(error);
         }
+        this.addTrace({
+          data: {
+            message: `Another process is already running the simulator on the same state directory.`,
+            error,
+            status: "failure",
+          },
+          type: TraceType.SIMULATOR,
+          level: LogLevel.ERROR,
+          sourcePath: "",
+          sourceType: "",
+          timestamp: new Date().toISOString(),
+        });
         await this.stop();
       },
     });
