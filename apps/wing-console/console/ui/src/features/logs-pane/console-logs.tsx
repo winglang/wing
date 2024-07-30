@@ -1,8 +1,4 @@
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  XCircleIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronRightIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import {
   useTheme,
   ResourceIcon,
@@ -11,7 +7,6 @@ import {
 import type { LogEntry } from "@wingconsole/server";
 import classNames from "classnames";
 import Linkify from "linkify-react";
-import throttle from "lodash.throttle";
 import {
   Fragment,
   memo,
@@ -21,6 +16,9 @@ import {
   useRef,
   useState,
 } from "react";
+
+import { useRafThrottle } from "../../use-raf-throttle.js";
+import { useResizeObserver } from "../../use-resize-observer.js";
 
 const shortDateTimeFormat = new Intl.DateTimeFormat(undefined, {
   hour: "2-digit",
@@ -75,8 +73,8 @@ const LogEntryRow = memo(
     const expandableRef = useRef<HTMLPreElement>(null);
     const [overflows, setOverflows] = useState(false);
 
-    useEffect(() => {
-      const computeOverflows = throttle(() => {
+    const computeOverflows = useRafThrottle(
+      useCallback(() => {
         const element = expandableRef.current?.parentNode as HTMLPreElement;
         if (!element) {
           return;
@@ -85,24 +83,16 @@ const LogEntryRow = memo(
           element.offsetWidth < element.scrollWidth ||
             log.message?.indexOf("\n") !== -1,
         );
-      }, 500);
+      }, [log.message]),
+    );
 
-      computeOverflows();
+    const containerRef = useRef<HTMLDivElement>(null);
+    useResizeObserver(computeOverflows, containerRef);
 
-      window.addEventListener("resize", computeOverflows);
-      return () => {
-        window.removeEventListener("resize", computeOverflows);
-      };
-    }, [log.message]);
     const [canBeExpanded, setCanBeExpanded] = useState(false);
     useEffect(() => {
       setCanBeExpanded(overflows || expanded);
     }, [expanded, overflows]);
-
-    const ChevronIcon = useMemo(
-      () => (expanded ? ChevronDownIcon : ChevronRightIcon),
-      [expanded],
-    );
 
     const resourceName = useMemo(
       () => log.ctx?.label || nodePathBaseName(log.ctx?.sourcePath ?? ""),
@@ -128,6 +118,7 @@ const LogEntryRow = memo(
         {/*TODO: Fix a11y*/}
         {/*eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions*/}
         <div
+          ref={containerRef}
           className={classNames(
             "group w-full",
             "flex min-w-0",
@@ -180,14 +171,17 @@ const LogEntryRow = memo(
           >
             {canBeExpanded && (
               <button
+                className="select-none"
                 onClick={() => {
                   setExpanded((expanded) => !expanded);
                 }}
               >
-                <ChevronIcon
+                <ChevronRightIcon
                   className={classNames(
                     "w-3.5 h-3.5",
                     "mr-0.5 inline-block -mt-0.5",
+                    expanded && "transform rotate-90",
+                    "transition",
                     theme.text1,
                     theme.text1Hover,
                   )}

@@ -17,10 +17,11 @@ import type { DetailedHTMLProps, HTMLAttributes } from "react";
 import type { ReactNode } from "react";
 import { useEvent } from "react-use";
 
+import { useRafThrottle } from "../../use-raf-throttle.js";
+import { useResizeObserver } from "../../use-resize-observer.js";
 import { useAppLocalStorage } from "../localstorage-context/use-localstorage.js";
 
 import { MapControls } from "./map-controls.js";
-import { useRafThrottle } from "./use-raf-throttle.js";
 
 export interface Viewport {
   x: number;
@@ -312,25 +313,16 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     containerRef.current,
   );
 
-  const fixViewport = useCallback(() => {
-    setViewTransform((viewTransform) => {
-      return restrict(viewTransform);
-    });
-  }, [restrict, setViewTransform]);
-
-  const throttledFixViewport = useRafThrottle(fixViewport);
-
-  useEffect(() => {
-    const myObserver = new ResizeObserver(() => {
-      throttledFixViewport();
-    });
-
-    myObserver.observe(containerRef.current!);
-
-    return () => {
-      myObserver.disconnect();
-    };
-  }, [throttledFixViewport]);
+  useResizeObserver(
+    useRafThrottle(
+      useCallback(() => {
+        setViewTransform((viewTransform) => {
+          return restrict(viewTransform);
+        });
+      }, [restrict, setViewTransform]),
+    ),
+    containerRef,
+  );
 
   const zoomIn = useCallback(() => {
     const container = containerRef.current;
