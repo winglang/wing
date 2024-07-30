@@ -505,7 +505,6 @@ pub enum StmtKind {
 		catch_block: Option<CatchBlock>,
 		finally_statements: Option<Scope>,
 	},
-	CompilerDebugEnv,
 	ExplicitLift(ExplicitLift),
 }
 
@@ -677,7 +676,6 @@ pub enum ExprKind {
 		element: Box<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
-	CompilerDebugPanic,
 }
 
 #[derive(Debug)]
