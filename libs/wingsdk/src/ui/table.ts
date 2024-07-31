@@ -16,26 +16,6 @@ export const TABLE_FQN = fqnForType("ui.Table");
  */
 export interface TableHandlers {
   /**
-   * Handler for getting the primary key.
-   */
-  readonly primaryKey: ITablePrimaryKeyHandler;
-  /**
-   * Handler for getting a row.
-   */
-  readonly get: ITableGetHandler;
-  /**
-   * Handler for putting a row.
-   */
-  readonly put: ITableputHandler;
-  /**
-   * Handler for updatete a row.
-   */
-  readonly update: ITableUpdateHandler;
-  /**
-   * Handler for deleting a row.
-   */
-  readonly delete: ITableDeleteHandler;
-  /**
    * Handler for scanning rows.
    */
   readonly scan: ITableScanHandler;
@@ -59,11 +39,6 @@ export class Table extends VisualComponent {
     return Resource._newFromFactory(TABLE_FQN, scope, id, label, handlers);
   }
 
-  private readonly primaryKeyFn: Function;
-  private readonly putFn: Function;
-  private readonly updateFn: Function;
-  private readonly getFn: Function;
-  private readonly deleteFn: Function;
   private readonly scanFn: Function;
   private readonly label: string;
 
@@ -76,56 +51,6 @@ export class Table extends VisualComponent {
     super(scope, id);
     this.label = label;
 
-    const primaryKeyFn = lift({ handler: handlers.primaryKey }).inflight(
-      async (ctx) => {
-        return ctx.handler();
-      }
-    );
-
-    const getHandler = lift({ handler: handlers.get }).inflight(
-      async (ctx, payload) => {
-        try {
-          const key = JSON.parse(payload).key;
-          return await ctx.handler(key);
-        } catch (e) {
-          throw new Error("Invalid payload for table get handler client");
-        }
-      }
-    );
-
-    const putHandler = lift({ handler: handlers.put }).inflight(
-      async (ctx, payload) => {
-        try {
-          const item = JSON.parse(payload);
-          return await ctx.handler(item);
-        } catch (e) {
-          throw new Error("Invalid payload for table put handler client");
-        }
-      }
-    );
-
-    const updateHandler = lift({ handler: handlers.update }).inflight(
-      async (ctx, payload) => {
-        try {
-          const { key, item } = JSON.parse(payload);
-          return await ctx.handler(key, item);
-        } catch (e) {
-          throw new Error("Invalid payload for table update handler client");
-        }
-      }
-    );
-
-    const deleteHandler = lift({ handler: handlers.delete }).inflight(
-      async (ctx, payload) => {
-        try {
-          const key = JSON.parse(payload).key;
-          return await ctx.handler(key);
-        } catch (e) {
-          throw new Error("Invalid payload for table delete handler client");
-        }
-      }
-    );
-
     const scanHandler = lift({ handler: handlers.scan }).inflight(
       async (ctx) => {
         try {
@@ -136,11 +61,6 @@ export class Table extends VisualComponent {
       }
     );
 
-    this.primaryKeyFn = new Function(this, "primaryKey", primaryKeyFn);
-    this.getFn = new Function(this, "get", getHandler);
-    this.putFn = new Function(this, "put", putHandler);
-    this.updateFn = new Function(this, "update", updateHandler);
-    this.deleteFn = new Function(this, "delete", deleteHandler);
     this.scanFn = new Function(this, "scan", scanHandler);
   }
 
@@ -149,11 +69,6 @@ export class Table extends VisualComponent {
     return {
       kind: "table",
       label: this.label,
-      primaryKeyHandler: this.primaryKeyFn.node.path,
-      putHandler: this.putFn.node.path,
-      updateHandler: this.updateFn.node.path,
-      deleteHandler: this.deleteFn.node.path,
-      getHandler: this.getFn.node.path,
       scanHandler: this.scanFn.node.path,
     };
   }

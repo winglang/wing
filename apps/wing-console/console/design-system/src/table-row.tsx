@@ -44,17 +44,8 @@ const hasError = (value: any, type: string) => {
 export type Column = { name: string; type: string };
 
 export type TableRowProps = {
-  inputRef?: RefObject<HTMLInputElement>;
   row: Record<string, any>;
-  newRow?: boolean;
-  placeholder?: string;
   columns: Column[];
-  primaryKey: string;
-  disabled?: boolean;
-  readonly?: boolean;
-  error?: string;
-  updateRow?: (column: string, value: any) => void;
-  saveRow?: (row: Record<string, any>) => void;
   actions?: (() => React.ReactNode) | JSX.Element;
   rowClassName?: string;
   columnClassName?: string;
@@ -63,17 +54,8 @@ export type TableRowProps = {
 };
 
 export const TableRow = ({
-  inputRef,
   row,
-  newRow,
-  placeholder,
   columns,
-  primaryKey,
-  disabled,
-  readonly,
-  error,
-  updateRow,
-  saveRow,
   actions,
   rowClassName,
   columnClassName,
@@ -81,16 +63,7 @@ export const TableRow = ({
   dataTestid,
 }: TableRowProps) => {
   return (
-    <tr
-      className={classNames(
-        rowClassName,
-        error && [
-          "rounded ring-2 ring-red-800/50",
-          "dark:ring-red-500/50 dark:border-red-500/50",
-        ],
-      )}
-      data-testid={dataTestid}
-    >
+    <tr className={classNames(rowClassName)}>
       {columns.map(({ name: column, type }, index) => {
         const inputType = getInputType(type);
         return (
@@ -103,27 +76,10 @@ export const TableRow = ({
             )}
           >
             <RowInput
-              inputRef={index === 0 ? inputRef : undefined}
               type={inputType}
               placeholder={type}
-              inactivePlaceholder={placeholder}
               value={row[column]}
-              onChange={(event) => {
-                updateRow?.(column, getValue(inputType, event));
-              }}
-              onKeyUp={(event) => {
-                if (event.key === "Enter") {
-                  saveRow?.(row);
-                }
-              }}
-              onBlur={() => {
-                !newRow && saveRow?.(row);
-              }}
-              disabled={
-                (!newRow && column === primaryKey) || disabled || readonly
-              }
-              error={!readonly && hasError(row[column], type)}
-              dataTestId={`${dataTestid}-column-${column}`}
+              disabled
             />
           </td>
         );

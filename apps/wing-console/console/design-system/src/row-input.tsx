@@ -20,11 +20,11 @@ export const RowInput = memo(
   }: {
     inputRef?: RefObject<HTMLInputElement>;
     type: string;
-    placeholder: string;
+    placeholder?: string;
     inactivePlaceholder?: string;
     value: any;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onKeyUp: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
     disabled?: boolean;
     error?: boolean;
@@ -50,7 +50,8 @@ export const RowInput = memo(
           !active && inactivePlaceholder ? inactivePlaceholder : placeholder
         }
         type={showPlaceholderAsText ? "text" : type}
-        value={value}
+        // value={typeof value.value === "string" ? value.value : value}
+        value={typeof value === "string" ? value : JSON.stringify(value)}
         checked={type === "checkbox" && value === true}
         className={classNames(
           theme.borderInput,

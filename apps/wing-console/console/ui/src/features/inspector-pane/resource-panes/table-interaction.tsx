@@ -10,125 +10,33 @@ import { createPersistentState } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-export type RowData = Record<string, any>;
-
-export type Row = {
-  data: RowData;
-  error?: string;
-};
+export type Row = Record<string, any>;
 
 export interface TableInteractionProps {
-  id: string;
-  primaryKey?: string;
   rows?: Row[];
-  onAddRow?: (row: RowData) => void;
-  onRemoveRow?: (index: number) => void;
-  onEditRow?: (row: RowData) => void;
-  disabled?: boolean;
-  readonly?: boolean;
   loading?: boolean;
 }
 
 export const TableInteraction = memo(
-  ({
-    id,
-    primaryKey = "",
-    rows = [],
-    onAddRow = (row: RowData) => {},
-    onRemoveRow = (index: number) => {},
-    onEditRow = (row: RowData) => {},
-    disabled = false,
-    readonly = false,
-    loading = false,
-  }: TableInteractionProps) => {
+  ({ rows, loading = false }: TableInteractionProps) => {
     const { theme } = useTheme();
-    const { usePersistentState } = createPersistentState(id);
 
-    const columns = useMemo(() => {
-      const row = rows[0];
-      if (!row) {
-        return [
-          {
-            name: primaryKey,
-            type: "string",
-          },
-        ];
-      }
-      return Object.keys(row.data).map((name) => ({
-        name,
-        type: typeof row.data[name],
-      }));
-    }, [rows, primaryKey]);
-
-    const [newRow, setNewRow] = usePersistentState<Row>({
-      data: {},
-      error: "",
-    });
-    const [internalRows, setInternalRows] = useState<Row[]>([]);
-    const inputRef = useRef<HTMLInputElement>(null);
-
-    const addRow = useCallback(async () => {
-      const row = newRow.data;
-      if (row[primaryKey] === undefined) {
-        return;
-      }
-      onAddRow(row);
-      setNewRow({ data: {}, error: "" });
-    }, [newRow, onAddRow, primaryKey, setNewRow]);
-
-    const updateNewRow = useCallback(
-      (key: string, newValue: any) => {
-        setNewRow((newRow) => ({
-          data: {
-            ...newRow.data,
-            [key]: newValue,
-          },
-          error: "",
-        }));
-      },
-      [setNewRow],
-    );
-
-    const editRow = useCallback(
-      async (index: number, row: RowData) => {
-        if (rows[index]?.data === row) {
-          return;
-        }
-        onEditRow(row);
-      },
-      [onEditRow, rows],
-    );
-
-    const updateRow = useCallback(
-      (index: number, row: RowData, key: string, newValue: any) => {
-        const newRow = {
-          ...row,
-          [key]: newValue,
-        };
-        const newRows = [...internalRows];
-        newRows[index] = {
-          data: newRow,
-          error: "",
-        };
-        setInternalRows(newRows);
-      },
-      [internalRows, setInternalRows],
-    );
-
-    useEffect(() => {
-      setInternalRows(rows);
+    const columns: Column[] = useMemo(() => {
+      const columns = rows?.flatMap((row) => Object.keys(row));
+      return [...new Set(columns).values()]
+        .sort()
+        .map((name) => ({ name, type: "text" }));
     }, [rows]);
-
     useEffect(() => {
-      inputRef.current?.focus();
-    }, [internalRows.length]);
+      console.log("columns", columns);
+    }, [columns]);
 
     return (
       <div className="inline-block align-middle w-full mt-1">
         <div
           className={classNames(
             "relative min-h-[2rem] max-h-[30rem]",
-            "overflow-auto shadow ring-1 ring-black ring-opacity-5 rounded border px-1",
+            "overflow-auto rounded border px-1",
             theme.textInput,
             theme.borderInput,
             theme.focusWithin,
@@ -157,21 +65,19 @@ export const TableInteraction = memo(
                 className={classNames(
                   theme.bgInput,
                   "px-1 sticky top-[4px] z-10 border-spacing-x-0",
-                  "ring-2 ring-white dark:ring-slate-800",
+                  // "ring-2 ring-white dark:ring-slate-800",
                 )}
               >
-                {columns.map(({ name, type }) => (
+                {columns.map(({ name }) => (
                   <th
                     key={name}
                     className={classNames(
-                      "text-sm p-1.5",
+                      "text-sm px-1.5",
                       "border-b border-slate-300 dark:border-slate-700",
-                      getInputType(type) === "checkbox"
-                        ? "text-center"
-                        : "text-left",
+                      "text-left",
                     )}
                   >
-                    {`${name}${name === primaryKey ? "*" : ""}`}
+                    {name}
                   </th>
                 ))}
                 <th
@@ -183,7 +89,7 @@ export const TableInteraction = memo(
               </tr>
             </thead>
             <tbody className="spacing-y-1">
-              {internalRows.length === 0 && (
+              {rows?.length === 0 && (
                 <tr>
                   <td
                     colSpan={columns.length + 1}
@@ -196,107 +102,9 @@ export const TableInteraction = memo(
                   </td>
                 </tr>
               )}
-              {internalRows.map(({ data: row, error }, index) => (
-                <TableRow
-                  key={index}
-                  row={row}
-                  placeholder="null"
-                  error={error}
-                  columns={columns}
-                  primaryKey={primaryKey}
-                  disabled={disabled}
-                  readonly={readonly}
-                  saveRow={() => editRow(index, row)}
-                  updateRow={(key, value) => updateRow(index, row, key, value)}
-                  actions={
-                    <>
-                      {!readonly && (
-                        <button
-                          className={classNames(
-                            "outline-none rounded p-1.5",
-                            theme.bg4Hover,
-                            theme.textInput,
-                            theme.borderInput,
-                            theme.focusInput,
-                            disabled && "opacity-50 cursor-not-allowed",
-                          )}
-                          onClick={() => onRemoveRow(index)}
-                          disabled={disabled}
-                          data-testid={`ex.table:remove-row-${row[primaryKey]}`}
-                        >
-                          <TrashIcon className="w-4 h-4" />
-                        </button>
-                      )}
-                    </>
-                  }
-                  dataTestid={`ex.table:row-${row[primaryKey]}`}
-                />
+              {rows?.map((row, index) => (
+                <TableRow key={index} row={row} columns={columns} />
               ))}
-              {!readonly && columns.length > 0 && (
-                <>
-                  <tr className="sticky bottom-[35px] z-10">
-                    <td className="p-0">
-                      <div className="-mb-[6px]">
-                        <div
-                          className={classNames(
-                            "inline-block whitespace-nowrap",
-                            theme.bg3,
-                            "text-[0.60rem] font-medium tracking-wide text-slate-400 dark:text-slate-350",
-                            "leading-none px-2 pt-1.5 pb-1",
-                            "rounded-t",
-                          )}
-                        >
-                          NEW ROW
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <TableRow
-                    key={internalRows.length}
-                    inputRef={inputRef}
-                    newRow
-                    rowClassName={classNames(
-                      "sticky bottom-[4px] z-10",
-                      newRow.error && [
-                        "dark:ring-red-500/50 dark:border-red-500/50",
-                      ],
-                    )}
-                    columnClassName={classNames(
-                      "first:rounded-bl -mb-2.5",
-                      theme.bg3,
-                    )}
-                    actionsClassName={classNames("rounded-r", theme.bg3)}
-                    row={newRow.data}
-                    error={newRow.error}
-                    columns={columns}
-                    primaryKey={primaryKey}
-                    disabled={disabled}
-                    readonly={readonly}
-                    saveRow={addRow}
-                    updateRow={(key, value) => updateNewRow(key, value)}
-                    dataTestid="ex.table:new-row"
-                    actions={
-                      <button
-                        className={classNames(
-                          "inline-flex gap-2 items-center text-xs font-medium outline-none rounded",
-                          "p-1.5",
-                          theme.bg4Hover,
-                          theme.bgInputHover,
-                          theme.textInput,
-                          theme.focusInput,
-                          (disabled || !newRow.data[primaryKey]) &&
-                            "opacity-50 cursor-not-allowed",
-                        )}
-                        onClick={addRow}
-                        disabled={disabled || !newRow.data[primaryKey]}
-                        data-testid="ex.table:add-row"
-                      >
-                        <PlusIcon className="w-4 h-4" />
-                      </button>
-                    }
-                  />
-                </>
-              )}
             </tbody>
           </table>
         </div>
