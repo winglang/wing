@@ -33,9 +33,12 @@ class TableStorage {
           return "key";
         },
         put: inflight (item: str) => {
-            this.table.put(Item: Json.parse(item));
+          let item = Json.parse(item);
+          this.table.put(Item: item);
         },
         update: inflight (key: str, item: str) => {
+  
+
           this.table.update({
             Key: key,
             UpdateExpression: "set contents = :contents",

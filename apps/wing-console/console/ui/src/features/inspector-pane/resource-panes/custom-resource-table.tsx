@@ -41,9 +41,7 @@ export const CustomResourceTable = memo(
       resourcePath: primaryKeyHandler,
     });
 
-    const tablePut = trpc["table.put"].useMutation({
-      resourcePath: putHandler,
-    });
+    const tablePut = trpc["table.put"].useMutation();
 
     const tableUpdate = trpc["table.update"].useMutation({
       resourcePath: putHandler,
@@ -61,10 +59,11 @@ export const CustomResourceTable = memo(
       async (row: any) => {
         console.log(row);
         await tablePut.mutateAsync({
+          resourcePath: putHandler,
           data: row,
         });
       },
-      [tablePut],
+      [tablePut, putHandler],
     );
 
     const removeRow = useCallback(
