@@ -25,6 +25,7 @@ const options = parseArgs({
     requestedPort: 1214,
     log: {
       info: () => {},
+      warning: () => {},
       error: (...arguments_) => console.error("[error]", ...arguments_),
       verbose: () => {},
     },
