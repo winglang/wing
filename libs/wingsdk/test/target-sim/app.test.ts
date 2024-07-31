@@ -63,7 +63,7 @@ test("tests do not synthesize functions when test mode is off", async () => {
   ]);
 });
 
-test("tests are synthesized into individual environments when test mode is on", async () => {
+test("tests are synthesized into a single environemnt environments when test mode is on", async () => {
   // GIVEN
   class Root extends Construct {
     constructor(scope: Construct, id: string) {
@@ -82,12 +82,10 @@ test("tests are synthesized into individual environments when test mode is on", 
 
   // THEN
   expect(resources.sort()).toEqual([
+    "root/Default/my_bucket",
+    "root/Default/my_bucket/Policy",
+    "root/Default/test:my_test1/Handler",
+    "root/Default/test:my_test2/Handler",
     "root/cloud.TestRunner",
-    "root/env0/my_bucket",
-    "root/env0/my_bucket/Policy",
-    "root/env0/test:my_test1/Handler",
-    "root/env1/my_bucket",
-    "root/env1/my_bucket/Policy",
-    "root/env1/test:my_test2/Handler",
   ]);
 });

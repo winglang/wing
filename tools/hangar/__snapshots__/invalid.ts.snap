@@ -7,8 +7,6 @@ exports[`access_hidden_namespace.test.w 1`] = `
 7 | new core.NodeJsCode("<ABSOLUTE>/test.txt"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
   |     ^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -289,8 +287,6 @@ error: Cannot access private member "private_static_method" of "Foo"
     |
     = hint: the definition of "private_static_method" needs a broader access modifier like "pub" or "protected" to be used outside of "Foo"
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -359,8 +355,6 @@ error: Expected identifier "subdir2" to be a variable, but it's a namespace
 17 | let e = subdir2.MyPrivateEnum.A;
    |         ^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -401,8 +395,6 @@ error: Member "f" does not exist in "Construct"
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
   |          ^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -454,8 +446,6 @@ error: "cloud" is already defined
 4 | bring cloud;
   |       ^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -487,8 +477,6 @@ error: Cannot bring Wing directories that contain sub-directories with invalid c
   |
   = hint: Directory names must start with a letter or underscore and contain only letters, numbers, and underscores.
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -508,8 +496,6 @@ error: Unable to load "foobar": Module not found in "<ABSOLUTE>/bring_jsii.test.
   |
 4 | bring "foobar" as baz;
   | ^^^^^^^^^^^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -537,8 +523,6 @@ error: Symbol "Foo" has multiple definitions in "<ABSOLUTE>/inner"
   |
 1 | bring "./subdir" as subdir;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -574,8 +558,6 @@ error: Cannot bring module "./bring_local_dir.test.w" since it is an entrypoint 
 10 | bring "./bring_local_dir.test.w" as qux;
    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -610,8 +592,6 @@ error: Preflight field "x" is not initialized
 10 |   x: num;
    |   ^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -638,8 +618,6 @@ error: Cannot set scope of non-standard preflight class "S3Backend" using \`in\`
    |
 15 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: "foo", key: "bar"}) in this;
    |                                                                                     ^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -675,8 +653,6 @@ error: Expected type to be "num", but got "str" instead
 20 |     return "a";
    |            ^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -696,8 +672,6 @@ error: Cannot call into inflight phase while preflight
    |
 12 | foo.do();
    | ^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -725,8 +699,6 @@ error: Cannot access "x" because it is shadowed by another symbol with the same 
    |
 22 |   log(x);
    |       ^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1066,8 +1038,6 @@ error: Expected type to be "str", but got "num" instead
 223 |     return 5;
     |            ^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1097,8 +1067,6 @@ error: Expected type to be "inflight (message: str): void", but got "inflight (x
 12 | | });
    | \\-^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1122,8 +1090,6 @@ error: Member "node" does not exist in "IConstruct"
    |                       ^^^^
    |
    = hint: use nodeof(x) to access the tree node on a preflight class
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1313,8 +1279,6 @@ error: Member "copyMut" does not exist in "MutSet"
 46 | let ss4 = ss3.copyMut();
    |               ^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1398,8 +1362,6 @@ error: Expected 1 positional argument(s) but got 0
 65 |       super();
    |       ^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1425,8 +1387,6 @@ error: Could not type check "<ABSOLUTE>/cyclic_bring3.w" due to cyclic bring sta
   |
 1 | bring "./cyclic_bring3.w" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1454,8 +1414,6 @@ error: Could not type check "<ABSOLUTE>/cyclic_bring1.w" due to cyclic bring sta
 1 | bring "./cyclic_bring1.w" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1482,8 +1440,6 @@ error: Could not type check "<ABSOLUTE>/cyclic_bring2.w" due to cyclic bring sta
 1 | bring "./cyclic_bring2.w" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1496,8 +1452,6 @@ exports[`diags_with_multibyte_chars.test.w 1`] = `
   |
 4 | asdf;
   | ^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1518,8 +1472,6 @@ error: Property not found
   |
 8 | let two = SomeEnum.TWO.TWO;
   |                        ^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1633,8 +1585,6 @@ error: Expected type to be "MutSet<bool>", but got "Set<num>" instead
    |
 72 | assert(e1 == e2);
    |        ^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1755,8 +1705,6 @@ error: Expression of type "IPreflightInterface" references an unknown preflight 
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1770,8 +1718,6 @@ exports[`extern.test.w 1`] = `
 2 |   extern "./sad.js" static getNum(): num;
   |   ^^^^^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1784,8 +1730,6 @@ exports[`extern_static.test.w 1`] = `
   |
 2 |   extern "../valid/external_ts.ts" inflight getGreeting(name: str): str;
   |                                             ^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1821,8 +1765,6 @@ error: Preflight field "x" is not initialized
 10 |   x: num;
    |   ^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1842,8 +1784,6 @@ error: Unable to iterate over "Bucket"
   |
 5 | for test in bucket {
   |             ^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1942,8 +1882,6 @@ error: Expected type to be "Options", but got "str" instead
 31 | invalidCombinationFunc2(1, 2, prefix: "debug", priority: 0, "hello", "world");
    |                                                             ^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1978,8 +1916,6 @@ error: Expected type to be "str", but got "Array<str>" instead
 4 | func(["a", "b", "c"]); // should fail as the parameter is variadic
   |      ^^^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2006,8 +1942,6 @@ error: Optional parameters must always be after all non-optional parameters.
   |
 9 | let my_func3 = (a: num, b: str?, c: bool) => {};
   |                         ^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2063,8 +1997,6 @@ error: Expected type to be "Bucket", but got "bool" instead
    |
 24 | funcBucket(bucket1, true, bucket2);
    |                     ^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2155,8 +2087,6 @@ error: Expected type to be "preflight (construct: IConstruct): Node", but got "s
    |
 16 | nodeof = "!";
    |          ^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2255,8 +2185,6 @@ error: Expected type to be "bool", but got "Array<num>" instead
 32 | let s4: Set<bool> = Set<bool>[[3]];
    |                               ^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2304,8 +2232,6 @@ error: Class "r" does not implement method "method3" of interface "I3"
    |
 30 | class r impl I3 {
    |       ^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2395,8 +2321,6 @@ error: Indexing into an inferred type is not supported
    |
 41 |   log(x[0]);
    |       ^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2576,8 +2500,6 @@ error: Unable to infer type by usage, an explicit type annotation is required
 4 | let preflightClosureArgs = (nice) => { return true; };
   |     ^^^^^^^^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2612,8 +2534,6 @@ error: Cannot create preflight class "PreflightClass" in inflight phase
 19 |   new PreflightClass();
    |   ^^^^^^^^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2629,8 +2549,6 @@ exports[`inflight_class_dup_init.test.w 1`] = `
 8 | |   }
   | \\---^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2644,8 +2562,6 @@ exports[`inflight_class_in_preflight.test.w 1`] = `
 5 | new Foo();
   | ^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2658,8 +2574,6 @@ exports[`inflight_class_interface_structural_typing.test.w 1`] = `
    |
 26 |   let x: IGoo = new NotGoo();
    |                 ^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2680,8 +2594,6 @@ error: Inflight path must be a non-interpolated string literal
   |
 2 | let func: inflight (): str = @inflight(funkPath, lifts: [
   |                                        ^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2705,8 +2617,6 @@ error: Variable is not reassignable
   .
 8 |   ylet = 456;
   |   ^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2744,8 +2654,6 @@ error: Expression of type "Bucket" references an unknown preflight object, can't
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2772,8 +2680,6 @@ error: Expression of type "Queue" references an unknown preflight object, can't 
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2799,8 +2705,6 @@ error: Expression of type "Bucket" references an unknown preflight object, can't
    |
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2933,8 +2837,6 @@ error: Expected type to be "preflight (): void", but got "inflight (): void" ins
    |
    = hint: expected phase to be preflight, but got inflight instead
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2955,8 +2857,6 @@ error: @dirname cannot be used in inflight
 2 |   let x = @dirname;
   |           ^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2968,9 +2868,7 @@ exports[`invalid compile directory 1`] = `
   --> ../../../examples/tests/invalid/lib/extern_above.w:2:3
   |
 2 |   extern "../../valid/external_ts.ts" static getGreeting(name: str): str;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-"
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 `;
 
 exports[`invalid_call_before_super.w 1`] = `
@@ -3057,8 +2955,6 @@ error: super() should be called at the top scope of the constructor
 73 |       super(5); // Super can't be called from inner scope
    |       ^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3071,8 +2967,6 @@ exports[`issue_2767.test.w 1`] = `
   |
 4 | x.set("hello", new cloud.Bucket());
   |                ^^^^^^^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3088,8 +2982,6 @@ exports[`jsii_access_modifiers.test.w 1`] = `
    |   ^^^^^^^^^^^
    |
    = hint: the definition of "createTopic" needs a broader access modifier like "pub" to be used outside of "Bucket"
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3288,8 +3180,6 @@ error: "Bucket" is not a legal JSON value
 137 | Json { bucket };
     |        ^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3310,8 +3200,6 @@ error: Expected type to be "Json", but got "str?" instead
 67 | outerJson(optionalStr());
    |           ^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3325,8 +3213,6 @@ exports[`json_static.test.w 1`] = `
 4 | immutObj.set("a", "foo");
   |          ^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3339,8 +3225,6 @@ exports[`map_entries.test.w 1`] = `
   |
 2 | let someStr: str = mapToNumber.entries().at(0).value;
   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3384,8 +3268,6 @@ error: A function whose return type is "str" must return a value.
 42 | | };
    | \\-^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3412,8 +3294,6 @@ error: Expected '}'
    |
 19 | if (x > 10) {
    |             ^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3505,8 +3385,6 @@ error: Expected type to be "MutMap<str>", but got "MutMap<num>" instead
 24 | let m5: MutMap<str> = m4;
    |                       ^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3544,8 +3422,6 @@ error: Expected type to be "num", but got "nil" instead
    |              ^^^
    |
    = hint: to allow "nil" assignment use optional type: "num?"
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3675,31 +3551,11 @@ error: Variable is not reassignable
 50 |   hi = "bye";
    |   ^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
-
-exports[`panic.test.w 1`] = `
-"error: Compiler bug during type-checking ('panicked at libs/wingc/src/type_check.rs:LINE:COL:
-User invoked panic'), please report at https://www.winglang.io/contributing/start-here/bugs
-  --> ../../../examples/tests/invalid/panic.test.w:6:1
-  |
-6 | 😱;
-  | ^^
-
-
-
-Tests 1 failed (1)
-Snapshots 1 skipped
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`panic.test.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
 exports[`parameters.test.w 1`] = `
 "Error: Parameter validation errors:
@@ -3757,8 +3613,6 @@ error: Expected type to be "preflight (inflight (str): str): void", but got "pre
 25 | accepts_callback(callback); // error
    |                  ^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3771,8 +3625,6 @@ exports[`preflight_from_inflight.test.w 1`] = `
    |
 15 |     this.r.myPreflight();
    |     ^^^^^^^^^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3801,8 +3653,6 @@ error: Expected type to be "str", but got "num" instead
 10 | let n: str = arr.at(0);
    |              ^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3815,8 +3665,6 @@ exports[`private_constructor.test.w 1`] = `
   |
 3 | new jsii_fixture.JsiiClassWithPrivateConstructor();
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3851,8 +3699,6 @@ error: Enums must be public ("pub") or private
    |
 10 | protected enum MyEnum {}
    | ^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3907,8 +3753,6 @@ error: Variable is not reassignable
    |          --- defined here (try adding "var" in front)
 42 |   arg = 0;
    |   ^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4026,8 +3870,6 @@ error: Multiple or ambiguous modifiers found
    | |            possible redundant modifier
    | possible redundant modifier
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4040,8 +3882,6 @@ exports[`resource_access_field_as_method.test.w 1`] = `
   |
 9 | x.name();
   | ^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4069,8 +3909,6 @@ error: Expression of type "Bucket" references an unknown preflight object, can't
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4083,8 +3921,6 @@ exports[`resource_inflight.test.w 1`] = `
   |
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
   |   ^^^^^^^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4119,8 +3955,6 @@ error: Inflight constructors cannot have parameters
   |
 9 |   inflight new(x: num) {}
   |               ^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4163,8 +3997,6 @@ error: Unexpected return value from void function. Return type annotations are r
 19 |     return 9;
    |     ^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4198,8 +4030,6 @@ error: Inflight classes cannot have a scope
    |
 17 |   new InflightClass() in pc;
    |                          ^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4491,8 +4321,6 @@ error: Return value cannot have a non-serializable type "MyStructWithNonSerializ
 53 | |   }
    | \\---^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4547,8 +4375,6 @@ error: Expression of type "Bucket" references an unknown preflight object, can't
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4582,8 +4408,6 @@ error: Expected "b" to be a type but it's a variable
   |
 5 | inflight class e extends b {}
   |                          ^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4619,8 +4443,6 @@ error: Expected continue statement to be inside of a loop (while/for)
 15 |     continue;
    |     ^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4648,8 +4470,6 @@ error: Expected type to be "bool", but got "num" instead
 8 | if !n || true {}
   |     ^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4662,8 +4482,6 @@ exports[`std_containers.test.w 1`] = `
   |
 3 | let c = a.concat(b); 
   |                  ^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4697,8 +4515,6 @@ error: Expected type to be "stringable", but got "B" instead
    |     ^
    |
    = hint: str, num, bool, json, and enums are stringable
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4760,8 +4576,6 @@ error: Missing required field "contentType" from "BucketPutOptions"
 11 |   bucket1.put(file: "file.txt", "data");
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4807,8 +4621,6 @@ error: Struct "C" contains field "b" which cannot be represented in Json
    |
 22 | C.fromJson({});
    |   ^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4900,8 +4712,6 @@ error: struct "InflightStruct" must be declared at the top-level of a file
 58 |   struct InflightStruct {
    |          ^^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4957,8 +4767,6 @@ error: \`super\` calls inside inflight closures not supported yet, see: https://
 52 |       return "this: {this.m1()}, super: {super.m1()}";
    |                                                ^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4972,8 +4780,6 @@ exports[`this.w 1`] = `
 3 |     log(this.node.id);
   |         ^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4986,8 +4792,6 @@ exports[`throw_non_string.test.w 1`] = `
   |
 1 | throw 42;
   |       ^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5009,8 +4813,6 @@ error: Unexpected parentheses in catch block. Use 'catch longError' instead of '
 10 | } catch (longError) {
    |         ^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -5025,8 +4827,6 @@ exports[`try_no_catch_or_finally.test.w 1`] = `
 2 | |   log("Hello World");
 3 | | }
   | \\-^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5061,8 +4861,6 @@ error: Expected type to be "num", but got "str" instead
    |
 15 | a += b;
    |      ^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5128,8 +4926,6 @@ error: Member "push" does not exist in "Array"
 29 |   recursive_ar.at(0).push(3); // Error: push doesn't exist in Array
    |                      ^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -5171,8 +4967,6 @@ error: Unable to infer type by usage, an explicit type annotation is required
 2 | let somePromise = Promise<str>{};
   |     ^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -5186,8 +4980,6 @@ exports[`unknown_field.test.w 1`] = `
 1 | std.String.a.b.c.fromJson();
   |            ^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -5200,8 +4992,6 @@ exports[`unknown_submodule.test.w 1`] = `
   |
 1 | std.random.String.fromJson("hello");
   | ^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5279,8 +5069,6 @@ error: Member "methodWhichIsNotPartOfBucketApi" does not exist in "Bucket"
 23 |     return this.bucket.methodWhichIsNotPartOfBucketApi(id);
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -5357,8 +5145,6 @@ error: Unphased methods on interfaces are not yet supported - see https://github
 33 | | }
    | \\-^
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -5366,8 +5152,10 @@ Duration <DURATION>"
 `;
 
 exports[`unresolved_state.test.w 1`] = `
-"[ERROR] (no test) | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/env0/State" referenced by "root/env0/Function"
-Failed to start resources: "root/env0/Function"
+"[ERROR]  | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/Default/State" referenced by "root/Default/Function"
+[ERROR]  | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/Default/State" referenced by "root/Default/Function"
+[ERROR]  | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/Default/State" referenced by "root/Default/Function"
+Failed to start resources: "root/Default/Function", "root/Default/test:/Handler", "root/cloud.TestRunner"
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5392,8 +5180,6 @@ error: Symbol "x" used before being defined
 8 | let x = "hi";
   |     - defined later here
 
-
-
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -5406,8 +5192,6 @@ exports[`variable_scoping.test.w 1`] = `
   |
 6 |   let z = x;
   |           ^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5458,8 +5242,6 @@ error: Expected type to be "str?", but got "void" instead
    |
 15 | let w: str? = returnsNothing2();
    |               ^^^^^^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped

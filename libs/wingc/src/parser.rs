@@ -18,13 +18,13 @@ use crate::ast::{
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{
-	report_diagnostic, Diagnostic, DiagnosticResult, WingLocation, WingSpan, ERR_EXPECTED_SEMICOLON,
+	report_diagnostic, Diagnostic, DiagnosticResult, DiagnosticSeverity, WingLocation, WingSpan, ERR_EXPECTED_SEMICOLON,
 };
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::{
-	dbg_panic, is_absolute_path, TRUSTED_LIBRARY_NPM_NAMESPACE, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE,
+	is_absolute_path, TRUSTED_LIBRARY_NPM_NAMESPACE, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE,
 	WINGSDK_TEST_CLASS_NAME,
 };
 
@@ -226,6 +226,7 @@ pub fn parse_wing_project(
 				span: None,
 				annotations: vec![],
 				hints: vec![],
+				severity: DiagnosticSeverity::Error,
 			});
 
 			// return a list of all files just so we can continue type-checking
@@ -653,7 +654,6 @@ impl<'s> Parser<'s> {
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
 			"test_statement" => self.build_test_statement(statement_node)?,
-			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
 			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase)?,
 			"lift_statement" => self.build_lift_statement(statement_node, phase)?,
 			"ERROR" => return self.with_error("Expected statement", statement_node),
@@ -1568,6 +1568,7 @@ impl<'s> Parser<'s> {
 				span: Some(self.node_span(&class_element)),
 				annotations: vec![],
 				hints: vec![],
+				severity: DiagnosticSeverity::Error,
 			});
 		}
 
@@ -2254,11 +2255,6 @@ impl<'s> Parser<'s> {
 			"json_literal" => self.build_json_literal(&expression_node, phase),
 			"struct_literal" => self.build_struct_literal(&expression_node, phase),
 			"optional_unwrap" => self.build_optional_unwrap_expression(&expression_node, phase),
-			"compiler_dbg_panic" => {
-				// Handle the debug panic expression (during parsing)
-				dbg_panic!();
-				Ok(Expr::new(ExprKind::CompilerDebugPanic, expression_span))
-			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
 	}
@@ -2759,6 +2755,7 @@ impl<'s> Parser<'s> {
 					}),
 					annotations: vec![],
 					hints: vec![],
+					severity: DiagnosticSeverity::Error,
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
@@ -2777,6 +2774,7 @@ impl<'s> Parser<'s> {
 					}),
 					annotations: vec![],
 					hints: vec![],
+					severity: DiagnosticSeverity::Error,
 				};
 				report_diagnostic(diag);
 			} else if !self.error_nodes.borrow().contains(&node.id()) {
@@ -2797,6 +2795,7 @@ impl<'s> Parser<'s> {
 						span: Some(self.node_span(&target_node)),
 						annotations: vec![],
 						hints: vec![],
+						severity: DiagnosticSeverity::Error,
 					};
 					report_diagnostic(diag);
 				}
@@ -2968,7 +2967,6 @@ fn is_valid_module_statement(stmt: &Stmt) -> bool {
 		StmtKind::Interface(_) => true,
 		StmtKind::Struct { .. } => true,
 		StmtKind::Enum { .. } => true,
-		StmtKind::CompilerDebugEnv => true,
 		// --- these are all uncool ---
 		StmtKind::SuperConstructor { .. } => false,
 		StmtKind::If { .. } => false,

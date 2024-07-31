@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ bucket_list.test.wsim » root/env0/test:list
+pass ─ bucket_list.test.wsim » root/Default/test:list
 
 Tests 1 passed (1)
 Snapshots 1 skipped

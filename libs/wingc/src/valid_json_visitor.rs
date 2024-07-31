@@ -1,6 +1,6 @@
 use crate::{
 	ast::{Expr, ExprKind, Intrinsic, IntrinsicKind, Scope},
-	diagnostic::{report_diagnostic, Diagnostic},
+	diagnostic::{report_diagnostic, Diagnostic, DiagnosticSeverity},
 	type_check::{JsonData, JsonDataKind, SpannedTypeInfo, Type, Types},
 	visit::{self, Visit},
 };
@@ -32,6 +32,7 @@ impl<'a> ValidJsonVisitor<'a> {
 				span: Some(inner.span.clone()),
 				annotations: vec![],
 				hints: vec![],
+				severity: DiagnosticSeverity::Error,
 			})
 		}
 	}

@@ -1,6 +1,7 @@
 import type { inferRouterInputs } from "@trpc/server";
 import Emittery from "emittery";
 import type { Express } from "express";
+import throttle from "lodash.throttle";
 
 import type { Config } from "./config.js";
 import type { LogSource } from "./consoleLogger.js";
@@ -110,9 +111,13 @@ export const createConsoleServer = async ({
   };
   config?.addEventListener("config-change", invalidateConfig);
 
+  const invalidateLogs = throttle(() => {
+    invalidateQuery("app.logs");
+  }, 300);
+
   const consoleLogger: ConsoleLogger = createConsoleLogger({
-    onLog: (level, message) => {
-      invalidateQuery("app.logs");
+    onLog: () => {
+      invalidateLogs();
     },
     log,
   });
@@ -156,8 +161,12 @@ export const createConsoleServer = async ({
     platform,
     logger: consoleLogger,
   });
-  testRunner.onTestsChange(async () => {
+
+  const invalidateTestList = throttle(() => {
     invalidateQuery("test.list");
+  }, 300);
+  testRunner.onTestsChange(async () => {
+    invalidateTestList();
   });
 
   let lastErrorMessage = "";

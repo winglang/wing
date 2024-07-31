@@ -1,11 +1,8 @@
-use crate::{
-	ast::{
-		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum,
-		ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet,
-		Interface, InterpolatedString, InterpolatedStringPart, Intrinsic, LiftQualification, Literal, New, Reference,
-		Scope, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
-	},
-	dbg_panic,
+use crate::ast::{
+	ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum, ExplicitLift,
+	Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface,
+	InterpolatedString, InterpolatedStringPart, Intrinsic, LiftQualification, Literal, New, Reference, Scope, Stmt,
+	StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -199,7 +196,6 @@ where
 			}),
 			finally_statements: finally_statements.map(|statements| f.fold_scope(statements)),
 		},
-		StmtKind::CompilerDebugEnv => StmtKind::CompilerDebugEnv,
 		StmtKind::SuperConstructor { arg_list } => StmtKind::SuperConstructor {
 			arg_list: f.fold_args(arg_list),
 		},
@@ -391,10 +387,6 @@ where
 			element: Box::new(f.fold_expr(*element)),
 		},
 		ExprKind::FunctionClosure(def) => ExprKind::FunctionClosure(f.fold_function_definition(def)),
-		ExprKind::CompilerDebugPanic => {
-			dbg_panic!(); // Handle the debug panic expression (during folding)
-			ExprKind::CompilerDebugPanic
-		}
 	};
 	Expr {
 		id: node.id,

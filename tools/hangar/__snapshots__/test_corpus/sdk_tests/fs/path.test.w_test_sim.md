@@ -2,8 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ path.test.wsim » root/env0/test:inflight path conversion
-pass ─ path.test.wsim » root/env1/test:extension()             
+pass ─ path.test.wsim » root/Default/test:extension()             
+pass ─ path.test.wsim » root/Default/test:inflight path conversion
 
 Tests 2 passed (2)
 Snapshots 1 skipped

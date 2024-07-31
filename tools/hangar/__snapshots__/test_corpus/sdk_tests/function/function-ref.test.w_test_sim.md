@@ -2,8 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ function-ref.test.wsim » root/env0/test:functionArn returns the arn                                                 
-pass ─ function-ref.test.wsim » root/env1/test:invoke() sends a request to aws, fails because we are using a dummy function
+pass ─ function-ref.test.wsim » root/Default/test:functionArn returns the arn                                                 
+pass ─ function-ref.test.wsim » root/Default/test:invoke() sends a request to aws, fails because we are using a dummy function
 
 Tests 2 passed (2)
 Snapshots 1 skipped

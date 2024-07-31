@@ -241,6 +241,18 @@ export class Simulator {
         if (error) {
           console.error(error);
         }
+        this.addTrace({
+          data: {
+            message: `Another process is already running the simulator on the same state directory.`,
+            error,
+            status: "failure",
+          },
+          type: TraceType.SIMULATOR,
+          level: LogLevel.ERROR,
+          sourcePath: "",
+          sourceType: "",
+          timestamp: new Date().toISOString(),
+        });
         await this.stop();
       },
     });
@@ -514,13 +526,20 @@ export class Simulator {
     await this.stop();
 
     if (resetState) {
-      await rm(this.statedir, { recursive: true });
+      await this.resetState();
       this._traces = [];
     }
 
     this._model = this._loadApp(this._model.simdir);
 
     await this.start();
+  }
+
+  /**
+   * Reset the state of the simulator.
+   */
+  public async resetState(): Promise<void> {
+    await rm(this.statedir, { recursive: true });
   }
 
   /**

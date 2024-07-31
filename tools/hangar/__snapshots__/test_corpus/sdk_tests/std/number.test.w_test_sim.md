@@ -2,8 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ number.test.wsim » root/env0/test:fromJson
-pass ─ number.test.wsim » root/env1/test:fromStr 
+pass ─ number.test.wsim » root/Default/test:fromJson
+pass ─ number.test.wsim » root/Default/test:fromStr 
 
 Tests 2 passed (2)
 Snapshots 1 skipped

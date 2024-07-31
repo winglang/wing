@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ no-stop.test.wsim » root/env0/test:token is resolved
+pass ─ no-stop.test.wsim » root/Default/test:token is resolved
 
 Tests 1 passed (1)
 Snapshots 1 skipped

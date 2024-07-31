@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ rename.test.wsim » root/env0/test:rename()
+pass ─ rename.test.wsim » root/Default/test:rename()
 
 Tests 1 passed (1)
 Snapshots 1 skipped

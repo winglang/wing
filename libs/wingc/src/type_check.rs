@@ -17,7 +17,7 @@ use crate::ast::{
 	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, DiagnosticSeverity, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::FileGraph;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
@@ -27,11 +27,10 @@ use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_stmt_before_super::{CheckSuperCtorLocationVisitor, CheckValidBeforeSuperVisitor};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, UTIL_CLASS_NAME,
-	WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC,
-	WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
-	WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING,
-	WINGSDK_STRUCT,
+	debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, UTIL_CLASS_NAME, WINGSDK_ARRAY,
+	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON,
+	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE,
+	WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -1563,6 +1562,7 @@ impl Types {
 					span: Some(span.clone()),
 					annotations: vec![],
 					hints: vec![],
+					severity: DiagnosticSeverity::Error,
 				});
 				existing_type_option.replace(error);
 				return;
@@ -1902,6 +1902,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(spanned.span()),
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 
 		(self.make_error_variable_info(), Phase::Independent)
@@ -1913,6 +1914,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(spanned.span()),
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 	}
 
@@ -1922,6 +1924,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(spanned.span()),
 			annotations: vec![],
 			hints: hints.iter().map(|h| h.to_string()).collect(),
+			severity: DiagnosticSeverity::Error,
 		});
 	}
 
@@ -1936,6 +1939,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(spanned.span()),
 			annotations,
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 	}
 
@@ -1945,6 +1949,7 @@ impl<'a> TypeChecker<'a> {
 			span: None,
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		});
 	}
 
@@ -1960,6 +1965,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(span),
 			annotations,
 			hints,
+			severity: DiagnosticSeverity::Error,
 		});
 
 		self.types.error()
@@ -2241,19 +2247,6 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			ExprKind::JsonLiteral { is_mut, element } => self.type_check_json_lit(is_mut, element, env, exp),
 			ExprKind::JsonMapLiteral { fields } => self.type_check_json_map_lit(fields, env, exp),
 			ExprKind::FunctionClosure(func_def) => self.type_check_closure(func_def, env),
-			ExprKind::CompilerDebugPanic => {
-				// Handle the debug panic expression (during type-checking)
-				dbg_panic!();
-				(
-					self.type_error(TypeError {
-						message: "Panic expression".to_string(),
-						span: exp.span.clone(),
-						annotations: vec![],
-						hints: vec![],
-					}),
-					env.phase,
-				)
-			}
 		};
 
 		// If we're inflight but the expression is a lifted (preflight) expression then make it immutable
@@ -3638,6 +3631,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							span: None,
 							annotations: vec![],
 							hints: vec![],
+							severity: DiagnosticSeverity::Error,
 						}),
 					);
 					return;
@@ -3661,6 +3655,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							span: None,
 							annotations: vec![],
 							hints: vec![],
+							severity: DiagnosticSeverity::Error,
 						}),
 					);
 					return;
@@ -4247,10 +4242,6 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				finally_statements,
 			} => {
 				tc.type_check_try_catch(try_statements, catch_block, finally_statements, env);
-			}
-			StmtKind::CompilerDebugEnv => {
-				eprintln!("[symbol environment at {}]", stmt.span);
-				eprintln!("{}", env);
 			}
 			StmtKind::SuperConstructor { arg_list } => {
 				tc.type_check_super_constructor_against_parent_initializer(stmt, arg_list, env);
@@ -5477,6 +5468,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 											span: lookup.name.span.clone(),
 										}],
 										hints: vec![format!("Change type to match first declaration: {}", lookup.type_)],
+										severity: DiagnosticSeverity::Error,
 									});
 								}
 							} else {
@@ -6550,6 +6542,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							hints: vec![format!(
 								"the definition of \"{property}\" needs a broader access modifier like \"pub\" or \"protected\" to be used outside of \"{class}\"",
 							)],
+							severity: DiagnosticSeverity::Error,
 						});
 					}
 				}
@@ -6565,6 +6558,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							hints: vec![format!(
 								"the definition of \"{property}\" needs a broader access modifier like \"pub\" to be used outside of \"{class}\"",
 							)],
+							severity: DiagnosticSeverity::Error,
 						});
 					}
 				}

@@ -98,8 +98,17 @@ export class Lockfile {
       if (this.lastMtime) {
         // Check if the lockfile got compromised because we were too late to update it.
         if (Date.now() > this.lastMtime + STALE_THRESHOLD) {
-          this.markAsCompromised("Lockfile was not updated in time");
-          return;
+          // Try to acquire the lock again.
+          try {
+            fs.closeSync(this.lockfile);
+            this.lockfile = undefined;
+            this.lastMtime = undefined;
+            this.lock();
+            return;
+          } catch (error) {
+            this.markAsCompromised("Lockfile was not updated in time", error);
+            return;
+          }
         }
 
         // Check if the lockfile got compromised because access was lost or something else updated it.

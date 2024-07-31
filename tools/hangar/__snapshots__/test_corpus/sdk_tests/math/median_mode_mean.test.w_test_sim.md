@@ -2,9 +2,9 @@
 
 ## stdout.log
 ```log
-pass ─ median_mode_mean.test.wsim » root/env0/test:inflight median
-pass ─ median_mode_mean.test.wsim » root/env1/test:inflight mode  
-pass ─ median_mode_mean.test.wsim » root/env2/test:inflight mean  
+pass ─ median_mode_mean.test.wsim » root/Default/test:inflight mean  
+pass ─ median_mode_mean.test.wsim » root/Default/test:inflight median
+pass ─ median_mode_mean.test.wsim » root/Default/test:inflight mode  
 
 Tests 3 passed (3)
 Snapshots 1 skipped

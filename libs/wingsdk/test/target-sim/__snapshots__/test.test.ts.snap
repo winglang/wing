@@ -2,7 +2,7 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c86fc180.cjs": ""use strict";
+  ".wing/handler_c818e9be.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
@@ -25,31 +25,31 @@ exports.handler = async function(event) {
   },
   "simulator.json": {
     "resources": {
-      "root/cloud.TestRunner": {
-        "addr": "c8647dd8d2adabe83cc081ebe0ccbefe4a068ef3bf",
-        "deps": [
-          "root/env0/test:my_test/Handler",
-        ],
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {
-            "root/env0/test:my_test": "\${wsim#root/env0/test:my_test/Handler#attrs.handle}",
-          },
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      "root/env0/test:my_test/Handler": {
-        "addr": "c86fc1804106bd848769cb0ddbcb872aa1e47943f4",
-        "path": "root/env0/test:my_test/Handler",
+      "root/Default/test:my_test/Handler": {
+        "addr": "c818e9bed156155e61095c3e68cdb0d4e55c141aca",
+        "path": "root/Default/test:my_test/Handler",
         "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/handler_c86fc180.cjs",
+          "sourceCodeFile": ".wing/handler_c818e9be.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/cloud.TestRunner": {
+        "addr": "c8647dd8d2adabe83cc081ebe0ccbefe4a068ef3bf",
+        "deps": [
+          "root/Default/test:my_test/Handler",
+        ],
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {
+            "root/Default/test:my_test": "\${wsim#root/Default/test:my_test/Handler#attrs.handle}",
+          },
+        },
+        "type": "@winglang/sdk.std.TestRunner",
       },
     },
     "sdkVersion": "0.0.0",
@@ -131,20 +131,7 @@ exports.handler = async function(event) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.3.0",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "env0": {
+        "Default": {
           "children": {
             "test:my_test": {
               "children": {
@@ -158,7 +145,7 @@ exports.handler = async function(event) {
                     "title": "Function",
                   },
                   "id": "Handler",
-                  "path": "root/env0/test:my_test/Handler",
+                  "path": "root/Default/test:my_test/Handler",
                 },
               },
               "constructInfo": {
@@ -170,7 +157,7 @@ exports.handler = async function(event) {
                 "title": "Test",
               },
               "id": "test:my_test",
-              "path": "root/env0/test:my_test",
+              "path": "root/Default/test:my_test",
             },
           },
           "constructInfo": {
@@ -178,8 +165,21 @@ exports.handler = async function(event) {
             "version": "10.3.0",
           },
           "display": {},
-          "id": "env0",
-          "path": "root/env0",
+          "id": "Default",
+          "path": "root/Default",
+        },
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {

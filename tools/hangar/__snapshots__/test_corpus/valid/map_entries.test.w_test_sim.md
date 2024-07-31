@@ -2,10 +2,10 @@
 
 ## stdout.log
 ```log
-pass ─ map_entries.test.wsim » root/env0/test:check if map has entries                     
-pass ─ map_entries.test.wsim » root/env1/test:get value from map                           
-pass ─ map_entries.test.wsim » root/env2/test:iterate map using entries() method           
-pass ─ map_entries.test.wsim » root/env3/test:check entries() when map has multiple entries
+pass ─ map_entries.test.wsim » root/Default/test:check entries() when map has multiple entries
+pass ─ map_entries.test.wsim » root/Default/test:check if map has entries                     
+pass ─ map_entries.test.wsim » root/Default/test:get value from map                           
+pass ─ map_entries.test.wsim » root/Default/test:iterate map using entries() method           
 
 Tests 4 passed (4)
 Snapshots 1 skipped

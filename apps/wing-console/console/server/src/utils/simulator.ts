@@ -1,4 +1,5 @@
 import { simulator } from "@winglang/sdk";
+import { LogLevel, TraceType } from "@winglang/sdk/lib/std/test-runner.js";
 import Emittery from "emittery";
 
 import type { ResourceLifecycleEvent, Trace } from "../types.js";
@@ -62,7 +63,14 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
     });
     instance.onTrace({
       callback(trace) {
-        events.emit("trace", trace);
+        if (
+          trace.type === TraceType.SIMULATOR &&
+          trace.level === LogLevel.ERROR
+        ) {
+          events.emit("error", new Error(trace.data.message));
+        } else {
+          events.emit("trace", trace);
+        }
       },
     });
     instance.onResourceLifecycleEvent({

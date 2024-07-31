@@ -1,10 +1,7 @@
-use crate::{
-	ast::{
-		ArgList, BringSource, CalleeKind, Class, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope,
-		Stmt, StmtKind, Struct, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
-	},
-	dbg_panic,
+use crate::ast::{
+	ArgList, BringSource, CalleeKind, Class, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt,
+	StmtKind, Struct, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -219,7 +216,6 @@ where
 				v.visit_scope(finally_statements);
 			}
 		}
-		StmtKind::CompilerDebugEnv => {}
 		StmtKind::ExplicitLift(explict_lift) => {
 			for q in explict_lift.qualifications.iter() {
 				v.visit_expr(&q.obj);
@@ -400,10 +396,6 @@ where
 		}
 		ExprKind::FunctionClosure(def) => {
 			v.visit_function_definition(def);
-		}
-		ExprKind::CompilerDebugPanic => {
-			// Handle the debug panic expression (during visiting)
-			dbg_panic!();
 		}
 	}
 }

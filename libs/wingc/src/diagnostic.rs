@@ -281,6 +281,7 @@ pub struct Diagnostic {
 	pub annotations: Vec<DiagnosticAnnotation>,
 	pub span: Option<WingSpan>,
 	pub hints: Vec<String>,
+	pub severity: DiagnosticSeverity,
 }
 
 impl Diagnostic {
@@ -290,6 +291,7 @@ impl Diagnostic {
 			span: Some(span.span()),
 			annotations: vec![],
 			hints: vec![],
+			severity: DiagnosticSeverity::Error,
 		}
 	}
 
@@ -316,6 +318,11 @@ impl Diagnostic {
 		new
 	}
 
+	pub fn severity(mut self, level: DiagnosticSeverity) -> Self {
+		self.severity = level;
+		self
+	}
+
 	pub fn report(self) {
 		report_diagnostic(self);
 	}
@@ -334,6 +341,13 @@ impl DiagnosticAnnotation {
 			span: span.span(),
 		}
 	}
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum DiagnosticSeverity {
+	Error,
+	Warning,
 }
 
 impl std::fmt::Display for Diagnostic {
@@ -374,7 +388,7 @@ impl PartialOrd for Diagnostic {
 }
 
 thread_local! {
-	pub static DIAGNOSTICS: RefCell<Diagnostics> = RefCell::new(Diagnostics::new());
+	static DIAGNOSTICS: RefCell<Diagnostics> = RefCell::new(Diagnostics::new());
 }
 
 /// Report a compilation diagnostic
@@ -411,7 +425,7 @@ extern "C" {
 pub fn found_errors() -> bool {
 	DIAGNOSTICS.with(|diagnostics| {
 		let diagnostics = diagnostics.borrow();
-		!diagnostics.is_empty()
+		diagnostics.iter().any(|d| d.severity == DiagnosticSeverity::Error)
 	})
 }
 

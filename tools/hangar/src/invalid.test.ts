@@ -31,10 +31,6 @@ invalidWingFiles.forEach((wingFile) => {
     });
 
     expect(out.stdout).toMatchSnapshot();
-    // when this env var is on, we allow the on-demand-panic-char (😱), right now panic writes to stderr (will be changed in the future)
-    if (metaComment?.env?.WINGC_DEBUG_PANIC) {
-      expect(out.stderr).toMatchSnapshot();
-    }
   });
 });
 

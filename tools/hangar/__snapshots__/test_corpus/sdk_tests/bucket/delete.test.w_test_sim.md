@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ delete.test.wsim » root/env0/test:delete
+pass ─ delete.test.wsim » root/Default/test:delete
 
 Tests 1 passed (1)
 Snapshots 1 skipped

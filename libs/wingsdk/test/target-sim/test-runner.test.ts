@@ -30,7 +30,7 @@ describe("Single test", () => {
 
     //@ts-expect-error
     const testList = app._testRunner?.getTestFunctionHandles() ?? {};
-    expect(Object.keys(testList)).toEqual(["root/env0/test:first test"]);
+    expect(Object.keys(testList)).toEqual(["root/Default/test:first test"]);
   });
 });
 
@@ -50,9 +50,9 @@ describe("Multiple tests", () => {
     //@ts-expect-error
     const testList = app._testRunner?.getTestFunctionHandles() ?? {};
     expect(Object.keys(testList)).toEqual([
-      "root/env0/test:first test",
-      "root/env1/test:second test",
-      "root/env2/test:third test",
+      "root/Default/test:first test",
+      "root/Default/test:second test",
+      "root/Default/test:third test",
     ]);
   });
 });

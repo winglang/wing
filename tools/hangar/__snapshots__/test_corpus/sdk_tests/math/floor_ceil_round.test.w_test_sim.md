@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ floor_ceil_round.test.wsim » root/env0/test:inflight floor--ceil--round
+pass ─ floor_ceil_round.test.wsim » root/Default/test:inflight floor--ceil--round
 
 Tests 1 passed (1)
 Snapshots 1 skipped

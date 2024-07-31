@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`warning is emitted when an unsupported package manager is used 1`] = `""`;
+
+exports[`warning is emitted when an unsupported package manager is used 2`] = `"warning: The current project has a pnpm/yarn/bun lockfile. Wing hasn't been tested with package managers besides npm, so it may be unable to resolve dependencies to Wing libraries when using these tools. See https://github.com/winglang/wing/issues/6129 for more details."`;
