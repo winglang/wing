@@ -19,17 +19,15 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^19.28.0",
     "@segment/analytics-node": "^1.3.0",
     "@wingconsole/server": "workspace:^",
-    "@winglibs/dynamodb": "^0.1.19",
-    "cdktf": "^0.20.8",
     "cross-spawn": "^7.0.3",
     "express": "^4.19.2",
     "open": "^8.4.2",
     "picocolors": "^1.0.1"
   },
   "devDependencies": {
+    "@cdktf/provider-aws": "^19.28.0",
     "@ibm/plex": "^6.4.1",
     "@playwright/test": "^1.44.1",
     "@tailwindcss/forms": "^0.5.7",
@@ -42,8 +40,11 @@
     "@wingconsole/eslint-plugin": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
     "@wingconsole/ui": "workspace:^",
+    "@winglibs/dynamodb": "^0.1.19",
     "autoprefixer": "^10.4.19",
     "bump-pack": "workspace:^",
+    "cdktf": "^0.20.8",
+    "constructs": "^10.3.0",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "nanoid": "^4.0.2",
