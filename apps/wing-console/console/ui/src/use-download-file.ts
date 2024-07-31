@@ -8,7 +8,11 @@ export interface File {
 
 // TODO - once mime-types is added to the sdk, use it to determine the encoding
 export const getFileEncoding = (file: string): "base64" | "utf8" => {
-  const extension = file.split(".").pop();
+  const basename = file.split("/").pop() ?? file;
+  if (!basename.includes(".")) {
+    return "utf8";
+  }
+  const extension = basename.split(".").pop();
   if (!extension) {
     return "utf8";
   }
