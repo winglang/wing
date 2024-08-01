@@ -79,7 +79,7 @@ export const Attribute = ({
             theme.textInput,
             theme.focusInput,
             theme.borderInput,
-            "w-full border opacity-70 ease-in-out",
+            "w-full border ease-in-out",
             "items-center px-2 select-text text-sm transition truncate rounded",
             "py-0",
           )}
