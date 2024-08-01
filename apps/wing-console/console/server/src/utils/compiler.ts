@@ -1,6 +1,7 @@
 import path from "node:path";
 
 import * as wing from "@winglang/compiler";
+import { CompileError } from "@winglang/compiler";
 import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import chokidar from "chokidar";
 import Emittery from "emittery";
@@ -54,38 +55,64 @@ export const createCompiler = ({
 
     loadEnvVariables({ cwd: dirname });
 
-    try {
-      isCompiling = true;
-      await events.emit("compiling");
-      simfile = await wing.compile(wingfile, {
+    isCompiling = true;
+    await events.emit("compiling");
+
+    const { outputDir, wingcErrors, preflightError, success } =
+      await wing.compile(wingfile, {
         platform,
         testing,
         preflightLog,
       });
-      await events.emit("compiled", { simfile });
-    } catch (error) {
+
+    if (success && wingcErrors.length > 0) {
+      let errorString = await formatWingError(
+        new CompileError(wingcErrors),
+        wingfile,
+      );
+      preflightLog?.(errorString);
+    }
+
+    if (!success) {
       // There's no point in showing errors if we're going to recompile anyway.
       if (shouldCompileAgain) {
         return;
       }
 
+      let errorString = "";
+      if (wingcErrors.length > 0) {
+        errorString += await formatWingError(
+          new CompileError(wingcErrors),
+          wingfile,
+        );
+      } else if (preflightError) {
+        errorString += await formatWingError(preflightError, wingfile);
+      }
       await events.emit(
         "error",
-        new Error(
-          `Failed to compile.\n\n${await formatWingError(error, wingfile)}`,
-          {
-            cause: error,
-          },
-        ),
+        new Error(`Failed to compile.\n\n${errorString}`),
       );
-    } finally {
-      isCompiling = false;
-
-      if (shouldCompileAgain) {
-        shouldCompileAgain = false;
-        await recompile();
-      }
     }
+
+    isCompiling = false;
+    if (shouldCompileAgain) {
+      shouldCompileAgain = false;
+      await recompile();
+    }
+
+    if (!success) {
+      return;
+    }
+
+    if (!outputDir) {
+      await events.emit(
+        "error",
+        new Error("Internal error: outputDir is not defined"),
+      );
+      return;
+    }
+    simfile = outputDir;
+    await events.emit("compiled", { simfile });
   };
 
   const pathsToWatch = [
