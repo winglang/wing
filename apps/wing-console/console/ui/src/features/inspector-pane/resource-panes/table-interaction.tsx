@@ -1,14 +1,7 @@
-import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import type { Column } from "@wingconsole/design-system";
-import {
-  SpinnerLoader,
-  useTheme,
-  TableRow,
-  getInputType,
-} from "@wingconsole/design-system";
-import { createPersistentState } from "@wingconsole/use-persistent-state";
+import { SpinnerLoader, useTheme, TableRow } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useMemo } from "react";
 
 export type Row = Record<string, any>;
 
@@ -27,9 +20,6 @@ export const TableInteraction = memo(
         .sort()
         .map((name) => ({ name, type: "text" }));
     }, [rows]);
-    useEffect(() => {
-      console.log("columns", columns);
-    }, [columns]);
 
     return (
       <div className="inline-block align-middle w-full mt-1">
@@ -65,7 +55,6 @@ export const TableInteraction = memo(
                 className={classNames(
                   theme.bgInput,
                   "px-1 sticky top-[4px] z-10 border-spacing-x-0",
-                  // "ring-2 ring-white dark:ring-slate-800",
                 )}
               >
                 {columns.map(({ name }) => (

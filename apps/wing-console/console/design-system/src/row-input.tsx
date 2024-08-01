@@ -10,7 +10,7 @@ export const RowInput = memo(
     type,
     placeholder,
     inactivePlaceholder,
-    value,
+    value: rawValue,
     onChange,
     onKeyUp,
     onBlur,
@@ -34,14 +34,21 @@ export const RowInput = memo(
 
     const [active, setActive] = useState(false);
 
-    const showPlaceholderAsText = useMemo(() => {
-      return (
-        !active &&
-        ["text", "date", "number"].includes(type) &&
-        !value &&
-        inactivePlaceholder
-      );
-    }, [active, type, value, inactivePlaceholder]);
+    const value = useMemo(() => {
+      if (typeof rawValue === "string") {
+        return rawValue;
+      }
+
+      if (
+        typeof rawValue === "object" &&
+        typeof rawValue.value === "string" &&
+        /^\d+$/.test(rawValue.value)
+      ) {
+        return rawValue.value;
+      }
+
+      return JSON.stringify(rawValue);
+    }, [rawValue]);
 
     return (
       <input
@@ -49,16 +56,14 @@ export const RowInput = memo(
         placeholder={
           !active && inactivePlaceholder ? inactivePlaceholder : placeholder
         }
-        type={showPlaceholderAsText ? "text" : type}
-        // value={typeof value.value === "string" ? value.value : value}
-        value={typeof value === "string" ? value : JSON.stringify(value)}
+        type={"text"}
+        value={value}
         checked={type === "checkbox" && value === true}
         className={classNames(
           theme.borderInput,
           "rounded text-sm relative",
           "text-sm ring-0 focus:ring-0 bg-transparent",
           "border-0 p-0 m-0 appearance-none rounded",
-          showPlaceholderAsText && "placeholder:italic",
           error && "bg-red-300/50 dark:bg-red-500/50",
           type !== "checkbox" && [
             "w-full",
