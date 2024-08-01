@@ -11,7 +11,7 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Elifs, Enum, ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	ElseIfBlock, ElseIfLetBlock, ElseIfs, Enum, ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition,
 	FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic,
 	IntrinsicKind, LiftQualification, Literal, New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct,
 	StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
@@ -78,6 +78,7 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"instanceof",
 	"int",
 	"interface",
+	"is",
 	"let",
 	"long",
 	"native",
@@ -115,7 +116,6 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"test",
 	"inflight",
 	"preflight",
-	"elif",
 	"any",
 	"num",
 	"str",
@@ -812,30 +812,30 @@ impl<'s> Parser<'s> {
 		let value = self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 
-		let mut elif_vec = vec![];
+		let mut else_if_vec = vec![];
 		let mut cursor = statement_node.walk();
 		for node in statement_node.children(&mut cursor) {
 			match node.kind() {
-				"elif_let_block" => {
+				"else_if_let_block" => {
 					let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
 					let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
 					let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
-					let elif = Elifs::ElifLetBlock(ElifLetBlock {
+					let else_if = ElseIfs::ElseIfLetBlock(ElseIfLetBlock {
 						reassignable: node.child_by_field_name("reassignable").is_some(),
 						statements: statements,
 						value: value,
 						var_name: name,
 					});
-					elif_vec.push(elif);
+					else_if_vec.push(else_if);
 				}
-				"elif_block" => {
+				"else_if_block" => {
 					let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap(), phase);
 					let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
-					let elif = Elifs::ElifBlock(ElifBlock {
+					let else_if = ElseIfs::ElseIfBlock(ElseIfBlock {
 						condition: conditions.unwrap(),
 						statements: statements,
 					});
-					elif_vec.push(elif);
+					else_if_vec.push(else_if);
 				}
 				_ => {}
 			}
@@ -851,23 +851,23 @@ impl<'s> Parser<'s> {
 			reassignable,
 			value,
 			statements: if_block,
-			elif_statements: elif_vec,
+			else_if_statements: else_if_vec,
 			else_statements: else_block,
 		}))
 	}
 
 	fn build_if_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
-		let mut elif_vec = vec![];
+		let mut else_if_vec = vec![];
 		let mut cursor = statement_node.walk();
-		for node in statement_node.children_by_field_name("elif_block", &mut cursor) {
+		for node in statement_node.children_by_field_name("else_if_block", &mut cursor) {
 			let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap(), phase);
 			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
-			let elif = ElifBlock {
+			let else_if = ElseIfBlock {
 				condition: conditions.unwrap(),
 				statements: statements,
 			};
-			elif_vec.push(elif);
+			else_if_vec.push(else_if);
 		}
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
 			Some(self.build_scope(&else_block, phase))
@@ -877,7 +877,7 @@ impl<'s> Parser<'s> {
 		Ok(StmtKind::If {
 			condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap(), phase)?,
 			statements: if_block,
-			elif_statements: elif_vec,
+			else_if_statements: else_if_vec,
 			else_statements: else_block,
 		})
 	}

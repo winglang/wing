@@ -44,7 +44,7 @@ new std.Test(inflight () => {
       assert(info.get("functionArn").contains(":function:"));
       assert(info.get("functionArn").contains("aws-wing-function"));
       assert(info.get("functionName").contains("aws-wing-function"));
-    } elif target == "awscdk" {
+    } else if target == "awscdk" {
       assert(info.get("functionArn").contains("arn:aws:lambda:"));
       assert(info.get("functionArn").contains(":function:"));
       assert(info.get("functionArn").contains("awswingfunction"));

@@ -1708,18 +1708,18 @@
             "members": [
               {
                 "type": "FIELD",
-                "name": "elif_let_block",
+                "name": "else_if_let_block",
                 "content": {
                   "type": "SYMBOL",
-                  "name": "elif_let_block"
+                  "name": "else_if_let_block"
                 }
               },
               {
                 "type": "FIELD",
-                "name": "elif_block",
+                "name": "else_if_block",
                 "content": {
                   "type": "SYMBOL",
-                  "name": "elif_block"
+                  "name": "else_if_block"
                 }
               }
             ]
@@ -1752,12 +1752,16 @@
         }
       ]
     },
-    "elif_let_block": {
+    "else_if_let_block": {
       "type": "SEQ",
       "members": [
         {
           "type": "STRING",
-          "value": "elif"
+          "value": "else"
+        },
+        {
+          "type": "STRING",
+          "value": "if"
         },
         {
           "type": "STRING",
@@ -1836,10 +1840,10 @@
           "type": "REPEAT",
           "content": {
             "type": "FIELD",
-            "name": "elif_block",
+            "name": "else_if_block",
             "content": {
               "type": "SYMBOL",
-              "name": "elif_block"
+              "name": "else_if_block"
             }
           }
         },
@@ -1870,12 +1874,16 @@
         }
       ]
     },
-    "elif_block": {
+    "else_if_block": {
       "type": "SEQ",
       "members": [
         {
           "type": "STRING",
-          "value": "elif"
+          "value": "else"
+        },
+        {
+          "type": "STRING",
+          "value": "if"
         },
         {
           "type": "FIELD",

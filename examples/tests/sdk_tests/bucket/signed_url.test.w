@@ -75,7 +75,7 @@ test "signedUrl duration option is respected" {
 
     if target == "tf-aws" {
       result = output.contains("<Code>AccessDenied</Code><Message>Request has expired</Message>");
-    } elif target == "tf-gcp" {
+    } else if target == "tf-gcp" {
       result = output.contains("<Code>ExpiredToken</Code><Message>Invalid argument.</Message>");
     }
     

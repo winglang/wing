@@ -309,13 +309,13 @@ pub struct Stmt {
 }
 
 #[derive(Debug)]
-pub struct ElifBlock {
+pub struct ElseIfBlock {
 	pub condition: Expr,
 	pub statements: Scope,
 }
 
 #[derive(Debug)]
-pub struct ElifLetBlock {
+pub struct ElseIfLetBlock {
 	pub reassignable: bool,
 	pub var_name: Symbol,
 	pub value: Expr,
@@ -444,14 +444,14 @@ pub struct IfLet {
 	pub var_name: Symbol,
 	pub value: Expr,
 	pub statements: Scope,
-	pub elif_statements: Vec<Elifs>,
+	pub else_if_statements: Vec<ElseIfs>,
 	pub else_statements: Option<Scope>,
 }
 
 #[derive(Debug)]
-pub enum Elifs {
-	ElifBlock(ElifBlock),
-	ElifLetBlock(ElifLetBlock),
+pub enum ElseIfs {
+	ElseIfBlock(ElseIfBlock),
+	ElseIfLetBlock(ElseIfLetBlock),
 }
 
 #[derive(Debug)]
@@ -482,7 +482,7 @@ pub enum StmtKind {
 	If {
 		condition: Expr,
 		statements: Scope,
-		elif_statements: Vec<ElifBlock>,
+		else_if_statements: Vec<ElseIfBlock>,
 		else_statements: Option<Scope>,
 	},
 	Break,

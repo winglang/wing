@@ -1,8 +1,8 @@
 use crate::ast::{
-	ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum, ExplicitLift,
-	Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface,
-	InterpolatedString, InterpolatedStringPart, Intrinsic, LiftQualification, Literal, New, Reference, Scope, Stmt,
-	StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+	ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElseIfBlock, ElseIfLetBlock, ElseIfs, Enum,
+	ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet,
+	Interface, InterpolatedString, InterpolatedStringPart, Intrinsic, LiftQualification, Literal, New, Reference, Scope,
+	Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -124,28 +124,28 @@ where
 			statements,
 			reassignable,
 			var_name,
-			elif_statements,
+			else_if_statements,
 			else_statements,
 		}) => StmtKind::IfLet(IfLet {
 			value: f.fold_expr(value),
 			statements: f.fold_scope(statements),
 			reassignable,
 			var_name: f.fold_symbol(var_name),
-			elif_statements: elif_statements
+			else_if_statements: else_if_statements
 				.into_iter()
-				.map(|elif_block| match elif_block {
-					Elifs::ElifBlock(elif_block) => {
-						return Elifs::ElifBlock(ElifBlock {
-							condition: f.fold_expr(elif_block.condition),
-							statements: f.fold_scope(elif_block.statements),
+				.map(|else_if_block| match else_if_block {
+					ElseIfs::ElseIfBlock(else_if_block) => {
+						return ElseIfs::ElseIfBlock(ElseIfBlock {
+							condition: f.fold_expr(else_if_block.condition),
+							statements: f.fold_scope(else_if_block.statements),
 						})
 					}
-					Elifs::ElifLetBlock(elif_let_block) => {
-						return Elifs::ElifLetBlock(ElifLetBlock {
-							reassignable: elif_let_block.reassignable,
-							statements: f.fold_scope(elif_let_block.statements),
-							value: f.fold_expr(elif_let_block.value),
-							var_name: f.fold_symbol(elif_let_block.var_name),
+					ElseIfs::ElseIfLetBlock(else_if_let_block) => {
+						return ElseIfs::ElseIfLetBlock(ElseIfLetBlock {
+							reassignable: else_if_let_block.reassignable,
+							statements: f.fold_scope(else_if_let_block.statements),
+							value: f.fold_expr(else_if_let_block.value),
+							var_name: f.fold_symbol(else_if_let_block.var_name),
 						});
 					}
 				})
@@ -155,16 +155,16 @@ where
 		StmtKind::If {
 			condition,
 			statements,
-			elif_statements,
+			else_if_statements,
 			else_statements,
 		} => StmtKind::If {
 			condition: f.fold_expr(condition),
 			statements: f.fold_scope(statements),
-			elif_statements: elif_statements
+			else_if_statements: else_if_statements
 				.into_iter()
-				.map(|elif_block| ElifBlock {
-					condition: f.fold_expr(elif_block.condition),
-					statements: f.fold_scope(elif_block.statements),
+				.map(|else_if_block| ElseIfBlock {
+					condition: f.fold_expr(else_if_block.condition),
+					statements: f.fold_scope(else_if_block.statements),
 				})
 				.collect(),
 			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
