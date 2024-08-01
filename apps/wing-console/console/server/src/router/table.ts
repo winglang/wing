@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
 
-export const createtableRouter = () => {
+export const createTableRouter = () => {
   return createRouter({
     "table.scan": createProcedure
       .input(
