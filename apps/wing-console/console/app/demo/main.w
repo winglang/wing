@@ -3,6 +3,18 @@ bring ui;
 bring util;
 bring sim;
 
+
+let tableBucket = new cloud.Bucket() as "TableBucket";
+let visual = new ui.Table(
+  scan: inflight () => {
+    return [
+      { age: { value: "34" }, name: "John" },
+      { age: { value: "25" }, name: "Alice" },
+      { age: { value: "40" }, name: "Bob" },
+    ];
+  },
+) as "ui.Table" in tableBucket;
+
 // let errorService = new cloud.Service(inflight () => {}) as "ErrorService";
 
 // let errorResource = new sim.Resource(inflight () => {
@@ -305,29 +317,3 @@ class ApiUsersService {
 new ApiUsersService();
 
 log("hello from inflight");
-
-bring dynamodb;
-bring math;
-
-let table = new dynamodb.Table(
-  hashKey: "key",
-  attributes: [
-    { name: "key", type: "S" },
-  ],
-) as "dynamodb.Table";
-
-let visual = new ui.Table(
-  scan: inflight () => {
-    let output = table.scan();
-    return output.Items;
-  },
-) as "ui.Table" in table;
-
-new cloud.Function(inflight () => {
-  table.put(
-    Item: {
-      key: "human_{util.nanoid()}",
-      age: 20 + math.floor(math.random(30)),
-    },
-  );
-}) as "table-put-item-function";
