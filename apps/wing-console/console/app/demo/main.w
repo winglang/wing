@@ -317,7 +317,6 @@ let table = new dynamodb.Table(
 ) as "dynamodb.Table";
 
 let visual = new ui.Table(
-  "Data",
   scan: inflight () => {
     let output = table.scan();
     return output.Items;
