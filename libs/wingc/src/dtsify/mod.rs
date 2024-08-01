@@ -1,12 +1,17 @@
 use std::cell::RefCell;
 
-use camino::{Utf8Path, Utf8PathBuf};
+use camino::Utf8PathBuf;
 use indexmap::IndexMap;
 use itertools::Itertools;
 
 use crate::{
-	ast::*, diagnostic::report_diagnostic, file_graph::FileGraph, files::Files, jsify::codemaker::CodeMaker,
-	type_check::Types, WINGSDK_ASSEMBLY_NAME,
+	ast::*,
+	diagnostic::report_diagnostic,
+	file_graph::{File, FileGraph},
+	files::Files,
+	jsify::codemaker::CodeMaker,
+	type_check::Types,
+	WINGSDK_ASSEMBLY_NAME,
 };
 pub mod extern_dtsify;
 
@@ -37,16 +42,19 @@ impl<'a> DTSifier<'a> {
 		}
 	}
 
-	pub fn dtsify(&self, source_path: &Utf8Path, scope: &Scope) {
+	pub fn dtsify(&self, source_file: &File, scope: &Scope) {
 		let mut dts = CodeMaker::default();
 
-		if source_path.is_dir() {
-			let directory_children = self.source_file_graph.dependencies_of(source_path);
+		if source_file.path.is_dir() {
+			let directory_children = self.source_file_graph.dependencies_of(source_file);
 
 			for file in directory_children {
-				let preflight_file_name = self.preflight_file_map.get(file).expect("no emitted JS file found");
-				if file.is_dir() {
-					let directory_name = file.file_stem().unwrap();
+				let preflight_file_name = self
+					.preflight_file_map
+					.get(&file.path)
+					.expect("no emitted JS file found");
+				if file.path.is_dir() {
+					let directory_name = file.path.file_stem().unwrap();
 					dts.line(format!("export * as {directory_name} from \"./{preflight_file_name}\""));
 				} else {
 					dts.line(format!("export * from \"./{preflight_file_name}\""));
@@ -63,7 +71,7 @@ impl<'a> DTSifier<'a> {
 			dts.add_code(self.dtsify_statement(statement));
 		}
 
-		let mut dts_file_name = Utf8PathBuf::from(self.preflight_file_map.get(source_path).unwrap());
+		let mut dts_file_name = Utf8PathBuf::from(self.preflight_file_map.get(&source_file.path).unwrap());
 
 		assert!(matches!(dts_file_name.extension(), Some(EMIT_FILE_EXTENSION)));
 

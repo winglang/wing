@@ -19,7 +19,7 @@ use crate::{
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic, DiagnosticSeverity, WingSpan},
 	dtsify::extern_dtsify::ExternDTSifier,
-	file_graph::FileGraph,
+	file_graph::{File, FileGraph},
 	files::Files,
 	parser::{is_entrypoint_file, normalize_path},
 	type_check::{
@@ -67,7 +67,7 @@ const SCOPE_PARAM: &str = "$scope";
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
 	pub visit_ctx: &'a mut VisitContext,
-	pub source_path: Option<&'a Utf8Path>,
+	pub source_file: Option<&'a File>,
 }
 
 pub struct JSifier<'a> {
@@ -133,7 +133,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	pub fn jsify(&mut self, source_path: &Utf8Path, scope: &Scope) {
+	pub fn jsify(&mut self, source_file: &File, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
@@ -142,7 +142,7 @@ impl<'a> JSifier<'a> {
 		let mut jsify_context = JSifyContext {
 			visit_ctx: &mut visit_ctx,
 			lifts: None,
-			source_path: Some(source_path),
+			source_file: Some(source_file),
 		};
 		jsify_context.visit_ctx.push_env(self.types.get_scope_env(&scope));
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
@@ -166,9 +166,9 @@ impl<'a> JSifier<'a> {
 
 		let mut output = CodeMaker::default();
 
-		let is_compilation_init = source_path == self.compilation_init_path;
-		let is_entrypoint = is_entrypoint_file(source_path);
-		let is_directory = source_path.is_dir();
+		let is_compilation_init = source_file.path == self.compilation_init_path;
+		let is_entrypoint = is_entrypoint_file(&source_file.path);
+		let is_directory = source_file.path.is_dir();
 
 		output.line("\"use strict\";");
 
@@ -210,7 +210,7 @@ impl<'a> JSifier<'a> {
 			root_class.line(format!("let {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
 
 			root_class.add_code(imports);
-			root_class.add_code(self.jsify_struct_schemas(source_path));
+			root_class.add_code(self.jsify_struct_schemas(source_file));
 
 			// A global map pointing to the root preflight types map
 			root_class.line(format!("{PREFLIGHT_TYPES_MAP} = {MODULE_PREFLIGHT_TYPES_MAP};"));
@@ -220,14 +220,14 @@ impl<'a> JSifier<'a> {
 			root_class.close("}");
 
 			output.add_code(root_class);
-			let app_name = source_path.file_stem().unwrap();
+			let app_name = source_file.path.file_stem().unwrap();
 			output.line(format!(
 				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
 				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
 			));
 			output.line("$APP.synth();".to_string());
 		} else if is_directory {
-			let directory_children = self.source_file_graph.dependencies_of(source_path);
+			let directory_children = self.source_file_graph.dependencies_of(source_file);
 			let preflight_file_map = self.preflight_file_map.borrow();
 
 			// supposing a directory has a file and a subdirectory in it,
@@ -243,9 +243,9 @@ impl<'a> JSifier<'a> {
 			output.line(format!("const {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
 
 			for file in directory_children {
-				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
-				if file.is_dir() {
-					let directory_name = file.file_stem().unwrap();
+				let preflight_file_name = preflight_file_map.get(&file.path).expect("no emitted JS file found");
+				if file.path.is_dir() {
+					let directory_name = file.path.file_stem().unwrap();
 					output.line(format!(
 						"Object.assign(module.exports, {{ get {directory_name}() {{ return $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP}); }} }});"
 					));
@@ -262,9 +262,9 @@ impl<'a> JSifier<'a> {
 			// This module's preflight type map
 			output.line(format!("let {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
 			output.add_code(imports);
-			output.add_code(self.jsify_struct_schemas(source_path));
+			output.add_code(self.jsify_struct_schemas(source_file));
 			output.add_code(js);
-			let exports = get_public_symbols(&scope);
+			let exports = get_exported_symbols(&scope);
 			output.line(format!(
 				"module.exports = {{ {MODULE_PREFLIGHT_TYPES_MAP}, {} }};",
 				exports.iter().map(ToString::to_string).join(", ")
@@ -276,7 +276,8 @@ impl<'a> JSifier<'a> {
 			PREFLIGHT_FILE_NAME.to_string()
 		} else {
 			// remove all non-alphanumeric characters
-			let sanitized_name = source_path
+			let sanitized_name = source_file
+				.path
 				.file_stem()
 				.unwrap()
 				.chars()
@@ -293,15 +294,15 @@ impl<'a> JSifier<'a> {
 		self
 			.preflight_file_map
 			.borrow_mut()
-			.insert(source_path.to_path_buf(), preflight_file_name.clone());
+			.insert(source_file.path.to_path_buf(), preflight_file_name.clone());
 
 		let sourcemap_path = format!("{}.map", preflight_file_name);
 		output.line(format!("//# sourceMappingURL={sourcemap_path}"));
-		let source_content = self.source_files.get_file(source_path.as_str()).unwrap();
+		let source_content = self.source_files.get_file(source_file.path.as_str()).unwrap();
 
 		let output_base = output.to_string();
 		let output_sourcemap = output.generate_sourcemap(
-			&make_relative_path(self.out_dir.as_str(), source_path.as_str()),
+			&make_relative_path(self.out_dir.as_str(), source_file.path.as_str()),
 			source_content,
 			&preflight_file_name,
 		);
@@ -325,14 +326,14 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_struct_schemas(&self, source_path: &Utf8Path) -> CodeMaker {
+	fn jsify_struct_schemas(&self, source_file: &File) -> CodeMaker {
 		// For each struct schema that is referenced in the code
 		// (this is determined by the StructSchemaVisitor before jsification starts)
 		// we write an inline call to stdlib struct class to instantiate the schema object
 		// preflight root class.
 		let mut code = CodeMaker::default();
 		let file_schemas = self.referenced_struct_schemas.borrow();
-		let Some(file_schemas) = file_schemas.get(source_path) else {
+		let Some(file_schemas) = file_schemas.get(&source_file.path) else {
 			return code;
 		};
 		for (name, schema_code) in file_schemas.iter() {
@@ -679,13 +680,14 @@ impl<'a> JSifier<'a> {
 			ExprKind::Intrinsic(intrinsic) => match intrinsic.kind {
 				IntrinsicKind::Unknown => new_code!(expr_span, ""),
 				IntrinsicKind::Dirname => {
-					let Some(source_path) = ctx.source_path else {
+					let Some(source_path) = ctx.source_file else {
 						// Only happens inflight, so we can assume an error was caught earlier
 						return new_code!(expr_span, "");
 					};
 					let relative_source_path = make_relative_path(
 						self.out_dir.as_str(),
 						source_path
+							.path
 							.parent()
 							.expect("source path is file in a directory")
 							.as_str(),
@@ -839,7 +841,7 @@ impl<'a> JSifier<'a> {
 						let extern_path = Utf8Path::new(&ss);
 
 						// TODO Warn if path does not exist or create it automatically?
-						normalize_path(extern_path, ctx.source_path)
+						normalize_path(extern_path, ctx.source_file.map(|f| f.path.as_path()))
 					} else {
 						report_diagnostic(Diagnostic {
 							message: "Inflight path must be a non-interpolated string literal".to_string(),
@@ -1792,7 +1794,7 @@ impl<'a> JSifier<'a> {
 			let ctx = &mut JSifyContext {
 				lifts,
 				visit_ctx: &mut ctx.visit_ctx,
-				source_path: ctx.source_path,
+				source_file: ctx.source_file,
 			};
 
 			// emit the inflight side of the class into a separate file
@@ -2079,7 +2081,7 @@ impl<'a> JSifier<'a> {
 		code.close("}");
 		code.line(format!("//# sourceMappingURL={sourcemap_file}"));
 
-		let root_source = ctx.source_path.unwrap().to_string();
+		let root_source = ctx.source_file.unwrap().to_string();
 
 		// emit the inflight class to a file
 		match self
@@ -2326,7 +2328,11 @@ fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
 	parent_class_type(ctx).as_class().expect("a class").phase
 }
 
-fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
+/// Get a list of symbols that should be exported in JS from a Wing module (a file with Wing APIs).
+///
+/// Symbols that are public or internal are exported, though internal symbols
+/// should be hidden at a library level.
+fn get_exported_symbols(scope: &Scope) -> Vec<Symbol> {
 	let mut symbols = Vec::new();
 
 	for stmt in &scope.statements {

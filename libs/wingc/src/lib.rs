@@ -14,14 +14,14 @@ use comp_ctx::set_custom_panic_hook;
 use const_format::formatcp;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic, DiagnosticSeverity};
 use dtsify::extern_dtsify::{is_extern_file, ExternDTSifier};
-use file_graph::FileGraph;
+use file_graph::{File, FileGraph};
 use files::Files;
 use fold::Fold;
 use indexmap::IndexMap;
 use jsify::JSifier;
 
 use lifting::LiftVisitor;
-use parser::{is_entrypoint_file, parse_wing_project};
+use parser::{as_wing_library, is_entrypoint_file, parse_wing_project};
 use serde::Serialize;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
@@ -131,6 +131,8 @@ const MACRO_REPLACE_ARGS: &'static str = "$args$";
 const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
 pub const TRUSTED_LIBRARY_NPM_NAMESPACE: &'static str = "@winglibs";
+
+pub const DEFAULT_PACKAGE_NAME: &'static str = "rootpkg";
 
 #[derive(Serialize)]
 pub struct CompilerOutput {
@@ -244,7 +246,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 pub fn type_check(
 	scope: &mut Scope,
 	types: &mut Types,
-	file_path: &Utf8Path,
+	file: &File,
 	file_graph: &FileGraph,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
@@ -253,7 +255,7 @@ pub fn type_check(
 
 	types.set_scope_env(scope, env);
 
-	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
+	let mut tc = TypeChecker::new(types, file, file_graph, jsii_types, jsii_imports);
 	tc.add_jsii_module_to_env(
 		&mut env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
@@ -265,11 +267,11 @@ pub fn type_check(
 	tc.patch_constructs();
 
 	// If the file is an entrypoint file, we add "this" to its symbol environment
-	if is_entrypoint_file(file_path) {
+	if is_entrypoint_file(&file.path) {
 		tc.add_this(&mut env);
 	}
 
-	tc.type_check_file_or_dir(file_path, scope);
+	tc.type_check_file_or_dir(file, scope);
 }
 
 pub fn compile(
@@ -278,7 +280,9 @@ pub fn compile(
 	source_text: Option<String>,
 	out_dir: &Utf8Path,
 ) -> Result<CompilerOutput, ()> {
+	let source_package = as_wing_library(project_dir).unwrap_or_else(|| DEFAULT_PACKAGE_NAME.to_string());
 	let source_path = normalize_path(source_path, None);
+	let source_file = File::new(&source_path, source_package);
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -286,7 +290,7 @@ pub fn compile(
 	let mut tree_sitter_trees = IndexMap::new();
 	let mut asts = IndexMap::new();
 	let topo_sorted_files = parse_wing_project(
-		&source_path,
+		&source_file,
 		source_text,
 		&mut files,
 		&mut file_graph,
@@ -320,7 +324,7 @@ pub fn compile(
 	// Type check all files in topological order (start with files that don't bring any other
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
-		let mut scope = asts.swap_remove(file).expect("matching AST not found");
+		let mut scope = asts.swap_remove(&file.path).expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,
@@ -342,7 +346,7 @@ pub fn compile(
 		let mut json_checker = ValidJsonVisitor::new(&types);
 		json_checker.check(&scope);
 
-		asts.insert(file.clone(), scope);
+		asts.insert(file.path.to_owned(), scope);
 	}
 
 	// Verify that the project dir is absolute
@@ -389,8 +393,8 @@ pub fn compile(
 	// -- JSIFICATION PHASE --
 
 	for file in &topo_sorted_files {
-		let scope = asts.get_mut(file).expect("matching AST not found");
-		jsifier.jsify(file, &scope);
+		let scope = asts.get_mut(&file.path).expect("matching AST not found");
+		jsifier.jsify(&file, &scope);
 	}
 	if !found_errors() {
 		match jsifier.output_files.borrow().emit_files(out_dir) {
@@ -404,8 +408,8 @@ pub fn compile(
 		let preflight_file_map = jsifier.preflight_file_map.borrow();
 		let dtsifier = dtsify::DTSifier::new(&mut types, &preflight_file_map, &mut file_graph);
 		for file in &topo_sorted_files {
-			let scope = asts.get_mut(file).expect("matching AST not found");
-			dtsifier.dtsify(file, &scope);
+			let scope = asts.get_mut(&file.path).expect("matching AST not found");
+			dtsifier.dtsify(&file, &scope);
 		}
 		if !found_errors() {
 			let output_files = dtsifier.output_files.borrow();

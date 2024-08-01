@@ -20,7 +20,7 @@ use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{
 	report_diagnostic, Diagnostic, DiagnosticResult, DiagnosticSeverity, WingLocation, WingSpan, ERR_EXPECTED_SEMICOLON,
 };
-use crate::file_graph::FileGraph;
+use crate::file_graph::{File, FileGraph};
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::{
@@ -34,7 +34,6 @@ use crate::{
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "https://github.com/winglang/wing/issues/434",
 	"Promise" => "https://github.com/winglang/wing/issues/529",
-	"storage_modifier" => "https://github.com/winglang/wing/issues/107",
 	"internal" => "https://github.com/winglang/wing/issues/4156",
 	"await_expression" => "https://github.com/winglang/wing/issues/116",
 	"defer_expression" => "https://github.com/winglang/wing/issues/116",
@@ -147,7 +146,7 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 /// provided text will be used as the source text for the file. This is useful for
 /// the LSP, where the text may not be saved to the disk yet, and for unit tests.
 ///
-/// Internally it parses the initial file, and then recursively parse all of the files that
+/// Internally it parses the initial file, and then recursively parses all of the files that
 /// it depends on, storing all results in the `files`, `file_graph`, `tree_sitter_trees`,
 /// and `asts` parameters. It skips re-parsing any files that have already been parsed. function assumes all of these collections are kept in sync
 /// with each other.
@@ -155,56 +154,49 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 /// Returns a topological ordering of all known Wing files, where each file only depends on
 /// files that come before it in the ordering.
 pub fn parse_wing_project(
-	init_path: &Utf8Path,
+	init_file: &File,
 	init_text: Option<String>,
 	files: &mut Files,
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
-) -> Vec<Utf8PathBuf> {
+) -> Vec<File> {
 	// Parse the initial path (even if we have already seen it before)
-	let dependent_wing_paths = match init_path.is_dir() {
+	let dependent_wing_paths = match init_file.path.is_dir() {
 		true => parse_wing_directory(
-			&init_path,
-			&WingSpan::for_file(init_path.to_string()),
+			&init_file,
+			&WingSpan::for_file(init_file.to_string()),
 			files,
 			file_graph,
 			tree_sitter_trees,
 			asts,
 		),
-		false => parse_wing_file(&init_path, init_text, files, file_graph, tree_sitter_trees, asts),
+		false => parse_wing_file(&init_file, init_text, files, file_graph, tree_sitter_trees, asts),
 	};
 
 	// Store a stack of files that still need parsing
 	let mut unparsed_files = dependent_wing_paths;
 
 	// Parse all remaining files in the project
-	while let Some((file_or_dir_path, source_ref)) = unparsed_files.pop() {
+	while let Some((file_or_dir, source_ref)) = unparsed_files.pop() {
 		// Skip files that we have already seen before (they should already be parsed)
-		if files.contains_file(&file_or_dir_path) {
+		if files.contains_file(&file_or_dir.path) {
 			assert!(
-				tree_sitter_trees.contains_key(&file_or_dir_path),
+				tree_sitter_trees.contains_key(&file_or_dir.path),
 				"files is not in sync with tree_sitter_trees"
 			);
-			assert!(asts.contains_key(&file_or_dir_path), "files is not in sync with asts");
+			assert!(asts.contains_key(&file_or_dir.path), "files is not in sync with asts");
 			assert!(
-				file_graph.contains_file(&file_or_dir_path),
+				file_graph.contains_file(&file_or_dir),
 				"files is not in sync with file_graph"
 			);
 			continue;
 		}
 
 		// Parse the file or directory
-		let dependent_wing_paths = match file_or_dir_path.is_dir() {
-			true => parse_wing_directory(
-				&file_or_dir_path,
-				&source_ref,
-				files,
-				file_graph,
-				tree_sitter_trees,
-				asts,
-			),
-			false => parse_wing_file(&file_or_dir_path, None, files, file_graph, tree_sitter_trees, asts),
+		let dependent_wing_paths = match file_or_dir.path.is_dir() {
+			true => parse_wing_directory(&file_or_dir, &source_ref, files, file_graph, tree_sitter_trees, asts),
+			false => parse_wing_file(&file_or_dir, None, files, file_graph, tree_sitter_trees, asts),
 		};
 
 		// Add the dependent files to the stack of files to parse
@@ -220,7 +212,7 @@ pub fn parse_wing_project(
 			report_diagnostic(Diagnostic {
 				message: format!(
 					"Could not compile \"{}\" due to cyclic bring statements:\n{}",
-					init_path,
+					init_file,
 					formatted_cycle.trim_end()
 				),
 				span: None,
@@ -230,28 +222,28 @@ pub fn parse_wing_project(
 			});
 
 			// return a list of all files just so we can continue type-checking
-			asts.keys().cloned().collect::<Vec<_>>()
+			file_graph.iter_files().cloned().collect::<Vec<_>>()
 		}
 	}
 }
 
 fn parse_wing_file(
-	source_path: &Utf8Path,
+	source_file: &File,
 	source_text: Option<String>,
 	files: &mut Files,
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
-) -> Vec<(Utf8PathBuf, WingSpan)> {
+) -> Vec<(File, WingSpan)> {
 	let source_text = match source_text {
 		Some(text) => text,
-		None => fs::read_to_string(source_path).expect("read_to_string call failed"),
+		None => fs::read_to_string(&source_file.path).expect("read_to_string call failed"),
 	};
 
 	// Update our files collection with the new source text. On a fresh compilation,
 	// this will be the first time we've seen this file. In the LSP we might already have
 	// text from a previous compilation, so we'll replace the contents.
-	files.update_file(&source_path, source_text.clone());
+	files.update_file(&source_file.path, source_text.clone());
 
 	let language = tree_sitter_wing::language();
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
@@ -260,31 +252,33 @@ fn parse_wing_file(
 	let tree_sitter_tree = match tree_sitter_parser.parse(&source_text.as_bytes(), None) {
 		Some(tree) => tree,
 		None => {
-			panic!("Error parsing source file with tree-sitter: {}", source_path);
+			panic!("Error parsing source file with tree-sitter: {}", source_file);
 		}
 	};
 
 	let tree_sitter_root = tree_sitter_tree.root_node();
 
 	// Parse the source text into an AST
-	let parser = Parser::new(&source_text.as_bytes(), source_path.to_owned());
+	let parser = Parser::new(&source_text.as_bytes(), source_file.to_owned());
 	let (scope, dependent_wing_paths) = parser.parse(&tree_sitter_root);
 
 	// Update our collections of trees and ASTs and our file graph
-	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
-	asts.insert(source_path.to_owned(), scope);
-	file_graph.update_file(source_path, dependent_wing_paths.iter().map(|(path, _)| path));
+	tree_sitter_trees.insert(source_file.path.to_owned(), tree_sitter_tree);
+	asts.insert(source_file.path.to_owned(), scope);
+	file_graph.set_file_deps(source_file, dependent_wing_paths.iter().map(|(path, _)| path));
 
 	dependent_wing_paths
 }
 
-fn dir_contains_wing_file(dir_path: &Utf8Path) -> bool {
+/// Returns true if the directory contains any Wing source files (.w), either directly
+/// in the directory or in any subdirectories.
+fn dir_contains_wing_file_recursive(dir_path: &Utf8Path) -> bool {
 	for entry in fs::read_dir(dir_path).unwrap() {
 		let entry = entry.unwrap().path();
 		let path = Utf8Path::from_path(&entry).unwrap();
 
 		if path.is_dir() {
-			if dir_contains_wing_file(&path) {
+			if dir_contains_wing_file_recursive(&path) {
 				return true;
 			}
 		} else if path.extension() == Some("w") {
@@ -308,27 +302,27 @@ fn check_valid_wing_dir_name(dir_path: &Utf8Path) -> bool {
 }
 
 fn parse_wing_directory(
-	source_path: &Utf8Path,
+	source_file: &File,
 	source_ref: &WingSpan,
 	files: &mut Files,
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
-) -> Vec<(Utf8PathBuf, WingSpan)> {
+) -> Vec<(File, WingSpan)> {
 	// Collect a list of all files and subdirectories in the directory
-	let mut files_and_dirs = Vec::new();
+	let mut files_and_dirs: Vec<(File, WingSpan)> = Vec::new();
 
-	if source_path.is_dir() && !dir_contains_wing_file(&source_path) {
+	if source_file.path.is_dir() && !dir_contains_wing_file_recursive(&source_file.path) {
 		report_diagnostic(Diagnostic::new(
 			format!(
 				"Cannot explicitly bring directory with no Wing files \"{}\"",
-				source_path.file_name().unwrap()
+				source_file.path.file_name().unwrap()
 			),
 			source_ref,
 		))
 	}
 
-	for entry in fs::read_dir(&source_path).expect("read_dir call failed") {
+	for entry in fs::read_dir(&source_file.path).expect("read_dir call failed") {
 		let entry = entry.unwrap();
 		let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
 
@@ -338,7 +332,7 @@ fn parse_wing_directory(
 			&& path.file_name() != Some("node_modules")
 			&& path.file_name() != Some(".git")
 			&& path.extension() != Some("tmp"))
-			&& dir_contains_wing_file(&path)
+			&& dir_contains_wing_file_recursive(&path)
 			|| path.extension() == Some("w") && !is_entrypoint_file(&path)
 		{
 			// before we add the path, we need to check that directory names are valid
@@ -353,12 +347,12 @@ fn parse_wing_directory(
 					).hint("Directory names must start with a letter or underscore and contain only letters, numbers, and underscores."));
 				}
 			}
-			files_and_dirs.push((path, source_ref.clone()));
+			files_and_dirs.push((File::new(path, &source_file.package), source_ref.clone()));
 		}
 	}
 
 	// Sort the files and directories so that we always visit them in the same order
-	files_and_dirs.sort();
+	files_and_dirs.sort_by(|(a, _), (b, _)| a.path.cmp(&b.path));
 
 	// Create a fake AST (since the directory doesn't have any source code to parse)
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
@@ -368,10 +362,10 @@ fn parse_wing_directory(
 	let dependent_wing_paths = files_and_dirs;
 
 	// Update our collections of trees and ASTs and our file graph
-	files.update_file(&source_path, "".to_string());
-	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
-	asts.insert(source_path.to_owned(), scope);
-	file_graph.update_file(source_path, dependent_wing_paths.iter().map(|(path, _)| path));
+	files.update_file(&source_file.path, "".to_string());
+	tree_sitter_trees.insert(source_file.path.to_owned(), tree_sitter_tree);
+	asts.insert(source_file.path.to_owned(), scope);
+	file_graph.set_file_deps(source_file, dependent_wing_paths.iter().map(|(path, _)| path));
 
 	dependent_wing_paths
 }
@@ -380,15 +374,16 @@ fn parse_wing_directory(
 pub struct Parser<'a> {
 	/// Source code of the file being parsed
 	pub source: &'a [u8],
-	pub source_name: Utf8PathBuf,
+	pub source_file: File,
+
 	pub error_nodes: RefCell<HashSet<usize>>,
 	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
 	in_json: RefCell<u64>,
 	is_in_mut_json: RefCell<bool>,
 	is_in_loop: RefCell<bool>,
-	/// Track all file paths (and where they appear in the source) that have been found while parsing the current file
+	/// Track all files (and where they appear in the source) that have been found while parsing the current file
 	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
-	referenced_wing_paths: RefCell<Vec<(Utf8PathBuf, WingSpan)>>,
+	referenced_wing_files: RefCell<Vec<(File, WingSpan)>>,
 }
 
 struct ParseErrorBuilder<'s> {
@@ -418,10 +413,10 @@ impl<'a> ParseErrorBuilder<'a> {
 }
 
 impl<'s> Parser<'s> {
-	pub fn new(source: &'s [u8], source_name: Utf8PathBuf) -> Self {
+	pub fn new(source: &'s [u8], source_file: File) -> Self {
 		Self {
 			source,
-			source_name,
+			source_file,
 			error_nodes: RefCell::new(HashSet::new()),
 			is_in_loop: RefCell::new(false),
 			// This is similar to what we do in the type_checker, but we need to know 2 things when
@@ -430,18 +425,18 @@ impl<'s> Parser<'s> {
 			// mutability from the root of the Json literal.
 			in_json: RefCell::new(0),
 			is_in_mut_json: RefCell::new(false),
-			referenced_wing_paths: RefCell::new(Vec::new()),
+			referenced_wing_files: RefCell::new(Vec::new()),
 		}
 	}
 
-	pub fn parse(self, root: &Node) -> (Scope, Vec<(Utf8PathBuf, WingSpan)>) {
+	pub fn parse(self, root: &Node) -> (Scope, Vec<(File, WingSpan)>) {
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root, Phase::Preflight),
 			_ => Scope::empty(),
 		};
 
 		// Module files can only have certain kinds of statements
-		if !is_entrypoint_file(&self.source_name) {
+		if !is_entrypoint_file(&self.source_file.path) {
 			for stmt in &scope.statements {
 				if !is_valid_module_statement(&stmt) {
 					Diagnostic::new(
@@ -454,7 +449,7 @@ impl<'s> Parser<'s> {
 
 		self.report_unhandled_errors(&root);
 
-		(scope, self.referenced_wing_paths.into_inner())
+		(scope, self.referenced_wing_files.into_inner())
 	}
 
 	fn add_error(&self, message: impl ToString, node: &Node) {
@@ -584,7 +579,7 @@ impl<'s> Parser<'s> {
 		WingSpan {
 			start: node_range.start_point.into(),
 			end: node_range.end_point.into(),
-			file_id: self.source_name.to_string(),
+			file_id: self.source_file.to_string(),
 			start_offset: node_range.start_byte,
 			end_offset: node_range.end_byte,
 		}
@@ -1007,8 +1002,8 @@ impl<'s> Parser<'s> {
 		}
 
 		if module_name.name.starts_with("\".") && module_name.name.ends_with("\"") {
-			let source_path = normalize_path(module_path, Some(&Utf8Path::new(&self.source_name)));
-			if source_path == Utf8Path::new(&self.source_name) {
+			let source_path = normalize_path(module_path, Some(&Utf8Path::new(&self.source_file.path)));
+			if source_path == Utf8Path::new(&self.source_file.path) {
 				return self.with_error("Cannot bring a module into itself", &module_name_node);
 			}
 			if !source_path.exists() {
@@ -1031,10 +1026,11 @@ impl<'s> Parser<'s> {
 					);
 				}
 
+				let source_file = File::new(&source_path, &self.source_file.package);
 				self
-					.referenced_wing_paths
+					.referenced_wing_files
 					.borrow_mut()
-					.push((source_path.clone(), module_name.span()));
+					.push((source_file, module_name.span()));
 
 				// parse error if no alias is provided
 				let module = if let Some(alias) = alias {
@@ -1056,10 +1052,11 @@ impl<'s> Parser<'s> {
 
 			// case: directory
 			if source_path.is_dir() {
+				let source_file = File::new(&source_path, &self.source_file.package);
 				self
-					.referenced_wing_paths
+					.referenced_wing_files
 					.borrow_mut()
-					.push((source_path.clone(), module_name.span()));
+					.push((source_file, module_name.span()));
 
 				// parse error if no alias is provided
 				let module = if let Some(alias) = alias {
@@ -1090,14 +1087,14 @@ impl<'s> Parser<'s> {
 			// we need to inspect the npm dependency to figure out if it's a JSII library or a Wing library
 			// first, find where the package.json is located
 			let module_name_parsed = module_name.name[1..module_name.name.len() - 1].to_string();
-			let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
+			let source_dir = Utf8Path::new(&self.source_file.path).parent().unwrap();
 			let module_dir = wingii::util::package_json::find_dependency_directory(&module_name_parsed, &source_dir)
 				.ok_or_else(|| {
 					self
 						.with_error::<Node>(
 							format!(
 								"Unable to load {}: Module not found in \"{}\"",
-								module_name, self.source_name
+								module_name, self.source_file
 							),
 							&statement_node,
 						)
@@ -1105,13 +1102,14 @@ impl<'s> Parser<'s> {
 				})?;
 
 			// If the package.json has a `wing` field, then we treat it as a Wing library
-			if is_wing_library(&Utf8Path::new(&module_dir)) {
+			if let Some(libname) = as_wing_library(&Utf8Path::new(&module_dir)) {
 				return if let Some(alias) = alias {
 					// make sure the Wing library is also parsed
+					let module_file = File::new(&module_dir, &libname);
 					self
-						.referenced_wing_paths
+						.referenced_wing_files
 						.borrow_mut()
-						.push((module_dir.clone(), module_name.span()));
+						.push((module_file, module_name.span()));
 
 					Ok(StmtKind::Bring {
 						source: BringSource::WingLibrary(
@@ -1162,7 +1160,7 @@ impl<'s> Parser<'s> {
 		}
 
 		// check if a trusted library exists with this name
-		let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
+		let source_dir = Utf8Path::new(&self.source_file.path).parent().unwrap();
 		let module_dir = wingii::util::package_json::find_dependency_directory(
 			&format!("{}/{}", TRUSTED_LIBRARY_NPM_NAMESPACE, module_name.name),
 			&source_dir,
@@ -1180,10 +1178,14 @@ impl<'s> Parser<'s> {
 		})?;
 
 		// make sure the trusted library is also parsed
+		let module_file = File::new(
+			&module_dir,
+			format!("{}/{}", TRUSTED_LIBRARY_NPM_NAMESPACE, module_name.name),
+		);
 		self
-			.referenced_wing_paths
+			.referenced_wing_files
 			.borrow_mut()
-			.push((module_dir.clone(), module_name.span()));
+			.push((module_file, module_name.span()));
 
 		Ok(StmtKind::Bring {
 			source: BringSource::TrustedModule(
@@ -1804,7 +1806,7 @@ impl<'s> Parser<'s> {
 		let statements = if let Some(external) = self.get_modifier("extern_modifier", &modifiers)? {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
 			let file_path = Utf8Path::new(&node_text[1..node_text.len() - 1]);
-			let file_path = normalize_path(file_path, Some(&Utf8Path::new(&self.source_name)));
+			let file_path = normalize_path(file_path, Some(&Utf8Path::new(&self.source_file.path)));
 			if !file_path.exists() {
 				self.add_error(format!("File not found: {}", node_text), &external);
 			}
@@ -2751,7 +2753,7 @@ impl<'s> Parser<'s> {
 						end: end_point,
 						end_offset: end_byte,
 						start_offset: end_byte,
-						file_id: self.source_name.to_string(),
+						file_id: self.source_file.to_string(),
 					}),
 					annotations: vec![],
 					hints: vec![],
@@ -2770,7 +2772,7 @@ impl<'s> Parser<'s> {
 						end: end_point,
 						end_offset: end_byte,
 						start_offset: end_byte,
-						file_id: self.source_name.to_string(),
+						file_id: self.source_file.to_string(),
 					}),
 					annotations: vec![],
 					hints: vec![],
@@ -2929,26 +2931,35 @@ fn get_actual_children_by_field_name<'a>(node: Node<'a>, field_name: &str) -> Ve
 	children
 }
 
-/// Check if the package.json in the given directory has a `wing` field
-fn is_wing_library(module_dir: &Utf8Path) -> bool {
+/// Check if the package.json in the given directory has a `wing` field.
+/// If so, return the name of the library.
+pub fn as_wing_library(module_dir: &Utf8Path) -> Option<String> {
 	let package_json_path = Utf8Path::new(module_dir).join("package.json");
 	if !package_json_path.exists() {
-		return false;
+		return None;
 	}
 
 	let package_json = match fs::read_to_string(package_json_path) {
 		Ok(package_json) => package_json,
-		Err(_) => return false,
+		Err(_) => return None,
 	};
 
 	let package_json: serde_json::Value = match serde_json::from_str(&package_json) {
 		Ok(package_json) => package_json,
-		Err(_) => return false,
+		Err(_) => return None,
 	};
 
 	match package_json.get("wing") {
-		Some(_) => true,
-		None => false,
+		Some(_) => {}
+		None => return None,
+	}
+
+	match package_json.get("name") {
+		Some(name) => match name.as_str() {
+			Some(name) => Some(name.to_string()),
+			None => None,
+		},
+		None => None,
 	}
 }
 

@@ -9,13 +9,12 @@ use tree_sitter::Tree;
 
 use crate::closure_transform::ClosureTransformer;
 use crate::diagnostic::{found_errors, reset_diagnostics};
-use crate::file_graph::FileGraph;
+use crate::file_graph::{File, FileGraph};
 use crate::files::Files;
 use crate::fold::Fold;
 use crate::jsify::JSifier;
 use crate::lifting::LiftVisitor;
 use crate::parser::{normalize_path, parse_wing_project};
-use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::type_check::type_reference_transform::TypeReferenceTransformer;
 use crate::type_check_assert::TypeCheckAssert;
@@ -23,6 +22,7 @@ use crate::valid_json_visitor::ValidJsonVisitor;
 use crate::visit::Visit;
 use crate::wasm_util::extern_json_fn;
 use crate::{ast::Scope, type_check::Types};
+use crate::{type_check, DEFAULT_PACKAGE_NAME};
 
 /// The output of compiling a Wing project with one or more files
 pub struct ProjectData {
@@ -130,8 +130,21 @@ fn partial_compile(
 	let source_path = Utf8Path::from_path(source_path).expect("invalid unicode path");
 	let source_path = normalize_path(source_path, None);
 
+	let source_package = if let Some(file) = project_data
+		.file_graph
+		.iter_files()
+		.find(|file| file.path == source_path)
+	{
+		&file.package
+	} else {
+		// If this is our first time seeing the file, we assume it's from the user's root package.
+		// This could be wrong if the user is opening a file inside node_modules, for example.
+		DEFAULT_PACKAGE_NAME
+	};
+	let source_file = File::new(source_path, source_package);
+
 	let topo_sorted_files = parse_wing_project(
-		&source_path,
+		&source_file,
 		Some(source_text),
 		&mut project_data.files,
 		&mut project_data.file_graph,
@@ -144,9 +157,9 @@ fn partial_compile(
 	// Transform all inflight closures defined in preflight into single-method resources
 	for file in &topo_sorted_files {
 		let mut inflight_transformer = ClosureTransformer::new();
-		let scope = project_data.asts.swap_remove(file).unwrap();
+		let scope = project_data.asts.swap_remove(&file.path).unwrap();
 		let new_scope = inflight_transformer.fold_scope(scope);
-		project_data.asts.insert(file.clone(), new_scope);
+		project_data.asts.insert(file.path.clone(), new_scope);
 	}
 
 	// Reset all type information
@@ -158,7 +171,10 @@ fn partial_compile(
 	// Type check all files in topological order (start with files that don't require any other
 	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
-		let mut scope = project_data.asts.swap_remove(file).expect("matching AST not found");
+		let mut scope = project_data
+			.asts
+			.swap_remove(&file.path)
+			.expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,
@@ -180,7 +196,7 @@ fn partial_compile(
 		let mut json_checker = ValidJsonVisitor::new(&types);
 		json_checker.check(&scope);
 
-		project_data.asts.insert(file.clone(), scope);
+		project_data.asts.insert(file.path.clone(), scope);
 	}
 
 	// -- LIFTING PHASE --
@@ -189,15 +205,18 @@ fn partial_compile(
 		&mut types,
 		&project_data.files,
 		&project_data.file_graph,
-		&source_path,
+		&source_file.path,
 		// out_dir will not be used
-		&source_path,
+		&source_file.path,
 	);
 	for file in &topo_sorted_files {
 		let mut lift = LiftVisitor::new(&jsifier);
-		let scope = project_data.asts.swap_remove(file).expect("matching AST not found");
+		let scope = project_data
+			.asts
+			.swap_remove(&file.path)
+			.expect("matching AST not found");
 		lift.visit_scope(&scope);
-		project_data.asts.insert(file.clone(), scope);
+		project_data.asts.insert(file.path.clone(), scope);
 	}
 
 	// no need to JSify in the LSP
