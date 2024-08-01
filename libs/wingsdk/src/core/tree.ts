@@ -141,7 +141,6 @@ export interface UIHttpClient {
 /** @internal */
 export interface UITable {
   readonly kind: "table";
-  readonly label: string;
   readonly scanHandler: string;
 }
 
