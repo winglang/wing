@@ -58,61 +58,47 @@ export const createCompiler = ({
     isCompiling = true;
     await events.emit("compiling");
 
-    const { outputDir, wingcErrors, preflightError, success } =
-      await wing.compile(wingfile, {
+    const { outputDir, wingcErrors, preflightError } = await wing.compile(
+      wingfile,
+      {
         platform,
         testing,
         preflightLog,
-      });
-
-    if (success && wingcErrors.length > 0) {
-      let errorString = await formatWingError(
-        new CompileError(wingcErrors),
-        wingfile,
-      );
-      preflightLog?.(errorString);
-    }
-
-    if (!success) {
-      // There's no point in showing errors if we're going to recompile anyway.
-      if (shouldCompileAgain) {
-        return;
-      }
-
-      let errorString = "";
-      if (wingcErrors.length > 0) {
-        errorString += await formatWingError(
-          new CompileError(wingcErrors),
-          wingfile,
-        );
-      } else if (preflightError) {
-        errorString += await formatWingError(preflightError, wingfile);
-      }
-      await events.emit(
-        "error",
-        new Error(`Failed to compile.\n\n${errorString}`),
-      );
-    }
+      },
+    );
 
     isCompiling = false;
     if (shouldCompileAgain) {
       shouldCompileAgain = false;
       await recompile();
-    }
-
-    if (!success) {
       return;
     }
 
-    if (!outputDir) {
-      await events.emit(
-        "error",
-        new Error("Internal error: outputDir is not defined"),
+    let errorString = "";
+    if (wingcErrors.length > 0) {
+      errorString += await formatWingError(
+        new CompileError(wingcErrors),
+        wingfile,
       );
-      return;
     }
-    simfile = outputDir;
-    await events.emit("compiled", { simfile });
+    if (preflightError) {
+      errorString += await formatWingError(preflightError, wingfile);
+    }
+    if (errorString) {
+      if (outputDir === undefined) {
+        // Emit a blue screen of death error if there is no output directory.
+        await events.emit("error", new Error(errorString));
+        return;
+      } else {
+        // Log the error if there is an output directory.
+        preflightLog?.(errorString);
+      }
+    }
+
+    if (outputDir) {
+      simfile = outputDir;
+      await events.emit("compiled", { simfile });
+    }
   };
 
   const pathsToWatch = [

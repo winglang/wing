@@ -180,8 +180,8 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
     throw error.causedBy;
   }
 
-  if (!compileOutput.success || !compileOutput.outputDir) {
-    // If "success" is false, then one or more errors should have been found, so there must be a logical bug.
+  if (compileOutput.outputDir === undefined) {
+    // If "outputDir" is undefined, then one or more errors should have been found, so there must be a logical bug.
     throw new Error(
       "Internal compilation error. Please report this as a bug on the Wing issue tracker."
     );

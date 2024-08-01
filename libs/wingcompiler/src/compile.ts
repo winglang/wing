@@ -133,7 +133,6 @@ export interface CompileOutput {
   readonly wingcErrors: wingCompiler.WingDiagnostic[];
   // Error that occurred during preflight execution
   readonly preflightError?: PreflightError;
-  readonly success: boolean;
 }
 
 /**
@@ -242,7 +241,6 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     outputDir: !failed ? synthDir : undefined,
     wingcErrors,
     preflightError,
-    success: !failed,
   };
 }
 
