@@ -310,34 +310,25 @@ bring dynamodb;
 bring math;
 
 let table = new dynamodb.Table(
-    hashKey: "key",
-    attributes: [
-        { name: "key", type: "S" },
-    ],
+  hashKey: "key",
+  attributes: [
+    { name: "key", type: "S" },
+  ],
 ) as "dynamodb.Table";
 
-new cloud.Service(inflight () => {
-    table.put(
-        Item: {
-            key: "key",
-            age: 35,
-        },
-    );
-}) as "table-put-item-service";
-
 let visual = new ui.Table(
-    "Data",
-    scan: inflight () => {
-        let output = table.scan();
-        return output.Items;
-    },
+  "Data",
+  scan: inflight () => {
+    let output = table.scan();
+    return output.Items;
+  },
 ) as "ui.Table" in table;
 
 new cloud.Function(inflight () => {
-    table.put(
-        Item: {
-            key: "human_{util.nanoid()}",
-            age: 18 + math.floor(math.random(70)),
-        },
-    );
+  table.put(
+    Item: {
+      key: "human_{util.nanoid()}",
+      age: 20 + math.floor(math.random(30)),
+    },
+  );
 }) as "table-put-item-function";
