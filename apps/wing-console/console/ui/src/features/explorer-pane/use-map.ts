@@ -1,8 +1,7 @@
 import type { MapItem } from "@wingconsole/server";
-import type { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
+import { uniqBy } from "@wingconsole/uniq-by";
 import type { ElkExtendedEdge } from "elkjs";
-import uniqBy from "lodash.uniqby";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import { trpc } from "../../trpc.js";
 

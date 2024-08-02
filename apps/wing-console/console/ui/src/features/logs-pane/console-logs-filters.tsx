@@ -11,9 +11,9 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import type { LogLevel } from "@wingconsole/server";
+import { uniqBy } from "@wingconsole/uniq-by";
 import classNames from "classnames";
 import debounce from "lodash.debounce";
-import uniqby from "lodash.uniqby";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 export const LOG_LEVELS: LogLevel[] = ["verbose", "info", "warn", "error"];
@@ -154,7 +154,7 @@ export const ConsoleLogsFilters = memo(
       if (!resources) {
         return [];
       }
-      const resourceTypes = uniqby(
+      const resourceTypes = uniqBy(
         resources
           .sort((a, b) => a.type?.localeCompare(b.type ?? "") ?? 0)
           .filter((resource) => resource.type !== undefined),

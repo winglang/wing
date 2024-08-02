@@ -1,8 +1,8 @@
 import { ResourceIcon } from "@wingconsole/design-system";
 import type { ExplorerItem } from "@wingconsole/server";
-import uniqBy from "lodash.uniqby";
+import { uniqBy } from "@wingconsole/uniq-by";
 import type { ReactNode } from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { trpc } from "../../trpc.js";
 import { RunningStateIndicator } from "../running-state-indicator/running-state-indicator.js";
