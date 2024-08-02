@@ -2861,6 +2861,8 @@ error: Interface "fixture.InternalInterface" is internal
    |
 34 | internal interface InternalInterface {}
    |                    ----------------- defined here
+   |
+   = hint: the definition of "fixture.InternalInterface" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
 
 
 error: Expected an interface, instead found type "unresolved"
@@ -2880,6 +2882,8 @@ error: Class "fixture.InternalClass" is internal
    |
 36 | internal class InternalClass {
    |                ------------- defined here
+   |
+   = hint: the definition of "fixture.InternalClass" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
 
 
 error: Cannot access internal member "internalStaticMethod" of "PublicClass"
@@ -2934,6 +2938,8 @@ error: Struct "fixture.InternalStruct" is internal
    |
 55 | internal struct InternalStruct {}
    |                 -------------- defined here
+   |
+   = hint: the definition of "fixture.InternalStruct" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
 
 Tests 1 failed (1)
 Snapshots 1 skipped

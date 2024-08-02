@@ -35,7 +35,6 @@ use crate::{
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
-use duplicate::duplicate_item;
 use indexmap::IndexMap;
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
@@ -6222,7 +6221,8 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					if symbol.name == "print" {
 						self.spanned_error(symbol, "Unknown symbol \"print\", did you mean to use \"log\"?");
 					} else {
-						self.type_error(lookup_result_mut_to_type_error(lookup_res, symbol));
+						let lookup_res = env.lookup_ext(symbol, Some(self.ctx.current_stmt_idx()));
+						self.type_error(lookup_result_to_type_error(lookup_res, symbol));
 					}
 					(
 						ResolveReferenceResult::Variable(self.make_error_variable_info()),
@@ -6978,11 +6978,6 @@ fn add_parent_members_to_iface_env(
 	Ok(())
 }
 
-#[duplicate_item(
-	lookup_result_to_type_error LookupResult;
-	[lookup_result_to_type_error] [LookupResult];
-	[lookup_result_mut_to_type_error] [LookupResultMut];
-)]
 fn lookup_result_to_type_error<T>(lookup_result: LookupResult, looked_up_object: &T) -> TypeError
 where
 	T: Spanned + Display,
@@ -7005,34 +7000,46 @@ where
 				hints,
 			}
 		}
-		LookupResult::NotPublic(kind, lookup_info) => TypeError {
-			message: {
-				let access = lookup_info.access.to_string();
-				match kind {
-					SymbolKind::Type(type_) => {
-						if matches!(**type_, Type::Class(_)) {
-							format!("Class \"{looked_up_object}\" is {access}")
-						} else if matches!(**type_, Type::Interface(_)) {
-							format!("Interface \"{looked_up_object}\" is {access}")
-						} else if matches!(**type_, Type::Struct(_)) {
-							format!("Struct \"{looked_up_object}\" is {access}")
-						} else if matches!(**type_, Type::Enum(_)) {
-							format!("Enum \"{looked_up_object}\" is {access}")
-						} else {
-							format!("Symbol \"{looked_up_object}\" is {access}")
+		LookupResult::NotPublic(kind, lookup_info) => {
+			let access = lookup_info.access;
+			let source_package = &lookup_info.env.source_package;
+			TypeError {
+				message: {
+					let access_str = access.to_string();
+					match kind {
+						SymbolKind::Type(type_) => {
+							if matches!(**type_, Type::Class(_)) {
+								format!("Class \"{looked_up_object}\" is {access_str}")
+							} else if matches!(**type_, Type::Interface(_)) {
+								format!("Interface \"{looked_up_object}\" is {access_str}")
+							} else if matches!(**type_, Type::Struct(_)) {
+								format!("Struct \"{looked_up_object}\" is {access_str}")
+							} else if matches!(**type_, Type::Enum(_)) {
+								format!("Enum \"{looked_up_object}\" is {access_str}")
+							} else {
+								format!("Symbol \"{looked_up_object}\" is {access_str}")
+							}
 						}
+						SymbolKind::Variable(_) => format!("Symbol \"{looked_up_object}\" is {access_str}"),
+						SymbolKind::Namespace(_) => format!("namespace \"{looked_up_object}\" is {access_str}"),
 					}
-					SymbolKind::Variable(_) => format!("Symbol \"{looked_up_object}\" is {access}"),
-					SymbolKind::Namespace(_) => format!("namespace \"{looked_up_object}\" is {access}"),
-				}
-			},
-			span: looked_up_object.span(),
-			annotations: vec![DiagnosticAnnotation {
-				message: "defined here".to_string(),
-				span: lookup_info.span,
-			}],
-			hints: vec![],
-		},
+				},
+				span: looked_up_object.span(),
+				annotations: vec![DiagnosticAnnotation {
+					message: "defined here".to_string(),
+					span: lookup_info.span,
+				}],
+				hints: {
+					let mut hints = vec![];
+					if access == AccessModifier::Internal {
+						hints.push(format!(
+						"the definition of \"{looked_up_object}\" needs a broader access modifier like \"pub\" to be used outside of \"{source_package}\"",
+					));
+					}
+					hints
+				},
+			}
+		}
 		LookupResult::MultipleFound => TypeError {
 			message: format!("Ambiguous symbol \"{looked_up_object}\""),
 			span: looked_up_object.span(),
