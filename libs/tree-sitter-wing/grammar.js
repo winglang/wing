@@ -309,16 +309,17 @@ module.exports = grammar({
         field("block", $.block),
         repeat(
           choice(
-            field("elif_let_block", $.elif_let_block),
-            field("elif_block", $.elif_block)
+            field("else_if_let_block", $.else_if_let_block),
+            field("else_if_block", $.else_if_block)
           )
         ),
         optional(seq("else", field("else_block", $.block)))
       ),
 
-    elif_let_block: ($) =>
+    else_if_let_block: ($) =>
       seq(
-        "elif",
+        "else",
+        "if",
         "let",
         optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
@@ -332,12 +333,12 @@ module.exports = grammar({
         "if",
         field("condition", $.expression),
         field("block", $.block),
-        repeat(field("elif_block", $.elif_block)),
+        repeat(field("else_if_block", $.else_if_block)),
         optional(seq("else", field("else_block", $.block)))
       ),
 
-    elif_block: ($) =>
-      seq("elif", field("condition", $.expression), field("block", $.block)),
+    else_if_block: ($) =>
+      seq("else", "if", field("condition", $.expression), field("block", $.block)),
 
     try_catch_statement: ($) =>
       seq(

@@ -274,17 +274,17 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			StmtKind::IfLet(IfLet {
 				var_name,
 				statements,
-				elif_statements,
+				else_if_statements,
 				..
 			}) => {
 				self.push_scope_env(&statements);
 				self.visit_symbol(var_name);
 				self.ctx.pop_env();
 
-				for elif in elif_statements {
-					if let Elifs::ElifLetBlock(elif_let_block) = elif {
-						self.push_scope_env(&elif_let_block.statements);
-						self.visit_symbol(&elif_let_block.var_name);
+				for else_if in else_if_statements {
+					if let ElseIfs::ElseIfLetBlock(else_if_let_block) = else_if {
+						self.push_scope_env(&else_if_let_block.statements);
+						self.visit_symbol(&else_if_let_block.var_name);
 						self.ctx.pop_env();
 					}
 				}

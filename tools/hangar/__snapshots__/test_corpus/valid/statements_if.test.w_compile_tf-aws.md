@@ -138,9 +138,9 @@ class $Root extends $stdlib.std.Resource {
           $helpers.assert(true, "true");
         }
         else {
-          const $elif_let_value1 = c;
-          if ($elif_let_value1 != undefined) {
-            const e = $elif_let_value1;
+          const $else_if_let_value1 = c;
+          if ($else_if_let_value1 != undefined) {
+            const e = $else_if_let_value1;
             $helpers.assert(false, "false");
           }
           else {
@@ -160,9 +160,9 @@ class $Root extends $stdlib.std.Resource {
           $helpers.assert(false, "false");
         }
         else {
-          const $elif_let_value0 = c;
-          if ($elif_let_value0 != undefined) {
-            const e = $elif_let_value0;
+          const $else_if_let_value0 = c;
+          if ($else_if_let_value0 != undefined) {
+            const e = $else_if_let_value0;
             $helpers.assert(true, "true");
           }
           else if ($helpers.neq(b, undefined)) {

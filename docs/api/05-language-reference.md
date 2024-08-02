@@ -1284,8 +1284,8 @@ includes for and while loops currently.
 
 ### 2.5 if
 
-Flow control can be done with `if/elif/else` statements.  
-The **if** statement is optionally followed by **elif** and **else**.  
+Flow control can be done with `if/else if/else` statements.
+The **if** statement is optionally followed by **else if** and **else**.
 
 > ```TS
 > // Wing program:
@@ -1293,7 +1293,7 @@ The **if** statement is optionally followed by **elif** and **else**.
 > let y = "sample";
 > if x == 2 {
 >   log("x is 2");
-> } elif y != "sample" {
+> } else if y != "sample" {
 >   log("y is not sample");
 > } else {
 >   log("x is 1 and y is sample");

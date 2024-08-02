@@ -5,11 +5,11 @@ let grade = (score: num): str => {
     // However, curly braces are required in `if/else` statements.
     if 0 < score && score < 55 {
         return "F";
-    } elif 55 <= score && score < 65 {
+    } else if 55 <= score && score < 65 {
         return "C";
-    } elif 65 <= score && score < 75  {
+    } else if 65 <= score && score < 75  {
         return "B";
-    } elif 75 <= score && score <= 100 {
+    } else if 75 <= score && score <= 100 {
         return "A";
     } else {
         return "Invalid grade";

@@ -88,9 +88,9 @@ class DynamoTable {
   inflight _attributeTypeToString(type: AttributeType): str {
     if type == AttributeType.String {
       return "S";
-    } elif type == AttributeType.Number {
+    } else if type == AttributeType.Number {
       return "N";
-    } elif type == AttributeType.Binary {
+    } else if type == AttributeType.Binary {
       return "B";
     }
   }
