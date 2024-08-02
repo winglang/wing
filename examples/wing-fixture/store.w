@@ -28,3 +28,28 @@ pub class Store {
     this.handlers.push(handler);
   }
 }
+
+pub interface PublicInterface {}
+
+internal interface InternalInterface {}
+
+internal class InternalClass {
+  static internal internalStaticMethod() {}
+}
+
+pub class PublicClass impl PublicInterface, InternalInterface {
+  static internal internalStaticMethod() {}
+  pub publicField: num;
+  internal internalField: num;
+
+  new() {
+    this.publicField = 42;
+    this.internalField = 42;
+  }
+
+  pub publicMethod() {}
+  internal internalMethod() {}
+}
+
+pub struct PublicStruct {}
+internal struct InternalStruct {}

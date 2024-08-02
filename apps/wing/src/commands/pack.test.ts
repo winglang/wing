@@ -210,6 +210,9 @@ describe("wing pack", () => {
       [
         "$preflightTypesMap",
         "FavoriteNumbers",
+        "FavoritePlanets",
+        "InternalClass",
+        "PublicClass",
         "Store",
         "default",
         "subdir",
@@ -234,6 +237,10 @@ describe("wing pack", () => {
 
     expect(Object.keys(tarballContents).sort()).toMatchInlineSnapshot(`
       [
+        "$lib/.wing/inflight.InternalClass-2.cjs",
+        "$lib/.wing/inflight.InternalClass-2.cjs.map",
+        "$lib/.wing/inflight.PublicClass-2.cjs",
+        "$lib/.wing/inflight.PublicClass-2.cjs.map",
         "$lib/.wing/inflight.Store-2.cjs",
         "$lib/.wing/inflight.Store-2.cjs.map",
         "$lib/.wing/inflight.Util-1.cjs",

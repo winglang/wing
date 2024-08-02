@@ -111,6 +111,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
 			let root_ts_node = project_data.trees.get(&file).expect("tree not found").root_node();
 			let root_scope = project_data.asts.get(&file).expect("ast not found");
+			let source_package = project_data.find_source_package(&file);
 
 			let true_point = Point::new(
 				params.text_document_position.position.line as usize,
@@ -235,8 +236,13 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							ObjectAccessContext::Outside
 						};
 
-						let mut completions =
-							get_completions_from_type(&nearest_expr_type, &types, Some(found_env.phase), &access_context);
+						let mut completions = get_completions_from_type(
+							&nearest_expr_type,
+							&types,
+							Some(found_env.phase),
+							&access_context,
+							source_package,
+						);
 						if nearest_expr_type.is_option() {
 							// check to see if we need to add a ? to the completion
 							let replace_node = if node_to_complete_kind == "." {
@@ -317,9 +323,13 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						.ok()
 					{
 						let completions = match lookup_thing {
-							SymbolKind::Type(t) => {
-								get_completions_from_type(&t, &types, Some(found_env.phase), &ObjectAccessContext::Static)
-							}
+							SymbolKind::Type(t) => get_completions_from_type(
+								&t,
+								&types,
+								Some(found_env.phase),
+								&ObjectAccessContext::Static,
+								source_package,
+							),
 							SymbolKind::Variable(v) => {
 								// Handle cases where the parser incorrectly thinks we're in a type reference
 								// This often happens before return statements when returning an anonymous struct literal:
@@ -337,6 +347,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 													&types,
 													Some(found_env.phase),
 													&str_to_access_context(&reference_text),
+													source_package,
 												);
 											}
 										}
@@ -344,7 +355,13 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 									}
 								}
 
-								get_completions_from_type(&v.type_, &types, Some(found_env.phase), &ObjectAccessContext::Static)
+								get_completions_from_type(
+									&v.type_,
+									&types,
+									Some(found_env.phase),
+									&ObjectAccessContext::Static,
+									source_package,
+								)
 							}
 							SymbolKind::Namespace(n) => {
 								// In case the types in this namespace aren't loaded yet, load them now to get completions
@@ -360,7 +377,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 									// Import all types in the namespace by trying to load the "dummy type"
 									import_udt_from_jsii(&mut types, &jsii_types, &udt, &project_data.jsii_imports);
 								});
-								get_completions_from_namespace(&n, Some(found_env.phase))
+								get_completions_from_namespace(&n, Some(found_env.phase), source_package)
 							}
 						};
 
@@ -917,14 +934,15 @@ fn get_completions_from_type(
 	types: &Types,
 	current_phase: Option<Phase>,
 	access_context: &ObjectAccessContext,
+	current_package: &str,
 ) -> Vec<CompletionItem> {
 	let type_ = *type_.maybe_unwrap_option();
 	let type_ = types.maybe_unwrap_inference(type_);
 	match &*type_ {
-		Type::Class(c) => get_completions_from_class(c, current_phase, access_context),
-		Type::Interface(i) => get_completions_from_class(i, current_phase, access_context),
+		Type::Class(c) => get_completions_from_class(c, current_phase, access_context, current_package),
+		Type::Interface(i) => get_completions_from_class(i, current_phase, access_context, current_package),
 		Type::Struct(s) if !matches!(access_context, ObjectAccessContext::Static) => {
-			get_completions_from_class(s, current_phase, access_context)
+			get_completions_from_class(s, current_phase, access_context, current_package)
 		}
 		Type::Enum(enum_) => {
 			let variants = &enum_.values;
@@ -938,12 +956,12 @@ fn get_completions_from_type(
 				})
 				.collect()
 		}
-		Type::Optional(t) => get_completions_from_type(t, types, current_phase, access_context),
+		Type::Optional(t) => get_completions_from_type(t, types, current_phase, access_context, current_package),
 		Type::Void | Type::Function(_) | Type::Anything | Type::Unresolved | Type::Inferred(_) => vec![],
 		_ => {
 			if let Some(lookup) = types.get_std_class(&type_) {
 				let class = lookup.0.as_type_ref().unwrap().as_class().unwrap();
-				get_completions_from_class(class, current_phase, access_context)
+				get_completions_from_class(class, current_phase, access_context, current_package)
 			} else {
 				vec![]
 			}
@@ -954,6 +972,7 @@ fn get_completions_from_type(
 fn get_completions_from_namespace(
 	namespace: &UnsafeRef<Namespace>,
 	current_phase: Option<Phase>,
+	current_package: &str,
 ) -> Vec<CompletionItem> {
 	// If a namespace has a class named "Util", then its members can be accessed directly from
 	// the namespace as a syntactic sugar. e.g. "foo.bar()" is equivalent to "foo.Util.bar()"
@@ -967,6 +986,7 @@ fn get_completions_from_namespace(
 						util_class,
 						current_phase,
 						&ObjectAccessContext::Static,
+						current_package,
 					));
 				}
 			}
@@ -977,7 +997,10 @@ fn get_completions_from_namespace(
 		.envs
 		.iter()
 		.flat_map(|env| env.symbol_map.iter())
-		.filter(|t| matches!(t.1.access, AccessModifier::Public))
+		.filter(|t| {
+			matches!(t.1.access, AccessModifier::Public)
+				|| (matches!(t.1.access, AccessModifier::Internal) && namespace.source_package == current_package)
+		})
 		.flat_map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.kind))
 		.chain(util_completions)
 		.collect()
@@ -988,7 +1011,9 @@ fn get_completions_from_class(
 	class: &impl ClassLike,
 	current_phase: Option<Phase>,
 	access_context: &ObjectAccessContext,
+	current_package: &str,
 ) -> Vec<CompletionItem> {
+	let allow_internal_access = current_package == class.get_env().source_package;
 	class
 		.get_env()
 		.iter(true)
@@ -1003,6 +1028,9 @@ fn get_completions_from_class(
 				// hide private and protected members when accessing from outside the class
 				ObjectAccessContext::Outside => {
 					if matches!(variable.access, AccessModifier::Private | AccessModifier::Protected) {
+						return None;
+					}
+					if matches!(variable.access, AccessModifier::Internal) && !allow_internal_access {
 						return None;
 					}
 				}

@@ -2843,6 +2843,104 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`internal_access_modifiers.test.w 1`] = `
+"error: Expected identifier "fixture" to be a variable, but it's a namespace
+  --> ../../../examples/tests/invalid/internal_access_modifiers.test.w:3:9
+  |
+3 | let e = fixture.FavoritePlanets.MARS;
+  |         ^^^^^^^
+
+
+error: Interface "fixture.InternalInterface" is internal
+   --> ../../../examples/tests/invalid/internal_access_modifiers.test.w:6:22
+   |
+ 6 | class FakeClass impl fixture.InternalInterface {}
+   |                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   --> ../../../examples/tests/invalid/node_modules/@winglibs/testfixture/store.w:34:20
+   |
+34 | internal interface InternalInterface {}
+   |                    ----------------- defined here
+
+
+error: Expected an interface, instead found type "unresolved"
+  --> ../../../examples/tests/invalid/internal_access_modifiers.test.w:6:22
+  |
+6 | class FakeClass impl fixture.InternalInterface {}
+  |                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Class "fixture.InternalClass" is internal
+   --> ../../../examples/tests/invalid/internal_access_modifiers.test.w:9:13
+   |
+ 9 | let i = new fixture.InternalClass();
+   |             ^^^^^^^^^^^^^^^^^^^^^
+   |
+   --> ../../../examples/tests/invalid/node_modules/@winglibs/testfixture/store.w:36:16
+   |
+36 | internal class InternalClass {
+   |                ------------- defined here
+
+
+error: Cannot access internal member "internalStaticMethod" of "PublicClass"
+   --> ../../../examples/tests/invalid/internal_access_modifiers.test.w:12:21
+   |
+12 | fixture.PublicClass.internalStaticMethod();
+   |                     ^^^^^^^^^^^^^^^^^^^^
+   |
+   --> ../../../examples/tests/invalid/node_modules/@winglibs/testfixture/store.w:41:19
+   |
+41 |   static internal internalStaticMethod() {}
+   |                   -------------------- defined here
+   |
+   = hint: the definition of "internalStaticMethod" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
+
+
+error: Cannot access internal member "internalField" of "PublicClass"
+   --> ../../../examples/tests/invalid/internal_access_modifiers.test.w:16:3
+   |
+16 | p.internalField;
+   |   ^^^^^^^^^^^^^
+   |
+   --> ../../../examples/tests/invalid/node_modules/@winglibs/testfixture/store.w:43:12
+   |
+43 |   internal internalField: num;
+   |            ------------- defined here
+   |
+   = hint: the definition of "internalField" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
+
+
+error: Cannot access internal member "internalMethod" of "PublicClass"
+   --> ../../../examples/tests/invalid/internal_access_modifiers.test.w:19:3
+   |
+19 | p.internalMethod();
+   |   ^^^^^^^^^^^^^^
+   |
+   --> ../../../examples/tests/invalid/node_modules/@winglibs/testfixture/store.w:51:12
+   |
+51 |   internal internalMethod() {}
+   |            -------------- defined here
+   |
+   = hint: the definition of "internalMethod" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
+
+
+error: Struct "fixture.InternalStruct" is internal
+   --> ../../../examples/tests/invalid/internal_access_modifiers.test.w:22:9
+   |
+22 | let s = fixture.InternalStruct {};
+   |         ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   --> ../../../examples/tests/invalid/node_modules/@winglibs/testfixture/store.w:55:17
+   |
+55 | internal struct InternalStruct {}
+   |                 -------------- defined here
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`intrinsics.test.w 1`] = `
 "error: @dirname does not expect arguments
   --> ../../../examples/tests/invalid/intrinsics.test.w:6:20

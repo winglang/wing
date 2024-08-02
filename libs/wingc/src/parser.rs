@@ -1944,6 +1944,7 @@ impl<'s> Parser<'s> {
 			Some(access_modifier) => match self.node_text(access_modifier) {
 				"pub" => AccessModifier::Public,
 				"protected" => AccessModifier::Protected,
+				"internal" => AccessModifier::Internal,
 				other => panic!("Unexpected access modifier {}", other),
 			},
 			None => AccessModifier::Private,

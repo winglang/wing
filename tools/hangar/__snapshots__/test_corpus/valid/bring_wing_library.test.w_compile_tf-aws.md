@@ -22,6 +22,32 @@ module.exports = function({ $fixture_Store }) {
 //# sourceMappingURL=inflight.$Closure1-3.cjs.map
 ```
 
+## inflight.InternalClass-2.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({  }) {
+  class InternalClass {
+  }
+  return InternalClass;
+}
+//# sourceMappingURL=inflight.InternalClass-2.cjs.map
+```
+
+## inflight.PublicClass-2.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({  }) {
+  class PublicClass {
+  }
+  return PublicClass;
+}
+//# sourceMappingURL=inflight.PublicClass-2.cjs.map
+```
+
 ## inflight.Store-2.cjs
 ```cjs
 "use strict";
@@ -174,7 +200,14 @@ const FavoriteNumbers =
     return tmp;
   })({})
 ;
-module.exports = { $preflightTypesMap, FavoriteNumbers };
+const FavoritePlanets =
+  (function (tmp) {
+    tmp["MARS"] = "MARS";
+    tmp["JUPITER"] = "JUPITER";
+    return tmp;
+  })({})
+;
+module.exports = { $preflightTypesMap, FavoriteNumbers, FavoritePlanets };
 //# sourceMappingURL=preflight.enums-1.cjs.map
 ```
 
@@ -236,7 +269,51 @@ class Store extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { $preflightTypesMap, Store };
+class InternalClass extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  static internalStaticMethod($scope) {
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.InternalClass-2.cjs")({
+      })
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+class PublicClass extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+    this.publicField = 42;
+    this.internalField = 42;
+  }
+  static internalStaticMethod($scope) {
+  }
+  publicMethod() {
+  }
+  internalMethod() {
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.PublicClass-2.cjs")({
+      })
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+module.exports = { $preflightTypesMap, Store, InternalClass, PublicClass };
 //# sourceMappingURL=preflight.store-3.cjs.map
 ```
 

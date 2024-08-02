@@ -27,10 +27,11 @@ use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_stmt_before_super::{CheckSuperCtorLocationVisitor, CheckValidBeforeSuperVisitor};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, UTIL_CLASS_NAME, WINGSDK_ARRAY,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE,
-	WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, DEFAULT_PACKAGE_NAME,
+	UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC,
+	WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
+	WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -291,8 +292,14 @@ impl Display for SpannedTypeInfo {
 pub struct Namespace {
 	pub name: String,
 
+	/// Environments storing the symbols in this namespace
+	/// Why is this a Vec? Because sometimes a namespace is created from a directory of Wing files,
+	/// in which case each child source file or subdirectory will have its own environment.
 	#[derivative(Debug = "ignore")]
 	pub envs: Vec<SymbolEnvRef>,
+
+	/// The source package of this namespace
+	pub source_package: String,
 
 	/// Where we can resolve this namespace from
 	pub module_path: ResolveSource,
@@ -1452,8 +1459,20 @@ impl Types {
 			inferences: Vec::new(),
 			type_expressions: IndexMap::new(),
 			append_empty_struct_to_arglist: HashSet::new(),
-			libraries: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
-			intrinsics: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0),
+			libraries: SymbolEnv::new(
+				None,
+				SymbolEnvKind::Scope,
+				Phase::Preflight,
+				0,
+				DEFAULT_PACKAGE_NAME.to_string(),
+			),
+			intrinsics: SymbolEnv::new(
+				None,
+				SymbolEnvKind::Scope,
+				Phase::Independent,
+				0,
+				DEFAULT_PACKAGE_NAME.to_string(),
+			),
 			// 1 based to avoid conflict with imported JSII classes. This isn't strictly needed since brought JSII classes are never accessed
 			// through their unique ID, but still good to avoid confusion.
 			class_counter: 1,
@@ -3194,6 +3213,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			},
 			func_def.signature.phase,
 			self.ctx.current_stmt_idx(),
+			self.source_file.package.clone(),
 		));
 		self.add_arguments_to_env(&func_def.signature.parameters, &sig, &mut function_env);
 
@@ -3604,7 +3624,13 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					child_envs.push(*env);
 				}
 				Some(SymbolEnvOrNamespace::Namespace(ns)) => {
-					let mut new_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0);
+					let mut new_env = SymbolEnv::new(
+						None,
+						SymbolEnvKind::Scope,
+						Phase::Independent,
+						0,
+						self.source_file.package.clone(),
+					);
 					new_env
 						.define(
 							&Symbol::global(child_file.path.file_stem().unwrap().to_string()),
@@ -3667,6 +3693,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		let ns = self.types.add_namespace(Namespace {
 			name: source_file.path.file_stem().unwrap().to_string(),
 			envs: child_envs,
+			source_package: source_file.package.clone(),
 			module_path: ResolveSource::WingFile,
 		});
 		self
@@ -3812,6 +3839,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				let ns = self.types.add_namespace(Namespace {
 					name: path.to_string(),
 					envs: vec![brought_env],
+					source_package: self.source_file.package.clone(),
 					module_path: ResolveSource::WingFile,
 				});
 				if let Err(e) = env.define(
@@ -3909,7 +3937,13 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		// Create environment representing this struct, for now it'll be empty just so we can support referencing it
-		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(self.types.void()), env.phase, 0);
+		let dummy_env = SymbolEnv::new(
+			None,
+			SymbolEnvKind::Type(self.types.void()),
+			env.phase,
+			0,
+			self.source_file.package.clone(),
+		);
 
 		// Collect types this struct extends
 		let extends_types = extends
@@ -3952,6 +3986,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			SymbolEnvKind::Type(self.types.void()),
 			env.phase,
 			self.ctx.current_stmt_idx(),
+			self.source_file.package.clone(),
 		);
 
 		// Collect types this interface extends
@@ -4214,6 +4249,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					SymbolEnvKind::Scope,
 					env.phase,
 					stmt.idx,
+					self.source_file.package.clone(),
 				));
 				tc.types.set_scope_env(scope, scope_env);
 				tc.inner_scopes.push((scope, tc.ctx.clone()));
@@ -4265,6 +4301,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			SymbolEnvKind::Scope,
 			env.phase,
 			self.ctx.current_stmt_idx(),
+			self.source_file.package.clone(),
 		));
 		self.types.set_scope_env(try_statements, try_env);
 		self.inner_scopes.push((try_statements, self.ctx.clone()));
@@ -4276,6 +4313,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				SymbolEnvKind::Scope,
 				env.phase,
 				self.ctx.current_stmt_idx(),
+				self.source_file.package.clone(),
 			));
 
 			// Add the exception variable to the catch block
@@ -4303,6 +4341,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				SymbolEnvKind::Scope,
 				env.phase,
 				self.ctx.current_stmt_idx(),
+				self.source_file.package.clone(),
 			));
 			self.types.set_scope_env(finally_statements, finally_env);
 			self.inner_scopes.push((finally_statements, self.ctx.clone()));
@@ -4338,6 +4377,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			SymbolEnvKind::Type(struct_type),
 			Phase::Independent,
 			self.ctx.current_stmt_idx(),
+			self.source_file.package.clone(),
 		);
 
 		// Add fields to the struct env
@@ -4394,6 +4434,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			SymbolEnvKind::Type(interface_type),
 			env.phase,
 			self.ctx.current_stmt_idx(),
+			self.source_file.package.clone(),
 		);
 
 		// Add methods to the interface env
@@ -4481,7 +4522,13 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			self.extract_parent_class(ast_class.parent.as_ref(), ast_class.phase, &ast_class.name, env);
 
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(self.types.void()), env.phase, stmt.idx);
+		let dummy_env = SymbolEnv::new(
+			None,
+			SymbolEnvKind::Type(self.types.void()),
+			env.phase,
+			stmt.idx,
+			self.source_file.package.clone(),
+		);
 
 		let impl_interfaces = ast_class
 			.implements
@@ -4542,7 +4589,13 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		};
 
 		// Create a the real class environment to be filled with the class AST types
-		let mut class_env = SymbolEnv::new(parent_class_env, SymbolEnvKind::Type(class_type), env.phase, stmt.idx);
+		let mut class_env = SymbolEnv::new(
+			parent_class_env,
+			SymbolEnvKind::Type(class_type),
+			env.phase,
+			stmt.idx,
+			self.source_file.package.clone(),
+		);
 
 		// Add fields to the class env
 		for field in ast_class.fields.iter() {
@@ -5019,6 +5072,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				SymbolEnvKind::Scope,
 				env.phase,
 				self.ctx.current_stmt_idx(),
+				self.source_file.package.clone(),
 			));
 			self.types.set_scope_env(else_scope, else_scope_env);
 			self.inner_scopes.push((else_scope, self.ctx.clone()));
@@ -5057,6 +5111,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				SymbolEnvKind::Scope,
 				env.phase,
 				self.ctx.current_stmt_idx(),
+				self.source_file.package.clone(),
 			));
 			self.types.set_scope_env(else_scope, else_scope_env);
 			self.inner_scopes.push((else_scope, self.ctx.clone()));
@@ -5072,6 +5127,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			SymbolEnvKind::Scope,
 			env.phase,
 			self.ctx.current_stmt_idx(),
+			self.source_file.package.clone(),
 		));
 		self.types.set_scope_env(statements, scope_env);
 
@@ -5101,6 +5157,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			SymbolEnvKind::Scope,
 			env.phase,
 			self.ctx.current_stmt_idx(),
+			self.source_file.package.clone(),
 		));
 		match scope_env.define(
 			&iterator,
@@ -5218,6 +5275,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			SymbolEnvKind::Scope,
 			env.phase,
 			self.ctx.current_stmt_idx(),
+			self.source_file.package.clone(),
 		));
 
 		// Add the variable to if block scope
@@ -5246,6 +5304,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			SymbolEnvKind::Scope,
 			env.phase,
 			self.ctx.current_stmt_idx(),
+			self.source_file.package.clone(),
 		));
 		self.types.set_scope_env(statements, if_scope_env);
 		self.inner_scopes.push((statements, self.ctx.clone()));
@@ -5407,6 +5466,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			},
 			method_sig.phase,
 			statement_idx,
+			self.source_file.package.clone(),
 		));
 		// Prime the method environment with `this`
 		if !method_def.is_static || is_init {
@@ -5448,6 +5508,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							SymbolEnvKind::Type(tc.types.void()),
 							method_sig.phase,
 							0,
+							self.source_file.package.clone(),
 						));
 						tc.types
 							.source_file_envs
@@ -5755,7 +5816,13 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			types_map.insert(format!("{o}"), (*o, *n));
 		}
 
-		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(original_type), Phase::Independent, 0);
+		let dummy_env = SymbolEnv::new(
+			None,
+			SymbolEnvKind::Type(original_type),
+			Phase::Independent,
+			0,
+			self.source_file.package.clone(),
+		);
 		let tt = match &*original_type {
 			Type::Class(c) => Type::Class(Class {
 				name: c.name.clone(),
@@ -5791,8 +5858,14 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
 		let mut new_type = self.types.add_type(tt);
-		let new_env =
-			SymbolEnv::new_with_type_params(None, SymbolEnvKind::Type(new_type), Phase::Independent, 0, type_params);
+		let new_env = SymbolEnv::new_with_type_params(
+			None,
+			SymbolEnvKind::Type(new_type),
+			Phase::Independent,
+			0,
+			self.source_file.package.clone(),
+			type_params,
+		);
 
 		// Update the types's env to point to the new env
 		match *new_type {
@@ -6515,24 +6588,27 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			};
 
 			// Check if the class in which the property is defined is one of the classes we're currently nested in
-			let mut private_access = false;
-			let mut protected_access = false;
+			let mut allow_private_access = false;
+			let mut allow_protected_access = false;
 			for current_class in self.ctx.current_class_nesting() {
 				let current_class_type = self
 					.resolve_user_defined_type(&current_class, env, self.ctx.current_stmt_idx())
 					.unwrap();
-				private_access = private_access || current_class_type.is_same_type_as(&property_defined_in);
-				protected_access =
-					protected_access || private_access || current_class_type.is_strict_subtype_of(&property_defined_in);
-				if private_access {
+				allow_private_access = allow_private_access || current_class_type.is_same_type_as(&property_defined_in);
+				allow_protected_access = allow_protected_access
+					|| allow_private_access
+					|| current_class_type.is_strict_subtype_of(&property_defined_in);
+				if allow_private_access {
 					break;
 				}
 			}
 
+			let allow_internal_access = self.source_file.package == lookup_info.env.source_package;
+
 			// Compare the access type with what's allowed
 			match var.access {
 				AccessModifier::Private => {
-					if !private_access {
+					if !allow_private_access {
 						report_diagnostic(Diagnostic {
 							message: format!("Cannot access private member \"{property}\" of \"{class}\""),
 							span: Some(property.span()),
@@ -6548,7 +6624,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					}
 				}
 				AccessModifier::Protected => {
-					if !protected_access {
+					if !allow_protected_access {
 						report_diagnostic(Diagnostic {
 							message: format!("Cannot access protected member \"{property}\" of \"{class}\""),
 							span: Some(property.span()),
@@ -6558,6 +6634,23 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							}],
 							hints: vec![format!(
 								"the definition of \"{property}\" needs a broader access modifier like \"pub\" to be used outside of \"{class}\"",
+							)],
+							severity: DiagnosticSeverity::Error,
+						});
+					}
+				}
+				AccessModifier::Internal => {
+					let other_package = &lookup_info.env.source_package;
+					if !allow_internal_access {
+						report_diagnostic(Diagnostic {
+							message: format!("Cannot access internal member \"{property}\" of \"{class}\""),
+							span: Some(property.span()),
+							annotations: vec![DiagnosticAnnotation {
+								message: "defined here".to_string(),
+								span: lookup_info.span,
+							}],
+							hints: vec![format!(
+								"the definition of \"{property}\" needs a broader access modifier like \"pub\" to be used outside of \"{other_package}\"",
 							)],
 							severity: DiagnosticSeverity::Error,
 						});
@@ -6720,6 +6813,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			SymbolEnvKind::Scope,
 			env.phase,
 			self.ctx.current_stmt_idx(),
+			self.source_file.package.clone(),
 		));
 		self.types.set_scope_env(&lift_quals.statements, scope_env);
 		self.inner_scopes.push((&lift_quals.statements, self.ctx.clone()));

@@ -4,7 +4,8 @@
     "cdktf": "0.20.7",
     "constructs": "^10.3.0",
     "jsii-code-samples": "1.7.0",
-    "jsii-fixture": "workspace:^"
+    "jsii-fixture": "workspace:^",
+    "@winglibs/testfixture": "workspace:^"
   },
   "volta": {
     "extends": "../../../package.json"

@@ -2357,7 +2357,7 @@ fn get_exported_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Assignment { .. } => {}
 			StmtKind::Scope(_) => {}
 			StmtKind::Class(class) => {
-				if class.access == AccessModifier::Public {
+				if class.access == AccessModifier::Public || class.access == AccessModifier::Internal {
 					symbols.push(class.name.clone());
 				}
 			}
@@ -2367,7 +2367,7 @@ fn get_exported_symbols(scope: &Scope) -> Vec<Symbol> {
 			// unless a static method is called on them
 			StmtKind::Struct(_) => {}
 			StmtKind::Enum(enu) => {
-				if enu.access == AccessModifier::Public {
+				if enu.access == AccessModifier::Public || enu.access == AccessModifier::Internal {
 					symbols.push(enu.name.clone());
 				}
 			}
