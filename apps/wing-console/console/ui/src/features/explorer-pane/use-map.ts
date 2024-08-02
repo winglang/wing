@@ -1,5 +1,5 @@
 import type { MapItem } from "@wingconsole/server";
-import { uniqBy } from "@wingconsole/uniq-by";
+import { uniqBy } from "@wingconsole/utilities";
 import type { ElkExtendedEdge } from "elkjs";
 import { useCallback, useMemo } from "react";
 

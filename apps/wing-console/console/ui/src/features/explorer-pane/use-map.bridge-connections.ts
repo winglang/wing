@@ -1,4 +1,4 @@
-import { uniqBy } from "@wingconsole/uniq-by";
+import { uniqBy } from "@wingconsole/utilities";
 
 export type Connection<T> = {
   source: T;
