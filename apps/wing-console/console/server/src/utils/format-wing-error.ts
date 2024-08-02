@@ -14,7 +14,7 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
       const result = [];
 
       for (const error of errors) {
-        const { message, span, annotations, hints } = error;
+        const { message, span, annotations, hints, severity } = error;
         const files: File[] = [];
         const labels: Label[] = [];
         const cwd = process.cwd();
@@ -59,7 +59,7 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
           files,
           {
             message,
-            severity: "error",
+            severity,
             labels,
             notes: hints.map((hint) => `hint: ${hint}`),
           },

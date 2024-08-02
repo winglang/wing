@@ -159,10 +159,10 @@ if false {} else {}
     else_block: (block)))
 
 ================================================================================
-If Elif Else
+If Else If Else
 ================================================================================
 
-if false {} elif false {} else {}
+if false {} else if false {} else {}
 
 --------------------------------------------------------------------------------
 
@@ -170,16 +170,16 @@ if false {} elif false {} else {}
   (if_statement
     condition: (bool)
     block: (block)
-    elif_block: (elif_block
+    else_if_block: (else_if_block
       condition: (bool)
       block: (block))
     else_block: (block)))
 
 ================================================================================
-If More Than One Elif Else
+If More Than One Else If Else
 ================================================================================
 
-if false {} elif false {} elif true {} else {}
+if false {} else if false {} else if true {} else {}
 
 --------------------------------------------------------------------------------
 
@@ -187,10 +187,10 @@ if false {} elif false {} elif true {} else {}
   (if_statement
     condition: (bool)
     block: (block)
-    elif_block: (elif_block
+    else_if_block: (else_if_block
       condition: (bool)
       block: (block))
-    elif_block: (elif_block
+    else_if_block: (else_if_block
       condition: (bool)
       block: (block))
     else_block: (block)))
@@ -447,10 +447,10 @@ if let x = y {} else {}
     else_block: (block)))
 
 ================================================================================
-If Let Elif Let Else
+If Let Else If Let Else
 ================================================================================
 
-if let x = y {} elif let x = z {} else {}
+if let x = y {} else if let x = z {} else {}
 
 --------------------------------------------------------------------------------
 
@@ -460,7 +460,7 @@ if let x = y {} elif let x = z {} else {}
     value: (reference
       (reference_identifier))
     block: (block)
-    elif_let_block: (elif_let_block
+    else_if_let_block: (else_if_let_block
       name: (identifier)
       value: (reference
         (reference_identifier))
@@ -468,10 +468,10 @@ if let x = y {} elif let x = z {} else {}
     else_block: (block)))
 
 ================================================================================
-(If Let) (Elif) (Elif Let) (Else)
+(If Let) (Else If) (Else If Let) (Else)
 ================================================================================
 
-if let x = y {} elif let x = z {} else {}
+if let x = y {} else if let x = z {} else {}
 
 --------------------------------------------------------------------------------
 
@@ -481,7 +481,7 @@ if let x = y {} elif let x = z {} else {}
     value: (reference
       (reference_identifier))
     block: (block)
-    elif_let_block: (elif_let_block
+    else_if_let_block: (else_if_let_block
       name: (identifier)
       value: (reference
         (reference_identifier))
@@ -489,10 +489,10 @@ if let x = y {} elif let x = z {} else {}
     else_block: (block)))
 
 ================================================================================
-(If Let) (Elif Let) (Elif) (Else)
+(If Let) (Else If Let) (Else If) (Else)
 ================================================================================
 
-if let x = y {} elif let x = z {} elif v {} else {}
+if let x = y {} else if let x = z {} else if v {} else {}
 
 --------------------------------------------------------------------------------
 
@@ -502,12 +502,12 @@ if let x = y {} elif let x = z {} elif v {} else {}
     value: (reference
       (reference_identifier))
     block: (block)
-    elif_let_block: (elif_let_block
+    else_if_let_block: (else_if_let_block
       name: (identifier)
       value: (reference
         (reference_identifier))
       block: (block))
-    elif_block: (elif_block
+    else_if_block: (else_if_block
       condition: (reference
         (reference_identifier))
       block: (block))

@@ -11,7 +11,7 @@ use crate::ast::{
 	FunctionDefinition, IfLet, Intrinsic, IntrinsicKind, New, TypeAnnotationKind,
 };
 use crate::ast::{
-	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
+	ArgList, BinaryOperator, Class as AstClass, ElseIfs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
 	FunctionParameter as AstFunctionParameter, Interface as AstInterface, InterpolatedStringPart, Literal, Phase,
 	Reference, Scope, Spanned, Stmt, StmtKind, Struct as AstStruct, Symbol, TypeAnnotation, UnaryOperator,
 	UserDefinedType,
@@ -4194,10 +4194,10 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			StmtKind::If {
 				condition,
 				statements,
-				elif_statements,
+				else_if_statements,
 				else_statements,
 			} => {
-				tc.type_check_if(condition, statements, elif_statements, else_statements, env);
+				tc.type_check_if(condition, statements, else_if_statements, else_statements, env);
 			}
 			StmtKind::Expression(e) => {
 				tc.type_check_exp(e, env);
@@ -5003,14 +5003,14 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		&mut self,
 		condition: &Expr,
 		statements: &Scope,
-		elif_statements: &Vec<ast::ElifBlock>,
+		else_if_statements: &Vec<ast::ElseIfBlock>,
 		else_statements: &Option<Scope>,
 		env: &mut SymbolEnv,
 	) {
 		self.type_check_if_statement(condition, statements, env);
 
-		for elif_scope in elif_statements {
-			self.type_check_if_statement(&elif_scope.condition, &elif_scope.statements, env);
+		for else_if_scope in else_if_statements {
+			self.type_check_if_statement(&else_if_scope.condition, &else_if_scope.statements, env);
 		}
 
 		if let Some(else_scope) = else_statements {
@@ -5034,17 +5034,17 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			env,
 		);
 
-		for elif_scope in &iflet.elif_statements {
-			match elif_scope {
-				Elifs::ElifBlock(elif_block) => {
-					self.type_check_if_statement(&elif_block.condition, &elif_block.statements, env);
+		for else_if_scope in &iflet.else_if_statements {
+			match else_if_scope {
+				ElseIfs::ElseIfBlock(else_if_block) => {
+					self.type_check_if_statement(&else_if_block.condition, &else_if_block.statements, env);
 				}
-				Elifs::ElifLetBlock(elif_let_block) => {
+				ElseIfs::ElseIfLetBlock(else_if_let_block) => {
 					self.type_check_if_let_statement(
-						&elif_let_block.value,
-						&elif_let_block.statements,
-						&elif_let_block.reassignable,
-						&elif_let_block.var_name,
+						&else_if_let_block.value,
+						&else_if_let_block.statements,
+						&else_if_let_block.reassignable,
+						&else_if_let_block.var_name,
 						env,
 					);
 				}

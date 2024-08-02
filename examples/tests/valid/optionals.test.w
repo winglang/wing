@@ -60,9 +60,9 @@ let json_obj = Json { ghost: "spooky" };
 let var something_else = false;
 if let y = json_obj.tryAsBool() {
   assert(y == true || y == false);
-} elif let y = json_obj.tryAsNum() {
+} else if let y = json_obj.tryAsNum() {
   assert(y + 0 == y);
-} elif let y = json_obj.tryAsStr() {
+} else if let y = json_obj.tryAsStr() {
   assert(y.length >= 0);
 } else {
   something_else = true;
@@ -199,7 +199,7 @@ let str2: str? = nil;
 
 if let s1 = str1 {
   assert(false); // Should not happen
-} elif let s2 = str2 {
+} else if let s2 = str2 {
   assert(true);
 }
 

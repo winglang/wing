@@ -1,5 +1,5 @@
 use crate::ast::{
-	ArgList, BringSource, CalleeKind, Class, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	ArgList, BringSource, CalleeKind, Class, ElseIfs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition,
 	FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt,
 	StmtKind, Struct, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 };
@@ -141,22 +141,22 @@ where
 			statements,
 			reassignable: _,
 			var_name,
-			elif_statements,
+			else_if_statements,
 			else_statements,
 		}) => {
 			v.visit_symbol(var_name);
 			v.visit_expr(value);
 			v.visit_scope(statements);
-			for elif in elif_statements {
-				match elif {
-					Elifs::ElifBlock(elif_block) => {
-						v.visit_expr(&elif_block.condition);
-						v.visit_scope(&elif_block.statements);
+			for else_if in else_if_statements {
+				match else_if {
+					ElseIfs::ElseIfBlock(else_if_block) => {
+						v.visit_expr(&else_if_block.condition);
+						v.visit_scope(&else_if_block.statements);
 					}
-					Elifs::ElifLetBlock(elif_let_block) => {
-						v.visit_symbol(&elif_let_block.var_name);
-						v.visit_expr(&elif_let_block.value);
-						v.visit_scope(&elif_let_block.statements);
+					ElseIfs::ElseIfLetBlock(else_if_let_block) => {
+						v.visit_symbol(&else_if_let_block.var_name);
+						v.visit_expr(&else_if_let_block.value);
+						v.visit_scope(&else_if_let_block.statements);
 					}
 				}
 			}
@@ -167,14 +167,14 @@ where
 		StmtKind::If {
 			condition,
 			statements,
-			elif_statements,
+			else_if_statements,
 			else_statements,
 		} => {
 			v.visit_expr(condition);
 			v.visit_scope(statements);
-			for elif in elif_statements {
-				v.visit_expr(&elif.condition);
-				v.visit_scope(&elif.statements);
+			for else_if in else_if_statements {
+				v.visit_expr(&else_if.condition);
+				v.visit_scope(&else_if.statements);
 			}
 			if let Some(statements) = else_statements {
 				v.visit_scope(statements);

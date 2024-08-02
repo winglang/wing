@@ -12,7 +12,7 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Enum,
+		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElseIfs, Enum,
 		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, IntrinsicKind, Literal, New,
 		Phase, Reference, Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
@@ -1093,16 +1093,16 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	// To avoid a performance penalty when evaluating assignments made in the elif statement,
+	// To avoid a performance penalty when evaluating assignments made in the else if statement,
 	// it was necessary to nest the if statements.
 	//
 	// Thus, this code in Wing:
 	//
 	// if let x = tryA() {
 	//  ...
-	// } elif let x = tryB() {
+	// } else if let x = tryB() {
 	// 	 ...
-	// } elif let x = TryC() {
+	// } else if let x = TryC() {
 	// 	 ...
 	// } else {
 	// 	...
@@ -1114,65 +1114,70 @@ impl<'a> JSifier<'a> {
 	// if ($if_let_value !== undefined) {
 	// 	...
 	// } else {
-	// 	let $elif_let_value0 = tryB();
-	// 	if ($elif_let_value0 !== undefined) {
+	// 	let $else_if_let_value0 = tryB();
+	// 	if ($else_if_let_value0 !== undefined) {
 	// 		 ...
 	// 	} else {
-	// 		 let $elif_let_value1 = tryC();
-	// 		 if ($elif_let_value1 !== undefined) {
+	// 		 let $else_if_let_value1 = tryC();
+	// 		 if ($else_if_let_value1 !== undefined) {
 	// 				...
 	// 		 } else {
 	// 				...
 	// 		 }
 	// 	}
 	// }
-	fn jsify_elif_statements(
+	fn jsify_else_if_statements(
 		&self,
 		code: &mut CodeMaker,
-		elif_statements: &Vec<Elifs>,
+		else_if_statements: &Vec<ElseIfs>,
 		index: usize,
 		else_statements: &Option<Scope>,
 		ctx: &mut JSifyContext,
 	) {
-		match elif_statements.get(index).unwrap() {
-			Elifs::ElifLetBlock(elif_let_to_jsify) => {
-				// Emit a JavaScript "else {" for each Wing "elif_let_block",
+		match else_if_statements.get(index).unwrap() {
+			ElseIfs::ElseIfLetBlock(else_if_let_to_jsify) => {
+				// Emit a JavaScript "else {" for each Wing "else_if_let_block",
 				// and emit the closing "}" bracket in jsify_statement()'s StmtKind::IfLet match case
 				code.open("else {");
-				let elif_let_value = "$elif_let_value";
+				let else_if_let_value = "$else_if_let_value";
 
-				let value = format!("{}{}", elif_let_value, index);
+				let value = format!("{}{}", else_if_let_value, index);
 
 				code.line(new_code!(
-					&elif_let_to_jsify.value.span,
+					&else_if_let_to_jsify.value.span,
 					"const ",
 					value,
 					" = ",
-					self.jsify_expression(&elif_let_to_jsify.value, ctx),
+					self.jsify_expression(&else_if_let_to_jsify.value, ctx),
 					";"
 				));
-				let value = format!("{}{}", elif_let_value, index);
+				let value = format!("{}{}", else_if_let_value, index);
 				code.open(format!("if ({value} != undefined) {{"));
-				if elif_let_to_jsify.reassignable {
-					code.line(format!("let {} = {};", elif_let_to_jsify.var_name, value));
+				if else_if_let_to_jsify.reassignable {
+					code.line(format!("let {} = {};", else_if_let_to_jsify.var_name, value));
 				} else {
-					code.line(format!("const {} = {};", elif_let_to_jsify.var_name, value));
+					code.line(format!("const {} = {};", else_if_let_to_jsify.var_name, value));
 				}
 
-				code.add_code(self.jsify_scope_body(&elif_let_to_jsify.statements, ctx));
+				code.add_code(self.jsify_scope_body(&else_if_let_to_jsify.statements, ctx));
 				code.close("}");
 			}
-			Elifs::ElifBlock(elif_to_jsify) => {
-				let condition = self.jsify_expression(&elif_to_jsify.condition, ctx);
+			ElseIfs::ElseIfBlock(else_if_to_jsify) => {
+				let condition = self.jsify_expression(&else_if_to_jsify.condition, ctx);
 				// TODO: this puts the "else if" in a separate line from the closing block but
 				// technically that shouldn't be a problem, its just ugly
-				code.open(new_code!(&elif_to_jsify.condition.span, "else if (", condition, ") {"));
-				code.add_code(self.jsify_scope_body(&elif_to_jsify.statements, ctx));
+				code.open(new_code!(
+					&else_if_to_jsify.condition.span,
+					"else if (",
+					condition,
+					") {"
+				));
+				code.add_code(self.jsify_scope_body(&else_if_to_jsify.statements, ctx));
 				code.close("}");
 			}
 		}
-		if index < elif_statements.len() - 1 {
-			self.jsify_elif_statements(code, elif_statements, index + 1, else_statements, ctx);
+		if index < else_if_statements.len() - 1 {
+			self.jsify_else_if_statements(code, else_if_statements, index + 1, else_statements, ctx);
 		} else if let Some(else_scope) = else_statements {
 			code.open("else {");
 			code.add_code(self.jsify_scope_body(else_scope, ctx));
@@ -1294,7 +1299,7 @@ impl<'a> JSifier<'a> {
 				value,
 				statements,
 				var_name,
-				elif_statements,
+				else_if_statements,
 				else_statements,
 			}) => {
 				// To enable shadowing variables in if let statements, the following does some scope trickery
@@ -1344,13 +1349,13 @@ impl<'a> JSifier<'a> {
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
 
-				if elif_statements.len() > 0 {
-					self.jsify_elif_statements(&mut code, elif_statements, 0, else_statements, ctx);
-					for elif_statement in elif_statements {
-						if let Elifs::ElifLetBlock(_) = elif_statement {
-							// "elif_let_block" statements emit "else {" in jsify_elif_statements(),
+				if else_if_statements.len() > 0 {
+					self.jsify_else_if_statements(&mut code, else_if_statements, 0, else_statements, ctx);
+					for else_if_statement in else_if_statements {
+						if let ElseIfs::ElseIfLetBlock(_) = else_if_statement {
+							// "else_if_let_block" statements emit "else {" in jsify_else_if_statements(),
 							//  but no closing bracket "}". The closing brackets are emitted here instead to
-							// deal with properly nesting "elif_let_block", "elif_block", and "else" statements
+							// deal with properly nesting "else_if_let_block", "else_if_block", and "else" statements
 							code.close("}");
 						}
 					}
@@ -1365,7 +1370,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::If {
 				condition,
 				statements,
-				elif_statements,
+				else_if_statements,
 				else_statements,
 			} => {
 				code.open(new_code!(
@@ -1377,12 +1382,12 @@ impl<'a> JSifier<'a> {
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
 
-				for elif_block in elif_statements {
-					let condition = self.jsify_expression(&elif_block.condition, ctx);
+				for else_if_block in else_if_statements {
+					let condition = self.jsify_expression(&else_if_block.condition, ctx);
 					// TODO: this puts the "else if" in a separate line from the closing block but
 					// technically that shouldn't be a problem, its just ugly
-					code.open(new_code!(&elif_block.condition.span, "else if (", condition, ") {"));
-					code.add_code(self.jsify_scope_body(&elif_block.statements, ctx));
+					code.open(new_code!(&else_if_block.condition.span, "else if (", condition, ") {"));
+					code.add_code(self.jsify_scope_body(&else_if_block.statements, ctx));
 					code.close("}");
 				}
 

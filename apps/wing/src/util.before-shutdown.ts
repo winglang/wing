@@ -1,4 +1,4 @@
-import once from "lodash.once";
+import { once } from "./util.once";
 
 /**
  * Based on https://gist.github.com/nfantone/1eaa803772025df69d07f4dbf5df7e58.

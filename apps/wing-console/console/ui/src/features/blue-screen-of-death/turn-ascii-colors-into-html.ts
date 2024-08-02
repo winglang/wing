@@ -1,4 +1,4 @@
-import escape from "lodash.escape";
+import { escapeHtml } from "@wingconsole/utilities";
 
 export type AsciiColor =
   | "black"
@@ -58,6 +58,6 @@ export const turnAsciiColorsIntoHtml = (
     } else if (color) {
       return `<span ${colorsTransform(color)}>`;
     }
-    return options?.escapeHtml === false ? match : escape(match);
+    return options?.escapeHtml === false ? match : escapeHtml(match);
   });
 };

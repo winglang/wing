@@ -6,11 +6,11 @@ if true {
   if true && x + 2 == 4 {
     if true && x + 3 == 4 {
       assert(false);
-    } elif true && x + 3 == 6 {
+    } else if true && x + 3 == 6 {
       assert(false);
-    } elif false || x + 3 == 5 {
+    } else if false || x + 3 == 5 {
       assert(true);
-    } elif !f {
+    } else if !f {
       assert(!!!f);
     } else {
       assert(false);
@@ -26,9 +26,9 @@ test "test" {
     if true && x + 2 == 4 {
       if true && x + 3 == 4 {
         assert(false);
-      } elif true && x + 3 == 6 {
+      } else if true && x + 3 == 6 {
         assert(false);
-      } elif false || x + 3 == 5 {
+      } else if false || x + 3 == 5 {
         assert(true);
       } else {
         assert(false);
@@ -45,9 +45,9 @@ if true {
   let c: str? = "c";
   if let d = a {
     assert(false);
-  } elif b != nil {
+  } else if b != nil {
     assert(true);
-  } elif let e = c {
+  } else if let e = c {
     assert(false);
   } else {
     assert(false);
@@ -60,9 +60,9 @@ if true {
   let c: str? = "c";
   if let d = a {
     assert(false);
-  } elif let e = c {
+  } else if let e = c {
     assert(true);
-  } elif b != nil {
+  } else if b != nil {
     assert(false);
   } else {
     assert(false);

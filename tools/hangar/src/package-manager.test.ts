@@ -19,7 +19,7 @@ test("warning is emitted when an unsupported package manager is used", async () 
     wingFile: wingFile,
     platforms: ["sim"],
     args: ["compile"],
-    expectFailure: true,
+    expectFailure: false,
   });
 
   expect(out.stdout).toMatchSnapshot();

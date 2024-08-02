@@ -276,15 +276,15 @@ class $Root extends $stdlib.std.Resource {
         $helpers.assert(($helpers.eq(y, true) || $helpers.eq(y, false)), "y == true || y == false");
       }
       else {
-        const $elif_let_value0 = $macros.__Json_tryAsNum(false, json_obj, );
-        if ($elif_let_value0 != undefined) {
-          const y = $elif_let_value0;
+        const $else_if_let_value0 = $macros.__Json_tryAsNum(false, json_obj, );
+        if ($else_if_let_value0 != undefined) {
+          const y = $else_if_let_value0;
           $helpers.assert($helpers.eq((y + 0), y), "y + 0 == y");
         }
         else {
-          const $elif_let_value1 = $macros.__Json_tryAsStr(false, json_obj, );
-          if ($elif_let_value1 != undefined) {
-            const y = $elif_let_value1;
+          const $else_if_let_value1 = $macros.__Json_tryAsStr(false, json_obj, );
+          if ($else_if_let_value1 != undefined) {
+            const y = $else_if_let_value1;
             $helpers.assert((y.length >= 0), "y.length >= 0");
           }
           else {
@@ -407,9 +407,9 @@ class $Root extends $stdlib.std.Resource {
         $helpers.assert(false, "false");
       }
       else {
-        const $elif_let_value0 = str2;
-        if ($elif_let_value0 != undefined) {
-          const s2 = $elif_let_value0;
+        const $else_if_let_value0 = str2;
+        if ($else_if_let_value0 != undefined) {
+          const s2 = $else_if_let_value0;
           $helpers.assert(true, "true");
         }
       }
