@@ -129,7 +129,7 @@ impl<'a> LiftVisitor<'a> {
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
-				source_path: None,
+				source_file: None,
 			},
 		);
 		self.ctx.pop_phase();
@@ -144,7 +144,7 @@ impl<'a> LiftVisitor<'a> {
 				&mut JSifyContext {
 					lifts: None,
 					visit_ctx: &mut self.ctx,
-					source_path: None,
+					source_file: None,
 				},
 			)
 			.to_string();

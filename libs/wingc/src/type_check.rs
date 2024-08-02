@@ -19,7 +19,7 @@ use crate::ast::{
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, DiagnosticSeverity, TypeError, WingSpan};
 use crate::docs::Docs;
-use crate::file_graph::FileGraph;
+use crate::file_graph::{File, FileGraph};
 use crate::type_check::has_type_stmt::HasStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit::Visit;
@@ -1814,10 +1814,10 @@ pub struct TypeChecker<'a> {
 	/// so all nodes implement some basic "tree" interface. For now this is good enough.
 	inner_scopes: Vec<(*const Scope, VisitContext)>,
 
-	/// The path to the source file being type checked.
-	source_path: &'a Utf8Path,
+	/// The source file (or directory) being type checked.
+	source_file: &'a File,
 
-	/// The file graph of the compilation.
+	/// The file graph of the entire project compilation.
 	file_graph: &'a FileGraph,
 
 	/// JSII Manifest descriptions to be imported.
@@ -1835,7 +1835,7 @@ pub struct TypeChecker<'a> {
 impl<'a> TypeChecker<'a> {
 	pub fn new(
 		types: &'a mut Types,
-		source_path: &'a Utf8Path,
+		source_file: &'a File,
 		file_graph: &'a FileGraph,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
@@ -1844,7 +1844,7 @@ impl<'a> TypeChecker<'a> {
 			types,
 			inner_scopes: vec![],
 			jsii_types,
-			source_path,
+			source_file,
 			file_graph,
 			jsii_imports,
 			is_in_mut_json: false,
@@ -3573,12 +3573,12 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		first_expected_type
 	}
 
-	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {
+	pub fn type_check_file_or_dir(&mut self, source_file: &File, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
-		if source_path.is_dir() {
-			self.type_check_dir(source_path);
+		if source_file.path.is_dir() {
+			self.type_check_dir(source_file);
 			return;
 		}
 
@@ -3588,18 +3588,18 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		self
 			.types
 			.source_file_envs
-			.insert(source_path.to_owned(), SymbolEnvOrNamespace::SymbolEnv(scope_env));
+			.insert(source_file.path.to_owned(), SymbolEnvOrNamespace::SymbolEnv(scope_env));
 	}
 
-	pub fn type_check_dir(&mut self, source_path: &Utf8Path) {
+	pub fn type_check_dir(&mut self, source_file: &File) {
 		// Get a list of all children paths (files or directories) through the file graph
-		let children = self.file_graph.dependencies_of(source_path);
+		let children = self.file_graph.dependencies_of(source_file);
 
 		// Obtain each child's symbol environment or namespace
 		// If it's a namespace (i.e. it's a directory), wrap it in a symbol env
 		let mut child_envs = vec![];
-		for child_path in children.iter() {
-			match self.types.source_file_envs.get(*child_path) {
+		for child_file in children.into_iter() {
+			match self.types.source_file_envs.get(&child_file.path) {
 				Some(SymbolEnvOrNamespace::SymbolEnv(env)) => {
 					child_envs.push(*env);
 				}
@@ -3607,7 +3607,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					let mut new_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0);
 					new_env
 						.define(
-							&Symbol::global(child_path.file_stem().unwrap().to_string()),
+							&Symbol::global(child_file.path.file_stem().unwrap().to_string()),
 							SymbolKind::Namespace(*ns),
 							AccessModifier::Public,
 							StatementIdx::Top,
@@ -3617,17 +3617,17 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					child_envs.push(wrapper_env);
 				}
 				Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
-					self
-						.types
-						.source_file_envs
-						.insert(source_path.to_owned(), SymbolEnvOrNamespace::Error(diagnostic.clone()));
+					self.types.source_file_envs.insert(
+						source_file.path.to_owned(),
+						SymbolEnvOrNamespace::Error(diagnostic.clone()),
+					);
 					return;
 				}
 				None => {
 					self.types.source_file_envs.insert(
-						source_path.to_owned(),
+						source_file.path.to_owned(),
 						SymbolEnvOrNamespace::Error(Diagnostic {
-							message: format!("Could not bring \"{}\" due to cyclic bring statements", source_path,),
+							message: format!("Could not bring \"{}\" due to cyclic bring statements", source_file,),
 							span: None,
 							annotations: vec![],
 							hints: vec![],
@@ -3649,9 +3649,9 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 
 				if seen_public_symbols.contains(key) {
 					self.types.source_file_envs.insert(
-						source_path.to_owned(),
+						source_file.path.to_owned(),
 						SymbolEnvOrNamespace::Error(Diagnostic {
-							message: format!("Symbol \"{}\" has multiple definitions in \"{}\"", key, source_path),
+							message: format!("Symbol \"{}\" has multiple definitions in \"{}\"", key, source_file),
 							span: None,
 							annotations: vec![],
 							hints: vec![],
@@ -3665,14 +3665,14 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		let ns = self.types.add_namespace(Namespace {
-			name: source_path.file_stem().unwrap().to_string(),
+			name: source_file.path.file_stem().unwrap().to_string(),
 			envs: child_envs,
 			module_path: ResolveSource::WingFile,
 		});
 		self
 			.types
 			.source_file_envs
-			.insert(source_path.to_owned(), SymbolEnvOrNamespace::Namespace(ns));
+			.insert(source_file.path.to_owned(), SymbolEnvOrNamespace::Namespace(ns));
 	}
 
 	fn type_check_scope(&mut self, scope: &Scope) {
@@ -5635,7 +5635,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 
 				assembly_name
 			} else {
-				let source_dir = self.source_path.parent().unwrap();
+				let source_dir = self.source_file.path.parent().unwrap();
 				let assembly_name = match self.jsii_types.load_dep(library_name.as_str(), source_dir) {
 					Ok(name) => name,
 					Err(type_error) => {
@@ -6513,6 +6513,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			let SymbolEnvKind::Type(property_defined_in) = lookup_info.env.kind else {
 				panic!("Expected env to be a type env");
 			};
+
 			// Check if the class in which the property is defined is one of the classes we're currently nested in
 			let mut private_access = false;
 			let mut protected_access = false;
