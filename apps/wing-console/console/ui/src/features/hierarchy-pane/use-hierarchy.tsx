@@ -1,6 +1,6 @@
 import { ResourceIcon } from "@wingconsole/design-system";
 import type { ExplorerItem } from "@wingconsole/server";
-import { uniqBy } from "@wingconsole/uniq-by";
+import { uniqBy } from "@wingconsole/utilities";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 

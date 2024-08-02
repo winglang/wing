@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 
-import { uniqBy } from "./index.js";
+import { uniqBy } from "./uniq-by.js";
 
 test("deduplicates items using identity as iteratee", () => {
   expect(uniqBy([1, 2], (number) => number)).toEqual([1, 2]);

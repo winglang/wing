@@ -11,9 +11,9 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import type { LogLevel } from "@wingconsole/server";
-import { uniqBy } from "@wingconsole/uniq-by";
+import { uniqBy } from "@wingconsole/utilities";
+import { debounce } from "@wingconsole/utilities";
 import classNames from "classnames";
-import debounce from "lodash.debounce";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 export const LOG_LEVELS: LogLevel[] = ["verbose", "info", "warn", "error"];
