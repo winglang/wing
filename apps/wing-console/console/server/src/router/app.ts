@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
+import { uniqBy } from "@wingconsole/utilities";
 import type { UIComponent } from "@winglang/sdk/lib/core/tree.js";
 import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/simulator.js";
-import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
 import type { LogEntry } from "../consoleLogger.js";
@@ -303,7 +303,7 @@ export const createAppRouter = () => {
         // we keep only one connection per resource and direction (because the SDK currently has
         // no way to distinguish between multiple connections to the same resource).
         // Also, we need to filter out connections to hidden nodes.
-        const connections = uniqby(simulator.connections(), (connection) => {
+        const connections = uniqBy(simulator.connections(), (connection) => {
           return `${connection.source}-${connection.target}`;
         }).filter((connection) => {
           return connectionsBasicFilter(connection, nodeMap, !!showTests);

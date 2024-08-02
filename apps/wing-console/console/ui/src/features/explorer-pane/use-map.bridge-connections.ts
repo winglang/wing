@@ -1,4 +1,4 @@
-import uniqby from "lodash.uniqby";
+import { uniqBy } from "@wingconsole/utilities";
 
 export type Connection<T> = {
   source: T;
@@ -27,12 +27,12 @@ const resolveConnections = <T>(
     (c) => getNodeId(c[type]) === getNodeId(node),
   );
   const invertedType = type === "source" ? "target" : "source";
-  const nodes = uniqby(
+  const nodes = uniqBy(
     connections.map((connection) => connection[invertedType]),
     (node) => getNodeId(node),
   );
 
-  return uniqby(
+  return uniqBy(
     nodes.flatMap((node) => {
       return resolveConnections(
         node,
@@ -77,7 +77,7 @@ export interface BridgeConnectionsOptions<T> {
 }
 
 export const bridgeConnections = <T>(options: BridgeConnectionsOptions<T>) => {
-  return uniqby(
+  return uniqBy(
     options.connections.flatMap((connection) => {
       const sources = resolveConnections(
         connection.source,
@@ -95,7 +95,7 @@ export const bridgeConnections = <T>(options: BridgeConnectionsOptions<T>) => {
         options.getNodeId,
         options.resolveNode,
       );
-      return uniqby(
+      return uniqBy(
         sources.flatMap((source) => {
           return targets.map((target) => {
             return {

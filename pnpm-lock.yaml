@@ -285,9 +285,6 @@ importers:
       inquirer:
         specifier: ^8.2.6
         version: 8.2.6
-      lodash.once:
-        specifier: ^4.1.1
-        version: 4.1.1
       nanoid:
         specifier: ^3.3.7
         version: 3.3.7
@@ -319,9 +316,6 @@ importers:
       '@types/inquirer':
         specifier: ^9.0.7
         version: 9.0.7
-      '@types/lodash.once':
-        specifier: ^4.1.9
-        version: 4.1.9
       '@types/node':
         specifier: ^20.11.0
         version: 20.14.8
@@ -558,12 +552,6 @@ importers:
       framer-motion:
         specifier: ^10.18.0
         version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
-      lodash.escape:
-        specifier: ^4.0.1
-        version: 4.0.1
-      lodash.uniq:
-        specifier: ^4.5.0
-        version: 4.5.0
       nanoid:
         specifier: ^4.0.2
         version: 4.0.2
@@ -589,12 +577,6 @@ importers:
       '@testing-library/react':
         specifier: ^14.3.1
         version: 14.3.1(react-dom@18.3.1)(react@18.3.1)
-      '@types/lodash.escape':
-        specifier: ^4.0.9
-        version: 4.0.9
-      '@types/lodash.uniq':
-        specifier: ^4.5.9
-        version: 4.5.9
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
@@ -613,6 +595,9 @@ importers:
       '@wingconsole/tsconfig':
         specifier: workspace:^
         version: link:../../tools/tsconfig
+      '@wingconsole/utilities':
+        specifier: workspace:^
+        version: link:../../packages/utilities
       bump-pack:
         specifier: workspace:^
         version: link:../../../../tools/bump-pack
@@ -668,12 +653,6 @@ importers:
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
-      '@types/lodash.throttle':
-        specifier: ^4.1.9
-        version: 4.1.9
-      '@types/lodash.uniqby':
-        specifier: ^4.7.9
-        version: 4.7.9
       '@types/ws':
         specifier: ^8.5.10
         version: 8.5.10
@@ -689,6 +668,9 @@ importers:
       '@wingconsole/tsconfig':
         specifier: workspace:^
         version: link:../../tools/tsconfig
+      '@wingconsole/utilities':
+        specifier: workspace:^
+        version: link:../../packages/utilities
       bump-pack:
         specifier: workspace:^
         version: link:../../../../tools/bump-pack
@@ -719,12 +701,6 @@ importers:
       get-port:
         specifier: ^6.1.2
         version: 6.1.2
-      lodash.throttle:
-        specifier: ^4.1.1
-        version: 4.1.1
-      lodash.uniqby:
-        specifier: ^4.7.0
-        version: 4.7.0
       nanoid:
         specifier: ^4.0.2
         version: 4.0.2
@@ -770,9 +746,6 @@ importers:
       '@trpc/server':
         specifier: ^10.45.2
         version: 10.45.2
-      '@types/lodash.escape':
-        specifier: ^4.0.9
-        version: 4.0.9
       '@wingconsole/design-system':
         specifier: workspace:^
         version: link:../design-system
@@ -794,15 +767,6 @@ importers:
       linkifyjs:
         specifier: ^4.1.3
         version: 4.1.3
-      lodash.debounce:
-        specifier: ^4.0.8
-        version: 4.0.8
-      lodash.escape:
-        specifier: ^4.0.1
-        version: 4.0.1
-      lodash.uniqby:
-        specifier: ^4.7.0
-        version: 4.7.0
       nanoid:
         specifier: ^4.0.2
         version: 4.0.2
@@ -855,12 +819,6 @@ importers:
       '@types/d3-zoom':
         specifier: ^3.0.8
         version: 3.0.8
-      '@types/lodash.debounce':
-        specifier: ^4.0.9
-        version: 4.0.9
-      '@types/lodash.uniqby':
-        specifier: ^4.7.9
-        version: 4.7.9
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
@@ -885,6 +843,9 @@ importers:
       '@wingconsole/use-persistent-state':
         specifier: workspace:^
         version: link:../../packages/use-persistent-state
+      '@wingconsole/utilities':
+        specifier: workspace:^
+        version: link:../../packages/utilities
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../../../../libs/wingsdk
@@ -963,6 +924,21 @@ importers:
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
+
+  apps/wing-console/packages/utilities:
+    devDependencies:
+      '@wingconsole/eslint-plugin':
+        specifier: workspace:^
+        version: link:../../tools/eslint-plugin
+      '@wingconsole/tsconfig':
+        specifier: workspace:^
+        version: link:../../tools/tsconfig
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(happy-dom@9.20.3)
 
   apps/wing-console/tools/eslint-plugin:
     dependencies:
@@ -10786,43 +10762,9 @@ packages:
       '@types/node': 20.14.8
     dev: true
 
-  /@types/lodash.debounce@4.0.9:
-    resolution: {integrity: sha512-Ma5JcgTREwpLRwMM+XwBR7DaWe96nC38uCBDFKZWbNKD+osjVzdpnUSwBcqCptrp16sSOLBAUb50Car5I0TCsQ==}
-    dependencies:
-      '@types/lodash': 4.17.5
-    dev: true
-
-  /@types/lodash.escape@4.0.9:
-    resolution: {integrity: sha512-YR9R6RU9D36OWrhVZ+r4fY8mMXQtofnLXAcE6CkKIxdH66uiCdEjkhxx/eiJnYpxjOFmPbWBUUvdv8lckO823Q==}
-    dependencies:
-      '@types/lodash': 4.17.5
-
-  /@types/lodash.once@4.1.9:
-    resolution: {integrity: sha512-nvZ7GYfyZB6CUmXL+7HSXg53rFpc49FsKuRmMiCIGhgJB/yyTip8uHk4mxGyVJOl87dXPlf3qy42WsjOcIrnmg==}
-    dependencies:
-      '@types/lodash': 4.17.5
-    dev: true
-
-  /@types/lodash.throttle@4.1.9:
-    resolution: {integrity: sha512-PCPVfpfueguWZQB7pJQK890F2scYKoDUL3iM522AptHWn7d5NQmeS/LTEHIcLr5PaTzl3dK2Z0xSUHHTHwaL5g==}
-    dependencies:
-      '@types/lodash': 4.17.5
-    dev: true
-
-  /@types/lodash.uniq@4.5.9:
-    resolution: {integrity: sha512-2Vd5avnDMNLbDSnUwwgwExKXvX9W3CN72rodT+ikGqGHXn7gVK6BM6Z+kHonbpGgCI2BzM+QDMHrkgKoofOi6A==}
-    dependencies:
-      '@types/lodash': 4.17.5
-    dev: true
-
-  /@types/lodash.uniqby@4.7.9:
-    resolution: {integrity: sha512-rjrXji/seS6BZJRgXrU2h6FqxRVufsbq/HE0Tx0SdgbtlWr2YmD/M64BlYEYYlaMcpZwy32IYVkMfUMYlPuv0w==}
-    dependencies:
-      '@types/lodash': 4.17.5
-    dev: true
-
   /@types/lodash@4.17.5:
     resolution: {integrity: sha512-MBIOHVZqVqgfro1euRDWX7OO0fBVUUMrN6Pwm8LQsz8cWhEpihlvR70ENj3f40j58TNxZaWv2ndSkInykNBBJw==}
+    dev: true
 
   /@types/long@4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
@@ -14334,7 +14276,7 @@ packages:
     dependencies:
       semver: 7.6.2
       shelljs: 0.8.5
-      typescript: 5.6.0-dev.20240730
+      typescript: 5.6.0-dev.20240802
     dev: true
 
   /dset@3.1.3:
@@ -18026,6 +17968,7 @@ packages:
 
   /lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: true
 
   /lodash.defaults@4.2.0:
     resolution: {integrity: sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==}
@@ -18034,10 +17977,6 @@ packages:
   /lodash.difference@4.5.0:
     resolution: {integrity: sha512-dS2j+W26TQ7taQBGN8Lbbq04ssV3emRw4NY58WErlTO29pIqS0HmoT5aJ9+TUQ1N3G+JOZSji4eugsWwGp9yPA==}
     dev: true
-
-  /lodash.escape@4.0.1:
-    resolution: {integrity: sha512-nXEOnb/jK9g0DYMr1/Xvq6l5xMD7GDG55+GSYIYmS0G4tBk/hURD4JR9WCavs04t33WmJx9kCyp9vJ+mr4BOUw==}
-    dev: false
 
   /lodash.flatten@4.4.0:
     resolution: {integrity: sha512-C5N2Z3DgnnKr0LOpv/hKCgKdb7ZZwafIrsesve6lmzvZIRZRGaZ/l6Q8+2W7NaT+ZwO3fFlSCzCzrDCFdJfZ4g==}
@@ -18083,20 +18022,9 @@ packages:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
     dev: true
 
-  /lodash.throttle@4.1.1:
-    resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
-    dev: true
-
   /lodash.union@4.6.0:
     resolution: {integrity: sha512-c4pB2CdGrGdjMKYLA+XiRDO7Y0PRQbm/Gzg8qMj+QH+pFVAoTp5sBpO0odL3FjoPCGjK96p6qsP+yQoiLoOBcw==}
     dev: true
-
-  /lodash.uniq@4.5.0:
-    resolution: {integrity: sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==}
-    dev: false
-
-  /lodash.uniqby@4.7.0:
-    resolution: {integrity: sha512-e/zcLx6CSbmaEgFHCA7BnoQKyCtKMxnuWrJygbwPs/AIn+IMKl66L8/s+wBUn5LRw2pZx3bUHibiV1b6aTWIww==}
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -22713,8 +22641,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.6.0-dev.20240730:
-    resolution: {integrity: sha512-i0xbpbeqFm+j2FGOU9ghel5U2nK6FP9mKLbdvms41n1mIjh56sGdexxjHNUUCmQr1rHGZtChRhLkxDcHmj72EA==}
+  /typescript@5.6.0-dev.20240802:
+    resolution: {integrity: sha512-aPQg1SL05JivtUdMmXq3BBa9NqhNbDvOlDPXvCf3K+kZ5jkxDdf2El6BLEkkzxkWOczoxma8l40ppGsC6pF40A==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

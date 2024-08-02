@@ -5,10 +5,12 @@ import type {
   UISection,
   UIFileBrowser,
   UIHttpClient,
+  UITable,
 } from "@winglang/sdk/lib/core";
 
 import { CustomResourceFileBrowser } from "./custom-resource-file-browser.js";
 import { CustomResourceHttpClientItem } from "./custom-resource-http-client.js";
+import { CustomResourceTable } from "./custom-resource-table.js";
 import { CustomResourceUiButtonItem } from "./custom-resource-ui-button.js";
 import { CustomResourceUiFieldItem } from "./custom-resource-ui-field.js";
 
@@ -33,6 +35,9 @@ const getUiComponent = (item: UIComponentLike) => {
   }
   if (item.kind === "http-client") {
     return item as unknown as UIHttpClient;
+  }
+  if (item.kind === "table") {
+    return item as unknown as UITable;
   }
   return item as UIComponent;
 };
@@ -68,6 +73,15 @@ export const CustomResourceUiItem = ({ item }: { item: UIComponentLike }) => {
           label={uiComponent.label}
           getUrlHandler={uiComponent.getUrlHandler}
           getApiSpecHandler={uiComponent.getApiSpecHandler}
+        />
+      )}
+      {uiComponent.kind === "table" && (
+        <CustomResourceTable
+          label={uiComponent.label}
+          primaryKeyHandler={uiComponent.primaryKeyHandler}
+          putHandler={uiComponent.putHandler}
+          scanHandler={uiComponent.scanHandler}
+          deleteHandler={uiComponent.deleteHandler}
         />
       )}
     </>

@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import uniq from "lodash.uniq";
 import type { KeyboardEvent, Ref } from "react";
 import { useState, useEffect, useCallback, forwardRef } from "react";
 
@@ -66,14 +65,14 @@ const useSelectionRange = ({
           .slice(slice.start, slice.end + 1)
           .map((newEntry) => newEntry.id);
 
-        onSelectionChange(
-          uniq([
+        onSelectionChange([
+          ...new Set([
             ...newShiftEntries,
             ...selectedEntries.filter(
               (newEntry) => !previousRangeSelection.includes(newEntry),
             ),
           ]),
-        );
+        ]);
         setPreviousRangeSelection(newShiftEntries);
       } else {
         setRangeOrigin(index);

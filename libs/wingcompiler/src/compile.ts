@@ -6,7 +6,7 @@ import * as wingCompiler from "./wingc";
 import { normalPath } from "./util";
 import { existsSync } from "fs";
 import { BuiltinPlatform } from "./constants";
-import { CompileError, PreflightError } from "./errors";
+import { PreflightError } from "./errors";
 import { readFile } from "fs/promises";
 import { fork } from "child_process";
 
@@ -126,13 +126,22 @@ export function determineTargetFromPlatforms(platforms: string[]): string {
   return _loadCustomPlatform(platform).target;
 }
 
+export interface CompileOutput {
+  readonly outputDir?: string;
+  // List of diagnostics produced by wingc (from parsing, type checking, and generating preflight JS code)
+  // Some of these diagnostics may be warnings.
+  readonly wingcErrors: wingCompiler.WingDiagnostic[];
+  // Error that occurred during preflight execution
+  readonly preflightError?: PreflightError;
+}
+
 /**
  * Compiles a Wing program. Throws an error if compilation fails.
  * @param entrypoint The program .w entrypoint.
  * @param options Compile options.
  * @returns the output directory
  */
-export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
+export async function compile(entrypoint: string, options: CompileOptions): Promise<CompileOutput> {
   const { log } = options;
   const preflightLog = options.preflightLog ?? process.stdout.write.bind(process.stdout);
   // create a unique temporary directory for the compilation
@@ -148,6 +157,9 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   log?.("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, DOT_WING);
   log?.("work dir: %s", workDir);
+
+  let wingcErrors: wingCompiler.WingDiagnostic[] = [];
+  let failed = false;
 
   const nearestNodeModules = (dir: string): string => {
     let nodeModules = join(dir, "node_modules");
@@ -177,11 +189,14 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     color: options.color,
     log,
   });
-  if (compileForPreflightResult.diagnostics.length > 0) {
-    throw new CompileError(compileForPreflightResult.diagnostics);
+  wingcErrors = compileForPreflightResult.diagnostics;
+  if (compileForPreflightResult.diagnostics.map((d) => d.severity).includes("error")) {
+    failed = true;
   }
 
-  if (isEntrypointFile(entrypoint)) {
+  let preflightError: PreflightError | undefined;
+
+  if (!failed && isEntrypointFile(entrypoint)) {
     let preflightEnv: Record<string, string | undefined> = {
       ...process.env,
       WING_TARGET: target,
@@ -211,13 +226,22 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       }
     }
 
-    await runPreflightCodeInWorkerThread(
+    let [err, finished] = await runPreflightCodeInWorkerThread(
       compileForPreflightResult.preflightEntrypoint,
       preflightEnv,
       (data) => preflightLog?.(data.toString())
     );
+    preflightError = err;
+    if (!finished) {
+      failed = true;
+    }
   }
-  return synthDir;
+
+  return {
+    outputDir: !failed ? synthDir : undefined,
+    wingcErrors,
+    preflightError,
+  };
 }
 
 function isEntrypointFile(path: string) {
@@ -349,11 +373,11 @@ async function runPreflightCodeInWorkerThread(
   entrypoint: string,
   env: Record<string, string | undefined>,
   onStdout: (data: Buffer) => void
-): Promise<void> {
+): Promise<[PreflightError | undefined, boolean]> {
   try {
     env.WING_PREFLIGHT_ENTRYPOINT = JSON.stringify(entrypoint);
 
-    await new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       const worker = fork(join(__dirname, "..", "preflight.shim.cjs"), {
         env,
         stdio: "pipe",
@@ -364,7 +388,7 @@ async function runPreflightCodeInWorkerThread(
       worker.on("error", reject);
       worker.on("exit", (code) => {
         if (code === 0) {
-          resolve(undefined);
+          resolve([undefined, true]);
         } else {
           reject(new Error(`Worker stopped with exit code ${code}`));
         }
@@ -372,7 +396,7 @@ async function runPreflightCodeInWorkerThread(
     });
   } catch (error) {
     const artifact = await readFile(entrypoint, "utf-8");
-    throw new PreflightError(error as any, entrypoint, artifact);
+    return [new PreflightError(error as any, entrypoint, artifact), false];
   }
 }
 
