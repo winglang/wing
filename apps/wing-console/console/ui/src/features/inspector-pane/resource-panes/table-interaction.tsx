@@ -21,6 +21,8 @@ export const TableInteraction = memo(
         .map((name) => ({ name, type: "text" }));
     }, [rows]);
 
+    const hasRows = rows && rows.length > 0;
+
     return (
       <div className="inline-block align-middle w-full mt-1">
         <div
@@ -51,39 +53,41 @@ export const TableInteraction = memo(
             }}
           >
             <thead>
-              <tr
-                className={classNames(
-                  theme.bgInput,
-                  "px-1 sticky top-[4px] z-10 border-spacing-x-0",
-                )}
-              >
-                {columns.map(({ name }) => (
-                  <th
-                    key={name}
-                    className={classNames(
-                      "text-sm px-1.5",
-                      "border-b border-slate-300 dark:border-slate-700",
-                      "text-left",
-                    )}
-                  >
-                    {name}
-                  </th>
-                ))}
-                <th
+              {hasRows && (
+                <tr
                   className={classNames(
-                    "w-0",
-                    "border-b border-slate-300 dark:border-slate-700",
+                    theme.bgInput,
+                    "px-1 sticky top-[4px] z-10 border-spacing-x-0",
                   )}
-                ></th>
-              </tr>
+                >
+                  {columns.map(({ name }) => (
+                    <th
+                      key={name}
+                      className={classNames(
+                        "text-sm px-1.5",
+                        "border-b border-slate-300 dark:border-slate-700",
+                        "text-left",
+                      )}
+                    >
+                      {name}
+                    </th>
+                  ))}
+                  <th
+                    className={classNames(
+                      "w-0",
+                      "border-b border-slate-300 dark:border-slate-700",
+                    )}
+                  ></th>
+                </tr>
+              )}
             </thead>
             <tbody className="spacing-y-1">
-              {rows?.length === 0 && (
+              {!hasRows && (
                 <tr>
                   <td
                     colSpan={columns.length + 1}
                     className={classNames(
-                      "text-center text-xs pt-4",
+                      "text-center text-xs py-4",
                       theme.text2,
                     )}
                   >
