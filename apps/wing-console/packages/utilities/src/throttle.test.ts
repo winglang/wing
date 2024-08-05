@@ -10,30 +10,23 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-test("throttles calls", () => {
+test("throttles invokations during the time frame", () => {
   const function_ = vi.fn();
   const throttled = throttle(function_, 100);
 
   throttled();
-  throttled();
-  throttled();
-  expect(function_).toHaveBeenCalledTimes(1);
-
   vi.advanceTimersByTime(99);
   throttled();
-  throttled();
+  expect(function_).toHaveBeenCalledTimes(1);
+});
+
+test("throttles with a leading and trailing invokation", () => {
+  const function_ = vi.fn();
+  const throttled = throttle(function_, 100);
+
   throttled();
   expect(function_).toHaveBeenCalledTimes(1);
 
-  vi.advanceTimersByTime(1);
-  throttled();
-  throttled();
-  throttled();
-  expect(function_).toHaveBeenCalledTimes(2);
-
   vi.advanceTimersByTime(100);
-  throttled();
-  throttled();
-  throttled();
-  expect(function_).toHaveBeenCalledTimes(3);
+  expect(function_).toHaveBeenCalledTimes(2);
 });
