@@ -2162,74 +2162,6 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			AccessModifier::Public,
 			StatementIdx::Top,
 		);
-
-		let import_inflight_options_fqn = format!("{}.std.ImportInflightOptions", WINGSDK_ASSEMBLY_NAME);
-		let import_inflight_options = self
-			.types
-			.libraries
-			.lookup_nested_str(&import_inflight_options_fqn, None)
-			.expect("std.ImportInflightOptions not found in type system")
-			.0
-			.as_type()
-			.expect("std.ImportInflightOptions was found but it's not a type");
-		let inflight_t = Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![
-				FunctionParameter {
-					name: "file".into(),
-					typeref: self.types.string(),
-					docs: Docs::with_summary("Path to extern file to create inflight. Relative to the current wing file."),
-					variadic: false,
-				},
-				FunctionParameter {
-					name: "options".into(),
-					typeref: self.types.make_option(import_inflight_options),
-					docs: import_inflight_options.as_struct().unwrap().docs.clone(),
-					variadic: false,
-				},
-			],
-			// In practice, this function returns an inferred type upon each use
-			return_type: self.types.anything(),
-			phase: Phase::Preflight,
-			// The emitted JS is dynamic
-			js_override: None,
-			is_macro: false,
-			docs: Docs::with_summary(
-				r#"Create an inflight function from the given file.
-The file must be a JavaScript or TypeScript file with a default export that matches the inferred return where `@inflight` is used.
-
-For example:
-
-```wing
-bring cloud;
-new cloud.Function(@inflight("./handler.ts"));
-```
-
-`./handler.ts` Must default export an `async ({}, string?) => string?` function. The first argument is anything lifted into that function, e.g.:
-
-```wing
-let bucket = new cloud.Bucket();
-new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
-```
-"#,
-			),
-			implicit_scope_param: false,
-		});
-		let inflight_t = self.types.add_type(inflight_t);
-		let _ = self.types.intrinsics.define(
-			&IntrinsicKind::Inflight.clone().into(),
-			SymbolKind::Variable(VariableInfo {
-				access: AccessModifier::Public,
-				name: IntrinsicKind::Inflight.into(),
-				docs: None,
-				kind: VariableKind::StaticMember,
-				phase: Phase::Preflight,
-				type_: inflight_t,
-				reassignable: false,
-			}),
-			AccessModifier::Public,
-			StatementIdx::Top,
-		);
 	}
 
 	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
@@ -2871,9 +2803,6 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				}
 
 				match intrinsic.kind {
-					IntrinsicKind::Inflight => {
-						return (self.types.make_inference(), Phase::Preflight);
-					}
 					IntrinsicKind::Dirname | IntrinsicKind::Unknown => {
 						return (sig.return_type, sig.phase);
 					}
