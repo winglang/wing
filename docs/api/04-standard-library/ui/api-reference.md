@@ -729,19 +729,12 @@ A table can be used to browse files.
 ```wing
 bring ui;
 
-new ui.Table(label: str, handlers: TableHandlers);
+new ui.Table(handlers: TableHandlers);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ui.Table.Initializer.parameter.label">label</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#@winglang/sdk.ui.Table.Initializer.parameter.handlers">handlers</a></code> | <code><a href="#@winglang/sdk.ui.TableHandlers">TableHandlers</a></code> | *No description.* |
-
----
-
-##### `label`<sup>Required</sup> <a name="label" id="@winglang/sdk.ui.Table.Initializer.parameter.label"></a>
-
-- *Type:* str
 
 ---
 
@@ -1253,60 +1246,7 @@ let TableHandlers = ui.TableHandlers{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ui.TableHandlers.property.delete">delete</a></code> | <code><a href="#@winglang/sdk.ui.ITableDeleteHandler">ITableDeleteHandler</a></code> | Handler for deleting a row. |
-| <code><a href="#@winglang/sdk.ui.TableHandlers.property.get">get</a></code> | <code><a href="#@winglang/sdk.ui.ITableGetHandler">ITableGetHandler</a></code> | Handler for getting a row. |
-| <code><a href="#@winglang/sdk.ui.TableHandlers.property.primaryKey">primaryKey</a></code> | <code><a href="#@winglang/sdk.ui.ITablePrimaryKeyHandler">ITablePrimaryKeyHandler</a></code> | Handler for getting the primary key. |
-| <code><a href="#@winglang/sdk.ui.TableHandlers.property.put">put</a></code> | <code><a href="#@winglang/sdk.ui.ITableputHandler">ITableputHandler</a></code> | Handler for putting a row. |
 | <code><a href="#@winglang/sdk.ui.TableHandlers.property.scan">scan</a></code> | <code><a href="#@winglang/sdk.ui.ITableScanHandler">ITableScanHandler</a></code> | Handler for scanning rows. |
-| <code><a href="#@winglang/sdk.ui.TableHandlers.property.update">update</a></code> | <code><a href="#@winglang/sdk.ui.ITableUpdateHandler">ITableUpdateHandler</a></code> | Handler for updatete a row. |
-
----
-
-##### `delete`<sup>Required</sup> <a name="delete" id="@winglang/sdk.ui.TableHandlers.property.delete"></a>
-
-```wing
-delete: ITableDeleteHandler;
-```
-
-- *Type:* <a href="#@winglang/sdk.ui.ITableDeleteHandler">ITableDeleteHandler</a>
-
-Handler for deleting a row.
-
----
-
-##### `get`<sup>Required</sup> <a name="get" id="@winglang/sdk.ui.TableHandlers.property.get"></a>
-
-```wing
-get: ITableGetHandler;
-```
-
-- *Type:* <a href="#@winglang/sdk.ui.ITableGetHandler">ITableGetHandler</a>
-
-Handler for getting a row.
-
----
-
-##### `primaryKey`<sup>Required</sup> <a name="primaryKey" id="@winglang/sdk.ui.TableHandlers.property.primaryKey"></a>
-
-```wing
-primaryKey: ITablePrimaryKeyHandler;
-```
-
-- *Type:* <a href="#@winglang/sdk.ui.ITablePrimaryKeyHandler">ITablePrimaryKeyHandler</a>
-
-Handler for getting the primary key.
-
----
-
-##### `put`<sup>Required</sup> <a name="put" id="@winglang/sdk.ui.TableHandlers.property.put"></a>
-
-```wing
-put: ITableputHandler;
-```
-
-- *Type:* <a href="#@winglang/sdk.ui.ITableputHandler">ITableputHandler</a>
-
-Handler for putting a row.
 
 ---
 
@@ -1319,18 +1259,6 @@ scan: ITableScanHandler;
 - *Type:* <a href="#@winglang/sdk.ui.ITableScanHandler">ITableScanHandler</a>
 
 Handler for scanning rows.
-
----
-
-##### `update`<sup>Required</sup> <a name="update" id="@winglang/sdk.ui.TableHandlers.property.update"></a>
-
-```wing
-update: ITableUpdateHandler;
-```
-
-- *Type:* <a href="#@winglang/sdk.ui.ITableUpdateHandler">ITableUpdateHandler</a>
-
-Handler for updatete a row.
 
 ---
 
@@ -1640,164 +1568,6 @@ inflight handle(): str
 Function that returns the URL to make a request to.
 
 
-### ITableDeleteHandler <a name="ITableDeleteHandler" id="@winglang/sdk.ui.ITableDeleteHandler"></a>
-
-- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
-
-- *Implemented By:* <a href="#@winglang/sdk.ui.ITableDeleteHandler">ITableDeleteHandler</a>
-
-**Inflight client:** [@winglang/sdk.ui.ITableDeleteHandlerClient](#@winglang/sdk.ui.ITableDeleteHandlerClient)
-
-A resource with an inflight "handle" method that can be passed to `ITable`.
-
-
-
-### ITableDeleteHandlerClient <a name="ITableDeleteHandlerClient" id="@winglang/sdk.ui.ITableDeleteHandlerClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.ui.ITableDeleteHandlerClient">ITableDeleteHandlerClient</a>
-
-Inflight client for `ITableDeleteHandler`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ui.ITableDeleteHandlerClient.handle">handle</a></code> | Function that performs an action. |
-
----
-
-##### `handle` <a name="handle" id="@winglang/sdk.ui.ITableDeleteHandlerClient.handle"></a>
-
-```wing
-inflight handle(key: str): void
-```
-
-Function that performs an action.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ui.ITableDeleteHandlerClient.handle.parameter.key"></a>
-
-- *Type:* str
-
----
-
-
-### ITableGetHandler <a name="ITableGetHandler" id="@winglang/sdk.ui.ITableGetHandler"></a>
-
-- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
-
-- *Implemented By:* <a href="#@winglang/sdk.ui.ITableGetHandler">ITableGetHandler</a>
-
-**Inflight client:** [@winglang/sdk.ui.ITableGetHandlerClient](#@winglang/sdk.ui.ITableGetHandlerClient)
-
-A resource with an inflight "handle" method that can be passed to `ITable`.
-
-
-
-### ITableGetHandlerClient <a name="ITableGetHandlerClient" id="@winglang/sdk.ui.ITableGetHandlerClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.ui.ITableGetHandlerClient">ITableGetHandlerClient</a>
-
-Inflight client for `ITableGetHandler`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ui.ITableGetHandlerClient.handle">handle</a></code> | Function that performs an action. |
-
----
-
-##### `handle` <a name="handle" id="@winglang/sdk.ui.ITableGetHandlerClient.handle"></a>
-
-```wing
-inflight handle(key: str): Json
-```
-
-Function that performs an action.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ui.ITableGetHandlerClient.handle.parameter.key"></a>
-
-- *Type:* str
-
----
-
-
-### ITablePrimaryKeyHandler <a name="ITablePrimaryKeyHandler" id="@winglang/sdk.ui.ITablePrimaryKeyHandler"></a>
-
-- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
-
-- *Implemented By:* <a href="#@winglang/sdk.ui.ITablePrimaryKeyHandler">ITablePrimaryKeyHandler</a>
-
-**Inflight client:** [@winglang/sdk.ui.ITablePrimaryKeyHandlerClient](#@winglang/sdk.ui.ITablePrimaryKeyHandlerClient)
-
-A resource with an inflight "handle" method that can be passed to `ITable`.
-
-
-
-### ITablePrimaryKeyHandlerClient <a name="ITablePrimaryKeyHandlerClient" id="@winglang/sdk.ui.ITablePrimaryKeyHandlerClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.ui.ITablePrimaryKeyHandlerClient">ITablePrimaryKeyHandlerClient</a>
-
-Inflight client for `ITablePrimaryKeyHandler`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ui.ITablePrimaryKeyHandlerClient.handle">handle</a></code> | Function that performs an action. |
-
----
-
-##### `handle` <a name="handle" id="@winglang/sdk.ui.ITablePrimaryKeyHandlerClient.handle"></a>
-
-```wing
-inflight handle(): str
-```
-
-Function that performs an action.
-
-
-### ITableputHandler <a name="ITableputHandler" id="@winglang/sdk.ui.ITableputHandler"></a>
-
-- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
-
-- *Implemented By:* <a href="#@winglang/sdk.ui.ITableputHandler">ITableputHandler</a>
-
-**Inflight client:** [@winglang/sdk.ui.ITablePutHandlerClient](#@winglang/sdk.ui.ITablePutHandlerClient)
-
-A resource with an inflight "handle" method that can be passed to `ITable`.
-
-
-
-### ITablePutHandlerClient <a name="ITablePutHandlerClient" id="@winglang/sdk.ui.ITablePutHandlerClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.ui.ITablePutHandlerClient">ITablePutHandlerClient</a>
-
-Inflight client for `ITableVoidHandler`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ui.ITablePutHandlerClient.handle">handle</a></code> | Function that performs an action. |
-
----
-
-##### `handle` <a name="handle" id="@winglang/sdk.ui.ITablePutHandlerClient.handle"></a>
-
-```wing
-inflight handle(item: str): void
-```
-
-Function that performs an action.
-
-###### `item`<sup>Required</sup> <a name="item" id="@winglang/sdk.ui.ITablePutHandlerClient.handle.parameter.item"></a>
-
-- *Type:* str
-
----
-
-
 ### ITableScanHandler <a name="ITableScanHandler" id="@winglang/sdk.ui.ITableScanHandler"></a>
 
 - *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
@@ -1831,52 +1601,5 @@ inflight handle(): MutArray<Json>
 ```
 
 Function that performs an action.
-
-
-### ITableUpdateHandler <a name="ITableUpdateHandler" id="@winglang/sdk.ui.ITableUpdateHandler"></a>
-
-- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
-
-- *Implemented By:* <a href="#@winglang/sdk.ui.ITableUpdateHandler">ITableUpdateHandler</a>
-
-**Inflight client:** [@winglang/sdk.ui.ITableUpdateHandlerClient](#@winglang/sdk.ui.ITableUpdateHandlerClient)
-
-A resource with an inflight "handle" method that can be passed to `ITable`.
-
-
-
-### ITableUpdateHandlerClient <a name="ITableUpdateHandlerClient" id="@winglang/sdk.ui.ITableUpdateHandlerClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.ui.ITableUpdateHandlerClient">ITableUpdateHandlerClient</a>
-
-Inflight client for `ITableVoidHandler`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.ui.ITableUpdateHandlerClient.handle">handle</a></code> | Function that performs an action. |
-
----
-
-##### `handle` <a name="handle" id="@winglang/sdk.ui.ITableUpdateHandlerClient.handle"></a>
-
-```wing
-inflight handle(key: str, item: str): void
-```
-
-Function that performs an action.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ui.ITableUpdateHandlerClient.handle.parameter.key"></a>
-
-- *Type:* str
-
----
-
-###### `item`<sup>Required</sup> <a name="item" id="@winglang/sdk.ui.ITableUpdateHandlerClient.handle.parameter.item"></a>
-
-- *Type:* str
-
----
 
 

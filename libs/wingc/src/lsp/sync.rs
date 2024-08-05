@@ -49,6 +49,15 @@ impl ProjectData {
 			jsii_imports: Vec::new(),
 		}
 	}
+
+	pub fn find_source_package(&self, path: &Utf8Path) -> &str {
+		self
+			.file_graph
+			.iter_files()
+			.find(|file| file.path == *path)
+			.map(|file| file.package.as_str())
+			.unwrap_or(DEFAULT_PACKAGE_NAME)
+	}
 }
 
 thread_local! {

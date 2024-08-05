@@ -33,6 +33,10 @@ pub struct SymbolEnv {
 	pub phase: Phase,
 	pub type_parameters: Option<Vec<TypeRef>>,
 	statement_idx: usize,
+
+	/// The source code package the environment is associated with
+	/// (for example, if the environment is for a class, this would be the package the class is defined in)
+	pub source_package: String,
 }
 
 #[derive(Debug)]
@@ -185,7 +189,13 @@ pub struct SymbolLookupInfo {
 }
 
 impl SymbolEnv {
-	pub fn new(parent: Option<SymbolEnvRef>, kind: SymbolEnvKind, phase: Phase, statement_idx: usize) -> Self {
+	pub fn new(
+		parent: Option<SymbolEnvRef>,
+		kind: SymbolEnvKind,
+		phase: Phase,
+		statement_idx: usize,
+		source_package: String,
+	) -> Self {
 		assert_is_type_env(parent, &kind);
 
 		Self {
@@ -195,6 +205,7 @@ impl SymbolEnv {
 			phase,
 			statement_idx,
 			type_parameters: None,
+			source_package,
 		}
 	}
 
@@ -203,6 +214,7 @@ impl SymbolEnv {
 		kind: SymbolEnvKind,
 		phase: Phase,
 		statement_idx: usize,
+		source_package: String,
 		type_params: Vec<UnsafeRef<Type>>,
 	) -> Self {
 		assert_is_type_env(parent, &kind);
@@ -214,6 +226,7 @@ impl SymbolEnv {
 			phase,
 			statement_idx,
 			type_parameters: Some(type_params),
+			source_package,
 		}
 	}
 
@@ -351,11 +364,10 @@ impl SymbolEnv {
 		if let Some(ref_annotation([parent_env])) = self.parent {
 			let res = parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx));
 			// The `NotFound` result needs to include the type of the original (non-parent) environment (if applicable)
-			let res = match res {
+			return match res {
 				LookupResult::NotFound(s, ..) => LookupResult::NotFound(s, env_type),
 				_ => res,
 			};
-			return res;
 		}
 
 		LookupResult::NotFound(symbol.clone(), env_type)
@@ -373,6 +385,7 @@ impl SymbolEnv {
 		let mut it = nested_vec.iter();
 
 		let symb = *it.next().unwrap();
+		let caller_source_package = self.source_package.clone();
 
 		let res = self.lookup_ext(symb, statement_idx);
 		let mut res = if let LookupResult::Found(k, i) = res {
@@ -398,11 +411,25 @@ impl SymbolEnv {
 				return LookupResult::ExpectedNamespace(prev_symb.clone());
 			};
 
-			// Look up the result in each env. If there are multiple results, throw a special error
-			// otherwise proceed normally
+			// Here we're looking up some symbol in each of the environments stored in the Namespace.
+			// Recall that a Namespace could represent a directory, in which case it points to multiple environments,
+			// one for each file or subdirectory.
+			// Suppose the user is trying to access a class named "Foo" inside a folder named "ns1".
+			// It's possible that both foo/file1.w and foo/file2.w could have a class named "Foo" defined inside.
+			// So we need to handle these possible conflicts.
+			//
+			// The way we have resolve the conflicts currently is we have a variable named "lookup_result" that is
+			// initialized before a for loop. Inside the for loop, we look up the target symbol in each of the child
+			// environments, and store it in "partial_result". Then, we compare "partial_result" with "lookup_result".
+			// and handle various cases.
+			//
+			// For example:
+			// - If "Foo" was found in both foo/file1.w and foo/file2.w, we return "MultipleFound".
+			// - If private "Foo" was found in foo/file1.w and public "Foo" was found in foo/file2.w,
+			//   we return the public version.
 			let mut lookup_result = LookupResult::NotFound((*next_symb).clone(), None);
 			for env in ns.envs.vec_iter() {
-				// invariant: lookup_result is never "ExpectedNamespace" or "MultipleFound"
+				// invariant: lookup_result is never "ExpectedNamespace" or "MultipleFound" (?)
 
 				// We're looking up a symbol in a namespace other than our own, so we need to
 				// check if the symbol is public or not. If it's not, replace a "Found" result
@@ -410,6 +437,14 @@ impl SymbolEnv {
 				let partial_result = match env.lookup_ext(next_symb, statement_idx) {
 					LookupResult::Found(kind, info) => match info.access {
 						AccessModifier::Public => LookupResult::Found(kind, info),
+						AccessModifier::Internal => {
+							// If the symbol is internal, we can only use it if it's in the same package
+							if ns.source_package == caller_source_package {
+								LookupResult::Found(kind, info)
+							} else {
+								LookupResult::NotPublic(kind, info)
+							}
+						}
 						AccessModifier::Private => LookupResult::NotPublic(kind, info),
 						AccessModifier::Protected => panic!("symbols in namespaces cannot be protected"),
 					},
@@ -445,6 +480,7 @@ impl SymbolEnv {
 					lookup_result = partial_result;
 				}
 			}
+
 			match lookup_result {
 				LookupResult::Found(k, i) => {
 					res = (k, i);
@@ -554,6 +590,7 @@ mod tests {
 			symbol_env::{LookupResult, SymbolEnvKind},
 			Namespace, ResolveSource, SymbolKind, Types,
 		},
+		DEFAULT_PACKAGE_NAME,
 	};
 
 	use super::{StatementIdx, SymbolEnv};
@@ -565,13 +602,15 @@ mod tests {
 	#[test]
 	fn test_statement_idx_lookups() {
 		let types = setup_types();
-		let mut parent_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0);
+		let source_pkg = "pkg1".to_string();
+		let mut parent_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0, source_pkg.clone());
 		let child_scope_idx = 10;
 		let mut child_env = SymbolEnv::new(
 			Some(parent_env.get_ref()),
 			SymbolEnvKind::Scope,
 			crate::ast::Phase::Independent,
 			child_scope_idx,
+			source_pkg,
 		);
 
 		// Define a globally visible variable in the parent env
@@ -687,30 +726,41 @@ mod tests {
 	#[test]
 	fn test_nested_lookups() {
 		let mut types = setup_types();
-		let mut parent_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0);
+		let source_pkg = "pkg1".to_string();
+		let mut parent_env = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0, source_pkg.clone());
 		let child_env = SymbolEnv::new(
 			Some(parent_env.get_ref()),
 			SymbolEnvKind::Scope,
 			crate::ast::Phase::Independent,
 			0,
+			source_pkg.clone(),
 		);
 
 		// Create namespaces
-		let mut ns1_env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0));
+		let mut ns1_env = types.add_symbol_env(SymbolEnv::new(
+			None,
+			SymbolEnvKind::Scope,
+			Phase::Independent,
+			0,
+			source_pkg.clone(),
+		));
 		let mut ns2_env = types.add_symbol_env(SymbolEnv::new(
 			Some(ns1_env),
 			SymbolEnvKind::Scope,
 			Phase::Independent,
 			0,
+			source_pkg,
 		));
 		let ns1 = types.add_namespace(Namespace {
 			name: "ns1".to_string(),
 			envs: vec![ns1_env],
+			source_package: DEFAULT_PACKAGE_NAME.to_string(),
 			module_path: ResolveSource::WingFile,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
 			envs: vec![ns2_env],
+			source_package: DEFAULT_PACKAGE_NAME.to_string(),
 			module_path: ResolveSource::WingFile,
 		});
 

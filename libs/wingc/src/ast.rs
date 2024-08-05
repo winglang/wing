@@ -551,6 +551,7 @@ pub enum AccessModifier {
 	Private,
 	Public,
 	Protected,
+	Internal,
 }
 
 impl Display for AccessModifier {
@@ -559,6 +560,7 @@ impl Display for AccessModifier {
 			AccessModifier::Private => write!(f, "private"),
 			AccessModifier::Public => write!(f, "public"),
 			AccessModifier::Protected => write!(f, "protected"),
+			AccessModifier::Internal => write!(f, "internal"),
 		}
 	}
 }

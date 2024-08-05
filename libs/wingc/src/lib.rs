@@ -120,7 +120,11 @@ const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 const WINGSDK_NODE: &'static str = "std.Node";
 
 const WINGSDK_SIM_IRESOURCE: &'static str = "sim.IResource";
-const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_SIM_IRESOURCE);
+const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!(
+	"{assembly}.{iface}",
+	assembly = WINGSDK_ASSEMBLY_NAME,
+	iface = WINGSDK_SIM_IRESOURCE
+);
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
@@ -251,7 +255,13 @@ pub fn type_check(
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
-	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
+	let mut env = types.add_symbol_env(SymbolEnv::new(
+		None,
+		SymbolEnvKind::Scope,
+		Phase::Preflight,
+		0,
+		file.package.clone(),
+	));
 
 	types.set_scope_env(scope, env);
 

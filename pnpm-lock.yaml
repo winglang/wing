@@ -1033,6 +1033,9 @@ importers:
 
   examples/tests/invalid:
     dependencies:
+      '@winglibs/testfixture':
+        specifier: workspace:^
+        version: link:../../wing-fixture
       cdktf:
         specifier: 0.20.7
         version: 0.20.7(constructs@10.3.0)
