@@ -1,3 +1,6 @@
+/**
+ * Debounce a function to be called after `wait` milliseconds has passed since the last call.
+ */
 export function debounce<T extends (...arguments_: any[]) => void>(
   function_: T,
   wait: number,
@@ -8,8 +11,6 @@ export function debounce<T extends (...arguments_: any[]) => void>(
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       timeout = undefined;
-
-      // Trailing call.
       function_(...arguments_);
     }, wait);
   };

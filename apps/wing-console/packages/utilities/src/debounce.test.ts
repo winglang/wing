@@ -10,15 +10,21 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-test("debounces calls", () => {
+test("debounces invokations", () => {
   const function_ = vi.fn();
-  const debounced = debounce(function_, 1);
+  const debounced = debounce(function_, 100);
 
   debounced();
   debounced();
   debounced();
   expect(function_).toHaveBeenCalledTimes(0);
 
-  vi.advanceTimersByTime(1);
+  vi.advanceTimersByTime(99);
+  debounced();
+  debounced();
+  debounced();
+  expect(function_).toHaveBeenCalledTimes(0);
+
+  vi.advanceTimersByTime(100);
   expect(function_).toHaveBeenCalledTimes(1);
 });
