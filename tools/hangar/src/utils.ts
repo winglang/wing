@@ -58,7 +58,7 @@ export function sanitizeOutput(output: string) {
       // Normalize line endings
       .replaceAll("\r\n", "\n")
       // Normalize windows slashes
-      .replace(/\\+([a-zA-Z0-9\.]{1})/g, "/$1")
+      .replace(/\\+([a-zA-Z0-9\.@]{1})/g, "/$1")
       // Remove line/column numbers from rust sources
       .replace(/(src\/.+\.rs):\d+:\d+/g, "$1:LINE:COL")
       // Remove absolute stacktraces
