@@ -295,19 +295,3 @@ export interface LiftAnnotation {
    */
   readonly ops?: string[];
 }
-
-/**
- * Options for the `@inflight` intrinsic
- */
-export interface ImportInflightOptions {
-  /**
-   * Name of exported function
-   * @default "default"
-   * */
-  readonly export?: string;
-  /**
-   * Mapping of available symbols to a lift declaration
-   * @default * All possible operations will be available
-   */
-  readonly lifts?: LiftAnnotation[];
-}

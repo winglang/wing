@@ -9,51 +9,6 @@ id: resource
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### ImportInflightOptions <a name="ImportInflightOptions" id="@winglang/sdk.std.ImportInflightOptions"></a>
-
-Options for the `@inflight` intrinsic.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.std.ImportInflightOptions.Initializer"></a>
-
-```wing
-let ImportInflightOptions = ImportInflightOptions{ ... };
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImportInflightOptions.property.export">export</a></code> | <code>str</code> | Name of exported function. |
-| <code><a href="#@winglang/sdk.std.ImportInflightOptions.property.lifts">lifts</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.std.LiftAnnotation">LiftAnnotation</a>&gt;</code> | Mapping of available symbols to a lift declaration. |
-
----
-
-##### `export`<sup>Optional</sup> <a name="export" id="@winglang/sdk.std.ImportInflightOptions.property.export"></a>
-
-```wing
-export: str;
-```
-
-- *Type:* str
-- *Default:* "default"
-
-Name of exported function.
-
----
-
-##### `lifts`<sup>Optional</sup> <a name="lifts" id="@winglang/sdk.std.ImportInflightOptions.property.lifts"></a>
-
-```wing
-lifts: MutArray<LiftAnnotation>;
-```
-
-- *Type:* MutArray&lt;<a href="#@winglang/sdk.std.LiftAnnotation">LiftAnnotation</a>&gt;
-- *Default:* * All possible operations will be available
-
-Mapping of available symbols to a lift declaration.
-
----
-
 ### LiftAnnotation <a name="LiftAnnotation" id="@winglang/sdk.std.LiftAnnotation"></a>
 
 Annotations about preflight data and desired inflight operations.
