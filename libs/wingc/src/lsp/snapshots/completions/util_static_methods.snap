@@ -141,13 +141,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass ChildProcess {\n  pid?: num;\n  kill(): void;\n  wait(): Output;\n}\n```\n---\nHandle to a running child process."
+    value: "```wing\nclass ChildProcess {\n  pid?: num;\n  kill(...): void;\n  wait(): Output;\n}\n```\n---\nHandle to a running child process."
   sortText: gg|ChildProcess
 - label: Util
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Util {\n  static base64Decode(): str;\n  static base64Encode(): str;\n  static env(): str;\n  static exec(): Output;\n  static nanoid(): str;\n  static os(): str;\n  /* ... */\n}\n```\n---\nUtility functions."
+    value: "```wing\nclass Util {\n  static base64Decode(...): str;\n  static base64Encode(...): str;\n  static env(...): str;\n  static exec(...): Output;\n  static nanoid(...): str;\n  static os(): str;\n  /* ... */\n}\n```\n---\nUtility functions."
   sortText: gg|Util
 - label: CommandOptions
   kind: 22

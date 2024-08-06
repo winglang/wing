@@ -5,19 +5,19 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Api {\n  url: str;\n  connect(): void;\n  delete(): void;\n  get(): void;\n  head(): void;\n  options(): void;\n  /* ... */\n}\n```\n---\nFunctionality shared between all `Api` implementations."
+    value: "```wing\nclass Api {\n  url: str;\n  connect(...): void;\n  delete(...): void;\n  get(...): void;\n  head(...): void;\n  options(...): void;\n  /* ... */\n}\n```\n---\nFunctionality shared between all `Api` implementations."
   sortText: gg|Api
 - label: Bucket
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Bucket {\n  addFile(): void;\n  addObject(): void;\n  onCreate(): void;\n  onDelete(): void;\n  onEvent(): void;\n  onUpdate(): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
+    value: "```wing\nclass Bucket {\n  addFile(...): void;\n  addObject(...): void;\n  onCreate(...): void;\n  onDelete(...): void;\n  onEvent(...): void;\n  onUpdate(...): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
   sortText: gg|Bucket
 - label: Counter
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Counter {\n  initial: num;\n  inflight dec(): num;\n  inflight inc(): num;\n  inflight peek(): num;\n  inflight set(): void;\n}\n```\n---\nA distributed atomic counter."
+    value: "```wing\nclass Counter {\n  initial: num;\n  inflight dec(...): num;\n  inflight inc(...): num;\n  inflight peek(...): num;\n  inflight set(...): void;\n}\n```\n---\nA distributed atomic counter."
   sortText: gg|Counter
 - label: Domain
   kind: 7
@@ -35,7 +35,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(): void;\n  inflight invoke(): Json?;\n  inflight invokeAsync(): void;\n}\n```\n---\nA function."
+    value: "```wing\nclass Function impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(...): void;\n  inflight invoke(...): Json?;\n  inflight invokeAsync(...): void;\n}\n```\n---\nA function."
   sortText: gg|Function
 - label: OnDeploy
   kind: 7
@@ -47,37 +47,37 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Queue {\n  setConsumer(): Function;\n  inflight approxSize(): num;\n  inflight pop(): str?;\n  inflight purge(): void;\n  inflight push(): void;\n}\n```\n---\nA queue."
+    value: "```wing\nclass Queue {\n  setConsumer(...): Function;\n  inflight approxSize(): num;\n  inflight pop(): str?;\n  inflight purge(): void;\n  inflight push(...): void;\n}\n```\n---\nA queue."
   sortText: gg|Queue
 - label: Schedule
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Schedule {\n  onTick(): Function;\n}\n```\n---\nA schedule."
+    value: "```wing\nclass Schedule {\n  onTick(...): Function;\n}\n```\n---\nA schedule."
   sortText: gg|Schedule
 - label: Secret
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Secret {\n  name?: str;\n  inflight value(): str;\n  inflight valueJson(): Json;\n}\n```\n---\nA cloud secret."
+    value: "```wing\nclass Secret {\n  name?: str;\n  inflight value(...): str;\n  inflight valueJson(...): Json;\n}\n```\n---\nA cloud secret."
   sortText: gg|Secret
 - label: Service
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Service impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(): void;\n  inflight start(): void;\n  inflight started(): bool;\n  inflight stop(): void;\n}\n```\n---\nA long-running service."
+    value: "```wing\nclass Service impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(...): void;\n  inflight start(): void;\n  inflight started(): bool;\n  inflight stop(): void;\n}\n```\n---\nA long-running service."
   sortText: gg|Service
 - label: Topic
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Topic {\n  onMessage(): Function;\n  subscribeQueue(): void;\n  inflight publish(): void;\n}\n```\n---\nA topic for pub/sub notifications."
+    value: "```wing\nclass Topic {\n  onMessage(...): Function;\n  subscribeQueue(...): void;\n  inflight publish(...): void;\n}\n```\n---\nA topic for pub/sub notifications."
   sortText: gg|Topic
 - label: Website
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Website impl IWebsite {\n  path: str;\n  url: str;\n  addFile(): str;\n  addJson(): str;\n}\n```\n---\nA cloud static website."
+    value: "```wing\nclass Website impl IWebsite {\n  path: str;\n  url: str;\n  addFile(...): str;\n  addJson(...): str;\n}\n```\n---\nA cloud static website."
   sortText: gg|Website
 - label: AddFileOptions
   kind: 22
@@ -383,7 +383,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IBucketClient {\n  inflight copy(): void;\n  inflight delete(): void;\n  inflight exists(): bool;\n  inflight get(): str;\n  inflight getJson(): Json;\n  inflight list(): Array<str>;\n  /* ... */\n}\n```\n---\nInflight interface for `Bucket`."
+    value: "```wing\ninterface IBucketClient {\n  inflight copy(...): void;\n  inflight delete(...): void;\n  inflight exists(...): bool;\n  inflight get(...): str;\n  inflight getJson(...): Json;\n  inflight list(...): Array<str>;\n  /* ... */\n}\n```\n---\nInflight interface for `Bucket`."
   sortText: ii|IBucketClient
 - label: IBucketEventHandler
   kind: 8
@@ -401,7 +401,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface ICounterClient {\n  inflight dec(): num;\n  inflight inc(): num;\n  inflight peek(): num;\n  inflight set(): void;\n}\n```\n---\nInflight interface for `Counter`."
+    value: "```wing\ninterface ICounterClient {\n  inflight dec(...): num;\n  inflight inc(...): num;\n  inflight peek(...): num;\n  inflight set(...): void;\n}\n```\n---\nInflight interface for `Counter`."
   sortText: ii|ICounterClient
 - label: IDomainClient
   kind: 8
@@ -419,7 +419,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IFunctionClient {\n  inflight invoke(): Json?;\n  inflight invokeAsync(): void;\n}\n```\n---\nInflight interface for `Function`."
+    value: "```wing\ninterface IFunctionClient {\n  inflight invoke(...): Json?;\n  inflight invokeAsync(...): void;\n}\n```\n---\nInflight interface for `Function`."
   sortText: ii|IFunctionClient
 - label: IFunctionHandler
   kind: 8
@@ -455,7 +455,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IQueueClient {\n  inflight approxSize(): num;\n  inflight pop(): str?;\n  inflight purge(): void;\n  inflight push(): void;\n}\n```\n---\nInflight interface for `Queue`."
+    value: "```wing\ninterface IQueueClient {\n  inflight approxSize(): num;\n  inflight pop(): str?;\n  inflight purge(): void;\n  inflight push(...): void;\n}\n```\n---\nInflight interface for `Queue`."
   sortText: ii|IQueueClient
 - label: IQueueSetConsumerHandler
   kind: 8
@@ -491,7 +491,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface ISecretClient {\n  inflight value(): str;\n  inflight valueJson(): Json;\n}\n```\n---\nInflight interface for `Secret`."
+    value: "```wing\ninterface ISecretClient {\n  inflight value(...): str;\n  inflight valueJson(...): Json;\n}\n```\n---\nInflight interface for `Secret`."
   sortText: ii|ISecretClient
 - label: IServiceClient
   kind: 8
@@ -527,7 +527,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface ITopicClient {\n  inflight publish(): void;\n}\n```\n---\nInflight interface for `Topic`."
+    value: "```wing\ninterface ITopicClient {\n  inflight publish(...): void;\n}\n```\n---\nInflight interface for `Topic`."
   sortText: ii|ITopicClient
 - label: ITopicOnMessageHandler
   kind: 8

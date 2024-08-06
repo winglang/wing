@@ -5,7 +5,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Api {\n  url: str;\n  connect(): void;\n  delete(): void;\n  get(): void;\n  head(): void;\n  options(): void;\n  /* ... */\n}\n```\n---\nFunctionality shared between all `Api` implementations."
+    value: "```wing\nclass Api {\n  url: str;\n  connect(...): void;\n  delete(...): void;\n  get(...): void;\n  head(...): void;\n  options(...): void;\n  /* ... */\n}\n```\n---\nFunctionality shared between all `Api` implementations."
   sortText: gg|Api
   insertText: Api($1)
   insertTextFormat: 2
@@ -16,7 +16,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Bucket {\n  addFile(): void;\n  addObject(): void;\n  onCreate(): void;\n  onDelete(): void;\n  onEvent(): void;\n  onUpdate(): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
+    value: "```wing\nclass Bucket {\n  addFile(...): void;\n  addObject(...): void;\n  onCreate(...): void;\n  onDelete(...): void;\n  onEvent(...): void;\n  onUpdate(...): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
   sortText: gg|Bucket
   insertText: Bucket($1)
   insertTextFormat: 2
@@ -27,7 +27,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Counter {\n  initial: num;\n  inflight dec(): num;\n  inflight inc(): num;\n  inflight peek(): num;\n  inflight set(): void;\n}\n```\n---\nA distributed atomic counter."
+    value: "```wing\nclass Counter {\n  initial: num;\n  inflight dec(...): num;\n  inflight inc(...): num;\n  inflight peek(...): num;\n  inflight set(...): void;\n}\n```\n---\nA distributed atomic counter."
   sortText: gg|Counter
   insertText: Counter($1)
   insertTextFormat: 2
@@ -60,7 +60,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(): void;\n  inflight invoke(): Json?;\n  inflight invokeAsync(): void;\n}\n```\n---\nA function."
+    value: "```wing\nclass Function impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(...): void;\n  inflight invoke(...): Json?;\n  inflight invokeAsync(...): void;\n}\n```\n---\nA function."
   sortText: gg|Function
   insertText: Function($1)
   insertTextFormat: 2
@@ -82,7 +82,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Queue {\n  setConsumer(): Function;\n  inflight approxSize(): num;\n  inflight pop(): str?;\n  inflight purge(): void;\n  inflight push(): void;\n}\n```\n---\nA queue."
+    value: "```wing\nclass Queue {\n  setConsumer(...): Function;\n  inflight approxSize(): num;\n  inflight pop(): str?;\n  inflight purge(): void;\n  inflight push(...): void;\n}\n```\n---\nA queue."
   sortText: gg|Queue
   insertText: Queue($1)
   insertTextFormat: 2
@@ -93,7 +93,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Schedule {\n  onTick(): Function;\n}\n```\n---\nA schedule."
+    value: "```wing\nclass Schedule {\n  onTick(...): Function;\n}\n```\n---\nA schedule."
   sortText: gg|Schedule
   insertText: Schedule($1)
   insertTextFormat: 2
@@ -104,7 +104,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Secret {\n  name?: str;\n  inflight value(): str;\n  inflight valueJson(): Json;\n}\n```\n---\nA cloud secret."
+    value: "```wing\nclass Secret {\n  name?: str;\n  inflight value(...): str;\n  inflight valueJson(...): Json;\n}\n```\n---\nA cloud secret."
   sortText: gg|Secret
   insertText: Secret($1)
   insertTextFormat: 2
@@ -115,7 +115,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Service impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(): void;\n  inflight start(): void;\n  inflight started(): bool;\n  inflight stop(): void;\n}\n```\n---\nA long-running service."
+    value: "```wing\nclass Service impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(...): void;\n  inflight start(): void;\n  inflight started(): bool;\n  inflight stop(): void;\n}\n```\n---\nA long-running service."
   sortText: gg|Service
   insertText: Service($1)
   insertTextFormat: 2
@@ -126,7 +126,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Topic {\n  onMessage(): Function;\n  subscribeQueue(): void;\n  inflight publish(): void;\n}\n```\n---\nA topic for pub/sub notifications."
+    value: "```wing\nclass Topic {\n  onMessage(...): Function;\n  subscribeQueue(...): void;\n  inflight publish(...): void;\n}\n```\n---\nA topic for pub/sub notifications."
   sortText: gg|Topic
   insertText: Topic($1)
   insertTextFormat: 2
@@ -137,7 +137,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Website impl IWebsite {\n  path: str;\n  url: str;\n  addFile(): str;\n  addJson(): str;\n}\n```\n---\nA cloud static website."
+    value: "```wing\nclass Website impl IWebsite {\n  path: str;\n  url: str;\n  addFile(...): str;\n  addJson(...): str;\n}\n```\n---\nA cloud static website."
   sortText: gg|Website
   insertText: Website($1)
   insertTextFormat: 2
