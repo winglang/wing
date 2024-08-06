@@ -1124,6 +1124,8 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				| Type::String
 				| Type::Stringable
 				| Type::Duration
+				| Type::Datetime
+				| Type::Regex
 				| Type::Boolean
 				| Type::Void
 				| Type::Json(_)

@@ -498,6 +498,8 @@ where
 		TypeAnnotationKind::String => {}
 		TypeAnnotationKind::Bool => {}
 		TypeAnnotationKind::Duration => {}
+		TypeAnnotationKind::Datetime => {}
+		TypeAnnotationKind::Regex => {}
 		TypeAnnotationKind::Void => {}
 		TypeAnnotationKind::Json => {}
 		TypeAnnotationKind::MutJson => {}

@@ -534,6 +534,8 @@ where
 		TypeAnnotationKind::String => TypeAnnotationKind::String,
 		TypeAnnotationKind::Bool => TypeAnnotationKind::Bool,
 		TypeAnnotationKind::Duration => TypeAnnotationKind::Duration,
+		TypeAnnotationKind::Datetime => TypeAnnotationKind::Datetime,
+		TypeAnnotationKind::Regex => TypeAnnotationKind::Regex,
 		TypeAnnotationKind::Void => TypeAnnotationKind::Void,
 		TypeAnnotationKind::Json => TypeAnnotationKind::Json,
 		TypeAnnotationKind::MutJson => TypeAnnotationKind::MutJson,

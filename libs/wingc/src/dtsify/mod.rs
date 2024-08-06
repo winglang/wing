@@ -376,6 +376,8 @@ impl<'a> DTSifier<'a> {
 			TypeAnnotationKind::Json => format!("Readonly<{TYPE_INTERNAL_NAMESPACE}.Json>"),
 			TypeAnnotationKind::MutJson => format!("{TYPE_INTERNAL_NAMESPACE}.Json"),
 			TypeAnnotationKind::Duration => format!("{TYPE_STD}.Duration"),
+			TypeAnnotationKind::Datetime => format!("{TYPE_STD}.Datetime"),
+			TypeAnnotationKind::Regex => format!("{TYPE_STD}.Regex"),
 			TypeAnnotationKind::Optional(t) => {
 				format!("({}) | undefined", self.dtsify_type_annotation(&t, ignore_phase))
 			}

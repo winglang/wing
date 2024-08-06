@@ -155,6 +155,8 @@ impl Documented for TypeRef {
 			| Type::Number
 			| Type::String
 			| Type::Duration
+			| Type::Datetime
+			| Type::Regex
 			| Type::Boolean
 			| Type::Void
 			| Type::Json(_)
@@ -190,6 +192,8 @@ impl Documented for TypeRef {
 			| Type::Number
 			| Type::String
 			| Type::Duration
+			| Type::Datetime
+			| Type::Regex
 			| Type::Boolean
 			| Type::Void
 			| Type::Json(_)
