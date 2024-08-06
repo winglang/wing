@@ -125,7 +125,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Util {\n  static inflight connect(): Response;\n  static inflight delete(): Response;\n  static inflight fetch(): Response;\n  static inflight formatUrl(): str;\n  static inflight get(): Response;\n  static inflight parseUrl(): Url;\n  /* ... */\n}\n```\n---\nThe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources."
+    value: "```wing\nclass Util {\n  static inflight connect(...): Response;\n  static inflight delete(...): Response;\n  static inflight fetch(...): Response;\n  static inflight formatUrl(...): str;\n  static inflight get(...): Response;\n  static inflight parseUrl(...): Url;\n  /* ... */\n}\n```\n---\nThe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources."
   sortText: gg|Util
 - label: FormatUrlOptions
   kind: 22

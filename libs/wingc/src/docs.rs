@@ -620,7 +620,7 @@ fn render_classlike_members(classlike: &impl ClassLike) -> String {
 		let member_name = &member.name.name;
 
 		if let Some(member_sig) = member_type.maybe_unwrap_option().as_function_sig() {
-			let arg_text = "";
+			let arg_text = if member_sig.parameters.len() > 0 { "..." } else { "" };
 			let text = format!(
 				"{static_text}{phase_text}{member_name}{option_text}({arg_text}): {};",
 				member_sig.return_type
