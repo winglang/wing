@@ -584,7 +584,6 @@ pub enum IntrinsicKind {
 	/// Error state
 	Unknown,
 	Dirname,
-	Inflight,
 }
 
 impl Display for IntrinsicKind {
@@ -592,7 +591,6 @@ impl Display for IntrinsicKind {
 		match self {
 			IntrinsicKind::Unknown => write!(f, "@"),
 			IntrinsicKind::Dirname => write!(f, "@dirname"),
-			IntrinsicKind::Inflight => write!(f, "@inflight"),
 		}
 	}
 }
@@ -601,7 +599,6 @@ impl IntrinsicKind {
 	pub fn from_str(s: &str) -> Self {
 		match s {
 			"@dirname" => IntrinsicKind::Dirname,
-			"@inflight" => IntrinsicKind::Inflight,
 			_ => IntrinsicKind::Unknown,
 		}
 	}
@@ -610,10 +607,6 @@ impl IntrinsicKind {
 		match self {
 			IntrinsicKind::Unknown => true,
 			IntrinsicKind::Dirname => match phase {
-				Phase::Preflight => true,
-				_ => false,
-			},
-			IntrinsicKind::Inflight => match phase {
 				Phase::Preflight => true,
 				_ => false,
 			},
@@ -716,20 +709,6 @@ impl Expr {
 	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
 		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
 		Self { id, kind, span }
-	}
-
-	pub fn as_static_string(&self) -> Option<&str> {
-		match &self.kind {
-			ExprKind::Literal(Literal::String(s)) => {
-				// strip the quotes ("data")
-				Some(&s[1..s.len() - 1])
-			}
-			ExprKind::Literal(Literal::NonInterpolatedString(s)) => {
-				// strip the quotes (#"data")
-				Some(&s[2..s.len() - 1])
-			}
-			_ => None,
-		}
 	}
 }
 
