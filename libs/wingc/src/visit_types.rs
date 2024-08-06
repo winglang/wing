@@ -47,6 +47,8 @@ where
 		| Type::Number
 		| Type::String
 		| Type::Duration
+		| Type::Datetime
+		| Type::Regex
 		| Type::Boolean
 		| Type::Void
 		| Type::Json(None)

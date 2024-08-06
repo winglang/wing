@@ -28,10 +28,10 @@ use crate::visit_stmt_before_super::{CheckSuperCtorLocationVisitor, CheckValidBe
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, DEFAULT_PACKAGE_NAME,
-	UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC,
-	WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
-	WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING,
-	WINGSDK_STRUCT,
+	UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DATETIME, WINGSDK_DURATION,
+	WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP,
+	WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REGEX, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN,
+	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -228,6 +228,8 @@ pub enum Type {
 	Number,
 	String,
 	Duration,
+	Datetime,
+	Regex,
 	Boolean,
 	Void,
 	/// Immutable Json literals may store extra information about their known data
@@ -874,6 +876,8 @@ impl Display for Type {
 			Type::String => write!(f, "str"),
 			Type::Stringable => write!(f, "stringable"),
 			Type::Duration => write!(f, "duration"),
+			Type::Datetime => write!(f, "datetime"),
+			Type::Regex => write!(f, "regex"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
 			Type::Json(_) => write!(f, "Json"),
@@ -1239,6 +1243,8 @@ impl TypeRef {
 			Type::Enum(_) => true,
 			// not serializable
 			Type::Duration => false,
+			Type::Datetime => false,
+			Type::Regex => false,
 			Type::Inferred(_) => false,
 			Type::Set(_) => false,
 			Type::MutSet(_) => false,
@@ -1386,6 +1392,8 @@ pub struct Types {
 	string_idx: usize,
 	bool_idx: usize,
 	duration_idx: usize,
+	datetime_idx: usize,
+	regex_idx: usize,
 	anything_idx: usize,
 	void_idx: usize,
 	json_idx: usize,
@@ -1421,6 +1429,10 @@ impl Types {
 		let bool_idx = types.len() - 1;
 		types.push(Box::new(Type::Duration));
 		let duration_idx = types.len() - 1;
+		types.push(Box::new(Type::Datetime));
+		let datetime_idx = types.len() - 1;
+		types.push(Box::new(Type::Regex));
+		let regex_idx = types.len() - 1;
 		types.push(Box::new(Type::Anything));
 		let anything_idx = types.len() - 1;
 		types.push(Box::new(Type::Void));
@@ -1445,6 +1457,8 @@ impl Types {
 			string_idx,
 			bool_idx,
 			duration_idx,
+			datetime_idx,
+			regex_idx,
 			anything_idx,
 			void_idx,
 			json_idx,
@@ -1500,6 +1514,14 @@ impl Types {
 
 	pub fn duration(&self) -> TypeRef {
 		self.get_typeref(self.duration_idx)
+	}
+
+	pub fn datetime(&self) -> TypeRef {
+		self.get_typeref(self.datetime_idx)
+	}
+
+	pub fn regex(&self) -> TypeRef {
+		self.get_typeref(self.regex_idx)
 	}
 
 	pub fn anything(&self) -> TypeRef {
@@ -1769,6 +1791,8 @@ impl Types {
 			Type::String => "String",
 			Type::Boolean => "Boolean",
 			Type::Duration => "Duration",
+			Type::Datetime => "Datetime",
+			Type::Regex => "Regex",
 			Type::Json(_) => "Json",
 			Type::MutJson => "MutJson",
 			Type::Array(_) => "Array",
@@ -3988,6 +4012,8 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			TypeAnnotationKind::String => self.types.string(),
 			TypeAnnotationKind::Bool => self.types.bool(),
 			TypeAnnotationKind::Duration => self.types.duration(),
+			TypeAnnotationKind::Datetime => self.types.datetime(),
+			TypeAnnotationKind::Regex => self.types.regex(),
 			TypeAnnotationKind::Void => self.types.void(),
 			TypeAnnotationKind::Json => self.types.json(),
 			TypeAnnotationKind::MutJson => self.types.mut_json(),
@@ -4934,6 +4960,8 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 				| Type::Unresolved
 				| Type::Number
 				| Type::Duration
+				| Type::Datetime
+				| Type::Regex
 				| Type::Boolean
 				| Type::Void
 				| Type::Nil
@@ -6390,6 +6418,8 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 					}
 					Type::Number
 					| Type::Duration
+					| Type::Datetime
+					| Type::Regex
 					| Type::Boolean
 					| Type::Void
 					| Type::Nil
@@ -6489,6 +6519,18 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			),
 			Type::Duration => self.get_property_from_class_like(
 				lookup_known_type(WINGSDK_DURATION, env).as_class().unwrap(),
+				property,
+				false,
+				env,
+			),
+			Type::Datetime => self.get_property_from_class_like(
+				lookup_known_type(WINGSDK_DATETIME, env).as_class().unwrap(),
+				property,
+				false,
+				env,
+			),
+			Type::Regex => self.get_property_from_class_like(
+				lookup_known_type(WINGSDK_REGEX, env).as_class().unwrap(),
 				property,
 				false,
 				env,

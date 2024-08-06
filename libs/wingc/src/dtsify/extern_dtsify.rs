@@ -10,10 +10,12 @@ use crate::{
 	files::{remove_file, update_file, FilesError},
 	jsify::codemaker::CodeMaker,
 	type_check::*,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION,
+	WINGSDK_ASSEMBLY_NAME, WINGSDK_DATETIME, WINGSDK_DURATION, WINGSDK_REGEX,
 };
 
 const DURATION_FQN: &str = formatcp!("{WINGSDK_ASSEMBLY_NAME}.{WINGSDK_DURATION}");
+const DATETIME_FQN: &str = formatcp!("{WINGSDK_ASSEMBLY_NAME}.{WINGSDK_DATETIME}");
+const REGEX_FQN: &str = formatcp!("{WINGSDK_ASSEMBLY_NAME}.{WINGSDK_REGEX}");
 
 /// Generates a self-contained .d.ts file for a given extern file.
 pub struct ExternDTSifier<'a> {
@@ -133,6 +135,28 @@ impl<'a> ExternDTSifier<'a> {
 					.as_type()
 					.unwrap();
 				self.dtsify_type(duration_type, false)
+			}
+			Type::Datetime => {
+				let datetime_type = self
+					.types
+					.libraries
+					.lookup_nested_str(DATETIME_FQN, None)
+					.unwrap()
+					.0
+					.as_type()
+					.unwrap();
+				self.dtsify_type(datetime_type, false)
+			}
+			Type::Regex => {
+				let regex_type = self
+					.types
+					.libraries
+					.lookup_nested_str(REGEX_FQN, None)
+					.unwrap()
+					.0
+					.as_type()
+					.unwrap();
+				self.dtsify_type(regex_type, false)
 			}
 			Type::Optional(t) => format!("({}) | undefined", self.dtsify_type(*t, is_inflight)),
 			Type::Array(t) => format!("(readonly ({})[])", self.dtsify_type(*t, is_inflight)),
