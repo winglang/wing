@@ -275,7 +275,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ObjectMetadata {\n  contentType?: str;\n  lastModified: Datetime;\n  size: num;\n}\n```\n---\nMetadata of a bucket object."
+    value: "```wing\nstruct ObjectMetadata {\n  contentType?: str;\n  lastModified: datetime;\n  size: num;\n}\n```\n---\nMetadata of a bucket object."
   sortText: hh|ObjectMetadata
 - label: OnDeployProps
   kind: 22
