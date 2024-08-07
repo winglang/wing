@@ -772,6 +772,7 @@ impl Subtype for Type {
 			(Self::Number, Self::Stringable) => true,
 			(Self::Boolean, Self::Stringable) => true,
 			(Self::Json(_), Self::Stringable) => true,
+			(Self::Json(_), Self::Json(_)) => true,
 			(Self::MutJson, Self::Stringable) => true,
 			(Self::Enum(_), Self::Stringable) => true,
 			_ => false,
