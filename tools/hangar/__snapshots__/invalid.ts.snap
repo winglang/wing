@@ -3303,6 +3303,26 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`json_values.test.w 1`] = `
+"error: "MutArray<num>" is not a legal JSON value
+   --> ../../../examples/tests/invalid/json_values.test.w:11:20
+   |
+11 | takeJson({ values: arr }); 
+   |                    ^^^
+
+
+error: "MutMap<str>" is not a legal JSON value
+   --> ../../../examples/tests/invalid/json_values.test.w:13:20
+   |
+13 | takeJson({ values: map }); 
+   |                    ^^^
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`map_entries.test.w 1`] = `
 "error: Expected type to be "str", but got "num" instead
   --> ../../../examples/tests/invalid/map_entries.test.w:2:20

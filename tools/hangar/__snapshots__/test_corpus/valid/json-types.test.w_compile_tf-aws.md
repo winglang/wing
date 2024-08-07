@@ -41,14 +41,6 @@ class $Root extends $stdlib.std.Resource {
     (base.concat($macros.__MutArray_copy(false, extra, )));
     const base2 = ["foo"];
     const obj = ({"first": "ok", "second": (["cool"].concat(base2))});
-    const arr = [1, 2, 3];
-    $macros.__MutArray_push(false, arr, 4);
-    const map = ({["a"]: "1"});
-    $macros.__MutMap_set(false, map, "b", "2");
-    const takeJson = ((obj) => {
-    });
-    (takeJson(({"values": arr})));
-    (takeJson(({"values": map})));
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "json-types.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
