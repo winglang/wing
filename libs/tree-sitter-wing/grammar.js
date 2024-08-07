@@ -235,12 +235,7 @@ module.exports = grammar({
 
     field_modifiers: ($) =>
       repeat1(
-        choice(
-          $.access_modifier,
-          $.static,
-          $.phase_specifier,
-          $.reassignable
-        )
+        choice($.access_modifier, $.static, $.phase_specifier, $.reassignable)
       ),
 
     class_field: ($) =>
@@ -338,7 +333,12 @@ module.exports = grammar({
       ),
 
     else_if_block: ($) =>
-      seq("else", "if", field("condition", $.expression), field("block", $.block)),
+      seq(
+        "else",
+        "if",
+        field("condition", $.expression),
+        field("block", $.block)
+      ),
 
     try_catch_statement: ($) =>
       seq(
@@ -531,7 +531,16 @@ module.exports = grammar({
     parameter_type_list: ($) => seq("(", commaSep($._type), ")"),
 
     builtin_type: ($) =>
-      choice("num", "bool", "any", "str", "void", "duration"),
+      choice(
+        "num",
+        "bool",
+        "any",
+        "str",
+        "void",
+        "duration",
+        "datetime",
+        "regex"
+      ),
 
     initializer: ($) =>
       seq(
@@ -695,7 +704,8 @@ module.exports = grammar({
       ),
 
     map_literal_member: ($) => seq($.expression, "=>", $.expression),
-    struct_literal_member: ($) => choice($.identifier, seq($.identifier, ":", $.expression)),
+    struct_literal_member: ($) =>
+      choice($.identifier, seq($.identifier, ":", $.expression)),
     structured_access_expression: ($) =>
       prec.right(
         PREC.STRUCTURED_ACCESS,
@@ -714,7 +724,10 @@ module.exports = grammar({
     json_map_literal: ($) =>
       braced(commaSep(field("member", $.json_literal_member))),
     json_literal_member: ($) =>
-      choice($.identifier, seq(choice($.identifier, $.string), ":", $.expression)),
+      choice(
+        $.identifier,
+        seq(choice($.identifier, $.string), ":", $.expression)
+      ),
     json_container_type: ($) => $._json_types,
 
     _json_types: ($) => choice("Json", "MutJson"),

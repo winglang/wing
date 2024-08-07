@@ -103,6 +103,8 @@ const WINGSDK_BRINGABLE_MODULES: [&'static str; 10] = [
 
 const WINGSDK_GENERIC: &'static str = "std.T1";
 const WINGSDK_DURATION: &'static str = "std.Duration";
+const WINGSDK_DATETIME: &'static str = "std.Datetime";
+const WINGSDK_REGEX: &'static str = "std.Regex";
 const WINGSDK_MAP: &'static str = "std.Map";
 const WINGSDK_MUT_MAP: &'static str = "std.MutMap";
 const WINGSDK_ARRAY: &'static str = "std.Array";

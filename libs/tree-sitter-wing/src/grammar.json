@@ -2921,6 +2921,14 @@
         {
           "type": "STRING",
           "value": "duration"
+        },
+        {
+          "type": "STRING",
+          "value": "datetime"
+        },
+        {
+          "type": "STRING",
+          "value": "regex"
         }
       ]
     },
