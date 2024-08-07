@@ -1276,9 +1276,7 @@ impl TypeRef {
 			Type::Boolean => true,
 			Type::MutJson | Type::Json(None) => true,
 			Type::Inferred(..) => true,
-			Type::MutArray(v) => v.is_json_legal_value(),
 			Type::Array(v) => v.is_json_legal_value(),
-			Type::MutMap(v) => v.is_json_legal_value(),
 			Type::Map(v) => v.is_json_legal_value(),
 			Type::Struct(ref s) => {
 				for t in s.fields(true).map(|(_, v)| v.type_) {
