@@ -1027,10 +1027,10 @@ impl<'a> JSifier<'a> {
 			},
 			StmtKind::SuperConstructor { arg_list } => {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
-				match parent_class_phase(ctx) {
+				match ctx.visit_ctx.current_phase() {
 					Phase::Inflight => code.line(new_code!(
 						&arg_list.span,
-						"await this.super_",
+						"await super.",
 						CLASS_INFLIGHT_INIT_NAME,
 						"?.(",
 						args,
