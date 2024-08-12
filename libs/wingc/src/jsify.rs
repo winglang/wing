@@ -1027,15 +1027,31 @@ impl<'a> JSifier<'a> {
 			},
 			StmtKind::SuperConstructor { arg_list } => {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
-				match parent_class_phase(ctx) {
-					Phase::Inflight => code.line(new_code!(
-						&arg_list.span,
-						"await this.super_",
-						CLASS_INFLIGHT_INIT_NAME,
-						"?.(",
-						args,
-						");"
-					)),
+				match ctx.visit_ctx.current_phase() {
+					// does class have any inflight constructor?
+					Phase::Inflight => {
+						// yes- and it's an inflight class
+						if parent_class_phase(ctx) == Phase::Inflight {
+							code.line(new_code!(
+								&arg_list.span,
+								"await this.",
+								SUPER_CLASS_INFLIGHT_INIT_NAME,
+								"?.(",
+								args,
+								");"
+							))
+						} else {
+							// yes- and it's a preflight class
+							code.line(new_code!(
+								&arg_list.span,
+								"await super.",
+								CLASS_INFLIGHT_INIT_NAME,
+								"?.(",
+								args,
+								");"
+							))
+						}
+					}
 					Phase::Preflight => code.line(new_code!(
 						&arg_list.span,
 						format!("super({SCOPE_PARAM}, $id, "),
