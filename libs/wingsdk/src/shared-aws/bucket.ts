@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { AwsInflightHost } from "./inflight-host";
 import { calculateBucketPermissions } from "./permissions";
 import { cloud, ui } from "..";
-import { InflightClient, LiftMap, lift } from "../core";
+import { App, InflightClient, LiftMap, lift } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { IInflightHost, Node, Resource } from "../std";
 
@@ -87,7 +87,10 @@ export class BucketRef extends Resource {
     this.bucketName = bucketName;
     this.bucketArn = `arn:aws:s3:::${bucketName}`;
 
-    this.addUserInterface();
+    const target = App.of(this)._target;
+    if (target === "sim") {
+      this.addUserInterface();
+    }
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
