@@ -105,6 +105,7 @@ module.exports = function({ $jsii_fixture_JsiiClass }) {
         constructor(x, y){
           super(x);
           this.$inflight_init = async () => {
+            await super.$inflight_init?.(x);
             this.foo_str = String.raw({ raw: ["", " ", ""] }, y, x);
             this.foo_num = (await this.get_six());
           }
