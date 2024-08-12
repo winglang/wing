@@ -334,7 +334,7 @@ export const ResourceMetadata = memo(
                           subection
                           headingClassName="pl-2"
                         >
-                          <div className="pl-6 pr-2 pb-2 h-full relative">
+                          <div className="pl-6 p-2 h-full relative">
                             <ResourceInteractionView
                               key={node.path}
                               resourceType={node.type}
