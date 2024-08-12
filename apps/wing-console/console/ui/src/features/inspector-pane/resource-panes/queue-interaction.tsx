@@ -21,8 +21,9 @@ export const QueueInteraction = ({
     if (!message || message === "") {
       return;
     }
+    setMessage("");
     onPushMessageClick(message);
-  }, [message, onPushMessageClick]);
+  }, [message, onPushMessageClick, setMessage]);
 
   const elementId = useId();
 
