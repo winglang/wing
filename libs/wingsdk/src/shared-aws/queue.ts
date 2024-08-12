@@ -3,7 +3,7 @@ import { AwsInflightHost } from "./inflight-host";
 import { calculateQueuePermissions } from "./permissions";
 import { isValidArn } from "./util";
 import { cloud, ui } from "..";
-import { lift, LiftMap, InflightClient } from "../core";
+import { lift, LiftMap, InflightClient, App } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { IInflightHost, Node, Resource } from "../std";
 
@@ -94,7 +94,10 @@ export class QueueRef extends Resource {
 
     this.queueArn = queueArn;
 
-    this.addUserInterface();
+    const target = App.of(this)._target;
+    if (target === "sim") {
+      this.addUserInterface();
+    }
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { AwsInflightHost, IAwsInflightHost } from "./inflight-host";
 import { isValidArn } from "./util";
 import { FunctionInflightMethods, IFunctionClient } from "../cloud";
-import { InflightClient, lift, LiftMap } from "../core";
+import { App, InflightClient, lift, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { IInflightHost, Node, Resource } from "../std";
 import * as ui from "../ui";
@@ -159,7 +159,10 @@ export class FunctionRef extends Resource {
 
     this.functionArn = functionArn;
 
-    this.addUserInterface();
+    const target = App.of(this)._target;
+    if (target === "sim") {
+      this.addUserInterface();
+    }
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
