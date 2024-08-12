@@ -80,6 +80,15 @@ impl JsonSchemaGenerator {
 			}
 			Type::Optional(t) => self.get_struct_schema_field(&t),
 			Type::Json(_) => "{ type: [\"object\", \"string\", \"boolean\", \"number\", \"array\"] }".to_string(),
+			Type::Enum(ref enu) => {
+				let choices = enu
+					.values
+					.iter()
+					.map(|(s, _)| format!("\"{}\"", s))
+					.collect::<Vec<String>>()
+					.join(", ");
+				format!("{{ type: \"string\", enum: [{}] }}", choices)
+			}
 			_ => "{ type: \"null\" }".to_string(),
 		}
 	}

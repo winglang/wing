@@ -100,7 +100,7 @@ module.exports = function({ $Student, $jStudent1 }) {
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
-module.exports = function({ $MyStruct, $expectedSchema, $jMyStruct, $schema, $std_Json }) {
+module.exports = function({ $MyStruct, $expect_Util, $expectedSchema, $jMyStruct, $schema, $std_Json }) {
   class $Closure4 {
     constructor($args) {
       const {  } = $args;
@@ -111,7 +111,7 @@ module.exports = function({ $MyStruct, $expectedSchema, $jMyStruct, $schema, $st
     async handle() {
       const s = $macros.__Struct_schema(false, $MyStruct, );
       (await s.validate($jMyStruct));
-      $helpers.assert($helpers.eq((await $schema.asStr()), $macros.__Json_stringify(false, $std_Json, $expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
+      (await $expect_Util.equal((await $schema.asStr()), $macros.__Json_stringify(false, $std_Json, $expectedSchema)));
     }
   }
   return $Closure4;
@@ -193,16 +193,25 @@ class $Root extends $stdlib.std.Resource {
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
     const cloud = $stdlib.cloud;
+    const expect = $stdlib.expect;
     const externalStructs = $helpers.bringJs(`${__dirname}/preflight.structs-1.cjs`, $preflightTypesMap);
     const otherExternalStructs = $helpers.bringJs(`${__dirname}/preflight.structs2-2.cjs`, $preflightTypesMap);
     const Bar = $stdlib.std.Struct._createJsonSchema({$id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
     const Foo = $stdlib.std.Struct._createJsonSchema({$id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
     const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
-    const MyStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyStruct",type:"object",properties:{m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["m1","m2",]});
+    const MyStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyStruct",type:"object",properties:{color:{type:"string",enum:["red","green","blue"]},m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["color","m1","m2",]});
     const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:["object","string","boolean","number","array"]},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
     const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({$id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
     const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
+    const Color =
+      (function (tmp) {
+        tmp["red"] = "red";
+        tmp["green"] = "green";
+        tmp["blue"] = "blue";
+        return tmp;
+      })({})
+    ;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -291,6 +300,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-2.cjs")({
             $MyStruct: ${$stdlib.core.liftObject(MyStruct)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
             $expectedSchema: ${$stdlib.core.liftObject(expectedSchema)},
             $jMyStruct: ${$stdlib.core.liftObject(jMyStruct)},
             $schema: ${$stdlib.core.liftObject(schema)},
@@ -301,6 +311,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
             [MyStruct, ["schema"]],
             [expectedSchema, []],
@@ -308,6 +319,7 @@ class $Root extends $stdlib.std.Resource {
             [schema, ["asStr"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), []],
             [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"), []],
             [MyStruct, []],
             [expectedSchema, []],
@@ -458,14 +470,15 @@ class $Root extends $stdlib.std.Resource {
     const jj1 = ({"data": ({"val": 10})});
     const externalBar = $macros.__Struct_fromJson(false, externalStructs_MyOtherStruct, jj1);
     $helpers.assert($helpers.eq(externalBar.data.val, 10), "externalBar.data.val == 10");
-    const jMyStruct = ({"m1": ({"val": 10}), "m2": ({"val": "10"})});
+    const jMyStruct = ({"m1": ({"val": 10}), "m2": ({"val": "10"}), "color": "red"});
     const myStruct = $macros.__Struct_fromJson(false, MyStruct, jMyStruct);
-    $helpers.assert($helpers.eq(myStruct.m1.val, 10), "myStruct.m1.val == 10");
-    $helpers.assert($helpers.eq(myStruct.m2.val, "10"), "myStruct.m2.val == \"10\"");
+    (expect.Util.equal(myStruct.m1.val, 10));
+    (expect.Util.equal(myStruct.m2.val, "10"));
+    (expect.Util.equal(myStruct.color, Color.red));
     const schema = $macros.__Struct_schema(false, MyStruct, );
     (schema.validate(jMyStruct));
-    const expectedSchema = ({"$id": "/MyStruct", "type": "object", "properties": ({"m1": ({"type": "object", "properties": ({"val": ({"type": "number"})}), "required": ["val"]}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"]})}), "required": ["m1", "m2"]});
-    $helpers.assert($helpers.eq((schema.asStr()), $macros.__Json_stringify(false, std.Json, expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
+    const expectedSchema = ({"$id": "/MyStruct", "type": "object", "properties": ({"color": ({"type": "string", "enum": ["red", "green", "blue"]}), "m1": ({"type": "object", "properties": ({"val": ({"type": "number"})}), "required": ["val"]}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"]})}), "required": ["color", "m1", "m2"]});
+    (expect.Util.equal((schema.asStr()), $macros.__Json_stringify(false, std.Json, expectedSchema)));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
     (std.String.fromJson(10, { unsafe: true }));
     (std.Boolean.fromJson(10, { unsafe: true }));

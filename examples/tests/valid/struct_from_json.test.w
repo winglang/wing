@@ -1,4 +1,5 @@
 bring cloud;
+bring expect;
 
 // JSII structs
 let j = { public: false };
@@ -260,9 +261,12 @@ assert(externalBar.data.val == 10);
 // test namespaced struct collisions dont occur
 bring "./subdir/structs_2.w" as otherExternalStructs;
 
+enum Color { red, green, blue }
+
 struct MyStruct {
   m1: externalStructs.MyStruct;
   m2: otherExternalStructs.MyStruct;
+  color: Color;
 }
 
 let jMyStruct = {
@@ -271,25 +275,27 @@ let jMyStruct = {
   },
   m2: {
     val: "10"
-  }
+  },
+  color: "red",
 };
 
 let myStruct = MyStruct.fromJson(jMyStruct);
-assert(myStruct.m1.val == 10);
-assert(myStruct.m2.val == "10");
+expect.equal(myStruct.m1.val, 10);
+expect.equal(myStruct.m2.val, "10");
+expect.equal(myStruct.color, Color.red);
 
 // Test using schema object
 let schema = MyStruct.schema();
 schema.validate(jMyStruct); // Should not throw exception
 
-let expectedSchema = {"$id":"/MyStruct","type":"object","properties":{"m1":{"type":"object","properties":{"val":{"type":"number"}},"required":["val"]},"m2":{"type":"object","properties":{"val":{"type":"string"}},"required":["val"]}},"required":["m1","m2"]};
+let expectedSchema = {"$id":"/MyStruct","type":"object","properties":{"color":{"type":"string","enum":["red","green","blue"]},"m1":{"type":"object","properties":{"val":{"type":"number"}},"required":["val"]},"m2":{"type":"object","properties":{"val":{"type":"string"}},"required":["val"]}},"required":["color","m1","m2"]};
 
-assert(schema.asStr() == Json.stringify(expectedSchema));
+expect.equal(schema.asStr(), Json.stringify(expectedSchema));
 
 test "inflight schema usage" {
   let s = MyStruct.schema();
   s.validate(jMyStruct);
-  assert(schema.asStr() == Json.stringify(expectedSchema));
+  expect.equal(schema.asStr(), Json.stringify(expectedSchema));
 }
 
 // Testing usafe parsing mode

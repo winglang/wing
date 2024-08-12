@@ -1324,6 +1324,7 @@ impl TypeRef {
 				}
 				true
 			}
+			Type::Enum(_) => true,
 			Type::Optional(t) | Type::Array(t) | Type::Set(t) | Type::Map(t) => t.has_json_representation(),
 			_ => self.is_json_legal_value(),
 		}
@@ -6324,8 +6325,9 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 					Type::Struct(ref s) => {
 						const FROM_JSON: &str = "fromJson";
 						const TRY_FROM_JSON: &str = "tryFromJson";
+						const SCHEMA: &str = "schema";
 
-						if property.name == FROM_JSON || property.name == TRY_FROM_JSON {
+						if property.name == FROM_JSON || property.name == TRY_FROM_JSON || property.name == SCHEMA {
 							// we need to validate that only structs with all valid json fields can have a fromJson method
 							for (name, field) in s.fields(true) {
 								if !field.type_.has_json_representation() {

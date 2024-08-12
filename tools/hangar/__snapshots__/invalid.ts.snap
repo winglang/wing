@@ -4713,18 +4713,39 @@ exports[`struct_json_conversion.test.w 1`] = `
   |   ^^^^^^^^
 
 
-error: Struct "B" contains field "a" which cannot be represented in Json
-   --> ../../../examples/tests/invalid/struct_json_conversion.test.w:15:3
+error: Struct "A" contains field "b" which cannot be represented in Json
+   --> ../../../examples/tests/invalid/struct_json_conversion.test.w:10:3
    |
-15 | B.fromJson({});
+10 | A.schema();
+   |   ^^^^^^
+
+
+error: Struct "B" contains field "a" which cannot be represented in Json
+   --> ../../../examples/tests/invalid/struct_json_conversion.test.w:17:3
+   |
+17 | B.fromJson({});
+   |   ^^^^^^^^
+
+
+error: Struct "B" contains field "a" which cannot be represented in Json
+   --> ../../../examples/tests/invalid/struct_json_conversion.test.w:19:3
+   |
+19 | B.schema();
+   |   ^^^^^^
+
+
+error: Struct "C" contains field "b" which cannot be represented in Json
+   --> ../../../examples/tests/invalid/struct_json_conversion.test.w:26:3
+   |
+26 | C.fromJson({});
    |   ^^^^^^^^
 
 
 error: Struct "C" contains field "b" which cannot be represented in Json
-   --> ../../../examples/tests/invalid/struct_json_conversion.test.w:22:3
+   --> ../../../examples/tests/invalid/struct_json_conversion.test.w:28:3
    |
-22 | C.fromJson({});
-   |   ^^^^^^^^
+28 | C.schema();
+   |   ^^^^^^
 
 Tests 1 failed (1)
 Snapshots 1 skipped
