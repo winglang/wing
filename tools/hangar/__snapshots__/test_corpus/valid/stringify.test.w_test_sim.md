@@ -7,6 +7,7 @@ my string
 true
 { cool: 'beans' }
 A
+{ bar: 'hello' }
 pass ─ stringify.test.wsim (no tests)
 
 Tests 1 passed (1)

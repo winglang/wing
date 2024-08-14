@@ -44,11 +44,13 @@ class $Root extends $stdlib.std.Resource {
         return tmp;
       })({})
     ;
+    const foo = ({"bar": "hello"});
     console.log("my string");
     console.log(42);
     console.log(true);
     console.log(({"cool": "beans"}));
     console.log(MyEnum.A);
+    console.log(foo);
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "stringify.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });

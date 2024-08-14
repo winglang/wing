@@ -775,6 +775,7 @@ impl Subtype for Type {
 			(Self::Json(_), Self::Json(_)) => true,
 			(Self::MutJson, Self::Stringable) => true,
 			(Self::Enum(_), Self::Stringable) => true,
+			(Self::Struct(s), Self::Stringable) => s.fields(true).map(|(_, v)| v.type_).all(|t| t.is_stringable()),
 			_ => false,
 		}
 	}
@@ -1127,6 +1128,14 @@ impl TypeRef {
 		matches!(**self, Type::Struct(_))
 	}
 
+	pub fn is_stringable_struct(&self) -> bool {
+		if let Type::Struct(ref s) = **self {
+			s.fields(true).map(|(_, v)| v.type_).all(|t| t.is_stringable())
+		} else {
+			false
+		}
+	}
+
 	pub fn is_map(&self) -> bool {
 		matches!(**self, Type::Map(_) | Type::MutMap(_))
 	}
@@ -1169,7 +1178,7 @@ impl TypeRef {
 		matches!(
 			**self,
 			Type::String | Type::Number | Type::Boolean | Type::Json(_) | Type::MutJson | Type::Enum(_) | Type::Anything
-		)
+		) || self.is_stringable_struct()
 	}
 
 	/// If this is a function and its last argument is a struct, return that struct.
