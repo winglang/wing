@@ -15,9 +15,9 @@ let assertThrows = inflight (expected: str, block: (): void) => {
 
 let output1 = util.exec("echo", ["-n", "Hello, Wing!"]);
   
-  expect.equal(output1.stdout, "Hello, Wing!");
-  expect.equal(output1.stderr, "");
-  expect.equal(output1.status, 0);
+expect.equal(output1.stdout, "Hello, Wing!");
+expect.equal(output1.stderr, "");
+expect.equal(output1.status, 0);
 
 
 test "exec()" {
