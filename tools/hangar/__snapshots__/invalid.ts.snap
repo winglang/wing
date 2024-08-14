@@ -4595,28 +4595,37 @@ Duration <DURATION>"
 
 exports[`stringify.test.w 1`] = `
 "error: Expected type to be "stringable", but got "B" instead
-  --> ../../../examples/tests/invalid/stringify.test.w:3:13
-  |
-3 | log("hello {b}");
-  |             ^
-  |
-  = hint: str, num, bool, json, and enums are stringable
+   --> ../../../examples/tests/invalid/stringify.test.w:10:13
+   |
+10 | log("hello {b}");
+   |             ^
+   |
+   = hint: str, num, bool, json, and enums are stringable
 
 
 error: Expected type to be "stringable", but got "str?" instead
-  --> ../../../examples/tests/invalid/stringify.test.w:7:7
-  |
-7 | log("{x}");
-  |       ^
-  |
-  = hint: str? is an optional, try unwrapping it with 'x ?? "nil"' or 'x!'
+   --> ../../../examples/tests/invalid/stringify.test.w:14:7
+   |
+14 | log("{x}");
+   |       ^
+   |
+   = hint: str? is an optional, try unwrapping it with 'x ?? "nil"' or 'x!'
 
 
 error: Expected type to be "stringable", but got "B" instead
-   --> ../../../examples/tests/invalid/stringify.test.w:10:5
+   --> ../../../examples/tests/invalid/stringify.test.w:17:5
    |
-10 | log(b);
+17 | log(b);
    |     ^
+   |
+   = hint: str, num, bool, json, and enums are stringable
+
+
+error: Expected type to be "stringable", but got "Foo" instead
+   --> ../../../examples/tests/invalid/stringify.test.w:20:5
+   |
+20 | log(foo);
+   |     ^^^
    |
    = hint: str, num, bool, json, and enums are stringable
 
