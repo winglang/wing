@@ -1,11 +1,21 @@
 class B {}
 let b = new B();
+struct Foo {
+ bar: B;
+ baz: str;
+}
+
+let foo: Foo = {bar: b, baz: "hello"};
+
 log("hello {b}");
-// ^ Error: expected type to be stringable 
+// ^ Expected type to be "stringable", but got "B" instead 
 
 let x: str? = nil;
 log("{x}");
-// ^ Error: expected type to be stringable
+// ^ Expected type to be "stringable", but got "str?" instead
 
 log(b);
-// ^ Error: expected type to be stringable
+// ^ Expected type to be "stringable", but got "B" instead
+
+log(foo);
+// ^ Expected type to be "stringable", but got "Foo" instead
