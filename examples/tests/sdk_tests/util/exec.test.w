@@ -13,6 +13,12 @@ let assertThrows = inflight (expected: str, block: (): void) => {
   assert(error);
 };
 
+let output1 = util.exec("echo", ["-n", "Hello, Wing!"]);
+  
+  expect.equal(output1.stdout, "Hello, Wing!");
+  expect.equal(output1.stderr, "");
+  expect.equal(output1.status, 0);
+
 
 test "exec()" {
   // "exec() with valid program"
