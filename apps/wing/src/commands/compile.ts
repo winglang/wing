@@ -84,7 +84,10 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
     }
     entrypoint = wingFiles[0];
   }
-  loadEnvVariables({ cwd: resolve(dirname(entrypoint)) });
+  loadEnvVariables({
+    modes: options?.testing ? ["test"] : ["compile"],
+    cwd: resolve(dirname(entrypoint)),
+  });
   const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   const compileOutput = await wingCompiler.compile(entrypoint, {
     ...options,
