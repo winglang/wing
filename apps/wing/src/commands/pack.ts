@@ -80,7 +80,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
   const outfile = options.outFile ? resolve(options.outFile) : undefined;
   const outdir = outfile ? path.dirname(outfile) : userDir;
 
-  loadEnvVariables({ cwd: userDir });
+  loadEnvVariables({ modes: ["pack"], cwd: userDir });
   // check package.json exists
   const originalPkgJsonPath = path.join(userDir, "package.json");
   if (!(await exists(originalPkgJsonPath))) {

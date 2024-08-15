@@ -53,7 +53,7 @@ export const createCompiler = ({
       return;
     }
 
-    loadEnvVariables({ cwd: dirname });
+    loadEnvVariables({ modes: ["run", "it"], cwd: dirname });
 
     isCompiling = true;
     await events.emit("compiling");

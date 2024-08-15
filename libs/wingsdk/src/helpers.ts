@@ -233,8 +233,6 @@ export function preflightClassSingleton(
   return root.resourceSingletons[type];
 }
 
-const DEFAULT_ENV_FILES = [`.env`, `.env.local`];
-
 /**
  * Options for loading environment variables.
  */
@@ -244,16 +242,32 @@ export interface EnvLoadOptions {
    * @default process.cwd()
    */
   readonly cwd?: string;
+
+  /**
+   * The modes to load the environment variables for.
+   */
+  readonly modes: string[];
 }
 
 /**
- * Loads environment variables from `.env` and `.env.local` files.
+ * Loads environment variables from:
+ * - `.env`
+ * - `.env.local`
+ * - `.env.{mode}`
+ * - `.env.{mode}.local`
  */
 export function loadEnvVariables(
   options?: EnvLoadOptions
 ): Record<string, string> | undefined {
   const envDir = options?.cwd ?? process.cwd();
-  const envFiles = DEFAULT_ENV_FILES.map((file) => path.join(envDir, file));
+  const envFiles = [
+    `.env`,
+    `.env.local`,
+    ...(options?.modes.flatMap((mode) => [
+      `.env.${mode}`,
+      `.env.${mode}.local`,
+    ]) ?? []),
+  ].map((file) => path.join(envDir, file));
 
   // Parse `envFiles` and combine their variables into a single object
   const parsed = Object.fromEntries(
