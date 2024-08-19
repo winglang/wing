@@ -2296,17 +2296,24 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 				} else {
 					// If any of the types are unresolved (error) then don't report this assuming the error has already been reported
 					if !ltype.is_unresolved() && !rtype.is_unresolved() {
-						self.spanned_error(
+						let mut hints = vec![];
+						// If one of the operands is a string type, add a hint to use string interpolation
+						if ltype.is_subtype_of(&self.types.string()) || rtype.is_subtype_of(&self.types.string()) {
+							hints.push("Consider using string interpolation: \"Hello, {name}\"".to_string());
+						}
+
+						self.spanned_error_with_hints(
 							exp,
 							format!(
-														"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
-														ltype,
-														rtype,
-														self.types.number(),
-														self.types.number(),
-														self.types.string(),
-														self.types.string(),
-													),
+								"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
+								ltype,
+								rtype,
+								self.types.number(),
+								self.types.number(),
+								self.types.string(),
+								self.types.string(),
+							),
+							&hints,
 						);
 					}
 					self.resolved_error()
