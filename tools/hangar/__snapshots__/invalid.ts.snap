@@ -988,6 +988,8 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
     |
 185 |     2 + "2";
     |     ^^^^^^^
+    |
+    = hint: Consider using string interpolation: "Hello, {name}"
 
 
 error: Expected type to be "num", but got "str" instead
@@ -1002,6 +1004,8 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
     |
 198 |     2 + "2";
     |     ^^^^^^^
+    |
+    = hint: Consider using string interpolation: "Hello, {name}"
 
 
 error: Expected type to be "str", but got "num" instead
@@ -1016,6 +1020,8 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
     |
 210 |     2 + "2";
     |     ^^^^^^^
+    |
+    = hint: Consider using string interpolation: "Hello, {name}"
 
 
 error: Expected type to be "num", but got "str" instead
@@ -1030,6 +1036,8 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
     |
 221 |     2 + "2";
     |     ^^^^^^^
+    |
+    = hint: Consider using string interpolation: "Hello, {name}"
 
 
 error: Expected type to be "str", but got "num" instead
@@ -2307,6 +2315,8 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
    |
 36 | let var x = 3 + "hello";
    |             ^^^^^^^^^^^
+   |
+   = hint: Consider using string interpolation: "Hello, {name}"
 
 
 error: Unsupported reassignment of element of type unresolved
@@ -4629,6 +4639,24 @@ error: Expected type to be "stringable", but got "Foo" instead
    |
    = hint: str, num, bool, json, and enums are stringable
 
+
+error: Binary operator '+' cannot be applied to operands of type 'str' and 'num'; only (num, num) and (str, str) are supported
+   --> ../../../examples/tests/invalid/stringify.test.w:25:5
+   |
+25 | log("value: " + z);
+   |     ^^^^^^^^^^^^^
+   |
+   = hint: Consider using string interpolation: "Hello, {name}"
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+   --> ../../../examples/tests/invalid/stringify.test.w:28:5
+   |
+28 | log(z + " is the value");
+   |     ^^^^^^^^^^^^^^^^^^^
+   |
+   = hint: Consider using string interpolation: "Hello, {name}"
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4974,6 +5002,8 @@ exports[`types_strings_arithmetic.test.w 1`] = `
   |
 1 | let e1 = 2 + "2";
   |          ^^^^^^^
+  |
+  = hint: Consider using string interpolation: "Hello, {name}"
 
 
 error: Expected type to be "num", but got "str" instead
@@ -5188,6 +5218,8 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
    |
 20 |     this.bucket.assert(2 + "2");
    |                        ^^^^^^^
+   |
+   = hint: Consider using string interpolation: "Hello, {name}"
 
 
 error: Member "assert" does not exist in "Bucket"
