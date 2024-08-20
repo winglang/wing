@@ -1046,6 +1046,20 @@ error: Expected type to be "str", but got "num" instead
 223 |     return 5;
     |            ^
 
+
+error: public class "PublicClass" must be declared at the top-level of the file or marked private
+    --> ../../../examples/tests/invalid/class.test.w:231:13
+    |
+231 |   pub class PublicClass {
+    |             ^^^^^^^^^^^
+
+
+error: internal class "InternalClass" must be declared at the top-level of the file or marked private
+    --> ../../../examples/tests/invalid/class.test.w:235:18
+    |
+235 |   internal class InternalClass {
+    |                  ^^^^^^^^^^^^^
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1480,6 +1494,13 @@ error: Property not found
   |
 8 | let two = SomeEnum.TWO.TWO;
   |                        ^^^
+
+
+error: enum "AnotherEnum" must be declared at the top-level of the file
+   --> ../../../examples/tests/invalid/enums.test.w:12:8
+   |
+12 |   enum AnotherEnum {
+   |        ^^^^^^^^^^^
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2826,6 +2847,13 @@ error: Expected type to be "preflight (): void", but got "inflight (): void" ins
    |       ^^^^^^
    |
    = hint: expected phase to be preflight, but got inflight instead
+
+
+error: interface "INestedInterface" must be declared at the top-level of the file
+   --> ../../../examples/tests/invalid/interface.test.w:72:13
+   |
+72 |   interface INestedInterface {
+   |             ^^^^^^^^^^^^^^^^
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4861,14 +4889,14 @@ error: "noSuchField" is not a field of "SomeStruct1"
    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-error: struct "PreflightStruct" must be declared at the top-level of a file
+error: struct "PreflightStruct" must be declared at the top-level of the file
    --> ../../../examples/tests/invalid/structs.test.w:51:10
    |
 51 |   struct PreflightStruct {
    |          ^^^^^^^^^^^^^^^
 
 
-error: struct "InflightStruct" must be declared at the top-level of a file
+error: struct "InflightStruct" must be declared at the top-level of the file
    --> ../../../examples/tests/invalid/structs.test.w:58:10
    |
 58 |   struct InflightStruct {
