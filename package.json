@@ -27,6 +27,7 @@
   "pnpm": {
     "overrides": {
       "mime": "^3.0.0",
+      "@tanstack/react-virtual": "3.9.0",
       "axios@>=0.8.1 <0.28.0": ">=0.28.0"
     },
     "patchedDependencies": {

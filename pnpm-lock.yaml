@@ -6,6 +6,7 @@ settings:
 
 overrides:
   mime: ^3.0.0
+  '@tanstack/react-virtual': 3.9.0
   axios@>=0.8.1 <0.28.0: '>=0.28.0'
 
 patchedDependencies:
@@ -6236,7 +6237,7 @@ packages:
       react: ^16 || ^17 || ^18
       react-dom: ^16 || ^17 || ^18
     dependencies:
-      '@tanstack/react-virtual': 3.7.0(react-dom@18.3.1)(react@18.3.1)
+      '@tanstack/react-virtual': 3.9.0(react-dom@18.3.1)(react@18.3.1)
       client-only: 0.0.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -10377,19 +10378,19 @@ packages:
       use-sync-external-store: 1.2.2(react@18.3.1)
     dev: false
 
-  /@tanstack/react-virtual@3.7.0(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-3RtOwEU1HKS4iFBoTcCrV3Szqt4KoERMhZr8v57dvnh5o70sR9GAdF+0aE/qhiOmePrKujGwAayFNJSr/8Dbqw==}
+  /@tanstack/react-virtual@3.9.0(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-5TeTSQBMV1PIFzBP9cduIX5klRaTvbOw+CxRx3LaUhwqiZLEZBZqz8anEIqG4eHNhDAe+BLarRDeNE9cNM1/EA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      '@tanstack/virtual-core': 3.7.0
+      '@tanstack/virtual-core': 3.9.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /@tanstack/virtual-core@3.7.0:
-    resolution: {integrity: sha512-p0CWuqn+n8iZmsL7/l0Xg7kbyIKnHNqkEJkMDOkg4x3Ni3LohszmnJY8FPhTgG7Ad9ZFGcdKmn1R1mKUGEh9Xg==}
+  /@tanstack/virtual-core@3.9.0:
+    resolution: {integrity: sha512-Saga7/QRGej/IDCVP5BgJ1oDqlDT2d9rQyoflS3fgMS8ntJ8JGw/LBqK2GorHa06+VrNFc0tGz65XQHJQJetFQ==}
     dev: false
 
   /@testing-library/dom@8.20.1:
@@ -14279,7 +14280,7 @@ packages:
     dependencies:
       semver: 7.6.2
       shelljs: 0.8.5
-      typescript: 5.6.0-dev.20240802
+      typescript: 5.6.0-dev.20240819
     dev: true
 
   /dset@3.1.3:
@@ -22644,8 +22645,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.6.0-dev.20240802:
-    resolution: {integrity: sha512-aPQg1SL05JivtUdMmXq3BBa9NqhNbDvOlDPXvCf3K+kZ5jkxDdf2El6BLEkkzxkWOczoxma8l40ppGsC6pF40A==}
+  /typescript@5.6.0-dev.20240819:
+    resolution: {integrity: sha512-uNOMaNm8jBELjhuXZG5tSS6Pa6O/Wf89hawKkWaZcZvbkgkY2ykvNTNrkCP7QCQTSS3jwEVvd+pRhxJPxUeG4g==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
