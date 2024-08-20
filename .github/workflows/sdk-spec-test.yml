@@ -223,7 +223,7 @@ jobs:
         if: ${{ env.LOCAL_BUILD ==  'true' }}
         uses: actions/upload-artifact@v4
         with:
-          name: out-${{ matrix.test }}-${{ matrix.target }}
+          name: out-${{ matrix.test.name }}-${{ matrix.target }}
           path: out/*
 
       - name: Output Terraform log
