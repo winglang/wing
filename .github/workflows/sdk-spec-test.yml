@@ -128,7 +128,7 @@ jobs:
       ##################### install a local wing version #########################
       - name: Download Dist Artifacts
         if: ${{ env.LOCAL_BUILD ==  'true' }}
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
@@ -221,7 +221,7 @@ jobs:
 
       - name: Upload Artifacts
         if: ${{ env.LOCAL_BUILD ==  'true' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: out
           path: out/*

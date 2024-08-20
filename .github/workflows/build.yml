@@ -89,7 +89,7 @@ jobs:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/*
@@ -140,7 +140,7 @@ jobs:
 
       - name: Upload patch
         if: steps.diff.outputs.diff == 'true'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build.diff
           path: build.diff
@@ -156,7 +156,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Dist Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
@@ -191,7 +191,7 @@ jobs:
         run: pnpm bench
 
       - name: Upload Report JSON
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: benchmarks
           path: tools/hangar/results/report.json
@@ -235,7 +235,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Download Dist Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
@@ -263,7 +263,7 @@ jobs:
 
       - name: Upload mutation
         if: matrix.runner == 'ubuntu' && matrix.node == '20' && steps.diff.outputs.diff == 'true'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.diff.outputs.diff_name }}
           path: ${{ steps.diff.outputs.diff_name }}
@@ -290,7 +290,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Dist Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
@@ -341,7 +341,7 @@ jobs:
           echo '${{ toJson(needs) }}'
           exit 1
       - name: Download patches
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
       - name: Check patches
         run: |
           PATCH_COUNT=0
@@ -365,7 +365,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
