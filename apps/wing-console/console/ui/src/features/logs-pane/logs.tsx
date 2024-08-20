@@ -115,7 +115,7 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
   ]);
 
   return (
-    <div className="relative h-full flex flex-col gap-2">
+    <div className="relative h-full flex flex-col">
       <ConsoleLogsFilters
         selectedLogTypeFilters={selectedLogTypeFilters}
         setSelectedLogTypeFilters={setSelectedLogTypeFilters}
