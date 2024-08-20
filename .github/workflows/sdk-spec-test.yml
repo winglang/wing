@@ -219,12 +219,12 @@ jobs:
           cd ${{ matrix.test.directory }}
           $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} -p ${{ (matrix.target == 'tf-azure' && 2 ) || (matrix.target == 'tf-gcp' && 5) || 10 }} --retry 3 $COMPATIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
 
-      - name: Upload Artifacts
-        if: ${{ env.LOCAL_BUILD ==  'true' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: out
-          path: out/*
+      # - name: Upload Artifacts
+      #   if: ${{ env.LOCAL_BUILD ==  'true' }}
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: out
+      #     path: out/*
 
       - name: Output Terraform log
         if: failure()
