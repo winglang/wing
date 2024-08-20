@@ -65,7 +65,7 @@ export function main(
     if (process.env[envVar] === undefined) {
       throw new Error(`\
 Missing environment variable: ${envVar}
-This is a Wing app and must be run through the Wing CLI (npm install -f winglang).`);
+This is a Wing app and must be run through the Wing CLI (npm install -g winglang).`);
     }
   }
 
