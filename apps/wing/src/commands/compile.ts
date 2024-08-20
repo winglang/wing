@@ -1,13 +1,13 @@
-import { promises as fsPromise } from "fs";
-import { dirname, relative, resolve } from "path";
+import { dirname, resolve } from "path";
 
 import * as wingCompiler from "@winglang/compiler";
 import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
-import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import debug from "debug";
 import { glob } from "glob";
+import { formatDiagnostics } from "./diagnostics";
+import { COLORING } from "src/util";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -88,80 +88,21 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
     modes: options?.testing ? ["test"] : ["compile"],
     cwd: resolve(dirname(entrypoint)),
   });
-  const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   const compileOutput = await wingCompiler.compile(entrypoint, {
     ...options,
     log,
-    color: coloring,
+    color: COLORING,
     platform: options?.platform ?? ["sim"],
   });
   if (compileOutput.wingcErrors.length > 0) {
     // Print any errors or warnings from the compiler.
     const diagnostics = compileOutput.wingcErrors;
-    const cwd = process.cwd();
-    const result = [];
-
-    for (const diagnostic of diagnostics) {
-      const { message, span, annotations, hints, severity } = diagnostic;
-      const files: File[] = [];
-      const labels: Label[] = [];
-
-      // file_id might be "" if the span is synthetic (see #2521)
-      if (span?.file_id) {
-        // `span` should only be null if source file couldn't be read etc.
-        const source = await fsPromise.readFile(span.file_id, "utf8");
-        const start = span.start_offset;
-        const end = span.end_offset;
-        const filePath = relative(cwd, span.file_id);
-        files.push({ name: filePath, source });
-        labels.push({
-          fileId: filePath,
-          rangeStart: start,
-          rangeEnd: end,
-          message: "",
-          style: "primary",
-        });
-      }
-
-      for (const annotation of annotations) {
-        // file_id might be "" if the span is synthetic (see #2521)
-        if (!annotation.span?.file_id) {
-          continue;
-        }
-        const source = await fsPromise.readFile(annotation.span.file_id, "utf8");
-        const start = annotation.span.start_offset;
-        const end = annotation.span.end_offset;
-        const filePath = relative(cwd, annotation.span.file_id);
-        files.push({ name: filePath, source });
-        labels.push({
-          fileId: filePath,
-          rangeStart: start,
-          rangeEnd: end,
-          message: annotation.message,
-          style: "secondary",
-        });
-      }
-
-      const diagnosticText = emitDiagnostic(
-        files,
-        {
-          message,
-          severity,
-          labels,
-          notes: hints.map((hint) => `hint: ${hint}`),
-        },
-        {
-          chars: CHARS_ASCII,
-        },
-        coloring
-      );
-      result.push(diagnosticText);
-    }
+    const formatted = await formatDiagnostics(diagnostics);
 
     if (compileOutput.wingcErrors.map((e) => e.severity).includes("error")) {
-      throw new Error(result.join("\n").trimEnd());
+      throw new Error(formatted);
     } else {
-      console.error(result.join("\n").trimEnd());
+      console.error(formatted);
     }
   }
 

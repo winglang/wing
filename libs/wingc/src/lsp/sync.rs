@@ -22,7 +22,7 @@ use crate::valid_json_visitor::ValidJsonVisitor;
 use crate::visit::Visit;
 use crate::wasm_util::extern_json_fn;
 use crate::{ast::Scope, type_check::Types};
-use crate::{type_check, DEFAULT_PACKAGE_NAME};
+use crate::{type_check_file, DEFAULT_PACKAGE_NAME};
 
 /// The output of compiling a Wing project with one or more files
 pub struct ProjectData {
@@ -184,7 +184,7 @@ fn partial_compile(
 			.asts
 			.swap_remove(&file.path)
 			.expect("matching AST not found");
-		type_check(
+		type_check_file(
 			&mut scope,
 			&mut types,
 			&file,

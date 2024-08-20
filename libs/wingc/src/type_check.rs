@@ -306,6 +306,14 @@ pub struct Namespace {
 	pub module_path: ResolveSource,
 }
 
+impl Namespace {
+	/// Returns true if this namespace has any public API elements, like a `pub` class or enum,
+	/// or a namepsace with 1 or more public elements.
+	pub fn has_public_api_elements(&self) -> bool {
+		self.envs.iter().any(|env| env.has_public_api_elements())
+	}
+}
+
 #[derive(Debug)]
 pub enum ResolveSource {
 	/// A wing file within the source tree for this compilation.
