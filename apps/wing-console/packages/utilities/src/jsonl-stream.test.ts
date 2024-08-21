@@ -22,6 +22,28 @@ test("reads empty file", async () => {
   });
 });
 
+test("reads empty file with newline at the end", async () => {
+  const fileName = await createTemporaryFile("\n");
+  const lines = await readLinesReverse({
+    fileName,
+  });
+  expect(lines).toEqual({
+    lines: [],
+    position: 0,
+  });
+});
+
+test("reads empty file with many newlines at the end", async () => {
+  const fileName = await createTemporaryFile("\n\n\n\n");
+  const lines = await readLinesReverse({
+    fileName,
+  });
+  expect(lines).toEqual({
+    lines: [],
+    position: 0,
+  });
+});
+
 test("reads small file in a single read", async () => {
   const fileName = await createTemporaryFile("1\n2\n");
   const lines = await readLinesReverse({
@@ -64,14 +86,14 @@ test("handles missing newline character at the end of the file", async () => {
   });
 });
 
-test.only("reads partial lines if they are too big for the buffer size", async () => {
+test("reads partial lines if they are too big for the buffer size", async () => {
   const fileName = await createTemporaryFile("1\n23456789\n");
   const lines = await readLinesReverse({
     fileName,
     bufferSize: 4,
   });
   expect(lines).toEqual({
-    lines: [{ line: "2345", partial: true }],
-    position: 2,
+    lines: [{ partialLine: "2345", start: 2, end: 10 }],
+    position: 1,
   });
 });
