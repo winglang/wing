@@ -1,6 +1,4 @@
 import type { FileHandle } from "node:fs/promises";
-import { open } from "node:fs/promises";
-import assert from "node:assert/strict";
 
 const DEFAULT_BUFFER_SIZE = 1024;
 const SEPARATOR_CHARACTER = "\n";
@@ -10,59 +8,38 @@ const getFileSize = async (fileHandle: FileHandle): Promise<number> => {
   return stats.size;
 };
 
-// const findPartialLineReverse = async (
-//    fileHandle: FileHandle,
-//    buffer: Buffer,
-//    bufferSize: number,
-//    position: number,
-// ) => {
-//   const startPosition = Math.max(0, position - bufferSize);
-//   const { bytesRead } = await fileHandle.read(
-//       buffer,
-//       0,
-//       bufferSize,
-//       startPosition,
-//     );
-// }
-
 export interface ReadLinesReverseOptions {
-  fileName: string;
   bufferSize?: number;
   position?: number;
 }
 
 export interface PartialLine {
-  //   partial: true;
-  //   line: string;
   partialLine: string;
   start: number;
   end: number;
 }
 
 export interface ReadLinesReverseResult {
-  //   lines: JsonLine[];
   lines: (string | PartialLine)[];
   position: number;
 }
 
 export const readLinesReverse = async (
-  options: ReadLinesReverseOptions,
+  fileHandle: FileHandle,
+  options?: ReadLinesReverseOptions,
 ): Promise<ReadLinesReverseResult> => {
-  const fileHandle = await open(options.fileName, "r");
-
   const fileSize = await getFileSize(fileHandle);
   if (fileSize === 0) {
-    await fileHandle.close();
     return {
       lines: [],
       position: 0,
     };
   }
-  const position = options.position ?? fileSize;
+  const position = options?.position ?? fileSize;
 
   const bufferSize = Math.min(
     position,
-    options.bufferSize ?? DEFAULT_BUFFER_SIZE,
+    options?.bufferSize ?? DEFAULT_BUFFER_SIZE,
   );
   const buffer = Buffer.alloc(bufferSize);
 
@@ -127,8 +104,6 @@ export const readLinesReverse = async (
     .filter((line) => line.length > 0);
 
   const newPosition = startPosition === 0 ? 0 : startPosition + separator;
-
-  await fileHandle.close();
 
   return {
     lines,
