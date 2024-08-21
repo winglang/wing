@@ -1365,6 +1365,7 @@ If no catch block exists among caller functions, the program will terminate.
 Structs are loosely modeled after typed JSON literals in JavaScript.  
 Structs are defined with the `struct` keyword.  
 Structs are "bags" of immutable data.
+Structs must be defined at the top-level of a Wing file.
 
 Structs can only have fields of primitive types, preflight classes, and other structs.  
 Array, set, and map of above types is also allowed in struct field definition.  
@@ -1529,6 +1530,9 @@ Multiple inheritance is invalid and forbidden.
 Multiple implementations of various interfaces is allowed.  
 Multiple implementations of the same interface is invalid and forbidden.
 
+Classes can have an [access modifier](#15-access-modifiers-member-visibility) specifying whether it can be imported by other Wing source files.
+Classes can only be marked `pub` or `internal` if they are defined at the top-level of a Wing file.
+
 In methods if return type is missing, `: void` is assumed.
 
 #### Roadmap
@@ -1644,6 +1648,8 @@ of methods with different phases is not allowed as well.
 Interfaces represent a contract that a class must fulfill.
 Interfaces are defined with the `interface` keyword.
 Interfaces may be either preflight interfaces or inflight interfaces.
+Interfaces must be defined at the top-level of a Wing file.
+
 Preflight interfaces are defined in preflight scope and can contain both preflight and inflight methods.
 Only preflight classes may implement preflight interfaces.
 Inflight interfaces are either defined with the `inflight` modifier in preflight scope or simply defined in inflight scope.
@@ -1809,7 +1815,8 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 
 Enumeration type (`enum`) is a type that groups a list of named constant members.
 Enumeration is defined by writing **enum**, followed by enumeration name and a
-list of comma-separated constants in a {}. 
+list of comma-separated constants in a {}.
+Enums must be defined at the top-level of a Wing file.
 Naming convention for enums is to use "TitleCase" for name and ALL_CAPS for members.
 
 > ```TS

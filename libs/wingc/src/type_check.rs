@@ -3902,7 +3902,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		if let Some(_) = env.parent {
 			self.spanned_error(
 				name,
-				format!("struct \"{name}\" must be declared at the top-level of a file"),
+				format!("struct \"{name}\" must be declared at the top-level of the file"),
 			);
 		}
 
@@ -3959,6 +3959,15 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			self.source_file.package.clone(),
 		);
 
+		// Interfaces can only be declared only at the top-level of a program
+		if let Some(_) = env.parent {
+			let name = &iface.name;
+			self.spanned_error(
+				name,
+				format!("interface \"{name}\" must be declared at the top-level of the file"),
+			);
+		}
+
 		// Collect types this interface extends
 		let extend_interfaces = iface
 			.extends
@@ -4009,6 +4018,15 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			values: enu.values.clone(),
 			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 		}));
+
+		// Enums can only be declared only at the top-level of a program
+		if let Some(_) = env.parent {
+			let name = &enu.name;
+			self.spanned_error(
+				name,
+				format!("enum \"{name}\" must be declared at the top-level of the file"),
+			);
+		}
 
 		match env.define(
 			&enu.name,
@@ -4480,6 +4498,19 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 
 	fn type_check_class(&mut self, stmt: &Stmt, ast_class: &AstClass, env: &mut SymbolEnv) {
 		self.ctx.push_class(ast_class);
+
+		// Classes cannot be exported (via "pub" or "internal") if they are
+		// defined somewhere besides the top-level of the file.
+		if let Some(_) = env.parent {
+			let access = ast_class.access;
+			let name = &ast_class.name;
+			if access == AccessModifier::Public || access == AccessModifier::Internal {
+				self.spanned_error(
+					name,
+					format!("{access} class \"{name}\" must be declared at the top-level of the file or marked private"),
+				);
+			}
+		}
 
 		// preflight classes cannot be declared inside an inflight scope
 		// (the other way is okay)

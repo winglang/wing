@@ -67,3 +67,10 @@ inflight interface IInflightExtendsJsii extends jsii_fixture.ISomeInterface {
 inflight class CInflightImplJsii impl jsii_fixture.ISomeInterface {
   pub method(): void {}
 }
+
+if true {
+  interface INestedInterface {
+    // ^ Interfaces must be declared at the top-level of the file
+    method(): void;
+  }
+}
