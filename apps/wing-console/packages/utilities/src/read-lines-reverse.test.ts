@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 
 import { expect, test, vi } from "vitest";
 
-import { readLinesReverse } from "./jsonl-stream.js";
+import { readLinesReverse } from "./read-lines-reverse.js";
 
 const createTemporaryFile = async (content: string) => {
   const directory = await mkdtemp(tmpdir());
