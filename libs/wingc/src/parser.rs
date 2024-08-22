@@ -4,7 +4,7 @@ use itertools::Itertools;
 use phf::{phf_map, phf_set};
 use regex::Regex;
 use std::cell::RefCell;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::ops::Range;
 use std::{fs, str, vec};
 use tree_sitter::Node;
@@ -160,6 +160,7 @@ pub fn parse_wing_project(
 	init_text: Option<String>,
 	files: &mut Files,
 	file_graph: &mut FileGraph,
+	library_roots: &mut IndexMap<String, Utf8PathBuf>,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
 ) -> Vec<File> {
@@ -173,7 +174,15 @@ pub fn parse_wing_project(
 			tree_sitter_trees,
 			asts,
 		),
-		false => parse_wing_file(&init_file, init_text, files, file_graph, tree_sitter_trees, asts),
+		false => parse_wing_file(
+			&init_file,
+			init_text,
+			files,
+			file_graph,
+			library_roots,
+			tree_sitter_trees,
+			asts,
+		),
 	};
 
 	// Store a stack of files that still need parsing
@@ -198,7 +207,15 @@ pub fn parse_wing_project(
 		// Parse the file or directory
 		let dependent_wing_paths = match file_or_dir.path.is_dir() {
 			true => parse_wing_directory(&file_or_dir, &source_ref, files, file_graph, tree_sitter_trees, asts),
-			false => parse_wing_file(&file_or_dir, None, files, file_graph, tree_sitter_trees, asts),
+			false => parse_wing_file(
+				&file_or_dir,
+				None,
+				files,
+				file_graph,
+				library_roots,
+				tree_sitter_trees,
+				asts,
+			),
 		};
 
 		// Add the dependent files to the stack of files to parse
@@ -234,6 +251,7 @@ fn parse_wing_file(
 	source_text: Option<String>,
 	files: &mut Files,
 	file_graph: &mut FileGraph,
+	library_roots: &mut IndexMap<String, Utf8PathBuf>,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
 ) -> Vec<(File, WingSpan)> {
@@ -262,7 +280,10 @@ fn parse_wing_file(
 
 	// Parse the source text into an AST
 	let parser = Parser::new(&source_text.as_bytes(), source_file.to_owned());
-	let (scope, dependent_wing_paths) = parser.parse(&tree_sitter_root);
+	let (scope, dependent_wing_paths, found_library_roots) = parser.parse(&tree_sitter_root);
+	for (name, path) in found_library_roots {
+		library_roots.insert(name, path);
+	}
 
 	// Update our collections of trees and ASTs and our file graph
 	tree_sitter_trees.insert(source_file.path.to_owned(), tree_sitter_tree);
@@ -383,9 +404,13 @@ pub struct Parser<'a> {
 	in_json: RefCell<u64>,
 	is_in_mut_json: RefCell<bool>,
 	is_in_loop: RefCell<bool>,
+
 	/// Track all files (and where they appear in the source) that have been found while parsing the current file
 	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
 	referenced_wing_files: RefCell<Vec<(File, WingSpan)>>,
+
+	/// Track the roots of all libraries that have been found while parsing the current file
+	found_library_roots: RefCell<HashMap<String, Utf8PathBuf>>,
 }
 
 struct ParseErrorBuilder<'s> {
@@ -428,10 +453,11 @@ impl<'s> Parser<'s> {
 			in_json: RefCell::new(0),
 			is_in_mut_json: RefCell::new(false),
 			referenced_wing_files: RefCell::new(Vec::new()),
+			found_library_roots: RefCell::new(HashMap::new()),
 		}
 	}
 
-	pub fn parse(self, root: &Node) -> (Scope, Vec<(File, WingSpan)>) {
+	pub fn parse(self, root: &Node) -> (Scope, Vec<(File, WingSpan)>, HashMap<String, Utf8PathBuf>) {
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root, Phase::Preflight),
 			_ => Scope::empty(),
@@ -451,7 +477,11 @@ impl<'s> Parser<'s> {
 
 		self.report_unhandled_errors(&root);
 
-		(scope, self.referenced_wing_files.into_inner())
+		(
+			scope,
+			self.referenced_wing_files.into_inner(),
+			self.found_library_roots.into_inner(),
+		)
 	}
 
 	fn add_error(&self, message: impl ToString, node: &Node) {
@@ -1103,6 +1133,11 @@ impl<'s> Parser<'s> {
 						.err();
 				})?;
 
+			self
+				.found_library_roots
+				.borrow_mut()
+				.insert(module_name_parsed.clone(), module_dir.clone());
+
 			// If the package.json has a `wing` field, then we treat it as a Wing library
 			if let Some(libname) = as_wing_library(&Utf8Path::new(&module_dir)) {
 				return if let Some(alias) = alias {
@@ -1163,6 +1198,7 @@ impl<'s> Parser<'s> {
 
 		// check if a trusted library exists with this name
 		let source_dir = Utf8Path::new(&self.source_file.path).parent().unwrap();
+		let package_name = format!("{}/{}", TRUSTED_LIBRARY_NPM_NAMESPACE, module_name.name);
 		let module_dir = wingii::util::package_json::find_dependency_directory(
 			&format!("{}/{}", TRUSTED_LIBRARY_NPM_NAMESPACE, module_name.name),
 			&source_dir,
@@ -1178,6 +1214,11 @@ impl<'s> Parser<'s> {
 				)
 				.err();
 		})?;
+
+		self
+			.found_library_roots
+			.borrow_mut()
+			.insert(package_name, module_dir.clone());
 
 		// make sure the trusted library is also parsed
 		let module_file = File::new(

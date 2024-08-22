@@ -30,6 +30,8 @@ pub struct ProjectData {
 	pub files: Files,
 	/// A graph that tracks the dependencies between files
 	pub file_graph: FileGraph,
+	/// A map from library names to their root paths
+	pub library_roots: IndexMap<String, Utf8PathBuf>,
 	/// tree-sitter trees
 	pub trees: IndexMap<Utf8PathBuf, Tree>,
 	/// AST for each file
@@ -44,6 +46,7 @@ impl ProjectData {
 		ProjectData {
 			files: Files::new(),
 			file_graph: FileGraph::default(),
+			library_roots: IndexMap::new(),
 			trees: IndexMap::new(),
 			asts: IndexMap::new(),
 			jsii_imports: Vec::new(),
@@ -157,6 +160,7 @@ fn partial_compile(
 		Some(source_text),
 		&mut project_data.files,
 		&mut project_data.file_graph,
+		&mut project_data.library_roots,
 		&mut project_data.trees,
 		&mut project_data.asts,
 	);

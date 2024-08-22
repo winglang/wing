@@ -294,7 +294,11 @@ pub fn compile(
 ) -> Result<CompilerOutput, ()> {
 	let source_package = as_wing_library(project_dir).unwrap_or_else(|| DEFAULT_PACKAGE_NAME.to_string());
 	let source_path = normalize_path(source_path, None);
-	let source_file = File::new(&source_path, source_package);
+	let source_file = File::new(&source_path, source_package.clone());
+
+	// A map from package names to their root directories
+	let mut library_roots: IndexMap<String, Utf8PathBuf> = IndexMap::new();
+	library_roots.insert(source_package, project_dir.to_owned());
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -306,6 +310,7 @@ pub fn compile(
 		source_text,
 		&mut files,
 		&mut file_graph,
+		&mut library_roots,
 		&mut tree_sitter_trees,
 		&mut asts,
 	);
