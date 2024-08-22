@@ -354,6 +354,7 @@ pub struct Class {
 	// uid is used for Wing classes and is always 0 for JSII classes to avoid snapshot noise.
 	pub uid: usize,
 }
+
 impl Class {
 	pub(crate) fn set_lifts(&mut self, lifts: Lifts) {
 		self.lifts = Some(lifts);
@@ -4584,9 +4585,20 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		}
 
 		// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
+		let fqn = if ast_class.access == AccessModifier::Public {
+			let package_root = self
+				.library_roots
+				.get(&self.source_file.package)
+				.expect("package root not found");
+			let base_fqn = calculate_fqn_for_namespace(&self.source_file.package, package_root, &self.source_file.path);
+			Some(format!("{}.{}", base_fqn, ast_class.name))
+		} else {
+			None
+		};
+
 		let class_spec = Class {
 			name: ast_class.name.clone(),
-			fqn: None,
+			fqn,
 			env: dummy_env,
 			parent: parent_class,
 			implements: impl_interfaces.clone(),
