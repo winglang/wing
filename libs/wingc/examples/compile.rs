@@ -13,14 +13,9 @@ pub fn main() {
 	}
 
 	let source_path = Utf8Path::new(&args[1]).canonicalize_utf8().unwrap();
-	let project_dir = if source_path.is_dir() {
-		source_path.clone()
-	} else {
-		source_path.parent().unwrap().to_owned()
-	};
 	let target_dir: Utf8PathBuf = env::current_dir().unwrap().join("target").try_into().unwrap();
 
-	let _ = compile(&project_dir, &source_path, None, &target_dir);
+	let _ = compile(&source_path, None, &target_dir);
 	let mut diags = get_diagnostics();
 	if !diags.is_empty() {
 		// Sort error messages by line number (ascending)

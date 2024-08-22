@@ -97,7 +97,7 @@ fn command_build(source_file: Utf8PathBuf, target: Option<Target>) -> Result<(),
 		std::env::set_var("WINGSDK_MANIFEST_ROOT", &sdk_root);
 	}
 
-	let result = compile(&project_dir, &source_file, None, &work_dir);
+	let result = compile(&source_file, None, &work_dir);
 
 	match result {
 		Ok(_) => {}

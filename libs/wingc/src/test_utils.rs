@@ -86,9 +86,9 @@ fn compile_code(code: &str, as_dir: bool) -> String {
 		// Write lib.w to the project dir because compiling a directory requires an actual file to exist
 		std::fs::write(project_dir.join("lib.w"), &code).unwrap();
 
-		compile(project_dir, &project_dir, None, &out_dir)
+		compile(&project_dir, None, &out_dir)
 	} else {
-		compile(project_dir, &project_dir.join("main.w"), Some(code.clone()), &out_dir)
+		compile(&project_dir.join("main.w"), Some(code.clone()), &out_dir)
 	};
 
 	let mut snap = vec![];
