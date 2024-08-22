@@ -1,20 +1,44 @@
 import type { FileHandle } from "node:fs/promises";
 
+/**
+ * The minimum buffer size that can be used.
+ *
+ * This is used to ensure that the buffer is large enough to read at least one character and the newline.
+ */
+const MIN_BUFFER_SIZE = 2;
+
+/**
+ * The default buffer size to use when reading from the file.
+ */
 const DEFAULT_BUFFER_SIZE = 1024;
+
+/**
+ * The character that separates lines in the file.
+ */
 const SEPARATOR_CHARACTER = "\n";
 
-const getFileSize = async (fileHandle: FileHandle): Promise<number> => {
+/**
+ * Get the size of a file in bytes.
+ */
+const getFileSize = async (fileHandle: FileHandle) => {
   const stats = await fileHandle.stat();
   return stats.size;
 };
 
+/**
+ * Reads a chunk of data from the file handle into a buffer.
+ *
+ * The chunk is read starting at the given position, in the direction specified by the `forward` parameter.
+ */
 const readChunk = async (
   fileHandle: FileHandle,
   buffer: Buffer,
   position: number,
   forward: boolean,
 ) => {
-  const start = forward ? position : Math.max(0, position - buffer.byteLength);
+  const start = forward
+    ? position
+    : Math.max(0, position - buffer.byteLength - 1);
   const length = forward
     ? buffer.byteLength
     : Math.min(position, buffer.byteLength);
@@ -26,6 +50,11 @@ const readChunk = async (
   };
 };
 
+/**
+ * Attempts to extract lines from a chunk of text.
+ *
+ * If the chunk does not contain a separator character, the function will return `undefined` instead of an array of lines.
+ */
 const extractLines = (
   text: string,
   start: number,
@@ -37,7 +66,7 @@ const extractLines = (
 
     if (separator === -1) {
       return {
-        lines: [],
+        lines: undefined,
         position: end,
       };
     }
@@ -56,7 +85,7 @@ const extractLines = (
 
   if (separator === -1) {
     return {
-      lines: [],
+      lines: undefined,
       position: Math.max(0, start - 1),
     };
   }
@@ -68,6 +97,71 @@ const extractLines = (
       .filter((line) => line.length > 0),
     // position: Math.max(0, start + separator - 1),
     position: Math.max(0, start + separator),
+  };
+};
+
+/**
+ * Find the position of the next end of line character in the file.
+ */
+const findNextEndOfLinePosition = async (
+  fileHandle: FileHandle,
+  buffer: Buffer,
+  position: number,
+  forward: boolean,
+) => {
+  while (true) {
+    const start = forward
+      ? position
+      : Math.max(0, position - buffer.byteLength - 1);
+    const length = forward
+      ? buffer.byteLength
+      : Math.min(position, buffer.byteLength);
+    const { bytesRead } = await fileHandle.read(buffer, 0, length, start);
+
+    if (!forward && position === 0) {
+      return 0;
+    }
+
+    if (bytesRead === 0) {
+      return position;
+    }
+
+    const text = buffer.toString("utf8", 0, bytesRead);
+    const separator = forward
+      ? text.indexOf(SEPARATOR_CHARACTER)
+      : text.lastIndexOf(SEPARATOR_CHARACTER);
+    if (separator !== -1) {
+      return start + separator + (forward ? 0 : 1);
+    }
+    position = forward ? start + bytesRead : start;
+  }
+};
+
+const readPartialChunk = async (
+  fileHandle: FileHandle,
+  buffer: Buffer,
+  position: number,
+  forward: boolean,
+  chunk: { start: number; end: number },
+) => {
+  const newPosition = await findNextEndOfLinePosition(
+    fileHandle,
+    buffer,
+    position,
+    forward,
+  );
+  const newStart = forward ? chunk.start : newPosition;
+  const newEnd = forward ? newPosition : chunk.end;
+  const newChunk = await readChunk(fileHandle, buffer, newStart, true);
+  return {
+    lines: [
+      {
+        partialLine: newChunk.text,
+        start: newStart,
+        end: newEnd,
+      },
+    ],
+    position: newPosition,
   };
 };
 
@@ -101,91 +195,23 @@ export const readLines = async (
   const position =
     options?.position ?? (forward ? 0 : await getFileSize(fileHandle));
 
-  const buffer = Buffer.alloc(options?.bufferSize ?? DEFAULT_BUFFER_SIZE);
+  const buffer = Buffer.alloc(
+    Math.max(MIN_BUFFER_SIZE, options?.bufferSize ?? DEFAULT_BUFFER_SIZE),
+  );
 
   const chunk = await readChunk(fileHandle, buffer, position, forward);
+  if (chunk.text.length === 0) {
+    return {
+      lines: [],
+      position: 0,
+    };
+  }
+
   const lines = extractLines(chunk.text, chunk.start, chunk.end, forward);
-  // console.log({ chunk, lines });
+
+  if (lines.lines === undefined) {
+    return await readPartialChunk(fileHandle, buffer, position, forward, chunk);
+  }
 
   return lines;
-  // const readStartPosition = forward
-  //   ? position
-  //   : Math.max(0, position - bufferSize);
-
-  // const startPosition = forward ? position : Math.max(0, position - bufferSize);
-  // const { bytesRead } = await fileHandle.read(
-  //   buffer,
-  //   0,
-  //   bufferSize,
-  //   startPosition,
-  // );
-  // const readEndPosition = startPosition + bytesRead;
-
-  // const chunkString = buffer.toString("utf8", 0, bytesRead);
-
-  // const separator = forward
-  //   ? chunkString.lastIndexOf(SEPARATOR_CHARACTER)
-  //   : chunkString.indexOf(SEPARATOR_CHARACTER);
-  // // if (
-  // //   startPosition !== 0 &&
-  // //   (separator === -1 || separator === bytesRead - 1)
-  // // ) {
-  // //   const end = startPosition + (separator === -1 ? bytesRead : separator); // TODO: affected by direction.
-
-  // //   // Find the start of the line that doesn't fit the buffer.
-  // //   let position = Math.max(0, startPosition - bufferSize); // TODO: affected by direction.
-  // //   while (true) {
-  // //     const { bytesRead } = await fileHandle.read(
-  // //       buffer,
-  // //       0,
-  // //       bufferSize,
-  // //       position,
-  // //     );
-
-  // //     const chunkString = buffer.toString("utf8", 0, bytesRead);
-  // //     const separator = chunkString.lastIndexOf(SEPARATOR_CHARACTER); // TODO: affected by direction.
-
-  // //     if (separator !== -1 || position === 0) {
-  // //       const start = position + separator + 1;
-  // //       const { bytesRead } = await fileHandle.read(
-  // //         buffer,
-  // //         0,
-  // //         bufferSize,
-  // //         start,
-  // //       );
-
-  // //       return {
-  // //         lines: [
-  // //           {
-  // //             partialLine: buffer.toString("utf8", 0, bytesRead),
-  // //             start: position + separator + 1,
-  // //             end,
-  // //           },
-  // //         ],
-  // //         position: position + separator,
-  // //       };
-  // //     }
-
-  // //     position = Math.max(0, position - bufferSize);
-  // //   }
-  // // }
-  // assert(separator !== -1 || startPosition === 0);
-
-  // const slicedChunk = forward
-  //   ? chunkString.slice(0, separator)
-  //   : chunkString.slice(startPosition === 0 ? 0 : separator + 1);
-  // const lines = slicedChunk
-  //   .split(SEPARATOR_CHARACTER)
-  //   .filter((line) => line.length > 0);
-
-  // const newPosition = forward
-  //   ? separator
-  //   : startPosition === 0
-  //   ? 0
-  //   : startPosition + separator;
-
-  // return {
-  //   lines,
-  //   position: newPosition,
-  // };
 };

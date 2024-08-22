@@ -134,13 +134,29 @@ test("reads some lines and returns the new position", async ({
   });
 });
 
-// test("reads partial lines if they are too big for the buffer size", async ({ createTemporaryFile }) => {
-//   const fileHandle = await createTemporaryFile("1\n23456789\n");
-//   const lines = await readLines(fileHandle, {
-//     bufferSize: 4,
-//   });
-//   expect(lines).toEqual({
-//     lines: [{ partialLine: "2345", start: 2, end: 10 }],
-//     position: 1,
-//   });
-// });
+test("reads partial lines if they are too big for the buffer size", async ({
+  createTemporaryFile,
+}) => {
+  const fileHandle = await createTemporaryFile("1\n23456789\n");
+
+  await expect(
+    readLines(fileHandle, {
+      direction: "forward",
+      bufferSize: 4,
+      position: 2,
+    }),
+  ).resolves.toEqual({
+    lines: [{ partialLine: "2345", start: 2, end: 10 }],
+    position: 10,
+  });
+
+  await expect(
+    readLines(fileHandle, {
+      direction: "backward",
+      bufferSize: 4,
+    }),
+  ).resolves.toEqual({
+    lines: [{ partialLine: "2345", start: 2, end: 10 }],
+    position: 2,
+  });
+});
