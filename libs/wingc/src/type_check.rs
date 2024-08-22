@@ -1888,6 +1888,9 @@ pub struct TypeChecker<'a> {
 	/// The JSII type system
 	jsii_types: &'a mut TypeSystem,
 
+	// A sanity check to ensure we don't generate the same FQN multiple times.
+	generated_fqns: HashSet<String>,
+
 	is_in_mut_json: bool,
 
 	ctx: VisitContext,
@@ -1910,6 +1913,7 @@ impl<'a> TypeChecker<'a> {
 			file_graph,
 			library_roots,
 			jsii_imports,
+			generated_fqns: HashSet::new(),
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
 		}
@@ -4584,7 +4588,8 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			}
 		}
 
-		// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
+		// Only public classes are guaranteed to be unique across the package and
+		// can be referenced by their fully qualified name.
 		let fqn = if ast_class.access == AccessModifier::Public {
 			let package_root = self
 				.library_roots
@@ -4596,6 +4601,16 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			None
 		};
 
+		// Check if the FQN is already used
+		if let Some(fqn) = &fqn {
+			if self.generated_fqns.contains(fqn) {
+				self.spanned_error(stmt, format!("The fully qualified name {} is already in use", fqn));
+			} else {
+				self.generated_fqns.insert(fqn.clone());
+			}
+		}
+
+		// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 		let class_spec = Class {
 			name: ast_class.name.clone(),
 			fqn,
