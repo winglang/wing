@@ -110,7 +110,8 @@ export const createAppRouter = () => {
         const lowerCaseText = filters.text?.toLowerCase();
         let noVerboseLogsCount = 0;
 
-        const filteredLogs = ctx.logger.messages.filter((entry) => {
+        const messages = await ctx.logger.messages();
+        const filteredLogs = messages.filter((entry) => {
           // Filter by timestamp
           if (entry.timestamp && entry.timestamp < filters.timestamp) {
             return false;
