@@ -93,7 +93,7 @@ test("reads some lines and returns the new position", async () => {
       position: 8,
     }),
   ).resolves.toEqual({
-    lines: ["100", "200"],
+    lines: ["300", "400"],
     position: 16,
   });
 

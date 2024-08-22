@@ -24,50 +24,6 @@ const readChunk = async (
   };
 };
 
-// const extractLines = (
-//   text: string,
-//   start: number,
-//   end: number,
-//   forward: boolean,
-// ) => {
-//   if (forward) {
-//     const separator = text.lastIndexOf(SEPARATOR_CHARACTER);
-
-//     if (separator === -1) {
-//       return {
-//         lines: undefined,
-//         start,
-//         end,
-//       };
-//     }
-
-//     return {
-//       lines: text.slice(0, separator),
-//       // .split(SEPARATOR_CHARACTER)
-//       // .filter((line) => line.length > 0),
-//       start,
-//       end: start + separator,
-//     };
-//   }
-
-//   const separator = text.indexOf(SEPARATOR_CHARACTER);
-
-//   if (separator === -1) {
-//     return {
-//       lines: undefined,
-//       start,
-//       end,
-//     };
-//   }
-
-//   return {
-//     lines: text.slice(separator),
-//     // .split(SEPARATOR_CHARACTER)
-//     // .filter((line) => line.length > 0),
-//     start,
-//     end: start + separator,
-//   };
-// };
 const extractLines = (
   text: string,
   start: number,
