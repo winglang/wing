@@ -3,7 +3,8 @@ import type { FileHandle } from "node:fs/promises";
 /**
  * The minimum buffer size that can be used.
  *
- * This is used to ensure that the buffer is large enough to read at least one character and the newline.
+ * This is used to ensure that the buffer is large enough
+ * to read at least one character and the newline.
  */
 const MIN_BUFFER_SIZE = 2;
 
@@ -17,10 +18,7 @@ const DEFAULT_BUFFER_SIZE = 1024;
  */
 const SEPARATOR_CHARACTER = "\n";
 
-/**
- * Get the size of a file in bytes.
- */
-const getFileSize = async (fileHandle: FileHandle) => {
+const getFileSize = async (fileHandle: FileHandle): Promise<number> => {
   const stats = await fileHandle.stat();
   return stats.size;
 };
@@ -28,7 +26,8 @@ const getFileSize = async (fileHandle: FileHandle) => {
 /**
  * Reads a chunk of data from the file handle into a buffer.
  *
- * The chunk is read starting at the given position, in the direction specified by the `forward` parameter.
+ * The chunk is read starting at the given position, in the direction
+ * specified by the `forward` parameter.
  */
 const readChunk = async (
   fileHandle: FileHandle,
@@ -53,7 +52,8 @@ const readChunk = async (
 /**
  * Attempts to extract lines from a chunk of text.
  *
- * If the chunk does not contain a separator character, the function will return `undefined` instead of an array of lines.
+ * If the chunk does not contain a separator character, the function
+ * will return `undefined` instead of an array of lines.
  */
 const extractLines = (
   text: string,
@@ -81,7 +81,6 @@ const extractLines = (
   }
 
   const separator = start === 0 ? 0 : text.indexOf(SEPARATOR_CHARACTER);
-  // console.log({ text, separator });
 
   if (separator === -1) {
     return {
@@ -131,7 +130,7 @@ const findNextEndOfLinePosition = async (
       ? text.indexOf(SEPARATOR_CHARACTER)
       : text.lastIndexOf(SEPARATOR_CHARACTER);
     if (separator !== -1) {
-      return start + separator + (forward ? 0 : 1);
+      return start + separator + 1;
     }
     position = forward ? start + bytesRead : start;
   }
@@ -151,7 +150,7 @@ const readPartialChunk = async (
     forward,
   );
   const newStart = forward ? chunk.start : newPosition;
-  const newEnd = forward ? newPosition : chunk.end;
+  const newEnd = forward ? newPosition : chunk.end + 1;
   const newChunk = await readChunk(fileHandle, buffer, newStart, true);
   return {
     lines: [
