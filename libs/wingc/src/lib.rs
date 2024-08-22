@@ -250,6 +250,7 @@ pub fn type_check(
 	types: &mut Types,
 	file: &File,
 	file_graph: &FileGraph,
+	library_roots: &mut IndexMap<String, Utf8PathBuf>,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
@@ -263,7 +264,7 @@ pub fn type_check(
 
 	types.set_scope_env(scope, env);
 
-	let mut tc = TypeChecker::new(types, file, file_graph, jsii_types, jsii_imports);
+	let mut tc = TypeChecker::new(types, file, file_graph, library_roots, jsii_types, jsii_imports);
 	tc.add_jsii_module_to_env(
 		&mut env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
@@ -366,6 +367,7 @@ pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Ut
 			&mut types,
 			&file,
 			&file_graph,
+			&mut library_roots,
 			&mut jsii_types,
 			&mut jsii_imports,
 		);

@@ -756,12 +756,14 @@ mod tests {
 			envs: vec![ns1_env],
 			source_package: DEFAULT_PACKAGE_NAME.to_string(),
 			module_path: ResolveSource::WingFile,
+			fqn: "pkg1.ns1".to_string(),
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
 			envs: vec![ns2_env],
 			source_package: DEFAULT_PACKAGE_NAME.to_string(),
 			module_path: ResolveSource::WingFile,
+			fqn: "pkg1.ns1".to_string(),
 		});
 
 		// Define ns2 in n1's env

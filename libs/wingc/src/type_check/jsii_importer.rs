@@ -186,6 +186,7 @@ impl<'a> JsiiImporter<'a> {
 				envs: vec![ns_env],
 				source_package: assembly.name.clone(),
 				module_path: ResolveSource::ExternalModule(assembly.name.clone()),
+				fqn: assembly.name.clone(),
 			});
 			self
 				.wing_types
@@ -235,6 +236,7 @@ impl<'a> JsiiImporter<'a> {
 					envs: vec![ns_env],
 					source_package: assembly.name.clone(),
 					module_path: ResolveSource::ExternalModule(module_path),
+					fqn: format!("{}.{}", lookup_str.clone(), namespace_name),
 				});
 				parent_ns
 					.envs
@@ -1028,6 +1030,7 @@ impl<'a> JsiiImporter<'a> {
 					envs: vec![ns_env],
 					source_package: assembly.name.clone(),
 					module_path: ResolveSource::ExternalModule(assembly.name.clone()),
+					fqn: assembly.name.clone(),
 				});
 				self
 					.wing_types

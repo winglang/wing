@@ -212,6 +212,7 @@ fn partial_compile(
 			&mut types,
 			&file,
 			&project_data.file_graph,
+			&mut project_data.library_roots,
 			jsii_types,
 			&mut project_data.jsii_imports,
 		);

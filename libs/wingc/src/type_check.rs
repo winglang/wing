@@ -304,6 +304,9 @@ pub struct Namespace {
 
 	/// Where we can resolve this namespace from
 	pub module_path: ResolveSource,
+
+	/// The fully qualified name of this namespace
+	pub fqn: String,
 }
 
 #[derive(Debug)]
@@ -1873,6 +1876,10 @@ pub struct TypeChecker<'a> {
 	/// The file graph of the entire project compilation.
 	file_graph: &'a FileGraph,
 
+	/// A map from package names to their root directories.
+	/// This is used for resolving FQNs.
+	library_roots: &'a IndexMap<String, Utf8PathBuf>,
+
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
 	jsii_imports: &'a mut Vec<JsiiImportSpec>,
@@ -1890,6 +1897,7 @@ impl<'a> TypeChecker<'a> {
 		types: &'a mut Types,
 		source_file: &'a File,
 		file_graph: &'a FileGraph,
+		library_roots: &'a IndexMap<String, Utf8PathBuf>,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
 	) -> Self {
@@ -1899,6 +1907,7 @@ impl<'a> TypeChecker<'a> {
 			jsii_types,
 			source_file,
 			file_graph,
+			library_roots,
 			jsii_imports,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
@@ -3660,11 +3669,17 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			}
 		}
 
+		let package_root = self
+			.library_roots
+			.get(&source_file.package)
+			.expect("package root not found");
+		let fqn = calculate_fqn_for_namespace(&source_file.package, package_root, &source_file.path);
 		let ns = self.types.add_namespace(Namespace {
 			name: source_file.path.file_stem().unwrap().to_string(),
 			envs: child_envs,
 			source_package: source_file.package.clone(),
 			module_path: ResolveSource::WingFile,
+			fqn,
 		});
 		self
 			.types
@@ -3806,11 +3821,17 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 						return;
 					}
 				};
+				let package_root = self
+					.library_roots
+					.get(&self.source_file.package)
+					.expect("package root not found");
+				let fqn = calculate_fqn_for_namespace(&self.source_file.package, &package_root, path);
 				let ns = self.types.add_namespace(Namespace {
 					name: path.to_string(),
 					envs: vec![brought_env],
 					source_package: self.source_file.package.clone(),
 					module_path: ResolveSource::WingFile,
+					fqn,
 				});
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
@@ -7282,6 +7303,42 @@ fn lookup_known_type(name: &'static str, env: &SymbolEnv) -> TypeRef {
 		.0
 		.as_type()
 		.expect(&format!("Expected known type \"{}\" to be a type", name))
+}
+
+/// Given the root of a package and a file path within that package, calculate the
+/// fully qualified name to associate with any namespaces representing that file.
+///
+/// ```
+/// use wingc::type_check::calculate_fqn_for_namespace;
+///
+/// let fqn = calculate_fqn_for_namespace("@winglibs/dynamodb", "/foo/bar".into(), "/foo/bar/baz/impl.w".into());
+/// assert_eq!(fqn, "@winglibs/dynamodb.baz".to_string());
+///
+/// let fqn2 = calculate_fqn_for_namespace("@winglibs/dynamodb", "/foo/bar".into(), "/foo/bar/baz/".into());
+/// assert_eq!(fqn2, "@winglibs/dynamodb.baz".to_string());
+///
+/// let fqn3 = calculate_fqn_for_namespace("@winglibs/dynamodb", "/foo/bar".into(), "/foo/bar/".into());
+/// assert_eq!(fqn3, "@winglibs/dynamodb".to_string());
+/// ```
+pub fn calculate_fqn_for_namespace(package_name: &str, package_root: &Utf8Path, path: &Utf8Path) -> String {
+	let assembly = package_name;
+	if !path.starts_with(package_root) {
+		panic!(
+			"File path \"{}\" is not within the package root \"{}\"",
+			path, package_root
+		);
+	}
+	let path = if path.as_str().ends_with(".w") {
+		path.parent().expect("Expected a parent directory")
+	} else {
+		path
+	};
+	let relative_path = path.strip_prefix(package_root).expect("not a prefix");
+	if relative_path == Utf8Path::new("") {
+		return assembly.to_string();
+	}
+	let namespace = relative_path.as_str().replace("/", ".");
+	format!("{}.{}", assembly, namespace)
 }
 
 #[derive(Debug)]
