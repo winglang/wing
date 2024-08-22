@@ -141,8 +141,6 @@ export const createConsoleServer = async ({
   let isStarting = false;
   let isStopping = false;
 
-  console.log("simfile", await compiler.getSimfile());
-
   const simulator = createSimulator({
     stateDir,
   });
@@ -330,6 +328,7 @@ export const createConsoleServer = async ({
         simulator.stop(),
         testRunner.forceStop(),
       ]);
+      await consoleLogger.close();
     } catch (error) {
       log.error(error);
     } finally {

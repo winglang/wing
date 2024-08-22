@@ -2,9 +2,12 @@ import { mkdir, open } from "node:fs/promises";
 import path from "node:path";
 
 import { errorMessage } from "@wingconsole/error-message";
+import { readLines } from "@wingconsole/utilities";
 import { nanoid } from "nanoid";
 
 import type { LogInterface } from "./utils/LogInterface.js";
+
+const BUFFER_SIZE = 64 * 1024;
 
 export type LogLevel = "verbose" | "info" | "warn" | "error";
 
@@ -31,6 +34,7 @@ export type MessageType = "info" | "title" | "summary" | "success" | "fail";
 
 export interface ConsoleLogger {
   messages(): Promise<LogEntry[]>;
+  close(): Promise<void>;
   verbose: (message: string, source?: LogSource, context?: LogContext) => void;
   log: (message: string, source?: LogSource, context?: LogContext) => void;
   error: (message: unknown, source?: LogSource, context?: LogContext) => void;
@@ -52,10 +56,24 @@ export const createConsoleLogger = async ({
 
   const fileHandle = await open(logfile, "a+");
 
-  const messages = new Array<LogEntry>();
   return {
+    async close() {
+      await fileHandle.close();
+    },
     async messages() {
-      return messages;
+      const { lines } = await readLines(fileHandle, {
+        bufferSize: BUFFER_SIZE,
+        direction: "backward",
+      });
+
+      // TODO: `readLines` may return partial lines, we should handle that. For now, we ignore them.
+      return lines
+        .map((line) => {
+          if (typeof line === "string") {
+            return JSON.parse(line) as LogEntry;
+          }
+        })
+        .filter((entry) => entry !== undefined);
     },
     verbose(message, source, context) {
       const entry: LogEntry = {
@@ -68,7 +86,6 @@ export const createConsoleLogger = async ({
       };
       fileHandle.appendFile(`${JSON.stringify(entry)}\n`);
       log.info(message);
-      messages.push(entry);
       onLog("verbose", message);
     },
     log(message, source, context) {
@@ -82,7 +99,6 @@ export const createConsoleLogger = async ({
       };
       fileHandle.appendFile(`${JSON.stringify(entry)}\n`);
       log.info(message);
-      messages.push(entry);
       onLog("info", message);
     },
     warning(message, source, context) {
@@ -96,7 +112,6 @@ export const createConsoleLogger = async ({
       };
       fileHandle.appendFile(`${JSON.stringify(entry)}\n`);
       log.warning(message);
-      messages.push(entry);
       onLog("warn", message);
     },
     error(error, source, context) {
@@ -112,7 +127,6 @@ export const createConsoleLogger = async ({
           ctx: context,
         };
         fileHandle.appendFile(`${JSON.stringify(entry)}\n`);
-        messages.push(entry);
       }
       onLog("error", message);
     },
