@@ -212,9 +212,9 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let args = ptr_to_str(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
-	if split.len() != 3 {
+	if split.len() != 2 {
 		report_diagnostic(Diagnostic {
-			message: format!("Expected 3 arguments to wingc_compile, got {}", split.len()),
+			message: format!("Expected 2 arguments to wingc_compile, got {}", split.len()),
 			span: None,
 			annotations: vec![],
 			hints: vec![],
@@ -385,18 +385,6 @@ pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Ut
 		json_checker.check(&scope);
 
 		asts.insert(file.path.to_owned(), scope);
-	}
-
-	// Verify that the project dir is absolute
-	if !is_absolute_path(&project_dir) {
-		report_diagnostic(Diagnostic {
-			message: format!("Project directory must be absolute: {}", project_dir),
-			span: None,
-			annotations: vec![],
-			hints: vec![],
-			severity: DiagnosticSeverity::Error,
-		});
-		return Err(());
 	}
 
 	let mut jsifier = JSifier::new(&mut types, &files, &file_graph, &source_path, &out_dir);

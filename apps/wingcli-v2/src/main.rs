@@ -1,6 +1,12 @@
 mod cli;
 
-use std::{error::Error, io::Write, path::PathBuf, time::Instant};
+use std::{
+	error::Error,
+	io::Write,
+	path::PathBuf,
+	sync::{Mutex, Once},
+	time::Instant,
+};
 
 use camino::{Utf8Path, Utf8PathBuf};
 use clap::Parser;
@@ -8,7 +14,7 @@ use cli::{print_compiled, print_compiling, print_installing};
 use home::home_dir;
 use lazy_static::lazy_static;
 use strum::{Display, EnumString};
-use wingc::compile;
+use wingc::{compile, diagnostic::get_diagnostics};
 
 lazy_static! {
 	static ref HOME_PATH: PathBuf = home_dir().expect("Could not find home directory");
@@ -80,17 +86,13 @@ fn command_build(source_file: Utf8PathBuf, target: Option<Target>) -> Result<(),
 	));
 	let work_dir = target_dir.join(".wing");
 
-	// Print that work is being done
+	// Print "Compiling..."
 	print_compiling(source_file.as_str());
 
 	let sdk_root = WING_CACHE_DIR.join("node_modules").join("@winglang").join("sdk");
 
-	// Skip installing the SDK here if we're in a unit test since tests may run in parallel
-	// TODO: check if the SDK is up to date
-	if !sdk_root.exists() && !cfg!(test) {
-		install_sdk()?;
-	}
-	tracing::info!("Using SDK at {}", sdk_root);
+	install_sdk()?;
+	tracing::info!("Using Wing SDK at {}", sdk_root);
 
 	// Special pragma used by wingc to find the SDK types
 	if !cfg!(test) {
@@ -103,6 +105,10 @@ fn command_build(source_file: Utf8PathBuf, target: Option<Target>) -> Result<(),
 		Ok(_) => {}
 		Err(error) => {
 			tracing::error!(error = ?error, "Failed");
+			let diagnostics = get_diagnostics();
+			for diagnostic in diagnostics {
+				eprintln!("{}", diagnostic);
+			}
 			return Err("Compiler error".into());
 		}
 	}
@@ -113,7 +119,23 @@ fn command_build(source_file: Utf8PathBuf, target: Option<Target>) -> Result<(),
 	Ok(())
 }
 
+// Create a mutex to ensure that the SDK is only installed once
+lazy_static! {
+	static ref INSTALL_SDK_MUTEX: Mutex<()> = Mutex::new(());
+}
+
+static INSTALL_SDK_INIT: Once = Once::new();
+
 fn install_sdk() -> Result<(), Box<dyn Error>> {
+	let _guard = INSTALL_SDK_MUTEX.lock().unwrap();
+	let mut result = Ok(());
+	INSTALL_SDK_INIT.call_once(|| {
+		result = install_sdk_helper();
+	});
+	result
+}
+
+fn install_sdk_helper() -> Result<(), Box<dyn Error>> {
 	print_installing("Wing SDK");
 
 	std::fs::create_dir_all(WING_CACHE_DIR.as_str())?;
@@ -173,14 +195,16 @@ fn run_javascript_node(source_file: &Utf8Path, target_dir: &Utf8Path, target: Ta
 }
 
 fn initialize_logger() {
-	let enable_logs = std::env::var("WING_LOG").is_ok_and(|x| !x.is_empty() && x != "off" && x != "0");
+	let enable_logs = std::env::var("DEBUG").is_ok_and(|x| !x.is_empty() && x != "off" && x != "0");
 	let enable_colours = std::env::var("WING_LOG_NOCOLOR").is_err();
+	let show_thread_names = cfg!(test);
 	if enable_logs {
 		tracing_subscriber::fmt()
 			.with_writer(std::io::stderr)
 			.with_target(false)
 			.with_ansi(enable_colours)
 			.without_time()
+			.with_thread_names(show_thread_names)
 			.init();
 	}
 }
@@ -216,23 +240,22 @@ mod test {
 
 	static INIT: Once = Once::new();
 
-	fn initialize() {
+	fn setup() {
 		INIT.call_once(|| {
 			initialize_logger();
-			install_sdk().expect("Failed to install SDK");
 		});
 	}
 
 	#[test]
 	fn test_compile_sim() {
-		initialize();
+		setup();
 		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::Sim));
 		res.expect("Failed to compile to sim");
 	}
 
 	#[test]
 	fn test_compile_tfaws() {
-		initialize();
+		setup();
 		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::TfAws));
 		res.expect("Failed to compile to tf-aws");
 	}
