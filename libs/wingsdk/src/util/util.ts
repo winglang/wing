@@ -1,4 +1,4 @@
-import { exec, execFile } from "child_process";
+import { exec, execFileSync } from "child_process";
 import { createHash } from "crypto";
 import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
@@ -9,7 +9,6 @@ import { InflightClient } from "../core";
 import { Duration, IInflight } from "../std";
 
 const execPromise = promisify(exec);
-const execFilePromise = promisify(execFile);
 
 /**
  * Describes what to do with a standard I/O stream for a child process.
@@ -223,11 +222,11 @@ export class Util {
    * @param opts `ExecOptions`, such as the working directory and environment variables.
    * @returns A struct containing `stdout`, `stderr` and exit `status` of the executed program.
    */
-  public static async exec(
+  public static exec(
     program: string,
     args: Array<string>,
     opts?: ExecOptions
-  ): Promise<Output> {
+  ): Output {
     const execOpts = {
       windowsHide: true,
       shell: false,
@@ -239,10 +238,10 @@ export class Util {
     };
 
     try {
-      const { stdout, stderr } = await execFilePromise(program, args, execOpts);
+      const stdout = execFileSync(program, args, execOpts);
       return {
         stdout: stdout.toString(),
-        stderr: stderr.toString(),
+        stderr: "",
         status: 0,
       };
     } catch (error: any) {
@@ -252,7 +251,7 @@ export class Util {
         return {
           stdout: error.stdout.toString(),
           stderr: error.stderr.toString(),
-          status: error.code,
+          status: error.status,
         };
       }
     }
