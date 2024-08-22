@@ -1,17 +1,30 @@
 import { open, mkdtemp, writeFile } from "node:fs/promises";
+import type { FileHandle } from "node:fs/promises";
 import { tmpdir } from "node:os";
 
-import { expect, test, vi } from "vitest";
+import { expect, test as vitest } from "vitest";
 
 import { readLines } from "./read-lines.js";
 
-const createTemporaryFile = async (content: string) => {
-  const directory = await mkdtemp(tmpdir());
-  await writeFile(`${directory}/file.jsonl`, content);
-  return await open(`${directory}/file.jsonl`, "r");
-};
+const test = vitest.extend<{
+  createTemporaryFile: (content: string) => Promise<FileHandle>;
+}>({
+  async createTemporaryFile({}, use) {
+    const files = new Array<FileHandle>();
+    await use(async (content: string) => {
+      const directory = await mkdtemp(tmpdir());
+      await writeFile(`${directory}/file.jsonl`, content);
+      const handle = await open(`${directory}/file.jsonl`, "r");
+      files.push(handle);
+      return handle;
+    });
+    for (const file of files) {
+      await file.close();
+    }
+  },
+});
 
-test("reads empty file", async () => {
+test("reads empty file", async ({ createTemporaryFile }) => {
   const fileHandle = await createTemporaryFile("");
 
   await expect(
@@ -29,7 +42,7 @@ test("reads empty file", async () => {
   });
 });
 
-test("reads empty file with many newlines", async () => {
+test("reads file with many empty lines", async ({ createTemporaryFile }) => {
   const fileHandle = await createTemporaryFile("\n\n\n\n");
 
   await expect(
@@ -51,7 +64,7 @@ test("reads empty file with many newlines", async () => {
   });
 });
 
-test("reads small file in a single pass", async () => {
+test("reads small file in a single pass", async ({ createTemporaryFile }) => {
   const fileHandle = await createTemporaryFile("1\n2\n");
 
   await expect(
@@ -73,7 +86,9 @@ test("reads small file in a single pass", async () => {
   });
 });
 
-test("reads some lines and returns the new position", async () => {
+test("reads some lines and returns the new position", async ({
+  createTemporaryFile,
+}) => {
   const fileHandle = await createTemporaryFile("100\n200\n300\n400\n");
 
   await expect(
@@ -119,7 +134,7 @@ test("reads some lines and returns the new position", async () => {
   });
 });
 
-// test("reads partial lines if they are too big for the buffer size", async () => {
+// test("reads partial lines if they are too big for the buffer size", async ({ createTemporaryFile }) => {
 //   const fileHandle = await createTemporaryFile("1\n23456789\n");
 //   const lines = await readLines(fileHandle, {
 //     bufferSize: 4,

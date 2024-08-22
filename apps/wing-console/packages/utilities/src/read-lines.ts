@@ -14,8 +14,10 @@ const readChunk = async (
   position: number,
   forward: boolean,
 ) => {
-  const length = buffer.byteLength;
-  const start = forward ? position : Math.max(0, position - length);
+  const start = forward ? position : Math.max(0, position - buffer.byteLength);
+  const length = forward
+    ? buffer.byteLength
+    : Math.min(position, buffer.byteLength);
   const { bytesRead } = await fileHandle.read(buffer, 0, length, start);
   return {
     text: buffer.toString("utf8", 0, bytesRead),
@@ -95,21 +97,11 @@ export const readLines = async (
   fileHandle: FileHandle,
   options?: ReadLinesOptions,
 ): Promise<ReadLinesResult> => {
-  // const direction = options?.direction ?? "forward";
-  // const forward = direction === "forward";
   const forward = options?.direction !== "backward";
   const position =
     options?.position ?? (forward ? 0 : await getFileSize(fileHandle));
-  // console.log({ position });
 
-  // const bufferSize = Math.min(
-  //   position,
-  //   options?.bufferSize ?? DEFAULT_BUFFER_SIZE,
-  // );
-  const desiredBufferSize = options?.bufferSize ?? DEFAULT_BUFFER_SIZE;
-  const buffer = Buffer.alloc(
-    forward ? desiredBufferSize : Math.min(position, desiredBufferSize),
-  );
+  const buffer = Buffer.alloc(options?.bufferSize ?? DEFAULT_BUFFER_SIZE);
 
   const chunk = await readChunk(fileHandle, buffer, position, forward);
   const lines = extractLines(chunk.text, chunk.start, chunk.end, forward);
