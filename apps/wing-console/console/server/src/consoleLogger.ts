@@ -32,8 +32,14 @@ export interface LogEntry {
 
 export type MessageType = "info" | "title" | "summary" | "success" | "fail";
 
+interface ListMessagesOptions {
+  position?: number;
+}
+
 export interface ConsoleLogger {
-  messages(): Promise<LogEntry[]>;
+  listMessages(
+    options?: ListMessagesOptions,
+  ): Promise<{ entries: LogEntry[]; position: number }>;
   close(): Promise<void>;
   verbose(message: string, source?: LogSource, context?: LogContext): void;
   log(message: string, source?: LogSource, context?: LogContext): void;
@@ -54,7 +60,7 @@ export const createConsoleLogger = async ({
 }: CreateConsoleLoggerOptions): Promise<ConsoleLogger> => {
   await mkdir(path.dirname(logfile), { recursive: true });
 
-  // const fileHandle = await open(logfile, "a+");
+  // Create or truncate the log file. In the future, we might want to use `a+` to append to the file instead.
   const fileHandle = await open(logfile, "w+");
 
   // Create an `appendEntry` function that will append log
@@ -81,20 +87,24 @@ export const createConsoleLogger = async ({
     async close() {
       await fileHandle.close();
     },
-    async messages() {
-      const { lines } = await readLines(fileHandle, {
+    async listMessages(options) {
+      const { lines, position } = await readLines(fileHandle, {
         bufferSize: BUFFER_SIZE,
-        direction: "backward",
+        direction: "forward",
+        position: options?.position,
       });
 
       // TODO: `readLines` may return partial lines, we should handle that. For now, we ignore them.
-      return lines
-        .map((line) => {
-          if (typeof line === "string") {
-            return JSON.parse(line) as LogEntry;
-          }
-        })
-        .filter((entry) => entry !== undefined);
+      return {
+        entries: lines
+          .map((line) => {
+            if (typeof line === "string") {
+              return JSON.parse(line) as LogEntry;
+            }
+          })
+          .filter((entry) => entry !== undefined),
+        position,
+      };
     },
     verbose(message, source, context) {
       log.info(message);

@@ -5,7 +5,7 @@ import {
 } from "@wingconsole/design-system";
 import type { LogEntry } from "@wingconsole/server";
 import classNames from "classnames";
-import { useState, useRef, useEffect, useCallback, memo } from "react";
+import { useState, useRef, useEffect, useCallback, memo, useMemo } from "react";
 
 import { trpc } from "../../trpc.js";
 import { useAppLocalStorage } from "../localstorage-context/use-localstorage.js";
@@ -44,7 +44,7 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
 
   const filters = trpc["app.logsFilters"].useQuery();
 
-  const logs = trpc["app.logs"].useQuery(
+  const logs = trpc["app.logs"].useInfiniteQuery(
     {
       filters: {
         level: {
@@ -61,6 +61,9 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
     },
     {
       keepPreviousData: true,
+      getNextPageParam(lastPage) {
+        return lastPage.nextCursor;
+      },
     },
   );
 
@@ -114,6 +117,23 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
     setSelectedResourceTypes,
   ]);
 
+  const entries = useMemo(() => {
+    return logs.data?.pages.flatMap((page) => page.logs) ?? [];
+  }, [logs.data?.pages]);
+
+  const shownLogs = useMemo(() => {
+    return entries.length;
+  }, [entries]);
+
+  const hiddenLogs = useMemo(() => {
+    return (
+      logs.data?.pages.reduce(
+        (hiddenLogs, page) => hiddenLogs + page.hiddenLogs,
+        0,
+      ) ?? 0
+    );
+  }, [logs.data?.pages]);
+
   return (
     <div className="relative h-full flex flex-col">
       <ConsoleLogsFilters
@@ -127,8 +147,8 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         selectedResourceTypes={selectedResourceTypes}
         setSelectedResourceTypes={setSelectedResourceTypes}
         onResetFilters={resetFilters}
-        shownLogs={logs.data?.logs.length ?? 0}
-        hiddenLogs={logs.data?.hiddenLogs ?? 0}
+        shownLogs={shownLogs}
+        hiddenLogs={hiddenLogs}
       />
 
       <div className="relative h-full">
@@ -144,8 +164,8 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
           onScrolledToBottomChange={setScrolledToBottom}
         >
           <ConsoleLogs
-            logs={logs.data?.logs ?? []}
-            hiddenLogs={logs.data?.hiddenLogs ?? 0}
+            logs={entries}
+            hiddenLogs={hiddenLogs}
             onResourceClick={onLogClick}
           />
         </ScrollableArea>

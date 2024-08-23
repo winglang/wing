@@ -103,6 +103,7 @@ export const createAppRouter = () => {
             resourceIds: z.array(z.string()),
             resourceTypes: z.array(z.string()),
           }),
+          cursor: z.number().optional(),
         }),
       )
       .query(async ({ ctx, input }) => {
@@ -110,8 +111,10 @@ export const createAppRouter = () => {
         const lowerCaseText = filters.text?.toLowerCase();
         let noVerboseLogsCount = 0;
 
-        const messages = await ctx.logger.messages();
-        const filteredLogs = messages.filter((entry) => {
+        const { entries, position } = await ctx.logger.listMessages({
+          position: input.cursor,
+        });
+        const filteredLogs = entries.filter((entry) => {
           // Filter by timestamp
           if (entry.timestamp && entry.timestamp < filters.timestamp) {
             return false;
@@ -160,6 +163,7 @@ export const createAppRouter = () => {
               } as LogEntry),
           ),
           hiddenLogs: noVerboseLogsCount - filteredLogs.length,
+          nextCursor: position,
         };
       }),
     "app.error": createProcedure.query(({ ctx }) => {
