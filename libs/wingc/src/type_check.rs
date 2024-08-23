@@ -1919,6 +1919,13 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	fn current_package_root(&self) -> &Utf8Path {
+		self
+			.library_roots
+			.get(&self.source_file.package)
+			.expect("No package root found")
+	}
+
 	/// Recursively check if a type is or contains a type inference.
 	///
 	/// Returns true if any inferences were found.
@@ -3674,10 +3681,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			}
 		}
 
-		let package_root = self
-			.library_roots
-			.get(&source_file.package)
-			.expect("package root not found");
+		let package_root = self.current_package_root();
 		let fqn = calculate_fqn_for_namespace(&source_file.package, package_root, &source_file.path);
 		let ns = self.types.add_namespace(Namespace {
 			name: source_file.path.file_stem().unwrap().to_string(),
@@ -3826,10 +3830,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 						return;
 					}
 				};
-				let package_root = self
-					.library_roots
-					.get(&self.source_file.package)
-					.expect("package root not found");
+				let package_root = self.current_package_root();
 				let fqn = calculate_fqn_for_namespace(&self.source_file.package, &package_root, path);
 				let ns = self.types.add_namespace(Namespace {
 					name: path.to_string(),
@@ -4591,10 +4592,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		// Only public classes are guaranteed to be unique across the package and
 		// can be referenced by their fully qualified name.
 		let fqn = if ast_class.access == AccessModifier::Public {
-			let package_root = self
-				.library_roots
-				.get(&self.source_file.package)
-				.expect("package root not found");
+			let package_root = self.current_package_root();
 			let base_fqn = calculate_fqn_for_namespace(&self.source_file.package, package_root, &self.source_file.path);
 			Some(format!("{}.{}", base_fqn, ast_class.name))
 		} else {
