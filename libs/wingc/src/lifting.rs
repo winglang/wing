@@ -160,7 +160,7 @@ impl<'a> LiftVisitor<'a> {
 		let fqn = if let Some(class) = type_.as_ref().and_then(|t| t.as_class()) {
 			class.fqn.clone()
 		} else if let Some(iface) = type_.as_ref().and_then(|t| t.as_interface()) {
-			iface.fqn.clone()
+			Some(iface.fqn.clone())
 		} else {
 			None
 		};

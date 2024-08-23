@@ -280,7 +280,7 @@ pub fn type_check(
 		tc.add_this(&mut env);
 	}
 
-	tc.type_check_file_or_dir(file, scope);
+	tc.type_check_file_or_dir(scope);
 }
 
 /// Infer the root directory of the current Wing application or library.
