@@ -2,7 +2,7 @@ import { mkdir, open } from "node:fs/promises";
 import path from "node:path";
 
 import { errorMessage } from "@wingconsole/error-message";
-import { readLines } from "@wingconsole/utilities";
+import { readLines, throttle } from "@wingconsole/utilities";
 import { nanoid } from "nanoid";
 
 import type { LogInterface } from "./utils/LogInterface.js";
@@ -35,15 +35,15 @@ export type MessageType = "info" | "title" | "summary" | "success" | "fail";
 export interface ConsoleLogger {
   messages(): Promise<LogEntry[]>;
   close(): Promise<void>;
-  verbose: (message: string, source?: LogSource, context?: LogContext) => void;
-  log: (message: string, source?: LogSource, context?: LogContext) => void;
-  error: (message: unknown, source?: LogSource, context?: LogContext) => void;
-  warning: (message: string, source?: LogSource, context?: LogContext) => void;
+  verbose(message: string, source?: LogSource, context?: LogContext): void;
+  log(message: string, source?: LogSource, context?: LogContext): void;
+  error(message: unknown, source?: LogSource, context?: LogContext): void;
+  warning(message: string, source?: LogSource, context?: LogContext): void;
 }
 
 export interface CreateConsoleLoggerOptions {
   logfile: string;
-  onLog: (logLevel: LogLevel, message: string) => void;
+  onLog(): void;
   log: LogInterface;
 }
 
@@ -54,7 +54,28 @@ export const createConsoleLogger = async ({
 }: CreateConsoleLoggerOptions): Promise<ConsoleLogger> => {
   await mkdir(path.dirname(logfile), { recursive: true });
 
-  const fileHandle = await open(logfile, "a+");
+  // const fileHandle = await open(logfile, "a+");
+  const fileHandle = await open(logfile, "w+");
+
+  // Create an `appendEntry` function that will append log
+  // entries to the log file at a maximum speed of 4 times a second.
+  // Finally, `onLog` will be called to report changes to the log file.
+  const { appendEntry } = (() => {
+    const pendingEntries = new Array<LogEntry>();
+    const flushEntries = throttle(async () => {
+      const [...entries] = pendingEntries;
+      pendingEntries.length = 0;
+      for (const entry of entries) {
+        await fileHandle.appendFile(`${JSON.stringify(entry)}\n`);
+      }
+      onLog();
+    }, 250);
+    const appendEntry = (entry: LogEntry) => {
+      pendingEntries.push(entry);
+      flushEntries();
+    };
+    return { appendEntry };
+  })();
 
   return {
     async close() {
@@ -76,59 +97,50 @@ export const createConsoleLogger = async ({
         .filter((entry) => entry !== undefined);
     },
     verbose(message, source, context) {
-      const entry: LogEntry = {
+      log.info(message);
+      appendEntry({
         id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "verbose",
         message,
         source: source ?? "console",
         ctx: context,
-      };
-      fileHandle.appendFile(`${JSON.stringify(entry)}\n`);
-      log.info(message);
-      onLog("verbose", message);
+      });
     },
     log(message, source, context) {
-      const entry: LogEntry = {
+      log.info(message);
+      appendEntry({
         id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "info",
         message,
         source: source ?? "console",
         ctx: context,
-      };
-      fileHandle.appendFile(`${JSON.stringify(entry)}\n`);
-      log.info(message);
-      onLog("info", message);
+      });
     },
     warning(message, source, context) {
-      const entry: LogEntry = {
+      log.warning(message);
+      appendEntry({
         id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "warn",
         message,
         source: source ?? "console",
         ctx: context,
-      };
-      fileHandle.appendFile(`${JSON.stringify(entry)}\n`);
-      log.warning(message);
-      onLog("warn", message);
+      });
     },
     error(error, source, context) {
       log.error(error);
-      const message = errorMessage(error);
       if (source === "user") {
-        const entry: LogEntry = {
+        appendEntry({
           id: `${nanoid()}`,
           timestamp: Date.now(),
           level: "error",
-          message,
+          message: errorMessage(error),
           source,
           ctx: context,
-        };
-        fileHandle.appendFile(`${JSON.stringify(entry)}\n`);
+        });
       }
-      onLog("error", message);
     },
   };
 };

@@ -122,10 +122,10 @@ export const createConsoleServer = async ({
   )}sim/.console/logs.jsonl`;
   const consoleLogger = await createConsoleLogger({
     logfile,
+    log,
     onLog: () => {
       invalidateLogs();
     },
-    log,
   });
 
   const compiler = createCompiler({
