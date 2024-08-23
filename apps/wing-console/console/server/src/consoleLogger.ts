@@ -63,6 +63,9 @@ export const createConsoleLogger = async ({
   // Create or truncate the log file. In the future, we might want to use `a+` to append to the file instead.
   const fileHandle = await open(logfile, "w+");
 
+  // Create the buffer once so we can reuse it.
+  const buffer = Buffer.alloc(BUFFER_SIZE);
+
   // Create an `appendEntry` function that will append log
   // entries to the log file at a maximum speed of 4 times a second.
   // Finally, `onLog` will be called to report changes to the log file.
@@ -89,7 +92,7 @@ export const createConsoleLogger = async ({
     },
     async listMessages(options) {
       const { lines, position } = await readLines(fileHandle, {
-        bufferSize: BUFFER_SIZE,
+        buffer,
         direction: "forward",
         position: options?.position,
       });

@@ -1,14 +1,6 @@
 import type { FileHandle } from "node:fs/promises";
 
 /**
- * The minimum buffer size that can be used.
- *
- * This is used to ensure that the buffer is large enough
- * to read at least one character and the newline.
- */
-const MIN_BUFFER_SIZE = 2;
-
-/**
  * The default buffer size to use when reading from the file.
  */
 const DEFAULT_BUFFER_SIZE = 1024;
@@ -165,9 +157,9 @@ const readPartialChunk = async (
 };
 
 export interface ReadLinesOptions {
-  bufferSize?: number;
   position?: number;
   direction?: "forward" | "backward";
+  buffer?: Buffer;
 }
 
 export interface PartialLine {
@@ -184,7 +176,7 @@ export interface ReadLinesResult {
 /**
  * Read lines from a file starting at a given position.
  *
- * The default buffer size is {@link DEFAULT_BUFFER_SIZE}.
+ * If no buffer is passed, a temporary one is created and it's size is {@link DEFAULT_BUFFER_SIZE}.
  */
 export const readLines = async (
   fileHandle: FileHandle,
@@ -193,10 +185,7 @@ export const readLines = async (
   const forward = options?.direction !== "backward";
   const position =
     options?.position ?? (forward ? 0 : await getFileSize(fileHandle));
-
-  const buffer = Buffer.alloc(
-    Math.max(MIN_BUFFER_SIZE, options?.bufferSize ?? DEFAULT_BUFFER_SIZE),
-  );
+  const buffer = options?.buffer ?? Buffer.alloc(DEFAULT_BUFFER_SIZE);
 
   const chunk = await readChunk(fileHandle, buffer, position, forward);
   if (chunk.text.length === 0) {

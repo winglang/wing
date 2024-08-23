@@ -94,7 +94,7 @@ test("reads some lines and returns the new position", async ({
   await expect(
     readLines(fileHandle, {
       direction: "forward",
-      bufferSize: 11,
+      buffer: Buffer.alloc(11),
     }),
   ).resolves.toEqual({
     lines: ["100", "200"],
@@ -104,7 +104,7 @@ test("reads some lines and returns the new position", async ({
   await expect(
     readLines(fileHandle, {
       direction: "forward",
-      bufferSize: 11,
+      buffer: Buffer.alloc(11),
       position: 8,
     }),
   ).resolves.toEqual({
@@ -115,7 +115,7 @@ test("reads some lines and returns the new position", async ({
   await expect(
     readLines(fileHandle, {
       direction: "backward",
-      bufferSize: 11,
+      buffer: Buffer.alloc(11),
     }),
   ).resolves.toEqual({
     lines: ["300", "400"],
@@ -125,7 +125,7 @@ test("reads some lines and returns the new position", async ({
   await expect(
     readLines(fileHandle, {
       direction: "backward",
-      bufferSize: 11,
+      buffer: Buffer.alloc(11),
       position: 7,
     }),
   ).resolves.toEqual({
@@ -140,7 +140,7 @@ test("reads partial lines if they are too big for the buffer size", async ({
   await expect(
     readLines(await createTemporaryFile("123456789\n"), {
       direction: "forward",
-      bufferSize: 4,
+      buffer: Buffer.alloc(4),
     }),
   ).resolves.toEqual({
     lines: [{ partialLine: "1234", start: 0, end: 10 }],
@@ -150,7 +150,7 @@ test("reads partial lines if they are too big for the buffer size", async ({
   await expect(
     readLines(await createTemporaryFile("123456789\n"), {
       direction: "backward",
-      bufferSize: 4,
+      buffer: Buffer.alloc(4),
     }),
   ).resolves.toEqual({
     lines: [{ partialLine: "1234", start: 0, end: 10 }],
@@ -160,7 +160,7 @@ test("reads partial lines if they are too big for the buffer size", async ({
   await expect(
     readLines(await createTemporaryFile("1\n23456789\n"), {
       direction: "forward",
-      bufferSize: 4,
+      buffer: Buffer.alloc(4),
       position: 2,
     }),
   ).resolves.toEqual({
@@ -171,7 +171,7 @@ test("reads partial lines if they are too big for the buffer size", async ({
   await expect(
     readLines(await createTemporaryFile("1\n23456789\n"), {
       direction: "backward",
-      bufferSize: 4,
+      buffer: Buffer.alloc(4),
     }),
   ).resolves.toEqual({
     lines: [{ partialLine: "2345", start: 2, end: 11 }],
