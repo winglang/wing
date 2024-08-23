@@ -133,8 +133,6 @@ jobs:
 
       - name: Test
         run: pnpm test:ci
-        env:
-          TMPDIR: ${{ runner.temp }}/
 
       - name: Create git patch
         id: diff
