@@ -12,7 +12,7 @@ const test = vitest.extend<{
   async createTemporaryFile({}, use) {
     const files = new Array<FileHandle>();
     await use(async (content: string) => {
-      const directory = await mkdtemp(tmpdir());
+      const directory = await mkdtemp(process.env["TMPDIR"] ?? tmpdir());
       await writeFile(`${directory}/file.jsonl`, content);
       const handle = await open(`${directory}/file.jsonl`, "r");
       files.push(handle);
