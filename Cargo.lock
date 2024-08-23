@@ -1665,7 +1665,6 @@ dependencies = [
  "clap",
  "home",
  "lazy_static",
- "serde_json",
  "strum",
  "termcolor",
  "tracing",

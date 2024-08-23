@@ -16,8 +16,6 @@ clap = { version = "4.5.1", features = ["derive", "color"] }
 home = "0.5.9"
 # Lazily evaluated static variables
 lazy_static = "1.4.0"
-# Parsing JSON
-serde_json = "1.0.125"
 # Enum parsing
 strum = { version = "0.26.1", features = ["derive"] }
 # Colors in terminal
