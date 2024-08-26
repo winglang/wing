@@ -161,7 +161,7 @@ export const createAppRouter = () => {
               } as LogEntry),
           ),
           hiddenLogs: noVerboseLogsCount - filteredLogs.length,
-          nextCursor: position,
+          // nextCursor: position,
         };
       }),
     "app.error": createProcedure.query(({ ctx }) => {
