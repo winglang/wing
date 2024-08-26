@@ -289,10 +289,10 @@ pub fn type_check(
 /// and continue searching up the directory tree until we find one.
 /// If we run out of parent directories, fall back to the first directory we found.
 pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
-	let initial_dir = if source_path.is_dir() {
+	let initial_dir: Utf8PathBuf = if source_path.is_dir() {
 		source_path.to_owned()
 	} else {
-		source_path.parent().unwrap().to_owned()
+		source_path.parent().unwrap_or_else(|| Utf8Path::new("/")).to_owned()
 	};
 	let mut current_dir = initial_dir.as_path();
 	loop {
@@ -305,7 +305,7 @@ pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
 		if current_dir == "/" {
 			break;
 		}
-		current_dir = current_dir.parent().unwrap();
+		current_dir = current_dir.parent().expect("parent directory");
 	}
 	return initial_dir;
 }
