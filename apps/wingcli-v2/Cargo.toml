@@ -1,6 +1,6 @@
 [package]
 name = "wingcli"
-version = "0.74.53"
+version = "0.83.2"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

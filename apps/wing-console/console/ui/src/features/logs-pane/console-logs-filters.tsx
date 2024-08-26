@@ -17,7 +17,11 @@ import classNames from "classnames";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 export const LOG_LEVELS: LogLevel[] = ["verbose", "info", "warn", "error"];
-export const DEFAULT_LOG_LEVELS: LogLevel[] = ["info", "warn", "error"].sort();
+export const DEFAULT_LOG_LEVELS = [
+  "info",
+  "warn",
+  "error",
+].sort() as LogLevel[];
 
 const logLevelNames = {
   verbose: "Verbose",

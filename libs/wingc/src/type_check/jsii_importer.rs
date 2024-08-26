@@ -186,6 +186,7 @@ impl<'a> JsiiImporter<'a> {
 				envs: vec![ns_env],
 				source_package: assembly.name.clone(),
 				module_path: ResolveSource::ExternalModule(assembly.name.clone()),
+				fqn: assembly.name.clone(),
 			});
 			self
 				.wing_types
@@ -235,6 +236,7 @@ impl<'a> JsiiImporter<'a> {
 					envs: vec![ns_env],
 					source_package: assembly.name.clone(),
 					module_path: ResolveSource::ExternalModule(module_path),
+					fqn: format!("{}.{}", lookup_str.clone(), namespace_name),
 				});
 				parent_ns
 					.envs
@@ -269,6 +271,7 @@ impl<'a> JsiiImporter<'a> {
 
 		let enum_type_ref = self.wing_types.add_type(Type::Enum(Enum {
 			name: enum_symbol.clone(),
+			fqn: enum_fqn.to_string(),
 			docs: Docs::from(&jsii_enum.docs),
 			values,
 		}));
@@ -387,7 +390,7 @@ impl<'a> JsiiImporter<'a> {
 		let mut wing_type = match is_struct {
 			true => self.wing_types.add_type(Type::Struct(Struct {
 				name: new_type_symbol.clone(),
-				fqn: Some(jsii_interface_fqn.to_string()),
+				fqn: jsii_interface_fqn.to_string(),
 				// Will be replaced below
 				extends: vec![],
 				docs: Docs::from(&jsii_interface.docs),
@@ -402,7 +405,7 @@ impl<'a> JsiiImporter<'a> {
 			})),
 			false => self.wing_types.add_type(Type::Interface(Interface {
 				name: new_type_symbol.clone(),
-				fqn: Some(jsii_interface_fqn.to_string()),
+				fqn: jsii_interface_fqn.to_string(),
 				// Will be replaced below
 				extends: vec![],
 				docs: Docs::from(&jsii_interface.docs),
@@ -1028,6 +1031,7 @@ impl<'a> JsiiImporter<'a> {
 					envs: vec![ns_env],
 					source_package: assembly.name.clone(),
 					module_path: ResolveSource::ExternalModule(assembly.name.clone()),
+					fqn: assembly.name.clone(),
 				});
 				self
 					.wing_types

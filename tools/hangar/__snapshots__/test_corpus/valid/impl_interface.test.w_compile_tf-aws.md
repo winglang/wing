@@ -72,27 +72,6 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.$Closure3-1.cjs.map
 ```
 
-## inflight.$Closure4-1.cjs
-```cjs
-"use strict";
-const $helpers = require("@winglang/sdk/lib/helpers");
-const $macros = require("@winglang/sdk/lib/macros");
-module.exports = function({  }) {
-  class $Closure4 {
-    constructor($args) {
-      const {  } = $args;
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-    }
-  }
-  return $Closure4;
-}
-//# sourceMappingURL=inflight.$Closure4-1.cjs.map
-```
-
 ## inflight.A-1.cjs
 ```cjs
 "use strict";
@@ -472,27 +451,6 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    class $Closure4 extends $stdlib.std.AutoIdResource {
-      _id = $stdlib.core.closureId();
-      constructor($scope, $id, ) {
-        super($scope, $id);
-        $helpers.nodeof(this).hidden = true;
-      }
-      static _toInflightType() {
-        return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
-          })
-        `;
-      }
-      get _liftMap() {
-        return ({
-          "handle": [
-          ],
-          "$inflight_init": [
-          ],
-        });
-      }
-    }
     class ImplInflightIfaceInInflightClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -512,8 +470,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[11]) { throw new Error("ImplInflightIfaceInInflightClass is already in type map"); }
-    $preflightTypesMap[11] = ImplInflightIfaceInInflightClass;
+    if ($preflightTypesMap[10]) { throw new Error("ImplInflightIfaceInInflightClass is already in type map"); }
+    $preflightTypesMap[10] = ImplInflightIfaceInInflightClass;
     class ImplInflightIfaceInPreflightClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -564,7 +522,6 @@ class $Root extends $stdlib.std.Resource {
     const z = new Dog(this, "Dog");
     const w = new Terrier(this, "Terrier");
     const f = new $Closure3(this, "$Closure3");
-    new $Closure4(this, "$Closure4");
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "impl_interface.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });

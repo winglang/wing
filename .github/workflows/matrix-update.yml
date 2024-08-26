@@ -26,6 +26,12 @@ jobs:
       - name: Install pnpm Dependencies
         run: pnpm install --frozen-lockfile --filter ./tools/compatibility-matrix-automation
 
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: out
+          pattern: out-*
+
       - name: Download Output Files
         uses: actions/download-artifact@v4
         with:

@@ -226,3 +226,13 @@ class C13 {
   z: str;
   //^ Symbol "z" is already defined
 }
+
+if true {
+  pub class PublicClass {
+    // ^ public class "PublicClass" must be declared at the top-level of the file or marked private
+  }
+
+  internal class InternalClass {
+    // ^ internal class "PublicClass" must be declared at the top-level of the file or marked private
+  }
+}

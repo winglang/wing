@@ -194,9 +194,9 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let args = ptr_to_str(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
-	if split.len() != 3 {
+	if split.len() != 2 {
 		report_diagnostic(Diagnostic {
-			message: format!("Expected 3 arguments to wingc_compile, got {}", split.len()),
+			message: format!("Expected 2 arguments to wingc_compile, got {}", split.len()),
 			span: None,
 			annotations: vec![],
 			hints: vec![],
@@ -206,10 +206,6 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 	let source_path = Utf8Path::new(split[0]);
 	let output_dir = split.get(1).map(|s| Utf8Path::new(s)).expect("output dir not provided");
-	let project_dir = split
-		.get(2)
-		.map(|s| Utf8Path::new(s))
-		.expect("project dir not provided");
 
 	if !source_path.exists() {
 		report_diagnostic(Diagnostic {
@@ -222,7 +218,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 		return WASM_RETURN_ERROR;
 	}
 
-	let results = compile(project_dir, source_path, None, output_dir);
+	let results = compile(source_path, None, output_dir);
 
 	if let Ok(results) = results {
 		string_to_combined_ptr(serde_json::to_string(&results).unwrap())
@@ -269,6 +265,7 @@ pub fn type_check_file(
 	types: &mut Types,
 	file: &File,
 	file_graph: &FileGraph,
+	library_roots: &mut IndexMap<String, Utf8PathBuf>,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
@@ -282,7 +279,7 @@ pub fn type_check_file(
 
 	types.set_scope_env(scope, env);
 
-	let mut tc = TypeChecker::new(types, file, file_graph, jsii_types, jsii_imports);
+	let mut tc = TypeChecker::new(types, file, file_graph, library_roots, jsii_types, jsii_imports);
 	tc.add_jsii_module_to_env(
 		&mut env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
@@ -298,18 +295,45 @@ pub fn type_check_file(
 		tc.add_this(&mut env);
 	}
 
-	tc.type_check_file_or_dir(file, scope);
+	tc.type_check_file_or_dir(scope);
 }
 
-pub fn compile(
-	project_dir: &Utf8Path,
-	source_path: &Utf8Path,
-	source_text: Option<String>,
-	out_dir: &Utf8Path,
-) -> Result<CompilerOutput, ()> {
-	let source_package = as_wing_library(project_dir).unwrap_or_else(|| DEFAULT_PACKAGE_NAME.to_string());
+/// Infer the root directory of the current Wing application or library.
+///
+/// Check the current file's directory for a wing.toml file or package.json file,
+/// and continue searching up the directory tree until we find one.
+/// If we run out of parent directories, fall back to the first directory we found.
+pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
+	let initial_dir: Utf8PathBuf = if source_path.is_dir() {
+		source_path.to_owned()
+	} else {
+		source_path.parent().unwrap_or_else(|| Utf8Path::new("/")).to_owned()
+	};
+	let mut current_dir = initial_dir.as_path();
+	loop {
+		if current_dir.join("wing.toml").exists() {
+			return current_dir.to_owned();
+		}
+		if current_dir.join("package.json").exists() {
+			return current_dir.to_owned();
+		}
+		if current_dir == "/" {
+			break;
+		}
+		current_dir = current_dir.parent().unwrap_or_else(|| Utf8Path::new("/"));
+	}
+	return initial_dir;
+}
+
+pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Utf8Path) -> Result<CompilerOutput, ()> {
+	let project_dir = find_nearest_wing_project_dir(source_path);
+	let source_package = as_wing_library(&project_dir).unwrap_or_else(|| DEFAULT_PACKAGE_NAME.to_string());
 	let source_path = normalize_path(source_path, None);
-	let source_file = File::new(&source_path, source_package);
+	let source_file = File::new(&source_path, source_package.clone());
+
+	// A map from package names to their root directories
+	let mut library_roots: IndexMap<String, Utf8PathBuf> = IndexMap::new();
+	library_roots.insert(source_package, project_dir.to_owned());
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -321,6 +345,7 @@ pub fn compile(
 		source_text,
 		&mut files,
 		&mut file_graph,
+		&mut library_roots,
 		&mut tree_sitter_trees,
 		&mut asts,
 	);
@@ -357,6 +382,7 @@ pub fn compile(
 			&mut types,
 			&file,
 			&file_graph,
+			&mut library_roots,
 			&mut jsii_types,
 			&mut jsii_imports,
 		);
@@ -374,18 +400,6 @@ pub fn compile(
 		json_checker.check(&scope);
 
 		asts.insert(file.path.to_owned(), scope);
-	}
-
-	// Verify that the project dir is absolute
-	if !is_absolute_path(&project_dir) {
-		report_diagnostic(Diagnostic {
-			message: format!("Project directory must be absolute: {}", project_dir),
-			span: None,
-			annotations: vec![],
-			hints: vec![],
-			severity: DiagnosticSeverity::Error,
-		});
-		return Err(());
 	}
 
 	let mut jsifier = JSifier::new(&mut types, &files, &file_graph, &source_path, &out_dir);
@@ -520,7 +534,7 @@ mod sanity {
 				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
-			let result = compile(&test_dir, &test_file, None, &out_dir);
+			let result = compile(&test_file, None, &out_dir);
 
 			if result.is_err() {
 				assert!(

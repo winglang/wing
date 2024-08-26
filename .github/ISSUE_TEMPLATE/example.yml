@@ -1,6 +1,6 @@
 name: Missing Example 🚀
 description: Request for a missing example
-labels: ["✨ example","needs-discussion"]
+labels: ["💡 examples","needs-discussion"]
 body:
 
 - type: markdown

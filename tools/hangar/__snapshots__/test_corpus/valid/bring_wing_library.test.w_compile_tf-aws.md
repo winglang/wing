@@ -156,22 +156,22 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-3.cjs")({
-            $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
+            $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.Store") ?? fixture.Store, "", "Store"))},
           })
         `;
       }
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), ["makeKeyInflight"]],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.Store") ?? fixture.Store, "", "Store"), ["makeKeyInflight"]],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.Store") ?? fixture.Store, "", "Store"), []],
           ],
         });
       }
     }
-    new fixture.Store(this, "Store");
+    globalThis.$ClassFactory.new("@winglibs/testfixture.Store", fixture.Store, this, "Store");
     const fave_num = fixture.FavoriteNumbers.SEVEN;
     const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
@@ -237,7 +237,7 @@ class Store extends $stdlib.std.Resource {
   static _toInflightType() {
     return `
       require("${$helpers.normalPath(__dirname)}/inflight.Store-2.cjs")({
-        $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
+        $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.subdir.Util") ?? myutil.Util, "", "Util"))},
       })
     `;
   }
@@ -251,12 +251,12 @@ class Store extends $stdlib.std.Resource {
   get _liftMap() {
     return ({
       "set": [
-        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), ["double"]],
+        [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.subdir.Util") ?? myutil.Util, "", "Util"), ["double"]],
         [this.data, ["put"]],
         [this.handlers, []],
       ],
       "$inflight_init": [
-        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), []],
+        [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.subdir.Util") ?? myutil.Util, "", "Util"), []],
         [this.data, []],
         [this.handlers, []],
       ],
