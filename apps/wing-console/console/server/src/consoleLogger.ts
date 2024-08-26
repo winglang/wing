@@ -1,13 +1,12 @@
 import { mkdir, open } from "node:fs/promises";
 import path from "node:path";
+import readline from "node:readline/promises";
 
 import { errorMessage } from "@wingconsole/error-message";
-import { readLines, throttle } from "@wingconsole/utilities";
+import { throttle } from "@wingconsole/utilities";
 import { nanoid } from "nanoid";
 
 import type { LogInterface } from "./utils/LogInterface.js";
-
-const BUFFER_SIZE = 64 * 1024;
 
 export type LogLevel = "verbose" | "info" | "warn" | "error";
 
@@ -32,14 +31,12 @@ export interface LogEntry {
 
 export type MessageType = "info" | "title" | "summary" | "success" | "fail";
 
-interface ListMessagesOptions {
-  position?: number;
-}
+interface ListMessagesOptions {}
 
 export interface ConsoleLogger {
-  listMessages(
-    options?: ListMessagesOptions,
-  ): Promise<{ entries: LogEntry[]; position: number }>;
+  listMessages(options?: ListMessagesOptions): Promise<{
+    entries: LogEntry[];
+  }>;
   close(): Promise<void>;
   verbose(message: string, source?: LogSource, context?: LogContext): void;
   log(message: string, source?: LogSource, context?: LogContext): void;
@@ -62,9 +59,6 @@ export const createConsoleLogger = async ({
 
   // Create or truncate the log file. In the future, we might want to use `a+` to append to the file instead.
   const fileHandle = await open(logfile, "w+");
-
-  // Create the buffer once so we can reuse it.
-  const buffer = Buffer.alloc(BUFFER_SIZE);
 
   // Create an `appendEntry` function that will append log
   // entries to the log file at a maximum speed of 4 times a second.
@@ -91,22 +85,21 @@ export const createConsoleLogger = async ({
       await fileHandle.close();
     },
     async listMessages(options) {
-      const { lines, position } = await readLines(fileHandle, {
-        buffer,
-        direction: "forward",
-        position: options?.position,
-      });
-
-      // TODO: `readLines` may return partial lines, we should handle that. For now, we ignore them.
+      const fileHandle = await open(logfile, "r+");
+      const entries = new Array<LogEntry>();
+      for await (const line of readline.createInterface({
+        input: fileHandle.createReadStream(),
+      })) {
+        try {
+          entries.push(JSON.parse(line) as LogEntry);
+        } catch (error) {
+          log.error("Failed to parse log entry:");
+          log.error(error);
+        }
+      }
+      await fileHandle.close();
       return {
-        entries: lines
-          .map((line) => {
-            if (typeof line === "string") {
-              return JSON.parse(line) as LogEntry;
-            }
-          })
-          .filter((entry) => entry !== undefined),
-        position,
+        entries,
       };
     },
     verbose(message, source, context) {

@@ -44,7 +44,7 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
 
   const filters = trpc["app.logsFilters"].useQuery();
 
-  const logs = trpc["app.logs"].useInfiniteQuery(
+  const logs = trpc["app.logs"].useQuery(
     {
       filters: {
         level: {
@@ -61,11 +61,20 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
     },
     {
       keepPreviousData: true,
-      getNextPageParam(lastPage) {
-        return lastPage.nextCursor;
-      },
     },
   );
+
+  const entries = useMemo(() => {
+    return logs.data?.logs ?? [];
+  }, [logs.data?.logs]);
+
+  const shownLogs = useMemo(() => {
+    return entries.length;
+  }, [entries]);
+
+  const hiddenLogs = useMemo(() => {
+    return logs.data?.hiddenLogs ?? 0;
+  }, [logs.data?.hiddenLogs]);
 
   const scrollableRef = useRef<HTMLDivElement>(null);
   const [scrolledToBottom, setScrolledToBottom] = useState(true);
@@ -116,23 +125,6 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
     setSelectedResourceIds,
     setSelectedResourceTypes,
   ]);
-
-  const entries = useMemo(() => {
-    return logs.data?.pages.flatMap((page) => page.logs) ?? [];
-  }, [logs.data?.pages]);
-
-  const shownLogs = useMemo(() => {
-    return entries.length;
-  }, [entries]);
-
-  const hiddenLogs = useMemo(() => {
-    return (
-      logs.data?.pages.reduce(
-        (hiddenLogs, page) => hiddenLogs + page.hiddenLogs,
-        0,
-      ) ?? 0
-    );
-  }, [logs.data?.pages]);
 
   return (
     <div className="relative h-full flex flex-col">
