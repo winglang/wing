@@ -305,7 +305,7 @@ pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
 		if current_dir == "/" {
 			break;
 		}
-		current_dir = current_dir.parent().expect("parent directory");
+		current_dir = current_dir.parent().unwrap_or_else(|| Utf8Path::new("/"));
 	}
 	return initial_dir;
 }
