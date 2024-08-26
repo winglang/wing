@@ -103,7 +103,6 @@ export const createAppRouter = () => {
             resourceIds: z.array(z.string()),
             resourceTypes: z.array(z.string()),
           }),
-          cursor: z.number().optional(),
         }),
       )
       .query(async ({ ctx, input }) => {
@@ -161,7 +160,6 @@ export const createAppRouter = () => {
               } as LogEntry),
           ),
           hiddenLogs: noVerboseLogsCount - filteredLogs.length,
-          // nextCursor: position,
         };
       }),
     "app.error": createProcedure.query(({ ctx }) => {
