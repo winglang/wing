@@ -1,10 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-  httpBatchLink,
   wsLink,
   splitLink,
   createWSClient,
-  httpLink,
+  unstable_httpBatchStreamLink,
 } from "@trpc/client";
 import type { Mode } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
@@ -61,7 +60,6 @@ export const Console = ({
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
-        // For subscriptions, use WebSocket.
         splitLink({
           condition(op) {
             return op.type === "subscription";
@@ -69,26 +67,8 @@ export const Console = ({
           true: wsLink({
             client: wsClient,
           }),
-          // For the `test.*` operations, use a single HTTP link. This is necessary
-          // to avoid a bug where the Console would not display the data until
-          // the app starts correctly. For example, starting a new application
-          // with compilation errors, the Console will be stuck.
-          //
-          // For the rest of the operations, use the batch HTTP link.
-          //
-          // We should be able to use batch HTTP links everywhere if we refactor
-          // the `test.*` operations so they don't wait until the Simulator
-          // instance is ready.
-          false: splitLink({
-            condition(op) {
-              return op.path.startsWith("test.");
-            },
-            true: httpLink({
-              url: trpcUrl,
-            }),
-            false: httpBatchLink({
-              url: trpcUrl,
-            }),
+          false: unstable_httpBatchStreamLink({
+            url: trpcUrl,
           }),
         }),
       ],
