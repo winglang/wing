@@ -304,6 +304,9 @@ pub struct Namespace {
 
 	/// Where we can resolve this namespace from
 	pub module_path: ResolveSource,
+
+	/// The fully qualified name of this namespace
+	pub fqn: String,
 }
 
 #[derive(Debug)]
@@ -351,6 +354,7 @@ pub struct Class {
 	// uid is used for Wing classes and is always 0 for JSII classes to avoid snapshot noise.
 	pub uid: usize,
 }
+
 impl Class {
 	pub(crate) fn set_lifts(&mut self, lifts: Lifts) {
 		self.lifts = Some(lifts);
@@ -370,7 +374,7 @@ impl Class {
 #[derivative(Debug)]
 pub struct Interface {
 	pub name: Symbol,
-	pub fqn: Option<String>,
+	pub fqn: String,
 	pub docs: Docs,
 	pub extends: Vec<TypeRef>, // Must be a Type::Interface type
 	pub phase: Phase,
@@ -469,7 +473,7 @@ pub struct ArgListTypes {
 #[derivative(Debug)]
 pub struct Struct {
 	pub name: Symbol,
-	pub fqn: Option<String>,
+	pub fqn: String,
 	pub docs: Docs,
 	pub extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
@@ -485,6 +489,7 @@ impl Display for Struct {
 #[derive(Debug)]
 pub struct Enum {
 	pub name: Symbol,
+	pub fqn: String,
 	pub docs: Docs,
 	/// Variant name and optional documentation
 	pub values: IndexMap<Symbol, Option<String>>,
@@ -1873,12 +1878,19 @@ pub struct TypeChecker<'a> {
 	/// The file graph of the entire project compilation.
 	file_graph: &'a FileGraph,
 
+	/// A map from package names to their root directories.
+	/// This is used for resolving FQNs.
+	library_roots: &'a IndexMap<String, Utf8PathBuf>,
+
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
 	jsii_imports: &'a mut Vec<JsiiImportSpec>,
 
 	/// The JSII type system
 	jsii_types: &'a mut TypeSystem,
+
+	// A sanity check to ensure we don't generate the same FQN multiple times.
+	generated_fqns: HashSet<String>,
 
 	is_in_mut_json: bool,
 
@@ -1890,6 +1902,7 @@ impl<'a> TypeChecker<'a> {
 		types: &'a mut Types,
 		source_file: &'a File,
 		file_graph: &'a FileGraph,
+		library_roots: &'a IndexMap<String, Utf8PathBuf>,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
 	) -> Self {
@@ -1899,10 +1912,26 @@ impl<'a> TypeChecker<'a> {
 			jsii_types,
 			source_file,
 			file_graph,
+			library_roots,
 			jsii_imports,
+			generated_fqns: HashSet::new(),
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
 		}
+	}
+
+	fn current_package_root(&self) -> &Utf8Path {
+		self
+			.library_roots
+			.get(&self.source_file.package)
+			.expect("No package root found")
+	}
+
+	/// Calculate a prefix for all FQNs of types in the current file.
+	/// It assumes a flat file structure: all types that are given a FQN must be defined at the top-level.
+	fn base_fqn_for_current_file(&self) -> String {
+		let package_root = self.current_package_root();
+		calculate_fqn_for_namespace(&self.source_file.package, package_root, &self.source_file.path)
 	}
 
 	/// Recursively check if a type is or contains a type inference.
@@ -3563,27 +3592,27 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		first_expected_type
 	}
 
-	pub fn type_check_file_or_dir(&mut self, source_file: &File, scope: &Scope) {
+	pub fn type_check_file_or_dir(&mut self, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
-		if source_file.path.is_dir() {
-			self.type_check_dir(source_file);
+		if self.source_file.path.is_dir() {
+			self.type_check_dir();
 			return;
 		}
 
 		// Save the file's symbol environment to `self.types.source_file_envs`
 		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
 		let scope_env = self.types.get_scope_env(scope);
-		self
-			.types
-			.source_file_envs
-			.insert(source_file.path.to_owned(), SymbolEnvOrNamespace::SymbolEnv(scope_env));
+		self.types.source_file_envs.insert(
+			self.source_file.path.to_owned(),
+			SymbolEnvOrNamespace::SymbolEnv(scope_env),
+		);
 	}
 
-	pub fn type_check_dir(&mut self, source_file: &File) {
+	pub fn type_check_dir(&mut self) {
 		// Get a list of all children paths (files or directories) through the file graph
-		let children = self.file_graph.dependencies_of(source_file);
+		let children = self.file_graph.dependencies_of(self.source_file);
 
 		// Obtain each child's symbol environment or namespace
 		// If it's a namespace (i.e. it's a directory), wrap it in a symbol env
@@ -3614,16 +3643,19 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 				}
 				Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
 					self.types.source_file_envs.insert(
-						source_file.path.to_owned(),
+						self.source_file.path.to_owned(),
 						SymbolEnvOrNamespace::Error(diagnostic.clone()),
 					);
 					return;
 				}
 				None => {
 					self.types.source_file_envs.insert(
-						source_file.path.to_owned(),
+						self.source_file.path.to_owned(),
 						SymbolEnvOrNamespace::Error(Diagnostic {
-							message: format!("Could not bring \"{}\" due to cyclic bring statements", source_file,),
+							message: format!(
+								"Could not bring \"{}\" due to cyclic bring statements",
+								self.source_file,
+							),
 							span: None,
 							annotations: vec![],
 							hints: vec![],
@@ -3645,9 +3677,12 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 
 				if seen_public_symbols.contains(key) {
 					self.types.source_file_envs.insert(
-						source_file.path.to_owned(),
+						self.source_file.path.to_owned(),
 						SymbolEnvOrNamespace::Error(Diagnostic {
-							message: format!("Symbol \"{}\" has multiple definitions in \"{}\"", key, source_file),
+							message: format!(
+								"Symbol \"{}\" has multiple definitions in \"{}\"",
+								key, self.source_file
+							),
 							span: None,
 							annotations: vec![],
 							hints: vec![],
@@ -3661,15 +3696,16 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		}
 
 		let ns = self.types.add_namespace(Namespace {
-			name: source_file.path.file_stem().unwrap().to_string(),
+			name: self.source_file.path.file_stem().unwrap().to_string(),
 			envs: child_envs,
-			source_package: source_file.package.clone(),
+			source_package: self.source_file.package.clone(),
 			module_path: ResolveSource::WingFile,
+			fqn: self.base_fqn_for_current_file(),
 		});
 		self
 			.types
 			.source_file_envs
-			.insert(source_file.path.to_owned(), SymbolEnvOrNamespace::Namespace(ns));
+			.insert(self.source_file.path.to_owned(), SymbolEnvOrNamespace::Namespace(ns));
 	}
 
 	fn type_check_scope(&mut self, scope: &Scope) {
@@ -3806,11 +3842,14 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 						return;
 					}
 				};
+				let package_root = self.current_package_root();
+				let fqn = calculate_fqn_for_namespace(&self.source_file.package, &package_root, path);
 				let ns = self.types.add_namespace(Namespace {
 					name: path.to_string(),
 					envs: vec![brought_env],
 					source_package: self.source_file.package.clone(),
 					module_path: ResolveSource::WingFile,
+					fqn,
 				});
 				if let Err(e) = env.define(
 					identifier.as_ref().unwrap(),
@@ -3934,7 +3973,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		// Create the struct type with the empty environment
 		let struct_type = self.types.add_type(Type::Struct(Struct {
 			name: name.clone(),
-			fqn: None,
+			fqn: format!("{}.{}", self.base_fqn_for_current_file(), st.name),
 			extends: extends_types.clone(),
 			env: dummy_env,
 			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
@@ -3991,7 +4030,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		// Create the interface type with the empty environment
 		let interface_spec = Interface {
 			name: iface.name.clone(),
-			fqn: None,
+			fqn: format!("{}.{}", self.base_fqn_for_current_file(), iface.name),
 			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 			env: dummy_env,
 			extends: extend_interfaces.clone(),
@@ -4015,6 +4054,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 	fn hoist_enum_definition(&mut self, enu: &AstEnum, env: &mut SymbolEnv, doc: &Option<String>) {
 		let enum_type_ref = self.types.add_type(Type::Enum(Enum {
 			name: enu.name.clone(),
+			fqn: format!("{}.{}", self.base_fqn_for_current_file(), enu.name),
 			values: enu.values.clone(),
 			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 		}));
@@ -4562,10 +4602,29 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			}
 		}
 
+		// Only public classes are guaranteed to be unique across the package and
+		// can be referenced by their fully qualified name.
+		let fqn = if ast_class.access == AccessModifier::Public {
+			let package_root = self.current_package_root();
+			let base_fqn = calculate_fqn_for_namespace(&self.source_file.package, package_root, &self.source_file.path);
+			Some(format!("{}.{}", base_fqn, ast_class.name))
+		} else {
+			None
+		};
+
+		// Check if the FQN is already used
+		if let Some(fqn) = &fqn {
+			if self.generated_fqns.contains(fqn) {
+				self.spanned_error(stmt, format!("The fully qualified name {} is already in use", fqn));
+			} else {
+				self.generated_fqns.insert(fqn.clone());
+			}
+		}
+
 		// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 		let class_spec = Class {
 			name: ast_class.name.clone(),
-			fqn: None,
+			fqn,
 			env: dummy_env,
 			parent: parent_class,
 			implements: impl_interfaces.clone(),
@@ -4835,7 +4894,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		// types used in its methods are serializable and immutable
 		if impl_interfaces
 			.iter()
-			.any(|i| i.as_interface().unwrap().fqn.as_deref() == Some(WINGSDK_SIM_IRESOURCE_FQN))
+			.any(|i| i.as_interface().unwrap().fqn == WINGSDK_SIM_IRESOURCE_FQN)
 		{
 			for (method_name, method_def) in ast_class.methods.iter() {
 				let method_type = method_types.get(&method_name).unwrap();
@@ -5990,8 +6049,8 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 
 					let fqn = match &*type_to_maybe_replace {
 						Type::Class(c) => c.fqn.as_ref(),
-						Type::Interface(i) => i.fqn.as_ref(),
-						Type::Struct(s) => s.fqn.as_ref(),
+						Type::Interface(i) => Some(&i.fqn),
+						Type::Struct(s) => Some(&s.fqn),
 						_ => None,
 					};
 
@@ -7282,6 +7341,42 @@ fn lookup_known_type(name: &'static str, env: &SymbolEnv) -> TypeRef {
 		.0
 		.as_type()
 		.expect(&format!("Expected known type \"{}\" to be a type", name))
+}
+
+/// Given the root of a package and a file path within that package, calculate the
+/// fully qualified name to associate with any namespaces representing that file.
+///
+/// ```
+/// use wingc::type_check::calculate_fqn_for_namespace;
+///
+/// let fqn = calculate_fqn_for_namespace("@winglibs/dynamodb", "/foo/bar".into(), "/foo/bar/baz/impl.w".into());
+/// assert_eq!(fqn, "@winglibs/dynamodb.baz".to_string());
+///
+/// let fqn2 = calculate_fqn_for_namespace("@winglibs/dynamodb", "/foo/bar".into(), "/foo/bar/baz/".into());
+/// assert_eq!(fqn2, "@winglibs/dynamodb.baz".to_string());
+///
+/// let fqn3 = calculate_fqn_for_namespace("@winglibs/dynamodb", "/foo/bar".into(), "/foo/bar/".into());
+/// assert_eq!(fqn3, "@winglibs/dynamodb".to_string());
+/// ```
+pub fn calculate_fqn_for_namespace(package_name: &str, package_root: &Utf8Path, path: &Utf8Path) -> String {
+	let assembly = package_name;
+	if !path.starts_with(package_root) {
+		panic!(
+			"File path \"{}\" is not within the package root \"{}\"",
+			path, package_root
+		);
+	}
+	let path = if path.as_str().ends_with(".w") {
+		path.parent().expect("Expected a parent directory")
+	} else {
+		path
+	};
+	let relative_path = path.strip_prefix(package_root).expect("not a prefix");
+	if relative_path == Utf8Path::new("") {
+		return assembly.to_string();
+	}
+	let namespace = relative_path.as_str().replace("/", ".");
+	format!("{}.{}", assembly, namespace)
 }
 
 #[derive(Debug)]

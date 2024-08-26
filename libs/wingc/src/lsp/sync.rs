@@ -22,7 +22,7 @@ use crate::valid_json_visitor::ValidJsonVisitor;
 use crate::visit::Visit;
 use crate::wasm_util::extern_json_fn;
 use crate::{ast::Scope, type_check::Types};
-use crate::{type_check, DEFAULT_PACKAGE_NAME};
+use crate::{find_nearest_wing_project_dir, type_check, DEFAULT_PACKAGE_NAME};
 
 /// The output of compiling a Wing project with one or more files
 pub struct ProjectData {
@@ -30,6 +30,8 @@ pub struct ProjectData {
 	pub files: Files,
 	/// A graph that tracks the dependencies between files
 	pub file_graph: FileGraph,
+	/// A map from library names to their root paths
+	pub library_roots: IndexMap<String, Utf8PathBuf>,
 	/// tree-sitter trees
 	pub trees: IndexMap<Utf8PathBuf, Tree>,
 	/// AST for each file
@@ -44,6 +46,7 @@ impl ProjectData {
 		ProjectData {
 			files: Files::new(),
 			file_graph: FileGraph::default(),
+			library_roots: IndexMap::new(),
 			trees: IndexMap::new(),
 			asts: IndexMap::new(),
 			jsii_imports: Vec::new(),
@@ -137,6 +140,7 @@ fn partial_compile(
 	reset_diagnostics();
 
 	let source_path = Utf8Path::from_path(source_path).expect("invalid unicode path");
+	let project_dir = find_nearest_wing_project_dir(source_path);
 	let source_path = normalize_path(source_path, None);
 
 	let source_package = if let Some(file) = project_data
@@ -152,11 +156,30 @@ fn partial_compile(
 	};
 	let source_file = File::new(source_path, source_package);
 
+	// If this is a file from a project or package we haven't seen before,
+	// add it to the library roots
+	if !project_data.library_roots.contains_key(source_package) {
+		project_data
+			.library_roots
+			.insert(source_package.to_string(), project_dir);
+	} else if is_parent_of(&project_dir, project_data.library_roots.get(source_package).unwrap()) {
+		// The information about the library root could be wrong - for example,
+		// the user might open `foo/bar.w`` in their IDE first, and then
+		// `other.w` after. Without any other information, we will first assume that
+		// `foo/` is the root of the library, and then after seeing the other file,
+		// we will update our assumption to `./` through this branch.
+		// This is kludgey.
+		project_data
+			.library_roots
+			.insert(source_package.to_string(), project_dir);
+	}
+
 	let topo_sorted_files = parse_wing_project(
 		&source_file,
 		Some(source_text),
 		&mut project_data.files,
 		&mut project_data.file_graph,
+		&mut project_data.library_roots,
 		&mut project_data.trees,
 		&mut project_data.asts,
 	);
@@ -189,6 +212,7 @@ fn partial_compile(
 			&mut types,
 			&file,
 			&project_data.file_graph,
+			&mut project_data.library_roots,
 			jsii_types,
 			&mut project_data.jsii_imports,
 		);
@@ -233,6 +257,10 @@ fn partial_compile(
 
 pub fn check_utf8(path: PathBuf) -> Utf8PathBuf {
 	path.try_into().expect("invalid unicode path")
+}
+
+fn is_parent_of(parent: &Utf8Path, child: &Utf8Path) -> bool {
+	child.starts_with(parent) && parent != child
 }
 
 #[cfg(test)]

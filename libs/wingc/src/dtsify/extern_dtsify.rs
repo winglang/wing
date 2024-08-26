@@ -189,8 +189,8 @@ impl<'a> ExternDTSifier<'a> {
 	fn resolve_named_type(&mut self, type_: TypeRef, is_inflight: bool) -> String {
 		let fqn = match &*type_ {
 			Type::Class(c) => c.fqn.as_ref().unwrap_or(&c.name.span.file_id),
-			Type::Interface(i) => i.fqn.as_ref().unwrap_or(&i.name.span.file_id),
-			Type::Struct(s) => s.fqn.as_ref().unwrap_or(&s.name.span.file_id),
+			Type::Interface(i) => &i.fqn,
+			Type::Struct(s) => &s.fqn,
 			Type::Enum(e) => &e.name.span.file_id,
 			_ => panic!("Not a named type"),
 		};

@@ -179,7 +179,7 @@ class ParentClass extends $stdlib.std.Resource {
     });
   }
 }
-class Child extends ParentClass {
+class Child extends (globalThis.$ClassFactory.resolveType("rootpkg.ParentClass") ?? ParentClass) {
   constructor($scope, $id, ) {
     super($scope, $id);
   }

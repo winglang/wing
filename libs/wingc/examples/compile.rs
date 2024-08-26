@@ -15,7 +15,7 @@ pub fn main() {
 	let source_path = Utf8Path::new(&args[1]).canonicalize_utf8().unwrap();
 	let target_dir: Utf8PathBuf = env::current_dir().unwrap().join("target").try_into().unwrap();
 
-	let _ = compile(source_path.parent().unwrap(), &source_path, None, &target_dir);
+	let _ = compile(&source_path, None, &target_dir);
 	let mut diags = get_diagnostics();
 	if !diags.is_empty() {
 		// Sort error messages by line number (ascending)

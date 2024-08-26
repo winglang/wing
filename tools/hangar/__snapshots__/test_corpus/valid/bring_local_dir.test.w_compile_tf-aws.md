@@ -106,13 +106,13 @@ class $Root extends $stdlib.std.Resource {
     const w = $helpers.bringJs(`${__dirname}/preflight.widget-1.cjs`, $preflightTypesMap);
     const subdir = $helpers.bringJs(`${__dirname}/preflight.subdir2-6.cjs`, $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
-    const widget1 = new w.Widget(this, "widget1");
+    const widget1 = globalThis.$ClassFactory.new("rootpkg.subdir2.inner.Widget", w.Widget, this, "widget1");
     $helpers.assert($helpers.eq((widget1.compute()), 42), "widget1.compute() == 42");
-    const foo = new subdir.Foo(this, "Foo");
+    const foo = globalThis.$ClassFactory.new("rootpkg.subdir2.Foo", subdir.Foo, this, "Foo");
     $helpers.assert($helpers.eq((foo.foo()), "foo"), "foo.foo() == \"foo\"");
-    const bar = new subdir.Bar(this, "Bar");
+    const bar = globalThis.$ClassFactory.new("rootpkg.subdir2.Bar", subdir.Bar, this, "Bar");
     $helpers.assert($helpers.eq((bar.bar()), "bar"), "bar.bar() == \"bar\"");
-    const widget2 = new subdir.inner.Widget(this, "widget2");
+    const widget2 = globalThis.$ClassFactory.new("rootpkg.subdir2.inner.Widget", subdir.inner.Widget, this, "widget2");
     $helpers.assert($helpers.eq((widget2.compute()), 42), "widget2.compute() == 42");
     $helpers.assert($helpers.eq((foo.checkWidget(widget2)), 1379), "foo.checkWidget(widget2) == 1379");
   }

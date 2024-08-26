@@ -351,19 +351,19 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-3.cjs")({
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
-            $file2_Q: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(file2.Q, "", "Q"))},
+            $file2_Q: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("rootpkg.subdir.Q") ?? file2.Q, "", "Q"))},
           })
         `;
       }
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(file2.Q, "", "Q"), ["greet"]],
             [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("rootpkg.subdir.Q") ?? file2.Q, "", "Q"), ["greet"]],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(file2.Q, "", "Q"), []],
             [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("rootpkg.subdir.Q") ?? file2.Q, "", "Q"), []],
           ],
         });
       }
@@ -405,8 +405,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const store = new file1.Store(this, "Store");
-    const q = new file2.Q(this, "Q");
+    const store = globalThis.$ClassFactory.new("rootpkg.Store", file1.Store, this, "Store");
+    const q = globalThis.$ClassFactory.new("rootpkg.subdir.Q", file2.Q, this, "Q");
     (expect.Util.equal((file2.Q.preflightGreet("foo")), "Hello foo"));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:add data to store", new $Closure1(this, "$Closure1"));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:greet", new $Closure2(this, "$Closure2"));

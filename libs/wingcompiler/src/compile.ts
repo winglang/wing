@@ -332,9 +332,7 @@ async function compileForPreflight(props: {
       diagnostics.push(JSON.parse(data_str));
     }
 
-    const arg = `${normalPath(props.entrypointFile)};${normalPath(props.workDir)};${normalPath(
-      props.wingDir
-    )}`;
+    const arg = `${normalPath(props.entrypointFile)};${normalPath(props.workDir)}`;
     props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
     let compilerOutput: string | number = "";
     try {
