@@ -1,4 +1,9 @@
+import { mkdir, open } from "node:fs/promises";
+import path from "node:path";
+import readline from "node:readline/promises";
+
 import { errorMessage } from "@wingconsole/error-message";
+import { throttle } from "@wingconsole/utilities";
 import { nanoid } from "nanoid";
 
 import type { LogInterface } from "./utils/LogInterface.js";
@@ -26,28 +31,80 @@ export interface LogEntry {
 
 export type MessageType = "info" | "title" | "summary" | "success" | "fail";
 
+interface ListMessagesOptions {}
+
 export interface ConsoleLogger {
-  messages: LogEntry[];
-  verbose: (message: string, source?: LogSource, context?: LogContext) => void;
-  log: (message: string, source?: LogSource, context?: LogContext) => void;
-  error: (message: unknown, source?: LogSource, context?: LogContext) => void;
-  warning: (message: string, source?: LogSource, context?: LogContext) => void;
+  listMessages(options?: ListMessagesOptions): Promise<{
+    entries: LogEntry[];
+  }>;
+  close(): Promise<void>;
+  verbose(message: string, source?: LogSource, context?: LogContext): void;
+  log(message: string, source?: LogSource, context?: LogContext): void;
+  error(message: unknown, source?: LogSource, context?: LogContext): void;
+  warning(message: string, source?: LogSource, context?: LogContext): void;
 }
 
 export interface CreateConsoleLoggerOptions {
-  onLog: (logLevel: LogLevel, message: string) => void;
+  logfile: string;
+  onLog(): void;
   log: LogInterface;
 }
 
-export const createConsoleLogger = ({
+export const createConsoleLogger = async ({
+  logfile,
   onLog,
   log,
-}: CreateConsoleLoggerOptions): ConsoleLogger => {
+}: CreateConsoleLoggerOptions): Promise<ConsoleLogger> => {
+  await mkdir(path.dirname(logfile), { recursive: true });
+
+  // Create or truncate the log file. In the future, we might want to use `a+` to append to the file instead.
+  const fileHandle = await open(logfile, "w+");
+
+  // Create an `appendEntry` function that will append log
+  // entries to the log file at a maximum speed of 4 times a second.
+  // Finally, `onLog` will be called to report changes to the log file.
+  const { appendEntry } = (() => {
+    const pendingEntries = new Array<LogEntry>();
+    const flushEntries = throttle(async () => {
+      const [...entries] = pendingEntries;
+      pendingEntries.length = 0;
+      for (const entry of entries) {
+        await fileHandle.appendFile(`${JSON.stringify(entry)}\n`);
+      }
+      onLog();
+    }, 250);
+    const appendEntry = (entry: LogEntry) => {
+      pendingEntries.push(entry);
+      flushEntries();
+    };
+    return { appendEntry };
+  })();
+
   return {
-    messages: new Array<LogEntry>(),
+    async close() {
+      await fileHandle.close();
+    },
+    async listMessages(options) {
+      const fileHandle = await open(logfile, "r+");
+      const entries = new Array<LogEntry>();
+      for await (const line of readline.createInterface({
+        input: fileHandle.createReadStream(),
+      })) {
+        try {
+          entries.push(JSON.parse(line) as LogEntry);
+        } catch (error) {
+          log.error("Failed to parse log entry:");
+          log.error(error);
+        }
+      }
+      await fileHandle.close();
+      return {
+        entries,
+      };
+    },
     verbose(message, source, context) {
       log.info(message);
-      this.messages.push({
+      appendEntry({
         id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "verbose",
@@ -55,11 +112,10 @@ export const createConsoleLogger = ({
         source: source ?? "console",
         ctx: context,
       });
-      onLog("verbose", message);
     },
     log(message, source, context) {
       log.info(message);
-      this.messages.push({
+      appendEntry({
         id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "info",
@@ -67,11 +123,10 @@ export const createConsoleLogger = ({
         source: source ?? "console",
         ctx: context,
       });
-      onLog("info", message);
     },
     warning(message, source, context) {
       log.warning(message);
-      this.messages.push({
+      appendEntry({
         id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "warn",
@@ -79,22 +134,19 @@ export const createConsoleLogger = ({
         source: source ?? "console",
         ctx: context,
       });
-      onLog("warn", message);
     },
     error(error, source, context) {
       log.error(error);
-      const message = errorMessage(error);
       if (source === "user") {
-        this.messages.push({
+        appendEntry({
           id: `${nanoid()}`,
           timestamp: Date.now(),
           level: "error",
-          message,
+          message: errorMessage(error),
           source,
           ctx: context,
         });
       }
-      onLog("error", message);
     },
   };
 };

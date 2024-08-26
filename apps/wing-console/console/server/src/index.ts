@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import type { inferRouterInputs } from "@trpc/server";
 import { throttle } from "@wingconsole/utilities";
 import Emittery from "emittery";
@@ -115,11 +117,15 @@ export const createConsoleServer = async ({
     invalidateQuery("app.logs");
   }, 300);
 
-  const consoleLogger: ConsoleLogger = createConsoleLogger({
+  const logfile = `${path.dirname(wingfile)}/target/${path.basename(
+    wingfile,
+  )}sim/.console/logs.jsonl`;
+  const consoleLogger = await createConsoleLogger({
+    logfile,
+    log,
     onLog: () => {
       invalidateLogs();
     },
-    log,
   });
 
   const compiler = createCompiler({
@@ -322,6 +328,7 @@ export const createConsoleServer = async ({
         simulator.stop(),
         testRunner.forceStop(),
       ]);
+      await consoleLogger.close();
     } catch (error) {
       log.error(error);
     } finally {
