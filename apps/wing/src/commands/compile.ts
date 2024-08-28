@@ -7,7 +7,7 @@ import chalk from "chalk";
 import debug from "debug";
 import { glob } from "glob";
 import { formatDiagnostics } from "./diagnostics";
-import { COLORING } from "src/util";
+import { COLORING } from "../util";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)

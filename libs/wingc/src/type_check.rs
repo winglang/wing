@@ -20,6 +20,7 @@ use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, DiagnosticSeverity, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::{File, FileGraph};
+use crate::parser::normalize_path;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit::Visit;
@@ -3762,7 +3763,12 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		}
 
 		let ns = self.types.add_namespace(Namespace {
-			name: self.source_file.path.file_stem().unwrap().to_string(),
+			name: self
+				.source_file
+				.path
+				.file_stem()
+				.unwrap_or_else(|| DEFAULT_PACKAGE_NAME)
+				.to_string(),
 			envs: child_envs,
 			source_package: self.source_file.package.clone(),
 			module_path: ResolveSource::WingFile,
@@ -7423,21 +7429,31 @@ fn lookup_known_type(name: &'static str, env: &SymbolEnv) -> TypeRef {
 ///
 /// let fqn3 = calculate_fqn_for_namespace("@winglibs/dynamodb", "/foo/bar".into(), "/foo/bar/".into());
 /// assert_eq!(fqn3, "@winglibs/dynamodb".to_string());
+///
+/// let fqn4 = calculate_fqn_for_namespace("@winglibs/dynamodb", ".".into(), "impl.w".into());
+/// assert_eq!(fqn4, "@winglibs/dynamodb".to_string());
+///
+/// let fqn5 = calculate_fqn_for_namespace("@winglibs/dynamodb", ".".into(), "foo/impl.w".into());
+/// assert_eq!(fqn5, "@winglibs/dynamodb.foo".to_string());
 /// ```
 pub fn calculate_fqn_for_namespace(package_name: &str, package_root: &Utf8Path, path: &Utf8Path) -> String {
-	let assembly = package_name;
-	if !path.starts_with(package_root) {
+	let normalized_root = normalize_path(&package_root, None);
+	let normalized = normalize_path(&path, None);
+	if normalized.starts_with("..") {
 		panic!(
 			"File path \"{}\" is not within the package root \"{}\"",
 			path, package_root
 		);
 	}
-	let path = if path.as_str().ends_with(".w") {
-		path.parent().expect("Expected a parent directory")
+	let assembly = package_name;
+	let normalized = if normalized.as_str().ends_with(".w") {
+		normalized.parent().expect("Expected a parent directory")
 	} else {
-		path
+		&normalized
 	};
-	let relative_path = path.strip_prefix(package_root).expect("not a prefix");
+	let relative_path = normalized
+		.strip_prefix(&normalized_root)
+		.expect(format!("not a prefix: {} {}", normalized_root, normalized).as_str());
 	if relative_path == Utf8Path::new("") {
 		return assembly.to_string();
 	}

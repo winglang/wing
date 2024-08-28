@@ -20,7 +20,7 @@ export async function generateDocs() {
   });
 
   if (docs.diagnostics.length > 0) {
-    await formatDiagnostics(docs.diagnostics);
+    console.error(await formatDiagnostics(docs.diagnostics));
   }
 
   if (docs.diagnostics.some((d) => d.severity === "error")) {

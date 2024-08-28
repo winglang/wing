@@ -11,7 +11,6 @@ use crate::{
 	files::Files,
 	find_nearest_wing_project_dir,
 	fold::Fold,
-	is_absolute_path,
 	jsify::JSifier,
 	lifting::LiftVisitor,
 	parser::{as_wing_library, normalize_path, parse_wing_project},
@@ -114,18 +113,6 @@ pub fn generate_docs(project_dir: &Utf8Path) -> Result<String, ()> {
 		asts.insert(file.path.to_owned(), scope);
 	}
 
-	// Verify that the project dir is absolute
-	if !is_absolute_path(&project_dir) {
-		report_diagnostic(Diagnostic {
-			message: format!("Project directory must be absolute: {}", project_dir),
-			span: None,
-			annotations: vec![],
-			hints: vec![],
-			severity: DiagnosticSeverity::Error,
-		});
-		return Err(());
-	}
-
 	let jsifier = JSifier::new(
 		&mut types,
 		&files,
@@ -148,7 +135,7 @@ pub fn generate_docs(project_dir: &Utf8Path) -> Result<String, ()> {
 	}
 
 	// -- DOC GENERATION PHASE --
-	return generate_docs_helper(&types, &project_dir);
+	return generate_docs_helper(&types, &source_path);
 }
 
 const HIDDEN_METHODS: [&str; 8] = [
@@ -429,6 +416,8 @@ fn print_constructors(docs: &mut String, class: &impl ClassLike) {
 		}
 		docs.push_str("</pre>\n");
 	}
+
+	docs.push_str("\n");
 }
 
 fn print_properties(docs: &mut String, class: &impl ClassLike) {

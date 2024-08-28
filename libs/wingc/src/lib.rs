@@ -234,7 +234,7 @@ pub unsafe extern "C" fn wingc_generate_docs(ptr: u32, len: u32) -> u64 {
 	let results = generate_docs(project_dir);
 
 	if let Ok(results) = results {
-		string_to_combined_ptr(serde_json::to_string(&results).unwrap())
+		string_to_combined_ptr(results)
 	} else {
 		WASM_RETURN_ERROR
 	}
