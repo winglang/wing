@@ -126,6 +126,16 @@ export class Bucket extends cloud.Bucket {
     };
   }
 
+  public addCorsConfiguration(value: cloud.BucketCorsOptions): void {
+    value;
+    throw new NotImplementedError(
+      "addCorsConfiguration method isn't implemented yet on the current target.",
+      {
+        resource: this.constructor.name,
+      }
+    );
+  }
+
   public addObject(key: string, body: string): void {
     new StorageBucketObject(this, `Object-${key}`, {
       bucket: this.bucket.id,

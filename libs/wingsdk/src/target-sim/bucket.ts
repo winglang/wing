@@ -12,6 +12,7 @@ import * as cloud from "../cloud";
 import { LiftMap, lift } from "../core";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost } from "../std";
+import { NotImplementedError } from "../core/errors";
 
 /**
  * Simulator implementation of `cloud.Bucket`.
@@ -53,6 +54,16 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
       [cloud.BucketInflightMethods.COPY]: [],
       [cloud.BucketInflightMethods.RENAME]: [],
     };
+  }
+
+  public addCorsConfiguration(value: cloud.BucketCorsOptions): void {
+    value;
+    throw new NotImplementedError(
+      "addCorsConfiguration method isn't implemented yet on the current target.",
+      {
+        resource: this.constructor.name,
+      }
+    );
   }
 
   /**

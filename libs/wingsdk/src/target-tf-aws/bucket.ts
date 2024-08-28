@@ -4,6 +4,11 @@ import { App } from "./app";
 import { Topic as AWSTopic } from "./topic";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import {
+  S3BucketCorsConfiguration,
+  S3BucketCorsConfigurationCorsRule,
+} from "../.gen/providers/aws/s3-bucket-cors-configuration";
+
+import {
   S3BucketNotification,
   S3BucketNotificationTopic,
 } from "../.gen/providers/aws/s3-bucket-notification";
@@ -65,6 +70,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly public: boolean;
   private readonly notificationTopics: S3BucketNotificationTopic[] = [];
   private readonly notificationDependencies: ITerraformDependable[] = [];
+  private corsConfiguration?: S3BucketCorsConfiguration;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
@@ -72,6 +78,20 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     this.public = props.public ?? false;
 
     this.bucket = createEncryptedBucket(this, this.public);
+  }
+
+  public addCorsConfiguration(value: cloud.BucketCorsOptions): void {
+    if (!!this.corsConfiguration) {
+      throw new Error("S3 Buckets only support a single CORS configuration.");
+    }
+    this.corsConfiguration = new S3BucketCorsConfiguration(
+      this,
+      `CorsConfiguration-${this.node.addr.slice(-8)}`,
+      {
+        bucket: this.bucket.id,
+        corsRule: [value as S3BucketCorsConfigurationCorsRule],
+      }
+    );
   }
 
   public addObject(key: string, body: string): void {

@@ -6,6 +6,7 @@ import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
+import { HttpMethod } from "../http";
 import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
 
 /**
@@ -44,6 +45,42 @@ export interface BucketProps {
    * @default false
    */
   readonly public?: boolean;
+}
+
+export interface BucketCorsOptions {
+  /**
+   * The allowed origin.
+   * @example "https://example.com"
+   * @default - ["*"]
+   */
+  readonly allowedOrigins: string[];
+
+  /**
+   * The list of allowed methods.
+   * @example [HttpMethod.GET, HttpMethod.POST]
+   * @default - [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS]
+   */
+  readonly allowedMethods: Array<HttpMethod>;
+
+  /**
+   * The list of allowed headers.
+   * @example ["Content-Type"]
+   * @default - ["Content-Type", "Authorization"]
+   */
+  readonly allowedHeaders?: Array<string>;
+
+  /**
+   * The list of exposed headers.
+   * @example ["Content-Type"]
+   * @default - []
+   */
+  readonly exposeHeaders?: Array<string>;
+
+  /**
+   * How long the browser should cache preflight request results.
+   * @default - 300 seconds
+   */
+  readonly maxAgeSeconds?: Number;
 }
 
 /**
@@ -97,6 +134,18 @@ export class Bucket extends Resource {
   public addObject(key: string, body: string): void {
     key;
     body;
+    throw new AbstractMemberError();
+  }
+
+  /**
+   * Add cors configuration to the bucket
+   *
+   * @param {BucketCorsOptions} value - The cors configuration
+   * @abstract
+   */
+
+  public addCorsConfiguration(value: BucketCorsOptions): void {
+    value;
     throw new AbstractMemberError();
   }
 
