@@ -265,7 +265,7 @@ pub fn type_check_file(
 	types: &mut Types,
 	file: &File,
 	file_graph: &FileGraph,
-	library_roots: &mut IndexMap<String, Utf8PathBuf>,
+	library_roots: &IndexMap<String, Utf8PathBuf>,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {

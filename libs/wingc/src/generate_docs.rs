@@ -1,22 +1,24 @@
 use camino::{Utf8Path, Utf8PathBuf};
 use indexmap::IndexMap;
-use wingii::type_system::TypeSystem;
+use wingii::{fqn::FQN, type_system::TypeSystem};
 
 use crate::{
-	ast::{AccessModifier, Scope},
+	ast::{AccessModifier, Phase, Scope},
 	closure_transform::ClosureTransformer,
 	diagnostic::{found_errors, report_diagnostic, Diagnostic, DiagnosticSeverity},
 	emit_warning_for_unsupported_package_managers,
 	file_graph::{File, FileGraph},
 	files::Files,
+	find_nearest_wing_project_dir,
 	fold::Fold,
 	is_absolute_path,
 	jsify::JSifier,
 	lifting::LiftVisitor,
 	parser::{as_wing_library, normalize_path, parse_wing_project},
 	type_check::{
-		type_reference_transform::TypeReferenceTransformer, Namespace, NamespaceRef, SymbolEnvOrNamespace, SymbolKind,
-		TypeRef, Types, UnsafeRef,
+		type_reference_transform::TypeReferenceTransformer, ClassLike, FunctionSignature, HasFqn, Namespace, NamespaceRef,
+		SymbolEnvOrNamespace, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME,
+		CLASS_INIT_NAME,
 	},
 	type_check_assert::TypeCheckAssert,
 	type_check_file,
@@ -26,7 +28,8 @@ use crate::{
 
 /// Generate documentation for the project
 pub fn generate_docs(project_dir: &Utf8Path) -> Result<String, ()> {
-	let source_package = as_wing_library(project_dir);
+	let project_dir = find_nearest_wing_project_dir(project_dir);
+	let source_package = as_wing_library(&project_dir);
 	if source_package.is_none() {
 		report_diagnostic(Diagnostic {
 			message: "No package.json found in project directory".to_string(),
@@ -36,8 +39,13 @@ pub fn generate_docs(project_dir: &Utf8Path) -> Result<String, ()> {
 			severity: DiagnosticSeverity::Error,
 		});
 	}
+	let source_package = source_package.unwrap();
 	let source_path = normalize_path(&project_dir, None);
-	let source_file = File::new(&source_path, source_path.to_string());
+	let source_file = File::new(&source_path, source_package.clone());
+
+	// A map from package names to their root directories
+	let mut library_roots: IndexMap<String, Utf8PathBuf> = IndexMap::new();
+	library_roots.insert(source_package.clone(), project_dir.to_owned());
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -49,6 +57,7 @@ pub fn generate_docs(project_dir: &Utf8Path) -> Result<String, ()> {
 		None,
 		&mut files,
 		&mut file_graph,
+		&mut library_roots,
 		&mut tree_sitter_trees,
 		&mut asts,
 	);
@@ -85,6 +94,7 @@ pub fn generate_docs(project_dir: &Utf8Path) -> Result<String, ()> {
 			&mut types,
 			&file,
 			&file_graph,
+			&library_roots,
 			&mut jsii_types,
 			&mut jsii_imports,
 		);
@@ -137,11 +147,23 @@ pub fn generate_docs(project_dir: &Utf8Path) -> Result<String, ()> {
 		return Err(());
 	}
 
-	return generate_docs_helper(&types, project_dir);
+	// -- DOC GENERATION PHASE --
+	return generate_docs_helper(&types, &project_dir);
 }
 
+const HIDDEN_METHODS: [&str; 8] = [
+	"toString",
+	"toJSON",
+	"onLift",
+	"onLiftType",
+	CLASS_INIT_NAME,
+	CLASS_INFLIGHT_INIT_NAME,
+	"toInflight",
+	"isConstruct",
+];
+
 fn generate_docs_helper(types: &Types, project_dir: &Utf8Path) -> Result<String, ()> {
-	let docs = String::new();
+	let mut docs = String::new();
 	let root_env = types.source_file_envs.get(project_dir).expect("No root env found");
 	let ns = match root_env {
 		SymbolEnvOrNamespace::Namespace(ns) => *ns,
@@ -149,20 +171,26 @@ fn generate_docs_helper(types: &Types, project_dir: &Utf8Path) -> Result<String,
 		SymbolEnvOrNamespace::Error(diag) => panic!("Error in root env: {}", diag),
 	};
 
+	docs.push_str("## API Reference\n\n");
+
+	let mut public_types = vec![];
 	let namespaces = find_documentable_namespaces_recursive(&ns);
 	for ns in namespaces {
-		println!("{}", ns.name);
-		let public_types = find_public_types_in_namespace(&ns);
-		for (name, typ) in public_types {
-			println!(" - {} ({})", name, typ);
-		}
+		public_types.extend(find_public_types_in_namespace(&ns));
 	}
+
+	print_table_of_contents(&public_types, &mut docs);
+	print_classes(&public_types, &mut docs);
+	print_interfaces(&public_types, &mut docs);
+	print_structs(&public_types, &mut docs);
+	print_enums(&public_types, &mut docs);
+
 	Ok(docs)
 }
 
 /// Return a list of all of the public namespaces directly in this namespace and all of its children, including
 /// this namespace if it has any public elements.
-pub fn find_documentable_namespaces_recursive(ns: &Namespace) -> Vec<NamespaceRef> {
+fn find_documentable_namespaces_recursive(ns: &Namespace) -> Vec<NamespaceRef> {
 	let mut namespaces = vec![];
 	if ns.has_public_api_elements() {
 		namespaces.push(UnsafeRef::from(ns));
@@ -180,16 +208,308 @@ pub fn find_documentable_namespaces_recursive(ns: &Namespace) -> Vec<NamespaceRe
 }
 
 /// Return a list of all public types directly in this namespace (does not include types in child namespaces).
-pub fn find_public_types_in_namespace(ns: &Namespace) -> Vec<(String, TypeRef)> {
+fn find_public_types_in_namespace(ns: &Namespace) -> Vec<TypeRef> {
 	let mut entries = vec![];
 	for env in ns.envs.iter() {
-		for (name, entry) in env.symbol_map.iter() {
+		for (_name, entry) in env.symbol_map.iter() {
 			if entry.access == AccessModifier::Public {
 				if let SymbolKind::Type(typ) = entry.kind {
-					entries.push((name.clone(), typ));
+					entries.push(typ);
 				}
 			}
 		}
 	}
 	return entries;
+}
+
+fn simplified_fqn(typ: &TypeRef) -> String {
+	let fqn = typ.fqn().expect("Type has no FQN");
+	let fqn = FQN::from(fqn.as_str());
+	fqn
+		.as_str()
+		.strip_prefix(fqn.assembly())
+		.expect("FQN assembly prefix not found")
+		.strip_prefix('.')
+		.expect("FQN dot not found")
+		.to_string()
+}
+
+fn print_table_of_contents(types: &[TypeRef], docs: &mut String) {
+	docs.push_str("### Table of Contents\n\n");
+
+	let mut classes = vec![];
+	let mut interfaces = vec![];
+	let mut structs = vec![];
+	let mut enums = vec![];
+
+	for typ in types {
+		match **typ {
+			Type::Class(_) => classes.push(typ),
+			Type::Interface(_) => interfaces.push(typ),
+			Type::Struct(_) => structs.push(typ),
+			Type::Enum(_) => enums.push(typ),
+			_ => panic!("Unexpected type in public types list"),
+		}
+	}
+
+	if !classes.is_empty() {
+		docs.push_str("- **Classes**\n");
+		for class in &classes {
+			docs.push_str("  - <a href=\"#");
+			docs.push_str(&class.fqn().expect("Type has no FQN"));
+			docs.push_str("\">");
+			docs.push_str(&simplified_fqn(class));
+			docs.push_str("</a>\n");
+		}
+	}
+
+	if !interfaces.is_empty() {
+		docs.push_str("- **Interfaces**\n");
+		for interface in &interfaces {
+			docs.push_str("  - <a href=\"#");
+			docs.push_str(&interface.fqn().expect("Type has no FQN"));
+			docs.push_str("\">");
+			docs.push_str(&simplified_fqn(interface));
+			docs.push_str("</a>\n");
+		}
+	}
+
+	if !structs.is_empty() {
+		docs.push_str("- **Structs**\n");
+		for struct_ in &structs {
+			docs.push_str("  - <a href=\"#");
+			docs.push_str(&struct_.fqn().expect("Type has no FQN"));
+			docs.push_str("\">");
+			docs.push_str(&simplified_fqn(struct_));
+			docs.push_str("</a>\n");
+		}
+	}
+
+	if !enums.is_empty() {
+		docs.push_str("- **Enums**\n");
+		for enum_ in &enums {
+			docs.push_str("  - <a href=\"#");
+			docs.push_str(&enum_.fqn().expect("Type has no FQN"));
+			docs.push_str("\">");
+			docs.push_str(&simplified_fqn(enum_));
+			docs.push_str("</a>\n");
+		}
+	}
+
+	docs.push_str("\n");
+}
+
+fn print_classes(types: &[TypeRef], docs: &mut String) {
+	for typ in types {
+		if let Type::Class(ref class) = **typ {
+			docs.push_str("### ");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" (");
+			docs.push_str(&class.phase.to_string());
+			docs.push_str(" class) <a name=");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" id=\"");
+			docs.push_str(&typ.fqn().expect("Type has no FQN"));
+			docs.push_str("\"></a>\n\n");
+
+			let docstring = class.docs.render();
+			if !docstring.is_empty() {
+				docs.push_str(&docstring);
+				docs.push_str("\n\n");
+			}
+
+			print_constructors(docs, class);
+			print_properties(docs, class);
+			print_methods(docs, class);
+		}
+	}
+}
+
+fn print_interfaces(types: &[TypeRef], docs: &mut String) {
+	for typ in types {
+		if let Type::Interface(ref interface) = **typ {
+			docs.push_str("### ");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" (interface) <a name=");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" id=\"");
+			docs.push_str(&typ.fqn().expect("Type has no FQN"));
+			docs.push_str("\"></a>\n\n");
+
+			let docstring = interface.docs.render();
+			if !docstring.is_empty() {
+				docs.push_str(&docstring);
+				docs.push_str("\n\n");
+			}
+
+			print_properties(docs, interface);
+			print_methods(docs, interface);
+		}
+	}
+}
+
+fn print_structs(types: &[TypeRef], docs: &mut String) {
+	for typ in types {
+		if let Type::Struct(ref struct_) = **typ {
+			docs.push_str("### ");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" (struct) <a name=");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" id=\"");
+			docs.push_str(&typ.fqn().expect("Type has no FQN"));
+			docs.push_str("\"></a>\n\n");
+
+			let docstring = struct_.docs.render();
+			if !docstring.is_empty() {
+				docs.push_str(&docstring);
+				docs.push_str("\n\n");
+			}
+
+			print_properties(docs, struct_);
+		}
+	}
+}
+
+fn print_enums(types: &[TypeRef], docs: &mut String) {
+	for typ in types {
+		if let Type::Enum(ref enum_) = **typ {
+			docs.push_str("### ");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" (enum) <a name=");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" id=\"");
+			docs.push_str(&typ.fqn().expect("Type has no FQN"));
+			docs.push_str("\"></a>\n\n");
+
+			let docstring = enum_.docs.render();
+			if !docstring.is_empty() {
+				docs.push_str(&docstring);
+				docs.push_str("\n\n");
+			}
+
+			docs.push_str("#### Values\n\n");
+			docs.push_str("| **Name** | **Description** |\n");
+			docs.push_str("| --- | --- |\n");
+			for (name, description) in enum_.values.iter() {
+				docs.push_str("| <code>");
+				docs.push_str(&name.name);
+				docs.push_str("</code> | ");
+				if let Some(description) = description {
+					docs.push_str(&description);
+				} else {
+					docs.push_str("*No description*");
+				}
+				docs.push_str(" |\n");
+			}
+
+			docs.push_str("\n");
+		}
+	}
+}
+
+fn print_constructors(docs: &mut String, class: &impl ClassLike) {
+	docs.push_str("#### Constructor\n\n");
+
+	let mut constructors = class.constructors(true).collect::<Vec<_>>();
+	constructors.retain(|(_, constructor_info)| constructor_info.access == AccessModifier::Public);
+	// We only care about printing the preflight constructor
+	constructors.retain(|(_, constructor_info)| constructor_info.phase == Phase::Preflight);
+
+	if constructors.is_empty() {
+		docs.push_str("*No constructor*\n");
+	} else {
+		docs.push_str("<pre>\n");
+		for (_, constructor_info) in constructors {
+			let sig = constructor_info
+				.type_
+				.as_function_sig()
+				.expect("Constructor is not a function");
+			print_signature(&VariableKind::InstanceMember, "new", sig, docs);
+			docs.push_str("\n");
+		}
+		docs.push_str("</pre>\n");
+	}
+}
+
+fn print_properties(docs: &mut String, class: &impl ClassLike) {
+	docs.push_str("#### Properties\n\n");
+
+	let mut fields = class.fields(true).collect::<Vec<_>>();
+	fields.retain(|(_, field_info)| field_info.access == AccessModifier::Public);
+
+	if fields.is_empty() {
+		docs.push_str("*No properties*\n");
+	} else {
+		docs.push_str("| **Name** | **Type** | **Description** |\n");
+		docs.push_str("| --- | --- | --- |\n");
+		for (name, prop_info) in fields {
+			docs.push_str("| <code>");
+			docs.push_str(&name);
+			docs.push_str("</code> | <code>");
+			docs.push_str(&prop_info.type_.to_string());
+			docs.push_str("</code> | ");
+			let prop_summary = prop_info.docs.and_then(|d| d.summary);
+			if let Some(prop_summary) = prop_summary {
+				docs.push_str(&prop_summary.replace('\n', " "));
+			} else {
+				docs.push_str("*No description*");
+			}
+			docs.push_str(" |\n");
+		}
+	}
+
+	docs.push_str("\n");
+}
+
+fn print_methods(docs: &mut String, class: &impl ClassLike) {
+	docs.push_str("#### Methods\n\n");
+
+	let mut methods = class.methods(true).collect::<Vec<_>>();
+	methods.retain(|(_, method_info)| method_info.access == AccessModifier::Public);
+	methods.retain(|(name, _)| !HIDDEN_METHODS.contains(&name.as_str()));
+
+	if methods.is_empty() {
+		docs.push_str("*No methods*\n");
+	} else {
+		docs.push_str("| **Signature** | **Description** |\n");
+		docs.push_str("| --- | --- |\n");
+		for (name, method_info) in methods {
+			let sig = method_info.type_.as_function_sig().expect("Method is not a function");
+
+			docs.push_str("| <code>");
+			print_signature(&method_info.kind, &name, sig, docs);
+			docs.push_str("</code> | ");
+			let method_summary = method_info.docs.and_then(|d| d.summary);
+			if let Some(method_summary) = method_summary {
+				docs.push_str(&method_summary.replace('\n', " "));
+			} else {
+				docs.push_str("*No description*");
+			}
+			docs.push_str(" |\n");
+		}
+	}
+
+	docs.push_str("\n");
+}
+
+fn print_signature(var_kind: &VariableKind, name: &str, sig: &FunctionSignature, docs: &mut String) {
+	if var_kind == &VariableKind::StaticMember {
+		docs.push_str("static ");
+	}
+	if sig.phase != Phase::Preflight {
+		docs.push_str(&sig.phase.to_string());
+		docs.push_str(" ");
+	}
+	docs.push_str(name);
+	docs.push_str("(");
+	for (i, param) in sig.parameters.iter().enumerate() {
+		if i > 0 {
+			docs.push_str(", ");
+		}
+		docs.push_str(&param.name);
+		docs.push_str(": ");
+		docs.push_str(&param.typeref.to_string());
+	}
+	docs.push_str("): ");
+	docs.push_str(&sig.return_type.to_string());
 }

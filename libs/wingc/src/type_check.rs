@@ -411,6 +411,7 @@ type ClassLikeIterator<'a> =
 pub trait ClassLike: Display {
 	fn get_env(&self) -> &SymbolEnv;
 
+	// TODO: refactor this to not emit constructors as methods
 	fn methods(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
 			if sym_kind.as_variable()?.type_.as_function_sig().is_some() {
@@ -424,6 +425,16 @@ pub trait ClassLike: Display {
 	fn fields(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
 			if sym_kind.as_variable()?.type_.as_function_sig().is_none() {
+				Some((s, sym_kind.as_variable()?.clone()))
+			} else {
+				None
+			}
+		})
+	}
+
+	fn constructors(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
+		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
+			if s == CLASS_INIT_NAME || s == CLASS_INFLIGHT_INIT_NAME {
 				Some((s, sym_kind.as_variable()?.clone()))
 			} else {
 				None
@@ -507,6 +518,53 @@ pub struct Enum {
 pub struct EnumInstance {
 	pub enum_name: TypeRef,
 	pub enum_value: Symbol,
+}
+
+pub trait HasFqn {
+	/// Obtain the fully qualified name of the symbol
+	fn fqn(&self) -> Option<String>;
+}
+
+impl HasFqn for Class {
+	fn fqn(&self) -> Option<String> {
+		self.fqn.clone()
+	}
+}
+
+impl HasFqn for Interface {
+	fn fqn(&self) -> Option<String> {
+		Some(self.fqn.clone())
+	}
+}
+
+impl HasFqn for Struct {
+	fn fqn(&self) -> Option<String> {
+		Some(self.fqn.clone())
+	}
+}
+
+impl HasFqn for Enum {
+	fn fqn(&self) -> Option<String> {
+		Some(self.fqn.clone())
+	}
+}
+
+impl HasFqn for Namespace {
+	fn fqn(&self) -> Option<String> {
+		Some(self.fqn.clone())
+	}
+}
+
+impl HasFqn for Type {
+	fn fqn(&self) -> Option<String> {
+		match self {
+			Type::Class(c) => c.fqn(),
+			Type::Interface(i) => i.fqn(),
+			Type::Struct(s) => s.fqn(),
+			Type::Enum(e) => e.fqn(),
+			_ => None,
+		}
+	}
 }
 
 trait Subtype {

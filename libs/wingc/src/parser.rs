@@ -2920,6 +2920,7 @@ struct DocBuilder<'a> {
 	parser: &'a Parser<'a>,
 }
 
+#[derive(Debug)]
 enum DocBuilderResult {
 	Done(Option<String>),
 	Continue,
@@ -2936,12 +2937,15 @@ impl<'a> DocBuilder<'a> {
 
 	fn process_node(&mut self, node: &Node) -> DocBuilderResult {
 		if node.kind() == "doc" {
-			self.doc_lines.push(
-				self
-					.parser
-					.get_child_field(&node, "content")
-					.map_or("", |n| self.parser.node_text(&n)),
-			);
+			let line = self
+				.parser
+				.get_child_field(&node, "content")
+				.map_or("", |n| self.parser.node_text(&n));
+			if line.len() > 0 && line.chars().next() == Some(' ') {
+				self.doc_lines.push(&line[1..]);
+			} else {
+				self.doc_lines.push(line);
+			}
 			DocBuilderResult::Continue
 		} else if node.is_extra() {
 			DocBuilderResult::Skip
