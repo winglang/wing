@@ -1,4 +1,4 @@
-# [for_loop.test.w](../../../../../examples/tests/valid/for_loop.test.w) | compile | tf-aws
+# [for_loop.test.w](../../../../../tests/valid/for_loop.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

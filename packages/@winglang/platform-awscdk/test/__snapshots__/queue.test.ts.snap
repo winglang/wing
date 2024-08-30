@@ -53,7 +53,7 @@ exports[`default queue behavior 1`] = `
 exports[`queue with a consumer function 1`] = `
 "
 (await (async () => {
-  const klass = require("[REDACTED]/awscdk/src/function.inflight.ts").FunctionClient;
+  const klass = require("[REDACTED]/@winglang/platform-awscdk/src/function.inflight.ts").FunctionClient;
   const client = new klass({$functionArn: process.env["FUNCTION_NAME_27b8b1c8"], $constructPath: "my-project/Default/Queue-SetConsumer0"});
   if (client.$inflight_init) { await client.$inflight_init(); }
   return client;

@@ -1,4 +1,4 @@
-# [root_path_vars.test.w](../../../../../../examples/tests/sdk_tests/api/root_path_vars.test.w) | compile | tf-aws
+# [root_path_vars.test.w](../../../../../../tests/sdk_tests/api/root_path_vars.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

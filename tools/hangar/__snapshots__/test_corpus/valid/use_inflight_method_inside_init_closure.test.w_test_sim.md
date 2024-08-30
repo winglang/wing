@@ -1,4 +1,4 @@
-# [use_inflight_method_inside_init_closure.test.w](../../../../../examples/tests/valid/use_inflight_method_inside_init_closure.test.w) | test | sim
+# [use_inflight_method_inside_init_closure.test.w](../../../../../tests/valid/use_inflight_method_inside_init_closure.test.w) | test | sim
 
 ## stdout.log
 ```log

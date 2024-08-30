@@ -1,4 +1,4 @@
-# [rootid.test.w](../../../../../examples/tests/valid/rootid.test.w) | compile | tf-aws
+# [rootid.test.w](../../../../../tests/valid/rootid.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

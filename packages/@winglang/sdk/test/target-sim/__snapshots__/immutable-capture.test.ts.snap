@@ -184,7 +184,7 @@ exports.handler = async function(event) {
     return void 0;
   }
   const $ctx = {
-  my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))]
+  my_array: [(new (require("[REDACTED]/@winglang/sdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/@winglang/sdk/src/std/duration.js").Duration)(1200))]
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -673,7 +673,7 @@ exports.handler = async function(event) {
     return void 0;
   }
   const $ctx = {
-  my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(7200))
+  my_capture: (new (require("[REDACTED]/@winglang/sdk/src/std/duration.js").Duration)(7200))
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -1172,7 +1172,7 @@ exports.handler = async function(event) {
     return void 0;
   }
   const $ctx = {
-  my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))]],["bar",[(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1800)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(2400))]]])
+  my_map: new Map([["foo",[(new (require("[REDACTED]/@winglang/sdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/@winglang/sdk/src/std/duration.js").Duration)(1200))]],["bar",[(new (require("[REDACTED]/@winglang/sdk/src/std/duration.js").Duration)(1800)),(new (require("[REDACTED]/@winglang/sdk/src/std/duration.js").Duration)(2400))]]])
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -1663,7 +1663,7 @@ exports.handler = async function(event) {
     return void 0;
   }
   const $ctx = {
-  my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))])
+  my_set: new Set([(new (require("[REDACTED]/@winglang/sdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/@winglang/sdk/src/std/duration.js").Duration)(1200))])
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);

@@ -1,4 +1,4 @@
-# [sim_resource.test.w](../../../../../examples/tests/valid/sim_resource.test.w) | compile | tf-aws
+# [sim_resource.test.w](../../../../../tests/valid/sim_resource.test.w) | compile | tf-aws
 
 ## inflight.ResourceBackend-1.cjs
 ```cjs

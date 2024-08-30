@@ -1,4 +1,4 @@
-# [bring_wing_library.test.w](../../../../../examples/tests/valid/bring_wing_library.test.w) | compile | tf-aws
+# [bring_wing_library.test.w](../../../../../tests/valid/bring_wing_library.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-3.cjs
 ```cjs

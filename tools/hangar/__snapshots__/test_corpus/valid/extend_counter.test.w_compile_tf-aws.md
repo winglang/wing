@@ -1,4 +1,4 @@
-# [extend_counter.test.w](../../../../../examples/tests/valid/extend_counter.test.w) | compile | tf-aws
+# [extend_counter.test.w](../../../../../tests/valid/extend_counter.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

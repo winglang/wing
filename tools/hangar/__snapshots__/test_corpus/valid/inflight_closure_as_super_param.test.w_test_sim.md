@@ -1,4 +1,4 @@
-# [inflight_closure_as_super_param.test.w](../../../../../examples/tests/valid/inflight_closure_as_super_param.test.w) | test | sim
+# [inflight_closure_as_super_param.test.w](../../../../../tests/valid/inflight_closure_as_super_param.test.w) | test | sim
 
 ## stdout.log
 ```log

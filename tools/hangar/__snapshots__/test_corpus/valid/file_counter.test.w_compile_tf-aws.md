@@ -1,4 +1,4 @@
-# [file_counter.test.w](../../../../../examples/tests/valid/file_counter.test.w) | compile | tf-aws
+# [file_counter.test.w](../../../../../tests/valid/file_counter.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

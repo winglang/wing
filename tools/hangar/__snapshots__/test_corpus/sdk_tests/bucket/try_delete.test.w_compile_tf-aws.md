@@ -1,4 +1,4 @@
-# [try_delete.test.w](../../../../../../examples/tests/sdk_tests/bucket/try_delete.test.w) | compile | tf-aws
+# [try_delete.test.w](../../../../../../tests/sdk_tests/bucket/try_delete.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

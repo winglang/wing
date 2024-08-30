@@ -30,10 +30,10 @@ export class AwsCdkApp extends App {
  */
 export function sanitizeCode(code: string): string {
   function removeAbsolutePaths(text: string) {
-    const regex = /"[^"]+?\/libs\/awscdk\/(.+?)"/g;
+    const regex = /"[^"]+?\/@winglang\/platform-awscdk\/(.+?)"/g;
 
     // replace first group with static text
-    return text.replace(regex, '"[REDACTED]/awscdk/$1"');
+    return text.replace(regex, '"[REDACTED]/@winglang/platform-awscdk/$1"');
   }
 
   return removeAbsolutePaths(code);

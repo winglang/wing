@@ -1,4 +1,4 @@
-# [expressions_string_interpolation.test.w](../../../../../examples/tests/valid/expressions_string_interpolation.test.w) | test | sim
+# [expressions_string_interpolation.test.w](../../../../../tests/valid/expressions_string_interpolation.test.w) | test | sim
 
 ## stdout.log
 ```log

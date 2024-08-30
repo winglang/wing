@@ -1,4 +1,4 @@
-# [lift_redefinition.test.w](../../../../../examples/tests/valid/lift_redefinition.test.w) | test | sim
+# [lift_redefinition.test.w](../../../../../tests/valid/lift_redefinition.test.w) | test | sim
 
 ## stdout.log
 ```log

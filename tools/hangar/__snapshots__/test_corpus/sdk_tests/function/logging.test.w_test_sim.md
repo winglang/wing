@@ -1,4 +1,4 @@
-# [logging.test.w](../../../../../../examples/tests/sdk_tests/function/logging.test.w) | test | sim
+# [logging.test.w](../../../../../../tests/sdk_tests/function/logging.test.w) | test | sim
 
 ## stdout.log
 ```log

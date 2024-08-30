@@ -1,4 +1,4 @@
-# [node.test.w](../../../../../../examples/tests/sdk_tests/std/node.test.w) | test | sim
+# [node.test.w](../../../../../../tests/sdk_tests/std/node.test.w) | test | sim
 
 ## stdout.log
 ```log

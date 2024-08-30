@@ -1,4 +1,4 @@
-# [section.test.w](../../../../../../examples/tests/sdk_tests/ui/section.test.w) | test | sim
+# [section.test.w](../../../../../../tests/sdk_tests/ui/section.test.w) | test | sim
 
 ## stdout.log
 ```log

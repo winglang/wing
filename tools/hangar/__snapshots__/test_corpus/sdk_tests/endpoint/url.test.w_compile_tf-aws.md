@@ -1,4 +1,4 @@
-# [url.test.w](../../../../../../examples/tests/sdk_tests/endpoint/url.test.w) | compile | tf-aws
+# [url.test.w](../../../../../../tests/sdk_tests/endpoint/url.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

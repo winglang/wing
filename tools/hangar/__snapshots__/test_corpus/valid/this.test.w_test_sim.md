@@ -1,4 +1,4 @@
-# [this.test.w](../../../../../examples/tests/valid/this.test.w) | test | sim
+# [this.test.w](../../../../../tests/valid/this.test.w) | test | sim
 
 ## stdout.log
 ```log

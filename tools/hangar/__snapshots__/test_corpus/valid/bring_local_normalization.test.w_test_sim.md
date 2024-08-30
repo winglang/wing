@@ -1,4 +1,4 @@
-# [bring_local_normalization.test.w](../../../../../examples/tests/valid/bring_local_normalization.test.w) | test | sim
+# [bring_local_normalization.test.w](../../../../../tests/valid/bring_local_normalization.test.w) | test | sim
 
 ## stdout.log
 ```log

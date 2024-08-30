@@ -1,4 +1,4 @@
-# [on_lift.test.w](../../../../../examples/tests/valid/on_lift.test.w) | test | sim
+# [on_lift.test.w](../../../../../tests/valid/on_lift.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -243,20 +243,21 @@ mod test {
 	fn setup() {
 		INIT.call_once(|| {
 			initialize_logger();
+			std::env::set_var("WINGSDK_MANIFEST_ROOT", "../@winglang/sdk");
 		});
 	}
 
 	#[test]
 	fn test_compile_sim() {
 		setup();
-		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::Sim));
+		let res = command_build("../../tests/valid/hello.test.w".into(), Some(Target::Sim));
 		res.expect("Failed to compile to sim");
 	}
 
 	#[test]
 	fn test_compile_tfaws() {
 		setup();
-		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::TfAws));
+		let res = command_build("../../tests/valid/hello.test.w".into(), Some(Target::TfAws));
 		res.expect("Failed to compile to tf-aws");
 	}
 }

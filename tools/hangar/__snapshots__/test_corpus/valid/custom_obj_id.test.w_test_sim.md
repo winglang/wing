@@ -1,4 +1,4 @@
-# [custom_obj_id.test.w](../../../../../examples/tests/valid/custom_obj_id.test.w) | test | sim
+# [custom_obj_id.test.w](../../../../../tests/valid/custom_obj_id.test.w) | test | sim
 
 ## stdout.log
 ```log

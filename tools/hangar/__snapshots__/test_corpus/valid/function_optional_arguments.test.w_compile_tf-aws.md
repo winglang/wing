@@ -1,4 +1,4 @@
-# [function_optional_arguments.test.w](../../../../../examples/tests/valid/function_optional_arguments.test.w) | compile | tf-aws
+# [function_optional_arguments.test.w](../../../../../tests/valid/function_optional_arguments.test.w) | compile | tf-aws
 
 ## inflight.Foo-1.cjs
 ```cjs

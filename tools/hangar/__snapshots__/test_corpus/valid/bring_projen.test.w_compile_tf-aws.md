@@ -1,4 +1,4 @@
-# [bring_projen.test.w](../../../../../examples/tests/valid/bring_projen.test.w) | compile | tf-aws
+# [bring_projen.test.w](../../../../../tests/valid/bring_projen.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

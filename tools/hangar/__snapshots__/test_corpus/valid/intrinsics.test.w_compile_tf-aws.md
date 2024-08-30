@@ -1,4 +1,4 @@
-# [intrinsics.test.w](../../../../../examples/tests/valid/intrinsics.test.w) | compile | tf-aws
+# [intrinsics.test.w](../../../../../tests/valid/intrinsics.test.w) | compile | tf-aws
 
 ## inflight.Bar-1.cjs
 ```cjs

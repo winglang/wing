@@ -1,4 +1,4 @@
-# [cors.test.w](../../../../../../examples/tests/sdk_tests/api/cors.test.w) | compile | tf-aws
+# [cors.test.w](../../../../../../tests/sdk_tests/api/cors.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

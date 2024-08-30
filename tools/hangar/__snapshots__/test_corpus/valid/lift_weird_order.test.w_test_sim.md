@@ -1,4 +1,4 @@
-# [lift_weird_order.test.w](../../../../../examples/tests/valid/lift_weird_order.test.w) | test | sim
+# [lift_weird_order.test.w](../../../../../tests/valid/lift_weird_order.test.w) | test | sim
 
 ## stdout.log
 ```log

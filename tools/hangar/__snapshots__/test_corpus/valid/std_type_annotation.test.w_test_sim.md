@@ -1,4 +1,4 @@
-# [std_type_annotation.test.w](../../../../../examples/tests/valid/std_type_annotation.test.w) | test | sim
+# [std_type_annotation.test.w](../../../../../tests/valid/std_type_annotation.test.w) | test | sim
 
 ## stdout.log
 ```log

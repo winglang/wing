@@ -1,4 +1,4 @@
-# [calling_inflight_variants.test.w](../../../../../examples/tests/valid/calling_inflight_variants.test.w) | test | sim
+# [calling_inflight_variants.test.w](../../../../../tests/valid/calling_inflight_variants.test.w) | test | sim
 
 ## stdout.log
 ```log

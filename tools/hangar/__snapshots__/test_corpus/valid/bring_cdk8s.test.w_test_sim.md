@@ -1,4 +1,4 @@
-# [bring_cdk8s.test.w](../../../../../examples/tests/valid/bring_cdk8s.test.w) | test | sim
+# [bring_cdk8s.test.w](../../../../../tests/valid/bring_cdk8s.test.w) | test | sim
 
 ## stdout.log
 ```log

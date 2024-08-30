@@ -1,4 +1,4 @@
-# [callbacks.test.w](../../../../../../examples/tests/sdk_tests/service/callbacks.test.w) | test | sim
+# [callbacks.test.w](../../../../../../tests/sdk_tests/service/callbacks.test.w) | test | sim
 
 ## stdout.log
 ```log

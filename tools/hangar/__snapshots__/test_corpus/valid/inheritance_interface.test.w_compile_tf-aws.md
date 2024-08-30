@@ -1,4 +1,4 @@
-# [inheritance_interface.test.w](../../../../../examples/tests/valid/inheritance_interface.test.w) | compile | tf-aws
+# [inheritance_interface.test.w](../../../../../tests/valid/inheritance_interface.test.w) | compile | tf-aws
 
 ## inflight.Baz-1.cjs
 ```cjs

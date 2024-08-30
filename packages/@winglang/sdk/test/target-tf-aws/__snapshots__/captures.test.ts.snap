@@ -26,7 +26,7 @@ exports[`function with a function binding 2`] = `
   const $ctx = {
   fn1: 
 (await (async () => {
-  const klass = require("[REDACTED]/wingsdk/src/shared-aws/function.inflight.js").FunctionClient;
+  const klass = require("[REDACTED]/@winglang/sdk/src/shared-aws/function.inflight.js").FunctionClient;
   const client = new klass({$functionArn: process.env["FUNCTION_NAME_50735b21"], $constructPath: "root/Default/Function1"});
   if (client.$inflight_init) { await client.$inflight_init(); }
   return client;
@@ -169,7 +169,7 @@ exports[`function with a queue binding 1`] = `
   const $ctx = {
   queue: 
 (await (async () => {
-  const klass = require("[REDACTED]/wingsdk/src/shared-aws/queue.inflight.js").QueueClient;
+  const klass = require("[REDACTED]/@winglang/sdk/src/shared-aws/queue.inflight.js").QueueClient;
   const client = new klass({$queueUrlOrArn: process.env["QUEUE_URL_1cfcc997"]});
   if (client.$inflight_init) { await client.$inflight_init(); }
   return client;

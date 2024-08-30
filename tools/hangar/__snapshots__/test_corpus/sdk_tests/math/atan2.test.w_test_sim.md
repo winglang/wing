@@ -1,4 +1,4 @@
-# [atan2.test.w](../../../../../../examples/tests/sdk_tests/math/atan2.test.w) | test | sim
+# [atan2.test.w](../../../../../../tests/sdk_tests/math/atan2.test.w) | test | sim
 
 ## stdout.log
 ```log

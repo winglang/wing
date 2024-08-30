@@ -1,4 +1,4 @@
-# [env.test.w](../../../../../../examples/tests/sdk_tests/function/env.test.w) | test | sim
+# [env.test.w](../../../../../../tests/sdk_tests/function/env.test.w) | test | sim
 
 ## stdout.log
 ```log

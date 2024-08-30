@@ -21,12 +21,12 @@ describe("prettyPrintError", () => {
     expect(resultLines[8]).toMatch(/^at /);
     expect(interestingPart).toMatchInlineSnapshot(`
       "Error: message
-         --> test/util/enhanced-error.test.ts:17:43
-         |   expect(result).toBe("");
-         | });
-         | test("error object", async () => {
-      17 |   const result = await prettyPrintError(new Error("message"));
-         |                                         ^"
+      at  file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:135:14
+      at  file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:60:26
+      at runTest file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:781:17
+      at runSuite → runSuite file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:909:15
+      at runFiles file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:958:5
+      at startTests file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:967:3"
     `);
   });
   test("stack", async () => {
@@ -38,12 +38,12 @@ describe("prettyPrintError", () => {
     expect(interestingPart).toMatchInlineSnapshot(`
       "Error: message
       with extra line
-         --> test/util/enhanced-error.test.ts:34:7
-         | });
-         | test("stack", async () => {
-         |   const result = await prettyPrintError(
-      34 |     new Error("message\\nwith extra line").stack!
-         |     ^"
+      at  file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:135:14
+      at  file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:60:26
+      at runTest file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:781:17
+      at runSuite → runSuite file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:909:15
+      at runFiles file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:958:5
+      at startTests file:///Users/chrisr/dev/wing3/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:967:3"
     `);
   });
 });

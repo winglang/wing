@@ -1,4 +1,4 @@
-# [stringify.test.w](../../../../../examples/tests/valid/stringify.test.w) | compile | tf-aws
+# [stringify.test.w](../../../../../tests/valid/stringify.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

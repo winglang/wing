@@ -1,4 +1,4 @@
-# [aws-layer.test.w](../../../../../../examples/tests/sdk_tests/function/aws-layer.test.w) | test | sim
+# [aws-layer.test.w](../../../../../../tests/sdk_tests/function/aws-layer.test.w) | test | sim
 
 ## stdout.log
 ```log

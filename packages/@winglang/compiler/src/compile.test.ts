@@ -15,7 +15,7 @@ const compileOrFail = async (entrypoint: string, options: CompileOptions) => {
   return result.outputDir;
 };
 
-const exampleDir = resolve("../../examples/tests/valid");
+const exampleDir = resolve("../../../tests/valid");
 const exampleFilePath = join(exampleDir, "enums.test.w");
 
 export async function generateTmpDir() {

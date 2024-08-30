@@ -1,4 +1,4 @@
-# [mount.test.w](../../../../../../examples/tests/sdk_tests/container/mount.test.w) | compile | tf-aws
+# [mount.test.w](../../../../../../tests/sdk_tests/container/mount.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

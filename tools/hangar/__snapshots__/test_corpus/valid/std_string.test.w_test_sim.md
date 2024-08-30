@@ -1,4 +1,4 @@
-# [std_string.test.w](../../../../../examples/tests/valid/std_string.test.w) | test | sim
+# [std_string.test.w](../../../../../tests/valid/std_string.test.w) | test | sim
 
 ## stdout.log
 ```log

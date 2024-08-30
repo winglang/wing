@@ -5818,7 +5818,8 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
 			let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
 				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../../libs/wingsdk".to_string());
+				let manifest_root =
+					std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../../@winglang/sdk".to_string());
 				let assembly_name = match self.jsii_types.load_module(&Utf8Path::new(&manifest_root)) {
 					Ok(name) => name,
 					Err(type_error) => {

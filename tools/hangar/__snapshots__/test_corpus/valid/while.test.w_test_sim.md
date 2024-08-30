@@ -1,4 +1,4 @@
-# [while.test.w](../../../../../examples/tests/valid/while.test.w) | test | sim
+# [while.test.w](../../../../../tests/valid/while.test.w) | test | sim
 
 ## stdout.log
 ```log

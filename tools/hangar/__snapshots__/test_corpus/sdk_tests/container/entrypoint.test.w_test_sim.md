@@ -1,4 +1,4 @@
-# [entrypoint.test.w](../../../../../../examples/tests/sdk_tests/container/entrypoint.test.w) | test | sim
+# [entrypoint.test.w](../../../../../../tests/sdk_tests/container/entrypoint.test.w) | test | sim
 
 ## stdout.log
 ```log

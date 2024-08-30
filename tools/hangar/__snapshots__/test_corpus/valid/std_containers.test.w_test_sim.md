@@ -1,4 +1,4 @@
-# [std_containers.test.w](../../../../../examples/tests/valid/std_containers.test.w) | test | sim
+# [std_containers.test.w](../../../../../tests/valid/std_containers.test.w) | test | sim
 
 ## stdout.log
 ```log

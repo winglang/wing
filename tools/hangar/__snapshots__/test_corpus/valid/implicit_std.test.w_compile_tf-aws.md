@@ -1,4 +1,4 @@
-# [implicit_std.test.w](../../../../../examples/tests/valid/implicit_std.test.w) | compile | tf-aws
+# [implicit_std.test.w](../../../../../tests/valid/implicit_std.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

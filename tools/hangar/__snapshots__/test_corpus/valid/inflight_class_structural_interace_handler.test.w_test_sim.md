@@ -1,4 +1,4 @@
-# [inflight_class_structural_interace_handler.test.w](../../../../../examples/tests/valid/inflight_class_structural_interace_handler.test.w) | test | sim
+# [inflight_class_structural_interace_handler.test.w](../../../../../tests/valid/inflight_class_structural_interace_handler.test.w) | test | sim
 
 ## stdout.log
 ```log

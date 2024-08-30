@@ -1,4 +1,4 @@
-# [inference.test.w](../../../../../examples/tests/valid/inference.test.w) | compile | tf-aws
+# [inference.test.w](../../../../../tests/valid/inference.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

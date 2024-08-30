@@ -1,4 +1,4 @@
-# [new_jsii.test.w](../../../../../examples/tests/valid/new_jsii.test.w) | test | sim
+# [new_jsii.test.w](../../../../../tests/valid/new_jsii.test.w) | test | sim
 
 ## stdout.log
 ```log

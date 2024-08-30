@@ -1,4 +1,4 @@
-# [inflight_handler_singleton.test.w](../../../../../examples/tests/valid/inflight_handler_singleton.test.w) | compile | tf-aws
+# [inflight_handler_singleton.test.w](../../../../../tests/valid/inflight_handler_singleton.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

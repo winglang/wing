@@ -1,4 +1,4 @@
-# [no_blocking.test.w](../../../../../../examples/tests/sdk_tests/topic/no_blocking.test.w) | compile | tf-aws
+# [no_blocking.test.w](../../../../../../tests/sdk_tests/topic/no_blocking.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

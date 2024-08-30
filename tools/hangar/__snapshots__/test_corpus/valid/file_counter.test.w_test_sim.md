@@ -1,4 +1,4 @@
-# [file_counter.test.w](../../../../../examples/tests/valid/file_counter.test.w) | test | sim
+# [file_counter.test.w](../../../../../tests/valid/file_counter.test.w) | test | sim
 
 ## stdout.log
 ```log

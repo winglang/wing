@@ -1,4 +1,4 @@
-# [bypass_return.test.w](../../../../../examples/tests/valid/bypass_return.test.w) | compile | tf-aws
+# [bypass_return.test.w](../../../../../tests/valid/bypass_return.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

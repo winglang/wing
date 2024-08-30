@@ -1,4 +1,4 @@
-# [inflight_closure_autoid.test.w](../../../../../examples/tests/valid/inflight_closure_autoid.test.w) | test | sim
+# [inflight_closure_autoid.test.w](../../../../../tests/valid/inflight_closure_autoid.test.w) | test | sim
 
 ## stdout.log
 ```log

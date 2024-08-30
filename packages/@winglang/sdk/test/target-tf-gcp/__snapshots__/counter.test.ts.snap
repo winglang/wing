@@ -577,7 +577,7 @@ exports[`function with a counter binding 1`] = `
   const $ctx = {
   my_counter: 
 (await (async () => {
-  const klass = require("[REDACTED]/wingsdk/src/shared-gcp/counter.inflight.js").CounterClient;
+  const klass = require("[REDACTED]/@winglang/sdk/src/shared-gcp/counter.inflight.js").CounterClient;
   const client = new klass({$databaseName: process.env["FIRESTORE_DATABASE_NAME_6cb5a3a4"], $initial: 0});
   if (client.$inflight_init) { await client.$inflight_init(); }
   return client;

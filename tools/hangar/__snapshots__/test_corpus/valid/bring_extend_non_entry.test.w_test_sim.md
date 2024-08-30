@@ -1,4 +1,4 @@
-# [bring_extend_non_entry.test.w](../../../../../examples/tests/valid/bring_extend_non_entry.test.w) | test | sim
+# [bring_extend_non_entry.test.w](../../../../../tests/valid/bring_extend_non_entry.test.w) | test | sim
 
 ## stdout.log
 ```log

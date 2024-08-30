@@ -1,4 +1,4 @@
-# [capture_tokens.test.w](../../../../../examples/tests/valid/capture_tokens.test.w) | compile | tf-aws
+# [capture_tokens.test.w](../../../../../tests/valid/capture_tokens.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

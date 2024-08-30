@@ -1,4 +1,4 @@
-# [aws-counter.test.w](../../../../../../examples/tests/sdk_tests/counter/aws-counter.test.w) | compile | tf-aws
+# [aws-counter.test.w](../../../../../../tests/sdk_tests/counter/aws-counter.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

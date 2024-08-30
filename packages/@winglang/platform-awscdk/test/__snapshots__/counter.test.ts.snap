@@ -70,7 +70,7 @@ exports[`dec() policy statement 1`] = `
   const $ctx = {
   my_counter: 
 (await (async () => {
-  const klass = require("[REDACTED]/awscdk/src/counter.inflight.ts").CounterClient;
+  const klass = require("[REDACTED]/@winglang/platform-awscdk/src/counter.inflight.ts").CounterClient;
   const client = new klass({$tableName: process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], $initial: 0});
   if (client.$inflight_init) { await client.$inflight_init(); }
   return client;
@@ -324,7 +324,7 @@ exports[`function with a counter binding 1`] = `
   const $ctx = {
   my_counter: 
 (await (async () => {
-  const klass = require("[REDACTED]/awscdk/src/counter.inflight.ts").CounterClient;
+  const klass = require("[REDACTED]/@winglang/platform-awscdk/src/counter.inflight.ts").CounterClient;
   const client = new klass({$tableName: process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], $initial: 0});
   if (client.$inflight_init) { await client.$inflight_init(); }
   return client;
@@ -517,7 +517,7 @@ exports[`inc() policy statement 1`] = `
   const $ctx = {
   my_counter: 
 (await (async () => {
-  const klass = require("[REDACTED]/awscdk/src/counter.inflight.ts").CounterClient;
+  const klass = require("[REDACTED]/@winglang/platform-awscdk/src/counter.inflight.ts").CounterClient;
   const client = new klass({$tableName: process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], $initial: 0});
   if (client.$inflight_init) { await client.$inflight_init(); }
   return client;
@@ -710,7 +710,7 @@ exports[`peek() policy statement 1`] = `
   const $ctx = {
   my_counter: 
 (await (async () => {
-  const klass = require("[REDACTED]/awscdk/src/counter.inflight.ts").CounterClient;
+  const klass = require("[REDACTED]/@winglang/platform-awscdk/src/counter.inflight.ts").CounterClient;
   const client = new klass({$tableName: process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], $initial: 0});
   if (client.$inflight_init) { await client.$inflight_init(); }
   return client;
@@ -903,7 +903,7 @@ exports[`set() policy statement 1`] = `
   const $ctx = {
   my_counter: 
 (await (async () => {
-  const klass = require("[REDACTED]/awscdk/src/counter.inflight.ts").CounterClient;
+  const klass = require("[REDACTED]/@winglang/platform-awscdk/src/counter.inflight.ts").CounterClient;
   const client = new klass({$tableName: process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], $initial: 0});
   if (client.$inflight_init) { await client.$inflight_init(); }
   return client;
