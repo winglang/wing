@@ -50,7 +50,7 @@
     },
     {
       "name": "Tests: Docs",
-      "path": "./examples/tests/doc_examples"
+      "path": "./tests/doc_examples"
     },
     {
       "name": "VSCode",
