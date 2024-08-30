@@ -12,8 +12,8 @@ wingc=$(cd $(dirname $0)/.. && pwd)
 # Currently we only do release wasm builds
 target="release"
 
-wasm_opt="$wingc/../../.cargo/binaryen-version_117/bin/wasm-opt"
-input_wasm="$wingc/../../target/wasm32-wasi/$target/wingc.wasm"
+wasm_opt="$wingc/../../../.cargo/binaryen-version_117/bin/wasm-opt"
+input_wasm="$wingc/../../../target/wasm32-wasi/$target/wingc.wasm"
 output_wasm="$wingc/wingc.wasm"
 
 # If CI env is set, run wasm-opt with extra optimizations
