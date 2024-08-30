@@ -13,6 +13,6 @@
     "@winglang/sdk": "workspace:^"
   },
   "volta": {
-    "extends": "../../package.json"
+    "extends": "../../../package.json"
   }
 }

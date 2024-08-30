@@ -322,7 +322,7 @@ project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.addFields({
   volta: {
-    extends: "../../package.json",
+    extends: "../../../package.json",
   },
 });
 project.addFields({

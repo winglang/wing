@@ -48,7 +48,7 @@
     "playground:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"turbo playground:quiet\""
   },
   "volta": {
-    "extends": "../../package.json"
+    "extends": "../../../package.json"
   },
   "devDependencies": {
     "nodemon": "^3.1.4",

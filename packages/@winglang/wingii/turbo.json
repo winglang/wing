@@ -4,7 +4,7 @@
   "tasks": {
     "compile": {
       "dependsOn": ["@winglang/tree-sitter-wing#compile"],
-      "outputs": ["../../target/wasm32-wasi/release/libwingii.*"]
+      "outputs": ["../../../target/wasm32-wasi/release/libwingii.*"]
     }
   }
 }

@@ -54,6 +54,6 @@
     "zod": "^3.23.8"
   },
   "volta": {
-    "extends": "../../../../package.json"
+    "extends": "../../../package.json"
   }
 }

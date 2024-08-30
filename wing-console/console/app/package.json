@@ -53,6 +53,6 @@
     "vite": "^5.3.1"
   },
   "volta": {
-    "extends": "../../../../package.json"
+    "extends": "../../../package.json"
   }
 }

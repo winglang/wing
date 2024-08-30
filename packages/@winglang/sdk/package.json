@@ -189,7 +189,7 @@
     "esbuild": "^0.19.12"
   },
   "volta": {
-    "extends": "../../package.json"
+    "extends": "../../../package.json"
   },
   "bump-pack": {
     "removeBundledDependencies": []

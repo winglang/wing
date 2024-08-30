@@ -18,6 +18,6 @@
     "uuid": "^9.0.1"
   },
   "volta": {
-    "extends": "../../../package.json"
+    "extends": "../../package.json"
   }
 }

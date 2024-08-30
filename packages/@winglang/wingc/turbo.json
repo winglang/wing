@@ -9,8 +9,8 @@
       ],
       "inputs": ["*.json", "*.toml", "src/**/*.rs", "scripts/postcompile.sh"],
       "outputs": [
-        "../../target/wasm32-wasi/release/wingc.wasm",
-        "../../target/wasm32-wasi/release/libwingc.*",
+        "../../../target/wasm32-wasi/release/wingc.wasm",
+        "../../../target/wasm32-wasi/release/libwingc.*",
         "wingc.wasm"
       ]
     },
