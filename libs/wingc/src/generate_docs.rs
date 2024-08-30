@@ -156,7 +156,7 @@ fn generate_docs_helper(types: &Types, project_dir: &Utf8Path) -> Result<String,
 		SymbolEnvOrNamespace::Error(diag) => panic!("Error in root env: {}", diag),
 	};
 
-	docs.push_str("## API Reference\n\n");
+	docs.push_str("<h2>API Reference</h2>\n\n");
 
 	let mut public_types = vec![];
 	let namespaces = find_documentable_namespaces_recursive(&ns);
@@ -220,7 +220,7 @@ fn simplified_fqn(typ: &TypeRef) -> String {
 }
 
 fn print_table_of_contents(types: &[TypeRef], docs: &mut String) {
-	docs.push_str("### Table of Contents\n\n");
+	docs.push_str("<h3>Table of Contents</h3>\n\n");
 
 	let mut classes = vec![];
 	let mut interfaces = vec![];
@@ -287,13 +287,13 @@ fn print_table_of_contents(types: &[TypeRef], docs: &mut String) {
 fn print_classes(types: &[TypeRef], docs: &mut String) {
 	for typ in types {
 		if let Type::Class(ref class) = **typ {
-			docs.push_str("### ");
+			docs.push_str("<h3 id=\"");
+			docs.push_str(&typ.fqn().expect("Type has no FQN"));
+			docs.push_str("\">");
 			docs.push_str(&simplified_fqn(typ));
 			docs.push_str(" (");
 			docs.push_str(&class.phase.to_string());
-			docs.push_str(" class) <a id=\"");
-			docs.push_str(&typ.fqn().expect("Type has no FQN"));
-			docs.push_str("\"></a>\n\n");
+			docs.push_str(" class)</h3>\n\n");
 
 			let docstring = class.docs.render();
 			if !docstring.is_empty() {
@@ -311,13 +311,11 @@ fn print_classes(types: &[TypeRef], docs: &mut String) {
 fn print_interfaces(types: &[TypeRef], docs: &mut String) {
 	for typ in types {
 		if let Type::Interface(ref interface) = **typ {
-			docs.push_str("### ");
-			docs.push_str(&simplified_fqn(typ));
-			docs.push_str(" (interface) <a name=");
-			docs.push_str(&simplified_fqn(typ));
-			docs.push_str(" id=\"");
+			docs.push_str("<h3 id=\"");
 			docs.push_str(&typ.fqn().expect("Type has no FQN"));
-			docs.push_str("\"></a>\n\n");
+			docs.push_str("\">");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" (interface)</h3>\n\n");
 
 			let docstring = interface.docs.render();
 			if !docstring.is_empty() {
@@ -334,13 +332,11 @@ fn print_interfaces(types: &[TypeRef], docs: &mut String) {
 fn print_structs(types: &[TypeRef], docs: &mut String) {
 	for typ in types {
 		if let Type::Struct(ref struct_) = **typ {
-			docs.push_str("### ");
-			docs.push_str(&simplified_fqn(typ));
-			docs.push_str(" (struct) <a name=");
-			docs.push_str(&simplified_fqn(typ));
-			docs.push_str(" id=\"");
+			docs.push_str("<h3 id=\"");
 			docs.push_str(&typ.fqn().expect("Type has no FQN"));
-			docs.push_str("\"></a>\n\n");
+			docs.push_str("\">");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" (struct)</h3>\n\n");
 
 			let docstring = struct_.docs.render();
 			if !docstring.is_empty() {
@@ -356,13 +352,11 @@ fn print_structs(types: &[TypeRef], docs: &mut String) {
 fn print_enums(types: &[TypeRef], docs: &mut String) {
 	for typ in types {
 		if let Type::Enum(ref enum_) = **typ {
-			docs.push_str("### ");
-			docs.push_str(&simplified_fqn(typ));
-			docs.push_str(" (enum) <a name=");
-			docs.push_str(&simplified_fqn(typ));
-			docs.push_str(" id=\"");
+			docs.push_str("<h3 id=\"");
 			docs.push_str(&typ.fqn().expect("Type has no FQN"));
-			docs.push_str("\"></a>\n\n");
+			docs.push_str("\">");
+			docs.push_str(&simplified_fqn(typ));
+			docs.push_str(" (enum)</h3>\n\n");
 
 			let docstring = enum_.docs.render();
 			if !docstring.is_empty() {
@@ -370,7 +364,7 @@ fn print_enums(types: &[TypeRef], docs: &mut String) {
 				docs.push_str("\n\n");
 			}
 
-			docs.push_str("#### Values\n\n");
+			docs.push_str("<h4>Values</h4>\n\n");
 			docs.push_str("| **Name** | **Description** |\n");
 			docs.push_str("| --- | --- |\n");
 			for (name, description) in enum_.values.iter() {
@@ -391,7 +385,7 @@ fn print_enums(types: &[TypeRef], docs: &mut String) {
 }
 
 fn print_constructors(docs: &mut String, class: &impl ClassLike) {
-	docs.push_str("#### Constructor\n\n");
+	docs.push_str("<h4>Constructor</h4>\n\n");
 
 	let mut constructors = class.constructors(true).collect::<Vec<_>>();
 	constructors.retain(|(_, constructor_info)| constructor_info.access == AccessModifier::Public);
@@ -417,7 +411,7 @@ fn print_constructors(docs: &mut String, class: &impl ClassLike) {
 }
 
 fn print_properties(docs: &mut String, class: &impl ClassLike) {
-	docs.push_str("#### Properties\n\n");
+	docs.push_str("<h4>Properties</h4>\n\n");
 
 	let mut fields = class.fields(true).collect::<Vec<_>>();
 	fields.retain(|(_, field_info)| field_info.access == AccessModifier::Public);
@@ -447,7 +441,7 @@ fn print_properties(docs: &mut String, class: &impl ClassLike) {
 }
 
 fn print_methods(docs: &mut String, class: &impl ClassLike) {
-	docs.push_str("#### Methods\n\n");
+	docs.push_str("<h4>Methods</h4>\n\n");
 
 	let mut methods = class.methods(true).collect::<Vec<_>>();
 	methods.retain(|(_, method_info)| method_info.access == AccessModifier::Public);
