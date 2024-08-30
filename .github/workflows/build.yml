@@ -126,7 +126,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright
-        working-directory: apps/wing-console/console/app
+        working-directory: wing-console/console/app
         run: |
           sudo rm /etc/apt/sources.list.d/microsoft-prod.list
           pnpm exec playwright install --with-deps
@@ -304,11 +304,11 @@ jobs:
         id: deploy-fly
         run: |
           if ! flyctl status --app "$APP_NAME"; then
-            pushd ./apps/wing-console/console/app/preview
+            pushd ./wing-console/console/app/preview
             flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest -o personal
             popd
           fi
-          flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 1024 --strategy immediate
+          flyctl deploy . --config ./wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 1024 --strategy immediate
           flyctl scale count 1 --yes --app "$APP_NAME"
           echo "deploytime=$(TZ=UTC date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
 

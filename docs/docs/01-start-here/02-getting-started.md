@@ -47,7 +47,7 @@ Wing has extended support for two IDEs. They provide syntax highlighting, comple
 To use Wing in other IDEs, there are a few tools available to help:
 
 - Language server - Running `wing lsp` serves the official language server
-- [TextMate grammar](https://github.com/winglang/wing/blob/main/apps/vscode-wing/syntaxes/wing.tmLanguage.json) - For syntax highlighting
+- [TextMate grammar](https://github.com/winglang/wing/blob/main/packages/vscode-wing/syntaxes/wing.tmLanguage.json) - For syntax highlighting
 - [tree-sitter grammar and queries](https://github.com/winglang/wing/tree/main/libs/tree-sitter-wing) - For syntax highlighting and more
 - [Syntax Highlighting for GitHub (Chrome extension)](https://chromewebstore.google.com/detail/winglang-syntax-hightligh/gjnleleianfjpmckmmdeahlklhcdlakj) - Adds syntax highlighting to various locations within GitHub
 

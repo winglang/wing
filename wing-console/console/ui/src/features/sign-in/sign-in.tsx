@@ -26,7 +26,7 @@ const SIGNED_IN_QUERY_PARAMETER = "signedIn";
  * The URL to the Console Terms and Conditions file.
  */
 const TERMS_AND_CONDITIONS_URL =
-  "https://github.com/winglang/wing/blob/main/apps/wing-console/LICENSE.md";
+  "https://github.com/winglang/wing/blob/main/wing-console/LICENSE.md";
 
 /**
  * Returns true if the Console should dismiss the sign in modal.
@@ -117,7 +117,7 @@ const useSignInRequired = () => {
   return signInRequired;
 };
 
-export interface SignInModalProps {}
+export interface SignInModalProps { }
 
 export const SignInModal = (props: SignInModalProps) => {
   const { theme } = useTheme();

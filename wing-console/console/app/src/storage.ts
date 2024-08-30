@@ -1,5 +1,5 @@
 /**
- * This is a duplication of only the relevant code from apps/wing/src/analytics/storage.ts
+ * This is a duplication of only the relevant code from packages/winglang/src/analytics/storage.ts
  * Waiting for a shared package to be created
  * See https://github.com/winglang/wing/issues/3336
  */

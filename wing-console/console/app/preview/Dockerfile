@@ -3,8 +3,8 @@ FROM node:20.11.0-alpine
 WORKDIR /app
 
 COPY dist dist
-COPY apps/wing-console/console/app/preview/index.mjs dist/
-COPY apps/wing-console/console/app/demo demo
+COPY wing-console/console/app/preview/index.mjs dist/
+COPY wing-console/console/app/demo demo
 
 RUN npm init -y && npm install --no-package-lock ./dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
 

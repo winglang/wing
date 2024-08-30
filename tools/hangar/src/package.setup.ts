@@ -45,11 +45,11 @@ const getInstallArgs = async () => {
     "install",
     "--no-package-lock",
     "--install-links=false",
-    "file:../../../apps/wing",
-    "file:../../../libs/wingsdk",
-    "file:../../../libs/awscdk",
-    "file:../../../libs/compatibility-spy",
-    "file:../../../libs/@wingcloud/framework",
+    "file:../../../packages/winglang",
+    "file:../../../packages/@winglang/sdk",
+    "file:../../../packages/@winglang/platform-awscdk",
+    "file:../../../packages/@winglang/compatibility-spy",
+    "file:../../../packages/@wingcloud/framework",
   ];
 };
 

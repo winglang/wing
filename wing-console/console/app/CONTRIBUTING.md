@@ -6,4 +6,4 @@
 pnpm dev
 ```
 
-Also, you have to start the dev script on the `apps/wing-console/console/server` package.
+Also, you have to start the dev script on the `wing-console/console/server` package.
