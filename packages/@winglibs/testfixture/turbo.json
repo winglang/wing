@@ -5,7 +5,7 @@
     "compile": {
       "dependsOn": ["^compile"],
       "inputs": ["**/*.w", "**/*.js", "**/*.ts"],
-      "outputs": ["target/wing-fixture.wsim/**"]
+      "outputs": ["target/testfixture.wsim/**"]
     },
     "topo": {}
   }
