@@ -1,25 +1,24 @@
-## API Reference
+<h2>API Reference</h2>
 
-### Table of Contents
+<h3>Table of Contents</h3>
 
 - **Classes**
   - <a href="#valid1.Foo">Foo</a>
 
-### Foo (preflight class) <a id="valid1.Foo"></a>
+<h3 id="valid1.Foo">Foo (preflight class)</h3>
 
 A test class
 
-#### Constructor
+<h4>Constructor</h4>
 
 <pre>
 new(): Foo
 </pre>
 
-#### Properties
+<h4>Properties</h4>
 
 *No properties*
 
-#### Methods
+<h4>Methods</h4>
 
 *No methods*
-
