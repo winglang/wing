@@ -16,8 +16,7 @@ use crate::{
 	parser::{as_wing_library, normalize_path, parse_wing_project},
 	type_check::{
 		type_reference_transform::TypeReferenceTransformer, ClassLike, FunctionSignature, HasFqn, Namespace, NamespaceRef,
-		SymbolEnvOrNamespace, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME,
-		CLASS_INIT_NAME,
+		SymbolEnvOrNamespace, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableKind,
 	},
 	type_check_assert::TypeCheckAssert,
 	type_check_file,
@@ -138,13 +137,11 @@ pub fn generate_docs(project_dir: &Utf8Path) -> Result<String, ()> {
 	return generate_docs_helper(&types, &source_path);
 }
 
-const HIDDEN_METHODS: [&str; 8] = [
+const HIDDEN_METHODS: [&str; 6] = [
 	"toString",
 	"toJSON",
 	"onLift",
 	"onLiftType",
-	CLASS_INIT_NAME,
-	CLASS_INFLIGHT_INIT_NAME,
 	"toInflight",
 	"isConstruct",
 ];

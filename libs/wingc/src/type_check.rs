@@ -412,11 +412,14 @@ type ClassLikeIterator<'a> =
 pub trait ClassLike: Display {
 	fn get_env(&self) -> &SymbolEnv;
 
-	// TODO: refactor this to not emit constructors as methods
 	fn methods(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
 			if sym_kind.as_variable()?.type_.as_function_sig().is_some() {
-				Some((s, sym_kind.as_variable()?.clone()))
+				if s == CLASS_INIT_NAME || s == CLASS_INFLIGHT_INIT_NAME {
+					None
+				} else {
+					Some((s, sym_kind.as_variable()?.clone()))
+				}
 			} else {
 				None
 			}
@@ -5508,7 +5511,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		let parent_initializer = parent_class
 			.as_class()
 			.unwrap()
-			.methods(false)
+			.constructors(false)
 			.find(|(name, ..)| name == parent_init_name)
 			.unwrap()
 			.1;
