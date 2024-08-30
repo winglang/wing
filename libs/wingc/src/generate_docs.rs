@@ -27,7 +27,7 @@ use crate::{
 /// Generate documentation for the project
 pub fn generate_docs(project_dir: &Utf8Path) -> Result<String, ()> {
 	let project_dir = find_nearest_wing_project_dir(project_dir);
-	let source_package = as_wing_library(&project_dir);
+	let source_package = as_wing_library(&project_dir, false);
 	if source_package.is_none() {
 		report_diagnostic(Diagnostic {
 			message: "No package.json found in project directory".to_string(),
@@ -36,6 +36,7 @@ pub fn generate_docs(project_dir: &Utf8Path) -> Result<String, ()> {
 			hints: vec![],
 			severity: DiagnosticSeverity::Error,
 		});
+		return Err(());
 	}
 	let source_package = source_package.unwrap();
 	let source_path = normalize_path(&project_dir, None);
@@ -290,9 +291,7 @@ fn print_classes(types: &[TypeRef], docs: &mut String) {
 			docs.push_str(&simplified_fqn(typ));
 			docs.push_str(" (");
 			docs.push_str(&class.phase.to_string());
-			docs.push_str(" class) <a name=");
-			docs.push_str(&simplified_fqn(typ));
-			docs.push_str(" id=\"");
+			docs.push_str(" class) <a id=\"");
 			docs.push_str(&typ.fqn().expect("Type has no FQN"));
 			docs.push_str("\"></a>\n\n");
 

@@ -20,13 +20,13 @@ export async function generateDocs() {
   });
 
   if (docs.diagnostics.length > 0) {
-    console.error(await formatDiagnostics(docs.diagnostics));
+    if (docs.diagnostics.some((d) => d.severity === "error")) {
+      throw new Error(await formatDiagnostics(docs.diagnostics));
+    } else {
+      console.error(await formatDiagnostics(docs.diagnostics));
+    }
   }
 
-  if (docs.diagnostics.some((d) => d.severity === "error")) {
-    process.exitCode = 1;
-    return;
-  }
 
   const docsFile = resolve(workDir, "API.md");
   await writeFile(docsFile, docs.docsContents);

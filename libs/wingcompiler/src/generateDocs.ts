@@ -44,15 +44,12 @@ export async function generateWingDocs(props: {
   const arg = normalPath(props.projectDir);
   props.log?.(`invoking %s with: "%s"`, WINGC_GENERATE_DOCS, arg);
   let docsContents: string = "";
-  try {
-    const result = wingCompiler.invoke(wingc, WINGC_GENERATE_DOCS, arg);
-    if (typeof result === "number") {
-      throw new Error(`Error generating docs: ${result}`);
-    }
-    docsContents = result;
-  } catch (error) {
+  const result = wingCompiler.invoke(wingc, WINGC_GENERATE_DOCS, arg);
+  if (typeof result === "number") {
     // This is a bug in the compiler, indicate a compilation failure.
     // The bug details should be part of the diagnostics handling below.
+  } else {
+    docsContents = result;
   }
 
   return {

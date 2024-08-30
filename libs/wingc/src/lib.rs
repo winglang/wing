@@ -327,7 +327,7 @@ pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
 
 pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Utf8Path) -> Result<CompilerOutput, ()> {
 	let project_dir = find_nearest_wing_project_dir(source_path);
-	let source_package = as_wing_library(&project_dir).unwrap_or_else(|| DEFAULT_PACKAGE_NAME.to_string());
+	let source_package = as_wing_library(&project_dir, false).unwrap_or_else(|| DEFAULT_PACKAGE_NAME.to_string());
 	let source_path = normalize_path(source_path, None);
 	let source_file = File::new(&source_path, source_package.clone());
 
