@@ -49,6 +49,10 @@
       "path": "./examples/tests/valid"
     },
     {
+      "name": "Tests: Docs",
+      "path": "./examples/tests/doc_examples"
+    },
+    {
       "name": "VSCode",
       "path": "./apps/vscode-wing"
     },
