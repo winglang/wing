@@ -447,7 +447,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure6-5.cjs")({
-            $subdir_InflightClass: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("rootpkg.subdir2.InflightClass") ?? subdir.InflightClass, "", "InflightClass"))},
+            $subdir_InflightClass: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("examples-valid.subdir2.InflightClass") ?? subdir.InflightClass, "", "InflightClass"))},
           })
         `;
       }
@@ -455,11 +455,11 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [$helpers.preflightClassSingleton(this, 5), ["method"]],
-            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("rootpkg.subdir2.InflightClass") ?? subdir.InflightClass, "", "InflightClass"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("examples-valid.subdir2.InflightClass") ?? subdir.InflightClass, "", "InflightClass"), []],
           ],
           "$inflight_init": [
             [$helpers.preflightClassSingleton(this, 5), []],
-            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("rootpkg.subdir2.InflightClass") ?? subdir.InflightClass, "", "InflightClass"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("examples-valid.subdir2.InflightClass") ?? subdir.InflightClass, "", "InflightClass"), []],
           ],
         });
       }
