@@ -9,7 +9,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/winglang/wing.git",
-    "directory": "libs/awscdk"
+    "directory": "packages/@winglang/platform-awscdk"
   },
   "description": "Wing Platform for AWS CDK",
   "publishConfig": {

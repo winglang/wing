@@ -19,7 +19,8 @@
   "main": "target/wing-fixture.wsim/.wing/preflight.cjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/winglang/wing.git"
+    "url": "git+https://github.com/winglang/wing.git",
+    "directory": "packages/@winglibs/testfixture"
   },
   "devDependencies": {
     "winglang": "workspace:^",

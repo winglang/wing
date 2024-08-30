@@ -49,4 +49,4 @@ See [issues labeled with `vscode-extension` or `language-server`](https://github
 
 We welcome community contributions and pull requests. Check out the [Contributor's Handbook](https://www.winglang.io/contributing/) for information on how to set up a development environment. A typical flow for working on the extension is [available there](https://www.winglang.io/contributing/start-here/development#-how-do-i-build-the-vscode-extension) as well.
 
-Most of the logic for this extension is found in the Wing Language server. The extension mostly serves as a client to that server, with some additional features. The entrypoint of the server is in the CLI [here](../wing/src/commands/lsp.ts), while the functionality is in the `wingc` Rust module [here](../../libs/wingc/src/lsp).
+Most of the logic for this extension is found in the Wing Language server. The extension mostly serves as a client to that server, with some additional features. The entrypoint of the server is in the CLI [here](../winglang/src/commands/lsp.ts), while the functionality is in the `wingc` Rust module [here](../@winglang/wingc/src/lsp).

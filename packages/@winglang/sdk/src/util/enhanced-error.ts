@@ -83,7 +83,6 @@ export async function prettyPrintError(
     // strip wingsdk
     .filter(
       (item) =>
-        !normalPath(item.file).includes("/libs/wingsdk/src/") &&
         !normalPath(item.file).includes("/@winglang/sdk/")
     )
     // special: remove the handler wrapper (See `cloud.Function` entrypoint for where this comes from)

@@ -136,7 +136,7 @@ export async function init(template: string, options: InitOptions = {}): Promise
             if (key === "winglang") {
               depMap[key] = `file:${join(__dirname, "..", "..")}`;
             } else {
-              depMap[key] = `file:${join(__dirname, "..", "..", "..", "..", "libs", key)}`;
+              depMap[key] = `file:${join(__dirname, "..", "..", "..", "..", "packages", key)}`;
             }
           } else {
             depMap[key] = depMap[key].replace("#WING_VERSION#", currentPackage.version);

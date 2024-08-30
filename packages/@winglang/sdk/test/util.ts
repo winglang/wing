@@ -196,10 +196,10 @@ export function sanitizePaths(json: DeepWriteable<WingSimulatorSchema>) {
  */
 export function sanitizeCode(code: string): string {
   function removeAbsolutePaths(text: string) {
-    const regex = /"[^"]+?\/libs\/wingsdk\/(.+?)"/g;
+    const regex = /"[^"]+?\/@winglang\/sdk\/(.+?)"/g;
 
     // replace first group with static text
-    return text.replace(regex, '"[REDACTED]/wingsdk/$1"');
+    return text.replace(regex, '"[REDACTED]/@winglang/sdk/$1"');
   }
 
   return removeAbsolutePaths(code);

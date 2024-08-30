@@ -9,7 +9,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/winglang/wing.git",
-    "directory": "libs/compatibility-spy"
+    "directory": "packages/@winglang/compatibility-spy"
   },
   "description": "Wing Platform for spying the usage of cloud resources' methods and properties",
   "publishConfig": {

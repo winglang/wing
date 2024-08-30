@@ -50,7 +50,7 @@
       "name": "Debug Wing Compiler",
       "type": "lldb",
       "request": "launch",
-      "cwd": "${workspaceFolder}/libs/wingc",
+      "cwd": "${workspaceFolder}/packages/@winglang/wingc",
       "cargo": {
         "args": [
           "build",
