@@ -6,7 +6,7 @@ import { pack } from "./pack";
 import { exec, generateTmpDir } from "../util";
 
 const fixturesDir = join(__dirname, "..", "..", "fixtures");
-const goodFixtureDir = join(__dirname, "..", "..", "..", "..", "examples", "wing-fixture");
+const goodFixtureDir = join(__dirname, "..", "..", "..", "@winglibs", "testfixture");
 
 console.log = vi.fn();
 

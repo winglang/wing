@@ -5,9 +5,9 @@ import { BuiltinPlatform } from "@winglang/compiler";
 import { describe, test, expect } from "vitest";
 import { compile } from "./compile";
 
-const exampleDir = resolve("../../examples/tests/valid");
-const exampleErrorDir = resolve("../../examples/tests/error");
-const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
+const exampleDir = resolve("../../tests/valid");
+const exampleErrorDir = resolve("../../tests/error");
+const exampleSmallDir = resolve("../../tests/valid/subdir2");
 const exampleFilePath = join(exampleDir, "captures.test.w");
 
 function rndTargetDir() {
@@ -101,14 +101,14 @@ describe(
 
       await expect(
         compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] })
-      ).rejects.not.toThrowError(/wingsdk/);
+      ).rejects.not.toThrowError(/@winglang\/sdk/);
 
       const prevDebug = process.env.DEBUG;
       process.env.DEBUG = "true";
 
       await expect(
         compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] })
-      ).rejects.toThrowError(/wingsdk/);
+      ).rejects.toThrowError(/@winglang\/sdk/);
 
       process.env.DEBUG = prevDebug;
     });
