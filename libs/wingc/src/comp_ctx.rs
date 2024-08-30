@@ -65,20 +65,19 @@ impl CompilationContext {
 }
 
 pub fn set_custom_panic_hook() {
-	std::panic::set_hook(Box::new(|pi| {
-		// Print backtrace if RUST_BACKTRACE=1
+	std::panic::set_hook(Box::new(|info| {
 		let bt = Backtrace::capture();
 		if bt.status() == BacktraceStatus::Captured {
 			eprintln!("Panic backtrace:\n{}", bt);
 		} else {
-			eprintln!("Panicked, backtrace not captured: {:?}", bt.status());
+			eprintln!("Panic message:\n{}", info.to_string());
 		}
 
 		report_diagnostic(Diagnostic {
 			message: format!(
 				"Compiler bug during {} ('{}'), please report at https://www.winglang.io/contributing/start-here/bugs",
 				CompilationContext::get_phase(),
-				pi,
+				info,
 			),
 			span: Some(CompilationContext::get_span()),
 			annotations: vec![],

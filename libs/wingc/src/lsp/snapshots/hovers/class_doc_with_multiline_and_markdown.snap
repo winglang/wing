@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nclass Foo {\n  a: num;\n}\n```\n---\n Class doc\n With multiline\n ## And markdown"
+  value: "```wing\nclass Foo {\n  a: num;\n}\n```\n---\nClass doc\nWith multiline\n## And markdown"
 range:
   start:
     line: 4

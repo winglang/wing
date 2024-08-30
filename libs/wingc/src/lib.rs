@@ -17,12 +17,14 @@ use dtsify::extern_dtsify::{is_extern_file, ExternDTSifier};
 use file_graph::{File, FileGraph};
 use files::Files;
 use fold::Fold;
+use generate_docs::generate_docs;
 use indexmap::IndexMap;
 use jsify::JSifier;
 
 use lifting::LiftVisitor;
 use parser::{as_wing_library, is_entrypoint_file, parse_wing_project};
 use serde::Serialize;
+use serde_json::Value;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::SymbolEnvKind;
@@ -36,7 +38,7 @@ use wingii::type_system::TypeSystem;
 use crate::parser::normalize_path;
 use std::alloc::{alloc, dealloc, Layout};
 
-use std::mem;
+use std::{fs, mem};
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
@@ -56,6 +58,7 @@ mod dtsify;
 mod file_graph;
 mod files;
 pub mod fold;
+pub mod generate_docs;
 pub mod jsify;
 pub mod json_schema_generator;
 mod lifting;
@@ -164,26 +167,6 @@ pub unsafe extern "C" fn wingc_malloc(size: usize) -> *mut u8 {
 	}
 }
 
-const LOCKFILES: [&'static str; 4] = ["pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb"];
-
-/// Wing sometimes can't find dependencies if they're installed with pnpm/yarn/bun.
-/// Try to anticipate any issues that may arise from using pnpm/yarn/bun with winglibs
-/// by emitting a warning if dependencies were installed with any of these package managers.
-fn emit_warning_for_unsupported_package_managers(project_dir: &Utf8Path) {
-	for lockfile in &LOCKFILES {
-		let lockfile_path = project_dir.join(lockfile);
-		if lockfile_path.exists() {
-			report_diagnostic(Diagnostic {
-				message: "The current project has a pnpm/yarn/bun lockfile. Wing hasn't been tested with package managers besides npm, so it may be unable to resolve dependencies to Wing libraries when using these tools. See https://github.com/winglang/wing/issues/6129 for more details.".to_string(),
-				span: None,
-				annotations: vec![],
-				hints: vec![],
-				severity: DiagnosticSeverity::Warning,
-			});
-		}
-	}
-}
-
 /// Expose a deallocation function to the WASM host
 ///
 /// _This implementation is copied from wasm-bindgen_
@@ -245,12 +228,45 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 }
 
-pub fn type_check(
+#[no_mangle]
+pub unsafe extern "C" fn wingc_generate_docs(ptr: u32, len: u32) -> u64 {
+	let args = ptr_to_str(ptr, len);
+	let project_dir = Utf8Path::new(args);
+	let results = generate_docs(project_dir);
+
+	if let Ok(results) = results {
+		string_to_combined_ptr(results)
+	} else {
+		WASM_RETURN_ERROR
+	}
+}
+
+const LOCKFILES: [&'static str; 4] = ["pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb"];
+
+/// Wing sometimes can't find dependencies if they're installed with pnpm/yarn/bun.
+/// Try to anticipate any issues that may arise from using pnpm/yarn/bun with winglibs
+/// by emitting a warning if dependencies were installed with any of these package managers.
+fn emit_warning_for_unsupported_package_managers(project_dir: &Utf8Path) {
+	for lockfile in &LOCKFILES {
+		let lockfile_path = project_dir.join(lockfile);
+		if lockfile_path.exists() {
+			report_diagnostic(Diagnostic {
+				message: "The current project has a pnpm/yarn/bun lockfile. Wing hasn't been tested with package managers besides npm, so it may be unable to resolve dependencies to Wing libraries when using these tools. See https://github.com/winglang/wing/issues/6129 for more details.".to_string(),
+				span: None,
+				annotations: vec![],
+				hints: vec![],
+				severity: DiagnosticSeverity::Warning,
+			});
+		}
+	}
+}
+
+pub fn type_check_file(
 	scope: &mut Scope,
 	types: &mut Types,
 	file: &File,
 	file_graph: &FileGraph,
-	library_roots: &mut IndexMap<String, Utf8PathBuf>,
+	library_roots: &IndexMap<String, Utf8PathBuf>,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
@@ -285,7 +301,7 @@ pub fn type_check(
 
 /// Infer the root directory of the current Wing application or library.
 ///
-/// Check the current file's directory for a wing.toml file or package.json file,
+/// Check the current file's directory for a wing.toml file or package.json file that has a "wing" field,
 /// and continue searching up the directory tree until we find one.
 /// If we run out of parent directories, fall back to the first directory we found.
 pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
@@ -300,7 +316,10 @@ pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
 			return current_dir.to_owned();
 		}
 		if current_dir.join("package.json").exists() {
-			return current_dir.to_owned();
+			let package_json = fs::read_to_string(current_dir.join("package.json")).unwrap();
+			if serde_json::from_str(&package_json).map_or(false, |v: Value| v.get("wing").is_some()) {
+				return current_dir.to_owned();
+			}
 		}
 		if current_dir == "/" {
 			break;
@@ -312,7 +331,7 @@ pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
 
 pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Utf8Path) -> Result<CompilerOutput, ()> {
 	let project_dir = find_nearest_wing_project_dir(source_path);
-	let source_package = as_wing_library(&project_dir).unwrap_or_else(|| DEFAULT_PACKAGE_NAME.to_string());
+	let source_package = as_wing_library(&project_dir, false).unwrap_or_else(|| DEFAULT_PACKAGE_NAME.to_string());
 	let source_path = normalize_path(source_path, None);
 	let source_file = File::new(&source_path, source_package.clone());
 
@@ -362,7 +381,7 @@ pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Ut
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
 		let mut scope = asts.swap_remove(&file.path).expect("matching AST not found");
-		type_check(
+		type_check_file(
 			&mut scope,
 			&mut types,
 			&file,

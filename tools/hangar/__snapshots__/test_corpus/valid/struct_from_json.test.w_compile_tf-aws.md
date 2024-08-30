@@ -485,7 +485,7 @@ class $Root extends $stdlib.std.Resource {
     (std.Number.fromJson("cool", { unsafe: true }));
     $macros.__Struct_fromJson(false, Student, ({"obviously": "not a student"}), { unsafe: true });
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:unsafe flight", new $Closure5(this, "$Closure5"));
-    globalThis.$ClassFactory.new("rootpkg.subdir.UsesStructInImportedFile", otherExternalStructs.UsesStructInImportedFile, this, "UsesStructInImportedFile");
+    globalThis.$ClassFactory.new("examples-valid.subdir.UsesStructInImportedFile", otherExternalStructs.UsesStructInImportedFile, this, "UsesStructInImportedFile");
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "struct_from_json.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });

@@ -165,6 +165,12 @@ async function main() {
     .action(runSubCommand("lsp"));
 
   program
+    .command("gen-docs")
+    .description("Generate documentation for the current project")
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("generateDocs"));
+
+  program
     .command("compile")
     .description("Compiles a Wing program")
     .argument("[entrypoint]", "program .w entrypoint")

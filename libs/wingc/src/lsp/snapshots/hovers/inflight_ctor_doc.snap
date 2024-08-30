@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\ninflight new(): Bob\n```\n---\n I'm bob the constructor (inflight)"
+  value: "```wing\ninflight new(): Bob\n```\n---\nI'm bob the constructor (inflight)"
 range:
   start:
     line: 3
