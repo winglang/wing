@@ -24,6 +24,7 @@ use jsify::JSifier;
 use lifting::LiftVisitor;
 use parser::{as_wing_library, is_entrypoint_file, parse_wing_project};
 use serde::Serialize;
+use serde_json::Value;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::SymbolEnvKind;
@@ -37,7 +38,7 @@ use wingii::type_system::TypeSystem;
 use crate::parser::normalize_path;
 use std::alloc::{alloc, dealloc, Layout};
 
-use std::mem;
+use std::{fs, mem};
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
@@ -300,7 +301,7 @@ pub fn type_check_file(
 
 /// Infer the root directory of the current Wing application or library.
 ///
-/// Check the current file's directory for a wing.toml file or package.json file,
+/// Check the current file's directory for a wing.toml file or package.json file that has a "wing" field,
 /// and continue searching up the directory tree until we find one.
 /// If we run out of parent directories, fall back to the first directory we found.
 pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
@@ -315,7 +316,10 @@ pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
 			return current_dir.to_owned();
 		}
 		if current_dir.join("package.json").exists() {
-			return current_dir.to_owned();
+			let package_json = fs::read_to_string(current_dir.join("package.json")).unwrap();
+			if serde_json::from_str(&package_json).map_or(false, |v: Value| v.get("wing").is_some()) {
+				return current_dir.to_owned();
+			}
 		}
 		if current_dir == "/" {
 			break;

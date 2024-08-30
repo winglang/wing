@@ -5,8 +5,6 @@ import { generateDocs } from "./generateDocs";
 
 const fixturesDir = join(__dirname, "..", "..", "fixtures");
 
-console.log = vi.fn();
-
 describe("wing gen-docs", () => {
   afterEach(() => {
     vi.restoreAllMocks();

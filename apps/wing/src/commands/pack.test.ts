@@ -1,4 +1,5 @@
 import * as fs from "fs/promises";
+import { existsSync } from "fs";
 import { join } from "path";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { pack } from "./pack";
@@ -135,6 +136,9 @@ describe("wing pack", () => {
     process.chdir(outdir);
 
     // create a file in /target
+    if (existsSync("target")) {
+      await fs.rmdir("target", { recursive: true });
+    }
     await fs.mkdir("target");
     await fs.writeFile("target/index.js", "console.log('hello world');");
 
@@ -143,7 +147,7 @@ describe("wing pack", () => {
     expect(tarballContents["target/index.js"]).toBeUndefined();
   });
 
-  it("packages a valid Wing project to a default path", async () => {
+  it("packages a valid Wing project into a tarball", async () => {
     // GIVEN
     const outdir = await generateTmpDir();
 
@@ -220,7 +224,7 @@ describe("wing pack", () => {
     `);
   });
 
-  it("packages a valid Wing project to a user-specified path", async () => {
+  it("packages a valid Wing project into a tarball with a custom filename", async () => {
     // GIVEN
     const outdir = await generateTmpDir();
 
