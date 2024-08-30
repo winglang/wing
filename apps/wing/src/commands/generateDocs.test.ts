@@ -31,7 +31,7 @@ describe("wing gen-docs", () => {
 
     // WHEN
     await generateDocs();
-    
+
     // THEN
     const files = await fs.readdir(projectDir);
     expect(files.findIndex((path) => basename(path) === "API.md")).not.toEqual(-1);

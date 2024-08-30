@@ -27,7 +27,6 @@ export async function generateDocs() {
     }
   }
 
-
   const docsFile = resolve(workDir, "API.md");
   await writeFile(docsFile, docs.docsContents);
 
