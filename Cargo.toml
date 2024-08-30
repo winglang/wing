@@ -1,9 +1,9 @@
 [workspace]
 members = [
-  "apps/wingcli-v2",
-  "libs/tree-sitter-wing",
-  "libs/wingc",
-  "libs/wingii",
+  "packages/wingcli-v2",
+  "packages/@winglang/tree-sitter-wing",
+  "packages/@winglang/wingc",
+  "packages/@winglang/wingii",
 ]
 resolver = "2"
 

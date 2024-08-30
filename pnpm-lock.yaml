@@ -28,7 +28,7 @@ importers:
     devDependencies:
       '@winglang/compatibility-spy':
         specifier: workspace:^
-        version: link:libs/compatibility-spy
+        version: link:packages/@winglang/compatibility-spy
       bump-pack:
         specifier: workspace:^
         version: link:tools/bump-pack
@@ -39,11 +39,103 @@ importers:
         specifier: ^2.0.7
         version: 2.0.7
 
-  apps/jsii-docgen:
+  docs:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.14.8
+      tsx:
+        specifier: ^4.15.7
+        version: 4.15.7
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+
+  docs/docs: {}
+
+  packages/@wingcloud/framework:
+    dependencies:
+      typescript:
+        specifier: ^5.3.3
+        version: 5.5.2
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.14.8
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../../@winglang/sdk
+      bump-pack:
+        specifier: workspace:^
+        version: link:../../../tools/bump-pack
+      tsup:
+        specifier: ^8.1.0
+        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.14.8)
+
+  packages/@winglang/compatibility-spy:
+    dependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../sdk
+      constructs:
+        specifier: ^10.3.0
+        version: 10.3.0
+    devDependencies:
+      bump-pack:
+        specifier: workspace:^
+        version: link:../../../tools/bump-pack
+      tsup:
+        specifier: ^8.1.0
+        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(happy-dom@9.20.3)
+
+  packages/@winglang/compiler:
+    dependencies:
+      '@wingcloud/framework':
+        specifier: workspace:^
+        version: link:../../@wingcloud/framework
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../sdk
+      jiti:
+        specifier: ^1.21.6
+        version: 1.21.6
+      wasi-js:
+        specifier: ^1.7.3
+        version: 1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q)
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.14.8
+      '@winglang/wingc':
+        specifier: workspace:^
+        version: link:../wingc
+      bump-pack:
+        specifier: workspace:^
+        version: link:../../../tools/bump-pack
+      tsup:
+        specifier: ^8.1.0
+        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.14.8)
+
+  packages/@winglang/jsii-docgen:
     dependencies:
       '@jsii/spec':
         specifier: ^1.100.0
-        version: 1.100.0
+        version: 1.101.0
       case:
         specifier: ^1.6.3
         version: 1.6.3
@@ -61,7 +153,7 @@ importers:
         version: 1.100.0
       semver:
         specifier: ^7.6.2
-        version: 7.6.2
+        version: 7.6.3
       yargs:
         specifier: ^16
         version: 16.2.0
@@ -124,7 +216,7 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@20.14.8)
 
-  apps/jsii-docgen/test/__fixtures__/libraries/construct-library:
+  packages/@winglang/jsii-docgen/test/__fixtures__/libraries/construct-library:
     devDependencies:
       '@aws-cdk/aws-events':
         specifier: 1.204.0
@@ -160,7 +252,372 @@ importers:
         specifier: ^5.5.2
         version: 5.5.2
 
-  apps/vscode-wing:
+  packages/@winglang/platform-awscdk:
+    dependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../sdk
+      aws-cdk-lib:
+        specifier: ^2.147.0
+        version: 2.147.0(constructs@10.3.0)
+      constructs:
+        specifier: ^10.3.0
+        version: 10.3.0
+      safe-stable-stringify:
+        specifier: ^2.4.3
+        version: 2.4.3
+    devDependencies:
+      bump-pack:
+        specifier: workspace:^
+        version: link:../../../tools/bump-pack
+      tsup:
+        specifier: ^8.1.0
+        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(happy-dom@9.20.3)
+
+  packages/@winglang/sdk:
+    dependencies:
+      '@aws-sdk/client-cloudwatch-logs':
+        specifier: 3.577.0
+        version: 3.577.0
+      '@aws-sdk/client-dynamodb':
+        specifier: 3.577.0
+        version: 3.577.0
+      '@aws-sdk/client-ecs':
+        specifier: 3.577.0
+        version: 3.577.0
+      '@aws-sdk/client-elasticache':
+        specifier: 3.577.0
+        version: 3.577.0
+      '@aws-sdk/client-lambda':
+        specifier: 3.577.0
+        version: 3.577.0
+      '@aws-sdk/client-s3':
+        specifier: 3.577.0
+        version: 3.577.0
+      '@aws-sdk/client-secrets-manager':
+        specifier: 3.577.0
+        version: 3.577.0
+      '@aws-sdk/client-sns':
+        specifier: 3.577.0
+        version: 3.577.0
+      '@aws-sdk/client-sqs':
+        specifier: 3.577.0
+        version: 3.577.0
+      '@aws-sdk/s3-request-presigner':
+        specifier: 3.577.0
+        version: 3.577.0
+      '@aws-sdk/types':
+        specifier: 3.449.0
+        version: 3.449.0
+      '@aws-sdk/util-dynamodb':
+        specifier: 3.577.0
+        version: 3.577.0(@aws-sdk/client-dynamodb@3.577.0)
+      '@azure/core-paging':
+        specifier: ^1.6.2
+        version: 1.6.2
+      '@azure/data-tables':
+        specifier: 13.2.2
+        version: 13.2.2
+      '@azure/identity':
+        specifier: 4.3.0
+        version: 4.3.0
+      '@azure/storage-blob':
+        specifier: 12.14.0
+        version: 12.14.0
+      '@google-cloud/datastore':
+        specifier: 8.4.0
+        version: 8.4.0
+      '@google-cloud/storage':
+        specifier: 6.9.5
+        version: 6.9.5
+      '@smithy/util-stream':
+        specifier: 2.0.17
+        version: 2.0.17
+      '@smithy/util-utf8':
+        specifier: 2.0.0
+        version: 2.0.0
+      '@types/aws-lambda':
+        specifier: ^8.10.140
+        version: 8.10.140
+      '@winglang/wingtunnels':
+        specifier: workspace:^
+        version: link:../wingtunnels
+      ajv:
+        specifier: ^8.16.0
+        version: 8.17.1
+      cdktf:
+        specifier: 0.20.7
+        version: 0.20.7(constructs@10.3.0)
+      constructs:
+        specifier: ^10.3
+        version: 10.3.0
+      cron-parser:
+        specifier: ^4.9.0
+        version: 4.9.0
+      cron-validator:
+        specifier: ^1.3.1
+        version: 1.3.1
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      dotenv-expand:
+        specifier: ^10.0.0
+        version: 10.0.0
+      express:
+        specifier: ^4.19.2
+        version: 4.19.2
+      glob:
+        specifier: ^8.1.0
+        version: 8.1.0
+      google-auth-library:
+        specifier: ^8.9.0
+        version: 8.9.0
+      jiti:
+        specifier: ^1.21.6
+        version: 1.21.6
+      mime:
+        specifier: ^3.0.0
+        version: 3.0.0(patch_hash=2he2uszztbibyal6zfzmv2a2oa)
+      mime-types:
+        specifier: ^2.1.35
+        version: 2.1.35
+      nanoid:
+        specifier: ^3.3.7
+        version: 3.3.7
+      protobufjs:
+        specifier: 7.2.5
+        version: 7.2.5(patch_hash=plkkb5oxv62w7nyvt6cqmvgk4q)
+      safe-stable-stringify:
+        specifier: ^2.4.3
+        version: 2.4.3
+      stacktracey:
+        specifier: ^2.1.8
+        version: 2.1.8
+      toml:
+        specifier: ^3.0.0
+        version: 3.0.0
+      ulid:
+        specifier: ^2.3.0
+        version: 2.3.0
+      uuid:
+        specifier: ^8.3.2
+        version: 8.3.2
+      vlq:
+        specifier: ^2.0.4
+        version: 2.0.4
+      yaml:
+        specifier: ^2.4.5
+        version: 2.4.5
+    optionalDependencies:
+      esbuild:
+        specifier: ^0.19.12
+        version: 0.19.12
+    devDependencies:
+      '@cdktf/provider-aws':
+        specifier: ^19
+        version: 19.23.0(cdktf@0.20.7)(constructs@10.3.0)
+      '@types/express':
+        specifier: ^4.17.21
+        version: 4.17.21
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
+      '@types/glob':
+        specifier: ^7.2.0
+        version: 7.2.0
+      '@types/mime-types':
+        specifier: ^2.1.4
+        version: 2.1.4
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.14.8
+      '@types/uuid':
+        specifier: ^9.0.8
+        version: 9.0.8
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7
+        version: 7.13.1(@typescript-eslint/parser@7.13.1)(eslint@8.57.0)(typescript@5.5.2)
+      '@typescript-eslint/parser':
+        specifier: ^7
+        version: 7.13.1(eslint@8.57.0)(typescript@5.5.2)
+      '@winglang/jsii-docgen':
+        specifier: workspace:^
+        version: link:../jsii-docgen
+      aws-sdk-client-mock:
+        specifier: 3.0.0
+        version: 3.0.0
+      aws-sdk-client-mock-jest:
+        specifier: 3.0.0
+        version: 3.0.0(aws-sdk-client-mock@3.0.0)
+      bump-pack:
+        specifier: workspace:^
+        version: link:../../../tools/bump-pack
+      cdktf-cli:
+        specifier: 0.20.7
+        version: 0.20.7(ink@3.2.0)(jsii-rosetta@5.4.25)(react@17.0.2)
+      chalk:
+        specifier: ^4.1.2
+        version: 4.1.2
+      eslint:
+        specifier: ^8.56.0
+        version: 8.57.0
+      eslint-config-prettier:
+        specifier: ^8.10.0
+        version: 8.10.0(eslint@8.57.0)
+      eslint-import-resolver-node:
+        specifier: ^0.3.9
+        version: 0.3.9
+      eslint-import-resolver-typescript:
+        specifier: ^3.6.1
+        version: 3.6.1(@typescript-eslint/parser@7.13.1)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
+      eslint-plugin-import:
+        specifier: ^2.29.1
+        version: 2.29.1(@typescript-eslint/parser@7.13.1)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-prettier:
+        specifier: ^4.2.1
+        version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.57.0)(prettier@2.8.8)
+      eslint-plugin-sort-exports:
+        specifier: ^0.8.0
+        version: 0.8.0(eslint@8.57.0)
+      fs-extra:
+        specifier: ^10.1.0
+        version: 10.1.0
+      jsii:
+        specifier: ~5.3.39
+        version: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
+      jsii-diff:
+        specifier: ^1.100.0
+        version: 1.100.0
+      jsii-pacmak:
+        specifier: ^1.100.0
+        version: 1.100.0(jsii-rosetta@5.4.25)
+      mock-gcs:
+        specifier: ^1.2.0
+        version: 1.2.0
+      prettier:
+        specifier: ^2.8.8
+        version: 2.8.8
+      projen:
+        specifier: ^0.71.163
+        version: 0.71.163
+      standard-version:
+        specifier: ^9
+        version: 9.5.0
+      ts-morph:
+        specifier: ^23.0.0
+        version: 23.0.0
+      tsx:
+        specifier: ^4.15.7
+        version: 4.15.7
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.14.8)
+      wing-api-checker:
+        specifier: workspace:^
+        version: link:../../wing-api-checker
+
+  packages/@winglang/tree-sitter-wing:
+    dependencies:
+      node-addon-api:
+        specifier: ^7.1.0
+        version: 7.1.0
+      tree-sitter:
+        specifier: ^0.21.0
+        version: 0.21.1
+    devDependencies:
+      nodemon:
+        specifier: ^3.1.4
+        version: 3.1.4
+      tree-sitter-cli:
+        specifier: 0.22.5
+        version: 0.22.5
+
+  packages/@winglang/wingc:
+    devDependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../sdk
+      '@winglang/tree-sitter-wing':
+        specifier: workspace:^
+        version: link:../tree-sitter-wing
+      '@winglang/wingii':
+        specifier: workspace:^
+        version: link:../wingii
+
+  packages/@winglang/wingii: {}
+
+  packages/@winglang/wingtunnels:
+    dependencies:
+      '@types/debug':
+        specifier: ^4.1.12
+        version: 4.1.12
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.14.8
+      '@types/ws':
+        specifier: ^8.5.10
+        version: 8.5.10
+      debug:
+        specifier: ^4.3.5
+        version: 4.3.5(supports-color@5.5.0)
+      ws:
+        specifier: ^8.17.1
+        version: 8.17.1
+    devDependencies:
+      bump-pack:
+        specifier: workspace:^
+        version: link:../../../tools/bump-pack
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@5.5.2)
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.14.8)
+
+  packages/@winglibs/testfixture:
+    devDependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../../@winglang/sdk
+      winglang:
+        specifier: workspace:^
+        version: link:../../winglang
+
+  packages/jsii-fixture:
+    devDependencies:
+      jsii:
+        specifier: ~5.3.39
+        version: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
+
+  packages/ts-fixture:
+    dependencies:
+      '@wingcloud/framework':
+        specifier: workspace:^
+        version: link:../@wingcloud/framework
+      '@winglibs/testfixture':
+        specifier: workspace:^
+        version: link:../@winglibs/testfixture
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.14.8
+      winglang:
+        specifier: workspace:^
+        version: link:../winglang
+
+  packages/vscode-wing:
     devDependencies:
       '@trpc/client':
         specifier: ^10.45.2
@@ -236,12 +693,88 @@ importers:
         version: 4.0.0
       winglang:
         specifier: workspace:^
-        version: link:../wing
+        version: link:../winglang
       ws:
         specifier: ^8.17.1
         version: 8.17.1
 
-  apps/wing:
+  packages/wing-api-checker:
+    dependencies:
+      chalk:
+        specifier: ^4.1.2
+        version: 4.1.2
+      chokidar:
+        specifier: ^3.6.0
+        version: 3.6.0
+      glob-promise:
+        specifier: ^6.0.7
+        version: 6.0.7(glob@8.1.0)
+      jsii-reflect:
+        specifier: ^1.100.0
+        version: 1.100.0
+      yargs:
+        specifier: ^17.7.2
+        version: 17.7.2
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.14.8
+      '@types/yargs':
+        specifier: ^16.0.9
+        version: 16.0.9
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^5
+        version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.57.0)(typescript@5.5.2)
+      '@typescript-eslint/parser':
+        specifier: ^5
+        version: 5.62.0(eslint@8.57.0)(typescript@5.5.2)
+      eslint:
+        specifier: ^8
+        version: 8.57.0
+      eslint-config-prettier:
+        specifier: ^8.10.0
+        version: 8.10.0(eslint@8.57.0)
+      eslint-import-resolver-node:
+        specifier: ^0.3.9
+        version: 0.3.9
+      eslint-import-resolver-typescript:
+        specifier: ^3.6.1
+        version: 3.6.1(@typescript-eslint/parser@5.62.0)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
+      eslint-plugin-import:
+        specifier: ^2.29.1
+        version: 2.29.1(@typescript-eslint/parser@5.62.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-prettier:
+        specifier: ^4.2.1
+        version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.57.0)(prettier@2.8.8)
+      prettier:
+        specifier: ^2.8.8
+        version: 2.8.8
+      projen:
+        specifier: ^0.71.163
+        version: 0.71.163
+      standard-version:
+        specifier: ^9
+        version: 9.5.0
+      tsx:
+        specifier: ^4.15.7
+        version: 4.15.7
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+
+  packages/wingcli-v2:
+    dependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../@winglang/sdk
+      '@winglang/wingc':
+        specifier: workspace:^
+        version: link:../@winglang/wingc
+      '@winglang/wingii':
+        specifier: workspace:^
+        version: link:../@winglang/wingii
+
+  packages/winglang:
     dependencies:
       '@npmcli/arborist':
         specifier: ^7.5.3
@@ -254,16 +787,16 @@ importers:
         version: 3.2.0
       '@wingconsole/app':
         specifier: workspace:^
-        version: link:../wing-console/console/app
+        version: link:../../wing-console/console/app
       '@wingconsole/server':
         specifier: workspace:^
-        version: link:../wing-console/console/server
+        version: link:../../wing-console/console/server
       '@winglang/compiler':
         specifier: workspace:^
-        version: link:../../libs/wingcompiler
+        version: link:../@winglang/compiler
       '@winglang/sdk':
         specifier: workspace:^
-        version: link:../../libs/wingsdk
+        version: link:../@winglang/sdk
       chalk:
         specifier: ^4.1.2
         version: 4.1.2
@@ -371,71 +904,242 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@20.14.8)
 
-  apps/wing-api-checker:
+  tests/doc_examples: {}
+
+  tests/error: {}
+
+  tests/invalid:
     dependencies:
-      chalk:
-        specifier: ^4.1.2
-        version: 4.1.2
-      chokidar:
-        specifier: ^3.6.0
-        version: 3.6.0
-      glob-promise:
-        specifier: ^6.0.7
-        version: 6.0.7(glob@8.1.0)
-      jsii-reflect:
-        specifier: ^1.100.0
-        version: 1.100.0
-      yargs:
-        specifier: ^17.7.2
-        version: 17.7.2
+      '@winglibs/testfixture':
+        specifier: workspace:^
+        version: link:../../packages/@winglibs/testfixture
+      cdktf:
+        specifier: 0.20.7
+        version: 0.20.7(constructs@10.3.0)
+      constructs:
+        specifier: ^10.3.0
+        version: 10.3.0
+      jsii-code-samples:
+        specifier: 1.7.0
+        version: 1.7.0
+      jsii-fixture:
+        specifier: workspace:^
+        version: link:../../packages/jsii-fixture
+
+  tests/sdk_tests:
+    dependencies:
+      nanoid:
+        specifier: ^3.3.7
+        version: 3.3.7
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
+
+  tests/valid:
+    dependencies:
+      '@aws-cdk/asset-awscli-v1':
+        specifier: ^2.2.202
+        version: 2.2.202
+      '@aws-cdk/asset-kubectl-v20':
+        specifier: ^2.1.2
+        version: 2.1.2
+      '@aws-cdk/asset-node-proxy-agent-v6':
+        specifier: ^2.0.3
+        version: 2.0.3
+      '@aws-sdk/client-dynamodb':
+        specifier: ^3.602.0
+        version: 3.602.0
+      '@cdktf/provider-aws':
+        specifier: ^19.23.0
+        version: 19.23.0(cdktf@0.20.7)(constructs@10.3.0)
+      '@winglibs/testfixture':
+        specifier: workspace:^
+        version: link:../../packages/@winglibs/testfixture
+      aws-cdk-lib:
+        specifier: ^2.147.0
+        version: 2.147.0(constructs@10.3.0)
+      cdk8s:
+        specifier: ^2.68.81
+        version: 2.68.81(constructs@10.3.0)
+      cdk8s-plus-27:
+        specifier: ^2.9.5
+        version: 2.9.5(cdk8s@2.68.81)(constructs@10.3.0)
+      cdktf:
+        specifier: 0.20.7
+        version: 0.20.7(constructs@10.3.0)
+      constructs:
+        specifier: ^10.3.0
+        version: 10.3.0
+      jsii-code-samples:
+        specifier: 1.7.0
+        version: 1.7.0
+      jsii-fixture:
+        specifier: workspace:^
+        version: link:../../packages/jsii-fixture
+      projen:
+        specifier: ^0.71.163
+        version: 0.71.163
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
+
+  tools/bump-pack:
+    dependencies:
+      '@actions/core':
+        specifier: ^1.10.1
+        version: 1.10.1
+      '@pnpm/find-workspace-dir':
+        specifier: ^6.0.3
+        version: 6.0.3
+      '@pnpm/reviewing.dependencies-hierarchy':
+        specifier: ^2.1.11
+        version: 2.1.11(@pnpm/logger@5.0.0)
+      '@pnpm/workspace.find-packages':
+        specifier: ^1.1.12
+        version: 1.1.12(@pnpm/logger@5.0.0)
+      changelogen:
+        specifier: ^0.5.5
+        version: 0.5.5
+      fs-extra:
+        specifier: ^11.2.0
+        version: 11.2.0
+      minimatch:
+        specifier: ^9.0.4
+        version: 9.0.4
+      npm-which:
+        specifier: ^3.0.1
+        version: 3.0.1
+      semver:
+        specifier: ^7.6.2
+        version: 7.6.2
+      tsx:
+        specifier: ^4.15.7
+        version: 4.15.7
+    devDependencies:
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.14.8
+      '@types/semver':
+        specifier: ^7.5.8
+        version: 7.5.8
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.14.8)
+
+  tools/compatibility-matrix-automation:
+    dependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../../packages/@winglang/sdk
+      winglang:
+        specifier: workspace:^
+        version: link:../../packages/winglang
     devDependencies:
       '@types/node':
         specifier: ^20.11.0
         version: 20.14.8
-      '@types/yargs':
-        specifier: ^16.0.9
-        version: 16.0.9
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^5
-        version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.57.0)(typescript@5.5.2)
-      '@typescript-eslint/parser':
-        specifier: ^5
-        version: 5.62.0(eslint@8.57.0)(typescript@5.5.2)
-      eslint:
-        specifier: ^8
-        version: 8.57.0
-      eslint-config-prettier:
-        specifier: ^8.10.0
-        version: 8.10.0(eslint@8.57.0)
-      eslint-import-resolver-node:
-        specifier: ^0.3.9
-        version: 0.3.9
-      eslint-import-resolver-typescript:
-        specifier: ^3.6.1
-        version: 3.6.1(@typescript-eslint/parser@5.62.0)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
-      eslint-plugin-import:
-        specifier: ^2.29.1
-        version: 2.29.1(@typescript-eslint/parser@5.62.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
-      eslint-plugin-prettier:
-        specifier: ^4.2.1
-        version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.57.0)(prettier@2.8.8)
-      prettier:
-        specifier: ^2.8.8
-        version: 2.8.8
-      projen:
-        specifier: ^0.71.163
-        version: 0.71.163
-      standard-version:
-        specifier: ^9
-        version: 9.5.0
+      npm-which:
+        specifier: ^3.0.1
+        version: 3.0.1
       tsx:
         specifier: ^4.15.7
         version: 4.15.7
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.14.8)
 
-  apps/wing-console/console/app:
+  tools/generate-workspace:
+    dependencies:
+      '@pnpm/find-workspace-dir':
+        specifier: ^6.0.3
+        version: 6.0.3
+      '@pnpm/workspace.find-packages':
+        specifier: ^1.1.12
+        version: 1.1.12(@pnpm/logger@5.0.0)
+      npm-which:
+        specifier: ^3.0.1
+        version: 3.0.1
+      tsx:
+        specifier: ^4.15.7
+        version: 4.15.7
+    devDependencies:
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.14.8
+      '@types/semver':
+        specifier: ^7.5.8
+        version: 7.5.8
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+
+  tools/hangar:
+    devDependencies:
+      '@wingconsole/app':
+        specifier: workspace:^
+        version: link:../../wing-console/console/app
+      '@wingconsole/design-system':
+        specifier: workspace:^
+        version: link:../../wing-console/console/design-system
+      '@wingconsole/server':
+        specifier: workspace:^
+        version: link:../../wing-console/console/server
+      '@wingconsole/ui':
+        specifier: workspace:^
+        version: link:../../wing-console/console/ui
+      '@winglang/compatibility-spy':
+        specifier: workspace:^
+        version: link:../../packages/@winglang/compatibility-spy
+      '@winglang/compiler':
+        specifier: workspace:^
+        version: link:../../packages/@winglang/compiler
+      '@winglang/platform-awscdk':
+        specifier: workspace:^
+        version: link:../../packages/@winglang/platform-awscdk
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../../packages/@winglang/sdk
+      cdktf:
+        specifier: ^0.20.7
+        version: 0.20.7(constructs@10.3.0)
+      execa:
+        specifier: ^7.2.0
+        version: 7.2.0
+      fflate:
+        specifier: ^0.8.2
+        version: 0.8.2
+      npm:
+        specifier: ^9.9.3
+        version: 9.9.3
+      octokit:
+        specifier: ^3.2.1
+        version: 3.2.1
+      tsx:
+        specifier: ^4.15.7
+        version: 4.15.7
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(happy-dom@9.20.3)
+      winglang:
+        specifier: workspace:^
+        version: link:../../packages/winglang
+      yaml:
+        specifier: ^2.4.5
+        version: 2.4.5
+
+  wing-console/console/app:
     dependencies:
       '@segment/analytics-node':
         specifier: ^1.3.0
@@ -497,7 +1201,7 @@ importers:
         version: 10.4.19(postcss@8.4.39)
       bump-pack:
         specifier: workspace:^
-        version: link:../../../../tools/bump-pack
+        version: link:../../../tools/bump-pack
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -529,7 +1233,7 @@ importers:
         specifier: ^5.3.1
         version: 5.3.1(@types/node@20.14.8)
 
-  apps/wing-console/console/design-system:
+  wing-console/console/design-system:
     dependencies:
       '@headlessui/react':
         specifier: ^1.7.19
@@ -600,7 +1304,7 @@ importers:
         version: link:../../packages/utilities
       bump-pack:
         specifier: workspace:^
-        version: link:../../../../tools/bump-pack
+        version: link:../../../tools/bump-pack
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -609,7 +1313,7 @@ importers:
         version: 9.20.3
       tsup:
         specifier: ^8.1.0
-        version: 8.1.0(postcss@8.4.38)(typescript@5.5.2)
+        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -623,14 +1327,14 @@ importers:
         specifier: ^5.92.1
         version: 5.92.1(esbuild@0.21.5)
 
-  apps/wing-console/console/server:
+  wing-console/console/server:
     dependencies:
       '@winglang/compiler':
         specifier: workspace:^
-        version: link:../../../../libs/wingcompiler
+        version: link:../../../packages/@winglang/compiler
       '@winglang/sdk':
         specifier: workspace:^
-        version: link:../../../../libs/wingsdk
+        version: link:../../../packages/@winglang/sdk
       codespan-wasm:
         specifier: ^0.4.0
         version: 0.4.0
@@ -673,7 +1377,7 @@ importers:
         version: link:../../packages/utilities
       bump-pack:
         specifier: workspace:^
-        version: link:../../../../tools/bump-pack
+        version: link:../../../tools/bump-pack
       chokidar:
         specifier: ^3.6.0
         version: 3.6.0
@@ -723,7 +1427,7 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
 
-  apps/wing-console/console/ui:
+  wing-console/console/ui:
     dependencies:
       '@headlessui/react':
         specifier: ^1.7.19
@@ -848,13 +1552,13 @@ importers:
         version: link:../../packages/utilities
       '@winglang/sdk':
         specifier: workspace:^
-        version: link:../../../../libs/wingsdk
+        version: link:../../../packages/@winglang/sdk
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.39)
       bump-pack:
         specifier: workspace:^
-        version: link:../../../../tools/bump-pack
+        version: link:../../../tools/bump-pack
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -883,7 +1587,7 @@ importers:
         specifier: ^5.92.1
         version: 5.92.1(esbuild@0.21.5)
 
-  apps/wing-console/packages/error-message:
+  wing-console/packages/error-message:
     devDependencies:
       '@wingconsole/eslint-plugin':
         specifier: workspace:^
@@ -895,22 +1599,7 @@ importers:
         specifier: ^5.5.2
         version: 5.5.2
 
-  apps/wing-console/packages/use-loading:
-    devDependencies:
-      '@types/react':
-        specifier: ^18.3.3
-        version: 18.3.3
-      '@wingconsole/eslint-plugin':
-        specifier: workspace:^
-        version: link:../../tools/eslint-plugin
-      '@wingconsole/tsconfig':
-        specifier: workspace:^
-        version: link:../../tools/tsconfig
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
-
-  apps/wing-console/packages/use-persistent-state:
+  wing-console/packages/use-loading:
     devDependencies:
       '@types/react':
         specifier: ^18.3.3
@@ -925,7 +1614,22 @@ importers:
         specifier: ^5.5.2
         version: 5.5.2
 
-  apps/wing-console/packages/utilities:
+  wing-console/packages/use-persistent-state:
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.3
+        version: 18.3.3
+      '@wingconsole/eslint-plugin':
+        specifier: workspace:^
+        version: link:../../tools/eslint-plugin
+      '@wingconsole/tsconfig':
+        specifier: workspace:^
+        version: link:../../tools/tsconfig
+      typescript:
+        specifier: ^5.5.2
+        version: 5.5.2
+
+  wing-console/packages/utilities:
     devDependencies:
       '@wingconsole/eslint-plugin':
         specifier: workspace:^
@@ -940,7 +1644,7 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0(happy-dom@9.20.3)
 
-  apps/wing-console/tools/eslint-plugin:
+  wing-console/tools/eslint-plugin:
     dependencies:
       '@cloudy-ts/eslint-plugin':
         specifier: ^0.0.260
@@ -989,715 +1693,11 @@ importers:
         specifier: ^5.5.2
         version: 5.5.2
 
-  apps/wing-console/tools/tsconfig:
+  wing-console/tools/tsconfig:
     devDependencies:
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
-
-  apps/wingcli-v2:
-    dependencies:
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../../libs/wingsdk
-      '@winglang/wingc':
-        specifier: workspace:^
-        version: link:../../libs/wingc
-      '@winglang/wingii':
-        specifier: workspace:^
-        version: link:../../libs/wingii
-
-  docs:
-    devDependencies:
-      '@types/node':
-        specifier: ^20.11.0
-        version: 20.14.8
-      tsx:
-        specifier: ^4.15.7
-        version: 4.15.7
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
-
-  docs/docs: {}
-
-  examples/jsii-fixture:
-    devDependencies:
-      jsii:
-        specifier: ~5.3.39
-        version: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
-
-  examples/tests/doc_examples: {}
-
-  examples/tests/error: {}
-
-  examples/tests/invalid:
-    dependencies:
-      '@winglibs/testfixture':
-        specifier: workspace:^
-        version: link:../../wing-fixture
-      cdktf:
-        specifier: 0.20.7
-        version: 0.20.7(constructs@10.3.0)
-      constructs:
-        specifier: ^10.3.0
-        version: 10.3.0
-      jsii-code-samples:
-        specifier: 1.7.0
-        version: 1.7.0
-      jsii-fixture:
-        specifier: workspace:^
-        version: link:../../jsii-fixture
-
-  examples/tests/sdk_tests:
-    dependencies:
-      nanoid:
-        specifier: ^3.3.7
-        version: 3.3.7
-      uuid:
-        specifier: ^9.0.1
-        version: 9.0.1
-
-  examples/tests/valid:
-    dependencies:
-      '@aws-cdk/asset-awscli-v1':
-        specifier: ^2.2.202
-        version: 2.2.202
-      '@aws-cdk/asset-kubectl-v20':
-        specifier: ^2.1.2
-        version: 2.1.2
-      '@aws-cdk/asset-node-proxy-agent-v6':
-        specifier: ^2.0.3
-        version: 2.0.3
-      '@aws-sdk/client-dynamodb':
-        specifier: ^3.602.0
-        version: 3.602.0
-      '@cdktf/provider-aws':
-        specifier: ^19.23.0
-        version: 19.23.0(cdktf@0.20.7)(constructs@10.3.0)
-      '@winglibs/testfixture':
-        specifier: workspace:^
-        version: link:../../wing-fixture
-      aws-cdk-lib:
-        specifier: ^2.147.0
-        version: 2.147.0(constructs@10.3.0)
-      cdk8s:
-        specifier: ^2.68.81
-        version: 2.68.81(constructs@10.3.0)
-      cdk8s-plus-27:
-        specifier: ^2.9.5
-        version: 2.9.5(cdk8s@2.68.81)(constructs@10.3.0)
-      cdktf:
-        specifier: 0.20.7
-        version: 0.20.7(constructs@10.3.0)
-      constructs:
-        specifier: ^10.3.0
-        version: 10.3.0
-      jsii-code-samples:
-        specifier: 1.7.0
-        version: 1.7.0
-      jsii-fixture:
-        specifier: workspace:^
-        version: link:../../jsii-fixture
-      projen:
-        specifier: ^0.71.163
-        version: 0.71.163
-      uuid:
-        specifier: ^9.0.1
-        version: 9.0.1
-
-  examples/ts-fixture:
-    dependencies:
-      '@wingcloud/framework':
-        specifier: workspace:^
-        version: link:../../libs/@wingcloud/framework
-      '@winglibs/testfixture':
-        specifier: workspace:^
-        version: link:../wing-fixture
-    devDependencies:
-      '@types/node':
-        specifier: ^20.11.0
-        version: 20.14.8
-      winglang:
-        specifier: workspace:^
-        version: link:../../apps/wing
-
-  examples/wing-fixture:
-    devDependencies:
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../../libs/wingsdk
-      winglang:
-        specifier: workspace:^
-        version: link:../../apps/wing
-
-  libs/@wingcloud/framework:
-    dependencies:
-      typescript:
-        specifier: ^5.3.3
-        version: 5.5.2
-    devDependencies:
-      '@types/node':
-        specifier: ^20.11.0
-        version: 20.14.8
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../../wingsdk
-      bump-pack:
-        specifier: workspace:^
-        version: link:../../../tools/bump-pack
-      tsup:
-        specifier: ^8.1.0
-        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
-
-  libs/awscdk:
-    dependencies:
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../wingsdk
-      aws-cdk-lib:
-        specifier: ^2.147.0
-        version: 2.147.0(constructs@10.3.0)
-      constructs:
-        specifier: ^10.3.0
-        version: 10.3.0
-      safe-stable-stringify:
-        specifier: ^2.4.3
-        version: 2.4.3
-    devDependencies:
-      bump-pack:
-        specifier: workspace:^
-        version: link:../../tools/bump-pack
-      tsup:
-        specifier: ^8.1.0
-        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.0(happy-dom@9.20.3)
-
-  libs/compatibility-spy:
-    dependencies:
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../wingsdk
-      constructs:
-        specifier: ^10.3.0
-        version: 10.3.0
-    devDependencies:
-      bump-pack:
-        specifier: workspace:^
-        version: link:../../tools/bump-pack
-      tsup:
-        specifier: ^8.1.0
-        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.0(happy-dom@9.20.3)
-
-  libs/tree-sitter-wing:
-    dependencies:
-      node-addon-api:
-        specifier: ^7.1.0
-        version: 7.1.0
-      tree-sitter:
-        specifier: ^0.21.0
-        version: 0.21.1
-    devDependencies:
-      nodemon:
-        specifier: ^3.1.4
-        version: 3.1.4
-      tree-sitter-cli:
-        specifier: 0.22.5
-        version: 0.22.5
-
-  libs/wingc:
-    devDependencies:
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../wingsdk
-      '@winglang/tree-sitter-wing':
-        specifier: workspace:^
-        version: link:../tree-sitter-wing
-      '@winglang/wingii':
-        specifier: workspace:^
-        version: link:../wingii
-
-  libs/wingcompiler:
-    dependencies:
-      '@wingcloud/framework':
-        specifier: workspace:^
-        version: link:../@wingcloud/framework
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../wingsdk
-      jiti:
-        specifier: ^1.21.6
-        version: 1.21.6
-      wasi-js:
-        specifier: ^1.7.3
-        version: 1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q)
-    devDependencies:
-      '@types/node':
-        specifier: ^20.11.0
-        version: 20.14.8
-      '@winglang/wingc':
-        specifier: workspace:^
-        version: link:../wingc
-      bump-pack:
-        specifier: workspace:^
-        version: link:../../tools/bump-pack
-      tsup:
-        specifier: ^8.1.0
-        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
-
-  libs/wingii: {}
-
-  libs/wingsdk:
-    dependencies:
-      '@aws-sdk/client-cloudwatch-logs':
-        specifier: 3.577.0
-        version: 3.577.0
-      '@aws-sdk/client-dynamodb':
-        specifier: 3.577.0
-        version: 3.577.0
-      '@aws-sdk/client-ecs':
-        specifier: 3.577.0
-        version: 3.577.0
-      '@aws-sdk/client-elasticache':
-        specifier: 3.577.0
-        version: 3.577.0
-      '@aws-sdk/client-lambda':
-        specifier: 3.577.0
-        version: 3.577.0
-      '@aws-sdk/client-s3':
-        specifier: 3.577.0
-        version: 3.577.0
-      '@aws-sdk/client-secrets-manager':
-        specifier: 3.577.0
-        version: 3.577.0
-      '@aws-sdk/client-sns':
-        specifier: 3.577.0
-        version: 3.577.0
-      '@aws-sdk/client-sqs':
-        specifier: 3.577.0
-        version: 3.577.0
-      '@aws-sdk/s3-request-presigner':
-        specifier: 3.577.0
-        version: 3.577.0
-      '@aws-sdk/types':
-        specifier: 3.449.0
-        version: 3.449.0
-      '@aws-sdk/util-dynamodb':
-        specifier: 3.577.0
-        version: 3.577.0(@aws-sdk/client-dynamodb@3.577.0)
-      '@azure/core-paging':
-        specifier: ^1.6.2
-        version: 1.6.2
-      '@azure/data-tables':
-        specifier: 13.2.2
-        version: 13.2.2
-      '@azure/identity':
-        specifier: 4.3.0
-        version: 4.3.0
-      '@azure/storage-blob':
-        specifier: 12.14.0
-        version: 12.14.0
-      '@google-cloud/datastore':
-        specifier: 8.4.0
-        version: 8.4.0
-      '@google-cloud/storage':
-        specifier: 6.9.5
-        version: 6.9.5
-      '@smithy/util-stream':
-        specifier: 2.0.17
-        version: 2.0.17
-      '@smithy/util-utf8':
-        specifier: 2.0.0
-        version: 2.0.0
-      '@types/aws-lambda':
-        specifier: ^8.10.140
-        version: 8.10.140
-      '@winglang/wingtunnels':
-        specifier: workspace:^
-        version: link:../wingtunnels
-      ajv:
-        specifier: ^8.16.0
-        version: 8.16.0
-      cdktf:
-        specifier: 0.20.7
-        version: 0.20.7(constructs@10.3.0)
-      constructs:
-        specifier: ^10.3
-        version: 10.3.0
-      cron-parser:
-        specifier: ^4.9.0
-        version: 4.9.0
-      cron-validator:
-        specifier: ^1.3.1
-        version: 1.3.1
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.5
-      dotenv-expand:
-        specifier: ^10.0.0
-        version: 10.0.0
-      express:
-        specifier: ^4.19.2
-        version: 4.19.2
-      glob:
-        specifier: ^8.1.0
-        version: 8.1.0
-      google-auth-library:
-        specifier: ^8.9.0
-        version: 8.9.0
-      jiti:
-        specifier: ^1.21.6
-        version: 1.21.6
-      mime:
-        specifier: ^3.0.0
-        version: 3.0.0(patch_hash=2he2uszztbibyal6zfzmv2a2oa)
-      mime-types:
-        specifier: ^2.1.35
-        version: 2.1.35
-      nanoid:
-        specifier: ^3.3.7
-        version: 3.3.7
-      protobufjs:
-        specifier: 7.2.5
-        version: 7.2.5(patch_hash=plkkb5oxv62w7nyvt6cqmvgk4q)
-      safe-stable-stringify:
-        specifier: ^2.4.3
-        version: 2.4.3
-      stacktracey:
-        specifier: ^2.1.8
-        version: 2.1.8
-      toml:
-        specifier: ^3.0.0
-        version: 3.0.0
-      ulid:
-        specifier: ^2.3.0
-        version: 2.3.0
-      uuid:
-        specifier: ^8.3.2
-        version: 8.3.2
-      vlq:
-        specifier: ^2.0.4
-        version: 2.0.4
-      yaml:
-        specifier: ^2.4.5
-        version: 2.4.5
-    optionalDependencies:
-      esbuild:
-        specifier: ^0.19.12
-        version: 0.19.12
-    devDependencies:
-      '@cdktf/provider-aws':
-        specifier: ^19
-        version: 19.23.0(cdktf@0.20.7)(constructs@10.3.0)
-      '@types/express':
-        specifier: ^4.17.21
-        version: 4.17.21
-      '@types/fs-extra':
-        specifier: ^11.0.4
-        version: 11.0.4
-      '@types/glob':
-        specifier: ^7.2.0
-        version: 7.2.0
-      '@types/mime-types':
-        specifier: ^2.1.4
-        version: 2.1.4
-      '@types/node':
-        specifier: ^20.11.0
-        version: 20.14.8
-      '@types/uuid':
-        specifier: ^9.0.8
-        version: 9.0.8
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^7
-        version: 7.13.1(@typescript-eslint/parser@7.13.1)(eslint@8.57.0)(typescript@5.5.2)
-      '@typescript-eslint/parser':
-        specifier: ^7
-        version: 7.13.1(eslint@8.57.0)(typescript@5.5.2)
-      '@winglang/jsii-docgen':
-        specifier: workspace:^
-        version: link:../../apps/jsii-docgen
-      aws-sdk-client-mock:
-        specifier: 3.0.0
-        version: 3.0.0
-      aws-sdk-client-mock-jest:
-        specifier: 3.0.0
-        version: 3.0.0(aws-sdk-client-mock@3.0.0)
-      bump-pack:
-        specifier: workspace:^
-        version: link:../../tools/bump-pack
-      cdktf-cli:
-        specifier: 0.20.7
-        version: 0.20.7(ink@3.2.0)(jsii-rosetta@5.4.25)(react@17.0.2)
-      chalk:
-        specifier: ^4.1.2
-        version: 4.1.2
-      eslint:
-        specifier: ^8.56.0
-        version: 8.57.0
-      eslint-config-prettier:
-        specifier: ^8.10.0
-        version: 8.10.0(eslint@8.57.0)
-      eslint-import-resolver-node:
-        specifier: ^0.3.9
-        version: 0.3.9
-      eslint-import-resolver-typescript:
-        specifier: ^3.6.1
-        version: 3.6.1(@typescript-eslint/parser@7.13.1)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
-      eslint-plugin-import:
-        specifier: ^2.29.1
-        version: 2.29.1(@typescript-eslint/parser@7.13.1)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
-      eslint-plugin-prettier:
-        specifier: ^4.2.1
-        version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.57.0)(prettier@2.8.8)
-      eslint-plugin-sort-exports:
-        specifier: ^0.8.0
-        version: 0.8.0(eslint@8.57.0)
-      fs-extra:
-        specifier: ^10.1.0
-        version: 10.1.0
-      jsii:
-        specifier: ~5.3.39
-        version: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
-      jsii-diff:
-        specifier: ^1.100.0
-        version: 1.100.0
-      jsii-pacmak:
-        specifier: ^1.100.0
-        version: 1.100.0(jsii-rosetta@5.4.25)
-      mock-gcs:
-        specifier: ^1.2.0
-        version: 1.2.0
-      prettier:
-        specifier: ^2.8.8
-        version: 2.8.8
-      projen:
-        specifier: ^0.71.163
-        version: 0.71.163
-      standard-version:
-        specifier: ^9
-        version: 9.5.0
-      ts-morph:
-        specifier: ^23.0.0
-        version: 23.0.0
-      tsx:
-        specifier: ^4.15.7
-        version: 4.15.7
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
-      wing-api-checker:
-        specifier: workspace:^
-        version: link:../../apps/wing-api-checker
-
-  libs/wingtunnels:
-    dependencies:
-      '@types/debug':
-        specifier: ^4.1.12
-        version: 4.1.12
-      '@types/node':
-        specifier: ^20.11.0
-        version: 20.14.8
-      '@types/ws':
-        specifier: ^8.5.10
-        version: 8.5.10
-      debug:
-        specifier: ^4.3.5
-        version: 4.3.5(supports-color@5.5.0)
-      ws:
-        specifier: ^8.17.1
-        version: 8.17.1
-    devDependencies:
-      bump-pack:
-        specifier: workspace:^
-        version: link:../../tools/bump-pack
-      tsup:
-        specifier: ^6.7.0
-        version: 6.7.0(typescript@5.5.2)
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
-
-  tools/bump-pack:
-    dependencies:
-      '@actions/core':
-        specifier: ^1.10.1
-        version: 1.10.1
-      '@pnpm/find-workspace-dir':
-        specifier: ^6.0.3
-        version: 6.0.3
-      '@pnpm/reviewing.dependencies-hierarchy':
-        specifier: ^2.1.11
-        version: 2.1.11(@pnpm/logger@5.0.0)
-      '@pnpm/workspace.find-packages':
-        specifier: ^1.1.12
-        version: 1.1.12(@pnpm/logger@5.0.0)
-      changelogen:
-        specifier: ^0.5.5
-        version: 0.5.5
-      fs-extra:
-        specifier: ^11.2.0
-        version: 11.2.0
-      minimatch:
-        specifier: ^9.0.4
-        version: 9.0.4
-      npm-which:
-        specifier: ^3.0.1
-        version: 3.0.1
-      semver:
-        specifier: ^7.6.2
-        version: 7.6.2
-      tsx:
-        specifier: ^4.15.7
-        version: 4.15.7
-    devDependencies:
-      '@types/fs-extra':
-        specifier: ^11.0.4
-        version: 11.0.4
-      '@types/node':
-        specifier: ^20.11.0
-        version: 20.14.8
-      '@types/semver':
-        specifier: ^7.5.8
-        version: 7.5.8
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
-
-  tools/compatibility-matrix-automation:
-    dependencies:
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../../libs/wingsdk
-      winglang:
-        specifier: workspace:^
-        version: link:../../apps/wing
-    devDependencies:
-      '@types/node':
-        specifier: ^20.11.0
-        version: 20.14.8
-      npm-which:
-        specifier: ^3.0.1
-        version: 3.0.1
-      tsx:
-        specifier: ^4.15.7
-        version: 4.15.7
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
-
-  tools/generate-workspace:
-    dependencies:
-      '@pnpm/find-workspace-dir':
-        specifier: ^6.0.3
-        version: 6.0.3
-      '@pnpm/workspace.find-packages':
-        specifier: ^1.1.12
-        version: 1.1.12(@pnpm/logger@5.0.0)
-      npm-which:
-        specifier: ^3.0.1
-        version: 3.0.1
-      tsx:
-        specifier: ^4.15.7
-        version: 4.15.7
-    devDependencies:
-      '@types/fs-extra':
-        specifier: ^11.0.4
-        version: 11.0.4
-      '@types/node':
-        specifier: ^20.11.0
-        version: 20.14.8
-      '@types/semver':
-        specifier: ^7.5.8
-        version: 7.5.8
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
-
-  tools/hangar:
-    devDependencies:
-      '@wingconsole/app':
-        specifier: workspace:^
-        version: link:../../apps/wing-console/console/app
-      '@wingconsole/design-system':
-        specifier: workspace:^
-        version: link:../../apps/wing-console/console/design-system
-      '@wingconsole/server':
-        specifier: workspace:^
-        version: link:../../apps/wing-console/console/server
-      '@wingconsole/ui':
-        specifier: workspace:^
-        version: link:../../apps/wing-console/console/ui
-      '@winglang/compatibility-spy':
-        specifier: workspace:^
-        version: link:../../libs/compatibility-spy
-      '@winglang/compiler':
-        specifier: workspace:^
-        version: link:../../libs/wingcompiler
-      '@winglang/platform-awscdk':
-        specifier: workspace:^
-        version: link:../../libs/awscdk
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../../libs/wingsdk
-      cdktf:
-        specifier: ^0.20.7
-        version: 0.20.7(constructs@10.3.0)
-      execa:
-        specifier: ^7.2.0
-        version: 7.2.0
-      fflate:
-        specifier: ^0.8.2
-        version: 0.8.2
-      npm:
-        specifier: ^9.9.3
-        version: 9.9.3
-      octokit:
-        specifier: ^3.2.1
-        version: 3.2.1
-      tsx:
-        specifier: ^4.15.7
-        version: 4.15.7
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.0(happy-dom@9.20.3)
-      winglang:
-        specifier: workspace:^
-        version: link:../../apps/wing
-      yaml:
-        specifier: ^2.4.5
-        version: 2.4.5
 
 packages:
 
@@ -1752,6 +1752,7 @@ packages:
     deprecated: |-
       AWS CDK v1 has reached End-of-Support on 2023-06-01.
       This package is no longer being updated, and users should migrate to AWS CDK v2.
+
       For more information on how to migrate, see https://docs.aws.amazon.com/cdk/v2/guide/migrating-v2.html
     peerDependencies:
       '@aws-cdk/aws-iam': 1.204.0
@@ -1769,6 +1770,7 @@ packages:
     deprecated: |-
       AWS CDK v1 has reached End-of-Support on 2023-06-01.
       This package is no longer being updated, and users should migrate to AWS CDK v2.
+
       For more information on how to migrate, see https://docs.aws.amazon.com/cdk/v2/guide/migrating-v2.html
     peerDependencies:
       '@aws-cdk/core': 1.204.0
@@ -1789,6 +1791,7 @@ packages:
     deprecated: |-
       AWS CDK v1 has reached End-of-Support on 2023-06-01.
       This package is no longer being updated, and users should migrate to AWS CDK v2.
+
       For more information on how to migrate, see https://docs.aws.amazon.com/cdk/v2/guide/migrating-v2.html
     peerDependencies:
       '@aws-cdk/aws-iam': 1.204.0
@@ -1810,6 +1813,7 @@ packages:
     deprecated: |-
       AWS CDK v1 has reached End-of-Support on 2023-06-01.
       This package is no longer being updated, and users should migrate to AWS CDK v2.
+
       For more information on how to migrate, see https://docs.aws.amazon.com/cdk/v2/guide/migrating-v2.html
     peerDependencies:
       '@aws-cdk/aws-events': 1.204.0
@@ -1833,6 +1837,7 @@ packages:
     deprecated: |-
       AWS CDK v1 has reached End-of-Support on 2023-06-01.
       This package is no longer being updated, and users should migrate to AWS CDK v2.
+
       For more information on how to migrate, see https://docs.aws.amazon.com/cdk/v2/guide/migrating-v2.html
     dependencies:
       jsonschema: 1.4.1
@@ -1848,6 +1853,7 @@ packages:
     deprecated: |-
       AWS CDK v1 has reached End-of-Support on 2023-06-01.
       This package is no longer being updated, and users should migrate to AWS CDK v2.
+
       For more information on how to migrate, see https://docs.aws.amazon.com/cdk/v2/guide/migrating-v2.html
     peerDependencies:
       '@aws-cdk/cloud-assembly-schema': 1.204.0
@@ -1872,6 +1878,7 @@ packages:
     deprecated: |-
       AWS CDK v1 has reached End-of-Support on 2023-06-01.
       This package is no longer being updated, and users should migrate to AWS CDK v2.
+
       For more information on how to migrate, see https://docs.aws.amazon.com/cdk/v2/guide/migrating-v2.html
     peerDependencies:
       '@aws-cdk/cloud-assembly-schema': 1.204.0
@@ -1896,7 +1903,7 @@ packages:
     resolution: {integrity: sha512-IzSgsrxUcsrejQbPVilIKy16kAT52EwB6zSaI+M3xxIhKh5+aldEyvI+z6erM7TCLB2BJsFrtHjp6/4/sr+3dA==}
     dependencies:
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.577.0
+      '@aws-sdk/types': 3.449.0
       tslib: 1.14.1
     dev: false
 
@@ -1905,7 +1912,7 @@ packages:
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.577.0
+      '@aws-sdk/types': 3.449.0
       tslib: 2.6.3
     dev: false
 
@@ -1913,7 +1920,7 @@ packages:
     resolution: {integrity: sha512-ENNPPManmnVJ4BTXlOjAgD7URidbAznURqD0KvfREyc4o20DPYdEldU1f5cQ7Jbj0CJJSPaMIk/9ZshdB3210w==}
     dependencies:
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.577.0
+      '@aws-sdk/types': 3.449.0
       tslib: 1.14.1
     dev: false
 
@@ -1929,7 +1936,7 @@ packages:
       '@aws-crypto/ie11-detection': 3.0.0
       '@aws-crypto/supports-web-crypto': 3.0.0
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.577.0
+      '@aws-sdk/types': 3.449.0
       '@aws-sdk/util-locate-window': 3.568.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
@@ -1942,7 +1949,7 @@ packages:
       '@aws-crypto/sha256-js': 3.0.0
       '@aws-crypto/supports-web-crypto': 3.0.0
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.577.0
+      '@aws-sdk/types': 3.449.0
       '@aws-sdk/util-locate-window': 3.568.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
@@ -1954,7 +1961,7 @@ packages:
       '@aws-crypto/sha256-js': 5.2.0
       '@aws-crypto/supports-web-crypto': 5.2.0
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.598.0
+      '@aws-sdk/types': 3.449.0
       '@aws-sdk/util-locate-window': 3.568.0
       '@smithy/util-utf8': 2.0.0
       tslib: 2.6.3
@@ -1964,7 +1971,7 @@ packages:
     resolution: {integrity: sha512-PnNN7os0+yd1XvXAy23CFOmTbMaDxgxXtTKHybrJ39Y8kGzBATgBFibWJKH6BhytLI/Zyszs87xCOBNyBig6vQ==}
     dependencies:
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.577.0
+      '@aws-sdk/types': 3.449.0
       tslib: 1.14.1
     dev: false
 
@@ -1973,7 +1980,7 @@ packages:
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/util': 5.2.0
-      '@aws-sdk/types': 3.598.0
+      '@aws-sdk/types': 3.449.0
       tslib: 2.6.3
     dev: false
 
@@ -1992,7 +1999,7 @@ packages:
   /@aws-crypto/util@3.0.0:
     resolution: {integrity: sha512-2OJlpeJpCR48CC8r+uKVChzs9Iungj9wkZrl8Z041DWEWvyIHILYKCPNzJghKsivj+S3mLo6BVc7mBNzdxA46w==}
     dependencies:
-      '@aws-sdk/types': 3.577.0
+      '@aws-sdk/types': 3.449.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
     dev: false
@@ -2000,7 +2007,7 @@ packages:
   /@aws-crypto/util@5.2.0:
     resolution: {integrity: sha512-4RkU9EsI6ZpBve5fseQlGNUWKMa1RLPQ1dnjnQoe07ldfIzcsGb5hC5W0Dm7u423KWzawlrpbjXBrXCEv9zazQ==}
     dependencies:
-      '@aws-sdk/types': 3.598.0
+      '@aws-sdk/types': 3.449.0
       '@smithy/util-utf8': 2.0.0
       tslib: 2.6.3
     dev: false
@@ -2116,8 +2123,8 @@ packages:
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.600.0(@aws-sdk/client-sts@3.600.0)
-      '@aws-sdk/client-sts': 3.600.0
+      '@aws-sdk/client-sso-oidc': 3.600.0
+      '@aws-sdk/client-sts': 3.600.0(@aws-sdk/client-sso-oidc@3.600.0)
       '@aws-sdk/core': 3.598.0
       '@aws-sdk/credential-provider-node': 3.600.0(@aws-sdk/client-sso-oidc@3.600.0)(@aws-sdk/client-sts@3.600.0)
       '@aws-sdk/middleware-endpoint-discovery': 3.598.0
@@ -2582,13 +2589,13 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-sso-oidc@3.600.0(@aws-sdk/client-sts@3.600.0):
+  /@aws-sdk/client-sso-oidc@3.600.0:
     resolution: {integrity: sha512-7+I8RWURGfzvChyNQSyj5/tKrqRbzRl7H+BnTOf/4Vsw1nFOi5ROhlhD4X/Y0QCTacxnaoNcIrqnY7uGGvVRzw==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sts': 3.600.0
+      '@aws-sdk/client-sts': 3.600.0(@aws-sdk/client-sso-oidc@3.600.0)
       '@aws-sdk/core': 3.598.0
       '@aws-sdk/credential-provider-node': 3.600.0(@aws-sdk/client-sso-oidc@3.600.0)(@aws-sdk/client-sts@3.600.0)
       '@aws-sdk/middleware-host-header': 3.598.0
@@ -2627,7 +2634,6 @@ packages:
       '@smithy/util-utf8': 3.0.0
       tslib: 2.6.3
     transitivePeerDependencies:
-      - '@aws-sdk/client-sts'
       - aws-crt
     dev: false
 
@@ -2771,13 +2777,13 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-sts@3.600.0:
+  /@aws-sdk/client-sts@3.600.0(@aws-sdk/client-sso-oidc@3.600.0):
     resolution: {integrity: sha512-KQG97B7LvTtTiGmjlrG1LRAY8wUvCQzrmZVV5bjrJ/1oXAU7DITYwVbSJeX9NWg6hDuSk0VE3MFwIXS2SvfLIA==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.600.0(@aws-sdk/client-sts@3.600.0)
+      '@aws-sdk/client-sso-oidc': 3.600.0
       '@aws-sdk/core': 3.598.0
       '@aws-sdk/credential-provider-node': 3.600.0(@aws-sdk/client-sso-oidc@3.600.0)(@aws-sdk/client-sts@3.600.0)
       '@aws-sdk/middleware-host-header': 3.598.0
@@ -2816,6 +2822,7 @@ packages:
       '@smithy/util-utf8': 3.0.0
       tslib: 2.6.3
     transitivePeerDependencies:
+      - '@aws-sdk/client-sso-oidc'
       - aws-crt
     dev: false
 
@@ -2923,7 +2930,7 @@ packages:
     peerDependencies:
       '@aws-sdk/client-sts': ^3.598.0
     dependencies:
-      '@aws-sdk/client-sts': 3.600.0
+      '@aws-sdk/client-sts': 3.600.0(@aws-sdk/client-sso-oidc@3.600.0)
       '@aws-sdk/credential-provider-env': 3.598.0
       '@aws-sdk/credential-provider-http': 3.598.0
       '@aws-sdk/credential-provider-process': 3.598.0
@@ -3057,7 +3064,7 @@ packages:
     peerDependencies:
       '@aws-sdk/client-sts': ^3.598.0
     dependencies:
-      '@aws-sdk/client-sts': 3.600.0
+      '@aws-sdk/client-sts': 3.600.0(@aws-sdk/client-sso-oidc@3.600.0)
       '@aws-sdk/types': 3.598.0
       '@smithy/property-provider': 3.1.2
       '@smithy/types': 3.2.0
@@ -3341,7 +3348,7 @@ packages:
     peerDependencies:
       '@aws-sdk/client-sso-oidc': ^3.598.0
     dependencies:
-      '@aws-sdk/client-sso-oidc': 3.600.0(@aws-sdk/client-sts@3.600.0)
+      '@aws-sdk/client-sso-oidc': 3.600.0
       '@aws-sdk/types': 3.598.0
       '@smithy/property-provider': 3.1.2
       '@smithy/shared-ini-file-loader': 3.1.2
@@ -3526,6 +3533,7 @@ packages:
   /@azure/core-http@3.0.4:
     resolution: {integrity: sha512-Fok9VVhMdxAFOtqiiAtg74fL0UJkt0z3D+ouUUxcRLzZNBioPRAMJFVxiWoJljYpXsRi4GDQHzQHDc9AiYaIUQ==}
     engines: {node: '>=14.0.0'}
+    deprecated: deprecating as we migrated to core v2
     dependencies:
       '@azure/abort-controller': 1.1.0
       '@azure/core-auth': 1.7.2
@@ -6220,7 +6228,7 @@ packages:
     dependencies:
       lodash.camelcase: 4.3.0
       long: 5.2.3
-      protobufjs: 7.3.2
+      protobufjs: 7.2.5(patch_hash=plkkb5oxv62w7nyvt6cqmvgk4q)
       yargs: 17.7.2
     dev: false
 
@@ -6596,7 +6604,7 @@ packages:
     engines: {node: '>= 14.17.0'}
     dependencies:
       chalk: 4.1.2
-      semver: 7.6.2
+      semver: 7.6.3
 
   /@jsii/check-node@1.101.0:
     resolution: {integrity: sha512-io8u1GAF9XGp2crx0C/WGiJeUnHGw5X0du4fisbrNJHmVVFwcJbBMjbfXKWq+JSzl8fo/JV3F1LqtjsnawKA2A==}
@@ -6611,21 +6619,21 @@ packages:
     engines: {node: '>= 14.17.0'}
     dependencies:
       chalk: 4.1.2
-      semver: 7.6.2
+      semver: 7.6.3
     dev: true
 
   /@jsii/spec@1.100.0:
     resolution: {integrity: sha512-4LJCpSkmi3Hfcbmbchv+2JPIquV+cgrkhQcwglBAWqS4liLGbWPwgfHRL22sMXEKXiyXeHfitVwkP+IoGIyJ8g==}
     engines: {node: '>= 14.17.0'}
     dependencies:
-      ajv: 8.16.0
+      ajv: 8.17.1
+    dev: true
 
   /@jsii/spec@1.101.0:
     resolution: {integrity: sha512-855OnjKm4RTzRA78GGTNBG/GLe6X/vHJYD58zg7Rw8rWS7sU6iB65TM/7P7R3cufVew8umjjPjvW7ygS6ZqITQ==}
     engines: {node: '>= 14.17.0'}
     dependencies:
       ajv: 8.17.1
-    dev: true
 
   /@juggle/resize-observer@3.4.0:
     resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
@@ -6732,7 +6740,7 @@ packages:
       promise-all-reject-late: 1.0.1
       promise-call-limit: 3.0.1
       read-package-json-fast: 3.0.2
-      semver: 7.6.2
+      semver: 7.6.3
       ssri: 10.0.6
       treeverse: 3.0.0
       walk-up-path: 3.0.1
@@ -6745,7 +6753,7 @@ packages:
     resolution: {integrity: sha512-q9CRWjpHCMIh5sVyefoD1cA7PkvILqCZsnSOEUUivORLjxCO/Irmue2DprETiNgEqktDBZaM1Bi+jrarx1XdCg==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      semver: 7.6.2
+      semver: 7.6.3
     dev: false
 
   /@npmcli/git@5.0.7:
@@ -6758,7 +6766,7 @@ packages:
       proc-log: 4.2.0
       promise-inflight: 1.0.1
       promise-retry: 2.0.1
-      semver: 7.6.2
+      semver: 7.6.3
       which: 4.0.0
     transitivePeerDependencies:
       - bluebird
@@ -6791,7 +6799,7 @@ packages:
       json-parse-even-better-errors: 3.0.2
       pacote: 18.0.6
       proc-log: 4.2.0
-      semver: 7.6.2
+      semver: 7.6.3
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -6817,7 +6825,7 @@ packages:
       json-parse-even-better-errors: 3.0.2
       normalize-package-data: 6.0.1
       proc-log: 4.2.0
-      semver: 7.6.2
+      semver: 7.6.3
     transitivePeerDependencies:
       - bluebird
     dev: false
@@ -7409,7 +7417,7 @@ packages:
       ramda: /@pnpm/ramda@0.28.1
       right-pad: 1.0.1
       rxjs: 7.8.1
-      semver: 7.6.2
+      semver: 7.6.3
       stacktracey: 2.1.8
       string-length: 4.0.2
     dev: false
@@ -7421,7 +7429,7 @@ packages:
       '@pnpm/crypto.base32-hash': 2.0.0
       '@pnpm/types': 9.4.2
       encode-registry: 3.0.1
-      semver: 7.6.2
+      semver: 7.6.3
     dev: false
 
   /@pnpm/error@5.0.3:
@@ -7501,7 +7509,7 @@ packages:
       js-yaml: /@zkochan/js-yaml@0.0.6
       normalize-path: 3.0.0
       ramda: /@pnpm/ramda@0.28.1
-      semver: 7.6.2
+      semver: 7.6.3
       sort-keys: 4.2.0
       strip-bom: 4.0.0
       write-file-atomic: 5.0.1
@@ -7560,7 +7568,7 @@ packages:
       '@pnpm/lockfile-types': 5.1.5
       comver-to-semver: 1.0.0
       ramda: /@pnpm/ramda@0.28.1
-      semver: 7.6.2
+      semver: 7.6.3
     dev: false
 
   /@pnpm/modules-yaml@12.1.7:
@@ -7604,7 +7612,7 @@ packages:
     engines: {node: '>=14.6'}
     dependencies:
       hosted-git-info: 4.1.0
-      semver: 7.6.2
+      semver: 7.6.3
       validate-npm-package-name: 4.0.0
     dev: false
 
@@ -7621,7 +7629,7 @@ packages:
       detect-libc: 2.0.3
       execa: /safe-execa@0.1.2
       mem: 8.1.1
-      semver: 7.6.2
+      semver: 7.6.3
     dev: false
 
   /@pnpm/parse-overrides@4.0.3:
@@ -7713,7 +7721,7 @@ packages:
       archy: 1.0.0
       chalk: 4.1.2
       cli-columns: 4.0.0
-      semver: 7.6.2
+      semver: 7.6.3
     dev: false
 
   /@pnpm/resolver-base@11.1.0:
@@ -7740,7 +7748,7 @@ packages:
       normalize-path: 3.0.0
       realpath-missing: 1.1.0
       resolve-link-target: 2.0.0
-      semver: 7.6.2
+      semver: 7.6.3
     transitivePeerDependencies:
       - '@pnpm/logger'
     dev: false
@@ -9787,7 +9795,7 @@ packages:
       prompts: 2.4.2
       puppeteer-core: 2.1.1
       read-pkg-up: 7.0.1
-      semver: 7.6.2
+      semver: 7.6.3
       strip-json-comments: 3.1.1
       tempy: 1.0.1
       ts-dedent: 2.2.0
@@ -9929,7 +9937,7 @@ packages:
       pretty-hrtime: 1.0.3
       prompts: 2.4.2
       read-pkg-up: 7.0.1
-      semver: 7.6.2
+      semver: 7.6.3
       telejson: 7.2.0
       tiny-invariant: 1.3.3
       ts-dedent: 2.2.0
@@ -11091,7 +11099,7 @@ packages:
       graphemer: 1.4.0
       ignore: 5.3.1
       natural-compare-lite: 1.4.0
-      semver: 7.6.2
+      semver: 7.6.3
       tsutils: 3.21.0(typescript@5.3.3)
       typescript: 5.3.3
     transitivePeerDependencies:
@@ -11119,7 +11127,7 @@ packages:
       graphemer: 1.4.0
       ignore: 5.3.1
       natural-compare-lite: 1.4.0
-      semver: 7.6.2
+      semver: 7.6.3
       tsutils: 3.21.0(typescript@5.5.2)
       typescript: 5.5.2
     transitivePeerDependencies:
@@ -11147,7 +11155,7 @@ packages:
       graphemer: 1.4.0
       ignore: 5.3.1
       natural-compare: 1.4.0
-      semver: 7.6.2
+      semver: 7.6.3
       ts-api-utils: 1.3.0(typescript@5.5.2)
       typescript: 5.5.2
     transitivePeerDependencies:
@@ -11391,7 +11399,7 @@ packages:
       debug: 4.3.5(supports-color@5.5.0)
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.6.2
+      semver: 7.6.3
       tsutils: 3.21.0(typescript@5.3.3)
       typescript: 5.3.3
     transitivePeerDependencies:
@@ -11411,7 +11419,7 @@ packages:
       debug: 4.3.5(supports-color@5.5.0)
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.6.2
+      semver: 7.6.3
       tsutils: 3.21.0(typescript@5.5.2)
       typescript: 5.5.2
     transitivePeerDependencies:
@@ -11432,7 +11440,7 @@ packages:
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.3
-      semver: 7.6.2
+      semver: 7.6.3
       ts-api-utils: 1.3.0(typescript@5.5.2)
       typescript: 5.5.2
     transitivePeerDependencies:
@@ -11454,7 +11462,7 @@ packages:
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.4
-      semver: 7.6.2
+      semver: 7.6.3
       ts-api-utils: 1.3.0(typescript@5.5.2)
       typescript: 5.5.2
     transitivePeerDependencies:
@@ -11475,7 +11483,7 @@ packages:
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.3.3)
       eslint: 8.57.0
       eslint-scope: 5.1.1
-      semver: 7.6.2
+      semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -11495,7 +11503,7 @@ packages:
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.5.2)
       eslint: 8.57.0
       eslint-scope: 5.1.1
-      semver: 7.6.2
+      semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -11513,7 +11521,7 @@ packages:
       '@typescript-eslint/types': 6.21.0
       '@typescript-eslint/typescript-estree': 6.21.0(typescript@5.5.2)
       eslint: 8.57.0
-      semver: 7.6.2
+      semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -11783,7 +11791,7 @@ packages:
       minimatch: 3.1.2
       parse-semver: 1.1.1
       read: 1.0.7
-      semver: 7.6.2
+      semver: 7.6.3
       tmp: 0.2.3
       typed-rest-client: 1.8.11
       url-join: 4.0.1
@@ -12099,14 +12107,6 @@ packages:
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
 
-  /ajv@8.16.0:
-    resolution: {integrity: sha512-F0twR8U1ZU67JIEtekUcLkXkoO5mMMmgGD8sK/xUFzJ805jxHQl92hImFAqqXMyMYjSPOyUPAwHYhB72g5sTXw==}
-    dependencies:
-      fast-deep-equal: 3.1.3
-      json-schema-traverse: 1.0.0
-      require-from-string: 2.0.2
-      uri-js: 4.4.1
-
   /ajv@8.17.1:
     resolution: {integrity: sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==}
     dependencies:
@@ -12114,7 +12114,6 @@ packages:
       fast-uri: 3.0.1
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
-    dev: true
 
   /ansi-align@3.0.1:
     resolution: {integrity: sha512-IOfwwBF5iczOjp/WeY4YxyjqAFMQoZufdQWDd19SEExbVLNXqvpzSJ/M7Za4/sCPmQ0+GRquoA7bGcINcxew6w==}
@@ -12817,7 +12816,7 @@ packages:
   /builtins@5.1.0:
     resolution: {integrity: sha512-SW9lzGTLvWTP1AY8xeAMZimqDrIaSdLQUcVr9DMef51niJ022Ri87SwRRKYm4A6iHfkPaiVUu/Duw2Wc4J7kKg==}
     dependencies:
-      semver: 7.6.2
+      semver: 7.6.3
     dev: false
 
   /bundle-name@3.0.0:
@@ -13094,7 +13093,7 @@ packages:
       pathe: 1.1.2
       pkg-types: 1.1.1
       scule: 1.3.0
-      semver: 7.6.2
+      semver: 7.6.3
       std-env: 3.7.0
       yaml: 2.4.5
     transitivePeerDependencies:
@@ -14277,9 +14276,9 @@ packages:
     resolution: {integrity: sha512-vo835pntK7kzYStk7xUHDifiYJvXxVhUapt85uk2AI94gUUAQX9HNRtrcMHNSc3YHJUEHGbYIGsM99uIbgAtxw==}
     hasBin: true
     dependencies:
-      semver: 7.6.2
+      semver: 7.6.3
       shelljs: 0.8.5
-      typescript: 5.6.0-dev.20240802
+      typescript: 5.7.0-dev.20240830
     dev: true
 
   /dset@3.1.3:
@@ -15131,7 +15130,7 @@ packages:
       regexp-tree: 0.1.27
       regjsparser: 0.10.0
       safe-regex: 2.1.1
-      semver: 7.6.2
+      semver: 7.6.3
       strip-indent: 3.0.0
     dev: false
 
@@ -15444,7 +15443,6 @@ packages:
 
   /fast-uri@3.0.1:
     resolution: {integrity: sha512-MWipKbbYiYI0UC7cl8m/i/IWTqfC8YXsqjzybjddLsFjStroQzsHXkc73JutMvBiXmOvapk+axIl79ig5t55Bw==}
-    dev: true
 
   /fast-xml-parser@4.2.5:
     resolution: {integrity: sha512-B9/wizE4WngqQftFPmdaMYlXoJlJOYxGQOanC77fq9k8+Z0v5dDSVh+3glErdIROP//s/jgb7ZuxKfB8nVyo0g==}
@@ -16161,6 +16159,7 @@ packages:
   /google-p12-pem@4.0.1:
     resolution: {integrity: sha512-WPkN4yGtz05WZ5EhtlxNDWPhC4JIic6G8ePitwUWy4l+XPVYec+a0j0Ts47PDtW59y3RwAhUd9/h9ZZ63px6RQ==}
     engines: {node: '>=12.0.0'}
+    deprecated: Package is no longer maintained
     hasBin: true
     dependencies:
       node-forge: 1.3.1
@@ -17364,7 +17363,7 @@ packages:
     hasBin: true
     dependencies:
       '@jsii/check-node': 1.100.0
-      '@jsii/spec': 1.100.0
+      '@jsii/spec': 1.101.0
       fs-extra: 10.1.0
       jsii-reflect: 1.100.0
       log4js: 6.9.1
@@ -17381,7 +17380,7 @@ packages:
       jsii-rosetta: ^1.100.0 || ~5.2.0 || ~5.3.0 || ~5.4.0
     dependencies:
       '@jsii/check-node': 1.100.0
-      '@jsii/spec': 1.100.0
+      '@jsii/spec': 1.101.0
       clone: 2.1.2
       codemaker: 1.100.0
       commonmark: 0.31.0
@@ -17389,7 +17388,7 @@ packages:
       fs-extra: 10.1.0
       jsii-reflect: 1.100.0
       jsii-rosetta: 5.3.28
-      semver: 7.6.2
+      semver: 7.6.3
       spdx-license-list: 6.9.0
       xmlbuilder: 15.1.1
       yargs: 16.2.0
@@ -17403,7 +17402,7 @@ packages:
       jsii-rosetta: ^1.100.0 || ~5.2.0 || ~5.3.0 || ~5.4.0
     dependencies:
       '@jsii/check-node': 1.100.0
-      '@jsii/spec': 1.100.0
+      '@jsii/spec': 1.101.0
       clone: 2.1.2
       codemaker: 1.100.0
       commonmark: 0.31.0
@@ -17411,7 +17410,7 @@ packages:
       fs-extra: 10.1.0
       jsii-reflect: 1.100.0
       jsii-rosetta: 5.4.25
-      semver: 7.6.2
+      semver: 7.6.3
       spdx-license-list: 6.9.0
       xmlbuilder: 15.1.1
       yargs: 16.2.0
@@ -17423,7 +17422,7 @@ packages:
     hasBin: true
     dependencies:
       '@jsii/check-node': 1.95.0
-      '@jsii/spec': 1.100.0
+      '@jsii/spec': 1.101.0
       clone: 2.1.2
       codemaker: 1.100.0
       commonmark: 0.30.0
@@ -17431,7 +17430,7 @@ packages:
       fs-extra: 10.1.0
       jsii-reflect: 1.100.0
       jsii-rosetta: 1.100.0
-      semver: 7.6.2
+      semver: 7.6.3
       spdx-license-list: 6.9.0
       xmlbuilder: 15.1.1
       yargs: 16.2.0
@@ -17445,7 +17444,7 @@ packages:
     hasBin: true
     dependencies:
       '@jsii/check-node': 1.100.0
-      '@jsii/spec': 1.100.0
+      '@jsii/spec': 1.101.0
       chalk: 4.1.2
       fs-extra: 10.1.0
       oo-ascii-tree: 1.100.0
@@ -17462,7 +17461,7 @@ packages:
       commonmark: 0.31.0
       fast-glob: 3.3.2
       jsii: 1.100.0
-      semver: 7.6.2
+      semver: 7.6.3
       semver-intersect: 1.5.0
       stream-json: 1.8.0
       typescript: 3.9.10
@@ -17478,13 +17477,13 @@ packages:
     hasBin: true
     dependencies:
       '@jsii/check-node': 1.95.0
-      '@jsii/spec': 1.100.0
+      '@jsii/spec': 1.101.0
       '@xmldom/xmldom': 0.8.10
       chalk: 4.1.2
       commonmark: 0.31.0
       fast-glob: 3.3.2
       jsii: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
-      semver: 7.6.2
+      semver: 7.6.3
       semver-intersect: 1.5.0
       stream-json: 1.8.0
       typescript: 5.3.3
@@ -17550,13 +17549,13 @@ packages:
     hasBin: true
     dependencies:
       '@jsii/check-node': 1.100.0
-      '@jsii/spec': 1.100.0
+      '@jsii/spec': 1.101.0
       case: 1.6.3
       chalk: 4.1.2
       fast-deep-equal: 3.1.3
       fs-extra: 10.1.0
       log4js: 6.9.1
-      semver: 7.6.2
+      semver: 7.6.3
       semver-intersect: 1.5.0
       sort-json: 2.0.1
       spdx-license-list: 6.9.0
@@ -17572,13 +17571,13 @@ packages:
     hasBin: true
     dependencies:
       '@jsii/check-node': 1.95.0
-      '@jsii/spec': 1.100.0
+      '@jsii/spec': 1.101.0
       case: 1.6.3
       chalk: 4.1.2
       downlevel-dts: 0.11.0
       fast-deep-equal: 3.1.3
       log4js: 6.9.1
-      semver: 7.6.2
+      semver: 7.6.3
       semver-intersect: 1.5.0
       sort-json: 2.0.1
       spdx-license-list: 6.9.0
@@ -17594,13 +17593,13 @@ packages:
     hasBin: true
     dependencies:
       '@jsii/check-node': 1.100.0
-      '@jsii/spec': 1.100.0
+      '@jsii/spec': 1.101.0
       case: 1.6.3
       chalk: 4.1.2
       downlevel-dts: 0.11.0
       fast-deep-equal: 3.1.3
       log4js: 6.9.1
-      semver: 7.6.2
+      semver: 7.6.3
       semver-intersect: 1.5.0
       sort-json: 2.0.1
       spdx-license-list: 6.9.0
@@ -17719,7 +17718,7 @@ packages:
       lodash.isstring: 4.0.1
       lodash.once: 4.1.1
       ms: 2.1.3
-      semver: 7.6.2
+      semver: 7.6.3
 
   /jsx-ast-utils@3.3.5:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
@@ -18156,7 +18155,7 @@ packages:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.6.2
+      semver: 7.6.3
     dev: true
 
   /make-fetch-happen@13.0.1:
@@ -18883,7 +18882,7 @@ packages:
     engines: {node: '>=10'}
     requiresBuild: true
     dependencies:
-      semver: 7.6.2
+      semver: 7.6.3
     dev: true
 
   /node-addon-api@4.3.0:
@@ -18959,7 +18958,7 @@ packages:
       make-fetch-happen: 13.0.1
       nopt: 7.2.1
       proc-log: 3.0.0
-      semver: 7.6.2
+      semver: 7.6.3
       tar: 6.2.1
       which: 4.0.0
     transitivePeerDependencies:
@@ -18984,7 +18983,7 @@ packages:
       ignore-by-default: 1.0.1
       minimatch: 3.1.2
       pstree.remy: 1.1.8
-      semver: 7.6.2
+      semver: 7.6.3
       simple-update-notifier: 2.0.0
       supports-color: 5.5.0
       touch: 3.1.1
@@ -19013,7 +19012,7 @@ packages:
     dependencies:
       hosted-git-info: 4.1.0
       is-core-module: 2.14.0
-      semver: 7.6.2
+      semver: 7.6.3
       validate-npm-package-license: 3.0.4
     dev: true
 
@@ -19023,7 +19022,7 @@ packages:
     dependencies:
       hosted-git-info: 6.1.1
       is-core-module: 2.14.0
-      semver: 7.6.2
+      semver: 7.6.3
       validate-npm-package-license: 3.0.4
     dev: false
 
@@ -19033,7 +19032,7 @@ packages:
     dependencies:
       hosted-git-info: 7.0.2
       is-core-module: 2.14.0
-      semver: 7.6.2
+      semver: 7.6.3
       validate-npm-package-license: 3.0.4
     dev: false
 
@@ -19061,7 +19060,7 @@ packages:
     resolution: {integrity: sha512-W29RiK/xtpCGqn6f3ixfRYGk+zRyr+Ew9F2E20BfXxT5/euLdA/Nm7fO7OeTGuAmTs30cpgInyJ0cYe708YTZw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      semver: 7.6.2
+      semver: 7.6.3
     dev: false
 
   /npm-normalize-package-bin@3.0.1:
@@ -19075,7 +19074,7 @@ packages:
     dependencies:
       hosted-git-info: 7.0.2
       proc-log: 4.2.0
-      semver: 7.6.2
+      semver: 7.6.3
       validate-npm-package-name: 5.0.1
     dev: false
 
@@ -19100,7 +19099,7 @@ packages:
       npm-install-checks: 6.3.0
       npm-normalize-package-bin: 3.0.1
       npm-package-arg: 11.0.2
-      semver: 7.6.2
+      semver: 7.6.3
     dev: false
 
   /npm-registry-fetch@17.1.0:
@@ -19851,25 +19850,25 @@ packages:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
     engines: {node: '>= 0.4'}
 
-  /postcss-import@15.1.0(postcss@8.4.38):
+  /postcss-import@15.1.0(postcss@8.4.39):
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       postcss: ^8.0.0
     dependencies:
-      postcss: 8.4.38
+      postcss: 8.4.39
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
 
-  /postcss-js@4.0.1(postcss@8.4.38):
+  /postcss-js@4.0.1(postcss@8.4.39):
     resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
     engines: {node: ^12 || ^14 || >= 16}
     peerDependencies:
       postcss: ^8.4.21
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.4.38
+      postcss: 8.4.39
 
   /postcss-load-config@3.1.4:
     resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
@@ -19887,22 +19886,6 @@ packages:
       yaml: 1.10.2
     dev: true
 
-  /postcss-load-config@4.0.2(postcss@8.4.38):
-    resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
-    engines: {node: '>= 14'}
-    peerDependencies:
-      postcss: '>=8.0.9'
-      ts-node: '>=9.0.0'
-    peerDependenciesMeta:
-      postcss:
-        optional: true
-      ts-node:
-        optional: true
-    dependencies:
-      lilconfig: 3.1.2
-      postcss: 8.4.38
-      yaml: 2.4.5
-
   /postcss-load-config@4.0.2(postcss@8.4.39):
     resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
     engines: {node: '>= 14'}
@@ -19918,15 +19901,14 @@ packages:
       lilconfig: 3.1.2
       postcss: 8.4.39
       yaml: 2.4.5
-    dev: true
 
-  /postcss-nested@6.0.1(postcss@8.4.38):
+  /postcss-nested@6.0.1(postcss@8.4.39):
     resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.2.14
     dependencies:
-      postcss: 8.4.38
+      postcss: 8.4.39
       postcss-selector-parser: 6.1.0
 
   /postcss-selector-parser@6.0.10:
@@ -19947,14 +19929,6 @@ packages:
   /postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
 
-  /postcss@8.4.38:
-    resolution: {integrity: sha512-Wglpdk03BSfXkHoQa3b/oulrotAkwrlLDRSOb9D0bN86FdRyE9lppSp33aHNPgBa0JKCoB+drFLZkQoRRYae5A==}
-    engines: {node: ^10 || ^12 || >=14}
-    dependencies:
-      nanoid: 3.3.7
-      picocolors: 1.0.1
-      source-map-js: 1.2.0
-
   /postcss@8.4.39:
     resolution: {integrity: sha512-0vzE+lAiG7hZl1/9I8yzKLx3aR9Xbof3fBHKunvMfOCYAtMhrsnccJY2iTURb9EZd5+pLuiNV9/c/GZJOHsgIw==}
     engines: {node: ^10 || ^12 || >=14}
@@ -19962,7 +19936,6 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.1
       source-map-js: 1.2.0
-    dev: true
 
   /prebuild-install@7.1.2:
     resolution: {integrity: sha512-UnNke3IQb6sgarcZIDU3gbMeTp/9SSU1DAIkil7PrqG1vZlBtY5msYccSKSHDqa3hNg436IXK+SNImReuA1wEQ==}
@@ -20166,7 +20139,7 @@ packages:
     resolution: {integrity: sha512-SAzp/O4Yh02jGdRc+uIrGoe87dkN/XtwxfZ4ZyafJHymd79ozp5VG5nyZ7ygqPM5+cpLDjjGnYFUkngonyDPOQ==}
     engines: {node: '>=14.0.0'}
     dependencies:
-      protobufjs: 7.3.2
+      protobufjs: 7.2.5(patch_hash=plkkb5oxv62w7nyvt6cqmvgk4q)
     dev: false
 
   /protobufjs@7.2.5(patch_hash=plkkb5oxv62w7nyvt6cqmvgk4q):
@@ -20277,6 +20250,7 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
     dev: true
 
@@ -21160,12 +21134,12 @@ packages:
     resolution: {integrity: sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==}
     engines: {node: '>=10'}
     hasBin: true
+    dev: false
 
   /semver@7.6.3:
     resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
     engines: {node: '>=10'}
     hasBin: true
-    dev: true
 
   /send@0.18.0:
     resolution: {integrity: sha512-qqWzuOjSFOuqPjFe4NOsMLafToQQwBSOEpS+FwEt3A2V3vKubTquT3vmLTQpFgMXp8AlFWFuP1qKaJZOtPpVXg==}
@@ -21337,7 +21311,7 @@ packages:
     resolution: {integrity: sha512-a2B9Y0KlNXl9u/vsW6sTIu9vGEpfKu2wRV6l1H3XEas/0gUIzGzBoP/IouTcUQbm9JWZLH3COxyn03TYlFax6w==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.6.2
+      semver: 7.6.3
     dev: true
 
   /sinon@14.0.2:
@@ -21567,7 +21541,7 @@ packages:
       figures: 3.2.0
       find-up: 5.0.0
       git-semver-tags: 4.1.1
-      semver: 7.6.2
+      semver: 7.6.3
       stringify-package: 1.0.1
       yargs: 16.2.0
     dev: true
@@ -21900,11 +21874,11 @@ packages:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.1
-      postcss: 8.4.38
-      postcss-import: 15.1.0(postcss@8.4.38)
-      postcss-js: 4.0.1(postcss@8.4.38)
-      postcss-load-config: 4.0.2(postcss@8.4.38)
-      postcss-nested: 6.0.1(postcss@8.4.38)
+      postcss: 8.4.39
+      postcss-import: 15.1.0(postcss@8.4.39)
+      postcss-js: 4.0.1(postcss@8.4.39)
+      postcss-load-config: 4.0.2(postcss@8.4.39)
+      postcss-nested: 6.0.1(postcss@8.4.39)
       postcss-selector-parser: 6.1.0
       resolve: 1.22.8
       sucrase: 3.35.0
@@ -22324,46 +22298,6 @@ packages:
       - ts-node
     dev: true
 
-  /tsup@8.1.0(postcss@8.4.38)(typescript@5.5.2):
-    resolution: {integrity: sha512-UFdfCAXukax+U6KzeTNO2kAARHcWxmKsnvSPXUcfA1D+kU05XDccCrkffCQpFaWDsZfV0jMyTsxU39VfCp6EOg==}
-    engines: {node: '>=18'}
-    hasBin: true
-    peerDependencies:
-      '@microsoft/api-extractor': ^7.36.0
-      '@swc/core': ^1
-      postcss: ^8.4.12
-      typescript: '>=4.5.0'
-    peerDependenciesMeta:
-      '@microsoft/api-extractor':
-        optional: true
-      '@swc/core':
-        optional: true
-      postcss:
-        optional: true
-      typescript:
-        optional: true
-    dependencies:
-      bundle-require: 4.2.1(esbuild@0.21.5)
-      cac: 6.7.14
-      chokidar: 3.6.0
-      debug: 4.3.5(supports-color@5.5.0)
-      esbuild: 0.21.5
-      execa: 5.1.1
-      globby: 11.1.0
-      joycon: 3.1.1
-      postcss: 8.4.38
-      postcss-load-config: 4.0.2(postcss@8.4.38)
-      resolve-from: 5.0.0
-      rollup: 4.18.0
-      source-map: 0.8.0-beta.0
-      sucrase: 3.35.0
-      tree-kill: 1.2.2
-      typescript: 5.5.2
-    transitivePeerDependencies:
-      - supports-color
-      - ts-node
-    dev: true
-
   /tsup@8.1.0(postcss@8.4.39)(typescript@5.5.2):
     resolution: {integrity: sha512-UFdfCAXukax+U6KzeTNO2kAARHcWxmKsnvSPXUcfA1D+kU05XDccCrkffCQpFaWDsZfV0jMyTsxU39VfCp6EOg==}
     engines: {node: '>=18'}
@@ -22644,8 +22578,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.6.0-dev.20240802:
-    resolution: {integrity: sha512-aPQg1SL05JivtUdMmXq3BBa9NqhNbDvOlDPXvCf3K+kZ5jkxDdf2El6BLEkkzxkWOczoxma8l40ppGsC6pF40A==}
+  /typescript@5.7.0-dev.20240830:
+    resolution: {integrity: sha512-9VbtIHvcw8LBJ3lcS+ovk4uraOFXpMGi+b3V9BOykkfszyAschMieLZgAV0YN/yvELk84QrWig1mZV8uBKS+RA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -23180,7 +23114,7 @@ packages:
     engines: {vscode: ^1.67.0}
     dependencies:
       minimatch: 5.1.6
-      semver: 7.6.2
+      semver: 7.6.3
       vscode-languageserver-protocol: 3.17.3
     dev: true
 

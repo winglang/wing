@@ -17,7 +17,7 @@
     "docs": "./scripts/docsite.sh",
     "install": "bash scripts/setup_wasi.sh",
     "postinstall": "link-bundles && generate-workspace",
-    "wing": "turbo compile -F winglang --output-logs=new-only && ./apps/wing/bin/wing"
+    "wing": "turbo compile -F winglang --output-logs=new-only && ./packages/winglang/bin/wing"
   },
   "volta": {
     "node": "20.11.1",

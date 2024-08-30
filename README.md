@@ -1,6 +1,3 @@
-
-
-
 <div align="center">
   <img src="./apps/wing/logo/banner.gif" alt="Wing Banner" >
 </div>
