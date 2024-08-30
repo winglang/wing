@@ -1,5 +1,5 @@
-import * as fs from "fs/promises";
 import { existsSync } from "fs";
+import * as fs from "fs/promises";
 import { join } from "path";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { pack } from "./pack";
