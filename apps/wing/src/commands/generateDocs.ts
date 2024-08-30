@@ -11,7 +11,7 @@ const color = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 export async function generateDocs() {
   // TODO: calculate the workDir by looking up for a wing.toml file
   // For now, assume the workDir is the current directory
-  const workDir = "."; // TODO: process.cwd()?
+  const workDir = ".";
 
   const docs = await wingCompiler.generateWingDocs({
     projectDir: workDir,
