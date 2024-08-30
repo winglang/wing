@@ -20,6 +20,7 @@ use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, DiagnosticSeverity, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::{File, FileGraph};
+use crate::parser::normalize_path;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit::Visit;
@@ -309,6 +310,14 @@ pub struct Namespace {
 	pub fqn: String,
 }
 
+impl Namespace {
+	/// Returns true if this namespace has any public API elements, like a `pub` class or enum,
+	/// or a namepsace with 1 or more public elements.
+	pub fn has_public_api_elements(&self) -> bool {
+		self.envs.iter().any(|env| env.has_public_api_elements())
+	}
+}
+
 #[derive(Debug)]
 pub enum ResolveSource {
 	/// A wing file within the source tree for this compilation.
@@ -406,7 +415,11 @@ pub trait ClassLike: Display {
 	fn methods(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
 			if sym_kind.as_variable()?.type_.as_function_sig().is_some() {
-				Some((s, sym_kind.as_variable()?.clone()))
+				if s == CLASS_INIT_NAME || s == CLASS_INFLIGHT_INIT_NAME {
+					None
+				} else {
+					Some((s, sym_kind.as_variable()?.clone()))
+				}
 			} else {
 				None
 			}
@@ -416,6 +429,16 @@ pub trait ClassLike: Display {
 	fn fields(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
 			if sym_kind.as_variable()?.type_.as_function_sig().is_none() {
+				Some((s, sym_kind.as_variable()?.clone()))
+			} else {
+				None
+			}
+		})
+	}
+
+	fn constructors(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
+		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
+			if s == CLASS_INIT_NAME || s == CLASS_INFLIGHT_INIT_NAME {
 				Some((s, sym_kind.as_variable()?.clone()))
 			} else {
 				None
@@ -499,6 +522,53 @@ pub struct Enum {
 pub struct EnumInstance {
 	pub enum_name: TypeRef,
 	pub enum_value: Symbol,
+}
+
+pub trait HasFqn {
+	/// Obtain the fully qualified name of the symbol
+	fn fqn(&self) -> Option<String>;
+}
+
+impl HasFqn for Class {
+	fn fqn(&self) -> Option<String> {
+		self.fqn.clone()
+	}
+}
+
+impl HasFqn for Interface {
+	fn fqn(&self) -> Option<String> {
+		Some(self.fqn.clone())
+	}
+}
+
+impl HasFqn for Struct {
+	fn fqn(&self) -> Option<String> {
+		Some(self.fqn.clone())
+	}
+}
+
+impl HasFqn for Enum {
+	fn fqn(&self) -> Option<String> {
+		Some(self.fqn.clone())
+	}
+}
+
+impl HasFqn for Namespace {
+	fn fqn(&self) -> Option<String> {
+		Some(self.fqn.clone())
+	}
+}
+
+impl HasFqn for Type {
+	fn fqn(&self) -> Option<String> {
+		match self {
+			Type::Class(c) => c.fqn(),
+			Type::Interface(i) => i.fqn(),
+			Type::Struct(s) => s.fqn(),
+			Type::Enum(e) => e.fqn(),
+			_ => None,
+		}
+	}
 }
 
 trait Subtype {
@@ -3696,7 +3766,12 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		}
 
 		let ns = self.types.add_namespace(Namespace {
-			name: self.source_file.path.file_stem().unwrap().to_string(),
+			name: self
+				.source_file
+				.path
+				.file_stem()
+				.unwrap_or_else(|| DEFAULT_PACKAGE_NAME)
+				.to_string(),
 			envs: child_envs,
 			source_package: self.source_file.package.clone(),
 			module_path: ResolveSource::WingFile,
@@ -5436,7 +5511,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 		let parent_initializer = parent_class
 			.as_class()
 			.unwrap()
-			.methods(false)
+			.constructors(false)
 			.find(|(name, ..)| name == parent_init_name)
 			.unwrap()
 			.1;
@@ -7357,21 +7432,31 @@ fn lookup_known_type(name: &'static str, env: &SymbolEnv) -> TypeRef {
 ///
 /// let fqn3 = calculate_fqn_for_namespace("@winglibs/dynamodb", "/foo/bar".into(), "/foo/bar/".into());
 /// assert_eq!(fqn3, "@winglibs/dynamodb".to_string());
+///
+/// let fqn4 = calculate_fqn_for_namespace("@winglibs/dynamodb", ".".into(), "impl.w".into());
+/// assert_eq!(fqn4, "@winglibs/dynamodb".to_string());
+///
+/// let fqn5 = calculate_fqn_for_namespace("@winglibs/dynamodb", ".".into(), "foo/impl.w".into());
+/// assert_eq!(fqn5, "@winglibs/dynamodb.foo".to_string());
 /// ```
 pub fn calculate_fqn_for_namespace(package_name: &str, package_root: &Utf8Path, path: &Utf8Path) -> String {
-	let assembly = package_name;
-	if !path.starts_with(package_root) {
+	let normalized_root = normalize_path(&package_root, None);
+	let normalized = normalize_path(&path, None);
+	if normalized.starts_with("..") {
 		panic!(
 			"File path \"{}\" is not within the package root \"{}\"",
 			path, package_root
 		);
 	}
-	let path = if path.as_str().ends_with(".w") {
-		path.parent().expect("Expected a parent directory")
+	let assembly = package_name;
+	let normalized = if normalized.as_str().ends_with(".w") {
+		normalized.parent().expect("Expected a parent directory")
 	} else {
-		path
+		&normalized
 	};
-	let relative_path = path.strip_prefix(package_root).expect("not a prefix");
+	let relative_path = normalized
+		.strip_prefix(&normalized_root)
+		.expect(format!("not a prefix: {} {}", normalized_root, normalized).as_str());
 	if relative_path == Utf8Path::new("") {
 		return assembly.to_string();
 	}

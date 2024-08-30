@@ -338,7 +338,7 @@ class LibClass extends $stdlib.std.Resource {
     super($scope, $id);
   }
   static createFoo($scope, id) {
-    return globalThis.$ClassFactory.new("rootpkg.Foo", Foo, $scope, id);
+    return globalThis.$ClassFactory.new("examples-valid.Foo", Foo, $scope, id);
   }
   static _toInflightType() {
     return `

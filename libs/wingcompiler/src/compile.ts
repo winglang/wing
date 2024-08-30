@@ -148,8 +148,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
   const entrypointFile = resolve(entrypoint);
   log?.("wing file: %s", entrypointFile);
-  const wingDir = resolve(dirname(entrypointFile));
-  log?.("wing dir: %s", wingDir);
+  const projectDir = resolve(dirname(entrypointFile));
+  log?.("wing dir: %s", projectDir);
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
   const target = determineTargetFromPlatforms(options.platform);
@@ -176,7 +176,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     return nodeModules;
   };
 
-  let wingNodeModules = nearestNodeModules(wingDir);
+  let wingNodeModules = nearestNodeModules(projectDir);
 
   if (!existsSync(synthDir)) {
     await fs.mkdir(workDir, { recursive: true });
@@ -184,7 +184,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const compileForPreflightResult = await compileForPreflight({
     entrypointFile,
     workDir,
-    wingDir,
+    projectDir,
     synthDir,
     color: options.color,
     log,
@@ -202,7 +202,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       WING_TARGET: target,
       WING_PLATFORMS: resolvePlatformPaths(options.platform),
       WING_SYNTH_DIR: synthDir,
-      WING_SOURCE_DIR: wingDir,
+      WING_SOURCE_DIR: projectDir,
       WING_IS_TEST: process.env["WING_IS_TEST"] ?? testing.toString(),
       WING_VALUES: options.value?.length == 0 ? undefined : options.value,
       WING_VALUES_FILE: options.values ?? defaultValuesFile(),
@@ -266,88 +266,110 @@ interface CompileForPreflightResult {
 async function compileForPreflight(props: {
   entrypointFile: string;
   workDir: string;
-  wingDir: string;
+  projectDir: string;
   synthDir: string;
   color?: boolean;
   log?: (...args: any[]) => void;
 }): Promise<CompileForPreflightResult> {
   if (props.entrypointFile.endsWith(".ts")) {
-    const diagnostics: wingCompiler.WingDiagnostic[] = [];
-    let typescriptFramework;
-    try {
-      typescriptFramework = (await import("@wingcloud/framework")).internal;
-    } catch (err) {
-      return {
-        preflightEntrypoint: "",
-        diagnostics: [
-          {
-            message: `\
+    return await compileTypeScriptForPreflight(props);
+  } else {
+    return await compileWingForPreflight(props);
+  }
+}
+
+async function compileTypeScriptForPreflight(props: {
+  entrypointFile: string;
+  workDir: string;
+  projectDir: string;
+  synthDir: string;
+  color?: boolean;
+  log?: (...args: any[]) => void;
+}): Promise<CompileForPreflightResult> {
+  const diagnostics: wingCompiler.WingDiagnostic[] = [];
+  let typescriptFramework;
+  try {
+    typescriptFramework = (await import("@wingcloud/framework")).internal;
+  } catch (err) {
+    return {
+      preflightEntrypoint: "",
+      diagnostics: [
+        {
+          message: `\
   Failed to load "@wingcloud/framework": ${(err as any).message}
   
   To use Wing with TypeScript files, you must install "@wingcloud/framework" as a dependency of your project.
   npm i @wingcloud/framework
   `,
-            severity: "error",
-            annotations: [],
-            hints: [],
-          },
-        ],
-      };
-    }
-
-    return {
-      preflightEntrypoint: await typescriptFramework.compile({
-        workDir: props.workDir,
-        entrypoint: props.entrypointFile,
-      }),
-      diagnostics,
-    };
-  } else {
-    let env: Record<string, string> = {
-      RUST_BACKTRACE: "full",
-      WING_SYNTH_DIR: normalPath(props.synthDir),
-    };
-    if (props.color !== undefined) {
-      env.CLICOLOR = props.color ? "1" : "0";
-    }
-
-    const wingc = await wingCompiler.load({
-      env,
-      imports: {
-        env: {
-          send_diagnostic,
+          severity: "error",
+          annotations: [],
+          hints: [],
         },
-      },
-    });
-
-    const diagnostics: wingCompiler.WingDiagnostic[] = [];
-
-    function send_diagnostic(data_ptr: number, data_len: number) {
-      const data_buf = Buffer.from(
-        (wingc.exports.memory as WebAssembly.Memory).buffer,
-        data_ptr,
-        data_len
-      );
-      const data_str = new TextDecoder().decode(data_buf);
-      diagnostics.push(JSON.parse(data_str));
-    }
-
-    const arg = `${normalPath(props.entrypointFile)};${normalPath(props.workDir)}`;
-    props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-    let compilerOutput: string | number = "";
-    try {
-      compilerOutput = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
-    } catch (error) {
-      // This is a bug in the compiler, indicate a compilation failure.
-      // The bug details should be part of the diagnostics handling below.
-    }
-
-    return {
-      preflightEntrypoint: join(props.workDir, WINGC_PREFLIGHT),
-      compilerOutput: JSON.parse(compilerOutput as string),
-      diagnostics,
+      ],
     };
   }
+
+  return {
+    preflightEntrypoint: await typescriptFramework.compile({
+      workDir: props.workDir,
+      entrypoint: props.entrypointFile,
+    }),
+    diagnostics,
+  };
+}
+
+async function compileWingForPreflight(props: {
+  entrypointFile: string;
+  workDir: string;
+  projectDir: string;
+  synthDir: string;
+  color?: boolean;
+  log?: (...args: any[]) => void;
+}) {
+  let env: Record<string, string> = {
+    RUST_BACKTRACE: "full",
+    WING_SYNTH_DIR: normalPath(props.synthDir),
+  };
+  if (props.color !== undefined) {
+    env.CLICOLOR = props.color ? "1" : "0";
+  }
+
+  const wingc = await wingCompiler.load({
+    env,
+    imports: {
+      env: {
+        send_diagnostic,
+      },
+    },
+  });
+
+  const diagnostics: wingCompiler.WingDiagnostic[] = [];
+
+  function send_diagnostic(data_ptr: number, data_len: number) {
+    const data_buf = Buffer.from(
+      (wingc.exports.memory as WebAssembly.Memory).buffer,
+      data_ptr,
+      data_len
+    );
+    const data_str = new TextDecoder().decode(data_buf);
+    diagnostics.push(JSON.parse(data_str));
+  }
+
+  const arg = `${normalPath(props.entrypointFile)};${normalPath(props.workDir)}`;
+  props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
+  let compilerOutput: string | number = "";
+  try {
+    compilerOutput = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+  } catch (error) {
+    // This is a bug in the compiler, indicate a compilation failure.
+    // The bug details should be part of the diagnostics handling below.
+  }
+
+  return {
+    preflightEntrypoint: join(props.workDir, WINGC_PREFLIGHT),
+    compilerOutput: JSON.parse(compilerOutput as string),
+    diagnostics,
+  };
 }
 
 /**

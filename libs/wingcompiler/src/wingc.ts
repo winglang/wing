@@ -7,6 +7,7 @@ import { promisify } from "util";
 
 export type WingCompilerFunction =
   | "wingc_compile"
+  | "wingc_generate_docs"
   | "wingc_on_did_open_text_document"
   | "wingc_on_did_change_text_document"
   | "wingc_on_completion"

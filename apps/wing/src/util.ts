@@ -4,8 +4,11 @@ import * as fs from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { promisify } from "util";
+import chalk from "chalk";
 
 export const DEFAULT_PARALLEL_SIZE = 10;
+
+export const COLORING = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
 /**
  * Normalize windows paths to be posix-like.

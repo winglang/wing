@@ -517,6 +517,13 @@ impl SymbolEnv {
 	pub fn is_in_function(&self) -> bool {
 		matches!(self.kind, SymbolEnvKind::Function { .. })
 	}
+
+	pub fn has_public_api_elements(&self) -> bool {
+		self
+			.symbol_map
+			.iter()
+			.any(|(_, entry)| entry.access == AccessModifier::Public)
+	}
 }
 
 pub struct SymbolEnvIter<'a> {

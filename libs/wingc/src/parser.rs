@@ -1139,7 +1139,7 @@ impl<'s> Parser<'s> {
 				.insert(module_name_parsed.clone(), module_dir.clone());
 
 			// If the package.json has a `wing` field, then we treat it as a Wing library
-			if let Some(libname) = as_wing_library(&Utf8Path::new(&module_dir)) {
+			if let Some(libname) = as_wing_library(&Utf8Path::new(&module_dir), true) {
 				return if let Some(alias) = alias {
 					// make sure the Wing library is also parsed
 					let module_file = File::new(&module_dir, &libname);
@@ -2920,6 +2920,7 @@ struct DocBuilder<'a> {
 	parser: &'a Parser<'a>,
 }
 
+#[derive(Debug)]
 enum DocBuilderResult {
 	Done(Option<String>),
 	Continue,
@@ -2936,12 +2937,15 @@ impl<'a> DocBuilder<'a> {
 
 	fn process_node(&mut self, node: &Node) -> DocBuilderResult {
 		if node.kind() == "doc" {
-			self.doc_lines.push(
-				self
-					.parser
-					.get_child_field(&node, "content")
-					.map_or("", |n| self.parser.node_text(&n)),
-			);
+			let line = self
+				.parser
+				.get_child_field(&node, "content")
+				.map_or("", |n| self.parser.node_text(&n));
+			if line.len() > 0 && line.chars().next() == Some(' ') {
+				self.doc_lines.push(&line[1..]);
+			} else {
+				self.doc_lines.push(line);
+			}
 			DocBuilderResult::Continue
 		} else if node.is_extra() {
 			DocBuilderResult::Skip
@@ -2985,7 +2989,7 @@ fn get_actual_children_by_field_name<'a>(node: Node<'a>, field_name: &str) -> Ve
 
 /// Check if the package.json in the given directory has a `wing` field.
 /// If so, return the name of the library.
-pub fn as_wing_library(module_dir: &Utf8Path) -> Option<String> {
+pub fn as_wing_library(module_dir: &Utf8Path, require_wing_field: bool) -> Option<String> {
 	let package_json_path = Utf8Path::new(module_dir).join("package.json");
 	if !package_json_path.exists() {
 		return None;
@@ -3003,7 +3007,11 @@ pub fn as_wing_library(module_dir: &Utf8Path) -> Option<String> {
 
 	match package_json.get("wing") {
 		Some(_) => {}
-		None => return None,
+		None => {
+			if require_wing_field {
+				return None;
+			}
+		}
 	}
 
 	match package_json.get("name") {
