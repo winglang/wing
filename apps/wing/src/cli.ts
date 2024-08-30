@@ -165,7 +165,7 @@ async function main() {
     .action(runSubCommand("lsp"));
 
   program
-    .command("generate-docs")
+    .command("gen-docs")
     .description("Generate documentation for the current project")
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("generateDocs"));
