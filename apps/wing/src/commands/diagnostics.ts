@@ -3,6 +3,7 @@ import { relative } from "path";
 import { WingDiagnostic } from "@winglang/compiler";
 import { Label, File, emitDiagnostic, CHARS_ASCII } from "codespan-wasm";
 import { COLORING } from "../util";
+import { existsSync, statSync } from "fs";
 
 export async function formatDiagnostics(diagnostics: WingDiagnostic[]): Promise<string> {
   const cwd = process.cwd();
@@ -14,7 +15,7 @@ export async function formatDiagnostics(diagnostics: WingDiagnostic[]): Promise<
     const labels: Label[] = [];
 
     // file_id might be "" if the span is synthetic (see #2521)
-    if (span?.file_id) {
+    if (span?.file_id && existsSync(span.file_id) && statSync(span.file_id).isFile()) {
       // `span` should only be null if source file couldn't be read etc.
       const source = await readFile(span.file_id, "utf8");
       const start = span.start_offset;
@@ -32,7 +33,7 @@ export async function formatDiagnostics(diagnostics: WingDiagnostic[]): Promise<
 
     for (const annotation of annotations) {
       // file_id might be "" if the span is synthetic (see #2521)
-      if (!annotation.span?.file_id) {
+      if (!annotation.span?.file_id || !existsSync(annotation.span.file_id) || !statSync(annotation.span.file_id).isFile()) {
         continue;
       }
       const source = await readFile(annotation.span.file_id, "utf8");
