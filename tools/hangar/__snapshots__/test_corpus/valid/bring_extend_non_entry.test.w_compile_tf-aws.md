@@ -50,7 +50,7 @@ class $Root extends $stdlib.std.Resource {
     let $preflightTypesMap = {};
     const lib = $helpers.bringJs(`${__dirname}/preflight.extendnonentrypoint-1.cjs`, $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
-    const f = globalThis.$ClassFactory.new("rootpkg.Foo", lib.Foo, this, "Foo");
+    const f = globalThis.$ClassFactory.new("examples-valid.Foo", lib.Foo, this, "Foo");
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_extend_non_entry.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
