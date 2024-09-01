@@ -69,7 +69,7 @@ project.tasks.addEnvironment("NODE_OPTIONS", "--max-old-space-size=7168");
 
 project.addFields({
   volta: {
-    extends: "../../package.json",
+    extends: "../../../package.json",
   },
 });
 
