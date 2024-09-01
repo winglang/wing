@@ -117,7 +117,7 @@ const useSignInRequired = () => {
   return signInRequired;
 };
 
-export interface SignInModalProps { }
+export interface SignInModalProps {}
 
 export const SignInModal = (props: SignInModalProps) => {
   const { theme } = useTheme();
