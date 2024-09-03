@@ -10,7 +10,7 @@
   },
   "scripts": {
     "compile": "wing compile .",
-    "test": "wing test && wing gen-docs"
+    "test": "wing test && wing docs"
   },
   "license": "MIT",
   "engines": {
