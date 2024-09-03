@@ -44,9 +44,9 @@ jobs:
             wing test main.w
             cd ..
           done
-      - name: Download examples/tests/valid/hello.test.w
+      - name: Download tests/valid/hello.test.w
         run: |
-          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/hello.test.w > hello.test.w
+          curl -L https://raw.githubusercontent.com/winglang/wing/main/tests/valid/hello.test.w > hello.test.w
           cat hello.test.w
       - name: Run Compile
         run: |
