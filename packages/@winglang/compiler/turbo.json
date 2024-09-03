@@ -5,14 +5,14 @@
     "compile:copy-wingc-wasm": {
       "dependsOn": ["^compile"],
       "inputs": ["../wingc/wingc.wasm"],
-      "outputs": ["wingc.wasm", "../../dist/wingc.wasm"]
+      "outputs": ["wingc.wasm", "../../../dist/wingc.wasm"]
     },
     "compile": {
       "dependsOn": ["compile:copy-wingc-wasm"],
       "outputs": ["dist/**"]
     },
     "package": {
-      "outputs": ["../../dist/winglang-compiler-*.tgz"]
+      "outputs": ["../../../dist/winglang-compiler-*.tgz"]
     }
   }
 }
