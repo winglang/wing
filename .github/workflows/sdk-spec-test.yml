@@ -210,14 +210,14 @@ jobs:
           elif ${{ env.LOCAL_BUILD == 'false'}}
           then 
             WING_CLI=$(which wing)
-            # COMPATIBILITY_SPY_PATH="@winglang/compatibility-spy" //TODO: will be handled in a following PR
+            # COMPATIBILITY="-t @winglang/compatibility-spy" //TODO: will be handled in a following PR
           else
             WING_CLI=$(realpath localwing/node_modules/.bin/wing)
-            COMPATIBILITY_SPY_PATH=$(realpath localwing/node_modules/@winglang/compatibility-spy/lib)
-            echo $COMPATIBILITY_SPY_PATH
+            COMPATIBILITY="-t  ../../../localwing/node_modules/@winglang/compatibility-spy/lib"
+            echo $COMPATIBILITY
           fi
           cd ${{ matrix.test.directory }}
-          $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} -p ${{ (matrix.target == 'tf-azure' && 2 ) || (matrix.target == 'tf-gcp' && 5) || 10 }} --retry 3 -t $COMPATIBILITY_SPY_PATH *.test.w -o ../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
+          $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} -p ${{ (matrix.target == 'tf-azure' && 2 ) || (matrix.target == 'tf-gcp' && 5) || 10 }} --retry 3 $COMPATIBILITY *.test.w -o ../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
 
       - name: Upload Artifacts
         if: ${{ env.LOCAL_BUILD ==  'true' }}
