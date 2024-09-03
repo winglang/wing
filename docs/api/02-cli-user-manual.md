@@ -242,14 +242,14 @@ This will compile your current Wing directory, and bundle it as a tarball that c
 
 See [Libraries](/docs/category/wing-libraries-winglibs) for more details on packaging and consuming Wing libraries.
 
-## Generate Docs: `wing gen-docs`
+## Generate Docs: `wing docs`
 
-The `wing gen-docs` command can be used to generate API documentation for your Wing project.
+The `wing docs` command can be used to generate API documentation for your Wing project.
 
 Usage:
 
 ```sh
-$ wing gen-docs
+$ wing docs
 ```
 
 This will generate a file named `API.md` in the root of your project.

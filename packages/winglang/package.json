@@ -48,7 +48,6 @@
     "inquirer": "^8.2.6",
     "nanoid": "^3.3.7",
     "npm-packlist": "^8.0.2",
-    "open": "^8.4.2",
     "ora": "^5.4.1",
     "tar": "^6.2.1",
     "tiny-updater": "^3.5.2",

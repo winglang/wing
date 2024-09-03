@@ -165,7 +165,7 @@ async function main() {
     .action(runSubCommand("lsp"));
 
   program
-    .command("gen-docs")
+    .command("docs")
     .description("Generate documentation for the current project")
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("generateDocs"));
@@ -275,12 +275,6 @@ async function main() {
     .addOption(new Option("--list-templates", "List available templates"))
     .hook("postAction", collectAnalyticsHook) // to catch the options that are added later
     .action(runSubCommand("init"));
-
-  program
-    .command("docs")
-    .description("Open the Wing documentation")
-    .hook("preAction", collectAnalyticsHook)
-    .action(runSubCommand("docs"));
 
   program.hook("postAction", exportAnalyticsHook);
 
