@@ -10,7 +10,7 @@
     },
     "package": {
       "dependsOn": ["compile"],
-      "outputs": ["../../dist/winglang-wingtunnels-*.tgz"]
+      "outputs": ["../../../dist/winglang-wingtunnels-*.tgz"]
     }
   }
 }
