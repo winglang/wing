@@ -10,7 +10,7 @@
     },
     "package": {
       "dependsOn": ["compile"],
-      "outputs": ["../../dist/winglang-compatibility-spy-*.tgz"]
+      "outputs": ["../../../dist/winglang-compatibility-spy-*.tgz"]
     }
   }
 }

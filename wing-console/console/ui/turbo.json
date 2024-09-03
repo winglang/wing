@@ -6,7 +6,7 @@
       "outputs": ["dist/**"]
     },
     "package": {
-      "outputs": ["../../../../dist/wingconsole-ui-*.tgz"]
+      "outputs": ["../../../dist/wingconsole-ui-*.tgz"]
     }
   }
 }

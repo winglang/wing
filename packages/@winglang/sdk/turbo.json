@@ -22,7 +22,7 @@
       "dependsOn": ["compile"]
     },
     "package": {
-      "outputs": ["../../dist/winglang-sdk-*.tgz"]
+      "outputs": ["../../../dist/winglang-sdk-*.tgz"]
     }
   }
 }

@@ -10,7 +10,7 @@
     },
     "package": {
       "dependsOn": ["compile"],
-      "outputs": ["../../dist/winglang-platform-awscdk-*.tgz"]
+      "outputs": ["../../../dist/winglang-platform-awscdk-*.tgz"]
     }
   }
 }
