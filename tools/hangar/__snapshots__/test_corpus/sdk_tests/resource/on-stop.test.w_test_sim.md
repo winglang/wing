@@ -3,13 +3,6 @@
 ## stdout.log
 ```log
 [ERROR] if a resource throws an error on stopping, it doesn't crash the simulation | Error: unexpected error!
-  --> on-stop.test.w:6:5
-  | 
-  | inflight class OnStopThrowerBackend impl sim.IResource {
-  |   pub onStop() {
-6 |     throw "unexpected error!";
-  |     ^
-at onStop <ABSOLUTE>/on-stop.test.w:6:5
 pass ─ on-stop.test.wsim » root/Default/test:if a resource throws an error on stopping, it doesn't crash the simulation
 
 Tests 1 passed (1)
