@@ -18,15 +18,15 @@ describe("prettyPrintError", () => {
 
     const resultLines = result.split("\n");
     const interestingPart = resultLines.slice(0, 7).join("\n");
-    expect(resultLines[8]).toMatch(/^at /);
+    expect(resultLines[7]).toMatch(/^at /);
     expect(interestingPart).toMatchInlineSnapshot(`
       "Error: message
-      at  file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:135:14
-      at  file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:60:26
-      at runTest file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:781:17
-      at runSuite → runSuite file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:909:15
-      at runFiles file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:958:5
-      at startTests file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:967:3"
+         --> test/util/enhanced-error.test.ts:17:43
+         |   expect(result).toBe("");
+         | });
+         | test("error object", async () => {
+      17 |   const result = await prettyPrintError(new Error("message"));
+         |                                         ^"
     `);
   });
   test("stack", async () => {
@@ -38,12 +38,12 @@ describe("prettyPrintError", () => {
     expect(interestingPart).toMatchInlineSnapshot(`
       "Error: message
       with extra line
-      at  file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:135:14
-      at  file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:60:26
-      at runTest file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:781:17
-      at runSuite → runSuite file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:909:15
-      at runFiles file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:958:5
-      at startTests file:///home/runner/work/wing/wing/node_modules/.pnpm/@vitest+runner@1.6.0/node_modules/@vitest/runner/dist/index.js:967:3"
+         --> test/util/enhanced-error.test.ts:34:7
+         | });
+         | test("stack", async () => {
+         |   const result = await prettyPrintError(
+      34 |     new Error("message\\nwith extra line").stack!
+         |     ^"
     `);
   });
 });
