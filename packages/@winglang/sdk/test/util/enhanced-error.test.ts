@@ -29,6 +29,7 @@ describe("prettyPrintError", () => {
          |                                         ^"
     `);
   });
+
   test("stack", async () => {
     const result = await prettyPrintError(
       new Error("message\nwith extra line").stack!
@@ -38,11 +39,11 @@ describe("prettyPrintError", () => {
     expect(interestingPart).toMatchInlineSnapshot(`
       "Error: message
       with extra line
-         --> test/util/enhanced-error.test.ts:34:7
-         | });
+         --> test/util/enhanced-error.test.ts:35:7
+         | 
          | test("stack", async () => {
          |   const result = await prettyPrintError(
-      34 |     new Error("message\\nwith extra line").stack!
+      35 |     new Error("message\\nwith extra line").stack!
          |     ^"
     `);
   });
