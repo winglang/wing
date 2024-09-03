@@ -1,4 +1,4 @@
-# [new_in_static.test.w](../../../../../examples/tests/valid/new_in_static.test.w) | test | sim
+# [new_in_static.test.w](../../../../../tests/valid/new_in_static.test.w) | test | sim
 
 ## stdout.log
 ```log

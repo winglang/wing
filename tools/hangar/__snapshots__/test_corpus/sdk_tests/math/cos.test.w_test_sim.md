@@ -1,4 +1,4 @@
-# [cos.test.w](../../../../../../examples/tests/sdk_tests/math/cos.test.w) | test | sim
+# [cos.test.w](../../../../../../tests/sdk_tests/math/cos.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [capture_resource_with_no_inflight.test.w](../../../../../examples/tests/valid/capture_resource_with_no_inflight.test.w) | compile | tf-aws
+# [capture_resource_with_no_inflight.test.w](../../../../../tests/valid/capture_resource_with_no_inflight.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

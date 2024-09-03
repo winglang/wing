@@ -1,4 +1,4 @@
-# [timeout.test.w](../../../../../../examples/tests/sdk_tests/function/timeout.test.w) | compile | tf-aws
+# [timeout.test.w](../../../../../../tests/sdk_tests/function/timeout.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

@@ -1,4 +1,4 @@
-# [tokens.test.w](../../../../../../examples/tests/sdk_tests/service/tokens.test.w) | compile | tf-aws
+# [tokens.test.w](../../../../../../tests/sdk_tests/service/tokens.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

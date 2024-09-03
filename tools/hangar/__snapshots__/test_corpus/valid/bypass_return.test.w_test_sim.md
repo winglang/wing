@@ -1,4 +1,4 @@
-# [bypass_return.test.w](../../../../../examples/tests/valid/bypass_return.test.w) | test | sim
+# [bypass_return.test.w](../../../../../tests/valid/bypass_return.test.w) | test | sim
 
 ## stdout.log
 ```log

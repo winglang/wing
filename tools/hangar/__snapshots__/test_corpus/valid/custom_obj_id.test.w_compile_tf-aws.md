@@ -1,4 +1,4 @@
-# [custom_obj_id.test.w](../../../../../examples/tests/valid/custom_obj_id.test.w) | compile | tf-aws
+# [custom_obj_id.test.w](../../../../../tests/valid/custom_obj_id.test.w) | compile | tf-aws
 
 ## inflight.Foo-1.cjs
 ```cjs

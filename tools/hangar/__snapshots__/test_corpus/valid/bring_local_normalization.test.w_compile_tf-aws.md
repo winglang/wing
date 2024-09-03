@@ -1,4 +1,4 @@
-# [bring_local_normalization.test.w](../../../../../examples/tests/valid/bring_local_normalization.test.w) | compile | tf-aws
+# [bring_local_normalization.test.w](../../../../../tests/valid/bring_local_normalization.test.w) | compile | tf-aws
 
 ## inflight.Bar-1.cjs
 ```cjs

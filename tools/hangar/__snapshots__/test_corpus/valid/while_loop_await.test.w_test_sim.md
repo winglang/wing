@@ -1,4 +1,4 @@
-# [while_loop_await.test.w](../../../../../examples/tests/valid/while_loop_await.test.w) | test | sim
+# [while_loop_await.test.w](../../../../../tests/valid/while_loop_await.test.w) | test | sim
 
 ## stdout.log
 ```log

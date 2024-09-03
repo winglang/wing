@@ -1,4 +1,4 @@
-# [aws-api.test.w](../../../../../../examples/tests/sdk_tests/api/aws-api.test.w) | test | sim
+# [aws-api.test.w](../../../../../../tests/sdk_tests/api/aws-api.test.w) | test | sim
 
 ## stdout.log
 ```log

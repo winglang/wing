@@ -1,4 +1,4 @@
-# [super_inflight_class.test.w](../../../../../examples/tests/valid/super_inflight_class.test.w) | test | sim
+# [super_inflight_class.test.w](../../../../../tests/valid/super_inflight_class.test.w) | test | sim
 
 ## stdout.log
 ```log

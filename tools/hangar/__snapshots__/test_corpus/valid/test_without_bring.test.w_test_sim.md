@@ -1,4 +1,4 @@
-# [test_without_bring.test.w](../../../../../examples/tests/valid/test_without_bring.test.w) | test | sim
+# [test_without_bring.test.w](../../../../../tests/valid/test_without_bring.test.w) | test | sim
 
 ## stdout.log
 ```log

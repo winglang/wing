@@ -6,31 +6,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "./apps/wing/bin/wing compile -t tf-aws ${file}",
+      "command": "./packages/winglang/bin/wing compile -t tf-aws ${file}",
       "name": "wing compile tf-aws",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "command": "./apps/wing/bin/wing compile -t tf-azure ${file}",
+      "command": "./packages/winglang/bin/wing compile -t tf-azure ${file}",
       "name": "wing compile tf-azure",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "command": "./apps/wing/bin/wing compile -t sim ${file}",
+      "command": "./packages/winglang/bin/wing compile -t sim ${file}",
       "name": "wing compile sim",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "command": "./apps/wing/bin/wing test ${file}",
+      "command": "./packages/winglang/bin/wing test ${file}",
       "name": "wing test sim",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "command": "./apps/wing/bin/wing test -t tf-aws ${file}",
+      "command": "./packages/winglang/bin/wing test -t tf-aws ${file}",
       "name": "wing test tf-aws",
       "request": "launch",
       "type": "node-terminal"
@@ -39,19 +39,31 @@
       "name": "Debug Extension",
       "type": "node",
       "request": "launch",
-      "args": ["${workspaceFolder}/apps/vscode-wing/scripts/dev.mjs"],
-      "outFiles": ["${workspaceFolder}/apps/vscode-wing/lib/**/*.js"]
+      "args": [
+        "${workspaceFolder}/packages/vscode-wing/scripts/dev.mjs"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/packages/vscode-wing/lib/**/*.js"
+      ]
     },
     {
       "name": "Debug Wing Compiler",
       "type": "lldb",
       "request": "launch",
-      "cwd": "${workspaceFolder}/libs/wingc",
+      "cwd": "${workspaceFolder}/packages/@winglang/wingc",
       "cargo": {
-        "args": ["build", "--example", "compile"]
+        "args": [
+          "build",
+          "--example",
+          "compile"
+        ]
       },
-      "args": ["${file}"],
-      "sourceLanguages": ["rust"]
+      "args": [
+        "${file}"
+      ],
+      "sourceLanguages": [
+        "rust"
+      ]
     }
   ]
 }

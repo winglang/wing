@@ -1,4 +1,4 @@
-# [mutation_after_class_init.test.w](../../../../../examples/tests/valid/mutation_after_class_init.test.w) | test | sim
+# [mutation_after_class_init.test.w](../../../../../tests/valid/mutation_after_class_init.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [set_consumer.test.w](../../../../../../examples/tests/sdk_tests/queue/set_consumer.test.w) | test | sim
+# [set_consumer.test.w](../../../../../../tests/sdk_tests/queue/set_consumer.test.w) | test | sim
 
 ## stdout.log
 ```log

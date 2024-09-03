@@ -1,4 +1,4 @@
-# [try_catch.test.w](../../../../../examples/tests/valid/try_catch.test.w) | test | sim
+# [try_catch.test.w](../../../../../tests/valid/try_catch.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [options.test.w](../../../../../../examples/tests/sdk_tests/api/options.test.w) | compile | tf-aws
+# [options.test.w](../../../../../../tests/sdk_tests/api/options.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

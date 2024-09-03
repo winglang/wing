@@ -1,4 +1,4 @@
-# [on-start.test.w](../../../../../../examples/tests/sdk_tests/resource/on-start.test.w) | compile | tf-aws
+# [on-start.test.w](../../../../../../tests/sdk_tests/resource/on-start.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

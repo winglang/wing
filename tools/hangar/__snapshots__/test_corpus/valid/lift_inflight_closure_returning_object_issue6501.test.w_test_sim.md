@@ -1,4 +1,4 @@
-# [lift_inflight_closure_returning_object_issue6501.test.w](../../../../../examples/tests/valid/lift_inflight_closure_returning_object_issue6501.test.w) | test | sim
+# [lift_inflight_closure_returning_object_issue6501.test.w](../../../../../tests/valid/lift_inflight_closure_returning_object_issue6501.test.w) | test | sim
 
 ## stdout.log
 ```log

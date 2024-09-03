@@ -1,4 +1,4 @@
-# [sqrt.test.w](../../../../../../examples/tests/sdk_tests/math/sqrt.test.w) | compile | tf-aws
+# [sqrt.test.w](../../../../../../tests/sdk_tests/math/sqrt.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

@@ -1,4 +1,4 @@
-# [options.test.w](../../../../../../examples/tests/sdk_tests/api/options.test.w) | test | sim
+# [options.test.w](../../../../../../tests/sdk_tests/api/options.test.w) | test | sim
 
 ## stdout.log
 ```log

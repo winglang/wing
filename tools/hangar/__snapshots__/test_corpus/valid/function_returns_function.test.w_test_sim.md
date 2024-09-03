@@ -1,4 +1,4 @@
-# [function_returns_function.test.w](../../../../../examples/tests/valid/function_returns_function.test.w) | test | sim
+# [function_returns_function.test.w](../../../../../tests/valid/function_returns_function.test.w) | test | sim
 
 ## stdout.log
 ```log

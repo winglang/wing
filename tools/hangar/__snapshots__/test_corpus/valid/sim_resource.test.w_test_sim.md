@@ -1,4 +1,4 @@
-# [sim_resource.test.w](../../../../../examples/tests/valid/sim_resource.test.w) | test | sim
+# [sim_resource.test.w](../../../../../tests/valid/sim_resource.test.w) | test | sim
 
 ## stdout.log
 ```log

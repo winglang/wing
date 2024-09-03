@@ -1,4 +1,4 @@
-# [while.test.w](../../../../../examples/tests/valid/while.test.w) | compile | tf-aws
+# [while.test.w](../../../../../tests/valid/while.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

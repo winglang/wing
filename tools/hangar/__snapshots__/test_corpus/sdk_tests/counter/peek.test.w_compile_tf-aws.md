@@ -1,4 +1,4 @@
-# [peek.test.w](../../../../../../examples/tests/sdk_tests/counter/peek.test.w) | compile | tf-aws
+# [peek.test.w](../../../../../../tests/sdk_tests/counter/peek.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

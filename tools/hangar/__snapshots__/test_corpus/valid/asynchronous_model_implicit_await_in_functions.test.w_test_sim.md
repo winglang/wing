@@ -1,4 +1,4 @@
-# [asynchronous_model_implicit_await_in_functions.test.w](../../../../../examples/tests/valid/asynchronous_model_implicit_await_in_functions.test.w) | test | sim
+# [asynchronous_model_implicit_await_in_functions.test.w](../../../../../tests/valid/asynchronous_model_implicit_await_in_functions.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [phase_independent_method_on_string.test.w](../../../../../examples/tests/valid/phase_independent_method_on_string.test.w) | test | sim
+# [phase_independent_method_on_string.test.w](../../../../../tests/valid/phase_independent_method_on_string.test.w) | test | sim
 
 ## stdout.log
 ```log

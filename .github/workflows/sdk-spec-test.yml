@@ -206,7 +206,7 @@ jobs:
         run: |
           if  ${{ env.MANUAL == 'true' }}
           then
-            WING_CLI=$(realpath apps/wing/bin/wing)
+            WING_CLI=$(realpath packages/winglang/bin/wing)
           elif ${{ env.LOCAL_BUILD == 'false'}}
           then 
             WING_CLI=$(which wing)

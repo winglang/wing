@@ -1,4 +1,4 @@
-# [nanoid.test.w](../../../../../../examples/tests/sdk_tests/util/nanoid.test.w) | test | sim
+# [nanoid.test.w](../../../../../../tests/sdk_tests/util/nanoid.test.w) | test | sim
 
 ## stdout.log
 ```log

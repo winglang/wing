@@ -1,4 +1,4 @@
-# [construct-base.test.w](../../../../../examples/tests/valid/construct-base.test.w) | compile | tf-aws
+# [construct-base.test.w](../../../../../tests/valid/construct-base.test.w) | compile | tf-aws
 
 ## inflight.WingResource-1.cjs
 ```cjs

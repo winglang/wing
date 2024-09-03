@@ -1,4 +1,4 @@
-# [no-stop.test.w](../../../../../../examples/tests/sdk_tests/resource/no-stop.test.w) | compile | tf-aws
+# [no-stop.test.w](../../../../../../tests/sdk_tests/resource/no-stop.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

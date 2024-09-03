@@ -36,7 +36,7 @@ Usage:
 $ wing new <template>
 ```
 
-Run `wing new` without any arguments to view the available templates or you can [view the templates on GitHub](https://github.com/winglang/wing/tree/main/apps/wing/project-templates/wing).
+Run `wing new` without any arguments to view the available templates or you can [view the templates on GitHub](https://github.com/winglang/wing/tree/main/packages/winglang/project-templates/wing).
 
 ## Run: `wing run|it`
 

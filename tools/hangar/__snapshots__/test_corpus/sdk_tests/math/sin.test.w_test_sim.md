@@ -1,4 +1,4 @@
-# [sin.test.w](../../../../../../examples/tests/sdk_tests/math/sin.test.w) | test | sim
+# [sin.test.w](../../../../../../tests/sdk_tests/math/sin.test.w) | test | sim
 
 ## stdout.log
 ```log

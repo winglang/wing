@@ -1,4 +1,4 @@
-# [call.test.w](../../../../../../examples/tests/sdk_tests/resource/call.test.w) | test | sim
+# [call.test.w](../../../../../../tests/sdk_tests/resource/call.test.w) | test | sim
 
 ## stdout.log
 ```log

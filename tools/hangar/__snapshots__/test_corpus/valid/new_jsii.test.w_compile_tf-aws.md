@@ -1,4 +1,4 @@
-# [new_jsii.test.w](../../../../../examples/tests/valid/new_jsii.test.w) | compile | tf-aws
+# [new_jsii.test.w](../../../../../tests/valid/new_jsii.test.w) | compile | tf-aws
 
 ## inflight.CustomScope-1.cjs
 ```cjs

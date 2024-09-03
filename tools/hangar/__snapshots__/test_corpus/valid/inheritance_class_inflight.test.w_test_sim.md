@@ -1,4 +1,4 @@
-# [inheritance_class_inflight.test.w](../../../../../examples/tests/valid/inheritance_class_inflight.test.w) | test | sim
+# [inheritance_class_inflight.test.w](../../../../../tests/valid/inheritance_class_inflight.test.w) | test | sim
 
 ## stdout.log
 ```log

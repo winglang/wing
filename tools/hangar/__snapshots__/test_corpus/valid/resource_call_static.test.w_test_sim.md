@@ -1,4 +1,4 @@
-# [resource_call_static.test.w](../../../../../examples/tests/valid/resource_call_static.test.w) | test | sim
+# [resource_call_static.test.w](../../../../../tests/valid/resource_call_static.test.w) | test | sim
 
 ## stdout.log
 ```log

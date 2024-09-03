@@ -1,4 +1,4 @@
-# [bring_extend_non_entry.test.w](../../../../../examples/tests/valid/bring_extend_non_entry.test.w) | compile | tf-aws
+# [bring_extend_non_entry.test.w](../../../../../tests/valid/bring_extend_non_entry.test.w) | compile | tf-aws
 
 ## inflight.Foo-1.cjs
 ```cjs

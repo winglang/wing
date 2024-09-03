@@ -1,4 +1,4 @@
-# [add_object.test.w](../../../../../../examples/tests/sdk_tests/bucket/add_object.test.w) | compile | tf-aws
+# [add_object.test.w](../../../../../../tests/sdk_tests/bucket/add_object.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

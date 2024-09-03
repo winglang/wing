@@ -1,4 +1,4 @@
-# [api_cors_default.test.w](../../../../../examples/tests/valid/api_cors_default.test.w) | compile | tf-aws
+# [api_cors_default.test.w](../../../../../tests/valid/api_cors_default.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

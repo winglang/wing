@@ -1,4 +1,4 @@
-# [median_mode_mean.test.w](../../../../../../examples/tests/sdk_tests/math/median_mode_mean.test.w) | test | sim
+# [median_mode_mean.test.w](../../../../../../tests/sdk_tests/math/median_mode_mean.test.w) | test | sim
 
 ## stdout.log
 ```log

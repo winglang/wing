@@ -1,4 +1,4 @@
-# [capture_in_binary.test.w](../../../../../examples/tests/valid/capture_in_binary.test.w) | test | sim
+# [capture_in_binary.test.w](../../../../../tests/valid/capture_in_binary.test.w) | test | sim
 
 ## stdout.log
 ```log

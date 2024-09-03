@@ -1,4 +1,4 @@
-# [copy.test.w](../../../../../../examples/tests/sdk_tests/bucket/copy.test.w) | compile | tf-aws
+# [copy.test.w](../../../../../../tests/sdk_tests/bucket/copy.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

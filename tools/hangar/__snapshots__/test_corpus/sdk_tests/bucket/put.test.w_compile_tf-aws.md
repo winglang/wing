@@ -1,4 +1,4 @@
-# [put.test.w](../../../../../../examples/tests/sdk_tests/bucket/put.test.w) | compile | tf-aws
+# [put.test.w](../../../../../../tests/sdk_tests/bucket/put.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

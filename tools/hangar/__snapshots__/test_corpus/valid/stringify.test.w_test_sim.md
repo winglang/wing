@@ -1,4 +1,4 @@
-# [stringify.test.w](../../../../../examples/tests/valid/stringify.test.w) | test | sim
+# [stringify.test.w](../../../../../tests/valid/stringify.test.w) | test | sim
 
 ## stdout.log
 ```log

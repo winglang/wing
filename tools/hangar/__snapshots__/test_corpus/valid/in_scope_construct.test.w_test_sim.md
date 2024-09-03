@@ -1,4 +1,4 @@
-# [in_scope_construct.test.w](../../../../../examples/tests/valid/in_scope_construct.test.w) | test | sim
+# [in_scope_construct.test.w](../../../../../tests/valid/in_scope_construct.test.w) | test | sim
 
 ## stdout.log
 ```log

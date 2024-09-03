@@ -1,6 +1,0 @@
-{
-  "name": "examples-docs",
-  "volta": {
-    "extends": "../../../package.json"
-  }
-}

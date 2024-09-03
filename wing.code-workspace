@@ -2,23 +2,23 @@
   "folders": [
     {
       "name": "Console App",
-      "path": "./apps/wing-console/console/app"
+      "path": "./wing-console/console/app"
     },
     {
       "name": "Console Server",
-      "path": "./apps/wing-console/console/server"
+      "path": "./wing-console/console/server"
     },
     {
       "name": "Console UI",
-      "path": "./apps/wing-console/console/ui"
+      "path": "./wing-console/console/ui"
     },
     {
       "name": "Compiler",
-      "path": "./libs/wingcompiler"
+      "path": "./packages/@winglang/compiler"
     },
     {
       "name": "API Docs Generator",
-      "path": "./apps/jsii-docgen"
+      "path": "./packages/@winglang/jsii-docgen"
     },
     {
       "name": "ROOT",
@@ -26,7 +26,7 @@
     },
     {
       "name": "SDK",
-      "path": "./libs/wingsdk"
+      "path": "./packages/@winglang/sdk"
     },
     {
       "name": "Docs",
@@ -34,43 +34,43 @@
     },
     {
       "name": "Tests: Error",
-      "path": "./examples/tests/error"
+      "path": "./tests/error"
     },
     {
       "name": "Tests: Invalid",
-      "path": "./examples/tests/invalid"
+      "path": "./tests/invalid"
     },
     {
       "name": "SDK Tests",
-      "path": "./examples/tests/sdk_tests"
+      "path": "./tests/sdk_tests"
     },
     {
       "name": "Tests: Valid",
-      "path": "./examples/tests/valid"
+      "path": "./tests/valid"
     },
     {
       "name": "Tests: Docs",
-      "path": "./examples/tests/doc_examples"
+      "path": "./tests/doc_examples"
     },
     {
       "name": "VSCode",
-      "path": "./apps/vscode-wing"
+      "path": "./packages/vscode-wing"
     },
     {
       "name": "API Checker",
-      "path": "./apps/wing-api-checker"
+      "path": "./packages/wing-api-checker"
     },
     {
       "name": "CLI",
-      "path": "./apps/wing"
+      "path": "./packages/winglang"
     },
     {
       "name": "CLIv2",
-      "path": "./apps/wingcli-v2"
+      "path": "./packages/wingcli-v2"
     },
     {
       "name": "Tunnel Server",
-      "path": "./libs/wingtunnels"
+      "path": "./packages/@winglang/wingtunnels"
     }
   ],
   "settings": {}

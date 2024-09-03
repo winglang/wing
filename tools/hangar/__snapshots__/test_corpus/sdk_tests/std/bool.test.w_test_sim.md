@@ -1,4 +1,4 @@
-# [bool.test.w](../../../../../../examples/tests/sdk_tests/std/bool.test.w) | test | sim
+# [bool.test.w](../../../../../../tests/sdk_tests/std/bool.test.w) | test | sim
 
 ## stdout.log
 ```log
