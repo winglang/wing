@@ -1,6 +1,6 @@
-<h2>API Reference</h2>
+## API Reference
 
-<h3>Table of Contents</h3>
+### Table of Contents
 
 - **Classes**
   - <a href="#@winglibs/testfixture.PublicClass">PublicClass</a>
@@ -14,39 +14,43 @@
 - **Enums**
   - <a href="#@winglibs/testfixture.FavoriteNumbers">FavoriteNumbers</a>
 
-<h3 id="@winglibs/testfixture.PublicClass">PublicClass (preflight class)</h3>
+### PublicClass (preflight class) <a class="wing-docs-anchor" id="@winglibs/testfixture.PublicClass"></a>
 
-<h4>Constructor</h4>
+*No description*
 
-<pre>
+#### Constructor
+
+```
 new(): PublicClass
-</pre>
+```
 
-<h4>Properties</h4>
+#### Properties
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code>publicField</code> | <code>num</code> | *No description* |
 
-<h4>Methods</h4>
+#### Methods
 
 | **Signature** | **Description** |
 | --- | --- |
 | <code>publicMethod(): void</code> | *No description* |
 
-<h3 id="@winglibs/testfixture.Store">Store (preflight class)</h3>
+### Store (preflight class) <a class="wing-docs-anchor" id="@winglibs/testfixture.Store"></a>
 
-<h4>Constructor</h4>
+*No description*
 
-<pre>
+#### Constructor
+
+```
 new(options: StoreOptions?): Store
-</pre>
+```
 
-<h4>Properties</h4>
+#### Properties
 
 *No properties*
 
-<h4>Methods</h4>
+#### Methods
 
 | **Signature** | **Description** |
 | --- | --- |
@@ -55,52 +59,62 @@ new(options: StoreOptions?): Store
 | <code>onSet(handler: inflight (str): void): void</code> | *No description* |
 | <code>inflight set(message: str): void</code> | *No description* |
 
-<h3 id="@winglibs/testfixture.subdir.Util">subdir.Util (preflight class)</h3>
+### subdir.Util (preflight class) <a class="wing-docs-anchor" id="@winglibs/testfixture.subdir.Util"></a>
 
-<h4>Constructor</h4>
+*No description*
 
-<pre>
+#### Constructor
+
+```
 new(): Util
-</pre>
+```
 
-<h4>Properties</h4>
+#### Properties
 
 *No properties*
 
-<h4>Methods</h4>
+#### Methods
 
 | **Signature** | **Description** |
 | --- | --- |
 | <code>static inflight double(msg: str): str</code> | *No description* |
 | <code>static inflight makeKeyInflight(name: str): str</code> | *No description* |
 
-<h3 id="@winglibs/testfixture.PublicInterface">PublicInterface (interface)</h3>
+### PublicInterface (interface) <a class="wing-docs-anchor" id="@winglibs/testfixture.PublicInterface"></a>
 
-<h4>Properties</h4>
+*No description*
+
+#### Properties
 
 *No properties*
 
-<h4>Methods</h4>
+#### Methods
 
 *No methods*
 
-<h3 id="@winglibs/testfixture.PublicStruct">PublicStruct (struct)</h3>
+### PublicStruct (struct) <a class="wing-docs-anchor" id="@winglibs/testfixture.PublicStruct"></a>
 
-<h4>Properties</h4>
+*No description*
+
+#### Properties
 
 *No properties*
 
-<h3 id="@winglibs/testfixture.StoreOptions">StoreOptions (struct)</h3>
+### StoreOptions (struct) <a class="wing-docs-anchor" id="@winglibs/testfixture.StoreOptions"></a>
 
-<h4>Properties</h4>
+*No description*
+
+#### Properties
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code>name</code> | <code>str?</code> | *No description* |
 
-<h3 id="@winglibs/testfixture.FavoriteNumbers">FavoriteNumbers (enum)</h3>
+### FavoriteNumbers (enum) <a class="wing-docs-anchor" id="@winglibs/testfixture.FavoriteNumbers"></a>
 
-<h4>Values</h4>
+*No description*
+
+#### Values
 
 | **Name** | **Description** |
 | --- | --- |
