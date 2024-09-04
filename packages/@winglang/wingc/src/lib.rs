@@ -291,6 +291,11 @@ pub fn type_check_file(
 	);
 	tc.add_builtins(scope);
 
+	// If the file is an entrypoint file, we add "this" to its symbol environment
+	if is_entrypoint_file(&file.path) {
+		tc.add_this(&mut env);
+	}
+
 	tc.type_check_file_or_dir(scope);
 }
 

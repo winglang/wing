@@ -1,5 +1,3 @@
-bring expect;
-
 class Foo {}
 
 class Base {
@@ -29,9 +27,9 @@ let c = new Derived() as "derived";
 assert(nodeof(c.f).path.endsWith("derived/in_derived"));
 // Make sure the instance created in the super call is scoped to the parent (root)
 assert(!nodeof(c.f_base).path.endsWith("derived/in_root"));
-let appPath = nodeof(@app).path;
-expect.equal(nodeof(c.f_base).path, "{appPath}/Default/in_root");
+let appPath = nodeof(this).path;
+assert(nodeof(c.f_base).path == "{appPath}/in_root");
 
-test "boom!" {
-  expect.equal(c.h(), "boom!");
+test "boom!" {
+  assert(c.h() == "boom!");
 }
