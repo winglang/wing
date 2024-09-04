@@ -54,6 +54,7 @@ new(options: StoreOptions?): Store
 
 | **Signature** | **Description** |
 | --- | --- |
+| <code>static loadStaticData(): str</code> | *No description* |
 | <code>static makeKey(name: str): str</code> | *No description* |
 | <code>static inflight makeKeyInflight(name: str): str</code> | *No description* |
 | <code>onSet(handler: inflight (str): void): void</code> | *No description* |

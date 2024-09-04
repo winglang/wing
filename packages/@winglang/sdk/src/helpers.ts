@@ -164,10 +164,7 @@ export function createExternRequire(dirname: string) {
   };
 }
 
-export function resolve(
-  outdir: string,
-  relativeSourcePath: string
-): string {
+export function resolve(outdir: string, relativeSourcePath: string): string {
   return normalPath(path.resolve(outdir, relativeSourcePath));
 }
 
