@@ -2138,6 +2138,18 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	pub fn add_this(&mut self, env: &mut SymbolEnv) {
+		let sym = Symbol::global("this");
+		env
+			.define(
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), self.types.construct_base_type(), false, Phase::Preflight),
+				AccessModifier::Private,
+				StatementIdx::Top,
+			)
+			.expect("Failed to add this");
+	}
+
 	pub fn add_builtins(&mut self, scope: &mut Scope) {
 		let optional_string = self.types.make_option(self.types.string());
 		self.add_builtin(

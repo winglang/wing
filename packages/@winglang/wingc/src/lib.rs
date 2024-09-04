@@ -22,7 +22,7 @@ use indexmap::IndexMap;
 use jsify::JSifier;
 
 use lifting::LiftVisitor;
-use parser::{as_wing_library, parse_wing_project};
+use parser::{as_wing_library, is_entrypoint_file, parse_wing_project};
 use serde::Serialize;
 use serde_json::Value;
 use struct_schema::StructSchemaVisitor;
