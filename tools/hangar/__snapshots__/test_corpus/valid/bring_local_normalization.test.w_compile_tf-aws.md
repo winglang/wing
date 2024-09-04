@@ -87,7 +87,10 @@ class Bar extends $stdlib.std.Resource {
     return "bar";
   }
   static getSubdir($scope) {
-    return $helpers.resolveDirname(__dirname, "../../../subdir");
+    return $helpers.normalPath("../../../subdir");
+  }
+  static getSubfile($scope) {
+    return $helpers.normalPath("../../../subdir/bar.w");
   }
   static _toInflightType() {
     return `

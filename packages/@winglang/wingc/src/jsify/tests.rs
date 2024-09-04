@@ -2056,15 +2056,6 @@ fn lift_self_reference() {
 }
 
 #[test]
-fn entrypoint_this() {
-	assert_compile_ok!(
-		r#"
-    this;
-    "#
-	);
-}
-
-#[test]
 fn allow_type_def_before_super() {
 	assert_compile_ok!(
 		r#"

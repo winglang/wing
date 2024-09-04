@@ -1,11 +1,9 @@
-let app = nodeof(this).app;
-
 struct MyParams {
   foo: str?;
   meaningOfLife: num;
 }
 
-let myParams = MyParams.fromJson(app.parameters.read(schema: MyParams.schema()));
+let myParams = MyParams.fromJson(@app.parameters.read(schema: MyParams.schema()));
 
 if let foo = myParams.foo {
   assert(false); // shouldnt happen

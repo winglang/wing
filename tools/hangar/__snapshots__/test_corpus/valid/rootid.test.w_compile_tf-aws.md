@@ -90,7 +90,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const rootId = $helpers.nodeof(this).app.node.id;
+    const rootId = $helpers.nodeof($helpers.nodeof(this).app).id;
     const envRootId = ((util.Util.tryEnv("WING_ROOT_ID")) ?? "root");
     (expect.Util.equal(rootId, envRootId));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:root id", new $Closure1(this, "$Closure1"));

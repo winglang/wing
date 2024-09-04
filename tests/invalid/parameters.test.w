@@ -1,4 +1,4 @@
-let app = nodeof(this).app;
+let app = @app;
 
 struct MyParams {
   foo: str;

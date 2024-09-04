@@ -1,4 +1,5 @@
 bring cloud;
+bring fs;
 bring "./subdir/util.w" as myutil;
 
 pub struct StoreOptions {
@@ -26,6 +27,14 @@ pub class Store {
 
   pub onSet(handler: inflight (str): void) {
     this.handlers.push(handler);
+  }
+
+  // Example of a method that reads a file from the winglib in preflight
+  // This is to validate that @dirname is calculated correctly
+  pub static loadStaticData(): str {
+    let path = fs.join(@dirname, "example-data.txt");
+    let contents = fs.readFile(path);
+    return contents;
   }
 }
 

@@ -588,6 +588,8 @@ pub enum IntrinsicKind {
 	/// Error state
 	Unknown,
 	Dirname,
+	Filename,
+	App,
 }
 
 impl Display for IntrinsicKind {
@@ -595,6 +597,8 @@ impl Display for IntrinsicKind {
 		match self {
 			IntrinsicKind::Unknown => write!(f, "@"),
 			IntrinsicKind::Dirname => write!(f, "@dirname"),
+			IntrinsicKind::Filename => write!(f, "@filename"),
+			IntrinsicKind::App => write!(f, "@app"),
 		}
 	}
 }
@@ -603,6 +607,8 @@ impl IntrinsicKind {
 	pub fn from_str(s: &str) -> Self {
 		match s {
 			"@dirname" => IntrinsicKind::Dirname,
+			"@filename" => IntrinsicKind::Filename,
+			"@app" => IntrinsicKind::App,
 			_ => IntrinsicKind::Unknown,
 		}
 	}
@@ -611,6 +617,14 @@ impl IntrinsicKind {
 		match self {
 			IntrinsicKind::Unknown => true,
 			IntrinsicKind::Dirname => match phase {
+				Phase::Preflight => true,
+				_ => false,
+			},
+			IntrinsicKind::Filename => match phase {
+				Phase::Preflight => true,
+				_ => false,
+			},
+			IntrinsicKind::App => match phase {
 				Phase::Preflight => true,
 				_ => false,
 			},

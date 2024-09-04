@@ -383,18 +383,18 @@ error: Cannot access static property "m" from instance
    |     ^
 
 
-error: Member "instanceField" does not exist in "Construct"
-  --> ../../../tests/invalid/access_static_from_instance.test.w:7:10
+error: Unknown symbol "this"
+  --> ../../../tests/invalid/access_static_from_instance.test.w:7:5
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |          ^^^^^^^^^^^^^
+  |     ^^^^
 
 
-error: Member "f" does not exist in "Construct"
-  --> ../../../tests/invalid/access_static_from_instance.test.w:8:10
+error: Unknown symbol "this"
+  --> ../../../tests/invalid/access_static_from_instance.test.w:8:5
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
-  |          ^
+  |     ^^^^
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2967,9 +2967,9 @@ Duration <DURATION>"
 
 exports[`intrinsics.test.w 1`] = `
 "error: @dirname does not expect arguments
-  --> ../../../tests/invalid/intrinsics.test.w:6:20
+  --> ../../../tests/invalid/intrinsics.test.w:8:20
   |
-6 | let path = @dirname();
+8 | let path = @dirname();
   |                    ^^
 
 
@@ -2978,6 +2978,13 @@ error: @dirname cannot be used in inflight
   |
 2 |   let x = @dirname;
   |           ^^^^^^^^
+
+
+error: @filename cannot be used in inflight
+  --> ../../../tests/invalid/intrinsics.test.w:4:11
+  |
+4 |   let y = @filename;
+  |           ^^^^^^^^^
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4752,17 +4759,11 @@ Duration <DURATION>"
 `;
 
 exports[`struct_from_parameter.test.w 1`] = `
-"Error: unable to parse MyParams:
-- MyParams must have required property 'bar'
-- MyParams must have required property 'baz'
-- MyParams must have required property 'foo'
-   --> ../../../tests/invalid/struct_from_parameter.test.w:14:1
-   | // technically we never enforced the parameters must have been
-   | // provided
-   | 
-14 | MyParams.fromJson(app.parameters.read());
-   | ^
-at <ABSOLUTE>/struct_from_parameter.test.w:14:1
+"error: Unknown symbol "this"
+  --> ../../../tests/invalid/struct_from_parameter.test.w:8:18
+  |
+8 | let app = nodeof(this).app;
+  |                  ^^^^
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4909,7 +4910,7 @@ Duration <DURATION>"
 `;
 
 exports[`super_call.test.w 1`] = `
-"error: Cannot call super method because class Construct has no parent
+"error: "super" can only be used inside of classes
    --> ../../../tests/invalid/super_call.test.w:32:7
    |
 32 | super.do();
@@ -4944,7 +4945,7 @@ error: super class "A" does not have a method named "child_method"
    |           ^^^^^^^^^^^^
 
 
-error: Cannot call super method because class Construct has no parent
+error: Cannot call super method inside of a static method
    --> ../../../tests/invalid/super_call.test.w:26:11
    |
 26 |     super.method();

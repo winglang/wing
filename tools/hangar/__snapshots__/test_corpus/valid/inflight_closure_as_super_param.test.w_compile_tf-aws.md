@@ -27,7 +27,7 @@ module.exports = function({  }) {
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
-module.exports = function({ $c_h }) {
+module.exports = function({ $c_h, $expect_Util }) {
   class $Closure2 {
     constructor($args) {
       const {  } = $args;
@@ -36,7 +36,7 @@ module.exports = function({ $c_h }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $c_h()), "boom!"), "c.h() == \"boom!\"");
+      (await $expect_Util.equal((await $c_h()), "boom!"));
     }
   }
   return $Closure2;
@@ -118,6 +118,7 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
+    const expect = $stdlib.expect;
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -205,15 +206,18 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $c_h: ${$stdlib.core.liftObject(c.h)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
           })
         `;
       }
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [c.h, ["handle"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), []],
             [c.h, []],
           ],
         });
@@ -222,8 +226,8 @@ class $Root extends $stdlib.std.Resource {
     const c = new Derived(this, "derived");
     $helpers.assert($macros.__String_endsWith(false, $helpers.nodeof(c.f).path, "derived/in_derived"), "nodeof(c.f).path.endsWith(\"derived/in_derived\")");
     $helpers.assert((!$macros.__String_endsWith(false, $helpers.nodeof(c.f_base).path, "derived/in_root")), "!nodeof(c.f_base).path.endsWith(\"derived/in_root\")");
-    const appPath = $helpers.nodeof(this).path;
-    $helpers.assert($helpers.eq($helpers.nodeof(c.f_base).path, String.raw({ raw: ["", "/in_root"] }, appPath)), "nodeof(c.f_base).path == \"{appPath}/in_root\"");
+    const appPath = $helpers.nodeof($helpers.nodeof(this).app).path;
+    (expect.Util.equal($helpers.nodeof(c.f_base).path, String.raw({ raw: ["", "/Default/in_root"] }, appPath)));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:boom!", new $Closure2(this, "$Closure2"));
   }
 }

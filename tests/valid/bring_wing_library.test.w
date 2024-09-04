@@ -1,3 +1,4 @@
+bring expect;
 bring "@winglibs/testfixture" as fixture;
 bring testfixture;
 bring testfixture as testfixture2;
@@ -12,3 +13,5 @@ assert(fixture.Store.makeKey("hello") == "data/hello.json");
 test "makeKeyInflight" {
   assert(fixture.Store.makeKeyInflight("hello") == "data/hello.json");
 }
+
+expect.equal(fixture.Store.loadStaticData(), "hello world!\n");

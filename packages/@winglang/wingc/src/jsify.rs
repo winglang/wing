@@ -683,23 +683,48 @@ impl<'a> JSifier<'a> {
 						// Only happens inflight, so we can assume an error was caught earlier
 						return new_code!(expr_span, "");
 					};
-					let relative_source_path = make_relative_path(
-						self.out_dir.as_str(),
-						source_path
-							.path
-							.parent()
-							.expect("source path is file in a directory")
-							.as_str(),
-					);
+					let source_dir = source_path.path.parent().expect("source path is file in a directory");
+
+					// Calculate the path of "if I'm at <outdir>, how do I get to <source_dir>"
+					// This relative path is what we will write inside the js file, with the motivation that
+					// the output is more stable across different users' machines than an absolute path.
+					let relative_source_path = make_relative_path(self.out_dir.as_str(), source_dir.as_str());
+
+					// At runtime, $helpers.resolve will normalize the path for Windows or Unix, and then convert it to an absolute path
 					new_code!(
 						expr_span,
 						HELPERS_VAR,
-						".resolveDirname(",
+						".resolve(",
 						__DIRNAME,
 						", \"",
 						relative_source_path,
 						"\")"
 					)
+				}
+				IntrinsicKind::Filename => {
+					let Some(source_path) = ctx.source_file else {
+						// Only happens inflight, so we can assume an error was caught earlier
+						return new_code!(expr_span, "");
+					};
+
+					// Calculate the path of "if I'm at <outdir>, how do I get to <source_path>"
+					// This relative path is what we will write inside the js file, with the motivation that
+					// the output is more stable across different users' machines than an absolute path.
+					let relative_source_path = make_relative_path(self.out_dir.as_str(), source_path.path.as_str());
+
+					// At runtime, $helpers.resolve will normalize the path for Windows or Unix, and then convert it to an absolute path
+					new_code!(
+						expr_span,
+						HELPERS_VAR,
+						".resolve(",
+						__DIRNAME,
+						", \"",
+						relative_source_path,
+						"\")"
+					)
+				}
+				IntrinsicKind::App => {
+					new_code!(expr_span, HELPERS_VAR, ".nodeof(this).app")
 				}
 			},
 			ExprKind::Call { callee, arg_list } => {

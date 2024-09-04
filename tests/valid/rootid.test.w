@@ -7,7 +7,7 @@ args:
 bring util;
 bring expect;
 
-let rootId = nodeof(this).app.node.id;
+let rootId = nodeof(@app).id;
 
 // this env var does not exist within the console and within inflight scopes
 let envRootId = util.tryEnv("WING_ROOT_ID") ?? "root";

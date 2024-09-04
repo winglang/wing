@@ -1,13 +1,6 @@
 ---
-source: libs/wingc/src/lsp/completions.rs
+source: packages/@winglang/wingc/src/lsp/completions.rs
 ---
-- label: this
-  kind: 6
-  detail: Construct
-  documentation:
-    kind: markdown
-    value: "Represents the building block of the construct graph.\n\n#### Remarks\nAll constructs besides the root construct must be created within the scope of\nanother construct."
-  sortText: bb|this
 - label: assert
   kind: 3
   detail: "(condition: bool, message: str?): void"

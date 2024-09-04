@@ -7,6 +7,9 @@ pub class Bar {
   pub static getSubdir(): str {
     return @dirname;
   }
+  pub static getSubfile(): str {
+    return @filename;
+  }
 }
 
 pub inflight class InflightBar {}

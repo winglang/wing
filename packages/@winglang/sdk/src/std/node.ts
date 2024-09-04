@@ -472,7 +472,7 @@ export interface IApp extends IConstruct {
   readonly [APP_SYMBOL]: true;
 
   /**
-   * The `.wing` directory into which you can emit artifacts during preflight.
+   * The `.wing` directory into which you can emit intermediate artifacts during preflight.
    */
   readonly workdir: string;
 
@@ -482,7 +482,7 @@ export interface IApp extends IConstruct {
   readonly isTestEnvironment: boolean;
 
   /**
-   * The directory of the entrypoint of the current program.
+   * The directory of the entrypoint of the current Wing application.
    */
   readonly entrypointDir: string;
 
