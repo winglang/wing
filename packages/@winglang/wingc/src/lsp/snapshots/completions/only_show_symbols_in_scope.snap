@@ -5,6 +5,13 @@ source: packages/@winglang/wingc/src/lsp/completions.rs
   kind: 6
   detail: num
   sortText: bb|a
+- label: this
+  kind: 6
+  detail: Construct
+  documentation:
+    kind: markdown
+    value: "Represents the building block of the construct graph.\n\n#### Remarks\nAll constructs besides the root construct must be created within the scope of\nanother construct."
+  sortText: bb|this
 - label: nodeof
   kind: 3
   detail: "preflight (construct: IConstruct): Node"
