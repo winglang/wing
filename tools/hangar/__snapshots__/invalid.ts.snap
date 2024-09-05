@@ -383,18 +383,18 @@ error: Cannot access static property "m" from instance
    |     ^
 
 
-error: Unknown symbol "this"
-  --> ../../../tests/invalid/access_static_from_instance.test.w:7:5
+error: Member "instanceField" does not exist in "Construct"
+  --> ../../../tests/invalid/access_static_from_instance.test.w:7:10
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |     ^^^^
+  |          ^^^^^^^^^^^^^
 
 
-error: Unknown symbol "this"
-  --> ../../../tests/invalid/access_static_from_instance.test.w:8:5
+error: Member "f" does not exist in "Construct"
+  --> ../../../tests/invalid/access_static_from_instance.test.w:8:10
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
-  |     ^^^^
+  |          ^
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4916,7 +4916,7 @@ Duration <DURATION>"
 `;
 
 exports[`super_call.test.w 1`] = `
-"error: "super" can only be used inside of classes
+"error: Cannot call super method because class Construct has no parent
    --> ../../../tests/invalid/super_call.test.w:32:7
    |
 32 | super.do();
@@ -4951,7 +4951,7 @@ error: super class "A" does not have a method named "child_method"
    |           ^^^^^^^^^^^^
 
 
-error: Cannot call super method inside of a static method
+error: Cannot call super method because class Construct has no parent
    --> ../../../tests/invalid/super_call.test.w:26:11
    |
 26 |     super.method();
