@@ -29,10 +29,10 @@ use crate::visit_stmt_before_super::{CheckSuperCtorLocationVisitor, CheckValidBe
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, DEFAULT_PACKAGE_NAME,
-	UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DATETIME, WINGSDK_DURATION,
-	WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP,
-	WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REGEX, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN,
-	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	UTIL_CLASS_NAME, WINGSDK_APP, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DATETIME,
+	WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON,
+	WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REGEX, WINGSDK_RESOURCE, WINGSDK_SET,
+	WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -1909,7 +1909,7 @@ impl Types {
 	}
 }
 
-/// Enum of builtin functions, this are defined as hard coded AST nodes in `add_builtins`
+/// Enum of builtin functions, this are defined as hard coded types in `add_builtins`
 #[derive(Debug)]
 pub enum UtilityFunctions {
 	Log,
@@ -1929,6 +1929,9 @@ impl Display for UtilityFunctions {
 	}
 }
 
+/// The type checker is responsible for type checking the AST of a Wing program.
+/// Type checking includes building the symbol environment, checking and inferring types, and emitting relevant errors.
+/// A new type checker is created for each file or directory.
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
 
@@ -2147,40 +2150,6 @@ impl<'a> TypeChecker<'a> {
 			.expect("Failed to add this");
 	}
 
-	/// Patch some of the types from the "constructs" package to provide a better DX
-	pub fn patch_constructs(&mut self) {
-		// Hide the "node" field from constructs so that users go through
-		// the `nodeof` utility function to get the tree node of a construct.
-		// The `Node` instance provided by Wing has some extra methods not
-		// available in the constructs package, and also modifies how the
-		// root node is obtained.
-		let mut constructs_iface = self
-			.types
-			.libraries
-			.lookup_nested_str(&CONSTRUCT_BASE_INTERFACE, None)
-			.expect("constructs.IConstruct not found in type system")
-			.0
-			.as_type()
-			.expect("constructs.IConstruct was found but it's not a type");
-		let iface = constructs_iface
-			.as_interface_mut()
-			.expect("constructs.IConstruct was found but it's not a class");
-		iface.env.symbol_map.remove(CONSTRUCT_NODE_PROPERTY);
-
-		let mut constructs_class = self
-			.types
-			.libraries
-			.lookup_nested_str(&CONSTRUCT_BASE_CLASS, None)
-			.expect("constructs.Construct not found in type system")
-			.0
-			.as_type()
-			.expect("constructs.Construct was found but it's not a type");
-		let class = constructs_class
-			.as_class_mut()
-			.expect("constructs.Construct was found but it's not a class");
-		class.env.symbol_map.remove(CONSTRUCT_NODE_PROPERTY);
-	}
-
 	pub fn add_builtins(&mut self, scope: &mut Scope) {
 		let optional_string = self.types.make_option(self.types.string());
 		self.add_builtin(
@@ -2279,15 +2248,19 @@ impl<'a> TypeChecker<'a> {
 		);
 
 		// Intrinsics
+		// @dirname
+
+		// TODO: we shouldn't be dropping the return value here
 		let _ = self.types.intrinsics.define(
 			&Symbol::global(IntrinsicKind::Dirname.to_string()),
 			SymbolKind::Variable(VariableInfo {
 				access: AccessModifier::Public,
 				name: Symbol::global(IntrinsicKind::Dirname.to_string()),
-				docs: Some(Docs::with_summary(r#"Get the normalized absolute path of the current source file's directory.
+				docs: Some(Docs::with_summary(
+					r#"Get the normalized absolute path of the current Wing source file's directory.
 
-The resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.
-It should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."#)),
+The resolved path represents a path during preflight only and is not guaranteed to be valid while inflight."#,
+				)),
 				kind: VariableKind::StaticMember,
 				phase: Phase::Preflight,
 				type_: self.types.string(),
@@ -2296,6 +2269,58 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			AccessModifier::Public,
 			StatementIdx::Top,
 		);
+
+		// @filename
+		let _ = self.types.intrinsics.define(
+			&Symbol::global(IntrinsicKind::Filename.to_string()),
+			SymbolKind::Variable(VariableInfo {
+				access: AccessModifier::Public,
+				name: Symbol::global(IntrinsicKind::Filename.to_string()),
+				docs: Some(Docs::with_summary(
+					r#"Get the normalized absolute path of the current Wing source file.
+
+The resolved path represents a path during preflight only and is not guaranteed to be valid while inflight."#,
+				)),
+				kind: VariableKind::StaticMember,
+				phase: Phase::Preflight,
+				type_: self.types.string(),
+				reassignable: false,
+			}),
+			AccessModifier::Public,
+			StatementIdx::Top,
+		);
+
+		// @app
+		let std_app_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_APP);
+		let std_app = self
+			.types
+			.libraries
+			.lookup_nested_str(&std_app_fqn, None)
+			.expect("std.IApp not found in type system")
+			.0
+			.as_type()
+			.expect("std.IApp was found but it's not a type");
+		let _ = self.types
+			.intrinsics
+			.define(
+				&Symbol::global(IntrinsicKind::App.to_string()),
+				SymbolKind::Variable(VariableInfo {
+					access: AccessModifier::Public,
+					name: Symbol::global(IntrinsicKind::App.to_string()),
+					docs: Some(Docs::with_summary(
+						r#"Get the root application node.
+
+The application node is the root of the construct tree and all other resources are children (or grandchildren) of this node.
+See https://www.winglang.io/docs/concepts/application-tree for more information."#,
+					)),
+					kind: VariableKind::StaticMember,
+					phase: Phase::Preflight,
+					type_: std_app,
+					reassignable: false,
+				}),
+				AccessModifier::Public,
+				StatementIdx::Top,
+			);
 	}
 
 	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
@@ -2944,7 +2969,7 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 				}
 
 				match intrinsic.kind {
-					IntrinsicKind::Dirname | IntrinsicKind::Unknown => {
+					IntrinsicKind::Dirname | IntrinsicKind::Filename | IntrinsicKind::App | IntrinsicKind::Unknown => {
 						return (sig.return_type, sig.phase);
 					}
 				}

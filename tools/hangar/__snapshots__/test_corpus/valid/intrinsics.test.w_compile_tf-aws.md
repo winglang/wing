@@ -61,7 +61,10 @@ class Bar extends $stdlib.std.Resource {
     return "bar";
   }
   static getSubdir($scope) {
-    return $helpers.resolveDirname(__dirname, "../../../subdir");
+    return $helpers.resolve(__dirname, "../../../subdir");
+  }
+  static getSubfile($scope) {
+    return $helpers.resolve(__dirname, "../../../subdir/bar.w");
   }
   static _toInflightType() {
     return `
@@ -124,10 +127,13 @@ class $Root extends $stdlib.std.Resource {
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const path = "SHOULD_IGNORE";
     const filename = "intrinsics.test.w";
-    const currentFile = (fs.Util.join($helpers.resolveDirname(__dirname, "../../.."), filename));
+    const currentFile = (fs.Util.join($helpers.resolve(__dirname, "../../.."), filename));
     (expect.Util.equal(filename, (fs.Util.basename(currentFile))));
-    (expect.Util.equal($helpers.resolveDirname(__dirname, "../../.."), (fs.Util.dirname(currentFile))));
-    (expect.Util.equal((bar.Bar.getSubdir(this)), (fs.Util.join($helpers.resolveDirname(__dirname, "../../.."), "subdir"))));
+    (expect.Util.equal($helpers.resolve(__dirname, "../../.."), (fs.Util.dirname(currentFile))));
+    (expect.Util.equal((bar.Bar.getSubdir(this)), (fs.Util.join($helpers.resolve(__dirname, "../../.."), "subdir"))));
+    (expect.Util.equal($helpers.resolve(__dirname, "../../../intrinsics.test.w"), currentFile));
+    (expect.Util.equal((fs.Util.dirname(currentFile)), $helpers.resolve(__dirname, "../../..")));
+    (expect.Util.equal((bar.Bar.getSubfile(this)), (fs.Util.join($helpers.resolve(__dirname, "../../.."), "subdir", "bar.w"))));
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "intrinsics.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });

@@ -1,4 +1,4 @@
-# [parameters.test.w](../../../../../../../tests/valid/parameters/simple/parameters.test.w) | compile | tf-aws
+# [app.test.w](../../../../../tests/valid/app.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
@@ -35,24 +35,18 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{foo:{type:"string"},meaningOfLife:{type:"number"},},required:["meaningOfLife",]});
+    const expect = $stdlib.expect;
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
-    const myParams = $macros.__Struct_fromJson(false, MyParams, ($helpers.nodeof(this).app.parameters.read({ schema: $macros.__Struct_schema(false, MyParams, ) })));
-    {
-      const $if_let_value = myParams.foo;
-      if ($if_let_value != undefined) {
-        const foo = $if_let_value;
-        $helpers.assert(false, "false");
-      }
-      else {
-        $helpers.assert(true, "true");
-      }
+    (expect.Util.equal($macros.__String_contains(false, $helpers.nodeof(this).app.workdir, ".wing"), true));
+    const path = $helpers.nodeof($helpers.nodeof(this).app).path;
+    for (const c of $helpers.nodeof($helpers.nodeof(this).app).children) {
+      console.log($helpers.nodeof(c).path);
     }
-    const meaningOfLife = myParams.meaningOfLife;
-    $helpers.assert($helpers.eq(meaningOfLife, 42), "meaningOfLife == 42");
+    (expect.Util.notNil($helpers.nodeof($helpers.nodeof(this).app)));
+    (expect.Util.equal($macros.__Array_at(false, ($helpers.nodeof($helpers.nodeof(this).app).path.split("/")), 0), "root"));
   }
 }
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "parameters.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "app.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

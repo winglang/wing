@@ -1,5 +1,5 @@
 ---
-source: libs/wingc/src/jsify/tests.rs
+source: packages/@winglang/wingc/src/jsify/tests.rs
 ---
 ## Errors
 Member "print" does not exist in "Construct" 3:13

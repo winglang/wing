@@ -2875,9 +2875,9 @@ error: Interface "fixture.InternalInterface" is internal
  6 | class FakeClass impl fixture.InternalInterface {}
    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:34:20
+   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:43:20
    |
-34 | internal interface InternalInterface {}
+43 | internal interface InternalInterface {}
    |                    ----------------- defined here
    |
    = hint: the definition of "fixture.InternalInterface" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
@@ -2896,9 +2896,9 @@ error: Class "fixture.InternalClass" is internal
  9 | let i = new fixture.InternalClass();
    |             ^^^^^^^^^^^^^^^^^^^^^
    |
-   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:36:16
+   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:45:16
    |
-36 | internal class InternalClass {
+45 | internal class InternalClass {
    |                ------------- defined here
    |
    = hint: the definition of "fixture.InternalClass" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
@@ -2910,9 +2910,9 @@ error: Cannot access internal member "internalStaticMethod" of "PublicClass"
 12 | fixture.PublicClass.internalStaticMethod();
    |                     ^^^^^^^^^^^^^^^^^^^^
    |
-   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:41:19
+   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:50:19
    |
-41 |   static internal internalStaticMethod() {}
+50 |   static internal internalStaticMethod() {}
    |                   -------------------- defined here
    |
    = hint: the definition of "internalStaticMethod" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
@@ -2924,9 +2924,9 @@ error: Cannot access internal member "internalField" of "PublicClass"
 16 | p.internalField;
    |   ^^^^^^^^^^^^^
    |
-   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:43:12
+   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:52:12
    |
-43 |   internal internalField: num;
+52 |   internal internalField: num;
    |            ------------- defined here
    |
    = hint: the definition of "internalField" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
@@ -2938,9 +2938,9 @@ error: Cannot access internal member "internalMethod" of "PublicClass"
 19 | p.internalMethod();
    |   ^^^^^^^^^^^^^^
    |
-   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:51:12
+   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:60:12
    |
-51 |   internal internalMethod() {}
+60 |   internal internalMethod() {}
    |            -------------- defined here
    |
    = hint: the definition of "internalMethod" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
@@ -2952,9 +2952,9 @@ error: Struct "fixture.InternalStruct" is internal
 22 | let s = fixture.InternalStruct {};
    |         ^^^^^^^^^^^^^^^^^^^^^^
    |
-   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:55:17
+   --> ../../../tests/invalid/node_modules/@winglibs/testfixture/store.w:64:17
    |
-55 | internal struct InternalStruct {}
+64 | internal struct InternalStruct {}
    |                 -------------- defined here
    |
    = hint: the definition of "fixture.InternalStruct" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
@@ -2967,9 +2967,9 @@ Duration <DURATION>"
 
 exports[`intrinsics.test.w 1`] = `
 "error: @dirname does not expect arguments
-  --> ../../../tests/invalid/intrinsics.test.w:6:20
+  --> ../../../tests/invalid/intrinsics.test.w:8:20
   |
-6 | let path = @dirname();
+8 | let path = @dirname();
   |                    ^^
 
 
@@ -2978,6 +2978,13 @@ error: @dirname cannot be used in inflight
   |
 2 |   let x = @dirname;
   |           ^^^^^^^^
+
+
+error: @filename cannot be used in inflight
+  --> ../../../tests/invalid/intrinsics.test.w:4:11
+  |
+4 |   let y = @filename;
+  |           ^^^^^^^^^
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4756,13 +4763,13 @@ exports[`struct_from_parameter.test.w 1`] = `
 - MyParams must have required property 'bar'
 - MyParams must have required property 'baz'
 - MyParams must have required property 'foo'
-   --> ../../../tests/invalid/struct_from_parameter.test.w:14:1
+   --> ../../../tests/invalid/struct_from_parameter.test.w:11:1
    | // technically we never enforced the parameters must have been
    | // provided
    | 
-14 | MyParams.fromJson(app.parameters.read());
+11 | MyParams.fromJson(@app.parameters.read());
    | ^
-at <ABSOLUTE>/struct_from_parameter.test.w:14:1
+at <ABSOLUTE>/struct_from_parameter.test.w:11:1
 
 Tests 1 failed (1)
 Snapshots 1 skipped

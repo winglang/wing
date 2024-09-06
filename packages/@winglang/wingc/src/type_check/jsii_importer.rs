@@ -10,8 +10,8 @@ use crate::{
 		Class, FunctionParameter, FunctionSignature, Interface, ResolveSource, Struct, SymbolKind, Type, TypeRef, Types,
 		CLASS_INIT_NAME,
 	},
-	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DATETIME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON,
-	WINGSDK_REGEX, WINGSDK_RESOURCE,
+	CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DATETIME, WINGSDK_DURATION,
+	WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_REGEX, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use indexmap::IndexMap;
@@ -27,11 +27,15 @@ use super::{
 };
 
 trait JsiiInterface {
+	fn fqn(&self) -> &str;
 	fn methods(&self) -> &Option<Vec<jsii::Method>>;
 	fn properties(&self) -> &Option<Vec<jsii::Property>>;
 }
 
 impl JsiiInterface for jsii::ClassType {
+	fn fqn(&self) -> &str {
+		&self.fqn
+	}
 	fn methods(&self) -> &Option<Vec<jsii::Method>> {
 		&self.methods
 	}
@@ -41,6 +45,9 @@ impl JsiiInterface for jsii::ClassType {
 }
 
 impl JsiiInterface for jsii::InterfaceType {
+	fn fqn(&self) -> &str {
+		&self.fqn
+	}
 	fn methods(&self) -> &Option<Vec<jsii::Method>> {
 		&self.methods
 	}
@@ -626,6 +633,14 @@ impl<'a> JsiiImporter<'a> {
 		if let Some(properties) = jsii_interface.properties() {
 			for p in properties {
 				debug!("Found property {} with type {:?}", p.name.green(), p.type_);
+
+				if (jsii_interface.fqn() == CONSTRUCT_BASE_CLASS || jsii_interface.fqn() == CONSTRUCT_BASE_INTERFACE)
+					&& p.name == "node"
+				{
+					debug!("Skipping node property on resource");
+					continue;
+				}
+
 				let base_wing_type = self.type_ref_to_wing_type(&p.type_);
 				let is_optional = if let Some(true) = p.optional { true } else { false };
 				let is_static = if let Some(true) = p.static_ { true } else { false };

@@ -1,5 +1,5 @@
 ---
-source: libs/wingc/src/lsp/completions.rs
+source: packages/@winglang/wingc/src/lsp/completions.rs
 ---
 - label: "a:"
   kind: 5
