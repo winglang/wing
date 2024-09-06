@@ -9,16 +9,16 @@ keywords: [Wing reference, Wing libraries, libraries, packaging, packages]
 
 Wing libraries ([winglibs](https://github.com/winglang/winglibs)) can be installed using the npm command line tool.
 
-Here is an example of installing the [wing-redis winglib](https://github.com/winglang/winglibs/tree/main/redis).
+Here is an example of installing the [redis winglib](https://github.com/winglang/winglibs/tree/main/redis).
 
 ```
-npm i wing-redis
+npm i @winglibs/redis
 ```
 
 Then in your Wing source code, the library can be imported by name using a `bring` statement:
 
 ```js
-bring "wing-redis" as redis;
+bring "@winglibs/redis" as redis;
 
 new redis.Redis();
 ```
