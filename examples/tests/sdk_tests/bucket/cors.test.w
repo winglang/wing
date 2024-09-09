@@ -10,7 +10,7 @@ let bucket = new cloud.Bucket(public: true);
 
 bucket.addCorsConfiguration(
   allowedMethods: [http.HttpMethod.GET],
-  allowedOrigins:[api.url]
+  allowedOrigins: [api.url]
 );
 
 bucket.addObject("hello", "hello");
