@@ -1,5 +1,5 @@
 ---
-source: libs/wingc/src/lsp/completions.rs
+source: packages/@winglang/wingc/src/lsp/completions.rs
 ---
 - label: aws
   kind: 9
@@ -19,9 +19,6 @@ source: libs/wingc/src/lsp/completions.rs
 - label: math
   kind: 9
   sortText: kk|math
-- label: regex
-  kind: 9
-  sortText: kk|regex
 - label: sim
   kind: 9
   sortText: kk|sim
