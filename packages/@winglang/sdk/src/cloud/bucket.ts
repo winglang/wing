@@ -47,6 +47,9 @@ export interface BucketProps {
   readonly public?: boolean;
 }
 
+/**
+ * Cors Options for `Bucket`.
+ */
 export interface BucketCorsOptions {
   /**
    * The allowed origin.
