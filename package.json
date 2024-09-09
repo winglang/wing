@@ -20,7 +20,7 @@
     "wing": "turbo compile -F winglang --output-logs=new-only && ./packages/winglang/bin/wing"
   },
   "volta": {
-    "node": "20.11.1",
+    "node": "20.17.0",
     "pnpm": "8.15.1"
   },
   "packageManager": "pnpm@8.15.1",
