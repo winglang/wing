@@ -1,4 +1,4 @@
-# [map.test.w](../../../../../../examples/tests/sdk_tests/std/map.test.w) | test | sim
+# [map.test.w](../../../../../../tests/sdk_tests/std/map.test.w) | test | sim
 
 ## stdout.log
 ```log

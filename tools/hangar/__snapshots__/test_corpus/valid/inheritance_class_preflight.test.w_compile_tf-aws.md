@@ -1,4 +1,4 @@
-# [inheritance_class_preflight.test.w](../../../../../examples/tests/valid/inheritance_class_preflight.test.w) | compile | tf-aws
+# [inheritance_class_preflight.test.w](../../../../../tests/valid/inheritance_class_preflight.test.w) | compile | tf-aws
 
 ## inflight.Foo-1.cjs
 ```cjs

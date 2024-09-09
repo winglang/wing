@@ -1,7 +1,7 @@
 import { execa } from "execa";
 import * as fs from "fs";
 import { expect } from "vitest";
-import { snapshotDir, wingBin } from "./paths";
+import { snapshotDir, testDir, wingBin } from "./paths";
 import { join, extname, relative, resolve, dirname, basename } from "path";
 
 export interface RunWingCommandOptions {
@@ -116,15 +116,13 @@ export function tfResourcesOfCount(
   return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
 }
 
-const testsRoot = join(__dirname, "..", "..", "..", "examples", "tests");
-
 export async function createMarkdownSnapshot(
   fileMap: Record<string, string>,
   filePath: string,
   testCase: string,
   target: string
 ) {
-  const relativePath = relative(resolve(testsRoot), filePath).replace(
+  const relativePath = relative(resolve(testDir), filePath).replace(
     /\\/g,
     "/"
   );
@@ -139,7 +137,7 @@ export async function createMarkdownSnapshot(
 
   const testDirRelativeToSnapshot = relative(
     dirname(snapPath),
-    testsRoot
+    testDir
   ).replace(/\\/g, "/");
 
   let md = `# [${wingFile}](${testDirRelativeToSnapshot}/${dirname(

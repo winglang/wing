@@ -1,4 +1,4 @@
-# [bring_cdktf.test.w](../../../../../examples/tests/valid/bring_cdktf.test.w) | test | sim
+# [bring_cdktf.test.w](../../../../../tests/valid/bring_cdktf.test.w) | test | sim
 
 ## stdout.log
 ```log

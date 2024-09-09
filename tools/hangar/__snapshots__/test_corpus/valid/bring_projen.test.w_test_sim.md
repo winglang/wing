@@ -1,4 +1,4 @@
-# [bring_projen.test.w](../../../../../examples/tests/valid/bring_projen.test.w) | test | sim
+# [bring_projen.test.w](../../../../../tests/valid/bring_projen.test.w) | test | sim
 
 ## stdout.log
 ```log

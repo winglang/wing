@@ -1,4 +1,4 @@
-# [json-types.test.w](../../../../../examples/tests/valid/json-types.test.w) | compile | tf-aws
+# [json-types.test.w](../../../../../tests/valid/json-types.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

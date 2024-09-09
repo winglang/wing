@@ -86,7 +86,7 @@ It will compile, lint, test and package all modules.
 When testing your changes to Wing, locally it may be helpful to be able to easily invoke your local version of the Wing CLI.
 In which case adding a shell alias may be helpful for instance on Linux and Mac you could add: 
 
-`alias mywing=/<PATH_TO_WING_REPO>/apps/wing/bin/wing` to your shell's rc file.
+`alias mywing=/<PATH_TO_WING_REPO>/packages/winglang/bin/wing` to your shell's rc file.
 :::
 
 The `pnpm wing` command can be executed from the root of the repository in order to build and run the
@@ -118,13 +118,11 @@ This command runs the full Wing CLI with the given arguments. Turbo will ensure 
 ## How is the repository structured?
 
 The Wing repository is structured as a monorepo, which means that it contains multiple packages.
-Packages that are primarily meant to be run by users are in the `apps` directory, while packages
-that are primarily meant to be consumed as libraries are in the `libs` directory. Some packages are
-written in Rust, while others are written in TypeScript. Each has a README explaining what it does
+Most of the packages are inside the `packages` folder. Each has a README explaining what it does
 and how to use it. (If you see one missing, please open an issue and let us know!)
 
-The Wing monorepo uses [Turbo] to run commands across all code packages in the `libs` and `apps`
-folders. This means it includes packages that form the entire toolchain (compiler, standard library, IDE
+The Wing monorepo uses [Turbo] to run commands across all code packages in the `packages`
+folder. This means it includes packages that form the entire toolchain (compiler, standard library, IDE
 extension, etc), and the build and release bind them all together.
 
 Turbo will be installed alongside the rest of the project's dependencies after you run `pnpm install`
@@ -196,10 +194,10 @@ turbo test -F @winglang/wingc
 The following command runs `wingc` on a file. This performs all the compilation steps. Run from the root.
 
 ```sh
-pnpm wing -- compile <path to a .w file (full path, or relative to the location of the apps/wing folder)>
+pnpm wing -- compile <path to a .w file (full path, or relative to the location of the packages/winglang folder)>
 ```
 
-You can find the compilation artifacts in the `apps/wing/target` folder.
+You can find the compilation artifacts in the `packages/winglang/target` folder.
 
 To check that your code passes all the lints, run:
 
@@ -243,8 +241,8 @@ turbo playground -F @winglang/tree-sitter-wing
 
 ## 🔨 How do I build the VSCode extension?
 
-The VSCode extension is located in `apps/vscode-wing`. Most of the "logic" is in the language server, which
-is located in the Wing CLI at `apps/wing/src/commands/lsp.ts`.
+The VSCode extension is located in `packages/vscode-wing`. Most of the "logic" is in the language server, which
+is located in the Wing CLI at `packages/winglang/src/commands/lsp.ts`.
 
 To compile the extension (also creates an installable `.vsix` file):
 
@@ -283,7 +281,7 @@ Lastly you can show linting errors in your IDE by enabling the following setting
 
 Adding a new template is straightforward!
 
-Each template is represented by a folder located at [project-templates](https://github.com/winglang/wing/tree/main/apps/wing/project-templates), containing all of the files that template should be initialized with.
+Each template is represented by a folder located at [project-templates](https://github.com/winglang/wing/tree/main/packages/winglang/project-templates), containing all of the files that template should be initialized with.
 
 Create a new folder with the template name, and insert any code files that are needed to run it.
 Unit tests ran with `turbo test` (or in GitHub Actions once you make a pull request) will automatically validate that the template is valid.

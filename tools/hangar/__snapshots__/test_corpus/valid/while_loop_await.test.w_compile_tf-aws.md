@@ -1,4 +1,4 @@
-# [while_loop_await.test.w](../../../../../examples/tests/valid/while_loop_await.test.w) | compile | tf-aws
+# [while_loop_await.test.w](../../../../../tests/valid/while_loop_await.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

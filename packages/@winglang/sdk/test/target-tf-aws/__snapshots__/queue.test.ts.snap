@@ -1,0 +1,991 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`QueueRef in an TFAWS app can be used to reference an existing queue 1`] = `
+{
+  "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+    },
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:GetQueueUrl"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:SendMessage"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:GetQueueAttributes"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "Function": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "QUEUE_ARN_23984aca": "arn:aws:sqs:us-west-2:123456789012:MyQueue1234",
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
+        },
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
+`;
+
+exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Function/CloudwatchLogGroup",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Function/Default",
+                  },
+                  "IamRole": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "IamRole",
+                    "path": "root/Default/Function/IamRole",
+                  },
+                  "IamRolePolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "IamRolePolicy",
+                    "path": "root/Default/Function/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "IamRolePolicyAttachment",
+                    "path": "root/Default/Function/IamRolePolicyAttachment",
+                  },
+                  "S3Object": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "S3Object",
+                    "path": "root/Default/Function/S3Object",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
+              "QueueRef": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {},
+                "id": "QueueRef",
+                "path": "root/Default/QueueRef",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`default queue behavior 1`] = `
+{
+  "resource": {
+    "aws_sqs_queue": {
+      "Queue": {
+        "message_retention_seconds": 3600,
+        "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30,
+      },
+    },
+  },
+}
+`;
+
+exports[`default queue behavior 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Queue": {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Queue/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed message queue",
+                  "title": "Queue",
+                },
+                "id": "Queue",
+                "path": "root/Default/Queue",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`queue name valid 1`] = `
+{
+  "resource": {
+    "aws_sqs_queue": {
+      "The-Incredible_Queue-01": {
+        "message_retention_seconds": 3600,
+        "name": "The-Incredible_Queue-01-c8d1a14d",
+        "visibility_timeout_seconds": 30,
+      },
+    },
+  },
+}
+`;
+
+exports[`queue name valid 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "The-Incredible_Queue-01": {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/The-Incredible_Queue-01/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed message queue",
+                  "title": "Queue",
+                },
+                "id": "The-Incredible_Queue-01",
+                "path": "root/Default/The-Incredible_Queue-01",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`queue with a consumer function 1`] = `
+"
+(await (async () => {
+  const klass = require("[REDACTED]/@winglang/sdk/src/shared-aws/function.inflight.js").FunctionClient;
+  const client = new klass({$functionArn: process.env["FUNCTION_NAME_fd688af4"], $constructPath: "root/Default/Queue-SetConsumer0"});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+"
+`;
+
+exports[`queue with a consumer function 2`] = `
+{
+  "resource": {
+    "aws_cloudwatch_log_group": {
+      "Queue-SetConsumer0_CloudwatchLogGroup_56C2891C": {
+        "name": "/aws/lambda/Queue-SetConsumer0-c83c303c",
+        "retention_in_days": 30,
+      },
+    },
+    "aws_iam_role": {
+      "Queue-SetConsumer0_IamRole_7F9ED9ED": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "Queue-SetConsumer0_IamRolePolicy_0299B5AB": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"}]}",
+        "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "Queue-SetConsumer0_IamRolePolicyAttachment_4A4C5C5D": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
+      },
+    },
+    "aws_lambda_event_source_mapping": {
+      "Queue_EventSourceMapping_8332F7DC": {
+        "batch_size": 1,
+        "event_source_arn": "\${aws_sqs_queue.Queue.arn}",
+        "function_name": "\${aws_lambda_function.Queue-SetConsumer0.function_name}",
+        "function_response_types": [
+          "ReportBatchItemFailures",
+        ],
+      },
+    },
+    "aws_lambda_function": {
+      "Queue-SetConsumer0": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "Queue-SetConsumer0-c83c303c",
+          },
+        },
+        "function_name": "Queue-SetConsumer0-c83c303c",
+        "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Queue-SetConsumer0_S3Object_2AD0A795.key}",
+        "timeout": "\${aws_sqs_queue.Queue.visibility_timeout_seconds}",
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Queue-SetConsumer0_S3Object_2AD0A795": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+    "aws_sqs_queue": {
+      "Queue": {
+        "message_retention_seconds": 3600,
+        "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30,
+      },
+    },
+  },
+}
+`;
+
+exports[`queue with a consumer function 3`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
+              "Queue": {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Queue/Default",
+                  },
+                  "EventSourceMapping": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "EventSourceMapping",
+                    "path": "root/Default/Queue/EventSourceMapping",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed message queue",
+                  "title": "Queue",
+                },
+                "id": "Queue",
+                "path": "root/Default/Queue",
+              },
+              "Queue-SetConsumer0": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Asset",
+                    "path": "root/Default/Queue-SetConsumer0/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Queue-SetConsumer0/CloudwatchLogGroup",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Queue-SetConsumer0/Default",
+                  },
+                  "IamRole": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "IamRole",
+                    "path": "root/Default/Queue-SetConsumer0/IamRole",
+                  },
+                  "IamRolePolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "IamRolePolicy",
+                    "path": "root/Default/Queue-SetConsumer0/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "IamRolePolicyAttachment",
+                    "path": "root/Default/Queue-SetConsumer0/IamRolePolicyAttachment",
+                  },
+                  "S3Object": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "S3Object",
+                    "path": "root/Default/Queue-SetConsumer0/S3Object",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Queue-SetConsumer0",
+                "path": "root/Default/Queue-SetConsumer0",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`queue with custom retention 1`] = `
+{
+  "resource": {
+    "aws_sqs_queue": {
+      "Queue": {
+        "message_retention_seconds": 1800,
+        "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30,
+      },
+    },
+  },
+}
+`;
+
+exports[`queue with custom retention 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Queue": {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Queue/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed message queue",
+                  "title": "Queue",
+                },
+                "id": "Queue",
+                "path": "root/Default/Queue",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`queue with custom timeout 1`] = `
+{
+  "resource": {
+    "aws_sqs_queue": {
+      "Queue": {
+        "message_retention_seconds": 3600,
+        "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30,
+      },
+    },
+  },
+}
+`;
+
+exports[`queue with custom timeout 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Queue": {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Queue/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed message queue",
+                  "title": "Queue",
+                },
+                "id": "Queue",
+                "path": "root/Default/Queue",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`replace invalid character from queue name 1`] = `
+{
+  "resource": {
+    "aws_sqs_queue": {
+      "TheIncredibleQueue": {
+        "message_retention_seconds": 3600,
+        "name": "The-Incredible-Queue-c8305287",
+        "visibility_timeout_seconds": 30,
+      },
+    },
+  },
+}
+`;
+
+exports[`replace invalid character from queue name 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "The*Incredible$Queue": {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/The*Incredible$Queue/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed message queue",
+                  "title": "Queue",
+                },
+                "id": "The*Incredible$Queue",
+                "path": "root/Default/The*Incredible$Queue",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;

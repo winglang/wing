@@ -1,4 +1,4 @@
-# [namspaced-expr-in-index-expr.test.w](../../../../../examples/tests/valid/namspaced-expr-in-index-expr.test.w) | test | sim
+# [namspaced-expr-in-index-expr.test.w](../../../../../tests/valid/namspaced-expr-in-index-expr.test.w) | test | sim
 
 ## stdout.log
 ```log

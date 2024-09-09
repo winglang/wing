@@ -1,4 +1,4 @@
-# [function_variadic_arguments.test.w](../../../../../examples/tests/valid/function_variadic_arguments.test.w) | compile | tf-aws
+# [function_variadic_arguments.test.w](../../../../../tests/valid/function_variadic_arguments.test.w) | compile | tf-aws
 
 ## inflight.A-1.cjs
 ```cjs

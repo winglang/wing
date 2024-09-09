@@ -1,4 +1,4 @@
-# [extend_counter.test.w](../../../../../examples/tests/valid/extend_counter.test.w) | test | sim
+# [extend_counter.test.w](../../../../../tests/valid/extend_counter.test.w) | test | sim
 
 ## stdout.log
 ```log

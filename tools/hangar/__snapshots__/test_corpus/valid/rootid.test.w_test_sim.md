@@ -1,4 +1,4 @@
-# [rootid.test.w](../../../../../examples/tests/valid/rootid.test.w) | test | sim
+# [rootid.test.w](../../../../../tests/valid/rootid.test.w) | test | sim
 
 ## stdout.log
 ```log

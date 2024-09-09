@@ -1,4 +1,4 @@
-# [chaining_macros.test.w](../../../../../examples/tests/valid/chaining_macros.test.w) | test | sim
+# [chaining_macros.test.w](../../../../../tests/valid/chaining_macros.test.w) | test | sim
 
 ## stdout.log
 ```log

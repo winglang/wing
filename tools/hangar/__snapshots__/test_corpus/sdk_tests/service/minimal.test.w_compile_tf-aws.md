@@ -1,4 +1,4 @@
-# [minimal.test.w](../../../../../../examples/tests/sdk_tests/service/minimal.test.w) | compile | tf-aws
+# [minimal.test.w](../../../../../../tests/sdk_tests/service/minimal.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

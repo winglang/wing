@@ -1,4 +1,4 @@
-# [mut_container_types.test.w](../../../../../examples/tests/valid/mut_container_types.test.w) | compile | tf-aws
+# [mut_container_types.test.w](../../../../../tests/valid/mut_container_types.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

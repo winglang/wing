@@ -1,4 +1,4 @@
-# [stringify.test.w](../../../../../examples/tests/valid/stringify.test.w) | test | sim
+# [stringify.test.w](../../../../../tests/valid/stringify.test.w) | test | sim
 
 ## stdout.log
 ```log
@@ -7,6 +7,7 @@ my string
 true
 { cool: 'beans' }
 A
+{ bar: 'hello' }
 pass ─ stringify.test.wsim (no tests)
 
 Tests 1 passed (1)

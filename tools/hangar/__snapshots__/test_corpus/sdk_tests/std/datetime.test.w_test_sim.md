@@ -1,4 +1,4 @@
-# [datetime.test.w](../../../../../../examples/tests/sdk_tests/std/datetime.test.w) | test | sim
+# [datetime.test.w](../../../../../../tests/sdk_tests/std/datetime.test.w) | test | sim
 
 ## stdout.log
 ```log

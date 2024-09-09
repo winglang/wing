@@ -1,4 +1,4 @@
-# [datetime.test.w](../../../../../../examples/tests/sdk_tests/std/datetime.test.w) | compile | tf-aws
+# [datetime.test.w](../../../../../../tests/sdk_tests/std/datetime.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

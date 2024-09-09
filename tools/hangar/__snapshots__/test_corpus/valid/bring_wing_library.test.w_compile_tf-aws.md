@@ -1,4 +1,4 @@
-# [bring_wing_library.test.w](../../../../../examples/tests/valid/bring_wing_library.test.w) | compile | tf-aws
+# [bring_wing_library.test.w](../../../../../tests/valid/bring_wing_library.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-3.cjs
 ```cjs
@@ -143,6 +143,7 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
+    const expect = $stdlib.expect;
     const fixture = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`, $preflightTypesMap);
     const testfixture = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`, $preflightTypesMap);
     const testfixture2 = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`, $preflightTypesMap);
@@ -156,27 +157,28 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-3.cjs")({
-            $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
+            $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.Store") ?? fixture.Store, "", "Store"))},
           })
         `;
       }
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), ["makeKeyInflight"]],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.Store") ?? fixture.Store, "", "Store"), ["makeKeyInflight"]],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), []],
+            [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.Store") ?? fixture.Store, "", "Store"), []],
           ],
         });
       }
     }
-    new fixture.Store(this, "Store");
+    globalThis.$ClassFactory.new("@winglibs/testfixture.Store", fixture.Store, this, "Store");
     const fave_num = fixture.FavoriteNumbers.SEVEN;
     const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
     $helpers.assert($helpers.eq((fixture.Store.makeKey("hello")), "data/hello.json"), "fixture.Store.makeKey(\"hello\") == \"data/hello.json\"");
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
+    (expect.Util.equal((fixture.Store.loadStaticData(this)), "hello world!\n"));
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_wing_library.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
@@ -221,6 +223,7 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
 const cloud = $stdlib.cloud;
+const fs = $stdlib.fs;
 const myutil = $helpers.bringJs(`${__dirname}/preflight.util-2.cjs`, $preflightTypesMap);
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, options) {
@@ -234,10 +237,15 @@ class Store extends $stdlib.std.Resource {
   onSet(handler) {
     $macros.__MutArray_push(false, this.handlers, handler);
   }
+  static loadStaticData($scope) {
+    const path = (fs.Util.join($helpers.resolve(__dirname, "../../../node_modules/@winglibs/testfixture"), "example-data.txt"));
+    const contents = (fs.Util.readFile(path));
+    return contents;
+  }
   static _toInflightType() {
     return `
       require("${$helpers.normalPath(__dirname)}/inflight.Store-2.cjs")({
-        $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
+        $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.subdir.Util") ?? myutil.Util, "", "Util"))},
       })
     `;
   }
@@ -251,12 +259,12 @@ class Store extends $stdlib.std.Resource {
   get _liftMap() {
     return ({
       "set": [
-        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), ["double"]],
+        [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.subdir.Util") ?? myutil.Util, "", "Util"), ["double"]],
         [this.data, ["put"]],
         [this.handlers, []],
       ],
       "$inflight_init": [
-        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), []],
+        [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglibs/testfixture.subdir.Util") ?? myutil.Util, "", "Util"), []],
         [this.data, []],
         [this.handlers, []],
       ],

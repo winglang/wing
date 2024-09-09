@@ -76,7 +76,7 @@ jobs:
         id: setdirs
         shell: bash
         run: | # TODO: skipping std, math and external folders, when https://github.com/winglang/wing/issues/3168 is resolve- we'll skip only the external folder.
-          dirs=$(ls -d examples/tests/sdk_tests/*/ | sed 's/\/$//' | grep -v "external\|std\|math" | jq -R -s -c 'split("\n")[:-1]')
+          dirs=$(ls -d tests/sdk_tests/*/ | sed 's/\/$//' | grep -v "external\|std\|math" | jq -R -s -c 'split("\n")[:-1]')
           processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
           wrapped_dirs=$(echo $processed_dirs | jq -c .)
           echo "dirs=$wrapped_dirs" >> $GITHUB_OUTPUT
@@ -128,7 +128,7 @@ jobs:
       ##################### install a local wing version #########################
       - name: Download Dist Artifacts
         if: ${{ env.LOCAL_BUILD ==  'true' }}
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
@@ -154,7 +154,7 @@ jobs:
       ########################################################################
       - name: Installing external js modules
         run: |
-          cd examples/tests/sdk_tests
+          cd tests/sdk_tests
           npm install
       - name: Configure AWS credentials
         if: ${{ matrix.target == 'tf-aws' }}
@@ -206,24 +206,24 @@ jobs:
         run: |
           if  ${{ env.MANUAL == 'true' }}
           then
-            WING_CLI=$(realpath apps/wing/bin/wing)
+            WING_CLI=$(realpath packages/winglang/bin/wing)
           elif ${{ env.LOCAL_BUILD == 'false'}}
           then 
             WING_CLI=$(which wing)
             # COMPATIBILITY="-t @winglang/compatibility-spy" //TODO: will be handled in a following PR
           else
             WING_CLI=$(realpath localwing/node_modules/.bin/wing)
-            COMPATIBILITY="-t  ../../../../localwing/node_modules/@winglang/compatibility-spy/lib"
+            COMPATIBILITY="-t  ../../../localwing/node_modules/@winglang/compatibility-spy/lib"
             echo $COMPATIBILITY
           fi
           cd ${{ matrix.test.directory }}
-          $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} -p ${{ (matrix.target == 'tf-azure' && 2 ) || (matrix.target == 'tf-gcp' && 5) || 10 }} --retry 3 $COMPATIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
+          $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} -p ${{ (matrix.target == 'tf-azure' && 2 ) || (matrix.target == 'tf-gcp' && 5) || 10 }} --retry 3 $COMPATIBILITY *.test.w -o ../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
 
       - name: Upload Artifacts
         if: ${{ env.LOCAL_BUILD ==  'true' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: out
+          name: out-${{ matrix.test.name }}-${{ matrix.target }}
           path: out/*
 
       - name: Output Terraform log

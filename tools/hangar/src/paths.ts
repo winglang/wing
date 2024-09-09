@@ -2,8 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 
 export const repoRoot = path.resolve(__dirname, "../../..");
-export const examplesDir = path.join(repoRoot, "examples");
-export const testDir = path.join(examplesDir, "tests");
+export const testDir = path.join(repoRoot, "tests");
 export const validTestDir = path.join(testDir, "valid");
 export const appWithParamsDir = path.join(validTestDir, "parameters");
 export const sdkTestsDir = path.join(testDir, "sdk_tests");

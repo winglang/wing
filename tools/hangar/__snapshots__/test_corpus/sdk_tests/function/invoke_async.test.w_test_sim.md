@@ -1,4 +1,4 @@
-# [invoke_async.test.w](../../../../../../examples/tests/sdk_tests/function/invoke_async.test.w) | test | sim
+# [invoke_async.test.w](../../../../../../tests/sdk_tests/function/invoke_async.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [root_path_vars.test.w](../../../../../../examples/tests/sdk_tests/api/root_path_vars.test.w) | test | sim
+# [root_path_vars.test.w](../../../../../../tests/sdk_tests/api/root_path_vars.test.w) | test | sim
 
 ## stdout.log
 ```log

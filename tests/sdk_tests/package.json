@@ -1,0 +1,10 @@
+{
+  "name": "examples-sdk",
+  "dependencies": {
+    "nanoid": "^3.3.7",
+    "uuid": "^9.0.1"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@wingconsole/use-persistent-state",
+  "version": "0.0.0",
+  "private": true,
+  "exports": "./src/index.tsx",
+  "types": "./src/index.tsx",
+  "sideEffects": false,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "tsc": "tsc --build",
+    "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@wingconsole/eslint-plugin": "workspace:^",
+    "@wingconsole/tsconfig": "workspace:^",
+    "typescript": "^5.5.2"
+  },
+  "volta": {
+    "extends": "../../../package.json"
+  }
+}

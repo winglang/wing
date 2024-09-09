@@ -1,4 +1,4 @@
-# [on_message.test.w](../../../../../../examples/tests/sdk_tests/topic/on_message.test.w) | test | sim
+# [on_message.test.w](../../../../../../tests/sdk_tests/topic/on_message.test.w) | test | sim
 
 ## stdout.log
 ```log

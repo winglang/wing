@@ -701,10 +701,10 @@ prepended to the unique identifier.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.std.IApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.std.IApp.property.entrypointDir">entrypointDir</a></code> | <code>str</code> | The directory of the entrypoint of the current program. |
+| <code><a href="#@winglang/sdk.std.IApp.property.entrypointDir">entrypointDir</a></code> | <code>str</code> | The directory of the entrypoint of the current Wing application. |
 | <code><a href="#@winglang/sdk.std.IApp.property.isTestEnvironment">isTestEnvironment</a></code> | <code>bool</code> | `true` if this is a testing environment. |
 | <code><a href="#@winglang/sdk.std.IApp.property.parameters">parameters</a></code> | <code><a href="#@winglang/sdk.platform.ParameterRegistrar">ParameterRegistrar</a></code> | The application's parameter registrar. |
-| <code><a href="#@winglang/sdk.std.IApp.property.workdir">workdir</a></code> | <code>str</code> | The `.wing` directory into which you can emit artifacts during preflight. |
+| <code><a href="#@winglang/sdk.std.IApp.property.workdir">workdir</a></code> | <code>str</code> | The `.wing` directory into which you can emit intermediate artifacts during preflight. |
 
 ---
 
@@ -728,7 +728,7 @@ entrypointDir: str;
 
 - *Type:* str
 
-The directory of the entrypoint of the current program.
+The directory of the entrypoint of the current Wing application.
 
 ---
 
@@ -764,7 +764,7 @@ workdir: str;
 
 - *Type:* str
 
-The `.wing` directory into which you can emit artifacts during preflight.
+The `.wing` directory into which you can emit intermediate artifacts during preflight.
 
 ---
 

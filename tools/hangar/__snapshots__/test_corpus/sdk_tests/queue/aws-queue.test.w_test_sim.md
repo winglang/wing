@@ -1,4 +1,4 @@
-# [aws-queue.test.w](../../../../../../examples/tests/sdk_tests/queue/aws-queue.test.w) | test | sim
+# [aws-queue.test.w](../../../../../../tests/sdk_tests/queue/aws-queue.test.w) | test | sim
 
 ## stdout.log
 ```log

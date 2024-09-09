@@ -1,4 +1,4 @@
-# [bring_awscdk.test.w](../../../../../examples/tests/valid/bring_awscdk.test.w) | compile | tf-aws
+# [bring_awscdk.test.w](../../../../../tests/valid/bring_awscdk.test.w) | compile | tf-aws
 
 ## inflight.CdkDockerImageFunction-1.cjs
 ```cjs

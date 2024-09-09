@@ -1,4 +1,4 @@
-# [statements_before_super.w](../../../../../examples/tests/valid/statements_before_super.w) | compile | tf-aws
+# [statements_before_super.w](../../../../../tests/valid/statements_before_super.w) | compile | tf-aws
 
 ## inflight.A-1.cjs
 ```cjs

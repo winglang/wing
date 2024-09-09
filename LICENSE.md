@@ -2,7 +2,7 @@ Copyright (c) 2022-present Wing Cloud, Inc.
 
 Portions of this software are licensed as follows:
 
-- All content that resides under the "apps/wing-console/" directory of this repository, if that directory exists, is licensed under the license defined in "apps/wing-console/LICENSE.md".
+- All content that resides under the "wing-console/" directory of this repository, if that directory exists, is licensed under the license defined in "wing-console/LICENSE.md".
 - All third party components incorporated into the Winglang Software are licensed under the original license provided by the owner of the applicable component.
 - Content outside of the above mentioned directories or restrictions above is available under the "MIT" license as defined below.
 

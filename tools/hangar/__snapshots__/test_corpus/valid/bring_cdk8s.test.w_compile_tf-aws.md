@@ -1,4 +1,4 @@
-# [bring_cdk8s.test.w](../../../../../examples/tests/valid/bring_cdk8s.test.w) | compile | tf-aws
+# [bring_cdk8s.test.w](../../../../../tests/valid/bring_cdk8s.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

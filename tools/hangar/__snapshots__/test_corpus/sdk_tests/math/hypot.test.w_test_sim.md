@@ -1,4 +1,4 @@
-# [hypot.test.w](../../../../../../examples/tests/sdk_tests/math/hypot.test.w) | test | sim
+# [hypot.test.w](../../../../../../tests/sdk_tests/math/hypot.test.w) | test | sim
 
 ## stdout.log
 ```log

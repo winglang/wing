@@ -36,7 +36,7 @@ Usage:
 $ wing new <template>
 ```
 
-Run `wing new` without any arguments to view the available templates or you can [view the templates on GitHub](https://github.com/winglang/wing/tree/main/apps/wing/project-templates/wing).
+Run `wing new` without any arguments to view the available templates or you can [view the templates on GitHub](https://github.com/winglang/wing/tree/main/packages/winglang/project-templates/wing).
 
 ## Run: `wing run|it`
 
@@ -242,7 +242,17 @@ This will compile your current Wing directory, and bundle it as a tarball that c
 
 See [Libraries](/docs/category/wing-libraries-winglibs) for more details on packaging and consuming Wing libraries.
 
-:::
+## Generate Docs: `wing docs`
+
+The `wing docs` command can be used to generate API documentation for your Wing project.
+
+Usage:
+
+```sh
+$ wing docs
+```
+
+This will generate a file named `API.md` in the root of your project.
 
 ## Store Secrets: `wing secrets`
 

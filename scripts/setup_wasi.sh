@@ -11,7 +11,7 @@ SYS_OS=$OSTYPE
 SYS_ARCH=$(uname -m)
 
 # Check if mac or linux
-if [[ "$SYS_OS" == "linux-gnu"* ]]; then
+if [[ "$SYS_OS" == "linux"* ]]; then
     SYS_OS="linux"
 elif [[ "$SYS_OS" == "darwin"* ]]; then
     SYS_OS="macos"

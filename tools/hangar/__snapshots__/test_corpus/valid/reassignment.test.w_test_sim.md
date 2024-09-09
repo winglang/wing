@@ -1,4 +1,4 @@
-# [reassignment.test.w](../../../../../examples/tests/valid/reassignment.test.w) | test | sim
+# [reassignment.test.w](../../../../../tests/valid/reassignment.test.w) | test | sim
 
 ## stdout.log
 ```log

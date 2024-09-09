@@ -1,4 +1,4 @@
-# [mutation_after_class_init.test.w](../../../../../examples/tests/valid/mutation_after_class_init.test.w) | compile | tf-aws
+# [mutation_after_class_init.test.w](../../../../../tests/valid/mutation_after_class_init.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

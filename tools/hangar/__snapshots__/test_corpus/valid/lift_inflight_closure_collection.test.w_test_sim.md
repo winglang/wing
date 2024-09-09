@@ -1,4 +1,4 @@
-# [lift_inflight_closure_collection.test.w](../../../../../examples/tests/valid/lift_inflight_closure_collection.test.w) | test | sim
+# [lift_inflight_closure_collection.test.w](../../../../../tests/valid/lift_inflight_closure_collection.test.w) | test | sim
 
 ## stdout.log
 ```log

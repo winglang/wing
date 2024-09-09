@@ -1,4 +1,4 @@
-# [inflight_concat.test.w](../../../../../examples/tests/valid/inflight_concat.test.w) | test | sim
+# [inflight_concat.test.w](../../../../../tests/valid/inflight_concat.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [indexing.test.w](../../../../../examples/tests/valid/indexing.test.w) | test | sim
+# [indexing.test.w](../../../../../tests/valid/indexing.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [inherit_stdlib_class.test.w](../../../../../examples/tests/valid/inherit_stdlib_class.test.w) | test | sim
+# [inherit_stdlib_class.test.w](../../../../../tests/valid/inherit_stdlib_class.test.w) | test | sim
 
 ## stdout.log
 ```log

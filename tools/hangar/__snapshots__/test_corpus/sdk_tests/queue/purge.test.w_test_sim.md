@@ -1,4 +1,4 @@
-# [purge.test.w](../../../../../../examples/tests/sdk_tests/queue/purge.test.w) | test | sim
+# [purge.test.w](../../../../../../tests/sdk_tests/queue/purge.test.w) | test | sim
 
 ## stdout.log
 ```log

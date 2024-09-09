@@ -1,4 +1,4 @@
-# [json_string_interpolation.test.w](../../../../../examples/tests/valid/json_string_interpolation.test.w) | compile | tf-aws
+# [json_string_interpolation.test.w](../../../../../tests/valid/json_string_interpolation.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\ninterface Foo extends IResource {\n  // No public members\n}\n```\n---\nInterface doc"
+range:
+  start:
+    line: 2
+    character: 12
+  end:
+    line: 2
+    character: 15
+

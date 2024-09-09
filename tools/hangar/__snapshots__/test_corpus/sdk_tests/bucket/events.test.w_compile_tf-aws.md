@@ -1,4 +1,4 @@
-# [events.test.w](../../../../../../examples/tests/sdk_tests/bucket/events.test.w) | compile | tf-aws
+# [events.test.w](../../../../../../tests/sdk_tests/bucket/events.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

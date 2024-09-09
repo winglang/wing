@@ -1,4 +1,4 @@
-# [primitive_methods.test.w](../../../../../examples/tests/valid/primitive_methods.test.w) | test | sim
+# [primitive_methods.test.w](../../../../../tests/valid/primitive_methods.test.w) | test | sim
 
 ## stdout.log
 ```log

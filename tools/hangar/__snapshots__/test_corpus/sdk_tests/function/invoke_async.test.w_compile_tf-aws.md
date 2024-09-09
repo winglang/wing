@@ -1,4 +1,4 @@
-# [invoke_async.test.w](../../../../../../examples/tests/sdk_tests/function/invoke_async.test.w) | compile | tf-aws
+# [invoke_async.test.w](../../../../../../tests/sdk_tests/function/invoke_async.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

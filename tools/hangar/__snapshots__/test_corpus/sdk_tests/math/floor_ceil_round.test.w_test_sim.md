@@ -1,4 +1,4 @@
-# [floor_ceil_round.test.w](../../../../../../examples/tests/sdk_tests/math/floor_ceil_round.test.w) | test | sim
+# [floor_ceil_round.test.w](../../../../../../tests/sdk_tests/math/floor_ceil_round.test.w) | test | sim
 
 ## stdout.log
 ```log

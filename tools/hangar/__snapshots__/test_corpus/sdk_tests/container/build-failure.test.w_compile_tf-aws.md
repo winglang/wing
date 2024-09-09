@@ -1,4 +1,4 @@
-# [build-failure.test.w](../../../../../../examples/tests/sdk_tests/container/build-failure.test.w) | compile | tf-aws
+# [build-failure.test.w](../../../../../../tests/sdk_tests/container/build-failure.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

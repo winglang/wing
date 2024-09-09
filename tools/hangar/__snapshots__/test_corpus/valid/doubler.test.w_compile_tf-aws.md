@@ -1,4 +1,4 @@
-# [doubler.test.w](../../../../../examples/tests/valid/doubler.test.w) | compile | tf-aws
+# [doubler.test.w](../../../../../tests/valid/doubler.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

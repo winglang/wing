@@ -1,4 +1,4 @@
-# [capture_resource_and_data.test.w](../../../../../examples/tests/valid/capture_resource_and_data.test.w) | test | sim
+# [capture_resource_and_data.test.w](../../../../../tests/valid/capture_resource_and_data.test.w) | test | sim
 
 ## stdout.log
 ```log

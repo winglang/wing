@@ -1,4 +1,4 @@
-# [namspaced-expr-in-index-expr.test.w](../../../../../examples/tests/valid/namspaced-expr-in-index-expr.test.w) | compile | tf-aws
+# [namspaced-expr-in-index-expr.test.w](../../../../../tests/valid/namspaced-expr-in-index-expr.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

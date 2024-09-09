@@ -1,4 +1,4 @@
-# [on-stop.test.w](../../../../../../examples/tests/sdk_tests/resource/on-stop.test.w) | test | sim
+# [on-stop.test.w](../../../../../../tests/sdk_tests/resource/on-stop.test.w) | test | sim
 
 ## stdout.log
 ```log

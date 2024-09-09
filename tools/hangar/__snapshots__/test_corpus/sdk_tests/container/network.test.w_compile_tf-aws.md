@@ -1,4 +1,4 @@
-# [network.test.w](../../../../../../examples/tests/sdk_tests/container/network.test.w) | compile | tf-aws
+# [network.test.w](../../../../../../tests/sdk_tests/container/network.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

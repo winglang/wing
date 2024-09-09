@@ -1,4 +1,4 @@
-# [super_call.test.w](../../../../../examples/tests/valid/super_call.test.w) | test | sim
+# [super_call.test.w](../../../../../tests/valid/super_call.test.w) | test | sim
 
 ## stdout.log
 ```log

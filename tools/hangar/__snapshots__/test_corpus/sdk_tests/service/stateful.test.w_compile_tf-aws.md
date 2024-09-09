@@ -1,4 +1,4 @@
-# [stateful.test.w](../../../../../../examples/tests/sdk_tests/service/stateful.test.w) | compile | tf-aws
+# [stateful.test.w](../../../../../../tests/sdk_tests/service/stateful.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

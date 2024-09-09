@@ -1,4 +1,4 @@
-# [json_string_interpolation.test.w](../../../../../examples/tests/valid/json_string_interpolation.test.w) | test | sim
+# [json_string_interpolation.test.w](../../../../../tests/valid/json_string_interpolation.test.w) | test | sim
 
 ## stdout.log
 ```log
