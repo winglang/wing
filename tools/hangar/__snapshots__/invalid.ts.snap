@@ -433,6 +433,20 @@ error: Could not find a trusted library "@winglibs/c" installed. Did you mean to
   | ^^^^^^^^
 
 
+error: Could not find a trusted library "@winglibs/regex" installed. Did you mean to run \`npm i @winglibs/regex\`?
+   --> ../../../tests/invalid/bring.test.w:11:1
+   |
+11 | bring regex;
+   | ^^^^^^^^^^^^
+
+
+error: Could not find a trusted library "@winglibs/num" installed. Did you mean to run \`npm i @winglibs/num\`?
+   --> ../../../tests/invalid/bring.test.w:14:1
+   |
+14 | bring num;
+   | ^^^^^^^^^^
+
+
 error: Redundant bring of "std"
   --> ../../../tests/invalid/bring.test.w:1:1
   |
