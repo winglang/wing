@@ -73,7 +73,7 @@ jobs:
           role-session-name: gh-actions-winglang # makes it easy to identify, e.g. in AWS Cloudtrail
           aws-region: ${{ env.AWS_REGION }}
       - name: Deploy Winglang App
-        uses: winglang/wing-github-action/actions/deploy@v0.1.0
+        uses: winglang/wing-github-action/actions/deploy@main
         with:
           entry: main.w
           target: 'tf-aws'
