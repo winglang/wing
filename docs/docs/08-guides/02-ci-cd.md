@@ -109,7 +109,7 @@ jobs:
           role-session-name: gh-actions-winglang
           aws-region: ${{ env.AWS_REGION }}
       - name: Terraform Plan
-        uses: winglang/wing-github-action/actions/pull-request-diff@v0.1.0
+        uses: winglang/wing-github-action/actions/pull-request-diff@main
         with:
           entry: main.w
           target: 'tf-aws'
@@ -123,24 +123,26 @@ Most users will find using the Wing GitHub Action within GitHub Actions as the s
 
 Refer to the following Github Action workflow as a template to define your customized workflow. For detailed instructions, please refer to the Github Actions [documentation](https://docs.github.com/en/actions).
 
-#### Backend Plugin
+#### Backend Platform
 
-Add the following file to your application root directory as `plugin.s3-backend.js`. This will be used in the Github Action workflow during the `wing compile` step. Learn more about this in the [Terraform Backend guide](./01-terraform-backend.md)
+Add the following file to your application root directory as `platform.s3-backend.js`. This will be used in the Github Action workflow during the `wing compile` step. Learn more about this in the [Terraform Backend guide](./01-terraform-backend.md)
 
 ```
-// plugin.s3-backend.js
-exports.postSynth = function(config) {
-  if (!process.env.TF_BACKEND_BUCKET) {throw new Error("env var TF_BACKEND_BUCKET not set")}
-  if (!process.env.TF_BACKEND_BUCKET_REGION) {throw new Error("env var TF_BACKEND_BUCKET_REGION not set")}
-  if (!process.env.TF_BACKEND_STATE_FILE) {throw new Error("env var TF_BACKEND_STATE_FILE not set")}
-  config.terraform.backend = {
-    s3: {
-      bucket: process.env.TF_BACKEND_BUCKET,
-      region: process.env.TF_BACKEND_BUCKET_REGION,
-      key: process.env.TF_BACKEND_STATE_FILE
+// platform.s3-backend.js
+exports.Platform = class TFBackend {
+  postSynth(config) {
+    if (!process.env.TF_BACKEND_BUCKET) {throw new Error("env var TF_BACKEND_BUCKET not set")}
+    if (!process.env.TF_BACKEND_BUCKET_REGION) {throw new Error("env var TF_BACKEND_BUCKET_REGION not set")}
+    if (!process.env.TF_BACKEND_STATE_FILE) {throw new Error("env var TF_BACKEND_STATE_FILE not set")}
+    config.terraform.backend = {
+      s3: {
+        bucket: process.env.TF_BACKEND_BUCKET,
+        region: process.env.TF_BACKEND_BUCKET_REGION,
+        key: process.env.TF_BACKEND_STATE_FILE
+      }
     }
+    return config;
   }
-  return config;
 }
 ```
 
@@ -181,7 +183,7 @@ permissions:
 
 env:
   AWS_REGION: "us-east-1"
-  # The following values are used in the backend plugin which
+  # The following values are used in the backend platform which
   # is used in the `wing compile` step
   TF_BACKEND_BUCKET: "my-terraform-state-bucket-with-a-globally-unique-name"
   TF_BACKEND_BUCKET_REGION: "us-east-1"
@@ -202,7 +204,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Compile
-        run: wing compile -t tf-aws --plugins=plugin.s3-backend.js main.w
+        run: wing compile -t tf-aws -t platform.s3-backend.js main.w
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -228,7 +230,7 @@ Consider adding Winglang simulator tests as an intermediate step in your workflo
       - name: Run Tests
         run: wing test main.w
       - name: Compile
-        run: wing compile -t tf-aws --plugins=plugin.s3-backend.js main.w
+        run: wing compile -t tf-aws -t platform.s3-backend.js main.w
 # ...
 ```
 
@@ -241,7 +243,7 @@ Consider integrating third-party Terraform analysis tools for more comprehensive
       - name: Install Dependencies
         run: npm ci
       - name: Compile
-        run: wing compile -t tf-aws --plugins=plugin.s3-backend.js main.w
+        run: wing compile -t tf-aws -t platform.s3-backend.js main.w
       - name: Check Terraform Config
         run: cd ./target/main.tfaws && your-tf-tool
 # ...
