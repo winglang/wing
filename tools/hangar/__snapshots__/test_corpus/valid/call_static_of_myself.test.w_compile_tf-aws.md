@@ -1,4 +1,4 @@
-# [call_static_of_myself.test.w](../../../../../examples/tests/valid/call_static_of_myself.test.w) | compile | tf-aws
+# [call_static_of_myself.test.w](../../../../../tests/valid/call_static_of_myself.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

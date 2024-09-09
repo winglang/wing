@@ -5,7 +5,7 @@
     "@winglang/compatibility-spy": "workspace:^",
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
-    "turbo": "^2.0.7"
+    "turbo": "^2.1.1"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",
@@ -17,7 +17,7 @@
     "docs": "./scripts/docsite.sh",
     "install": "bash scripts/setup_wasi.sh",
     "postinstall": "link-bundles && generate-workspace",
-    "wing": "turbo compile -F winglang --output-logs=new-only && ./apps/wing/bin/wing"
+    "wing": "turbo compile -F winglang --output-logs=new-only && ./packages/winglang/bin/wing"
   },
   "volta": {
     "node": "20.11.1",

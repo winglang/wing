@@ -1,4 +1,4 @@
-# [regex.test.w](../../../../../../examples/tests/sdk_tests/std/regex.test.w) | test | sim
+# [regex.test.w](../../../../../../tests/sdk_tests/std/regex.test.w) | test | sim
 
 ## stdout.log
 ```log

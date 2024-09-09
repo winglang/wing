@@ -1,4 +1,4 @@
-# [resource_call_static.test.w](../../../../../examples/tests/valid/resource_call_static.test.w) | compile | tf-aws
+# [resource_call_static.test.w](../../../../../tests/valid/resource_call_static.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

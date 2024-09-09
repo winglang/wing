@@ -1,4 +1,4 @@
-# [json-types.test.w](../../../../../examples/tests/valid/json-types.test.w) | test | sim
+# [json-types.test.w](../../../../../tests/valid/json-types.test.w) | test | sim
 
 ## stdout.log
 ```log

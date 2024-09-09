@@ -1,4 +1,4 @@
-# [network.test.w](../../../../../../examples/tests/sdk_tests/container/network.test.w) | test | sim
+# [network.test.w](../../../../../../tests/sdk_tests/container/network.test.w) | test | sim
 
 ## stdout.log
 ```log

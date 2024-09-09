@@ -1,4 +1,4 @@
-# [combinations.test.w](../../../../../../examples/tests/sdk_tests/math/combinations.test.w) | compile | tf-aws
+# [combinations.test.w](../../../../../../tests/sdk_tests/math/combinations.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

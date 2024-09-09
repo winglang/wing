@@ -1,4 +1,4 @@
-# [uuidv4.test.w](../../../../../../examples/tests/sdk_tests/util/uuidv4.test.w) | test | sim
+# [uuidv4.test.w](../../../../../../tests/sdk_tests/util/uuidv4.test.w) | test | sim
 
 ## stdout.log
 ```log

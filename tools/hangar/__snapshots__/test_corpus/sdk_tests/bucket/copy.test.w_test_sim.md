@@ -1,4 +1,4 @@
-# [copy.test.w](../../../../../../examples/tests/sdk_tests/bucket/copy.test.w) | test | sim
+# [copy.test.w](../../../../../../tests/sdk_tests/bucket/copy.test.w) | test | sim
 
 ## stdout.log
 ```log

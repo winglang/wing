@@ -1,4 +1,4 @@
-# [parameters.test.w](../../../../../../../examples/tests/valid/parameters/simple/parameters.test.w) | compile | tf-aws
+# [parameters.test.w](../../../../../../../tests/valid/parameters/simple/parameters.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
@@ -37,8 +37,7 @@ class $Root extends $stdlib.std.Resource {
     let $preflightTypesMap = {};
     const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{foo:{type:"string"},meaningOfLife:{type:"number"},},required:["meaningOfLife",]});
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
-    const app = $helpers.nodeof(this).app;
-    const myParams = $macros.__Struct_fromJson(false, MyParams, (app.parameters.read({ schema: $macros.__Struct_schema(false, MyParams, ) })));
+    const myParams = $macros.__Struct_fromJson(false, MyParams, ($helpers.nodeof(this).app.parameters.read({ schema: $macros.__Struct_schema(false, MyParams, ) })));
     {
       const $if_let_value = myParams.foo;
       if ($if_let_value != undefined) {

@@ -1,4 +1,4 @@
-# [bring_wing_library.test.w](../../../../../examples/tests/valid/bring_wing_library.test.w) | compile | tf-aws
+# [bring_wing_library.test.w](../../../../../tests/valid/bring_wing_library.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-3.cjs
 ```cjs
@@ -143,6 +143,7 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
+    const expect = $stdlib.expect;
     const fixture = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`, $preflightTypesMap);
     const testfixture = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`, $preflightTypesMap);
     const testfixture2 = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`, $preflightTypesMap);
@@ -177,6 +178,7 @@ class $Root extends $stdlib.std.Resource {
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
     $helpers.assert($helpers.eq((fixture.Store.makeKey("hello")), "data/hello.json"), "fixture.Store.makeKey(\"hello\") == \"data/hello.json\"");
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
+    (expect.Util.equal((fixture.Store.loadStaticData(this)), "hello world!\n"));
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_wing_library.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
@@ -221,6 +223,7 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
 const cloud = $stdlib.cloud;
+const fs = $stdlib.fs;
 const myutil = $helpers.bringJs(`${__dirname}/preflight.util-2.cjs`, $preflightTypesMap);
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, options) {
@@ -233,6 +236,11 @@ class Store extends $stdlib.std.Resource {
   }
   onSet(handler) {
     $macros.__MutArray_push(false, this.handlers, handler);
+  }
+  static loadStaticData($scope) {
+    const path = (fs.Util.join($helpers.resolve(__dirname, "../../../node_modules/@winglibs/testfixture"), "example-data.txt"));
+    const contents = (fs.Util.readFile(path));
+    return contents;
   }
   static _toInflightType() {
     return `

@@ -1,4 +1,4 @@
-# [aws-bucket.test.w](../../../../../../examples/tests/sdk_tests/bucket/aws-bucket.test.w) | test | sim
+# [aws-bucket.test.w](../../../../../../tests/sdk_tests/bucket/aws-bucket.test.w) | test | sim
 
 ## stdout.log
 ```log

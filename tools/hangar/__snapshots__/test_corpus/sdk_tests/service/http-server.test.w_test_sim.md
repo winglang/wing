@@ -1,4 +1,4 @@
-# [http-server.test.w](../../../../../../examples/tests/sdk_tests/service/http-server.test.w) | test | sim
+# [http-server.test.w](../../../../../../tests/sdk_tests/service/http-server.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [inference.test.w](../../../../../examples/tests/valid/inference.test.w) | test | sim
+# [inference.test.w](../../../../../tests/valid/inference.test.w) | test | sim
 
 ## stdout.log
 ```log

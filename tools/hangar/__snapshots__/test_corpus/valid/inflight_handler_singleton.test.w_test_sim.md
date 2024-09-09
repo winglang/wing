@@ -1,4 +1,4 @@
-# [inflight_handler_singleton.test.w](../../../../../examples/tests/valid/inflight_handler_singleton.test.w) | test | sim
+# [inflight_handler_singleton.test.w](../../../../../tests/valid/inflight_handler_singleton.test.w) | test | sim
 
 ## stdout.log
 ```log

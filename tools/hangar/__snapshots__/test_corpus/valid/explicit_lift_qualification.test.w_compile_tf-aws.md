@@ -1,4 +1,4 @@
-# [explicit_lift_qualification.test.w](../../../../../examples/tests/valid/explicit_lift_qualification.test.w) | compile | tf-aws
+# [explicit_lift_qualification.test.w](../../../../../tests/valid/explicit_lift_qualification.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

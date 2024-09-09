@@ -1,4 +1,4 @@
-# [print.test.w](../../../../../examples/tests/valid/print.test.w) | compile | tf-aws
+# [print.test.w](../../../../../tests/valid/print.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

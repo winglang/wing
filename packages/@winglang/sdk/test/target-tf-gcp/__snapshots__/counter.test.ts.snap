@@ -1,0 +1,1872 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`counter name valid 1`] = `
+{
+  "resource": {
+    "google_firestore_database": {
+      "TheAmazing-Counter_01": {
+        "app_engine_integration_mode": "DISABLED",
+        "concurrency_mode": "OPTIMISTIC",
+        "delete_protection_state": "DELETE_PROTECTION_DISABLED",
+        "deletion_policy": "DELETE",
+        "depends_on": [
+          "google_project_service.TheAmazing-Counter_01_CloudFirestoreAPI_8CA93C9B",
+        ],
+        "location_id": "us-central1",
+        "name": "wing-counter-the-amazing-counter-01-c83e5bd8",
+        "point_in_time_recovery_enablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+        "type": "DATASTORE_MODE",
+      },
+    },
+    "google_project_service": {
+      "TheAmazing-Counter_01_CloudFirestoreAPI_8CA93C9B": {
+        "disable_on_destroy": false,
+        "service": "firestore.googleapis.com",
+      },
+    },
+  },
+}
+`;
+
+exports[`counter name valid 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "The.Amazing-Counter_01": {
+                "children": {
+                  "CloudFirestoreAPI": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudFirestoreAPI",
+                    "path": "root/Default/The.Amazing-Counter_01/CloudFirestoreAPI",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/The.Amazing-Counter_01/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "The.Amazing-Counter_01",
+                "path": "root/Default/The.Amazing-Counter_01",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`counter with initial value 1`] = `
+{
+  "resource": {
+    "google_firestore_database": {
+      "Counter": {
+        "app_engine_integration_mode": "DISABLED",
+        "concurrency_mode": "OPTIMISTIC",
+        "delete_protection_state": "DELETE_PROTECTION_DISABLED",
+        "deletion_policy": "DELETE",
+        "depends_on": [
+          "google_project_service.Counter_CloudFirestoreAPI_2119CDFC",
+        ],
+        "location_id": "us-central1",
+        "name": "wing-counter-counter-c824ef62",
+        "point_in_time_recovery_enablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+        "type": "DATASTORE_MODE",
+      },
+    },
+    "google_project_service": {
+      "Counter_CloudFirestoreAPI_2119CDFC": {
+        "disable_on_destroy": false,
+        "service": "firestore.googleapis.com",
+      },
+    },
+  },
+}
+`;
+
+exports[`counter with initial value 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "children": {
+                  "CloudFirestoreAPI": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudFirestoreAPI",
+                    "path": "root/Default/Counter/CloudFirestoreAPI",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Counter/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`dec() IAM permissions 1`] = `
+{
+  "resource": {
+    "google_cloudfunctions_function": {
+      "Function_DefaultFunction_81B206D7": {
+        "available_memory_mb": 1024,
+        "description": "This function was created by Wing",
+        "entry_point": "handler",
+        "environment_variables": {
+          "FIRESTORE_DATABASE_NAME_6cb5a3a4": "\${google_firestore_database.Counter.name}",
+        },
+        "https_trigger_security_level": "SECURE_ALWAYS",
+        "name": "function-c852aba6",
+        "project": "my-project",
+        "region": "us-central1",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
+        "timeout": 120,
+        "trigger_http": true,
+      },
+    },
+    "google_firestore_database": {
+      "Counter": {
+        "app_engine_integration_mode": "DISABLED",
+        "concurrency_mode": "OPTIMISTIC",
+        "delete_protection_state": "DELETE_PROTECTION_DISABLED",
+        "deletion_policy": "DELETE",
+        "depends_on": [
+          "google_project_service.Counter_CloudFirestoreAPI_2119CDFC",
+        ],
+        "location_id": "us-central1",
+        "name": "wing-counter-counter-c824ef62",
+        "point_in_time_recovery_enablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+        "type": "DATASTORE_MODE",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_project-iam-member-KEN45_78725E0C": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "roles/datastore.user",
+      },
+    },
+    "google_project_service": {
+      "Counter_CloudFirestoreAPI_2119CDFC": {
+        "disable_on_destroy": false,
+        "service": "firestore.googleapis.com",
+      },
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
+    "google_service_account": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
+        "account_id": "function-c852aba6",
+        "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_storage_bucket": {
+      "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
+        "force_destroy": false,
+        "location": "us-central1",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "name": "objects",
+        "source": "<source>",
+      },
+    },
+    "random_id": {
+      "Function_FunctionBucket_Id_216676D0": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`dec() IAM permissions 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "children": {
+                  "CloudFirestoreAPI": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudFirestoreAPI",
+                    "path": "root/Default/Counter/CloudFirestoreAPI",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Counter/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "DefaultFunction": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "FunctionObjectBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
+                  "project-iam-member-KEN.45]}": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "project-iam-member-KEN.45]}",
+                    "path": "root/Default/Function/project-iam-member-KEN.45]}",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`default counter behavior 1`] = `
+{
+  "resource": {
+    "google_firestore_database": {
+      "Counter": {
+        "app_engine_integration_mode": "DISABLED",
+        "concurrency_mode": "OPTIMISTIC",
+        "delete_protection_state": "DELETE_PROTECTION_DISABLED",
+        "deletion_policy": "DELETE",
+        "depends_on": [
+          "google_project_service.Counter_CloudFirestoreAPI_2119CDFC",
+        ],
+        "location_id": "us-central1",
+        "name": "wing-counter-counter-c824ef62",
+        "point_in_time_recovery_enablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+        "type": "DATASTORE_MODE",
+      },
+    },
+    "google_project_service": {
+      "Counter_CloudFirestoreAPI_2119CDFC": {
+        "disable_on_destroy": false,
+        "service": "firestore.googleapis.com",
+      },
+    },
+  },
+}
+`;
+
+exports[`function with a counter binding 1`] = `
+"(await (async () => {
+  const $func = async (ctx) => {
+    const val = await ctx.my_counter.inc(2);
+    console.log(val);
+  }
+  const $ctx = {
+  my_counter: 
+(await (async () => {
+  const klass = require("[REDACTED]/@winglang/sdk/src/shared-gcp/counter.inflight.js").CounterClient;
+  const client = new klass({$databaseName: process.env["FIRESTORE_DATABASE_NAME_6cb5a3a4"], $initial: 0});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
+`;
+
+exports[`function with a counter binding 2`] = `
+{
+  "resource": {
+    "google_cloudfunctions_function": {
+      "Function_DefaultFunction_81B206D7": {
+        "available_memory_mb": 1024,
+        "description": "This function was created by Wing",
+        "entry_point": "handler",
+        "environment_variables": {
+          "FIRESTORE_DATABASE_NAME_6cb5a3a4": "\${google_firestore_database.Counter.name}",
+        },
+        "https_trigger_security_level": "SECURE_ALWAYS",
+        "name": "function-c852aba6",
+        "project": "my-project",
+        "region": "us-central1",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
+        "timeout": 120,
+        "trigger_http": true,
+      },
+    },
+    "google_firestore_database": {
+      "Counter": {
+        "app_engine_integration_mode": "DISABLED",
+        "concurrency_mode": "OPTIMISTIC",
+        "delete_protection_state": "DELETE_PROTECTION_DISABLED",
+        "deletion_policy": "DELETE",
+        "depends_on": [
+          "google_project_service.Counter_CloudFirestoreAPI_2119CDFC",
+        ],
+        "location_id": "us-central1",
+        "name": "wing-counter-counter-c824ef62",
+        "point_in_time_recovery_enablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+        "type": "DATASTORE_MODE",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_project-iam-member-KEN17_2AC93708": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "roles/datastore.user",
+      },
+    },
+    "google_project_service": {
+      "Counter_CloudFirestoreAPI_2119CDFC": {
+        "disable_on_destroy": false,
+        "service": "firestore.googleapis.com",
+      },
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
+    "google_service_account": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
+        "account_id": "function-c852aba6",
+        "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_storage_bucket": {
+      "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
+        "force_destroy": false,
+        "location": "us-central1",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "name": "objects",
+        "source": "<source>",
+      },
+    },
+    "random_id": {
+      "Function_FunctionBucket_Id_216676D0": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`function with a counter binding 3`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "children": {
+                  "CloudFirestoreAPI": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudFirestoreAPI",
+                    "path": "root/Default/Counter/CloudFirestoreAPI",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Counter/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "DefaultFunction": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "FunctionObjectBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
+                  "project-iam-member-KEN.17]}": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "project-iam-member-KEN.17]}",
+                    "path": "root/Default/Function/project-iam-member-KEN.17]}",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`inc() IAM permissions 1`] = `
+{
+  "resource": {
+    "google_cloudfunctions_function": {
+      "Function_DefaultFunction_81B206D7": {
+        "available_memory_mb": 1024,
+        "description": "This function was created by Wing",
+        "entry_point": "handler",
+        "environment_variables": {
+          "FIRESTORE_DATABASE_NAME_6cb5a3a4": "\${google_firestore_database.Counter.name}",
+        },
+        "https_trigger_security_level": "SECURE_ALWAYS",
+        "name": "function-c852aba6",
+        "project": "my-project",
+        "region": "us-central1",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
+        "timeout": 120,
+        "trigger_http": true,
+      },
+    },
+    "google_firestore_database": {
+      "Counter": {
+        "app_engine_integration_mode": "DISABLED",
+        "concurrency_mode": "OPTIMISTIC",
+        "delete_protection_state": "DELETE_PROTECTION_DISABLED",
+        "deletion_policy": "DELETE",
+        "depends_on": [
+          "google_project_service.Counter_CloudFirestoreAPI_2119CDFC",
+        ],
+        "location_id": "us-central1",
+        "name": "wing-counter-counter-c824ef62",
+        "point_in_time_recovery_enablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+        "type": "DATASTORE_MODE",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_project-iam-member-KEN31_651351B0": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "roles/datastore.user",
+      },
+    },
+    "google_project_service": {
+      "Counter_CloudFirestoreAPI_2119CDFC": {
+        "disable_on_destroy": false,
+        "service": "firestore.googleapis.com",
+      },
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
+    "google_service_account": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
+        "account_id": "function-c852aba6",
+        "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_storage_bucket": {
+      "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
+        "force_destroy": false,
+        "location": "us-central1",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "name": "objects",
+        "source": "<source>",
+      },
+    },
+    "random_id": {
+      "Function_FunctionBucket_Id_216676D0": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`inc() IAM permissions 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "children": {
+                  "CloudFirestoreAPI": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudFirestoreAPI",
+                    "path": "root/Default/Counter/CloudFirestoreAPI",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Counter/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "DefaultFunction": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "FunctionObjectBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
+                  "project-iam-member-KEN.31]}": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "project-iam-member-KEN.31]}",
+                    "path": "root/Default/Function/project-iam-member-KEN.31]}",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`peek() IAM permissions 1`] = `
+{
+  "resource": {
+    "google_cloudfunctions_function": {
+      "Function_DefaultFunction_81B206D7": {
+        "available_memory_mb": 1024,
+        "description": "This function was created by Wing",
+        "entry_point": "handler",
+        "environment_variables": {
+          "FIRESTORE_DATABASE_NAME_6cb5a3a4": "\${google_firestore_database.Counter.name}",
+        },
+        "https_trigger_security_level": "SECURE_ALWAYS",
+        "name": "function-c852aba6",
+        "project": "my-project",
+        "region": "us-central1",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
+        "timeout": 120,
+        "trigger_http": true,
+      },
+    },
+    "google_firestore_database": {
+      "Counter": {
+        "app_engine_integration_mode": "DISABLED",
+        "concurrency_mode": "OPTIMISTIC",
+        "delete_protection_state": "DELETE_PROTECTION_DISABLED",
+        "deletion_policy": "DELETE",
+        "depends_on": [
+          "google_project_service.Counter_CloudFirestoreAPI_2119CDFC",
+        ],
+        "location_id": "us-central1",
+        "name": "wing-counter-counter-c824ef62",
+        "point_in_time_recovery_enablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+        "type": "DATASTORE_MODE",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_project-iam-member-KEN59_3C6DFBFA": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "roles/datastore.user",
+      },
+    },
+    "google_project_service": {
+      "Counter_CloudFirestoreAPI_2119CDFC": {
+        "disable_on_destroy": false,
+        "service": "firestore.googleapis.com",
+      },
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
+    "google_service_account": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
+        "account_id": "function-c852aba6",
+        "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_storage_bucket": {
+      "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
+        "force_destroy": false,
+        "location": "us-central1",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "name": "objects",
+        "source": "<source>",
+      },
+    },
+    "random_id": {
+      "Function_FunctionBucket_Id_216676D0": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`peek() IAM permissions 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "children": {
+                  "CloudFirestoreAPI": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudFirestoreAPI",
+                    "path": "root/Default/Counter/CloudFirestoreAPI",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Counter/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "DefaultFunction": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "FunctionObjectBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
+                  "project-iam-member-KEN.59]}": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "project-iam-member-KEN.59]}",
+                    "path": "root/Default/Function/project-iam-member-KEN.59]}",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`replace invalid character from counter name 1`] = `
+{
+  "resource": {
+    "google_firestore_database": {
+      "TheAmazingCounter01": {
+        "app_engine_integration_mode": "DISABLED",
+        "concurrency_mode": "OPTIMISTIC",
+        "delete_protection_state": "DELETE_PROTECTION_DISABLED",
+        "deletion_policy": "DELETE",
+        "depends_on": [
+          "google_project_service.TheAmazingCounter01_CloudFirestoreAPI_3EBD30CE",
+        ],
+        "location_id": "us-central1",
+        "name": "wing-counter-the-amazing-counter-01-c848151b",
+        "point_in_time_recovery_enablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+        "type": "DATASTORE_MODE",
+      },
+    },
+    "google_project_service": {
+      "TheAmazingCounter01_CloudFirestoreAPI_3EBD30CE": {
+        "disable_on_destroy": false,
+        "service": "firestore.googleapis.com",
+      },
+    },
+  },
+}
+`;
+
+exports[`replace invalid character from counter name 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "The*Amazing%Counter@01": {
+                "children": {
+                  "CloudFirestoreAPI": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudFirestoreAPI",
+                    "path": "root/Default/The*Amazing%Counter@01/CloudFirestoreAPI",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/The*Amazing%Counter@01/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "The*Amazing%Counter@01",
+                "path": "root/Default/The*Amazing%Counter@01",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`set() IAM permissions 1`] = `
+{
+  "resource": {
+    "google_cloudfunctions_function": {
+      "Function_DefaultFunction_81B206D7": {
+        "available_memory_mb": 1024,
+        "description": "This function was created by Wing",
+        "entry_point": "handler",
+        "environment_variables": {
+          "FIRESTORE_DATABASE_NAME_6cb5a3a4": "\${google_firestore_database.Counter.name}",
+        },
+        "https_trigger_security_level": "SECURE_ALWAYS",
+        "name": "function-c852aba6",
+        "project": "my-project",
+        "region": "us-central1",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
+        "timeout": 120,
+        "trigger_http": true,
+      },
+    },
+    "google_firestore_database": {
+      "Counter": {
+        "app_engine_integration_mode": "DISABLED",
+        "concurrency_mode": "OPTIMISTIC",
+        "delete_protection_state": "DELETE_PROTECTION_DISABLED",
+        "deletion_policy": "DELETE",
+        "depends_on": [
+          "google_project_service.Counter_CloudFirestoreAPI_2119CDFC",
+        ],
+        "location_id": "us-central1",
+        "name": "wing-counter-counter-c824ef62",
+        "point_in_time_recovery_enablement": "POINT_IN_TIME_RECOVERY_DISABLED",
+        "type": "DATASTORE_MODE",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_project-iam-member-KEN73_73B1C2C2": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "roles/datastore.user",
+      },
+    },
+    "google_project_service": {
+      "Counter_CloudFirestoreAPI_2119CDFC": {
+        "disable_on_destroy": false,
+        "service": "firestore.googleapis.com",
+      },
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
+    "google_service_account": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
+        "account_id": "function-c852aba6",
+        "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_storage_bucket": {
+      "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
+        "force_destroy": false,
+        "location": "us-central1",
+        "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "google_storage_bucket_object": {
+      "Function_FunctionObjectBucket_A7CD2097": {
+        "bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
+        "name": "objects",
+        "source": "<source>",
+      },
+    },
+    "random_id": {
+      "Function_FunctionBucket_Id_216676D0": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`set() IAM permissions 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "children": {
+                  "CloudFirestoreAPI": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CloudFirestoreAPI",
+                    "path": "root/Default/Counter/CloudFirestoreAPI",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Counter/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "DefaultFunction": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "DefaultFunction",
+                    "path": "root/Default/Function/DefaultFunction",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Default",
+                        "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
+                      },
+                      "Id": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.7",
+                        },
+                        "display": {},
+                        "id": "Id",
+                        "path": "root/Default/Function/FunctionBucket/Id",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "FunctionObjectBucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "FunctionObjectBucket",
+                    "path": "root/Default/Function/FunctionObjectBucket",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
+                  "project-iam-member-KEN.73]}": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "project-iam-member-KEN.73]}",
+                    "path": "root/Default/Function/project-iam-member-KEN.73]}",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;

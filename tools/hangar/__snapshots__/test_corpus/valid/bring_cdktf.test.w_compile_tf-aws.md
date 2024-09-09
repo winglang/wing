@@ -1,4 +1,4 @@
-# [bring_cdktf.test.w](../../../../../examples/tests/valid/bring_cdktf.test.w) | compile | tf-aws
+# [bring_cdktf.test.w](../../../../../tests/valid/bring_cdktf.test.w) | compile | tf-aws
 
 ## inflight.Foo-1.cjs
 ```cjs

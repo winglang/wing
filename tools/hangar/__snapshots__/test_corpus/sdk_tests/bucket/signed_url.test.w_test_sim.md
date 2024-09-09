@@ -1,4 +1,4 @@
-# [signed_url.test.w](../../../../../../examples/tests/sdk_tests/bucket/signed_url.test.w) | test | sim
+# [signed_url.test.w](../../../../../../tests/sdk_tests/bucket/signed_url.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [lift_shared_resource.test.w](../../../../../examples/tests/valid/lift_shared_resource.test.w) | compile | tf-aws
+# [lift_shared_resource.test.w](../../../../../tests/valid/lift_shared_resource.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs
@@ -407,8 +407,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const bucket = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
-    const b1 = globalThis.$ClassFactory.new("rootpkg.MyBucket", MyBucket, this, "b1", bucket);
-    const b2 = globalThis.$ClassFactory.new("rootpkg.MyBucket", MyBucket, this, "b2", bucket);
+    const b1 = globalThis.$ClassFactory.new("examples-valid.MyBucket", MyBucket, this, "b1", bucket);
+    const b2 = globalThis.$ClassFactory.new("examples-valid.MyBucket", MyBucket, this, "b2", bucket);
     const api = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
     (api.get("/", new $Closure1(this, "$Closure1")));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:call endpoint", new $Closure2(this, "$Closure2"));

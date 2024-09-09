@@ -1,4 +1,4 @@
-# [tokens.test.w](../../../../../../examples/tests/sdk_tests/service/tokens.test.w) | test | sim
+# [tokens.test.w](../../../../../../tests/sdk_tests/service/tokens.test.w) | test | sim
 
 ## stdout.log
 ```log

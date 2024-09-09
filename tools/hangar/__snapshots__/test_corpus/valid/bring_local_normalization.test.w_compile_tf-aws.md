@@ -1,4 +1,4 @@
-# [bring_local_normalization.test.w](../../../../../examples/tests/valid/bring_local_normalization.test.w) | compile | tf-aws
+# [bring_local_normalization.test.w](../../../../../tests/valid/bring_local_normalization.test.w) | compile | tf-aws
 
 ## inflight.Bar-1.cjs
 ```cjs
@@ -87,7 +87,10 @@ class Bar extends $stdlib.std.Resource {
     return "bar";
   }
   static getSubdir($scope) {
-    return $helpers.resolveDirname(__dirname, "../../../subdir");
+    return $helpers.resolve(__dirname, "../../../subdir");
+  }
+  static getSubfile($scope) {
+    return $helpers.resolve(__dirname, "../../../subdir/bar.w");
   }
   static _toInflightType() {
     return `

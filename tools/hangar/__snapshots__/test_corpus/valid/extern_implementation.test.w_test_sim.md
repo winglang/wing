@@ -1,4 +1,4 @@
-# [extern_implementation.test.w](../../../../../examples/tests/valid/extern_implementation.test.w) | test | sim
+# [extern_implementation.test.w](../../../../../tests/valid/extern_implementation.test.w) | test | sim
 
 ## stdout.log
 ```log

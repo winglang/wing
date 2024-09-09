@@ -1,4 +1,4 @@
-# [inflight_class_capture_const.test.w](../../../../../examples/tests/valid/inflight_class_capture_const.test.w) | compile | tf-aws
+# [inflight_class_capture_const.test.w](../../../../../tests/valid/inflight_class_capture_const.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

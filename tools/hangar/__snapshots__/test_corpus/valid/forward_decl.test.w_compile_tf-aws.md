@@ -1,4 +1,4 @@
-# [forward_decl.test.w](../../../../../examples/tests/valid/forward_decl.test.w) | compile | tf-aws
+# [forward_decl.test.w](../../../../../tests/valid/forward_decl.test.w) | compile | tf-aws
 
 ## inflight.R-1.cjs
 ```cjs

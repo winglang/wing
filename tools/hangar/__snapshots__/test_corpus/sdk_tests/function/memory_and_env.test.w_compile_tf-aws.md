@@ -1,4 +1,4 @@
-# [memory_and_env.test.w](../../../../../../examples/tests/sdk_tests/function/memory_and_env.test.w) | compile | tf-aws
+# [memory_and_env.test.w](../../../../../../tests/sdk_tests/function/memory_and_env.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

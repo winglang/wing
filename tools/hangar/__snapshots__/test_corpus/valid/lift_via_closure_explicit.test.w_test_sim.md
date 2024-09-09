@@ -1,4 +1,4 @@
-# [lift_via_closure_explicit.test.w](../../../../../examples/tests/valid/lift_via_closure_explicit.test.w) | test | sim
+# [lift_via_closure_explicit.test.w](../../../../../tests/valid/lift_via_closure_explicit.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [statements_variable_declarations.test.w](../../../../../examples/tests/valid/statements_variable_declarations.test.w) | test | sim
+# [statements_variable_declarations.test.w](../../../../../tests/valid/statements_variable_declarations.test.w) | test | sim
 
 ## stdout.log
 ```log

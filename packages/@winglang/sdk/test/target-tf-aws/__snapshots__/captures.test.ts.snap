@@ -1,0 +1,533 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`function with a function binding 1`] = `
+"(await (async () => {
+  const $func = async (_, event) => {
+    console.log(event);
+  }
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
+`;
+
+exports[`function with a function binding 2`] = `
+"(await (async () => {
+  const $func = async (ctx, event) => {
+    console.log("Event: " + event);
+    await ctx.fn1.invoke(JSON.stringify({ hello: "world" }));
+  }
+  const $ctx = {
+  fn1: 
+(await (async () => {
+  const klass = require("[REDACTED]/@winglang/sdk/src/shared-aws/function.inflight.js").FunctionClient;
+  const client = new klass({$functionArn: process.env["FUNCTION_NAME_50735b21"], $constructPath: "root/Default/Function1"});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
+`;
+
+exports[`function with a function binding 3`] = `
+{
+  "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function1_CloudwatchLogGroup_2120A680": {
+        "name": "/aws/lambda/Function1-c87c16f1",
+        "retention_in_days": 30,
+      },
+      "Function2_CloudwatchLogGroup_038FCB43": {
+        "name": "/aws/lambda/Function2-c827e998",
+        "retention_in_days": 30,
+      },
+    },
+    "aws_iam_role": {
+      "Function1_IamRole_8B9BC80D": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+      "Function2_IamRole_62EBED55": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "Function1_IamRolePolicy_C0724D18": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
+      },
+      "Function2_IamRolePolicy_E46C9D6B": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["lambda:InvokeFunction"],"Resource":["\${aws_lambda_function.Function1.arn}"],"Effect":"Allow"}]}",
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "Function1_IamRolePolicyAttachment_0393C78B": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
+      },
+      "Function2_IamRolePolicyAttachment_1D579508": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "Function1": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "Function1-c87c16f1",
+          },
+        },
+        "function_name": "Function1-c87c16f1",
+        "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function1_S3Object_AFBA38E0.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+      "Function2": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "FUNCTION_NAME_50735b21": "\${aws_lambda_function.Function1.arn}",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "Function2-c827e998",
+          },
+        },
+        "function_name": "Function2-c827e998",
+        "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function2_S3Object_6F3ED347.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Function1_S3Object_AFBA38E0": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+      "Function2_S3Object_6F3ED347": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
+`;
+
+exports[`function with a queue binding 1`] = `
+"(await (async () => {
+  const $func = async (ctx) => {
+    await ctx.queue.push("info");
+  }
+  const $ctx = {
+  queue: 
+(await (async () => {
+  const klass = require("[REDACTED]/@winglang/sdk/src/shared-aws/queue.inflight.js").QueueClient;
+  const client = new klass({$queueUrlOrArn: process.env["QUEUE_URL_1cfcc997"]});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
+`;
+
+exports[`function with a queue binding 2`] = `
+"(await (async () => {
+  const $func = async (_, event) => {
+    console.log("Received" + event);
+  }
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
+`;
+
+exports[`function with a queue binding 3`] = `
+{
+  "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+      "Queue-SetConsumer0_CloudwatchLogGroup_56C2891C": {
+        "name": "/aws/lambda/Queue-SetConsumer0-c83c303c",
+        "retention_in_days": 30,
+      },
+    },
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+      "Queue-SetConsumer0_IamRole_7F9ED9ED": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:GetQueueUrl"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"},{"Action":["sqs:SendMessage"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+      "Queue-SetConsumer0_IamRolePolicy_0299B5AB": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"}]}",
+        "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+      "Queue-SetConsumer0_IamRolePolicyAttachment_4A4C5C5D": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
+      },
+    },
+    "aws_lambda_event_source_mapping": {
+      "Queue_EventSourceMapping_8332F7DC": {
+        "batch_size": 1,
+        "event_source_arn": "\${aws_sqs_queue.Queue.arn}",
+        "function_name": "\${aws_lambda_function.Queue-SetConsumer0.function_name}",
+        "function_response_types": [
+          "ReportBatchItemFailures",
+        ],
+      },
+    },
+    "aws_lambda_function": {
+      "Function": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "QUEUE_URL_1cfcc997": "\${aws_sqs_queue.Queue.url}",
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
+        },
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+      "Queue-SetConsumer0": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "Queue-SetConsumer0-c83c303c",
+          },
+        },
+        "function_name": "Queue-SetConsumer0-c83c303c",
+        "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Queue-SetConsumer0_S3Object_2AD0A795.key}",
+        "timeout": "\${aws_sqs_queue.Queue.visibility_timeout_seconds}",
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+      "Queue-SetConsumer0_S3Object_2AD0A795": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+    "aws_sqs_queue": {
+      "Queue": {
+        "message_retention_seconds": 3600,
+        "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30,
+      },
+    },
+  },
+}
+`;
+
+exports[`function with bucket binding > put operation 1`] = `
+{
+  "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+    },
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["s3:PutObject*","s3:Abort*"],"Resource":["\${aws_s3_bucket.Bucket.arn}","\${aws_s3_bucket.Bucket.arn}/*"],"Effect":"Allow"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "Function": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_1357ca3a": "\${aws_s3_bucket.Bucket.bucket}",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
+        },
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Bucket": {
+        "bucket_prefix": "bucket-c88fdc5f-",
+        "force_destroy": false,
+      },
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
+`;
+
+exports[`two functions reusing the same IFunctionHandler 1`] = `
+{
+  "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function1_CloudwatchLogGroup_2120A680": {
+        "name": "/aws/lambda/Function1-c87c16f1",
+        "retention_in_days": 30,
+      },
+      "Function2_CloudwatchLogGroup_038FCB43": {
+        "name": "/aws/lambda/Function2-c827e998",
+        "retention_in_days": 30,
+      },
+    },
+    "aws_iam_role": {
+      "Function1_IamRole_8B9BC80D": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+      "Function2_IamRole_62EBED55": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "Function1_IamRolePolicy_C0724D18": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
+      },
+      "Function2_IamRolePolicy_E46C9D6B": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "Function1_IamRolePolicyAttachment_0393C78B": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
+      },
+      "Function2_IamRolePolicyAttachment_1D579508": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "Function1": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "Function1-c87c16f1",
+          },
+        },
+        "function_name": "Function1-c87c16f1",
+        "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function1_S3Object_AFBA38E0.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+      "Function2": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "Function2-c827e998",
+          },
+        },
+        "function_name": "Function2-c827e998",
+        "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Function2_IamRole_62EBED55.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function2_S3Object_6F3ED347.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Function1_S3Object_AFBA38E0": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+      "Function2_S3Object_6F3ED347": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
+`;

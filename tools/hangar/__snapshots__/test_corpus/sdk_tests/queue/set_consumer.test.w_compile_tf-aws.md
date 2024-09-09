@@ -1,4 +1,4 @@
-# [set_consumer.test.w](../../../../../../examples/tests/sdk_tests/queue/set_consumer.test.w) | compile | tf-aws
+# [set_consumer.test.w](../../../../../../tests/sdk_tests/queue/set_consumer.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

@@ -1,0 +1,47 @@
+{
+  "name": "@winglang/compiler",
+  "version": "0.0.0",
+  "description": "Wing Compiler",
+  "files": [
+    "wingc.wasm",
+    "preflight.shim.cjs",
+    "dist/"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=v20.0.0"
+  },
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winglang/wing.git"
+  },
+  "scripts": {
+    "compile:copy-wingc-wasm": "cp ../wingc/wingc.wasm . && mkdir -p ../../../dist && cp wingc.wasm ../../../dist/wingc.wasm",
+    "compile": "tsup-node",
+    "watch": "tsup-node --watch",
+    "test": "vitest run --passWithNoTests",
+    "package": "bump-pack -b"
+  },
+  "dependencies": {
+    "@wingcloud/framework": "workspace:^",
+    "@winglang/sdk": "workspace:^",
+    "jiti": "^1.21.6",
+    "wasi-js": "^1.7.3"
+  },
+  "bundledDependencies": [
+    "wasi-js"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@winglang/wingc": "workspace:^",
+    "bump-pack": "workspace:^",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.2",
+    "vitest": "^1.6.0",
+    "wasi-js": "^1.7.3"
+  },
+  "volta": {
+    "extends": "../../../package.json"
+  }
+}

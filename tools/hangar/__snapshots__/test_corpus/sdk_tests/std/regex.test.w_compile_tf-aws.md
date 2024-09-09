@@ -1,4 +1,4 @@
-# [regex.test.w](../../../../../../examples/tests/sdk_tests/std/regex.test.w) | compile | tf-aws
+# [regex.test.w](../../../../../../tests/sdk_tests/std/regex.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

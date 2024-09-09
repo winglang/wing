@@ -1,0 +1,25 @@
+---
+source: packages/@winglang/wingc/src/lsp/completions.rs
+---
+- label: "@app"
+  kind: 6
+  detail: IApp
+  documentation:
+    kind: markdown
+    value: "Get the root application node.\n\nThe application node is the root of the construct tree and all other resources are children (or grandchildren) of this node.\nSee https://www.winglang.io/docs/concepts/application-tree for more information."
+  sortText: bb|@app
+- label: "@dirname"
+  kind: 6
+  detail: str
+  documentation:
+    kind: markdown
+    value: "Get the normalized absolute path of the current Wing source file's directory.\n\nThe resolved path represents a path during preflight only and is not guaranteed to be valid while inflight."
+  sortText: bb|@dirname
+- label: "@filename"
+  kind: 6
+  detail: str
+  documentation:
+    kind: markdown
+    value: "Get the normalized absolute path of the current Wing source file.\n\nThe resolved path represents a path during preflight only and is not guaranteed to be valid while inflight."
+  sortText: bb|@filename
+

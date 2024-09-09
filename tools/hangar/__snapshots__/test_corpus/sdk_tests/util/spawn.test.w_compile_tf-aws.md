@@ -1,4 +1,4 @@
-# [spawn.test.w](../../../../../../examples/tests/sdk_tests/util/spawn.test.w) | compile | tf-aws
+# [spawn.test.w](../../../../../../tests/sdk_tests/util/spawn.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

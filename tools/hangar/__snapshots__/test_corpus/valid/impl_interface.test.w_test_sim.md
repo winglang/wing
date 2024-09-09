@@ -1,4 +1,4 @@
-# [impl_interface.test.w](../../../../../examples/tests/valid/impl_interface.test.w) | test | sim
+# [impl_interface.test.w](../../../../../tests/valid/impl_interface.test.w) | test | sim
 
 ## stdout.log
 ```log

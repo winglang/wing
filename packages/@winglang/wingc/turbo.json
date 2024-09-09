@@ -1,0 +1,30 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "compile": {
+      "dependsOn": [
+        "@winglang/wingii#compile",
+        "@winglang/tree-sitter-wing#compile"
+      ],
+      "inputs": ["*.json", "*.toml", "src/**/*.rs", "scripts/postcompile.sh"],
+      "outputs": [
+        "../../../target/wasm32-wasi/release/wingc.wasm",
+        "../../../target/wasm32-wasi/release/libwingc.*",
+        "wingc.wasm"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "@winglang/tree-sitter-wing#compile",
+        "@winglang/sdk#compile",
+        "examples-valid#topo",
+        "examples-invalid#topo"
+      ]
+    },
+    "dev": {
+      "inputs": ["*.json", "*.toml", "src/**/*.rs", "examples/**/*.rs"],
+      "dependsOn": ["@winglang/sdk#compile"]
+    }
+  }
+}

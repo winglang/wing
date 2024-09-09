@@ -1,4 +1,4 @@
-# [casting.test.w](../../../../../examples/tests/valid/casting.test.w) | test | sim
+# [casting.test.w](../../../../../tests/valid/casting.test.w) | test | sim
 
 ## stdout.log
 ```log

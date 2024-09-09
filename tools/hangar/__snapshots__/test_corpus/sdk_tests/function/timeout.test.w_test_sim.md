@@ -1,4 +1,4 @@
-# [timeout.test.w](../../../../../../examples/tests/sdk_tests/function/timeout.test.w) | test | sim
+# [timeout.test.w](../../../../../../tests/sdk_tests/function/timeout.test.w) | test | sim
 
 ## stdout.log
 ```log

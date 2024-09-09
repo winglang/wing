@@ -1,4 +1,4 @@
-# [reassignment.test.w](../../../../../examples/tests/valid/reassignment.test.w) | compile | tf-aws
+# [reassignment.test.w](../../../../../tests/valid/reassignment.test.w) | compile | tf-aws
 
 ## inflight.R-1.cjs
 ```cjs

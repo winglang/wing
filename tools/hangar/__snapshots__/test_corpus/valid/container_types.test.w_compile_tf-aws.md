@@ -1,4 +1,4 @@
-# [container_types.test.w](../../../../../examples/tests/valid/container_types.test.w) | compile | tf-aws
+# [container_types.test.w](../../../../../tests/valid/container_types.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

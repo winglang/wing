@@ -1,4 +1,4 @@
-# [variadic-parameter.test.w](../../../../../../examples/tests/sdk_tests/topic/variadic-parameter.test.w) | compile | tf-aws
+# [variadic-parameter.test.w](../../../../../../tests/sdk_tests/topic/variadic-parameter.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

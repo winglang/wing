@@ -1,4 +1,4 @@
-# [dead-letter-queue.test.w](../../../../../../examples/tests/sdk_tests/queue/dead-letter-queue.test.w) | compile | tf-aws
+# [dead-letter-queue.test.w](../../../../../../tests/sdk_tests/queue/dead-letter-queue.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

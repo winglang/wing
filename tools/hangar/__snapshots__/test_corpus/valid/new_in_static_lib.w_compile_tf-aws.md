@@ -1,4 +1,4 @@
-# [new_in_static_lib.w](../../../../../examples/tests/valid/new_in_static_lib.w) | compile | tf-aws
+# [new_in_static_lib.w](../../../../../tests/valid/new_in_static_lib.w) | compile | tf-aws
 
 ## inflight.Foo-1.cjs
 ```cjs
@@ -57,7 +57,7 @@ class LibClass extends $stdlib.std.Resource {
     super($scope, $id);
   }
   static createFoo($scope, id) {
-    return globalThis.$ClassFactory.new("rootpkg.Foo", Foo, $scope, id);
+    return globalThis.$ClassFactory.new("examples-valid.Foo", Foo, $scope, id);
   }
   static _toInflightType() {
     return `

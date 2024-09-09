@@ -1,4 +1,4 @@
-# [angular_conversion.test.w](../../../../../../examples/tests/sdk_tests/math/angular_conversion.test.w) | test | sim
+# [angular_conversion.test.w](../../../../../../tests/sdk_tests/math/angular_conversion.test.w) | test | sim
 
 ## stdout.log
 ```log

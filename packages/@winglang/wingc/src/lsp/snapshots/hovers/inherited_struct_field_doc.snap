@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\nfield: num\n```\n---\nParent struct field doc"
+range:
+  start:
+    line: 9
+    character: 8
+  end:
+    line: 9
+    character: 13
+

@@ -1,4 +1,4 @@
-# [acos.test.w](../../../../../../examples/tests/sdk_tests/math/acos.test.w) | test | sim
+# [acos.test.w](../../../../../../tests/sdk_tests/math/acos.test.w) | test | sim
 
 ## stdout.log
 ```log

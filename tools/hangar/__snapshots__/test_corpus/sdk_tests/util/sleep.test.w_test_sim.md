@@ -1,4 +1,4 @@
-# [sleep.test.w](../../../../../../examples/tests/sdk_tests/util/sleep.test.w) | test | sim
+# [sleep.test.w](../../../../../../tests/sdk_tests/util/sleep.test.w) | test | sim
 
 ## stdout.log
 ```log

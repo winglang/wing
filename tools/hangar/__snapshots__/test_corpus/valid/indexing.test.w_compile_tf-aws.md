@@ -1,4 +1,4 @@
-# [indexing.test.w](../../../../../examples/tests/valid/indexing.test.w) | compile | tf-aws
+# [indexing.test.w](../../../../../tests/valid/indexing.test.w) | compile | tf-aws
 
 ## inflight.A-1.cjs
 ```cjs

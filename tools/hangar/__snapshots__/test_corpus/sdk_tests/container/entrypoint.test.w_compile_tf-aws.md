@@ -1,4 +1,4 @@
-# [entrypoint.test.w](../../../../../../examples/tests/sdk_tests/container/entrypoint.test.w) | compile | tf-aws
+# [entrypoint.test.w](../../../../../../tests/sdk_tests/container/entrypoint.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

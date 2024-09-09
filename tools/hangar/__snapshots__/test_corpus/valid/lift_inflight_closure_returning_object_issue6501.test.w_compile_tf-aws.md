@@ -1,4 +1,4 @@
-# [lift_inflight_closure_returning_object_issue6501.test.w](../../../../../examples/tests/valid/lift_inflight_closure_returning_object_issue6501.test.w) | compile | tf-aws
+# [lift_inflight_closure_returning_object_issue6501.test.w](../../../../../tests/valid/lift_inflight_closure_returning_object_issue6501.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

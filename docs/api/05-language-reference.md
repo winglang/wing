@@ -591,10 +591,12 @@ the following properties (given an example intrinsic `@x`):
 | --------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `@log()`        | logs str                                                                                                                  |
 | `@assert()`     | checks a condition and _throws_ if evaluated to false                                                                     |
-| `@dirname`      | current source directory                                                                                                  |
+| `@filename`     | absolute path of the source file                                                                                          |
+| `@dirname`      | absolute path of the source file's directory                                                                              |
+| `@app`          | the root of the construct tree                                                                                            |
 | `@unsafeCast()` | cast a value into a different type                                                                                        |
-| `@nodeof()`     | obtain the [tree node](/docs/concepts/application-tree) of a preflight object                                        |
-| `@lift()`       | explicitly qualify a [lift](/docs/concepts/inflights) of a preflight object |
+| `@nodeof()`     | obtain the [tree node](/docs/concepts/application-tree) of a preflight object                                             |
+| `@lift()`       | explicitly qualify a [lift](/docs/concepts/inflights) of a preflight object                                               |
 
 > ```TS
 > @log("Hello {name}");

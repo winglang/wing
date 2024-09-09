@@ -1,4 +1,4 @@
-# [intrinsics.test.w](../../../../../examples/tests/valid/intrinsics.test.w) | test | sim
+# [intrinsics.test.w](../../../../../tests/valid/intrinsics.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [lift_with_phase_ind.test.w](../../../../../examples/tests/valid/lift_with_phase_ind.test.w) | test | sim
+# [lift_with_phase_ind.test.w](../../../../../tests/valid/lift_with_phase_ind.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "compile": {
+      "outputs": ["dist/**"]
+    },
+    "package": {
+      "outputs": ["../../../dist/wingconsole-server-*.tgz"]
+    }
+  }
+}

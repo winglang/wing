@@ -1,4 +1,4 @@
-# [static_members.test.w](../../../../../examples/tests/valid/static_members.test.w) | test | sim
+# [static_members.test.w](../../../../../tests/valid/static_members.test.w) | test | sim
 
 ## stdout.log
 ```log

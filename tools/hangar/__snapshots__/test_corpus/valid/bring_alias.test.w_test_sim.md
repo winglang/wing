@@ -1,4 +1,4 @@
-# [bring_alias.test.w](../../../../../examples/tests/valid/bring_alias.test.w) | test | sim
+# [bring_alias.test.w](../../../../../tests/valid/bring_alias.test.w) | test | sim
 
 ## stdout.log
 ```log

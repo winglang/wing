@@ -1,4 +1,4 @@
-# [anon_function.test.w](../../../../../examples/tests/valid/anon_function.test.w) | compile | tf-aws
+# [anon_function.test.w](../../../../../tests/valid/anon_function.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

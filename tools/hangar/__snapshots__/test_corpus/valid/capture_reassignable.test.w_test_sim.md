@@ -1,4 +1,4 @@
-# [capture_reassignable.test.w](../../../../../examples/tests/valid/capture_reassignable.test.w) | test | sim
+# [capture_reassignable.test.w](../../../../../tests/valid/capture_reassignable.test.w) | test | sim
 
 ## stdout.log
 ```log

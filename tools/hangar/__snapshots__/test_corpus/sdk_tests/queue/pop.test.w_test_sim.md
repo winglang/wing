@@ -1,4 +1,4 @@
-# [pop.test.w](../../../../../../examples/tests/sdk_tests/queue/pop.test.w) | test | sim
+# [pop.test.w](../../../../../../tests/sdk_tests/queue/pop.test.w) | test | sim
 
 ## stdout.log
 ```log

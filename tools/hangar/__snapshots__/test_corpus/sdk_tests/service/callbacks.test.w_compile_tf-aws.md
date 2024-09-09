@@ -1,4 +1,4 @@
-# [callbacks.test.w](../../../../../../examples/tests/sdk_tests/service/callbacks.test.w) | compile | tf-aws
+# [callbacks.test.w](../../../../../../tests/sdk_tests/service/callbacks.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

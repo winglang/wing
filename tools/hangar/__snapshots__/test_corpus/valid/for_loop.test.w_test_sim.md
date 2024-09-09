@@ -1,4 +1,4 @@
-# [for_loop.test.w](../../../../../examples/tests/valid/for_loop.test.w) | test | sim
+# [for_loop.test.w](../../../../../tests/valid/for_loop.test.w) | test | sim
 
 ## stdout.log
 ```log

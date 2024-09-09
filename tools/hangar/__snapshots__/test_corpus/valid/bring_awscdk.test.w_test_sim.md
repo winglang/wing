@@ -1,4 +1,4 @@
-# [bring_awscdk.test.w](../../../../../examples/tests/valid/bring_awscdk.test.w) | test | sim
+# [bring_awscdk.test.w](../../../../../tests/valid/bring_awscdk.test.w) | test | sim
 
 ## stdout.log
 ```log

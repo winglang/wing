@@ -1,4 +1,4 @@
-# [secret-ref.test.w](../../../../../../examples/tests/sdk_tests/secret/secret-ref.test.w) | test | sim
+# [secret-ref.test.w](../../../../../../tests/sdk_tests/secret/secret-ref.test.w) | test | sim
 
 ## stdout.log
 ```log
