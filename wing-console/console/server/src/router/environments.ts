@@ -23,9 +23,10 @@ export const createEnvironmentsRouter = () => {
       }),
     "environments.listEnvironments": createProcedure.query(async ({ ctx }) => {
       const tests = ctx.getTestRunner();
-      const environments = ctx.getEnvironmentsManager();
+      const environmentsManager = ctx.getEnvironmentsManager();
       return {
-        environments: await environments.listEnvironments(tests),
+        // environments: await environmentsManager.listEnvironments(tests),
+        environments: [],
       };
     }),
   });

@@ -162,9 +162,10 @@ export const createEnvironmentProcedure = createProcedure
         },
       });
     } catch (error) {
-      return {
-        error,
-        ok: false,
-      };
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Environment not ready",
+        cause: error,
+      });
     }
   });

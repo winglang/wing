@@ -1,10 +1,17 @@
+import type { ConsoleEnvironmentId } from "@wingconsole/server";
 import { useMemo, useState } from "react";
 
 import { trpc } from "../../../trpc.js";
+
 export interface UseFunctionOptions {
+  environmentId: ConsoleEnvironmentId;
   resourcePath: string;
 }
-export const useFunction = ({ resourcePath }: UseFunctionOptions) => {
+
+export const useFunction = ({
+  environmentId,
+  resourcePath,
+}: UseFunctionOptions) => {
   const [response, setResponse] = useState("");
 
   const invoke = trpc["function.invoke"].useMutation({
@@ -22,7 +29,7 @@ export const useFunction = ({ resourcePath }: UseFunctionOptions) => {
   }, [invoke.error]);
 
   const invokeFunction = (payload: string) => {
-    invoke.mutate({ resourcePath, message: payload });
+    invoke.mutate({ environmentId, resourcePath, message: payload });
   };
 
   return {

@@ -5,6 +5,9 @@ import { throttle } from "@wingconsole/utilities";
 import Emittery from "emittery";
 import type { Express } from "express";
 
+// export { type default as Emittery } from "emittery";
+export * from "emittery";
+
 import type { Config } from "./config.js";
 import type { LogSource } from "./consoleLogger.js";
 import { createConsoleLogger } from "./consoleLogger.js";
@@ -23,6 +26,7 @@ import { createSimulator } from "./utils/simulator.js";
 import { createTestRunner } from "./utils/test-runner/test-runner.js";
 
 export type { ConsoleEnvironmentId } from "./types.js";
+export type { EnvironmentsManager } from "./environments-manager.js";
 export type { FileLink } from "./utils/createRouter.js";
 export type { TestStatus, TestItem } from "./utils/test-runner/test-runner.js";
 export type { Trace, State } from "./types.js";
@@ -356,3 +360,7 @@ function logSourceFromTraceType(trace: Trace): LogSource {
 
   return "user";
 }
+
+export { type Analytics } from "./utils/analytics.js";
+export { type TestRunner } from "./utils/test-runner/test-runner.js";
+export type { ConsoleLogger } from "./consoleLogger.js";
