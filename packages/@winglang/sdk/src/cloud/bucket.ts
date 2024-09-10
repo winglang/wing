@@ -37,6 +37,20 @@ export enum BucketInflightMethods {
   RENAME = "rename",
 }
 
+export const DEFAULT_BUCKET_CORS_CONFIGURATION: BucketCorsOptions = {
+  allowedHeaders: ["*"],
+  allowedOrigins: ["*"],
+  allowedMethods: [
+    HttpMethod.GET,
+    HttpMethod.POST,
+    HttpMethod.PUT,
+    HttpMethod.DELETE,
+    HttpMethod.HEAD,
+  ],
+  exposeHeaders: [],
+  maxAge: Duration.fromSeconds(0),
+};
+
 /**
  * Options for `Bucket`.
  */
@@ -142,21 +156,6 @@ export class Bucket extends Resource {
     BucketInflightMethods.COPY,
     BucketInflightMethods.RENAME,
   ];
-
-  /** @internal */
-  public static _DEFAULT_BUCKET_CORS_CONFIGURATION: BucketCorsOptions = {
-    allowedHeaders: ["*"],
-    allowedOrigins: ["*"],
-    allowedMethods: [
-      HttpMethod.GET,
-      HttpMethod.POST,
-      HttpMethod.PUT,
-      HttpMethod.DELETE,
-      HttpMethod.HEAD,
-    ],
-    exposeHeaders: [],
-    maxAge: Duration.fromSeconds(0),
-  };
 
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();

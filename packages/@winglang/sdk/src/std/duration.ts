@@ -1,5 +1,5 @@
 import { ILiftable } from "./resource";
-import { InflightClient } from "../core";
+import { InflightClient } from "../core/inflight";
 import { normalPath } from "../shared/misc";
 
 /**

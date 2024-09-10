@@ -79,7 +79,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     if (props.cors ?? true) {
       this.addCorsRule(
-        props.corsOptions ?? cloud.Bucket._DEFAULT_BUCKET_CORS_CONFIGURATION
+        props.corsOptions ?? cloud.DEFAULT_BUCKET_CORS_CONFIGURATION
       );
     }
   }

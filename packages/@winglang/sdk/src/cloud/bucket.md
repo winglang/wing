@@ -111,19 +111,20 @@ let uploads = new cloud.Bucket(
   public: false,
   cors: true,
   corsOptions: {
-    allowedMethods: [http.HttpMethod.GET, http.HttpMethod.POST, http.HttpMethod.PUT, http.HttpMethod.DELETE, http.HttpMethod.HEAD]
+    allowedMethods: [http.HttpMethod.GET, http.HttpMethod.POST, http.HttpMethod.PUT, http.HttpMethod.DELETE, http.HttpMethod.HEAD],
     allowedOrigins: ["*"],
     allowedHeaders: ["*"],
     exposeHeaders: [],
     maxAge: 0s
   },
-)
+);
 ```
 
 The CORS configuration can be disabled by passing `cors: false` to the constructor. CORS rules can also be configured after the bucket is created by calling the `addCorsRule` method:
 
 ```js playground example
 bring cloud;
+bring http;
 
 let bucket = new cloud.Bucket(
   cors: false, // disable any default CORS rules
@@ -131,6 +132,7 @@ let bucket = new cloud.Bucket(
 
 bucket.addCorsRule({
   allowedOrigins: ["https://example.com"],
+  allowedMethods: [http.HttpMethod.GET],
 });
 ```
 
