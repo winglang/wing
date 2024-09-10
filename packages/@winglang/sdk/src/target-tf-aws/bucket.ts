@@ -3,10 +3,7 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { Topic as AWSTopic } from "./topic";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
-import {
-  S3BucketCorsConfiguration,
-  S3BucketCorsConfigurationCorsRule,
-} from "../.gen/providers/aws/s3-bucket-cors-configuration";
+import { S3BucketCorsConfiguration } from "../.gen/providers/aws/s3-bucket-cors-configuration";
 
 import {
   S3BucketNotification,
@@ -89,7 +86,15 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
       `CorsConfiguration-${this.node.addr.slice(-8)}`,
       {
         bucket: this.bucket.id,
-        corsRule: [value as S3BucketCorsConfigurationCorsRule],
+        corsRule: [
+          {
+            allowedMethods: value.allowedMethods,
+            allowedOrigins: value.allowedOrigins,
+            allowedHeaders: value.allowedHeaders,
+            maxAgeSeconds: value.maxAge?.seconds,
+            exposeHeaders: value.exposeHeaders,
+          },
+        ],
       }
     );
   }

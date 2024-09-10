@@ -83,7 +83,7 @@ export interface BucketCorsOptions {
    * How long the browser should cache preflight request results.
    * @default - 300 seconds
    */
-  readonly maxAgeSeconds?: Number;
+  readonly maxAge?: Duration;
 }
 
 /**

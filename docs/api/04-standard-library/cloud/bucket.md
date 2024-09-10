@@ -150,6 +150,7 @@ new cloud.Bucket(props?: BucketProps);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Bucket.addCorsConfiguration">addCorsConfiguration</a></code> | Add cors configuration to the bucket. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.addFile">addFile</a></code> | Add a file to the bucket from system folder. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.addObject">addObject</a></code> | Add a file to the bucket that is uploaded when the app is deployed. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.onCreate">onCreate</a></code> | Run an inflight whenever a file is uploaded to the bucket. |
@@ -176,6 +177,22 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists If the bytes returned are not a valid UTF-8 string, an error is thrown. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
+
+---
+
+##### `addCorsConfiguration` <a name="addCorsConfiguration" id="@winglang/sdk.cloud.Bucket.addCorsConfiguration"></a>
+
+```wing
+addCorsConfiguration(value: BucketCorsOptions): void
+```
+
+Add cors configuration to the bucket.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.cloud.Bucket.addCorsConfiguration.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketCorsOptions">BucketCorsOptions</a>
+
+The cors configuration.
 
 ---
 
@@ -712,6 +729,123 @@ The tree node.
 
 
 ## Structs <a name="Structs" id="Structs"></a>
+
+### BucketCorsOptions <a name="BucketCorsOptions" id="@winglang/sdk.cloud.BucketCorsOptions"></a>
+
+Cors Options for `Bucket`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketCorsOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let BucketCorsOptions = cloud.BucketCorsOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketCorsOptions.property.allowedMethods">allowedMethods</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.http.HttpMethod">HttpMethod</a>&gt;</code> | The list of allowed methods. |
+| <code><a href="#@winglang/sdk.cloud.BucketCorsOptions.property.allowedOrigins">allowedOrigins</a></code> | <code>MutArray&lt;str&gt;</code> | The allowed origin. |
+| <code><a href="#@winglang/sdk.cloud.BucketCorsOptions.property.allowedHeaders">allowedHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed headers. |
+| <code><a href="#@winglang/sdk.cloud.BucketCorsOptions.property.exposeHeaders">exposeHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of exposed headers. |
+| <code><a href="#@winglang/sdk.cloud.BucketCorsOptions.property.maxAge">maxAge</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long the browser should cache preflight request results. |
+
+---
+
+##### `allowedMethods`<sup>Required</sup> <a name="allowedMethods" id="@winglang/sdk.cloud.BucketCorsOptions.property.allowedMethods"></a>
+
+```wing
+allowedMethods: MutArray<HttpMethod>;
+```
+
+- *Type:* MutArray&lt;<a href="#@winglang/sdk.http.HttpMethod">HttpMethod</a>&gt;
+- *Default:* [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS]
+
+The list of allowed methods.
+
+---
+
+*Example*
+
+```wing
+[HttpMethod.GET, HttpMethod.POST]
+```
+
+
+##### `allowedOrigins`<sup>Required</sup> <a name="allowedOrigins" id="@winglang/sdk.cloud.BucketCorsOptions.property.allowedOrigins"></a>
+
+```wing
+allowedOrigins: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* ["*"]
+
+The allowed origin.
+
+---
+
+*Example*
+
+```wing
+"https://example.com"
+```
+
+
+##### `allowedHeaders`<sup>Optional</sup> <a name="allowedHeaders" id="@winglang/sdk.cloud.BucketCorsOptions.property.allowedHeaders"></a>
+
+```wing
+allowedHeaders: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* ["Content-Type", "Authorization"]
+
+The list of allowed headers.
+
+---
+
+*Example*
+
+```wing
+["Content-Type"]
+```
+
+
+##### `exposeHeaders`<sup>Optional</sup> <a name="exposeHeaders" id="@winglang/sdk.cloud.BucketCorsOptions.property.exposeHeaders"></a>
+
+```wing
+exposeHeaders: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* []
+
+The list of exposed headers.
+
+---
+
+*Example*
+
+```wing
+["Content-Type"]
+```
+
+
+##### `maxAge`<sup>Optional</sup> <a name="maxAge" id="@winglang/sdk.cloud.BucketCorsOptions.property.maxAge"></a>
+
+```wing
+maxAge: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 300 seconds
+
+How long the browser should cache preflight request results.
+
+---
 
 ### BucketDeleteOptions <a name="BucketDeleteOptions" id="@winglang/sdk.cloud.BucketDeleteOptions"></a>
 

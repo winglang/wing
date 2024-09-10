@@ -167,7 +167,7 @@ source: packages/@winglang/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketCorsOptions {\n  allowedHeaders?: Array<str>;\n  exposeHeaders?: Array<str>;\n  maxAgeSeconds?: num;\n  allowedMethods: Array<HttpMethod>;\n  allowedOrigins: Array<str>;\n}\n```\n---\nCors Options for `Bucket`."
+    value: "```wing\nstruct BucketCorsOptions {\n  allowedHeaders?: Array<str>;\n  exposeHeaders?: Array<str>;\n  maxAge?: duration;\n  allowedMethods: Array<HttpMethod>;\n  allowedOrigins: Array<str>;\n}\n```\n---\nCors Options for `Bucket`."
   sortText: hh|BucketCorsOptions
 - label: BucketDeleteOptions
   kind: 22

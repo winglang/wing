@@ -10,9 +10,9 @@ import {
 } from "./util";
 import * as cloud from "../cloud";
 import { LiftMap, lift } from "../core";
+import { NotImplementedError } from "../core/errors";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost } from "../std";
-import { NotImplementedError } from "../core/errors";
 
 /**
  * Simulator implementation of `cloud.Bucket`.

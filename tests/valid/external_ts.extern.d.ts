@@ -79,6 +79,30 @@ export enum HttpMethod {
   CONNECT = 7,
   TRACE = 8,
 }
+/** Represents a length of time. */
+export class Duration implements ILiftable {
+  /** Return the total number of days in this Duration.
+  @returns the value of this `Duration` expressed in Days. */
+  readonly days: number;
+  /** Return the total number of hours in this Duration.
+  @returns the value of this `Duration` expressed in Hours. */
+  readonly hours: number;
+  /** Return the total number of milliseconds in this Duration.
+  @returns the value of this `Duration` expressed in Milliseconds. */
+  readonly milliseconds: number;
+  /** Return the total number of minutes in this Duration.
+  @returns the value of this `Duration` expressed in Minutes. */
+  readonly minutes: number;
+  /** Return the total number of months in this Duration.
+  @returns the value of this `Duration` expressed in Months. */
+  readonly months: number;
+  /** Return the total number of seconds in this Duration.
+  @returns the value of this `Duration` expressed in Seconds. */
+  readonly seconds: number;
+  /** Return the total number of years in this Duration.
+  @returns the value of this `Duration` expressed in Years. */
+  readonly years: number;
+}
 /** Cors Options for `Bucket`. */
 export interface BucketCorsOptions {
   /** The list of allowed headers.
@@ -94,7 +118,7 @@ export interface BucketCorsOptions {
   ["Content-Type"] */
   readonly exposeHeaders?: ((readonly (string)[])) | undefined;
   /** How long the browser should cache preflight request results. */
-  readonly maxAgeSeconds?: (number) | undefined;
+  readonly maxAge?: (Duration) | undefined;
 }
 /** Code that runs at runtime and implements your application's behavior.
 For example, handling API requests, processing queue messages, etc.
