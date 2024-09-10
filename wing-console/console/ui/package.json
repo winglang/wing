@@ -23,7 +23,7 @@
   "scripts": {
     "compile": "tsup",
     "tsc": "tsc --build",
-    "test": "vitest --passWithNoTests",
+    "test": "vitest run --passWithNoTests",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
