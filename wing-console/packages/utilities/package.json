@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "tsc": "tsc --build",
-    "test": "vitest",
+    "test": "vitest run",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix"
   },
   "devDependencies": {
