@@ -107,7 +107,7 @@ By default, buckets are configured with CORS for any origin. When a bucket is pr
 bring cloud;
 
 let uploads = new cloud.Bucket(
-  // these are the default options:
+  // these are the default values
   public: false,
   cors: true,
   corsOptions: {
