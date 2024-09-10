@@ -189,25 +189,32 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
 
                 {(hasChildNodes || collapsed) && (
                   <>
-                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                    <div
-                      className="flex grow justify-end"
-                      onClick={() => {
-                        if (collapsed) {
-                          onCollapse(false);
-                        } else {
-                          onCollapse(true);
-                        }
-                      }}
-                    >
-                      <ChevronDownIcon
+                    <div />
+                    <div className="flex grow justify-end">
+                      <button
                         className={clsx(
-                          collapsed && "-rotate-90",
-                          "size-4",
-                          "transition-all",
+                          "transition",
                           "hover:text-sky-600 dark:hover:text-sky-300",
+                          "p-0.5 -mr-1",
+                          "rounded hover:bg-slate-100",
                         )}
-                      />
+                        tabIndex={-1}
+                        onClick={() => {
+                          if (collapsed) {
+                            onCollapse(false);
+                          } else {
+                            onCollapse(true);
+                          }
+                        }}
+                      >
+                        <ChevronDownIcon
+                          className={clsx(
+                            collapsed && "-rotate-90",
+                            "size-4",
+                            "transition-transform",
+                          )}
+                        />
+                      </button>
                     </div>
                   </>
                 )}
@@ -653,17 +660,21 @@ export const MapView = memo(
 
     const { theme } = useTheme();
 
-    const unselectedNode = useCallback(() => {
+    const unselectNode = useCallback(() => {
       onSelectedNodeIdChange?.("root");
     }, [onSelectedNodeIdChange]);
 
-    useKeyPressEvent("Escape", unselectedNode);
+    useKeyPressEvent("Escape", unselectNode);
 
     return (
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
       <div
-        className={clsx("h-full flex flex-col", theme.bg4)}
-        onClick={unselectedNode}
+        className={clsx(
+          "h-full flex flex-col",
+          theme.bg4,
+          // "rounded overflow-hidden",
+        )}
+        onClick={unselectNode}
       >
         <div className="grow relative">
           {!rootNodes && (

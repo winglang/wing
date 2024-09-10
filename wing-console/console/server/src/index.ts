@@ -7,7 +7,7 @@ import type { Express } from "express";
 
 import type { Config } from "./config.js";
 import type { LogSource } from "./consoleLogger.js";
-import { type ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
+import { createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
 import type { HostUtils } from "./hostUtils.js";
 import type { Router } from "./router/index.js";
@@ -22,6 +22,7 @@ import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 import { createTestRunner } from "./utils/test-runner/test-runner.js";
 
+export type { ConsoleEnvironmentId } from "./types.js";
 export type { FileLink } from "./utils/createRouter.js";
 export type { TestStatus, TestItem } from "./utils/test-runner/test-runner.js";
 export type { Trace, State } from "./types.js";

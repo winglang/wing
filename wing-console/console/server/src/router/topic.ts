@@ -1,11 +1,14 @@
-import { z } from "zod";
+import * as z from "zod";
 
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  createEnvironmentProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import type { ITopicClient } from "../wingsdk.js";
 
 export const createTopicRouter = () => {
   return createRouter({
-    "topic.publish": createProcedure
+    "topic.publish": createEnvironmentProcedure
       .meta({
         analytics: {
           action: "publish",

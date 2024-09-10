@@ -9,6 +9,7 @@ import { WebSocketServer } from "ws";
 
 import type { Config } from "./config.js";
 import type { ConsoleLogger } from "./consoleLogger.js";
+import { createEnvironmentsManager } from "./environments-manager.js";
 import type { HostUtils } from "./hostUtils.js";
 import { mergeAllRouters } from "./router/index.js";
 import type { State, Trace } from "./types.js";
@@ -89,7 +90,7 @@ export const createExpressServer = async ({
   const createContext = (): RouterContext => {
     return {
       async simulator() {
-        return await simulatorInstance();
+        return simulatorInstance();
       },
       async restartSimulator() {
         return await restartSimulator();
@@ -120,6 +121,13 @@ export const createExpressServer = async ({
       notifySignedIn,
       getEndpointWarningAccepted,
       notifyEndpointWarningAccepted,
+      getEnvironmentsManager() {
+        return createEnvironmentsManager({
+          async getSimulator() {
+            return simulatorInstance();
+          },
+        });
+      },
     };
   };
   app.use(

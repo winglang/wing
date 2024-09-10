@@ -45,7 +45,11 @@ export const Hierarchy = memo((props: HierarchyProps) => {
   const selectionContext = useSelectionContext();
   return (
     <div
-      className={classNames("w-full h-full flex flex-col", theme.bg3)}
+      className={classNames(
+        "w-full h-full flex flex-col",
+        theme.bg3,
+        // "rounded overflow-hidden",
+      )}
       data-testid={props["data-testid"]}
     >
       <Toolbar title="Hierarchy">

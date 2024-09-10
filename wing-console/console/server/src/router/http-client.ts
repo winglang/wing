@@ -1,11 +1,14 @@
-import { z } from "zod";
+import * as z from "zod";
 
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  createEnvironmentProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import type { IFunctionClient } from "../wingsdk.js";
 
 export const createHttpClientRouter = () => {
   return createRouter({
-    "httpClient.getUrl": createProcedure
+    "httpClient.getUrl": createEnvironmentProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -17,13 +20,14 @@ export const createHttpClientRouter = () => {
           input.resourcePath,
         ) as IFunctionClient;
 
+        // @ts-ignore
         const url = await getUrlClient.invoke("");
         return {
           url,
         };
       }),
 
-    "httpClient.getOpenApiSpec": createProcedure
+    "httpClient.getOpenApiSpec": createEnvironmentProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -35,8 +39,10 @@ export const createHttpClientRouter = () => {
           input.resourcePath,
         ) as IFunctionClient;
 
+        // @ts-ignore
         const openApiSpec = await getApiSpecClient.invoke("");
         return {
+          // @ts-ignore
           openApiSpec: JSON.parse(openApiSpec ?? "{}"),
         };
       }),

@@ -1,11 +1,14 @@
-import { z } from "zod";
+import * as z from "zod";
 
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  createEnvironmentProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import type { WebsiteSchema } from "../wingsdk.js";
 
 export const createWebsiteRouter = () => {
   return createRouter({
-    "website.url": createProcedure
+    "website.url": createEnvironmentProcedure
       .input(
         z.object({
           resourcePath: z.string(),

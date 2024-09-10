@@ -1,14 +1,16 @@
 import { errorMessage } from "@wingconsole/error-message";
 import fetch from "node-fetch";
-import { z } from "zod";
+import * as z from "zod";
 
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  createEnvironmentProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import type { ApiSchema } from "../wingsdk.js";
-import { OpenApiSpec } from "../wingsdk.js";
 
 export const createApiRouter = () => {
   return createRouter({
-    "api.schema": createProcedure
+    "api.schema": createEnvironmentProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -26,7 +28,7 @@ export const createApiRouter = () => {
         };
       }),
 
-    "api.fetch": createProcedure
+    "api.fetch": createEnvironmentProcedure
       .meta({
         analytics: {
           action: "fetch",

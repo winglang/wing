@@ -1,6 +1,7 @@
 import { memo, useCallback, useContext } from "react";
 
 import { trpc } from "../../trpc.js";
+import { useConsoleEnvironment } from "../console-environment-context/console-environment-context.js";
 import { useSelectionContext } from "../selection-context/selection-context.js";
 import { TestsContext } from "../tests-pane/tests-context.js";
 
@@ -13,10 +14,13 @@ export const Inspector = memo(() => {
 
   const { showTests } = useContext(TestsContext);
 
+  const { consoleEnvironment } = useConsoleEnvironment();
+
   const metadata = trpc["app.nodeMetadata"].useQuery(
     {
       path: selectedItems[0],
       showTests,
+      environmentId: consoleEnvironment,
     },
     {
       enabled: selectedItems.length > 0,

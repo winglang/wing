@@ -124,7 +124,11 @@ export const EndpointTree = () => {
 
   return (
     <div
-      className={classNames("w-full h-full flex flex-col", theme.bg3)}
+      className={classNames(
+        "w-full h-full flex flex-col",
+        theme.bg3,
+        // "rounded overflow-hidden",
+      )}
       data-testid="endpoint-tree-menu"
     >
       <Toolbar title="Endpoints"></Toolbar>

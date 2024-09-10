@@ -100,7 +100,11 @@ export const TestTree = ({
 
   return (
     <div
-      className={classNames("w-full h-full flex flex-col", theme.bg3)}
+      className={classNames(
+        "w-full h-full flex flex-col",
+        theme.bg3,
+        // "rounded overflow-hidden",
+      )}
       data-testid="test-tree-menu"
     >
       <Toolbar title="Tests">

@@ -1,5 +1,5 @@
 import { type TestResult } from "@winglang/sdk/lib/std";
-import { z } from "zod";
+import * as z from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
 

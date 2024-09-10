@@ -1,10 +1,13 @@
-import { z } from "zod";
+import * as z from "zod";
 
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  createEnvironmentProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 
 export const createTableRouter = () => {
   return createRouter({
-    "table.scan": createProcedure
+    "table.scan": createEnvironmentProcedure
       .input(
         z.object({
           resourcePath: z.string(),

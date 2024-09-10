@@ -35,7 +35,7 @@ export const ResetButton = ({ disabled }: { disabled?: boolean }) => {
         disabled={resetMutation.isLoading || disabled}
       >
         <ArrowPathIcon className="size-3.5" />
-        <span>Reset</span>
+        {/* <span>Reset</span> */}
       </button>
 
       <Modal visible={showRestartModal}>
@@ -47,11 +47,11 @@ export const ResetButton = ({ disabled }: { disabled?: boolean }) => {
                 "text-base font-semibold leading-6",
               )}
             >
-              Reset Application
+              Reset Environment
             </h3>
             <p className={classNames(theme.text2, "text-sm text-center")}>
               Are you sure you want to reset all state and restart the
-              application?
+              environment?
             </p>
           </div>
         </ModalBody>

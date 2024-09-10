@@ -3,7 +3,7 @@ import { observable } from "@trpc/server/observable";
 import { uniqBy } from "@wingconsole/utilities";
 import type { UIComponent } from "@winglang/sdk/lib/core/tree.js";
 import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/simulator.js";
-import { z } from "zod";
+import * as z from "zod";
 
 import type { LogEntry } from "../consoleLogger.js";
 import type { Trace } from "../types.js";
@@ -16,7 +16,11 @@ import type {
 } from "../utils/constructTreeNodeMap.js";
 import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
 import type { FileLink } from "../utils/createRouter.js";
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  createEnvironmentProcedure,
+  createProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import type { Simulator } from "../wingsdk.js";
 
 import { getHierarchichalRunningState } from "./app.get-hierarchichal-running-state.js";
@@ -52,7 +56,7 @@ const shakeTree = (tree: ConstructTreeNode): ConstructTreeNode => {
 };
 
 export const createAppRouter = () => {
-  const router = createRouter({
+  return createRouter({
     "app.details": createProcedure.query(({ ctx }) => {
       return ctx.appDetails();
     }),
@@ -88,7 +92,7 @@ export const createAppRouter = () => {
         resources,
       };
     }),
-    "app.logs": createProcedure
+    "app.logs": createEnvironmentProcedure
       .input(
         z.object({
           filters: z.object({
@@ -188,11 +192,9 @@ export const createAppRouter = () => {
       }),
     "app.nodeIds": createProcedure
       .input(
-        z
-          .object({
-            showTests: z.boolean().optional(),
-          })
-          .optional(),
+        z.object({
+          showTests: z.boolean().optional(),
+        }),
       )
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
@@ -271,7 +273,7 @@ export const createAppRouter = () => {
           props: config?.props,
         };
       }),
-    "app.nodeMetadata": createProcedure
+    "app.nodeMetadata": createEnvironmentProcedure
       .input(
         z.object({
           path: z.string().optional(),
@@ -507,7 +509,7 @@ export const createAppRouter = () => {
         launch(`${input.path}:${input.line}:${input.column}`);
       }),
 
-    "app.getResourceUI": createProcedure
+    "app.getResourceUI": createEnvironmentProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -558,8 +560,6 @@ export const createAppRouter = () => {
       },
     ),
   });
-
-  return { router };
 };
 
 function createExplorerItemFromConstructTreeNode(

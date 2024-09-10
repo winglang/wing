@@ -1,11 +1,14 @@
-import { z } from "zod";
+import * as z from "zod";
 
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  createEnvironmentProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import type { ICounterClient } from "../wingsdk.js";
 
 export const createCounterRouter = () => {
   return createRouter({
-    "counter.inc": createProcedure
+    "counter.inc": createEnvironmentProcedure
       .meta({
         analytics: {
           action: "inc",
@@ -26,7 +29,7 @@ export const createCounterRouter = () => {
         const response = await client.inc(input.amount);
         return response;
       }),
-    "counter.dec": createProcedure
+    "counter.dec": createEnvironmentProcedure
       .meta({
         analytics: {
           action: "dec",
@@ -47,7 +50,7 @@ export const createCounterRouter = () => {
         const response = await client.dec(input.amount);
         return response;
       }),
-    "counter.peek": createProcedure
+    "counter.peek": createEnvironmentProcedure
       .meta({
         analytics: {
           action: "peek",
@@ -70,7 +73,7 @@ export const createCounterRouter = () => {
         const response = await client.peek();
         return response;
       }),
-    "counter.set": createProcedure
+    "counter.set": createEnvironmentProcedure
       .meta({
         analytics: {
           action: "set",

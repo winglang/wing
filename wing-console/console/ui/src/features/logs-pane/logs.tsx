@@ -8,6 +8,7 @@ import classNames from "classnames";
 import { useState, useRef, useEffect, useCallback, memo, useMemo } from "react";
 
 import { trpc } from "../../trpc.js";
+import { useConsoleEnvironment } from "../console-environment-context/console-environment-context.js";
 import { useAppLocalStorage } from "../localstorage-context/use-localstorage.js";
 
 import {
@@ -44,6 +45,7 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
 
   const filters = trpc["app.logsFilters"].useQuery();
 
+  const { consoleEnvironment } = useConsoleEnvironment();
   const logs = trpc["app.logs"].useQuery(
     {
       filters: {
@@ -58,6 +60,7 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         resourceIds: selectedResourceIds,
         resourceTypes: selectedResourceTypes,
       },
+      environmentId: consoleEnvironment,
     },
     {
       keepPreviousData: true,

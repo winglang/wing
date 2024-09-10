@@ -13,6 +13,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { BlueScreenOfDeath } from "../blue-screen-of-death/blue-screen-of-death.js";
 import { EndpointTree } from "../endpoints-pane/endpoint-tree.js";
 import { Explorer } from "../explorer-pane/explorer.js";
+import { HeaderBar } from "../header-bar/header-bar.js";
 import { Hierarchy } from "../hierarchy-pane/hierarchy.js";
 import { Inspector } from "../inspector-pane/inspector.js";
 import { LogsWidget } from "../logs-pane/logs.js";
@@ -170,6 +171,13 @@ export const DefaultLayout = ({
             layout?.panels?.rounded && "pt-1",
           )}
         >
+          {/* Footer */}
+          {!layout.statusBar?.hide && (
+            <div className={classNames(USE_EXTERNAL_THEME_COLOR)}>
+              <HeaderBar cloudAppState={cloudAppState} />
+            </div>
+          )}
+
           <div
             className={classNames(
               "w-full h-full flex flex-col select-none",
@@ -200,8 +208,7 @@ export const DefaultLayout = ({
                             const panelComponent = (
                               <div
                                 className={classNames(
-                                  layout.panels?.rounded &&
-                                    "rounded-lg overflow-hidden",
+                                  // "rounded overflow-hidden",
                                   index === 0 && "flex grow",
                                   index > 0 && "h-full",
                                 )}
@@ -225,8 +232,7 @@ export const DefaultLayout = ({
                                 key={index}
                                 className={classNames(
                                   "flex grow",
-                                  layout.panels?.rounded &&
-                                    "rounded-lg overflow-hidden",
+                                  // "rounded overflow-hidden",
                                 )}
                               >
                                 {panelComponent}
@@ -243,8 +249,7 @@ export const DefaultLayout = ({
                         className={classNames(
                           "flex-1 flex flex-col",
                           USE_EXTERNAL_THEME_COLOR,
-                          layout.panels?.rounded &&
-                            "rounded-lg overflow-hidden",
+                          // "rounded overflow-hidden",
                         )}
                         data-testid="map-view"
                       >
@@ -262,8 +267,7 @@ export const DefaultLayout = ({
                             className={classNames(
                               "w-full h-full relative",
                               theme.bg3,
-                              layout.panels?.rounded &&
-                                "rounded-lg overflow-hidden",
+                              // "rounded overflow-hidden",
                             )}
                           >
                             <Inspector />
@@ -302,8 +306,7 @@ export const DefaultLayout = ({
                       <div
                         key={index}
                         className={classNames(
-                          layout.panels?.rounded &&
-                            "rounded-lg overflow-hidden",
+                          // "rounded overflow-hidden",
                           "flex grow w-full",
                         )}
                       >

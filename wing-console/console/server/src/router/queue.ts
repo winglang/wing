@@ -1,11 +1,15 @@
-import { z } from "zod";
+import * as z from "zod";
 
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  createEnvironmentProcedure,
+  createProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import type { IQueueClient } from "../wingsdk.js";
 
 export const createQueueRouter = () => {
   return createRouter({
-    "queue.purge": createProcedure
+    "queue.purge": createEnvironmentProcedure
       .meta({
         analytics: {
           action: "purge",
@@ -24,7 +28,7 @@ export const createQueueRouter = () => {
         ) as IQueueClient;
         return client.purge();
       }),
-    "queue.approxSize": createProcedure
+    "queue.approxSize": createEnvironmentProcedure
       .meta({
         analytics: {
           action: "approxSize",
@@ -43,7 +47,7 @@ export const createQueueRouter = () => {
         ) as IQueueClient;
         return client.approxSize();
       }),
-    "queue.push": createProcedure
+    "queue.push": createEnvironmentProcedure
       .meta({
         analytics: {
           action: "push",

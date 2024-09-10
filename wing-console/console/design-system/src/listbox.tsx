@@ -173,6 +173,7 @@ export const Listbox = ({
                       <li
                         className={classNames(
                           "relative cursor-default select-none py-2 pl-10 pr-4",
+                          "list-none",
                           theme.bgInputHover,
                           theme.text1,
                         )}

@@ -1,10 +1,13 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import type { simulator } from "@winglang/sdk";
 import type Emittery from "emittery";
+import * as z from "zod";
 
 import type { Config } from "../config.js";
 import type { ConsoleLogger } from "../consoleLogger.js";
+import type { EnvironmentsManager } from "../environments-manager.js";
 import type { HostUtils } from "../hostUtils.js";
+import type { ConsoleEnvironmentId } from "../types.js";
 import type { State, Trace } from "../types.js";
 import type { Updater } from "../updater.js";
 
@@ -89,15 +92,17 @@ export interface RouterContext {
   wingfile: string;
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
-  getSelectedNode: () => string | undefined;
+  getSelectedNode(): string | undefined;
   setSelectedNode: (node: string) => void;
-  getTestRunner: () => TestRunner;
+  getTestRunner(): TestRunner;
   analyticsAnonymousId?: string;
-  requireSignIn?: () => Promise<boolean>;
-  notifySignedIn?: () => Promise<void>;
+  requireSignIn?(): Promise<boolean>;
+  notifySignedIn?(): Promise<void>;
   analytics?: Analytics;
-  getEndpointWarningAccepted?: () => Promise<boolean>;
-  notifyEndpointWarningAccepted?: () => Promise<void>;
+  getEndpointWarningAccepted?(): Promise<boolean>;
+  notifyEndpointWarningAccepted?(): Promise<void>;
+  // consoleEnvironmentId: ConsoleEnvironmentId | undefined;
+  getEnvironmentsManager(): EnvironmentsManager;
 }
 
 const t = initTRPC.context<RouterContext>().meta<RouterMeta>().create();
@@ -132,3 +137,34 @@ const sendUserResourceInteractionAnalyticsEvent = middleware(
 export const createProcedure = t.procedure
   .use(invalidateQueriesAfterMutation)
   .use(sendUserResourceInteractionAnalyticsEvent) as typeof t.procedure;
+
+export const environmentIdShape = z.custom<ConsoleEnvironmentId>((value) => {
+  return typeof value === "string"
+    ? value === "local" || value.startsWith("local-test:")
+    : false;
+});
+
+export const createEnvironmentProcedure = createProcedure
+  .input(
+    z.object({
+      environmentId: environmentIdShape,
+    }),
+  )
+  .use(async ({ input, ctx, next }) => {
+    try {
+      const environmentsManager = ctx.getEnvironmentsManager();
+      const environment = environmentsManager.getSimulatorForEnvironment(
+        input.environmentId,
+      );
+      return next({
+        ctx: {
+          environment,
+        },
+      });
+    } catch (error) {
+      return {
+        error,
+        ok: false,
+      };
+    }
+  });

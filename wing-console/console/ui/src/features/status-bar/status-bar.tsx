@@ -2,8 +2,6 @@ import { useTheme, Loader } from "@wingconsole/design-system";
 import type { State } from "@wingconsole/server";
 import classNames from "classnames";
 
-import { DiscordButton } from "./discord-button.js";
-import { ResetButton } from "./reset-button.js";
 import { ThemeToggle } from "./theme-toggle.js";
 
 export interface StatusBarProps {
@@ -39,18 +37,17 @@ export const StatusBar = ({
       )}
     >
       {/*left side*/}
-      <div className="flex gap-2 items-center">
-        <ResetButton disabled={loading} />
+      <div className="flex gap-4 items-center">
         <div title={wingVersion} className="truncate space-x-1">
           {wingVersion && (
-            <div className="flex gap-1 px-1 py-0.5">
+            <div className="flex gap-1 py-0.5">
               <span>Wing</span>
               <span className={classNames(theme.text2)}>v{wingVersion}</span>
             </div>
           )}
         </div>
 
-        <div className="flex gap-1 px-1 py-0.5">
+        <div className="flex gap-1 py-0.5">
           <span>Status:</span>
           <span className={classNames(theme.text2)}>
             <span
@@ -70,7 +67,6 @@ export const StatusBar = ({
       <div className="grow"></div>
       {/*right side*/}
       <div className="flex gap-2 items-center">
-        <DiscordButton />
         {showThemeToggle && <ThemeToggle />}
       </div>
     </footer>

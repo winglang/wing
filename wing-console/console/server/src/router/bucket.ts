@@ -1,11 +1,15 @@
-import { z } from "zod";
+import * as z from "zod";
 
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  createEnvironmentProcedure,
+  createProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import type { IBucketClient } from "../wingsdk.js";
 
 export const createBucketRouter = () => {
   return createRouter({
-    "bucket.put": createProcedure
+    "bucket.put": createEnvironmentProcedure
       .meta({
         analytics: {
           resource: "Bucket",
@@ -27,7 +31,7 @@ export const createBucketRouter = () => {
         const response = await client.put(input.fileName, input.fileContent);
         return response;
       }),
-    "bucket.get": createProcedure
+    "bucket.get": createEnvironmentProcedure
       .meta({
         analytics: {
           resource: "Bucket",
@@ -48,7 +52,7 @@ export const createBucketRouter = () => {
         const response = await client.get(input.fileName);
         return response;
       }),
-    "bucket.download": createProcedure
+    "bucket.download": createEnvironmentProcedure
       .meta({
         analytics: {
           resource: "Bucket",
@@ -69,7 +73,7 @@ export const createBucketRouter = () => {
         const response = await client.get(input.fileName);
         return response;
       }),
-    "bucket.list": createProcedure
+    "bucket.list": createEnvironmentProcedure
       .meta({
         analytics: {
           resource: "Bucket",
@@ -89,7 +93,7 @@ export const createBucketRouter = () => {
         const response = await client.list();
         return response;
       }),
-    "bucket.delete": createProcedure
+    "bucket.delete": createEnvironmentProcedure
       .meta({
         analytics: {
           resource: "Bucket",
