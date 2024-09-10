@@ -6,9 +6,9 @@ bring expect;
 
 let api = new cloud.Api();
 
-let bucket = new cloud.Bucket(public: true);
+let bucket = new cloud.Bucket(public: true, cors: false);
 
-bucket.addCorsConfiguration(
+bucket.addCorsRule(
   allowedMethods: [http.HttpMethod.GET],
   allowedOrigins: [api.url]
 );
@@ -30,22 +30,20 @@ api.get("/test-bucket-cors", inflight (req) => {
   };
 });
 
-
 if util.tryEnv("WING_TARGET") == "tf-aws" {
   test "bucket CORS configuration works" {
     let requestFromTest = http.fetch(
-    bucket.signedUrl("hello"),
-    method: http.HttpMethod.OPTIONS,
-    headers: {
-      Origin:  "not-api-url.com",
-      "Access-Control-Request-Method": "GET",
-    },
-  );
+      bucket.signedUrl("hello"),
+      method: http.HttpMethod.OPTIONS,
+      headers: {
+        Origin:  "not-api-url.com",
+        "Access-Control-Request-Method": "GET",
+      },
+    );
     expect.match(requestFromTest.body, "AccessForbidden");
 
     let requestFromApi = http.get(api.url + "/test-bucket-cors").body;
     expect.equal(requestFromApi, "");
-
   }
 }
 

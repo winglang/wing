@@ -22,6 +22,27 @@ exports[`bucket is public 1`] = `
             },
           ],
         },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "ExposedHeaders": [],
+              "MaxAge": 0,
+            },
+          ],
+        },
         "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": false,
           "BlockPublicPolicy": false,
@@ -303,6 +324,27 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               "ServerSideEncryptionByDefault": {
                 "SSEAlgorithm": "AES256",
               },
+            },
+          ],
+        },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "ExposedHeaders": [],
+              "MaxAge": 0,
             },
           ],
         },
@@ -663,6 +705,27 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               "ServerSideEncryptionByDefault": {
                 "SSEAlgorithm": "AES256",
               },
+            },
+          ],
+        },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "ExposedHeaders": [],
+              "MaxAge": 0,
             },
           ],
         },
@@ -1067,6 +1130,27 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               "ServerSideEncryptionByDefault": {
                 "SSEAlgorithm": "AES256",
               },
+            },
+          ],
+        },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "ExposedHeaders": [],
+              "MaxAge": 0,
             },
           ],
         },
@@ -1608,6 +1692,27 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             },
           ],
         },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "ExposedHeaders": [],
+              "MaxAge": 0,
+            },
+          ],
+        },
         "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": true,
           "BlockPublicPolicy": true,
@@ -1940,6 +2045,27 @@ exports[`bucket with two preflight files 1`] = `
             },
           ],
         },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "ExposedHeaders": [],
+              "MaxAge": 0,
+            },
+          ],
+        },
         "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": false,
           "BlockPublicPolicy": false,
@@ -2247,6 +2373,27 @@ exports[`bucket with two preflight objects 1`] = `
             },
           ],
         },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "ExposedHeaders": [],
+              "MaxAge": 0,
+            },
+          ],
+        },
         "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": false,
           "BlockPublicPolicy": false,
@@ -2392,6 +2539,27 @@ exports[`create a bucket 1`] = `
               "ServerSideEncryptionByDefault": {
                 "SSEAlgorithm": "AES256",
               },
+            },
+          ],
+        },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "ExposedHeaders": [],
+              "MaxAge": 0,
             },
           ],
         },

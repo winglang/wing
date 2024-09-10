@@ -3,7 +3,7 @@ source: packages/@winglang/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\npreflight bucket: class Bucket {\n  addCorsConfiguration(...): void;\n  addFile(...): void;\n  addObject(...): void;\n  onCreate(...): void;\n  onDelete(...): void;\n  onEvent(...): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
+  value: "```wing\npreflight bucket: class Bucket {\n  addCorsRule(...): void;\n  addFile(...): void;\n  addObject(...): void;\n  onCreate(...): void;\n  onDelete(...): void;\n  onEvent(...): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
 range:
   start:
     line: 3

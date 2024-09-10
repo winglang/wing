@@ -216,6 +216,36 @@
         "force_destroy": false
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "WidgetService_Bucket_CorsConfiguration-d47f60fd_4DF43029": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/WidgetService/Bucket/CorsConfiguration-d47f60fd",
+            "uniqueId": "WidgetService_Bucket_CorsConfiguration-d47f60fd_4DF43029"
+          }
+        },
+        "bucket": "${aws_s3_bucket.WidgetService_Bucket_125C963C.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_s3_object": {
       "WidgetService_Button_Handler_S3Object_277180FD": {
         "//": {

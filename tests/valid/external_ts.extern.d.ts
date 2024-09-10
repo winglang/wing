@@ -163,7 +163,7 @@ export interface BucketOnUpdateOptions {
 /** A cloud object store. */
 export class Bucket extends Resource {
   /** Add cors configuration to the bucket. */
-  readonly addCorsConfiguration: (value: BucketCorsOptions) => void;
+  readonly addCorsRule: (value: BucketCorsOptions) => void;
   /** Add a file to the bucket from system folder. */
   readonly addFile: (key: string, path: string, encoding?: (string) | undefined) => void;
   /** Add a file to the bucket that is uploaded when the app is deployed.

@@ -138,6 +138,64 @@ module.exports = function({ $bucket2 }) {
         "bucket_prefix": "bucket-c8fe564c-",
         "force_destroy": false
       }
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "Bucket_CorsConfiguration-1357ca3a_A4CCA40A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/CorsConfiguration-1357ca3a",
+            "uniqueId": "Bucket_CorsConfiguration-1357ca3a_A4CCA40A"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "MyClosure_Bucket_CorsConfiguration-e8fb640c_DE3E7CF4": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyClosure/Bucket/CorsConfiguration-e8fb640c",
+            "uniqueId": "MyClosure_Bucket_CorsConfiguration-e8fb640c_DE3E7CF4"
+          }
+        },
+        "bucket": "${aws_s3_bucket.MyClosure_Bucket_874B5056.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 ---
-source: libs/wingc/src/lsp/signature.rs
+source: packages/@winglang/wingc/src/lsp/signature.rs
 ---
 signatures:
   - label: "(...props): Bucket"
@@ -10,6 +10,6 @@ signatures:
       - label: "...props"
         documentation:
           kind: markdown
-          value: "```wing\nstruct BucketProps {\n  public?: bool;\n}\n```\n"
+          value: "```wing\nstruct BucketProps {\n  cors?: bool;\n  corsOptions?: BucketCorsOptions;\n  public?: bool;\n}\n```\n"
     activeParameter: 0
 

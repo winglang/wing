@@ -126,10 +126,10 @@ export class Bucket extends cloud.Bucket {
     };
   }
 
-  public addCorsConfiguration(value: cloud.BucketCorsOptions): void {
+  public addCorsRule(value: cloud.BucketCorsOptions): void {
     value;
     throw new NotImplementedError(
-      "addCorsConfiguration method isn't implemented yet on the current target.",
+      "addCorsRule method isn't implemented yet on the current target.",
       {
         resource: this.constructor.name,
       }

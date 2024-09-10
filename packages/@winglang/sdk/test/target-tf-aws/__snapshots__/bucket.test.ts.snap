@@ -9,6 +9,30 @@ exports[`bucket is public 1`] = `
         "force_destroy": false,
       },
     },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
     "aws_s3_bucket_policy": {
       "my_bucket_PublicPolicy_AF351571": {
         "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
@@ -32,6 +56,396 @@ exports[`bucket is public 1`] = `
 `;
 
 exports[`bucket is public 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "my_bucket": {
+                "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/my_bucket/PublicAccessBlock",
+                  },
+                  "PublicPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "PublicPolicy",
+                    "path": "root/Default/my_bucket/PublicPolicy",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket prefix must be lowercase 1`] = `
+{
+  "resource": {
+    "aws_s3_bucket": {
+      "The-UncannyBucket": {
+        "bucket_prefix": "the-uncanny-bucket-c88a0953-",
+        "force_destroy": false,
+      },
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "The-UncannyBucket_CorsConfiguration-2ae75afe_2E99AE47": {
+        "bucket": "\${aws_s3_bucket.The-UncannyBucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`bucket prefix must be lowercase 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "The-Uncanny.Bucket": {
+                "children": {
+                  "CorsConfiguration-2ae75afe": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-2ae75afe",
+                    "path": "root/Default/The-Uncanny.Bucket/CorsConfiguration-2ae75afe",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/The-Uncanny.Bucket/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "The-Uncanny.Bucket",
+                "path": "root/Default/The-Uncanny.Bucket",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket prefix valid 1`] = `
+{
+  "resource": {
+    "aws_s3_bucket": {
+      "the-uncannybucket": {
+        "bucket_prefix": "the-uncanny-bucket-c8e2755c-",
+        "force_destroy": false,
+      },
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "the-uncannybucket_CorsConfiguration-8129595d_396ADC5D": {
+        "bucket": "\${aws_s3_bucket.the-uncannybucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`bucket prefix valid 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "the-uncanny.bucket": {
+                "children": {
+                  "CorsConfiguration-8129595d": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-8129595d",
+                    "path": "root/Default/the-uncanny.bucket/CorsConfiguration-8129595d",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/the-uncanny.bucket/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "the-uncanny.bucket",
+                "path": "root/Default/the-uncanny.bucket",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket with cors disabled 1`] = `
+{
+  "resource": {
+    "aws_s3_bucket": {
+      "my_bucket": {
+        "bucket_prefix": "my-bucket-c8045fcc-",
+        "force_destroy": false,
+      },
+    },
+    "aws_s3_bucket_policy": {
+      "my_bucket_PublicPolicy_AF351571": {
+        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
+        "depends_on": [
+          "aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0",
+        ],
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":["s3:GetObject"],"Resource":["\${aws_s3_bucket.my_bucket.arn}/*"]}]}",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "my_bucket_PublicAccessBlock_538547C0": {
+        "block_public_acls": false,
+        "block_public_policy": false,
+        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
+        "ignore_public_acls": false,
+        "restrict_public_buckets": false,
+      },
+    },
+  },
+}
+`;
+
+exports[`bucket with cors disabled 2`] = `
 {
   "tree": {
     "children": {
@@ -129,20 +543,57 @@ exports[`bucket is public 2`] = `
 }
 `;
 
-exports[`bucket prefix must be lowercase 1`] = `
+exports[`bucket with custom cors in constructor 1`] = `
 {
   "resource": {
     "aws_s3_bucket": {
-      "The-UncannyBucket": {
-        "bucket_prefix": "the-uncanny-bucket-c88a0953-",
+      "my_bucket": {
+        "bucket_prefix": "my-bucket-c8045fcc-",
         "force_destroy": false,
+      },
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+            ],
+            "allowed_origins": [
+              "https://example.com",
+            ],
+            "max_age_seconds": 3600,
+          },
+        ],
+      },
+    },
+    "aws_s3_bucket_policy": {
+      "my_bucket_PublicPolicy_AF351571": {
+        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
+        "depends_on": [
+          "aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0",
+        ],
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":["s3:GetObject"],"Resource":["\${aws_s3_bucket.my_bucket.arn}/*"]}]}",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "my_bucket_PublicAccessBlock_538547C0": {
+        "block_public_acls": false,
+        "block_public_policy": false,
+        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
+        "ignore_public_acls": false,
+        "restrict_public_buckets": false,
       },
     },
   },
 }
 `;
 
-exports[`bucket prefix must be lowercase 2`] = `
+exports[`bucket with custom cors in constructor 2`] = `
 {
   "tree": {
     "children": {
@@ -150,8 +601,26 @@ exports[`bucket prefix must be lowercase 2`] = `
         "children": {
           "Default": {
             "children": {
-              "The-Uncanny.Bucket": {
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -159,7 +628,25 @@ exports[`bucket prefix must be lowercase 2`] = `
                     },
                     "display": {},
                     "id": "Default",
-                    "path": "root/Default/The-Uncanny.Bucket/Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/my_bucket/PublicAccessBlock",
+                  },
+                  "PublicPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "PublicPolicy",
+                    "path": "root/Default/my_bucket/PublicPolicy",
                   },
                 },
                 "constructInfo": {
@@ -170,17 +657,8 @@ exports[`bucket prefix must be lowercase 2`] = `
                   "description": "A cloud object store",
                   "title": "Bucket",
                 },
-                "id": "The-Uncanny.Bucket",
-                "path": "root/Default/The-Uncanny.Bucket",
-              },
-              "aws": {
-                "constructInfo": {
-                  "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.7",
-                },
-                "display": {},
-                "id": "aws",
-                "path": "root/Default/aws",
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
               },
             },
             "constructInfo": {
@@ -222,20 +700,57 @@ exports[`bucket prefix must be lowercase 2`] = `
 }
 `;
 
-exports[`bucket prefix valid 1`] = `
+exports[`bucket with custom cors via addCorsRule 1`] = `
 {
   "resource": {
     "aws_s3_bucket": {
-      "the-uncannybucket": {
-        "bucket_prefix": "the-uncanny-bucket-c8e2755c-",
+      "my_bucket": {
+        "bucket_prefix": "my-bucket-c8045fcc-",
         "force_destroy": false,
+      },
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+            ],
+            "allowed_origins": [
+              "https://example.com",
+            ],
+            "max_age_seconds": 3600,
+          },
+        ],
+      },
+    },
+    "aws_s3_bucket_policy": {
+      "my_bucket_PublicPolicy_AF351571": {
+        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
+        "depends_on": [
+          "aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0",
+        ],
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":["s3:GetObject"],"Resource":["\${aws_s3_bucket.my_bucket.arn}/*"]}]}",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "my_bucket_PublicAccessBlock_538547C0": {
+        "block_public_acls": false,
+        "block_public_policy": false,
+        "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
+        "ignore_public_acls": false,
+        "restrict_public_buckets": false,
       },
     },
   },
 }
 `;
 
-exports[`bucket prefix valid 2`] = `
+exports[`bucket with custom cors via addCorsRule 2`] = `
 {
   "tree": {
     "children": {
@@ -252,8 +767,17 @@ exports[`bucket prefix valid 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "the-uncanny.bucket": {
+              "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -261,7 +785,25 @@ exports[`bucket prefix valid 2`] = `
                     },
                     "display": {},
                     "id": "Default",
-                    "path": "root/Default/the-uncanny.bucket/Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/my_bucket/PublicAccessBlock",
+                  },
+                  "PublicPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "PublicPolicy",
+                    "path": "root/Default/my_bucket/PublicPolicy",
                   },
                 },
                 "constructInfo": {
@@ -272,8 +814,8 @@ exports[`bucket prefix valid 2`] = `
                   "description": "A cloud object store",
                   "title": "Bucket",
                 },
-                "id": "the-uncanny.bucket",
-                "path": "root/Default/the-uncanny.bucket",
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
               },
             },
             "constructInfo": {
@@ -387,6 +929,30 @@ exports[`bucket with onCreate method 1`] = `
         "force_destroy": false,
       },
     },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
     "aws_s3_bucket_notification": {
       "my_bucket_S3BucketNotification_DDA29E8F": {
         "bucket": "\${aws_s3_bucket.my_bucket.id}",
@@ -490,6 +1056,15 @@ exports[`bucket with onCreate method 2`] = `
               },
               "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -777,6 +1352,30 @@ exports[`bucket with onDelete method 1`] = `
         "force_destroy": false,
       },
     },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
     "aws_s3_bucket_notification": {
       "my_bucket_S3BucketNotification_DDA29E8F": {
         "bucket": "\${aws_s3_bucket.my_bucket.id}",
@@ -880,6 +1479,15 @@ exports[`bucket with onDelete method 2`] = `
               },
               "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -1263,6 +1871,30 @@ exports[`bucket with onEvent method 1`] = `
         "force_destroy": false,
       },
     },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
     "aws_s3_bucket_notification": {
       "my_bucket_S3BucketNotification_DDA29E8F": {
         "bucket": "\${aws_s3_bucket.my_bucket.id}",
@@ -1416,6 +2048,15 @@ exports[`bucket with onEvent method 2`] = `
               },
               "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -1957,6 +2598,30 @@ exports[`bucket with onUpdate method 1`] = `
         "force_destroy": false,
       },
     },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
     "aws_s3_bucket_notification": {
       "my_bucket_S3BucketNotification_DDA29E8F": {
         "bucket": "\${aws_s3_bucket.my_bucket.id}",
@@ -2060,6 +2725,15 @@ exports[`bucket with onUpdate method 2`] = `
               },
               "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -2284,6 +2958,30 @@ exports[`bucket with two preflight files 1`] = `
         "force_destroy": false,
       },
     },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
     "aws_s3_bucket_policy": {
       "my_bucket_PublicPolicy_AF351571": {
         "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
@@ -2337,6 +3035,15 @@ exports[`bucket with two preflight files 2`] = `
               },
               "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -2443,6 +3150,30 @@ exports[`bucket with two preflight objects 1`] = `
         "force_destroy": false,
       },
     },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
     "aws_s3_bucket_policy": {
       "my_bucket_PublicPolicy_AF351571": {
         "bucket": "\${aws_s3_bucket.my_bucket.bucket}",
@@ -2496,6 +3227,15 @@ exports[`bucket with two preflight objects 2`] = `
               },
               "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -2602,6 +3342,30 @@ exports[`create a bucket 1`] = `
         "force_destroy": false,
       },
     },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
   },
 }
 `;
@@ -2625,6 +3389,15 @@ exports[`create a bucket 2`] = `
               },
               "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",

@@ -2,14 +2,8 @@
 
 ## stdout.log
 ```log
-Error: addCorsConfiguration method isn't implemented yet on the current target.
-   --> cors.test.w:11:1
-   | 
-   | let bucket = new cloud.Bucket(public: true);
-   | 
-11 | bucket.addCorsConfiguration(
-   | ^
-at <ABSOLUTE>/cors.test.w:11:1
+Error: Resource root/Default/Bucket does not support inflight operation signedUrl.
+It might not be implemented yet.
 
 Tests 1 unsupported (1)
 Snapshots 1 skipped

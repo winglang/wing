@@ -150,7 +150,7 @@ new cloud.Bucket(props?: BucketProps);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Bucket.addCorsConfiguration">addCorsConfiguration</a></code> | Add cors configuration to the bucket. |
+| <code><a href="#@winglang/sdk.cloud.Bucket.addCorsRule">addCorsRule</a></code> | Add cors configuration to the bucket. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.addFile">addFile</a></code> | Add a file to the bucket from system folder. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.addObject">addObject</a></code> | Add a file to the bucket that is uploaded when the app is deployed. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.onCreate">onCreate</a></code> | Run an inflight whenever a file is uploaded to the bucket. |
@@ -180,15 +180,15 @@ new cloud.Bucket(props?: BucketProps);
 
 ---
 
-##### `addCorsConfiguration` <a name="addCorsConfiguration" id="@winglang/sdk.cloud.Bucket.addCorsConfiguration"></a>
+##### `addCorsRule` <a name="addCorsRule" id="@winglang/sdk.cloud.Bucket.addCorsRule"></a>
 
 ```wing
-addCorsConfiguration(value: BucketCorsOptions): void
+addCorsRule(value: BucketCorsOptions): void
 ```
 
 Add cors configuration to the bucket.
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.cloud.Bucket.addCorsConfiguration.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.cloud.Bucket.addCorsRule.parameter.value"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.BucketCorsOptions">BucketCorsOptions</a>
 
@@ -1040,7 +1040,55 @@ let BucketProps = cloud.BucketProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketProps.property.cors">cors</a></code> | <code>bool</code> | Whether to add default cors configuration. |
+| <code><a href="#@winglang/sdk.cloud.BucketProps.property.corsOptions">corsOptions</a></code> | <code><a href="#@winglang/sdk.cloud.BucketCorsOptions">BucketCorsOptions</a></code> | Custom cors configuration for the bucket. |
 | <code><a href="#@winglang/sdk.cloud.BucketProps.property.public">public</a></code> | <code>bool</code> | Whether the bucket's objects should be publicly accessible. |
+
+---
+
+##### `cors`<sup>Optional</sup> <a name="cors" id="@winglang/sdk.cloud.BucketProps.property.cors"></a>
+
+```wing
+cors: bool;
+```
+
+- *Type:* bool
+- *Default:* true
+
+Whether to add default cors configuration.
+
+The default cors configuration is equivalent to calling `addCorsRule`
+with the following options:
+{
+  allowHeaders: ["*"],
+  allowOrigins: ["*"],
+  allowMethods: ["DELETE", "GET", "HEAD", "POST", "PUT"],
+  exposeHeaders: [],
+  maxAge: 0s
+}
+
+---
+
+##### `corsOptions`<sup>Optional</sup> <a name="corsOptions" id="@winglang/sdk.cloud.BucketProps.property.corsOptions"></a>
+
+```wing
+corsOptions: BucketCorsOptions;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketCorsOptions">BucketCorsOptions</a>
+- *Default:* All origins, methods, headers are allowed.
+
+Custom cors configuration for the bucket.
+
+The default cors configuration is equivalent to calling `addCorsRule`
+with the following options:
+{
+  allowHeaders: ["*"],
+  allowOrigins: ["*"],
+  allowMethods: ["DELETE", "GET", "HEAD", "POST", "PUT"],
+  exposeHeaders: [],
+  maxAge: 0s
+}
 
 ---
 

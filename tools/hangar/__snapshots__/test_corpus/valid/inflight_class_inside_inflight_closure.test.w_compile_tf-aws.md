@@ -220,6 +220,36 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "PreflightClass_Bucket_CorsConfiguration-5318ec22_09CBB181": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/PreflightClass/Bucket/CorsConfiguration-5318ec22",
+            "uniqueId": "PreflightClass_Bucket_CorsConfiguration-5318ec22_09CBB181"
+          }
+        },
+        "bucket": "${aws_s3_bucket.PreflightClass_Bucket_93EC74D7.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_s3_object": {
       "PreflightClass_Function_S3Object_84DFAC83": {
         "//": {

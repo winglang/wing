@@ -123,6 +123,15 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                       "Bucket": {
                         "children": {
+                          "CorsConfiguration-82fe1f9e": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.0.0",
+                            },
+                            "display": {},
+                            "id": "CorsConfiguration-82fe1f9e",
+                            "path": "root/Default/Default/BigPublisher/Bucket/CorsConfiguration-82fe1f9e",
+                          },
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
@@ -373,6 +382,15 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                       "b2": {
                         "children": {
+                          "CorsConfiguration-584271ad": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.0.0",
+                            },
+                            "display": {},
+                            "id": "CorsConfiguration-584271ad",
+                            "path": "root/Default/Default/BigPublisher/b2/CorsConfiguration-584271ad",
+                          },
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
@@ -541,6 +559,15 @@ exports[`tree.json for an app with many resources 1`] = `
                   },
                   "Bucket": {
                     "children": {
+                      "CorsConfiguration-1357ca3a": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.0.0",
+                        },
+                        "display": {},
+                        "id": "CorsConfiguration-1357ca3a",
+                        "path": "root/Default/Default/Bucket/CorsConfiguration-1357ca3a",
+                      },
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",

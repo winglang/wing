@@ -16,7 +16,7 @@ source: packages/@winglang/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Bucket {\n  addCorsConfiguration(...): void;\n  addFile(...): void;\n  addObject(...): void;\n  onCreate(...): void;\n  onDelete(...): void;\n  onEvent(...): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
+    value: "```wing\nclass Bucket {\n  addCorsRule(...): void;\n  addFile(...): void;\n  addObject(...): void;\n  onCreate(...): void;\n  onDelete(...): void;\n  onEvent(...): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
   sortText: gg|Bucket
   insertText: Bucket($1)
   insertTextFormat: 2

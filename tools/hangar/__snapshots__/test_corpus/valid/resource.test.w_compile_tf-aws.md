@@ -590,6 +590,92 @@ module.exports = function({  }) {
         "bucket_prefix": "code-c84a50b1-"
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "BigPublisher_Bucket_CorsConfiguration-82fe1f9e_A1667736": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BigPublisher/Bucket/CorsConfiguration-82fe1f9e",
+            "uniqueId": "BigPublisher_Bucket_CorsConfiguration-82fe1f9e_A1667736"
+          }
+        },
+        "bucket": "${aws_s3_bucket.BigPublisher_Bucket_F4CC95F6.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "BigPublisher_b2_CorsConfiguration-584271ad_E76AB82E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BigPublisher/b2/CorsConfiguration-584271ad",
+            "uniqueId": "BigPublisher_b2_CorsConfiguration-584271ad_E76AB82E"
+          }
+        },
+        "bucket": "${aws_s3_bucket.BigPublisher_b2_702AC841.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "Bucket_CorsConfiguration-1357ca3a_A4CCA40A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/CorsConfiguration-1357ca3a",
+            "uniqueId": "Bucket_CorsConfiguration-1357ca3a_A4CCA40A"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_s3_bucket_notification": {
       "BigPublisher_b2_S3BucketNotification_26500622": {
         "//": {

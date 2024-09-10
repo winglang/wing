@@ -600,6 +600,64 @@
         "force_destroy": false
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "Bucket_CorsConfiguration-1357ca3a_A4CCA40A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/CorsConfiguration-1357ca3a",
+            "uniqueId": "Bucket_CorsConfiguration-1357ca3a_A4CCA40A"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "LogHistory_CorsConfiguration-76338bfb_AD56A3CD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/LogHistory/CorsConfiguration-76338bfb",
+            "uniqueId": "LogHistory_CorsConfiguration-76338bfb_AD56A3CD"
+          }
+        },
+        "bucket": "${aws_s3_bucket.LogHistory.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_s3_bucket_notification": {
       "Bucket_S3BucketNotification_D5E2F72C": {
         "//": {

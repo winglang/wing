@@ -192,6 +192,92 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "b1_CorsConfiguration-12a95bb8_084FCCA5": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b1/CorsConfiguration-12a95bb8",
+            "uniqueId": "b1_CorsConfiguration-12a95bb8_084FCCA5"
+          }
+        },
+        "bucket": "${aws_s3_bucket.b1.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "b2_CorsConfiguration-fa6445bb_E69581A6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b2/CorsConfiguration-fa6445bb",
+            "uniqueId": "b2_CorsConfiguration-fa6445bb_E69581A6"
+          }
+        },
+        "bucket": "${aws_s3_bucket.b2.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "b3_CorsConfiguration-c50b642d_34B3271D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b3/CorsConfiguration-c50b642d",
+            "uniqueId": "b3_CorsConfiguration-c50b642d_34B3271D"
+          }
+        },
+        "bucket": "${aws_s3_bucket.b3.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_s3_object": {
       "b1_S3Object-k_80FB6BEF": {
         "//": {

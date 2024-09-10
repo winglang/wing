@@ -36,6 +36,20 @@ export enum BucketInflightMethods {
   RENAME = "rename",
 }
 
+export const DEFAULT_BUCKET_CORS_CONFIGURATION: BucketCorsOptions = {
+  allowedHeaders: ["*"],
+  allowedOrigins: ["*"],
+  allowedMethods: [
+    HttpMethod.GET,
+    HttpMethod.POST,
+    HttpMethod.PUT,
+    HttpMethod.DELETE,
+    HttpMethod.HEAD,
+  ],
+  exposeHeaders: [],
+  maxAge: Duration.fromSeconds(0),
+};
+
 /**
  * Options for `Bucket`.
  */
@@ -45,6 +59,37 @@ export interface BucketProps {
    * @default false
    */
   readonly public?: boolean;
+
+  /**
+   * Whether to add default cors configuration.
+   *
+   * The default cors configuration is equivalent to calling `addCorsRule`
+   * with the following options:
+   * {
+   *   allowHeaders: ["*"],
+   *   allowOrigins: ["*"],
+   *   allowMethods: ["DELETE", "GET", "HEAD", "POST", "PUT"],
+   *   exposeHeaders: [],
+   *   maxAge: 0s
+   * }
+   * @default true
+   */
+  readonly cors?: boolean;
+
+  /**
+   * Custom cors configuration for the bucket.
+   * The default cors configuration is equivalent to calling `addCorsRule`
+   * with the following options:
+   * {
+   *   allowHeaders: ["*"],
+   *   allowOrigins: ["*"],
+   *   allowMethods: ["DELETE", "GET", "HEAD", "POST", "PUT"],
+   *   exposeHeaders: [],
+   *   maxAge: 0s
+   * }
+   * @default - All origins, methods, headers are allowed.
+   */
+  readonly corsOptions?: BucketCorsOptions;
 }
 
 /**
@@ -147,7 +192,7 @@ export class Bucket extends Resource {
    * @abstract
    */
 
-  public addCorsConfiguration(value: BucketCorsOptions): void {
+  public addCorsRule(value: BucketCorsOptions): void {
     value;
     throw new AbstractMemberError();
   }

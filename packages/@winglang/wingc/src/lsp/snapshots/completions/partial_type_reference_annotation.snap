@@ -11,7 +11,7 @@ source: packages/@winglang/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Bucket {\n  addCorsConfiguration(...): void;\n  addFile(...): void;\n  addObject(...): void;\n  onCreate(...): void;\n  onDelete(...): void;\n  onEvent(...): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
+    value: "```wing\nclass Bucket {\n  addCorsRule(...): void;\n  addFile(...): void;\n  addObject(...): void;\n  onCreate(...): void;\n  onDelete(...): void;\n  onEvent(...): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
   sortText: gg|Bucket
 - label: Counter
   kind: 7
@@ -215,7 +215,7 @@ source: packages/@winglang/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketProps {\n  public?: bool;\n}\n```\n---\nOptions for `Bucket`."
+    value: "```wing\nstruct BucketProps {\n  cors?: bool;\n  corsOptions?: BucketCorsOptions;\n  public?: bool;\n}\n```\n---\nOptions for `Bucket`."
   sortText: hh|BucketProps
 - label: BucketPutOptions
   kind: 22

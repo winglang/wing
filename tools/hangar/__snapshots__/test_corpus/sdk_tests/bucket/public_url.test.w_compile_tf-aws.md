@@ -38,6 +38,64 @@
         "force_destroy": false
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "privateBucket_CorsConfiguration-e82f6088_B53F96C4": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/privateBucket/CorsConfiguration-e82f6088",
+            "uniqueId": "privateBucket_CorsConfiguration-e82f6088_B53F96C4"
+          }
+        },
+        "bucket": "${aws_s3_bucket.privateBucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "publicBucket_CorsConfiguration-7c320eda_33D3FB14": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/publicBucket/CorsConfiguration-7c320eda",
+            "uniqueId": "publicBucket_CorsConfiguration-7c320eda_33D3FB14"
+          }
+        },
+        "bucket": "${aws_s3_bucket.publicBucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_s3_bucket_policy": {
       "publicBucket_PublicPolicy_F7753EC4": {
         "//": {

@@ -307,6 +307,36 @@
         "bucket_prefix": "code-c84a50b1-"
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "A_Bucket_CorsConfiguration-8cb07fb3_BD6030DE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/A/Bucket/CorsConfiguration-8cb07fb3",
+            "uniqueId": "A_Bucket_CorsConfiguration-8cb07fb3_BD6030DE"
+          }
+        },
+        "bucket": "${aws_s3_bucket.A_Bucket_EB05527C.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_s3_object": {
       "Api_get_bar0_S3Object_CBF78AB9": {
         "//": {

@@ -49,6 +49,20 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     this.public = props.public ?? false;
 
     this.bucket = createEncryptedBucket(this, this.public);
+
+    if (props.cors ?? true) {
+      this.addCorsRule(props.corsOptions ?? cloud.DEFAULT_BUCKET_CORS_CONFIGURATION);
+    }
+  }
+
+  public addCorsRule(value: cloud.BucketCorsOptions): void {
+    this.bucket.addCorsRule({
+      allowedHeaders: value.allowedHeaders,
+      allowedMethods: value.allowedMethods as any,
+      allowedOrigins: value.allowedOrigins,
+      maxAge: value.maxAge?.seconds,
+      exposedHeaders: value.exposeHeaders,
+    })
   }
 
   public addObject(key: string, body: string): void {
