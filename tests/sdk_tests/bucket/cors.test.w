@@ -6,11 +6,13 @@ bring expect;
 
 let api = new cloud.Api();
 
-let bucket = new cloud.Bucket(public: true, cors: false);
-
-bucket.addCorsRule(
-  allowedMethods: [http.HttpMethod.GET],
-  allowedOrigins: [api.url]
+let bucket = new cloud.Bucket(
+  public: false,
+  cors: true,
+  corsOptions: {
+    allowedMethods: [http.HttpMethod.GET],
+    allowedOrigins: [api.url]
+  },
 );
 
 bucket.addObject("hello", "hello");
