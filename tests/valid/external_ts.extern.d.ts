@@ -67,6 +67,35 @@ export class Resource extends Construct implements IResource {
   actually bound. */
   readonly onLift: (host: IInflightHost, ops: (readonly (string)[])) => void;
 }
+/** The request's method. */
+export enum HttpMethod {
+  GET = 0,
+  PUT = 1,
+  DELETE = 2,
+  PATCH = 3,
+  POST = 4,
+  OPTIONS = 5,
+  HEAD = 6,
+  CONNECT = 7,
+  TRACE = 8,
+}
+/** Cors Options for `Bucket`. */
+export interface BucketCorsOptions {
+  /** The list of allowed headers.
+  ["Content-Type"] */
+  readonly allowedHeaders?: ((readonly (string)[])) | undefined;
+  /** The list of allowed methods.
+  [HttpMethod.GET, HttpMethod.POST] */
+  readonly allowedMethods: (readonly (HttpMethod)[]);
+  /** The allowed origin.
+  "https://example.com" */
+  readonly allowedOrigins: (readonly (string)[]);
+  /** The list of exposed headers.
+  ["Content-Type"] */
+  readonly exposeHeaders?: ((readonly (string)[])) | undefined;
+  /** How long the browser should cache preflight request results. */
+  readonly maxAgeSeconds?: (number) | undefined;
+}
 /** Code that runs at runtime and implements your application's behavior.
 For example, handling API requests, processing queue messages, etc.
 Inflight code can be executed on various compute platforms in the cloud,
@@ -109,6 +138,8 @@ export interface BucketOnUpdateOptions {
 }
 /** A cloud object store. */
 export class Bucket extends Resource {
+  /** Add cors configuration to the bucket. */
+  readonly addCorsConfiguration: (value: BucketCorsOptions) => void;
   /** Add a file to the bucket from system folder. */
   readonly addFile: (key: string, path: string, encoding?: (string) | undefined) => void;
   /** Add a file to the bucket that is uploaded when the app is deployed.
