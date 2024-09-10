@@ -7,7 +7,8 @@ import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { HttpMethod } from "../http";
-import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
+import { Json, Node, Resource, Datetime, IInflight } from "../std";
+import { Duration } from "../std/duration";
 
 /**
  * Global identifier for `Bucket`.
@@ -35,20 +36,6 @@ export enum BucketInflightMethods {
   COPY = "copy",
   RENAME = "rename",
 }
-
-export const DEFAULT_BUCKET_CORS_CONFIGURATION: BucketCorsOptions = {
-  allowedHeaders: ["*"],
-  allowedOrigins: ["*"],
-  allowedMethods: [
-    HttpMethod.GET,
-    HttpMethod.POST,
-    HttpMethod.PUT,
-    HttpMethod.DELETE,
-    HttpMethod.HEAD,
-  ],
-  exposeHeaders: [],
-  maxAge: Duration.fromSeconds(0),
-};
 
 /**
  * Options for `Bucket`.
@@ -155,6 +142,21 @@ export class Bucket extends Resource {
     BucketInflightMethods.COPY,
     BucketInflightMethods.RENAME,
   ];
+
+  /** @internal */
+  public static _DEFAULT_BUCKET_CORS_CONFIGURATION: BucketCorsOptions = {
+    allowedHeaders: ["*"],
+    allowedOrigins: ["*"],
+    allowedMethods: [
+      HttpMethod.GET,
+      HttpMethod.POST,
+      HttpMethod.PUT,
+      HttpMethod.DELETE,
+      HttpMethod.HEAD,
+    ],
+    exposeHeaders: [],
+    maxAge: Duration.fromSeconds(0),
+  };
 
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();

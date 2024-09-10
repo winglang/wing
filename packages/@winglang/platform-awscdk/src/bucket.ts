@@ -51,7 +51,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     this.bucket = createEncryptedBucket(this, this.public);
 
     if (props.cors ?? true) {
-      this.addCorsRule(props.corsOptions ?? cloud.DEFAULT_BUCKET_CORS_CONFIGURATION);
+      this.addCorsRule(props.corsOptions ?? cloud.Bucket._DEFAULT_BUCKET_CORS_CONFIGURATION);
     }
   }
 
@@ -256,11 +256,11 @@ export function createEncryptedBucket(
     encryption: BucketEncryption.S3_MANAGED,
     blockPublicAccess: isPublic
       ? {
-          blockPublicAcls: false,
-          blockPublicPolicy: false,
-          ignorePublicAcls: false,
-          restrictPublicBuckets: false,
-        }
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      }
       : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,

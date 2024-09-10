@@ -242,36 +242,6 @@
         ]
       }
     },
-    "aws_s3_bucket_policy": {
-      "Bucket_PublicPolicy_9F2BCFC1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Bucket/PublicPolicy",
-            "uniqueId": "Bucket_PublicPolicy_9F2BCFC1"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Bucket.bucket}",
-        "depends_on": [
-          "aws_s3_bucket_public_access_block.Bucket_PublicAccessBlock_A34F3B5C"
-        ],
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.Bucket.arn}/*\"]}]}"
-      }
-    },
-    "aws_s3_bucket_public_access_block": {
-      "Bucket_PublicAccessBlock_A34F3B5C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Bucket/PublicAccessBlock",
-            "uniqueId": "Bucket_PublicAccessBlock_A34F3B5C"
-          }
-        },
-        "block_public_acls": false,
-        "block_public_policy": false,
-        "bucket": "${aws_s3_bucket.Bucket.bucket}",
-        "ignore_public_acls": false,
-        "restrict_public_buckets": false
-      }
-    },
     "aws_s3_object": {
       "Api_get_test-bucket-cors0_S3Object_B3687A16": {
         "//": {
