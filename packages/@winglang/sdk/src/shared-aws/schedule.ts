@@ -59,7 +59,7 @@ const convertDayOfWeekFromUnixToAWS = (dayOfWeek: string): string => {
 
   if (numbers) {
     for (const number of numbers) {
-      dayOfWeek = dayOfWeek.replace(number, (parseInt(number) - 1).toString());
+      dayOfWeek = dayOfWeek.replace(number, (parseInt(number) + 1).toString());
     }
   }
 
