@@ -2,7 +2,9 @@ use lsp_types::{Position, PrepareRenameResponse, Range, TextEdit};
 
 use crate::diagnostic::WingLocation;
 use crate::type_check::symbol_env::{LookupResult, SymbolEnv};
-use crate::type_check::{SymbolKind, Types, UnsafeRef, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
+use crate::type_check::{
+	resolve_super_method, SymbolKind, Types, UnsafeRef, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+};
 use crate::visit::{visit_scope, Visit};
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::{ast::*, visit_context};
@@ -159,20 +161,50 @@ impl<'a> Visit<'a> for RenameVisitor<'a> {
 	}
 
 	fn visit_expr(&mut self, node: &'a Expr) {
-		if let ExprKind::JsonMapLiteral { fields, .. } = &node.kind {
-			let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));
-			let type_ = *if let Some(type_) = self.types.get_type_from_json_cast(node.id) {
-				*type_
-			} else {
-				type_
-			}
-			.maybe_unwrap_option();
+		match &node.kind {
+			ExprKind::JsonMapLiteral { fields, .. } => {
+				let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));
+				let type_ = *if let Some(type_) = self.types.get_type_from_json_cast(node.id) {
+					*type_
+				} else {
+					type_
+				}
+				.maybe_unwrap_option();
 
-			if let Some(c) = type_.as_struct() {
-				for (field, ..) in fields {
-					self.add_reference_symbol(field, Some(&UnsafeRef::from(&c.env)));
+				if let Some(c) = type_.as_struct() {
+					for (field, ..) in fields {
+						self.add_reference_symbol(field, Some(&UnsafeRef::from(&c.env)));
+					}
 				}
 			}
+			ExprKind::Call { arg_list, callee } => {
+				let Some(env) = self.ctx.current_env() else {
+					// usually the env will exist, if not- we cannot use it to resolve the super method.
+					// it's the same as used here: https://github.com/winglang/wing/blob/main/packages/@winglang/wingc/src/lsp/symbol_locator.rs#L374-L376
+					return;
+				};
+				// we need to get the struct from the callee - to get the right env
+				let callee_type = match callee {
+					CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
+					CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &self.types)
+						.ok()
+						.map_or(self.types.error(), |t| t.0),
+				}
+				.maybe_unwrap_option()
+				.to_owned();
+
+				if let Some(func) = callee_type.as_function_sig() {
+					if let Some(arg) = func.parameters.last() {
+						let struct_type = arg.typeref.maybe_unwrap_option().as_struct();
+						if let Some(s) = struct_type {
+							for (arg, ..) in &arg_list.named_args {
+								self.add_reference_symbol(arg, Some(&UnsafeRef::from(&s.env)));
+							}
+						}
+					}
+				}
+			}
+			_ => {}
 		}
 		crate::visit::visit_expr(self, node);
 	}

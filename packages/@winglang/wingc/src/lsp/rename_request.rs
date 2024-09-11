@@ -627,4 +627,58 @@ test "a cat scares b cat" {
 	  "#,
 		"t1"
 	);
+
+	test_rename_request!(
+		named_args,
+		r#"
+	  struct A {
+      option: str;
+    //------
+    }
+    
+    let foo = (opts: A) => {};
+    
+    let option = "myOption";
+    foo(option: "bla");
+      //-----^
+    log(option);
+	  "#,
+		"t1"
+	);
+
+	test_rename_request!(
+		named_args_renaming_struct,
+		r#"
+	  struct A {
+      option: str;
+    //-----^
+    }
+    
+    let foo = (opts: A) => {};
+    
+    let option = "myOption";
+    foo(option: "bla");
+      //------
+    log(option);
+	  "#,
+		"t1"
+	);
+
+	test_rename_request!(
+		same_name_as_named_arg,
+		r#"
+    struct A {
+      option: str;
+    }
+    
+    let foo = (opts: A) => {};
+    
+    let option = "myOption";
+      //------
+    foo(option: "bla");
+    log(option);
+      //-----^
+	  "#,
+		"t1"
+	);
 }
