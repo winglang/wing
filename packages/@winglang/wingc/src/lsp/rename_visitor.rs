@@ -179,6 +179,8 @@ impl<'a> Visit<'a> for RenameVisitor<'a> {
 			}
 			ExprKind::Call { arg_list, callee } => {
 				let Some(env) = self.ctx.current_env() else {
+					// usually the env will exist, if not- we cannot use it to resolve the super method.
+					// it's the same as used here: packages/@winglang/wingc/src/lsp/symbol_locator.rs
 					return;
 				};
 				// we need to get the struct from the callee - to get the right env
