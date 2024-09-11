@@ -1,5 +1,5 @@
 ---
-source: libs/wingc/src/lsp/completions.rs
+source: packages/@winglang/wingc/src/lsp/completions.rs
 ---
 - label: Api
   kind: 7
@@ -11,7 +11,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Bucket {\n  addFile(...): void;\n  addObject(...): void;\n  onCreate(...): void;\n  onDelete(...): void;\n  onEvent(...): void;\n  onUpdate(...): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
+    value: "```wing\nclass Bucket {\n  addCorsRule(...): void;\n  addFile(...): void;\n  addObject(...): void;\n  onCreate(...): void;\n  onDelete(...): void;\n  onEvent(...): void;\n  /* ... */\n}\n```\n---\nA cloud object store."
   sortText: gg|Bucket
 - label: Counter
   kind: 7
@@ -163,6 +163,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct ApiResponse {\n  body?: str;\n  headers?: Map<str>;\n  status?: num;\n}\n```\n---\nShape of a response from a inflight handler."
   sortText: hh|ApiResponse
+- label: BucketCorsOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct BucketCorsOptions {\n  allowedHeaders?: Array<str>;\n  exposeHeaders?: Array<str>;\n  maxAge?: duration;\n  allowedMethods: Array<HttpMethod>;\n  allowedOrigins: Array<str>;\n}\n```\n---\nCors Options for `Bucket`."
+  sortText: hh|BucketCorsOptions
 - label: BucketDeleteOptions
   kind: 22
   documentation:
@@ -209,7 +215,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketProps {\n  public?: bool;\n}\n```\n---\nOptions for `Bucket`."
+    value: "```wing\nstruct BucketProps {\n  cors?: bool;\n  corsOptions?: BucketCorsOptions;\n  public?: bool;\n}\n```\n---\nOptions for `Bucket`."
   sortText: hh|BucketProps
 - label: BucketPutOptions
   kind: 22

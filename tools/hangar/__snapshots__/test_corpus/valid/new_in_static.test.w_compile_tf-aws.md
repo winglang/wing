@@ -155,6 +155,148 @@ module.exports = function({  }) {
         "bucket_prefix": "implicit-scope-bucket-c811b94a-",
         "force_destroy": false
       }
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "Construct_Bucket_CorsConfiguration-5f65e65b_CF886C7D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Construct/Bucket/CorsConfiguration-5f65e65b",
+            "uniqueId": "Construct_Bucket_CorsConfiguration-5f65e65b_CF886C7D"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Construct_Bucket_2C7B19D9.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "Construct_MyClass_implicit-scope-bucket_CorsConfiguration-cb540331_1C8206C8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Construct/MyClass/implicit-scope-bucket/CorsConfiguration-cb540331",
+            "uniqueId": "Construct_MyClass_implicit-scope-bucket_CorsConfiguration-cb540331_1C8206C8"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Construct_MyClass_implicit-scope-bucket_177A1CDF.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "b1_CorsConfiguration-12a95bb8_084FCCA5": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b1/CorsConfiguration-12a95bb8",
+            "uniqueId": "b1_CorsConfiguration-12a95bb8_084FCCA5"
+          }
+        },
+        "bucket": "${aws_s3_bucket.b1.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "b2_CorsConfiguration-fa6445bb_E69581A6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b2/CorsConfiguration-fa6445bb",
+            "uniqueId": "b2_CorsConfiguration-fa6445bb_E69581A6"
+          }
+        },
+        "bucket": "${aws_s3_bucket.b2.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "implicit-scope-bucket_CorsConfiguration-71756df9_DC767D65": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/implicit-scope-bucket/CorsConfiguration-71756df9",
+            "uniqueId": "implicit-scope-bucket_CorsConfiguration-71756df9_DC767D65"
+          }
+        },
+        "bucket": "${aws_s3_bucket.implicit-scope-bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
     }
   }
 }

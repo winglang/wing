@@ -42,6 +42,27 @@ test("wing platform", async () => {
         IgnorePublicAcls: true,
         RestrictPublicBuckets: true,
       },
+      CorsConfiguration: {
+        CorsRules: [
+          {
+            AllowedHeaders: [
+              "*",
+            ],
+            AllowedMethods: [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            AllowedOrigins: [
+              "*",
+            ],
+            ExposedHeaders: [],
+            MaxAge: 0,
+          },
+        ],
+      },
     },
     Type: "AWS::S3::Bucket",
     UpdateReplacePolicy: "Delete",

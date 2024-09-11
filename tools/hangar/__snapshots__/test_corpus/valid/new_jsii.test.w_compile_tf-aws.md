@@ -40,6 +40,36 @@ module.exports = function({  }) {
         "bucket_prefix": "bucket-c830af09-",
         "force_destroy": false
       }
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "CustomScope_Bucket_CorsConfiguration-15fff327_4DEB8580": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/CustomScope/Bucket/CorsConfiguration-15fff327",
+            "uniqueId": "CustomScope_Bucket_CorsConfiguration-15fff327_4DEB8580"
+          }
+        },
+        "bucket": "${aws_s3_bucket.CustomScope_Bucket_8BBB89A4.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
     }
   }
 }

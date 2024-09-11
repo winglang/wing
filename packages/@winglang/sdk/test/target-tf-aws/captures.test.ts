@@ -52,6 +52,7 @@ describe("function with bucket binding", () => {
       "aws_iam_role_policy_attachment",
       "aws_lambda_function",
       "aws_s3_bucket",
+      "aws_s3_bucket_cors_configuration",
       "aws_s3_object",
     ]);
     expect(tfSanitize(output)).toMatchSnapshot();

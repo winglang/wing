@@ -104,6 +104,36 @@ module.exports = function({  }) {
         "bucket_prefix": "orange-bucket-c8ecc927-",
         "force_destroy": false
       }
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "orangebucket_CorsConfiguration-c1491ba5_D38FC519": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/orange bucket/CorsConfiguration-c1491ba5",
+            "uniqueId": "orangebucket_CorsConfiguration-c1491ba5_D38FC519"
+          }
+        },
+        "bucket": "${aws_s3_bucket.orangebucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
     }
   }
 }

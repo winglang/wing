@@ -121,6 +121,36 @@ module.exports = function({  }) {
         "bucket_prefix": "bucket-c843dbb0-",
         "force_destroy": false
       }
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "Store_Bucket_CorsConfiguration-af11ee62_37AA6011": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Store/Bucket/CorsConfiguration-af11ee62",
+            "uniqueId": "Store_Bucket_CorsConfiguration-af11ee62_37AA6011"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Store_Bucket_42A4CEFB.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
     }
   }
 }

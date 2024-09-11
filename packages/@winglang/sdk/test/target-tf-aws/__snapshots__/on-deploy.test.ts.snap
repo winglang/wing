@@ -264,6 +264,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       "my_on_deploy_Invocation_1A26E3B9": {
         "depends_on": [
           "aws_s3_bucket.my_bucket",
+          "aws_s3_bucket_cors_configuration.my_bucket_CorsConfiguration-c53a401a_67598037",
         ],
         "function_name": "\${aws_lambda_function.my_on_deploy_Function_59669FC0.function_name}",
         "input": "{}",
@@ -332,6 +333,30 @@ exports[`execute OnDeploy after other resources 1`] = `
         "force_destroy": false,
       },
     },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
     "aws_s3_object": {
       "my_on_deploy_Function_S3Object_69D52AC4": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
@@ -382,6 +407,15 @@ exports[`execute OnDeploy after other resources 2`] = `
               },
               "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -619,6 +653,33 @@ exports[`execute OnDeploy before other resources 1`] = `
         "force_destroy": false,
       },
     },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+        "depends_on": [
+          "\${data.aws_lambda_invocation.my_on_deploy_Invocation_1A26E3B9}",
+        ],
+      },
+    },
     "aws_s3_object": {
       "my_on_deploy_Function_S3Object_69D52AC4": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
@@ -669,6 +730,15 @@ exports[`execute OnDeploy before other resources 2`] = `
               },
               "my_bucket": {
                 "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",

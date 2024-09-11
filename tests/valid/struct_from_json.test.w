@@ -2,13 +2,13 @@ bring cloud;
 bring expect;
 
 // JSII structs
-let j = { public: false };
-let x = cloud.BucketProps.fromJson(j);
-assert(x.public == false);
+let j = { initial: 3 };
+let x = cloud.CounterProps.fromJson(j);
+assert(x.initial == 3);
 
 test "inflight jsii struct conversion" {
-  let x = cloud.BucketProps.fromJson(j);
-  assert(x.public == false);
+  let x = cloud.CounterProps.fromJson(j);
+  assert(x.initial == 3);
 }
 
 // simple case

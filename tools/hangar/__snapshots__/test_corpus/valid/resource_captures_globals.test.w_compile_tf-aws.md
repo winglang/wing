@@ -320,6 +320,64 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         "bucket_prefix": "code-c84a50b1-"
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "Another_First_Bucket_CorsConfiguration-571245df_2D6D34C5": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Another/First/Bucket/CorsConfiguration-571245df",
+            "uniqueId": "Another_First_Bucket_CorsConfiguration-571245df_2D6D34C5"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Another_First_Bucket_490007B4.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "Bucket_CorsConfiguration-1357ca3a_A4CCA40A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/CorsConfiguration-1357ca3a",
+            "uniqueId": "Bucket_CorsConfiguration-1357ca3a_A4CCA40A"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_s3_object": {
       "MyResource_Topic-OnMessage0_S3Object_80106925": {
         "//": {

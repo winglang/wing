@@ -215,6 +215,92 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "Bucket_CorsConfiguration-1357ca3a_A4CCA40A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/CorsConfiguration-1357ca3a",
+            "uniqueId": "Bucket_CorsConfiguration-1357ca3a_A4CCA40A"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "MyResource_Another_First_Bucket_CorsConfiguration-88655007_8FA34C17": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/Another/First/Bucket/CorsConfiguration-88655007",
+            "uniqueId": "MyResource_Another_First_Bucket_CorsConfiguration-88655007_8FA34C17"
+          }
+        },
+        "bucket": "${aws_s3_bucket.MyResource_Another_First_Bucket_1DA21BC0.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "MyResource_Bucket_CorsConfiguration-1edd0595_9DA2A2CE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/MyResource/Bucket/CorsConfiguration-1edd0595",
+            "uniqueId": "MyResource_Bucket_CorsConfiguration-1edd0595_9DA2A2CE"
+          }
+        },
+        "bucket": "${aws_s3_bucket.MyResource_Bucket_0DE6FCB5.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_sqs_queue": {
       "MyResource_Queue_C2F2FBE5": {
         "//": {

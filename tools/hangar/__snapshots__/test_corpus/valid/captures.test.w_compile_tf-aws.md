@@ -563,6 +563,92 @@ module.exports = function({ $headers }) {
         "force_destroy": false
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "Bucket_CorsConfiguration-1357ca3a_A4CCA40A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/CorsConfiguration-1357ca3a",
+            "uniqueId": "Bucket_CorsConfiguration-1357ca3a_A4CCA40A"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "PrivateBucket_CorsConfiguration-0c557d45_BC34782D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/PrivateBucket/CorsConfiguration-0c557d45",
+            "uniqueId": "PrivateBucket_CorsConfiguration-0c557d45_BC34782D"
+          }
+        },
+        "bucket": "${aws_s3_bucket.PrivateBucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "PublicBucket_CorsConfiguration-21bd2572_E4EABB10": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/PublicBucket/CorsConfiguration-21bd2572",
+            "uniqueId": "PublicBucket_CorsConfiguration-21bd2572_E4EABB10"
+          }
+        },
+        "bucket": "${aws_s3_bucket.PublicBucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_s3_bucket_policy": {
       "PublicBucket_PublicPolicy_771B9F9A": {
         "//": {

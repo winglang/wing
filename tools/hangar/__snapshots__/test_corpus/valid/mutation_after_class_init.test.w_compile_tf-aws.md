@@ -266,6 +266,36 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
+    "aws_s3_bucket_cors_configuration": {
+      "Queue_Bucket_CorsConfiguration-6c443489_4F9F18F5": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Queue/Bucket/CorsConfiguration-6c443489",
+            "uniqueId": "Queue_Bucket_CorsConfiguration-6c443489_4F9F18F5"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Queue_Bucket_A87615FF.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
+    },
     "aws_s3_bucket_notification": {
       "Queue_Bucket_S3BucketNotification_B826201B": {
         "//": {

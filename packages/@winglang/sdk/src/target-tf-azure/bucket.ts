@@ -96,6 +96,16 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
+  public addCorsRule(value: cloud.BucketCorsOptions): void {
+    value;
+    throw new NotImplementedError(
+      "addCorsRule method isn't implemented yet on the current target.",
+      {
+        resource: this.constructor.name,
+      }
+    );
+  }
+
   public addObject(key: string, body: string): void {
     // Blob naming conventions:
     // https://learn.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata#blob-names

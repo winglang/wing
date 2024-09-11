@@ -5,7 +5,7 @@
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
-module.exports = function({ $cloud_BucketProps, $j }) {
+module.exports = function({ $cloud_CounterProps, $j }) {
   class $Closure1 {
     constructor($args) {
       const {  } = $args;
@@ -14,8 +14,8 @@ module.exports = function({ $cloud_BucketProps, $j }) {
       return $obj;
     }
     async handle() {
-      const x = $macros.__Struct_fromJson(false, $cloud_BucketProps, $j);
-      $helpers.assert($helpers.eq(x.public, false), "x.public == false");
+      const x = $macros.__Struct_fromJson(false, $cloud_CounterProps, $j);
+      $helpers.assert($helpers.eq(x.initial, 3), "x.initial == 3");
     }
   }
   return $Closure1;
@@ -201,7 +201,7 @@ class $Root extends $stdlib.std.Resource {
     const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
     const MyStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyStruct",type:"object",properties:{color:{type:"string",enum:["red","green","blue"]},m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["color","m1","m2",]});
     const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:["object","string","boolean","number","array"]},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
-    const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({$id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
+    const cloud_CounterProps = $stdlib.std.Struct._createJsonSchema({$id:"/CounterProps",type:"object",properties:{initial:{type:"number"},},required:[]});
     const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const Color =
@@ -221,7 +221,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-2.cjs")({
-            $cloud_BucketProps: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"))},
+            $cloud_CounterProps: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cloud_CounterProps, "@winglang/sdk/cloud", "CounterProps"))},
             $j: ${$stdlib.core.liftObject(j)},
           })
         `;
@@ -229,11 +229,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"), ["fromJson"]],
+            [$stdlib.core.toLiftableModuleType(cloud_CounterProps, "@winglang/sdk/cloud", "CounterProps"), ["fromJson"]],
             [j, []],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"), []],
+            [$stdlib.core.toLiftableModuleType(cloud_CounterProps, "@winglang/sdk/cloud", "CounterProps"), []],
             [j, []],
           ],
         });
@@ -362,9 +362,9 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const j = ({"public": false});
-    const x = $macros.__Struct_fromJson(false, cloud_BucketProps, j);
-    $helpers.assert($helpers.eq(x.public, false), "x.public == false");
+    const j = ({"initial": 3});
+    const x = $macros.__Struct_fromJson(false, cloud_CounterProps, j);
+    $helpers.assert($helpers.eq(x.initial, 3), "x.initial == 3");
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight jsii struct conversion", new $Closure1(this, "$Closure1"));
     const jFoo = ({"f": "bar"});
     $helpers.assert($helpers.eq($macros.__Struct_fromJson(false, Foo, jFoo).f, "bar"), "Foo.fromJson(jFoo).f == \"bar\"");

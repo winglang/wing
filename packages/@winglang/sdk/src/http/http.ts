@@ -1,6 +1,6 @@
 import { URL as NodeUrl, format } from "url";
-import { InflightClient } from "../core";
-import { Duration } from "../std";
+import { InflightClient } from "../core/inflight";
+import { Duration } from "../std/duration";
 
 /**
  * The cache mode of the request.

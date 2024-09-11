@@ -1,8 +1,10 @@
-import { ITerraformDependable } from "cdktf";
+import { ITerraformDependable, Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Topic as AWSTopic } from "./topic";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
+import { S3BucketCorsConfiguration } from "../.gen/providers/aws/s3-bucket-cors-configuration";
+
 import {
   S3BucketNotification,
   S3BucketNotificationTopic,
@@ -65,6 +67,8 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly public: boolean;
   private readonly notificationTopics: S3BucketNotificationTopic[] = [];
   private readonly notificationDependencies: ITerraformDependable[] = [];
+  private readonly corsRules: cloud.BucketCorsOptions[] = [];
+  private corsConfiguration?: S3BucketCorsConfiguration;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
@@ -72,6 +76,38 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     this.public = props.public ?? false;
 
     this.bucket = createEncryptedBucket(this, this.public);
+
+    if (props.cors ?? true) {
+      this.addCorsRule(
+        props.corsOptions ?? cloud.DEFAULT_BUCKET_CORS_CONFIGURATION
+      );
+    }
+  }
+
+  public addCorsRule(value: cloud.BucketCorsOptions): void {
+    this.corsRules.push(value);
+
+    if (!this.corsConfiguration) {
+      this.corsConfiguration = new S3BucketCorsConfiguration(
+        this,
+        `CorsConfiguration-${this.node.addr.slice(-8)}`,
+        {
+          bucket: this.bucket.id,
+          corsRule: Lazy.anyValue({
+            produce: () =>
+              this.corsRules.map((rule) => {
+                return {
+                  allowed_headers: rule.allowedHeaders,
+                  allowed_methods: rule.allowedMethods,
+                  allowed_origins: rule.allowedOrigins,
+                  max_age_seconds: rule.maxAge?.seconds,
+                  expose_headers: rule.exposeHeaders,
+                };
+              }),
+          }),
+        }
+      );
+    }
   }
 
   public addObject(key: string, body: string): void {

@@ -1,8 +1,9 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { AwsApp } from "./aws-util";
-import { Bucket } from "../../src/cloud";
+import { Bucket, HttpMethod } from "../../src/cloud";
 import { inflight } from "../../src/core";
+import { Duration } from "../../src/std";
 import {
   tfResourcesOf,
   tfResourcesOfCount,
@@ -20,6 +21,7 @@ test("create a bucket", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_cors_configuration", // cors configuration
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -46,6 +48,70 @@ test("bucket is public", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_cors_configuration", // cors configuration
+    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
+  ]);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("bucket with cors disabled", () => {
+  // GIVEN
+  const app = new AwsApp();
+  new Bucket(app, "my_bucket", { public: true, cors: false });
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).not.toContain(
+    "aws_s3_bucket_cors_configuration"
+  );
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("bucket with custom cors in constructor", () => {
+  // GIVEN
+  const app = new AwsApp();
+  new Bucket(app, "my_bucket", {
+    public: true,
+    cors: true,
+    corsOptions: {
+      allowedHeaders: ["*"],
+      allowedMethods: [HttpMethod.GET],
+      allowedOrigins: ["https://example.com"],
+      maxAge: Duration.fromSeconds(3600),
+    },
+  });
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_cors_configuration", // cors configuration
+    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
+  ]);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("bucket with custom cors via addCorsRule", () => {
+  // GIVEN
+  const app = new AwsApp();
+  const bucket = new Bucket(app, "my_bucket", { public: true, cors: false });
+  bucket.addCorsRule({
+    allowedHeaders: ["*"],
+    allowedMethods: [HttpMethod.GET],
+    allowedOrigins: ["https://example.com"],
+    maxAge: Duration.fromSeconds(3600),
+  });
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_cors_configuration", // cors configuration
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
   ]);
@@ -64,6 +130,7 @@ test("bucket with two preflight objects", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_cors_configuration", // cors configuration
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_object", // file1.txt
@@ -84,6 +151,7 @@ test("bucket with two preflight files", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_cors_configuration", // cors configuration
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
     "aws_s3_object", // file1.txt
@@ -161,6 +229,7 @@ test("bucket with onCreate method", () => {
     "aws_lambda_function", // inflight subscriber
     "aws_lambda_permission", // permission of the topic to invoke lambda
     "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_cors_configuration", // cors configuration
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
@@ -199,6 +268,7 @@ test("bucket with onDelete method", () => {
     "aws_lambda_function", // inflight subscriber
     "aws_lambda_permission", // permission of the topic to invoke lambda
     "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_cors_configuration", // cors configuration
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
@@ -237,6 +307,7 @@ test("bucket with onUpdate method", () => {
     "aws_lambda_function", // inflight subscriber
     "aws_lambda_permission", // permission of the topic to invoke lambda
     "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_cors_configuration", // cors configuration
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
@@ -275,6 +346,7 @@ test("bucket with onEvent method", () => {
     "aws_lambda_function", // inflight subscriber
     "aws_lambda_permission", // permission of the topic to invoke lambda
     "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_cors_configuration", // cors configuration
     "aws_s3_bucket_notification",
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket

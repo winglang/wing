@@ -6,7 +6,9 @@ import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
-import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
+import { HttpMethod } from "../http";
+import { Json, Node, Resource, Datetime, IInflight } from "../std";
+import { Duration } from "../std/duration";
 
 /**
  * Global identifier for `Bucket`.
@@ -35,6 +37,20 @@ export enum BucketInflightMethods {
   RENAME = "rename",
 }
 
+export const DEFAULT_BUCKET_CORS_CONFIGURATION: BucketCorsOptions = {
+  allowedHeaders: ["*"],
+  allowedOrigins: ["*"],
+  allowedMethods: [
+    HttpMethod.GET,
+    HttpMethod.POST,
+    HttpMethod.PUT,
+    HttpMethod.DELETE,
+    HttpMethod.HEAD,
+  ],
+  exposeHeaders: [],
+  maxAge: Duration.fromSeconds(0),
+};
+
 /**
  * Options for `Bucket`.
  */
@@ -44,6 +60,76 @@ export interface BucketProps {
    * @default false
    */
   readonly public?: boolean;
+
+  /**
+   * Whether to add default cors configuration.
+   *
+   * The default cors configuration is equivalent to calling `addCorsRule`
+   * with the following options:
+   * {
+   *   allowHeaders: ["*"],
+   *   allowOrigins: ["*"],
+   *   allowMethods: ["DELETE", "GET", "HEAD", "POST", "PUT"],
+   *   exposeHeaders: [],
+   *   maxAge: 0s
+   * }
+   * @default true
+   */
+  readonly cors?: boolean;
+
+  /**
+   * Custom cors configuration for the bucket.
+   * The default cors configuration is equivalent to calling `addCorsRule`
+   * with the following options:
+   * {
+   *   allowHeaders: ["*"],
+   *   allowOrigins: ["*"],
+   *   allowMethods: ["DELETE", "GET", "HEAD", "POST", "PUT"],
+   *   exposeHeaders: [],
+   *   maxAge: 0s
+   * }
+   * @default - All origins, methods, headers are allowed.
+   */
+  readonly corsOptions?: BucketCorsOptions;
+}
+
+/**
+ * Cors Options for `Bucket`.
+ */
+export interface BucketCorsOptions {
+  /**
+   * The allowed origin.
+   * @example "https://example.com"
+   * @default - ["*"]
+   */
+  readonly allowedOrigins: string[];
+
+  /**
+   * The list of allowed methods.
+   * @example [HttpMethod.GET, HttpMethod.POST]
+   * @default - [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS]
+   */
+  readonly allowedMethods: Array<HttpMethod>;
+
+  /**
+   * The list of allowed headers.
+   * @example ["Content-Type"]
+   * @default - ["Content-Type", "Authorization"]
+   */
+  readonly allowedHeaders?: Array<string>;
+
+  /**
+   * The list of exposed headers.
+   * @example ["Content-Type"]
+   * @default - []
+   */
+  readonly exposeHeaders?: Array<string>;
+
+  /**
+   * How long the browser should cache preflight request results.
+   * @default - 300 seconds
+   */
+  readonly maxAge?: Duration;
 }
 
 /**
@@ -97,6 +183,18 @@ export class Bucket extends Resource {
   public addObject(key: string, body: string): void {
     key;
     body;
+    throw new AbstractMemberError();
+  }
+
+  /**
+   * Add cors configuration to the bucket
+   *
+   * @param {BucketCorsOptions} value - The cors configuration
+   * @abstract
+   */
+
+  public addCorsRule(value: BucketCorsOptions): void {
+    value;
     throw new AbstractMemberError();
   }
 

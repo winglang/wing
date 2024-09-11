@@ -99,6 +99,43 @@ store.onDelete(inflight (key: str) => {
 });
 ```
 
+### Configuring CORS
+
+By default, buckets are configured with CORS for any origin. When a bucket is private (the default), CORS options only come into play when the bucket's objects are accessed through a signed URL.
+
+```js playground example
+bring cloud;
+
+let uploads = new cloud.Bucket(
+  // these are the default values
+  public: false,
+  cors: true,
+  corsOptions: {
+    allowedMethods: [http.HttpMethod.GET, http.HttpMethod.POST, http.HttpMethod.PUT, http.HttpMethod.DELETE, http.HttpMethod.HEAD],
+    allowedOrigins: ["*"],
+    allowedHeaders: ["*"],
+    exposeHeaders: [],
+    maxAge: 0s
+  },
+);
+```
+
+The CORS configuration can be disabled by passing `cors: false` to the constructor. CORS rules can also be configured after the bucket is created by calling the `addCorsRule` method:
+
+```js playground example
+bring cloud;
+bring http;
+
+let bucket = new cloud.Bucket(
+  cors: false, // disable any default CORS rules
+);
+
+bucket.addCorsRule({
+  allowedOrigins: ["https://example.com"],
+  allowedMethods: [http.HttpMethod.GET],
+});
+```
+
 ## Target-specific details
 
 ### Simulator (`sim`)

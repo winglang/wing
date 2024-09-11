@@ -55,6 +55,11 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     };
   }
 
+  public addCorsRule(value: cloud.BucketCorsOptions): void {
+    // currently no-op
+    value;
+  }
+
   /**
    * Iterates over the topics and supply their sim handler
    * @returns an object of Bucket event types (keys) and their topic handlers (values)

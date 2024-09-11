@@ -557,6 +557,27 @@ exports[`execute OnDeploy after other resources 1`] = `
             },
           ],
         },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "ExposedHeaders": [],
+              "MaxAge": 0,
+            },
+          ],
+        },
         "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": true,
           "BlockPublicPolicy": true,
@@ -922,6 +943,27 @@ exports[`execute OnDeploy before other resources 1`] = `
               "ServerSideEncryptionByDefault": {
                 "SSEAlgorithm": "AES256",
               },
+            },
+          ],
+        },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "ExposedHeaders": [],
+              "MaxAge": 0,
             },
           ],
         },

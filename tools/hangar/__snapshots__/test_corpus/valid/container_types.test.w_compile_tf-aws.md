@@ -47,6 +47,92 @@
         "bucket_prefix": "bucket3-c8b6c706-",
         "force_destroy": false
       }
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "bucket1_CorsConfiguration-a9c2ec90_08E843C8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/bucket1/CorsConfiguration-a9c2ec90",
+            "uniqueId": "bucket1_CorsConfiguration-a9c2ec90_08E843C8"
+          }
+        },
+        "bucket": "${aws_s3_bucket.bucket1.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "bucket2_CorsConfiguration-b3773efe_D25B3C71": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/bucket2/CorsConfiguration-b3773efe",
+            "uniqueId": "bucket2_CorsConfiguration-b3773efe_D25B3C71"
+          }
+        },
+        "bucket": "${aws_s3_bucket.bucket2.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      },
+      "bucket3_CorsConfiguration-1bc1fdd4_03D9D2C6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/bucket3/CorsConfiguration-1bc1fdd4",
+            "uniqueId": "bucket3_CorsConfiguration-1bc1fdd4_03D9D2C6"
+          }
+        },
+        "bucket": "${aws_s3_bucket.bucket3.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*"
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD"
+            ],
+            "allowed_origins": [
+              "*"
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0
+          }
+        ]
+      }
     }
   }
 }
