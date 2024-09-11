@@ -85,7 +85,7 @@ test("convert single dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new AwsApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "* * * * 1",
+    cron: "* * * * 0",
   });
   schedule.onTick(CODE_LOG_EVENT);
   const output = app.synth();
@@ -108,7 +108,7 @@ test("convert single dayOfWeek from Unix to AWS", () => {
       output,
       "aws_cloudwatch_event_rule",
       {
-        schedule_expression: "cron(* * ? * 0 *)",
+        schedule_expression: "cron(* * ? * 1 *)",
       }
     )
   ).toEqual(true);
@@ -120,7 +120,7 @@ test("convert the range of dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new AwsApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "* * * * 1-7",
+    cron: "* * * * 0-6",
   });
   schedule.onTick(CODE_LOG_EVENT);
   const output = app.synth();
@@ -143,7 +143,7 @@ test("convert the range of dayOfWeek from Unix to AWS", () => {
       output,
       "aws_cloudwatch_event_rule",
       {
-        schedule_expression: "cron(* * ? * 0-6 *)",
+        schedule_expression: "cron(* * ? * 1-7 *)",
       }
     )
   ).toEqual(true);
@@ -155,7 +155,7 @@ test("convert the list of dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new AwsApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "* * * * 1,3,5,7",
+    cron: "* * * * 0,2,4,6",
   });
   schedule.onTick(CODE_LOG_EVENT);
   const output = app.synth();
@@ -178,7 +178,7 @@ test("convert the list of dayOfWeek from Unix to AWS", () => {
       output,
       "aws_cloudwatch_event_rule",
       {
-        schedule_expression: "cron(* * ? * 0,2,4,6 *)",
+        schedule_expression: "cron(* * ? * 1,3,5,7 *)",
       }
     )
   ).toEqual(true);

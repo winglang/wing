@@ -48,7 +48,7 @@ test("convert single dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new AwsCdkApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "* * * * 1",
+    cron: "* * * * 0",
   });
   schedule.onTick(INFLIGHT_CODE);
   const output = app.synth();
@@ -57,7 +57,7 @@ test("convert single dayOfWeek from Unix to AWS", () => {
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::Events::Rule", 1);
   template.hasResourceProperties("AWS::Events::Rule", {
-    ScheduleExpression: "cron(* * ? * 0 *)",
+    ScheduleExpression: "cron(* * ? * 1 *)",
   });
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -66,7 +66,7 @@ test("convert the range of dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new AwsCdkApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "* * * * 1-7",
+    cron: "* * * * 0-6",
   });
   schedule.onTick(INFLIGHT_CODE);
   const output = app.synth();
@@ -75,7 +75,7 @@ test("convert the range of dayOfWeek from Unix to AWS", () => {
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::Events::Rule", 1);
   template.hasResourceProperties("AWS::Events::Rule", {
-    ScheduleExpression: "cron(* * ? * 0-6 *)",
+    ScheduleExpression: "cron(* * ? * 1-7 *)",
   });
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -84,7 +84,7 @@ test("convert the list of dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new AwsCdkApp();
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "* * * * 1,3,5,7",
+    cron: "* * * * 0,2,4,6",
   });
   schedule.onTick(INFLIGHT_CODE);
   const output = app.synth();
@@ -93,7 +93,7 @@ test("convert the list of dayOfWeek from Unix to AWS", () => {
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::Events::Rule", 1);
   template.hasResourceProperties("AWS::Events::Rule", {
-    ScheduleExpression: "cron(* * ? * 0,2,4,6 *)",
+    ScheduleExpression: "cron(* * ? * 1,3,5,7 *)",
   });
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

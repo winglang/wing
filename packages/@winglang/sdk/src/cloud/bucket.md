@@ -105,6 +105,7 @@ By default, buckets are configured with CORS for any origin. When a bucket is pr
 
 ```js playground example
 bring cloud;
+bring http;
 
 let uploads = new cloud.Bucket(
   // these are the default values
