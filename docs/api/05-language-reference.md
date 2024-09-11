@@ -1233,12 +1233,14 @@ let rawData: bytes = bytes.fromRaw([104, 101, 108, 108, 111]);
 let rawString: bytes = bytes.fromString("hello");
 let base64: bytes = bytes.fromBase64("aGVsbG8=");
 let hex: bytes = bytes.fromHex("68656c6c6f");
+let zeroes: bytes = bytes.alloc(20); // allocates 20 zeroed bytes
 
 // mutable initializers
 let rawDataMut: mutbytes = mutbytes.fromRaw([104, 101, 108, 108, 111]);
 let rawStringMut: mutbytes = mutbytes.fromString("hello");
 let base64Mut: mutbytes = mutbytes.fromBase64("aGVsbG8=");
 let hexMut: mutbytes = mutbytes.fromHex("68656c6c6f");
+let zeroesMut: mutbytes = mutbytes.alloc(20); // allocates 20 zeroed bytes
 ```
 
 #### Converting bytes to other types
