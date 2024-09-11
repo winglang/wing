@@ -1107,6 +1107,11 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 		return None;
 	}
 
+	// skipping abstract classes- so they won't appear in completions
+	if is_abstract_class(symbol_kind) {
+		return None;
+	}
+
 	Some(match symbol_kind {
 		SymbolKind::Type(t) => CompletionItem {
 			label: name.to_string(),
@@ -1186,6 +1191,15 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 
 fn should_exclude_symbol(symbol: &str) -> bool {
 	symbol == WINGSDK_STD_MODULE || symbol.starts_with(CLOSURE_CLASS_PREFIX) || symbol.starts_with(PARENT_THIS_NAME)
+}
+
+fn is_abstract_class(symbol_kind: &SymbolKind) -> bool {
+	if let Some(t) = symbol_kind.as_type() {
+		if let Some(c) = t.as_class() {
+			return c.is_abstract;
+		}
+	}
+	return false;
 }
 
 fn str_to_access_context(s: &str) -> ObjectAccessContext {
@@ -2051,6 +2065,17 @@ let x: cloud.Buc
               //^
 "#,
 		assert!(partial_type_reference_annotation.iter().any(|c| c.label == "Bucket"))
+	);
+
+	test_completion_list!(
+		hide_abstract_members,
+		r#"
+	bring ui;
+
+	let x = new ui.
+	            //^
+	"#,
+		assert!(hide_abstract_members.iter().all(|c| c.label != "VisualComponent"))
 	);
 
 	test_completion_list!(

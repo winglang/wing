@@ -1,0 +1,81 @@
+---
+source: packages/@winglang/wingc/src/lsp/completions.rs
+---
+- label: Button
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Button extends VisualComponent {\n  static isVisualComponent(...): bool;\n}\n```\n---\nA button can be used to perform an action.\n\n*@noinflight*"
+  sortText: gg|Button
+  insertText: Button($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: Field
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Field extends VisualComponent {\n  static isVisualComponent(...): bool;\n}\n```\n---\nA field can be used to display a value.\n\n*@noinflight*"
+  sortText: gg|Field
+  insertText: Field($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: FileBrowser
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass FileBrowser extends VisualComponent {\n  static isVisualComponent(...): bool;\n}\n```\n---\nA file browser can be used to browse files.\n\n*@noinflight*"
+  sortText: gg|FileBrowser
+  insertText: FileBrowser($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: HttpClient
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass HttpClient extends VisualComponent {\n  static isVisualComponent(...): bool;\n}\n```\n---\nAn HttpClient can be used to make HTTP requests.\n\n*@noinflight*"
+  sortText: gg|HttpClient
+  insertText: HttpClient($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: Section
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Section extends VisualComponent {\n  add(...): void;\n  addButton(...): void;\n  addField(...): void;\n  static isVisualComponent(...): bool;\n}\n```\n---\nA section can be used to group other visual components.\n\n*@noinflight*"
+  sortText: gg|Section
+  insertText: Section($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: Table
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Table extends VisualComponent {\n  static isVisualComponent(...): bool;\n}\n```\n---\nA table can be used to browse files.\n\n*@noinflight*"
+  sortText: gg|Table
+  insertText: Table($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: ValueField
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass ValueField extends Field {\n  static isVisualComponent(...): bool;\n}\n```\n---\nA value field can be used to display a string value.\n\n*@noinflight*"
+  sortText: gg|ValueField
+  insertText: ValueField($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+
