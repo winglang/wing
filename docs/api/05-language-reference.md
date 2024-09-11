@@ -1244,20 +1244,23 @@ let hexMut: mutbytes = mutbytes.fromHex("68656c6c6f");
 #### Converting bytes to other types
 
 ```TS
+let rawData: bytes = // ...
+
+// bytes or mutbytes can be converted to other formats
 let asString: str = rawData.toString();
 let asRaw: Array<num> = rawData.toRaw();
 let asBase64: str = rawData.toBase64();
 let asHex: str = rawData.toHex();
 
-// for conversion between bytes and mutbytes
+// bytes and mutbytes can be copied and converted to each other
 let asMutBytes: mutbytes = rawData.copyMut();
-let asBytes: bytes = rawData.copy();
+let asBytes: bytes = asMutBytes.copy();
 ```
 
 #### Working with bytes
 
 ```TS
-let concatenated: bytes = rawData.concat(rawString);
+let concatenated: bytes = rawData.concat(rawData);
 let sliced: bytes = rawData.slice(1, 3);
 let length: num = rawData.length;
 
