@@ -2139,8 +2139,7 @@ assert(Set<num>[1, 2, 3] == Set<num>[1, 2, 3]);
 assert(Set<num>[1, 2, 3] == Set<num>[3, 2, 1]);
 ```
 
-> *Note*: Collection type equality checking is not fully implemented. See [#2867](https://github.com/winglang/wing/issues/2867), [#2940](https://github.com/winglang/wing/issues/2940).
-
+These rules also apply to the `bytes` and `mutbytes` types.
 
 #### 6.1.3 Function types
 
