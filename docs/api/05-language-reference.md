@@ -1215,9 +1215,69 @@ The following features are not yet implemented, but we are planning to add them 
 * `await`/`defer` statements - see https://github.com/winglang/wing/issues/116 to track.
 * Promise function type - see https://github.com/winglang/wing/issues/1004 to track.
 
-### 1.14 Roadmap
+[`▲ top`][top]
 
-* `internal` access modifier is not yet implemented - see https://github.com/winglang/wing/issues/4156 to track.
+---
+
+### 1.14 Bytes type
+
+The `bytes` and `mutbytes` types store immutable and mutable sequences of binary data.
+Under the hood, these types are implemented using JavaScript's `Uint8Array` type.
+`mutbytes` allows for bytes to be changed in-place, but it cannot be resized.
+
+#### Creating bytes
+
+```wing
+// immutable initializers
+let rawData: bytes = bytes.fromRaw([104, 101, 108, 108, 111]);
+let rawString: bytes = bytes.fromString("hello");
+let base64: bytes = bytes.fromBase64("aGVsbG8=");
+let hex: bytes = bytes.fromHex("68656c6c6f");
+
+// mutable initializers
+let rawDataMut: mutbytes = mutbytes.fromRaw([104, 101, 108, 108, 111]);
+let rawStringMut: mutbytes = mutbytes.fromString("hello");
+let base64Mut: mutbytes = mutbytes.fromBase64("aGVsbG8=");
+let hexMut: mutbytes = mutbytes.fromHex("68656c6c6f");
+```
+
+#### Converting bytes to other types
+
+```wing
+let asString: str = rawData.toString();
+let asRaw: Array<num> = rawData.toRaw();
+let asBase64: str = rawData.toBase64();
+let asHex: str = rawData.toHex();
+
+// for conversion between bytes and mutbytes
+let asMutBytes: mutbytes = rawData.copyMut();
+let asBytes: bytes = rawData.copy();
+```
+
+#### Working with bytes
+
+```wing
+let concatenated: bytes = rawData.concat(rawString);
+let sliced: bytes = rawData.slice(1, 3);
+let length: num = rawData.length;
+
+// mutbytes specific methods
+rawData.set(0, 10);
+rawData.replace(3, 6, otherBytes);
+```
+
+##### Reading and writing bytes to disk
+
+```wing
+bring fs;
+
+let rawData: bytes = fs.readBytes("path/to/file");
+fs.writeBytes("path/to/file", rawData);
+```
+
+[`▲ top`][top]
+
+---
 
 ## 2. Statements
 
