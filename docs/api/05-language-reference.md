@@ -1227,7 +1227,7 @@ Under the hood, these types are implemented using JavaScript's `Uint8Array` type
 
 #### Creating bytes
 
-```wing
+```TS
 // immutable initializers
 let rawData: bytes = bytes.fromRaw([104, 101, 108, 108, 111]);
 let rawString: bytes = bytes.fromString("hello");
@@ -1243,7 +1243,7 @@ let hexMut: mutbytes = mutbytes.fromHex("68656c6c6f");
 
 #### Converting bytes to other types
 
-```wing
+```TS
 let asString: str = rawData.toString();
 let asRaw: Array<num> = rawData.toRaw();
 let asBase64: str = rawData.toBase64();
@@ -1256,7 +1256,7 @@ let asBytes: bytes = rawData.copy();
 
 #### Working with bytes
 
-```wing
+```TS
 let concatenated: bytes = rawData.concat(rawString);
 let sliced: bytes = rawData.slice(1, 3);
 let length: num = rawData.length;
@@ -1268,7 +1268,7 @@ rawData.replace(3, 6, otherBytes);
 
 ##### Reading and writing bytes to disk
 
-```wing
+```TS
 bring fs;
 
 let rawData: bytes = fs.readBytes("path/to/file");
