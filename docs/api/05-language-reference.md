@@ -1215,9 +1215,74 @@ The following features are not yet implemented, but we are planning to add them 
 * `await`/`defer` statements - see https://github.com/winglang/wing/issues/116 to track.
 * Promise function type - see https://github.com/winglang/wing/issues/1004 to track.
 
-### 1.14 Roadmap
+[`▲ top`][top]
 
-* `internal` access modifier is not yet implemented - see https://github.com/winglang/wing/issues/4156 to track.
+---
+
+### 1.14 Bytes type
+
+The `bytes` and `mutbytes` types store immutable and mutable sequences of binary data.
+Under the hood, these types are implemented using JavaScript's `Uint8Array` type.
+`mutbytes` allows for bytes to be changed in-place, but it cannot be resized.
+
+#### Creating bytes
+
+```TS
+// immutable initializers
+let rawData: bytes = bytes.fromRaw([104, 101, 108, 108, 111]);
+let rawString: bytes = bytes.fromString("hello");
+let base64: bytes = bytes.fromBase64("aGVsbG8=");
+let hex: bytes = bytes.fromHex("68656c6c6f");
+let zeroes: bytes = bytes.alloc(20); // allocates 20 zeroed bytes
+
+// mutable initializers
+let rawDataMut: mutbytes = mutbytes.fromRaw([104, 101, 108, 108, 111]);
+let rawStringMut: mutbytes = mutbytes.fromString("hello");
+let base64Mut: mutbytes = mutbytes.fromBase64("aGVsbG8=");
+let hexMut: mutbytes = mutbytes.fromHex("68656c6c6f");
+let zeroesMut: mutbytes = mutbytes.alloc(20); // allocates 20 zeroed bytes
+```
+
+#### Converting bytes to other types
+
+```TS
+let rawData: bytes = // ...
+
+// bytes or mutbytes can be converted to other formats
+let asString: str = rawData.toString();
+let asRaw: Array<num> = rawData.toRaw();
+let asBase64: str = rawData.toBase64();
+let asHex: str = rawData.toHex();
+
+// bytes and mutbytes can be copied and converted to each other
+let asMutBytes: mutbytes = rawData.copyMut();
+let asBytes: bytes = asMutBytes.copy();
+```
+
+#### Working with bytes
+
+```TS
+let concatenated: bytes = rawData.concat(rawData);
+let sliced: bytes = rawData.slice(1, 3);
+let length: num = rawData.length;
+
+// mutbytes specific methods
+rawData.set(0, 10);
+rawData.replace(3, 6, otherBytes);
+```
+
+##### Reading and writing bytes to disk
+
+```TS
+bring fs;
+
+let rawData: bytes = fs.readBytes("path/to/file");
+fs.writeBytes("path/to/file", rawData);
+```
+
+[`▲ top`][top]
+
+---
 
 ## 2. Statements
 
@@ -2074,8 +2139,7 @@ assert(Set<num>[1, 2, 3] == Set<num>[1, 2, 3]);
 assert(Set<num>[1, 2, 3] == Set<num>[3, 2, 1]);
 ```
 
-> *Note*: Collection type equality checking is not fully implemented. See [#2867](https://github.com/winglang/wing/issues/2867), [#2940](https://github.com/winglang/wing/issues/2940).
-
+These rules also apply to the `bytes` and `mutbytes` types.
 
 #### 6.1.3 Function types
 
