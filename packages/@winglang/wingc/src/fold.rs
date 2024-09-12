@@ -536,6 +536,7 @@ where
 		TypeAnnotationKind::Duration => TypeAnnotationKind::Duration,
 		TypeAnnotationKind::Datetime => TypeAnnotationKind::Datetime,
 		TypeAnnotationKind::Regex => TypeAnnotationKind::Regex,
+		TypeAnnotationKind::Bytes => TypeAnnotationKind::Bytes,
 		TypeAnnotationKind::Void => TypeAnnotationKind::Void,
 		TypeAnnotationKind::Json => TypeAnnotationKind::Json,
 		TypeAnnotationKind::MutJson => TypeAnnotationKind::MutJson,

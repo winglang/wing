@@ -378,6 +378,7 @@ impl<'a> DTSifier<'a> {
 			TypeAnnotationKind::Duration => format!("{TYPE_STD}.Duration"),
 			TypeAnnotationKind::Datetime => format!("{TYPE_STD}.Datetime"),
 			TypeAnnotationKind::Regex => format!("{TYPE_STD}.Regex"),
+			TypeAnnotationKind::Bytes => format!("{TYPE_STD}.Bytes"),
 			TypeAnnotationKind::Optional(t) => {
 				format!("({}) | undefined", self.dtsify_type_annotation(&t, ignore_phase))
 			}

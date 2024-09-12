@@ -29,9 +29,9 @@ use crate::visit_stmt_before_super::{CheckSuperCtorLocationVisitor, CheckValidBe
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, DEFAULT_PACKAGE_NAME,
-	UTIL_CLASS_NAME, WINGSDK_APP, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DATETIME,
-	WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON,
-	WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REGEX, WINGSDK_RESOURCE, WINGSDK_SET,
+	UTIL_CLASS_NAME, WINGSDK_APP, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_BYTES,
+	WINGSDK_DATETIME, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
+	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REGEX, WINGSDK_RESOURCE, WINGSDK_SET,
 	WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
@@ -231,6 +231,7 @@ pub enum Type {
 	Duration,
 	Datetime,
 	Regex,
+	Bytes,
 	Boolean,
 	Void,
 	/// Immutable Json literals may store extra information about their known data
@@ -955,6 +956,7 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Datetime => write!(f, "datetime"),
 			Type::Regex => write!(f, "regex"),
+			Type::Bytes => write!(f, "bytes"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
 			Type::Json(_) => write!(f, "Json"),
@@ -1330,6 +1332,7 @@ impl TypeRef {
 			Type::Duration => false,
 			Type::Datetime => false,
 			Type::Regex => false,
+			Type::Bytes => false,
 			Type::Inferred(_) => false,
 			Type::Set(_) => false,
 			Type::MutSet(_) => false,
@@ -1480,6 +1483,7 @@ pub struct Types {
 	duration_idx: usize,
 	datetime_idx: usize,
 	regex_idx: usize,
+	bytes_idx: usize,
 	anything_idx: usize,
 	void_idx: usize,
 	json_idx: usize,
@@ -1519,6 +1523,8 @@ impl Types {
 		let datetime_idx = types.len() - 1;
 		types.push(Box::new(Type::Regex));
 		let regex_idx = types.len() - 1;
+		types.push(Box::new(Type::Bytes));
+		let bytes_idx = types.len() - 1;
 		types.push(Box::new(Type::Anything));
 		let anything_idx = types.len() - 1;
 		types.push(Box::new(Type::Void));
@@ -1545,6 +1551,7 @@ impl Types {
 			duration_idx,
 			datetime_idx,
 			regex_idx,
+			bytes_idx,
 			anything_idx,
 			void_idx,
 			json_idx,
@@ -1608,6 +1615,10 @@ impl Types {
 
 	pub fn regex(&self) -> TypeRef {
 		self.get_typeref(self.regex_idx)
+	}
+
+	pub fn bytes(&self) -> TypeRef {
+		self.get_typeref(self.bytes_idx)
 	}
 
 	pub fn anything(&self) -> TypeRef {
@@ -1879,6 +1890,7 @@ impl Types {
 			Type::Duration => "Duration",
 			Type::Datetime => "Datetime",
 			Type::Regex => "Regex",
+			Type::Bytes => "Bytes",
 			Type::Json(_) => "Json",
 			Type::MutJson => "MutJson",
 			Type::Array(_) => "Array",
@@ -4190,6 +4202,7 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 			TypeAnnotationKind::Duration => self.types.duration(),
 			TypeAnnotationKind::Datetime => self.types.datetime(),
 			TypeAnnotationKind::Regex => self.types.regex(),
+			TypeAnnotationKind::Bytes => self.types.bytes(),
 			TypeAnnotationKind::Void => self.types.void(),
 			TypeAnnotationKind::Json => self.types.json(),
 			TypeAnnotationKind::MutJson => self.types.mut_json(),
@@ -5170,6 +5183,7 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 				| Type::Duration
 				| Type::Datetime
 				| Type::Regex
+				| Type::Bytes
 				| Type::Boolean
 				| Type::Void
 				| Type::Nil
@@ -6223,6 +6237,10 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 				name: "Regex".to_string(),
 				span: symbol.span.clone(),
 			}),
+			"bytes" => Some(Symbol {
+				name: "Bytes".to_string(),
+				span: symbol.span.clone(),
+			}),
 			"str" => Some(Symbol {
 				name: "String".to_string(),
 				span: symbol.span.clone(),
@@ -6626,6 +6644,10 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 
 						ResolveReferenceResult::Location(instance_type, self.types.string())
 					}
+					Type::Bytes => {
+						self.validate_type(index_type, self.types.number(), index);
+						ResolveReferenceResult::Location(instance_type, self.types.bytes())
+					}
 					Type::Number
 					| Type::Duration
 					| Type::Datetime
@@ -6741,6 +6763,12 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 			),
 			Type::Regex => self.get_property_from_class_like(
 				lookup_known_type(WINGSDK_REGEX, env).as_class().unwrap(),
+				property,
+				false,
+				env,
+			),
+			Type::Bytes => self.get_property_from_class_like(
+				lookup_known_type(WINGSDK_BYTES, env).as_class().unwrap(),
 				property,
 				false,
 				env,
@@ -7408,6 +7436,7 @@ pub fn fully_qualify_std_type(type_: &str) -> String {
 		"duration" => "Duration",
 		"datetime" => "Datetime",
 		"regex" => "Regex",
+		"bytes" => "Bytes",
 		"str" => "String",
 		"num" => "Number",
 		"bool" => "Boolean",

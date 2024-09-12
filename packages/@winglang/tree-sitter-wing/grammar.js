@@ -539,7 +539,8 @@ module.exports = grammar({
         "void",
         "duration",
         "datetime",
-        "regex"
+        "regex",
+        "bytes"
       ),
 
     initializer: ($) =>

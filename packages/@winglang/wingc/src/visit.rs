@@ -500,6 +500,7 @@ where
 		TypeAnnotationKind::Duration => {}
 		TypeAnnotationKind::Datetime => {}
 		TypeAnnotationKind::Regex => {}
+		TypeAnnotationKind::Bytes => {}
 		TypeAnnotationKind::Void => {}
 		TypeAnnotationKind::Json => {}
 		TypeAnnotationKind::MutJson => {}

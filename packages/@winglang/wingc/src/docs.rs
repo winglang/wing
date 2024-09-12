@@ -157,6 +157,7 @@ impl Documented for TypeRef {
 			| Type::Duration
 			| Type::Datetime
 			| Type::Regex
+			| Type::Bytes
 			| Type::Boolean
 			| Type::Void
 			| Type::Json(_)
@@ -194,6 +195,7 @@ impl Documented for TypeRef {
 			| Type::Duration
 			| Type::Datetime
 			| Type::Regex
+			| Type::Bytes
 			| Type::Boolean
 			| Type::Void
 			| Type::Json(_)
