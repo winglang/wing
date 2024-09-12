@@ -21,10 +21,11 @@ export const createFileBrowserRouter = () => {
         const client = simulator.getResource(
           input.resourcePath,
         ) as IFunctionClient;
-        return await client.invoke(
+        const contents = await client.invoke(
           // @ts-ignore
           JSON.stringify({ fileName: input.fileName }),
         );
+        return contents as unknown as string;
       }),
 
     "fileBrowser.list": createEnvironmentProcedure

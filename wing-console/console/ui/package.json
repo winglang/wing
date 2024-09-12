@@ -21,6 +21,7 @@
     ]
   },
   "scripts": {
+    "dev": "tsup --watch",
     "compile": "tsup",
     "tsc": "tsc --build",
     "test": "vitest --passWithNoTests",
@@ -40,6 +41,7 @@
     "@wingconsole/design-system": "workspace:^",
     "classnames": "^2.5.1",
     "elkjs": "^0.8.2",
+    "emittery": "^1.0.3",
     "framer-motion": "^10.18.0",
     "jszip": "^3.10.1",
     "linkify-react": "^4.1.3",

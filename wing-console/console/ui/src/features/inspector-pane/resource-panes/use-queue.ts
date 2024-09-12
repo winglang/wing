@@ -1,14 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { trpc } from "../../../trpc.js";
+import { useConsoleEnvironment } from "../../console-environment-context/console-environment-context.js";
 
 export interface UseQueueOptions {
   resourcePath: string;
 }
 
 export const useQueue = ({ resourcePath }: UseQueueOptions) => {
+  const { consoleEnvironment: environmentId } = useConsoleEnvironment();
   const push = trpc["queue.push"].useMutation();
-  const approxSize = trpc["queue.approxSize"].useQuery({ resourcePath });
+  const approxSize = trpc["queue.approxSize"].useQuery({
+    environmentId,
+    resourcePath,
+  });
   const purge = trpc["queue.purge"].useMutation();
 
   const [approxSizeValue, setApproxSizeValue] = useState(0);
@@ -17,18 +22,22 @@ export const useQueue = ({ resourcePath }: UseQueueOptions) => {
     setApproxSizeValue(approxSize.data ?? 0);
   }, [approxSize.data]);
 
-  const pushMessage = (message: string) => {
-    push.mutate({
-      resourcePath,
-      message: message,
-    });
-  };
+  const pushMessage = useCallback(
+    (message: string) => {
+      push.mutate({
+        environmentId,
+        resourcePath,
+        message: message,
+      });
+    },
+    [environmentId, push, resourcePath],
+  );
 
   const purgeQueue = useCallback(
     (onSuccess: () => void) => {
-      purge.mutateAsync({ resourcePath }).then(onSuccess);
+      purge.mutateAsync({ environmentId, resourcePath }).then(onSuccess);
     },
-    [purge, resourcePath],
+    [environmentId, purge, resourcePath],
   );
 
   const isLoading = useMemo(() => {

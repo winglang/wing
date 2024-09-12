@@ -19,6 +19,7 @@ import classNames from "classnames";
 import { memo, useCallback, useMemo, useState } from "react";
 
 import { trpc } from "../../../trpc.js";
+import { useConsoleEnvironment } from "../../console-environment-context/console-environment-context.js";
 import { RunningStateIndicator } from "../../running-state-indicator/running-state-indicator.js";
 
 import { BucketMetadata } from "./bucket-metadata.js";
@@ -219,8 +220,10 @@ export const ResourceMetadata = memo(
       });
     }, []);
 
+    const { consoleEnvironment } = useConsoleEnvironment();
     const resourceUI = trpc["app.getResourceUI"].useQuery({
       resourcePath: node.path,
+      environmentId: consoleEnvironment,
     });
 
     return (

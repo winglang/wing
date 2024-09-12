@@ -38,7 +38,7 @@ export interface ExplorerItem {
   type?: string;
   childItems?: ExplorerItem[];
   display?: NodeDisplay;
-  hierarchichalRunningState: ResourceRunningState | undefined;
+  hierarchichalRunningState?: ResourceRunningState | undefined;
 }
 
 export interface MapItem extends ConstructTreeNode {
@@ -192,9 +192,11 @@ export const createAppRouter = () => {
       }),
     "app.nodeIds": createProcedure
       .input(
-        z.object({
-          showTests: z.boolean().optional(),
-        }),
+        z
+          .object({
+            showTests: z.boolean().optional(),
+          })
+          .optional(),
       )
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();

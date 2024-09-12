@@ -1,6 +1,7 @@
 import { memo } from "react";
 
 import { trpc } from "../../../trpc.js";
+import { useConsoleEnvironment } from "../../console-environment-context/console-environment-context.js";
 
 import { TableInteraction } from "./table-interaction.js";
 
@@ -10,7 +11,9 @@ export interface CustomResourceTableProps {
 
 export const CustomResourceTable = memo(
   ({ scanHandler }: CustomResourceTableProps) => {
+    const { consoleEnvironment: environmentId } = useConsoleEnvironment();
     const tableScan = trpc["table.scan"].useQuery({
+      environmentId,
       resourcePath: scanHandler,
     });
 

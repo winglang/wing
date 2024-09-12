@@ -43,7 +43,8 @@ export const createEnvironmentsManager = (
         return options.getSimulator();
       }
 
-      throw new Error("Environment not ready yet");
+      return options.getSimulator();
+      // throw new Error("Environment not ready yet");
     },
   };
 };

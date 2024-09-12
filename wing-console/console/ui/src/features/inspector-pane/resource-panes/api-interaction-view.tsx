@@ -4,6 +4,7 @@ import { memo, useCallback, useContext, useState } from "react";
 
 import { AppContext } from "../../../AppContext.js";
 import { trpc } from "../../../trpc.js";
+import { useConsoleEnvironment } from "../../console-environment-context/console-environment-context.js";
 
 import { ApiInteraction } from "./api-interaction.js";
 import type { ApiResponse } from "./api.js";
@@ -30,7 +31,8 @@ export const ApiInteractionView = memo(({ resourcePath }: ApiViewProps) => {
     [setApiResponse],
   );
 
-  const schema = trpc["api.schema"].useQuery({ resourcePath });
+  const { consoleEnvironment: environmentId } = useConsoleEnvironment();
+  const schema = trpc["api.schema"].useQuery({ environmentId, resourcePath });
 
   const { isLoading, callFetch } = useApi({
     onFetchDataUpdate,

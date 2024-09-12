@@ -1456,6 +1456,9 @@ importers:
       elkjs:
         specifier: ^0.8.2
         version: 0.8.2
+      emittery:
+        specifier: ^1.0.3
+        version: 1.0.3
       framer-motion:
         specifier: ^10.18.0
         version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
@@ -14414,7 +14417,7 @@ packages:
     dependencies:
       semver: 7.6.3
       shelljs: 0.8.5
-      typescript: 5.7.0-dev.20240904
+      typescript: 5.7.0-dev.20240912
     dev: true
 
   /dset@3.1.3:
@@ -14477,7 +14480,6 @@ packages:
   /emittery@1.0.3:
     resolution: {integrity: sha512-tJdCJitoy2lrC2ldJcqN4vkqJ00lT+tOWNT1hBJjO/3FDMJa5TTIiYGCKGkn/WfCyOzUMObeohbVTj00fhiLiA==}
     engines: {node: '>=14.16'}
-    dev: true
 
   /emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -22749,8 +22751,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.7.0-dev.20240904:
-    resolution: {integrity: sha512-iGi6VWFGOuxPvDfwfK1/8C172NWzC5gtC4G2dxqCQehrr86WTfFkc9aWucynaxZdwQNMqG1Iu83bmXD7CNHCmg==}
+  /typescript@5.7.0-dev.20240912:
+    resolution: {integrity: sha512-mDTEqq6tLag5w75BeGd1g9t64z7dlhTl/3x0CP1bG/638MXiBbvCoI5sbkcEY0UoYUxP7EeIi7ZI6HBd9lDPFw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

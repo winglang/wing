@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { trpc } from "../../../trpc.js";
 import { useDownloadFile } from "../../../use-download-file.js";
 import { useUploadFile } from "../../../use-upload-file.js";
+import { useConsoleEnvironment } from "../../console-environment-context/console-environment-context.js";
 
 export interface UseBucketOptions {
   resourcePath: string;
@@ -14,8 +15,9 @@ export const useBucket = ({ resourcePath, currentFile }: UseBucketOptions) => {
   const { download: downloadFileLocally, downloadFiles: downloadFilesLocally } =
     useDownloadFile();
 
+  const { consoleEnvironment: environmentId } = useConsoleEnvironment();
   const list = trpc["bucket.list"].useQuery(
-    { resourcePath },
+    { environmentId, resourcePath },
     {
       onSuccess(data) {
         setFiles(data);
@@ -27,6 +29,7 @@ export const useBucket = ({ resourcePath, currentFile }: UseBucketOptions) => {
   const downloadMutation = trpc["bucket.download"].useMutation();
   const currentFileContentQuery = trpc["bucket.get"].useQuery(
     {
+      environmentId,
       fileName: currentFile ?? "",
       resourcePath,
     },
@@ -51,12 +54,13 @@ export const useBucket = ({ resourcePath, currentFile }: UseBucketOptions) => {
   const putFile = useCallback(
     (fileName: string, fileContent: string) => {
       return putMutation.mutateAsync({
+        environmentId,
         resourcePath,
         fileName,
         fileContent,
       });
     },
-    [putMutation, resourcePath],
+    [environmentId, putMutation, resourcePath],
   );
 
   const uploadFiles = useCallback(
@@ -78,6 +82,7 @@ export const useBucket = ({ resourcePath, currentFile }: UseBucketOptions) => {
         const content =
           currentFileContent ||
           (await downloadMutation.mutateAsync({
+            environmentId,
             resourcePath,
             fileName: files[0],
           }));
@@ -86,6 +91,7 @@ export const useBucket = ({ resourcePath, currentFile }: UseBucketOptions) => {
       if (files.length > 1) {
         const promises = files.map(async (file) => {
           const content = await downloadMutation.mutateAsync({
+            environmentId,
             resourcePath,
             fileName: file,
           });
@@ -97,6 +103,7 @@ export const useBucket = ({ resourcePath, currentFile }: UseBucketOptions) => {
       }
     },
     [
+      environmentId,
       downloadMutation,
       downloadFileLocally,
       downloadFilesLocally,
@@ -108,11 +115,12 @@ export const useBucket = ({ resourcePath, currentFile }: UseBucketOptions) => {
   const deleteFile = useCallback(
     async (fileNames: string[]) => {
       return deleteMutation.mutateAsync({
+        environmentId,
         resourcePath,
         fileNames,
       });
     },
-    [deleteMutation, resourcePath],
+    [environmentId, deleteMutation, resourcePath],
   );
 
   const isLoading = useMemo(() => {

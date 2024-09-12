@@ -4,6 +4,7 @@ import { useContext } from "react";
 
 import { AppContext } from "../../../AppContext.js";
 import { trpc } from "../../../trpc.js";
+import { useConsoleEnvironment } from "../../console-environment-context/console-environment-context.js";
 
 import { ApiInteraction } from "./api-interaction.js";
 import type { ApiResponse } from "./api.js";
@@ -25,8 +26,10 @@ export const CustomResourceHttpClientItem = ({
 
   const [openApiSpec, setOpenApiSpec] = usePersistentState<ApiResponse>();
 
+  const { consoleEnvironment: environmentId } = useConsoleEnvironment();
   const urlData = trpc["httpClient.getUrl"].useQuery(
     {
+      environmentId,
       resourcePath: getUrlHandler,
     },
     { enabled: !!getUrlHandler },
@@ -34,6 +37,7 @@ export const CustomResourceHttpClientItem = ({
 
   trpc["httpClient.getOpenApiSpec"].useQuery(
     {
+      environmentId,
       resourcePath: getApiSpecHandler,
     },
     {

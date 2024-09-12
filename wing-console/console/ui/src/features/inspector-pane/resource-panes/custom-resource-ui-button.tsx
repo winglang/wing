@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { useCallback, useId } from "react";
 
 import { trpc } from "../../../trpc.js";
+import { useConsoleEnvironment } from "../../console-environment-context/console-environment-context.js";
 
 export interface CustomResourceUiButtomItemProps {
   label: string;
@@ -14,12 +15,14 @@ export const CustomResourceUiButtonItem = ({
   handlerPath,
 }: CustomResourceUiButtomItemProps) => {
   const { theme } = useTheme();
+  const { consoleEnvironment: environmentId } = useConsoleEnvironment();
   const { mutate: invokeMutation } = trpc["uiButton.invoke"].useMutation();
   const invoke = useCallback(() => {
     invokeMutation({
+      environmentId,
       resourcePath: handlerPath,
     });
-  }, [handlerPath, invokeMutation]);
+  }, [environmentId, handlerPath, invokeMutation]);
 
   const id = useId();
   return (

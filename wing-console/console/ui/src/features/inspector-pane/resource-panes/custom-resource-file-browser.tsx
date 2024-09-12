@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { trpc } from "../../../trpc.js";
 import { useDownloadFile } from "../../../use-download-file.js";
 import { useUploadFile } from "../../../use-upload-file.js";
+import { useConsoleEnvironment } from "../../console-environment-context/console-environment-context.js";
 
 import { FileBrowserView } from "./file-browser-view.js";
 
@@ -26,8 +27,10 @@ export const CustomResourceFileBrowser = ({
 
   const [currentFile, setCurrentFile] = useState<string>();
 
+  const { consoleEnvironment: environmentId } = useConsoleEnvironment();
   const listQuery = trpc["fileBrowser.list"].useQuery(
     {
+      environmentId,
       resourcePath: listHandler,
     },
     { enabled: !!listHandler },
@@ -35,6 +38,7 @@ export const CustomResourceFileBrowser = ({
 
   const currentFileContentQuery = trpc["fileBrowser.get"].useQuery(
     {
+      environmentId,
       fileName: currentFile ?? "",
       resourcePath: getHandler,
     },
@@ -68,12 +72,13 @@ export const CustomResourceFileBrowser = ({
     async (files: string[]) => {
       for (const file of files) {
         await deleteMutation.mutateAsync({
+          environmentId,
           resourcePath: deleteHandler,
           fileName: file,
         });
       }
     },
-    [deleteHandler, deleteMutation],
+    [environmentId, deleteHandler, deleteMutation],
   );
 
   const downloadFiles = useCallback(
@@ -85,6 +90,7 @@ export const CustomResourceFileBrowser = ({
         const content =
           currentFileContent ||
           (await downloadMutation.mutate({
+            environmentId,
             resourcePath: getHandler,
             fileName: files[0],
           }));
@@ -93,6 +99,7 @@ export const CustomResourceFileBrowser = ({
       if (files.length > 1) {
         const promises = files.map(async (file) => {
           const content = await downloadMutation.mutateAsync({
+            environmentId,
             resourcePath: getHandler,
             fileName: file,
           });
@@ -104,6 +111,7 @@ export const CustomResourceFileBrowser = ({
       }
     },
     [
+      environmentId,
       downloadFileLocally,
       downloadFilesLocally,
       getHandler,
@@ -115,12 +123,13 @@ export const CustomResourceFileBrowser = ({
   const putFile = useCallback(
     (fileName: string, fileContent: string) => {
       return putMutation.mutateAsync({
+        environmentId,
         resourcePath: putHandler,
         fileName,
         fileContent,
       });
     },
-    [putHandler, putMutation],
+    [environmentId, putHandler, putMutation],
   );
 
   const uploadFiles = useCallback(

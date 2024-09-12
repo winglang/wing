@@ -25,8 +25,7 @@ export const createEnvironmentsRouter = () => {
       const tests = ctx.getTestRunner();
       const environmentsManager = ctx.getEnvironmentsManager();
       return {
-        // environments: await environmentsManager.listEnvironments(tests),
-        environments: [],
+        environments: await environmentsManager.listEnvironments(tests),
       };
     }),
   });

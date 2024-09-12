@@ -21,7 +21,7 @@ export const createHttpClientRouter = () => {
         ) as IFunctionClient;
 
         // @ts-ignore
-        const url = await getUrlClient.invoke("");
+        const url: string = await getUrlClient.invoke("");
         return {
           url,
         };

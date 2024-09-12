@@ -1,7 +1,7 @@
 import { useTheme, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import type { MetadataNode } from "../by-feature/inspector/resource-metadata.js";
+import type { MetadataNode } from "./resource-metadata.js";
 
 export interface ScheduleMetadataProps {
   node: MetadataNode;
