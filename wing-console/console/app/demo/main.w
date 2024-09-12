@@ -128,7 +128,7 @@ let cronSchedule = new cloud.Schedule(cloud.ScheduleProps{
 //   log("Cron schedule ticked!");
 // });
 
-test "Increment counter" {
+test "Increment counter (will fail)" {
   let previous = counter.inc();
   log("Assertion should fail: {previous} === {counter.peek()}");
   assert(previous == 1);
