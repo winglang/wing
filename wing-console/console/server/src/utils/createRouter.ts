@@ -151,21 +151,22 @@ export const createEnvironmentProcedure = createProcedure
     }),
   )
   .use(async ({ input, ctx, next }) => {
-    try {
-      const environmentsManager = ctx.getEnvironmentsManager();
-      const environment = environmentsManager.getSimulatorForEnvironment(
-        input.environmentId,
-      );
-      return next({
-        ctx: {
-          environment,
+    const environmentsManager = ctx.getEnvironmentsManager();
+    return next({
+      ctx: {
+        async simulator() {
+          try {
+            return environmentsManager.getSimulatorForEnvironment(
+              input.environmentId,
+            );
+          } catch (error) {
+            throw new TRPCError({
+              code: "TIMEOUT",
+              message: "Environment not ready yet",
+              cause: error,
+            });
+          }
         },
-      });
-    } catch (error) {
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Environment not ready",
-        cause: error,
-      });
-    }
+      },
+    });
   });
