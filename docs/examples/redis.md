@@ -35,7 +35,7 @@ When the cloud function is invoked a value is set in the redis database using th
 bring redis;
 bring cloud;
 
-// Create a reddit resource
+// Create a redis resource
 let redisInstance  = new redis.Redis();
 
 new cloud.Function(inflight () => {
