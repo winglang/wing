@@ -496,6 +496,7 @@ async rename(...args) { return this.backend.rename(...args); }
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
               },
+              "defaultChild": "root/HelloWorld/Counter/Resource",
               "display": {
                 "description": "A distributed atomic counter",
                 "title": "Counter",

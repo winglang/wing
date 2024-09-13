@@ -189,6 +189,7 @@ exports[`create an OnDeploy 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_on_deploy/Function/Default",
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
@@ -240,6 +241,7 @@ exports[`create an OnDeploy 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -430,6 +432,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -509,6 +512,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_on_deploy/Function/Default",
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
@@ -560,6 +564,7 @@ exports[`execute OnDeploy after other resources 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -753,6 +758,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -832,6 +838,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_on_deploy/Function/Default",
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
@@ -883,6 +890,7 @@ exports[`execute OnDeploy before other resources 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",

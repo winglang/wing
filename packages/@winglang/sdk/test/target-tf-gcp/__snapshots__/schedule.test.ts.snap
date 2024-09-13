@@ -155,6 +155,7 @@ exports[`create a schedule 2`] = `
                           "fqn": "constructs.Construct",
                           "version": "10.3.0",
                         },
+                        "defaultChild": "root/Default/Schedule/OnTick0/FunctionBucket/Default",
                         "display": {
                           "description": "A cloud object store",
                           "title": "Bucket",
@@ -272,6 +273,7 @@ exports[`create a schedule 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",

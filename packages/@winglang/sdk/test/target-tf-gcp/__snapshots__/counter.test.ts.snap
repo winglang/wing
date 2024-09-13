@@ -61,6 +61,7 @@ exports[`counter name valid 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/The.Amazing-Counter_01/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -109,6 +110,7 @@ exports[`counter name valid 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -187,6 +189,7 @@ exports[`counter with initial value 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -235,6 +238,7 @@ exports[`counter with initial value 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -375,6 +379,7 @@ exports[`dec() IAM permissions 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -436,6 +441,7 @@ exports[`dec() IAM permissions 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/Function/FunctionBucket/Default",
                     "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
@@ -523,6 +529,7 @@ exports[`dec() IAM permissions 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -716,6 +723,7 @@ exports[`function with a counter binding 3`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -777,6 +785,7 @@ exports[`function with a counter binding 3`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/Function/FunctionBucket/Default",
                     "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
@@ -864,6 +873,7 @@ exports[`function with a counter binding 3`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -1004,6 +1014,7 @@ exports[`inc() IAM permissions 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -1065,6 +1076,7 @@ exports[`inc() IAM permissions 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/Function/FunctionBucket/Default",
                     "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
@@ -1152,6 +1164,7 @@ exports[`inc() IAM permissions 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -1292,6 +1305,7 @@ exports[`peek() IAM permissions 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -1353,6 +1367,7 @@ exports[`peek() IAM permissions 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/Function/FunctionBucket/Default",
                     "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
@@ -1440,6 +1455,7 @@ exports[`peek() IAM permissions 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -1518,6 +1534,7 @@ exports[`replace invalid character from counter name 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/The*Amazing%Counter@01/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -1566,6 +1583,7 @@ exports[`replace invalid character from counter name 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -1706,6 +1724,7 @@ exports[`set() IAM permissions 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -1767,6 +1786,7 @@ exports[`set() IAM permissions 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/Function/FunctionBucket/Default",
                     "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
@@ -1854,6 +1874,7 @@ exports[`set() IAM permissions 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",

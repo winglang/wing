@@ -36,6 +36,7 @@ exports[`default topic behavior 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Topic/Default",
                 "display": {
                   "description": "A pub/sub notification topic",
                   "title": "Topic",
@@ -75,6 +76,7 @@ exports[`default topic behavior 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -128,6 +130,7 @@ exports[`replace invalid character from queue name 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/The%Spectacular@Topic/Default",
                 "display": {
                   "description": "A pub/sub notification topic",
                   "title": "Topic",
@@ -167,6 +170,7 @@ exports[`replace invalid character from queue name 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -220,6 +224,7 @@ exports[`topic name valid 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/The-Spectacular_Topic-01/Default",
                 "display": {
                   "description": "A pub/sub notification topic",
                   "title": "Topic",
@@ -259,6 +264,7 @@ exports[`topic name valid 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -437,6 +443,7 @@ exports[`topic with subscriber function 3`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Topic/Default",
                 "display": {
                   "description": "A pub/sub notification topic",
                   "title": "Topic",
@@ -523,6 +530,7 @@ exports[`topic with subscriber function 3`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Topic-OnMessage0/Default",
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
@@ -562,6 +570,7 @@ exports[`topic with subscriber function 3`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",

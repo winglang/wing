@@ -44,6 +44,7 @@ exports[`counter name valid 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/The.Amazing-Counter_01/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -83,6 +84,7 @@ exports[`counter name valid 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -144,6 +146,7 @@ exports[`counter with initial value 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -183,6 +186,7 @@ exports[`counter with initial value 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -318,6 +322,7 @@ exports[`dec() policy statement 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -395,6 +400,7 @@ exports[`dec() policy statement 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Function/Default",
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
@@ -445,6 +451,7 @@ exports[`dec() policy statement 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -625,6 +632,7 @@ exports[`function with a counter binding 3`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -702,6 +710,7 @@ exports[`function with a counter binding 3`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Function/Default",
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
@@ -752,6 +761,7 @@ exports[`function with a counter binding 3`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -887,6 +897,7 @@ exports[`inc() policy statement 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -964,6 +975,7 @@ exports[`inc() policy statement 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Function/Default",
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
@@ -1014,6 +1026,7 @@ exports[`inc() policy statement 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -1149,6 +1162,7 @@ exports[`peek() policy statement 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -1226,6 +1240,7 @@ exports[`peek() policy statement 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Function/Default",
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
@@ -1276,6 +1291,7 @@ exports[`peek() policy statement 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -1337,6 +1353,7 @@ exports[`replace invalid character from counter name 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/The*Amazing%Counter@01/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -1376,6 +1393,7 @@ exports[`replace invalid character from counter name 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -1511,6 +1529,7 @@ exports[`set() policy statement 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Counter/Default",
                 "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
@@ -1588,6 +1607,7 @@ exports[`set() policy statement 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/Function/Default",
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
@@ -1638,6 +1658,7 @@ exports[`set() policy statement 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
