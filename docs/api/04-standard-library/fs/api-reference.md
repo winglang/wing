@@ -51,6 +51,7 @@ new fs.Util();
 | <code><a href="#@winglang/sdk.fs.Util.metadata">metadata</a></code> | Gets the stats of the given path. |
 | <code><a href="#@winglang/sdk.fs.Util.mkdir">mkdir</a></code> | Create a directory. |
 | <code><a href="#@winglang/sdk.fs.Util.mkdtemp">mkdtemp</a></code> | Create a temporary directory. |
+| <code><a href="#@winglang/sdk.fs.Util.readBytes">readBytes</a></code> | Read the contents of the file as bytes. |
 | <code><a href="#@winglang/sdk.fs.Util.readdir">readdir</a></code> | Read the contents of the directory. |
 | <code><a href="#@winglang/sdk.fs.Util.readFile">readFile</a></code> | Read the entire contents of a file. |
 | <code><a href="#@winglang/sdk.fs.Util.readJson">readJson</a></code> | Read the contents of the file and convert it to JSON. |
@@ -60,10 +61,12 @@ new fs.Util();
 | <code><a href="#@winglang/sdk.fs.Util.setPermissions">setPermissions</a></code> | Set the permissions of the file, directory, etc. |
 | <code><a href="#@winglang/sdk.fs.Util.symlink">symlink</a></code> | Creates a symbolic link. |
 | <code><a href="#@winglang/sdk.fs.Util.symlinkMetadata">symlinkMetadata</a></code> | Gets the stats of the given path without following symbolic links. |
+| <code><a href="#@winglang/sdk.fs.Util.tryReadBytes">tryReadBytes</a></code> | If the file exists, read the contents of the file as bytes; |
 | <code><a href="#@winglang/sdk.fs.Util.tryReaddir">tryReaddir</a></code> | If the path exists, read the contents of the directory; |
 | <code><a href="#@winglang/sdk.fs.Util.tryReadFile">tryReadFile</a></code> | If the file exists and can be read successfully, read the entire contents; |
 | <code><a href="#@winglang/sdk.fs.Util.tryReadJson">tryReadJson</a></code> | Retrieve the contents of the file and convert it to JSON if the file exists and can be parsed successfully, otherwise, return `undefined`. |
 | <code><a href="#@winglang/sdk.fs.Util.tryReadYaml">tryReadYaml</a></code> | Convert all YAML objects from a single file into JSON objects if the file exists and can be parsed successfully, `undefined` otherwise. |
+| <code><a href="#@winglang/sdk.fs.Util.writeBytes">writeBytes</a></code> | Write bytes to a file, replacing the file if it already exists. |
 | <code><a href="#@winglang/sdk.fs.Util.writeFile">writeFile</a></code> | Writes data to a file, replacing the file if it already exists. |
 | <code><a href="#@winglang/sdk.fs.Util.writeJson">writeJson</a></code> | Writes JSON to a file, replacing the file if it already exists. |
 | <code><a href="#@winglang/sdk.fs.Util.writeYaml">writeYaml</a></code> | Writes multiple YAML objects to a file, replacing the file if it already exists. |
@@ -356,6 +359,24 @@ The prefix for the directory to be created, default `wingtemp`.
 
 ---
 
+##### `readBytes` <a name="readBytes" id="@winglang/sdk.fs.Util.readBytes"></a>
+
+```wing
+bring fs;
+
+fs.readBytes(filepath: str);
+```
+
+Read the contents of the file as bytes.
+
+###### `filepath`<sup>Required</sup> <a name="filepath" id="@winglang/sdk.fs.Util.readBytes.parameter.filepath"></a>
+
+- *Type:* str
+
+The file path.
+
+---
+
 ##### `readdir` <a name="readdir" id="@winglang/sdk.fs.Util.readdir"></a>
 
 ```wing
@@ -572,6 +593,26 @@ The path to get stats for.
 
 ---
 
+##### `tryReadBytes` <a name="tryReadBytes" id="@winglang/sdk.fs.Util.tryReadBytes"></a>
+
+```wing
+bring fs;
+
+fs.tryReadBytes(filepath: str);
+```
+
+If the file exists, read the contents of the file as bytes;
+
+otherwise, return `undefined`.
+
+###### `filepath`<sup>Required</sup> <a name="filepath" id="@winglang/sdk.fs.Util.tryReadBytes.parameter.filepath"></a>
+
+- *Type:* str
+
+The file path.
+
+---
+
 ##### `tryReaddir` <a name="tryReaddir" id="@winglang/sdk.fs.Util.tryReaddir"></a>
 
 ```wing
@@ -653,6 +694,43 @@ Convert all YAML objects from a single file into JSON objects if the file exists
 - *Type:* str
 
 The file path of the YAML file.
+
+---
+
+##### `writeBytes` <a name="writeBytes" id="@winglang/sdk.fs.Util.writeBytes"></a>
+
+```wing
+bring fs;
+
+fs.writeBytes(filepath: str, data: Bytes, options?: WriteFileOptions);
+```
+
+Write bytes to a file, replacing the file if it already exists.
+
+###### `filepath`<sup>Required</sup> <a name="filepath" id="@winglang/sdk.fs.Util.writeBytes.parameter.filepath"></a>
+
+- *Type:* str
+
+The file path that needs to be written.
+
+---
+
+###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.fs.Util.writeBytes.parameter.data"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Bytes">Bytes</a>
+
+The bytes to write.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.fs.Util.writeBytes.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.fs.WriteFileOptions">WriteFileOptions</a>
+
+The `encoding` can be set to specify the character encoding.
+
+And the `flag` can be set to specify the attributes.
+If a flag is not provided, it defaults to `"w"`.
 
 ---
 

@@ -7,8 +7,8 @@ import type { Construct } from "constructs";
 import { parse } from "dotenv";
 import { expand } from "dotenv-expand";
 import type { Resource } from "./std";
-import type { Node } from "./std/node";
 import type { Bytes } from "./std/bytes";
+import type { Node } from "./std/node";
 // since we moved from node:18 to node:20 the deepStrictEqual doesn't work as expected.
 // https://github.com/winglang/wing/issues/4444
 // therefore we're using a local version of the comparison from node 18.
