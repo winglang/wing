@@ -29,13 +29,6 @@ export class Bytes {
   }
 
   /** @internal */
-  public readonly _data: Uint8Array;
-
-  private constructor(data: Uint8Array) {
-    this._data = data;
-  }
-
-  /** @internal */
   public static _fromUtf8Array(data: Uint8Array): Bytes {
     return new Bytes(data);
   }
@@ -92,6 +85,29 @@ export class Bytes {
    */
   public static zeros(length: number): Bytes {
     return new Bytes(new Uint8Array(length));
+  }
+
+  /**
+   * Concatenate multiple `bytes` values
+   * @param values the `bytes` values to concatenate
+   * @returns a new `bytes` value with the bytes from the input values concatenated together
+   */
+  public static concat(...values: Array<Bytes>): Bytes {
+    const totalLength = values.reduce((acc, bytes) => acc + bytes.length, 0);
+    const newData = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const bytes of values) {
+      newData.set(bytes._data, offset);
+      offset += bytes.length;
+    }
+    return new Bytes(newData);
+  }
+
+  /** @internal */
+  public readonly _data: Uint8Array;
+
+  private constructor(data: Uint8Array) {
+    this._data = data;
   }
 
   /**
@@ -177,21 +193,5 @@ export class Bytes {
    */
   public slice(startIndex: number, endIndex?: number): Bytes {
     return new Bytes(this._data.slice(startIndex, endIndex));
-  }
-
-  /**
-   * Concatenate multiple `bytes` values
-   * @param values the `bytes` values to concatenate
-   * @returns a new `bytes` value with the bytes from the input values concatenated together
-   */
-  public static concat(...values: Array<Bytes>): Bytes {
-    const totalLength = values.reduce((acc, bytes) => acc + bytes.length, 0);
-    const newData = new Uint8Array(totalLength);
-    let offset = 0;
-    for (const bytes of values) {
-      newData.set(bytes._data, offset);
-      offset += bytes.length;
-    }
-    return new Bytes(newData);
   }
 }
