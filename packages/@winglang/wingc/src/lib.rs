@@ -145,6 +145,15 @@ pub const DEFAULT_PACKAGE_NAME: &'static str = "rootpkg";
 #[derive(Serialize)]
 pub struct CompilerOutput {
 	imported_namespaces: Vec<String>,
+
+	/// A list of all files (Wing source files and extern JS/TS files) in the root project
+	/// that were referenced during compilation.
+	///
+	/// These files can be watched for changes to trigger recompilations.
+	///
+	/// Note: files in this list may not exist (for example, it's possible for an "extern" statement to
+	/// reference a file that doesn't yet exist).
+	files_to_watch: Vec<String>,
 }
 
 /// Exposes an allocation function to the WASM host
