@@ -89,6 +89,7 @@ async exists(...args) { return this.backend.exists(...args); }
 async tryGet(...args) { return this.backend.tryGet(...args); }
 async tryGetJson(...args) { return this.backend.tryGetJson(...args); }
 async tryDelete(...args) { return this.backend.tryDelete(...args); }
+async signedUrl(...args) { return this.backend.signedUrl(...args); }
 async metadata(...args) { return this.backend.metadata(...args); }
 async copy(...args) { return this.backend.copy(...args); }
 async rename(...args) { return this.backend.rename(...args); }
