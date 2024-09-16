@@ -77,11 +77,6 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   bucket.onEvent(testInflight);
 
   const s = await app.startSimulator();
-  s.onTrace({
-    callback: (trace) => {
-      console.log(trace);
-    },
-  });
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
   const logClient = s.getResource("/log_bucket") as cloud.IBucketClient;
 
@@ -941,6 +936,21 @@ test("bucket ignores corrupted state file", async () => {
   // THEN
   // we lost all metadata, but the bucket is still functional
   expect(files).toEqual(["b"]);
+});
+
+test("signedUrl is not implemented for the simulator", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  // THEN
+  await expect(() => client.signedUrl("key")).rejects.toThrowError(
+    "signedUrl is not implemented yet"
+  );
+  await s.stop();
 });
 
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)

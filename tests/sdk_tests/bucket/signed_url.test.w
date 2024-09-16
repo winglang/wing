@@ -5,94 +5,102 @@ bring expect;
 
 let bucket = new cloud.Bucket();
 
-test "signedUrl GET (implicit)" {
-  let KEY = "tempfile.txt";
-  let VALUE = "Hello, Wing!";
+new cloud.Function(inflight () => {
+  bucket.signedUrl("key");
+});
 
-  bucket.put(KEY, VALUE);
+// TODO: signedUrl is not implemented for the simulator yet
+// https://github.com/winglang/wing/issues/1383
+if util.env("WING_TARGET") != "sim" {
+  test "signedUrl GET (implicit)" {
+    let KEY = "tempfile.txt";
+    let VALUE = "Hello, Wing!";
 
-  let getSignedUrl = bucket.signedUrl(KEY);
+    bucket.put(KEY, VALUE);
 
-  // Download file from private bucket using GET presigned URL
-  let output = util.shell("curl \"{getSignedUrl}\"");
+    let getSignedUrl = bucket.signedUrl(KEY);
 
-  expect.equal(output, VALUE);
-}
+    // Download file from private bucket using GET presigned URL
+    let output = util.shell("curl \"{getSignedUrl}\"");
 
-test "signedUrl GET (explicit)" {
-  let KEY = "tempfile.txt";
-  let VALUE = "Hello, Wing!";
+    expect.equal(output, VALUE);
+  }
 
-  bucket.put(KEY, VALUE);
+  test "signedUrl GET (explicit)" {
+    let KEY = "tempfile.txt";
+    let VALUE = "Hello, Wing!";
 
-  let getSignedUrl = bucket.signedUrl(KEY, { action: cloud.BucketSignedUrlAction.DOWNLOAD });
+    bucket.put(KEY, VALUE);
 
-  // Download file from private bucket using GET presigned URL
-  let output = util.shell("curl \"{getSignedUrl}\"");
+    let getSignedUrl = bucket.signedUrl(KEY, { action: cloud.BucketSignedUrlAction.DOWNLOAD });
 
-  expect.equal(output, VALUE);
-}
+    // Download file from private bucket using GET presigned URL
+    let output = util.shell("curl \"{getSignedUrl}\"");
 
-test "signedUrl GET with non-existent key" {
-  let assertThrows = (expected: str, block: (): void) => {
-    let var error = false;
-    try {
-      block();
-    } catch actual {
-      expect.equal(actual, expected);
-      error = true;
-    }
-      expect.equal(error, true);
-  };
-  let UNEXISTING_KEY = "no-such-file.txt";
-  let OBJECT_DOES_NOT_EXIST_ERROR = "Cannot provide signed url for a non-existent key (key={UNEXISTING_KEY})";
+    expect.equal(output, VALUE);
+  }
 
-  assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, () => {
-    bucket.signedUrl(UNEXISTING_KEY);
-  });
-}
+  test "signedUrl GET with non-existent key" {
+    let assertThrows = (expected: str, block: (): void) => {
+      let var error = false;
+      try {
+        block();
+      } catch actual {
+        expect.equal(actual, expected);
+        error = true;
+      }
+        expect.equal(error, true);
+    };
+    let UNEXISTING_KEY = "no-such-file.txt";
+    let OBJECT_DOES_NOT_EXIST_ERROR = "Cannot provide signed url for a non-existent key (key={UNEXISTING_KEY})";
 
-test "signedUrl PUT" {
-  let KEY = "tempfile.txt";
-  let VALUE = "Hello, Wing!";
+    assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, () => {
+      bucket.signedUrl(UNEXISTING_KEY);
+    });
+  }
 
-  let tempDir = fs.mkdtemp();
-  let tempFile = fs.join(tempDir, KEY);
-  fs.writeFile(tempFile, VALUE);
+  test "signedUrl PUT" {
+    let KEY = "tempfile.txt";
+    let VALUE = "Hello, Wing!";
 
-  let putSignedUrl = bucket.signedUrl(KEY, { action: cloud.BucketSignedUrlAction.UPLOAD });
+    let tempDir = fs.mkdtemp();
+    let tempFile = fs.join(tempDir, KEY);
+    fs.writeFile(tempFile, VALUE);
 
-  // Upload file to private bucket using PUT presigned URL
-  util.shell("curl -X PUT -T \"{tempFile}\" \"{putSignedUrl}\"");
+    let putSignedUrl = bucket.signedUrl(KEY, { action: cloud.BucketSignedUrlAction.UPLOAD });
 
-  expect.equal(bucket.get(KEY), VALUE);
-}
+    // Upload file to private bucket using PUT presigned URL
+    util.shell("curl -X PUT -T \"{tempFile}\" \"{putSignedUrl}\"");
 
-test "signedUrl duration option is respected" {
-  let isExpiredTokenError = (output: str) => {
-    let target = util.env("WING_TARGET");
-    let var result = false;
+    expect.equal(bucket.get(KEY), VALUE);
+  }
 
-    if target == "tf-aws" {
-      result = output.contains("<Code>AccessDenied</Code><Message>Request has expired</Message>");
-    } else if target == "tf-gcp" {
-      result = output.contains("<Code>ExpiredToken</Code><Message>Invalid argument.</Message>");
-    }
-    
-    return result;
-  };
+  test "signedUrl duration option is respected" {
+    let isExpiredTokenError = (output: str) => {
+      let target = util.env("WING_TARGET");
+      let var result = false;
 
-  let KEY = "tempfile.txt";
-  let VALUE = "Hello, Wing!";
+      if target == "tf-aws" {
+        result = output.contains("<Code>AccessDenied</Code><Message>Request has expired</Message>");
+      } else if target == "tf-gcp" {
+        result = output.contains("<Code>ExpiredToken</Code><Message>Invalid argument.</Message>");
+      }
 
-  bucket.put(KEY, VALUE);
+      return result;
+    };
 
-  let getSignedUrl = bucket.signedUrl(KEY, { duration: 1s });
+    let KEY = "tempfile.txt";
+    let VALUE = "Hello, Wing!";
 
-  util.sleep(2s);
+    bucket.put(KEY, VALUE);
 
-  // Download file from private bucket using expired GET presigned URL
-  let output = util.shell("curl \"{getSignedUrl}\"");
+    let getSignedUrl = bucket.signedUrl(KEY, { duration: 1s });
 
-  expect.equal(isExpiredTokenError(output), true);
+    util.sleep(2s);
+
+    // Download file from private bucket using expired GET presigned URL
+    let output = util.shell("curl \"{getSignedUrl}\"");
+
+    expect.equal(isExpiredTokenError(output), true);
+  }
 }

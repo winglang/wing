@@ -152,6 +152,7 @@ export class Bucket extends Resource {
     BucketInflightMethods.TRY_GET,
     BucketInflightMethods.TRY_GET_JSON,
     BucketInflightMethods.TRY_DELETE,
+    BucketInflightMethods.SIGNED_URL,
     BucketInflightMethods.METADATA,
     BucketInflightMethods.COPY,
     BucketInflightMethods.RENAME,
