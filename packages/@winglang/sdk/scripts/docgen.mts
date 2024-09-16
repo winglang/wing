@@ -21,7 +21,7 @@ const getStdlibDocsDir = (name: string) => {
 };
 
 const docsFrontMatter = (name: string) => `---
-title: API reference
+title: API Reference
 id: api-reference
 description: Wing standard library API reference for the ${name} module
 keywords: [Wing sdk, sdk, Wing API Reference]
@@ -33,7 +33,6 @@ sidebar_position: 100
 `;
 
 const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
-const UNDOCUMENTED_EX_FILES = ["index"];
 const UNDOCUMENTED_STD_FILES = [
   "README",
   "index",
