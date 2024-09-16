@@ -137,7 +137,7 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "~5.3.39",
+  jsiiVersion: "~5.5.4",
 });
 project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
 project.deps.removeDependency("ts-node");

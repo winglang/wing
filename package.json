@@ -33,7 +33,7 @@
       "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
       "mime@3.0.0": "patches/mime@3.0.0.patch",
       "protobufjs@7.2.5": "patches/protobufjs@7.2.5.patch",
-      "jsii@5.3.39": "patches/jsii@5.3.39.patch"
+      "jsii@5.5.4": "patches/jsii@5.5.4.patch"
     }
   }
 }

@@ -9,9 +9,9 @@ overrides:
   axios@>=0.8.1 <0.28.0: '>=0.28.0'
 
 patchedDependencies:
-  jsii@5.3.39:
-    hash: wolfkkypbs5h5o2e2c4c7vi7xu
-    path: patches/jsii@5.3.39.patch
+  jsii@5.5.4:
+    hash: in545kl6dgh5zsq3xp2uirvjzq
+    path: patches/jsii@5.5.4.patch
   mime@3.0.0:
     hash: 2he2uszztbibyal6zfzmv2a2oa
     path: patches/mime@3.0.0.patch
@@ -198,8 +198,8 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.57.0)(prettier@2.8.8)
       jsii:
-        specifier: ~5.3.39
-        version: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
+        specifier: ~5.5.4
+        version: 5.5.4(patch_hash=in545kl6dgh5zsq3xp2uirvjzq)
       prettier:
         specifier: ^2.8.8
         version: 2.8.8
@@ -246,8 +246,8 @@ importers:
         specifier: 3.4.344
         version: 3.4.344
       jsii:
-        specifier: ~5.3.39
-        version: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
+        specifier: ~5.5.4
+        version: 5.5.4(patch_hash=in545kl6dgh5zsq3xp2uirvjzq)
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -489,8 +489,8 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0
       jsii:
-        specifier: ~5.3.39
-        version: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
+        specifier: ~5.5.4
+        version: 5.5.4(patch_hash=in545kl6dgh5zsq3xp2uirvjzq)
       jsii-diff:
         specifier: ^1.100.0
         version: 1.100.0
@@ -598,8 +598,8 @@ importers:
   packages/jsii-fixture:
     devDependencies:
       jsii:
-        specifier: ~5.3.39
-        version: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
+        specifier: ~5.5.4
+        version: 5.5.4(patch_hash=in545kl6dgh5zsq3xp2uirvjzq)
 
   packages/ts-fixture:
     dependencies:
@@ -6611,6 +6611,14 @@ packages:
       semver: 7.6.3
     dev: true
 
+  /@jsii/check-node@1.103.1:
+    resolution: {integrity: sha512-Vi6ONm5WXEim98a2DJ6WMlrP/w5AGzXrrQBpGcfVV7cu86DPx1L0OAZnqzGAJE8ly0VfcSXkmxJ9LFcn3jylBQ==}
+    engines: {node: '>= 14.17.0'}
+    dependencies:
+      chalk: 4.1.2
+      semver: 7.6.3
+    dev: true
+
   /@jsii/check-node@1.95.0:
     resolution: {integrity: sha512-E5njkBk6X4WrQHtGeO0ed+cvkMxqinQZY83TJZ9RFEIwrndDfj7asMgWkRkYQRF05AlQXks+Eh8wza7ErIl85Q==}
     engines: {node: '>= 14.17.0'}
@@ -6631,6 +6639,13 @@ packages:
     engines: {node: '>= 14.17.0'}
     dependencies:
       ajv: 8.17.1
+
+  /@jsii/spec@1.103.1:
+    resolution: {integrity: sha512-14OGYM3DjEBjUOUaih+bwPgkhFnR8L9TSNSM0oE0L0hjWscTapvClqOgMDJ1ID52qkROCAgKl1d71Vmm4v0Buw==}
+    engines: {node: '>= 14.17.0'}
+    dependencies:
+      ajv: 8.17.1
+    dev: true
 
   /@juggle/resize-observer@3.4.0:
     resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
@@ -14275,7 +14290,7 @@ packages:
     dependencies:
       semver: 7.6.3
       shelljs: 0.8.5
-      typescript: 5.7.0-dev.20240904
+      typescript: 5.7.0-dev.20240916
     dev: true
 
   /dset@3.1.3:
@@ -17479,7 +17494,7 @@ packages:
       chalk: 4.1.2
       commonmark: 0.31.0
       fast-glob: 3.3.2
-      jsii: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
+      jsii: 5.3.39
       semver: 7.6.3
       semver-intersect: 1.5.0
       stream-json: 1.8.0
@@ -17496,7 +17511,7 @@ packages:
     hasBin: true
     dependencies:
       '@jsii/check-node': 1.101.0
-      '@jsii/spec': 1.101.0
+      '@jsii/spec': 1.103.1
       '@xmldom/xmldom': 0.8.10
       chalk: 4.1.2
       commonmark: 0.31.0
@@ -17517,7 +17532,7 @@ packages:
     hasBin: true
     dependencies:
       fs-extra: 9.1.0
-      jsii: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
+      jsii: 5.3.39
       jsii-pacmak: 1.100.0(jsii-rosetta@5.3.28)
       ncp: 2.0.0
       yargs: 15.4.1
@@ -17531,7 +17546,7 @@ packages:
     hasBin: true
     dependencies:
       fs-extra: 9.1.0
-      jsii: 5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu)
+      jsii: 5.3.39
       jsii-pacmak: 1.100.0(jsii-rosetta@5.4.25)
       ncp: 2.0.0
       yargs: 15.4.1
@@ -17584,7 +17599,7 @@ packages:
       - supports-color
     dev: true
 
-  /jsii@5.3.39(patch_hash=wolfkkypbs5h5o2e2c4c7vi7xu):
+  /jsii@5.3.39:
     resolution: {integrity: sha512-EzbS/3H73619BLJjjrVd6WKqNrKYYlTuNGa6yqJEyjqV4y8xMg/id8vP7rimE0CYzE75SfYCmIdPES1qz+wvQQ==}
     engines: {node: '>= 18.12.0'}
     hasBin: true
@@ -17605,7 +17620,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-    patched: true
 
   /jsii@5.4.26:
     resolution: {integrity: sha512-vb1k7wsVfgYysXagV6ASStC7I+uEFRttSxpVSlz3HTNaoQYgQwiShkpqhRLlzYw9Pl5jERs+457QTVSj7Ze+zg==}
@@ -17613,7 +17627,7 @@ packages:
     hasBin: true
     dependencies:
       '@jsii/check-node': 1.101.0
-      '@jsii/spec': 1.101.0
+      '@jsii/spec': 1.103.1
       case: 1.6.3
       chalk: 4.1.2
       downlevel-dts: 0.11.0
@@ -17628,6 +17642,29 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /jsii@5.5.4(patch_hash=in545kl6dgh5zsq3xp2uirvjzq):
+    resolution: {integrity: sha512-ftEKVacc0kLrxCJyCeVJ+C5JYpUY5GBpy4ckt1LgblYQWa1CDu+5qUn2MvD5k8AwnDp36Dm6iQKislhSTOxBkA==}
+    engines: {node: '>= 18.12.0'}
+    hasBin: true
+    dependencies:
+      '@jsii/check-node': 1.103.1
+      '@jsii/spec': 1.103.1
+      case: 1.6.3
+      chalk: 4.1.2
+      downlevel-dts: 0.11.0
+      fast-deep-equal: 3.1.3
+      log4js: 6.9.1
+      semver: 7.6.3
+      semver-intersect: 1.5.0
+      sort-json: 2.0.1
+      spdx-license-list: 6.9.0
+      typescript: 5.5.2
+      yargs: 17.7.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+    patched: true
 
   /json-bigint@1.0.0:
     resolution: {integrity: sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==}
@@ -22575,8 +22612,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.7.0-dev.20240904:
-    resolution: {integrity: sha512-iGi6VWFGOuxPvDfwfK1/8C172NWzC5gtC4G2dxqCQehrr86WTfFkc9aWucynaxZdwQNMqG1Iu83bmXD7CNHCmg==}
+  /typescript@5.7.0-dev.20240916:
+    resolution: {integrity: sha512-PvqtY2wVBTIlHc0+Vs3w3UNntEzSho0uNm56c8D3mFINC/WFcEyOszkwxjSKyqVwEv62zl6xg+p7Ilt3H6yOJA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
