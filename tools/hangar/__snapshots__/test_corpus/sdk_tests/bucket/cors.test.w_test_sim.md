@@ -2,12 +2,11 @@
 
 ## stdout.log
 ```log
-Error: Resource root/Default/Bucket does not support inflight operation signedUrl.
-It might not be implemented yet.
+pass ─ cors.test.wsim (no tests)
 
-Tests 1 unsupported (1)
+Tests 1 passed (1)
 Snapshots 1 skipped
-Test Files 1 unsupported (1)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 
