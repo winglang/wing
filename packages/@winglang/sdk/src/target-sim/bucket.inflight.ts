@@ -302,7 +302,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       message: `Signed URL (key=${key})`,
       activity: async () => {
         throw new Error(
-          `signedUrl is not implemented yet for sim (key=${key})`
+          `signedUrl is not implemented yet for the simulator (key=${key})`
         );
       },
     });
