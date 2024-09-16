@@ -7,6 +7,7 @@ import * as yaml from "yaml";
 import { InflightClient } from "../core";
 import { normalPath } from "../shared/misc";
 import { Datetime, Json } from "../std";
+import { Bytes } from "../std/bytes";
 
 /**
  * Custom settings for reading from a file
@@ -386,6 +387,30 @@ export class Util {
       return undefined;
     }
   }
+
+  /**
+   * Read the contents of the file as bytes.
+   * @param filepath The file path.
+   * @returns The bytes contained in the file.
+   */
+  public static readBytes(filepath: string): Bytes {
+    const buf = fs.readFileSync(filepath);
+    return Bytes._fromUtf8Array(buf);
+  }
+
+  /**
+   * If the file exists, read the contents of the file as bytes; otherwise, return `undefined`.
+   * @param filepath The file path.
+   * @returns The bytes contained in the file, `undefined` otherwise.
+   */
+  public static tryReadBytes(filepath: string): Bytes | undefined {
+    try {
+      return Util.readBytes(filepath);
+    } catch {
+      return undefined;
+    }
+  }
+
   /**
    * Writes data to a file, replacing the file if it already exists.
    * @param filepath The file path that needs to be written.
@@ -421,6 +446,21 @@ export class Util {
       yaml.stringify(o, { aliasDuplicateObjects: false })
     );
     fs.writeFileSync(filepath, contents.join("---\n"));
+  }
+
+  /**
+   * Write bytes to a file, replacing the file if it already exists.
+   * @param filepath The file path that needs to be written.
+   * @param data The bytes to write.
+   * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
+   * If a flag is not provided, it defaults to `"w"`.
+   */
+  public static writeBytes(
+    filepath: string,
+    data: Bytes,
+    options?: WriteFileOptions
+  ): void {
+    fs.writeFileSync(filepath, data._data, options);
   }
 
   /**

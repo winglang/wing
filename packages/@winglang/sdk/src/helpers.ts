@@ -7,6 +7,7 @@ import type { Construct } from "constructs";
 import { parse } from "dotenv";
 import { expand } from "dotenv-expand";
 import type { Resource } from "./std";
+import type { Bytes } from "./std/bytes";
 import type { Node } from "./std/node";
 // since we moved from node:18 to node:20 the deepStrictEqual doesn't work as expected.
 // https://github.com/winglang/wing/issues/4444
@@ -64,6 +65,10 @@ export function unwrap<T>(value: T): T | never {
 }
 
 export function lookup(obj: any, index: string | number): any {
+  if (isBytes(obj)) {
+    obj = obj._data;
+  }
+
   checkIndex(index);
 
   if (typeof index === "number") {
@@ -90,6 +95,10 @@ export function assign(
   kind: "=" | "+=" | "-=",
   value: any
 ) {
+  if (isBytes(obj)) {
+    obj = obj._data;
+  }
+
   checkIndex(index);
 
   if (typeof index === "number") {
@@ -126,7 +135,12 @@ function checkIndex(index: string | number) {
 }
 
 function checkArrayAccess(obj: any, index: number): number {
-  if (!Array.isArray(obj) && !Buffer.isBuffer(obj) && typeof obj !== "string") {
+  if (
+    !Array.isArray(obj) &&
+    !Buffer.isBuffer(obj) &&
+    !(obj instanceof Uint8Array) &&
+    typeof obj !== "string"
+  ) {
     throw new TypeError(
       "Index is a number but collection is not an array or string"
     );
@@ -140,6 +154,12 @@ function checkArrayAccess(obj: any, index: number): number {
     );
   }
   return index;
+}
+
+function isBytes(obj: any): obj is Bytes {
+  return (
+    typeof obj === "object" && obj !== null && obj._data instanceof Uint8Array
+  );
 }
 
 export function createExternRequire(dirname: string) {

@@ -111,6 +111,7 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 				| Type::Duration
 				| Type::Datetime
 				| Type::Regex
+				| Type::Bytes
 				| Type::Boolean
 				| Type::Void
 				| Type::Json(_)

@@ -10,8 +10,8 @@ use crate::{
 		Class, FunctionParameter, FunctionSignature, Interface, ResolveSource, Struct, SymbolKind, Type, TypeRef, Types,
 		CLASS_INIT_NAME,
 	},
-	CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DATETIME, WINGSDK_DURATION,
-	WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_REGEX, WINGSDK_RESOURCE,
+	CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, WINGSDK_ASSEMBLY_NAME, WINGSDK_BYTES, WINGSDK_DATETIME,
+	WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_REGEX, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use indexmap::IndexMap;
@@ -108,6 +108,8 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.datetime()
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_REGEX) {
 					self.wing_types.regex()
+				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_BYTES) {
+					self.wing_types.bytes()
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_JSON) {
 					self.wing_types.json()
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_MUT_JSON) {

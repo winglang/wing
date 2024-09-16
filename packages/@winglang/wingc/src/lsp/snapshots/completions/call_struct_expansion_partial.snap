@@ -56,6 +56,9 @@ source: packages/@winglang/wingc/src/lsp/completions.rs
 - label: bool
   kind: 14
   sortText: kl|zybool
+- label: bytes
+  kind: 14
+  sortText: kl|zybytes
 - label: datetime
   kind: 14
   sortText: kl|zydatetime

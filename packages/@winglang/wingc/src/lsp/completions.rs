@@ -25,7 +25,9 @@ use crate::{UTIL_CLASS_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE};
 
 use super::sync::check_utf8;
 
-const BUILTIN_TYPES: [&str; 8] = ["bool", "duration", "Json", "MutJson", "num", "str", "datetime", "regex"];
+const BUILTIN_TYPES: [&str; 9] = [
+	"bool", "duration", "Json", "MutJson", "num", "str", "datetime", "regex", "bytes",
+];
 const BUILTIN_GENERICS: [&str; 6] = ["Array", "Map", "MutArray", "MutMap", "MutSet", "Set"];
 
 #[no_mangle]
@@ -1131,6 +1133,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				| Type::Duration
 				| Type::Datetime
 				| Type::Regex
+				| Type::Bytes
 				| Type::Boolean
 				| Type::Void
 				| Type::Json(_)

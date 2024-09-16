@@ -49,6 +49,7 @@ where
 		| Type::Duration
 		| Type::Datetime
 		| Type::Regex
+		| Type::Bytes
 		| Type::Boolean
 		| Type::Void
 		| Type::Json(None)

@@ -2929,6 +2929,10 @@
         {
           "type": "STRING",
           "value": "regex"
+        },
+        {
+          "type": "STRING",
+          "value": "bytes"
         }
       ]
     },

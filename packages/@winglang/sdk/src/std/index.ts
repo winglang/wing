@@ -1,5 +1,6 @@
 export * from "./array";
 export * from "./bool";
+export * from "./bytes";
 export * from "./datetime";
 export * from "./duration";
 export * from "./generics";

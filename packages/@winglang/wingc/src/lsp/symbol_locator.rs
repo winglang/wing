@@ -142,6 +142,7 @@ impl<'a> SymbolLocator<'a> {
 			| Type::Duration
 			| Type::Datetime
 			| Type::Regex
+			| Type::Bytes
 			| Type::Boolean => {
 				if let Some((std_type, ..)) = self.types.get_std_class(&type_) {
 					if let Some(t) = std_type.as_type_ref() {

@@ -121,6 +121,7 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"duration",
 	"datetime",
 	"regex",
+	"bytes",
 	"bool",
 	"Json",
 	"MutJson",
@@ -2030,6 +2031,10 @@ impl<'s> Parser<'s> {
 				}),
 				"regex" => Ok(TypeAnnotation {
 					kind: TypeAnnotationKind::Regex,
+					span,
+				}),
+				"bytes" => Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Bytes,
 					span,
 				}),
 				"void" => Ok(TypeAnnotation {
