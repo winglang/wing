@@ -5,10 +5,6 @@ bring expect;
 
 let bucket = new cloud.Bucket();
 
-new cloud.Function(inflight () => {
-  bucket.signedUrl("key");
-});
-
 // TODO: signedUrl is not implemented for the simulator yet
 // https://github.com/winglang/wing/issues/1383
 if util.env("WING_TARGET") != "sim" {
