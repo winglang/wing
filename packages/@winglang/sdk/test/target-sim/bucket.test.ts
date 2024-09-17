@@ -953,7 +953,9 @@ test("signedUrl is implemented for the simulator", async () => {
   const formData = new FormData();
   formData.set("file", new Blob(["Hello, World!"], { type: "text/utf8" }));
 
-  const signedUrl = await client.signedUrl("key");
+  const signedUrl = await client.signedUrl("key", {
+    action: cloud.BucketSignedUrlAction.UPLOAD,
+  });
   const response = await fetch(signedUrl, {
     method: "PUT",
     body: formData,
