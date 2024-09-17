@@ -121,23 +121,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
       let fileInfo: FileInfo | undefined;
 
-      // Handle simple uploads.
-      if (!req.headers["content-type"]) {
-        const fileStream = fs.createWriteStream(filename);
-        req.pipe(fileStream);
-
-        fileStream.on("error", () => {
-          res.status(500).send("Failed to save the file.");
-        });
-
-        fileStream.on("finish", () => {
-          res.status(200).send();
-        });
-
-        return;
-      }
-      // Handle multipart uploads.
-      else {
+      if (req.header("content-type")?.startsWith("multipart/form-data")) {
         const bb = busboy({
           headers: req.headers,
         });
@@ -157,6 +141,19 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           });
         });
         req.pipe(bb);
+        return;
+      } else {
+        const fileStream = fs.createWriteStream(filename);
+        req.pipe(fileStream);
+
+        fileStream.on("error", () => {
+          res.status(500).send("Failed to save the file.");
+        });
+
+        fileStream.on("finish", () => {
+          res.status(200).send();
+        });
+
         return;
       }
     });
