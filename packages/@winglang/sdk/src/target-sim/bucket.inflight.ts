@@ -480,19 +480,24 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   }
 
   public async signedUrl(key: string, options?: BucketSignedUrlOptions) {
-    const url = new URL(key, this.url);
-    if (options?.action) {
-      url.searchParams.set("action", options.action);
-    }
-    if (options?.duration) {
-      // BUG: The `options?.duration` is supposed to be an instance of `Duration` but it is not. It's just
-      // a POJO with seconds, but TypeScript thinks otherwise.
-      url.searchParams.set(
-        "validUntil",
-        String(Datetime.utcNow().ms + options.duration.seconds * 1000)
-      );
-    }
-    return url.toString();
+    return this.context.withTrace({
+      message: `Signed URL (key=${key}).`,
+      activity: async () => {
+        const url = new URL(key, this.url);
+        if (options?.action) {
+          url.searchParams.set("action", options.action);
+        }
+        if (options?.duration) {
+          // BUG: The `options?.duration` is supposed to be an instance of `Duration` but it is not. It's just
+          // a POJO with seconds, but TypeScript thinks otherwise.
+          url.searchParams.set(
+            "validUntil",
+            String(Datetime.utcNow().ms + options.duration.seconds * 1000)
+          );
+        }
+        return url.toString();
+      },
+    });
   }
 
   /**
