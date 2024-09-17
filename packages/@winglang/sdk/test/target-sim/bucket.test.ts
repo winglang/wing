@@ -941,7 +941,7 @@ test("bucket ignores corrupted state file", async () => {
   expect(files).toEqual(["b"]);
 });
 
-test("signedUrl is implemented for the simulator", async () => {
+test("signedUrl accepts simple uploads", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
@@ -950,20 +950,47 @@ test("signedUrl is implemented for the simulator", async () => {
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
   // WHEN
-  const formData = new FormData();
-  formData.set("file", new Blob(["Hello, World!"], { type: "text/utf8" }));
-
   const signedUrl = await client.signedUrl("key", {
     action: cloud.BucketSignedUrlAction.UPLOAD,
   });
   const response = await fetch(signedUrl, {
     method: "PUT",
-    body: formData,
+    body: new Blob(["Hello, World!"], { type: "text/utf8" }),
   });
 
   // THEN
   expect(response.ok).toBe(true);
   await expect(client.get("key")).resolves.toBe("Hello, World!");
+
+  await s.stop();
+});
+
+test("signedUrl doesn't accept multipart uploads yet", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  // WHEN
+  const signedUrl = await client.signedUrl("key", {
+    action: cloud.BucketSignedUrlAction.UPLOAD,
+  });
+  const response = await fetch(signedUrl, {
+    method: "PUT",
+    body: (() => {
+      const formData = new FormData();
+      formData.set("file", new Blob(["Hello, World!"], { type: "text/utf8" }));
+      return formData;
+    })(),
+  });
+
+  // THEN
+  expect(response.ok).toBe(false);
+  await expect(response.text()).resolves.toBe(
+    "Multipart uploads not supported"
+  );
 
   await s.stop();
 });
