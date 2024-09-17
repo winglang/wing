@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import { Server } from "http";
-import { AddressInfo, Socket } from "net";
 import { join } from "path";
 import express from "express";
 import { IEventPublisher } from "./event-mapping";
@@ -10,7 +9,7 @@ import {
   ApiRoute,
   EventSubscription,
 } from "./schema-resources";
-import { exists } from "./util";
+import { exists, isPortAvailable, listenExpress } from "./util";
 import {
   API_FQN,
   ApiRequest,
@@ -27,8 +26,6 @@ import {
   UpdatePlan,
 } from "../simulator/simulator";
 import { LogLevel, Json, TraceType } from "../std";
-
-const LOCALHOST_ADDRESS = "127.0.0.1";
 
 const STATE_FILENAME = "state.json";
 
@@ -114,21 +111,10 @@ export class Api
       }
     }
 
-    // `server.address()` returns `null` until the server is listening
-    // on a port. We use a promise to wait for the server to start
-    // listening before returning the URL.
-    const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
-      this.server = this.app.listen(lastPort ?? 0, LOCALHOST_ADDRESS, () => {
-        const addr = this.server?.address();
-        if (addr && typeof addr === "object" && (addr as AddressInfo).port) {
-          resolve(addr);
-        } else {
-          reject(new Error("No address found"));
-        }
-      });
-    });
-    this.port = addrInfo.port;
-    this.url = `http://${addrInfo.address}:${addrInfo.port}`;
+    const { server, address } = await listenExpress(this.app, lastPort);
+    this.server = server;
+    this.port = address.port;
+    this.url = `http://${address.address}:${address.port}`;
 
     this.addTrace(`Server listening on ${this.url}`, LogLevel.VERBOSE);
 
@@ -342,27 +328,4 @@ function asyncMiddleware(
   ) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };
-}
-
-async function isPortAvailable(port: number): Promise<boolean> {
-  return new Promise((resolve, _reject) => {
-    const s = new Socket();
-    s.once("error", (err) => {
-      s.destroy();
-      if ((err as any).code !== "ECONNREFUSED") {
-        resolve(false);
-      } else {
-        // connection refused means the port is not used
-        resolve(true);
-      }
-    });
-
-    s.once("connect", () => {
-      s.destroy();
-      // connection successful means the port is used
-      resolve(false);
-    });
-
-    s.connect(port, LOCALHOST_ADDRESS);
-  });
 }

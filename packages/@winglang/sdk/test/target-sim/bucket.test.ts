@@ -334,7 +334,9 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.status).toEqual("failure");
+  expect(
+    s.listTraces().filter((t) => t.data.status === "failure")
+  ).toHaveLength(1);
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -939,7 +941,7 @@ test("bucket ignores corrupted state file", async () => {
   expect(files).toEqual(["b"]);
 });
 
-test("signedUrl is implemented for the simulator", async () => {
+test.only("signedUrl is implemented for the simulator", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");

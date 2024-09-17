@@ -1,14 +1,13 @@
 import * as crypto from "crypto";
 import * as fs from "fs";
 import { Server } from "http";
-import { AddressInfo, Socket } from "net";
 import { dirname, join } from "path";
 import { pathToFileURL } from "url";
 import busboy, { FileInfo } from "busboy";
 import express from "express";
 import mime from "mime-types";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
-import { exists } from "./util";
+import { exists, isPortAvailable, listenExpress } from "./util";
 import {
   ITopicClient,
   BucketSignedUrlOptions,
@@ -32,8 +31,6 @@ import {
 import { Datetime, Json, LogLevel, TraceType } from "../std";
 
 export const METADATA_FILENAME = "metadata.json";
-
-const LOCALHOST_ADDRESS = "127.0.0.1";
 
 const STATE_FILENAME = "state.json";
 
@@ -66,6 +63,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     this._metadata = new Map();
 
     this.app = express();
+
     // Enable cors for all requests.
     this.app.use((req, res, next) => {
       const corsHeaders: CorsHeaders = {
@@ -100,6 +98,8 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         next();
       }
     });
+
+    // Handle signed URL uploads.
     this.app.put("*", (req, res) => {
       const action = req.query.action;
       if (action === BucketSignedUrlAction.DOWNLOAD) {
@@ -114,7 +114,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         }
       }
 
-      const key = req.path;
+      const key = req.path.slice(1); // remove leading slash
       const hash = this.hashKey(key);
       const filename = join(this._fileDir, hash);
 
@@ -130,13 +130,21 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         file.pipe(fs.createWriteStream(filename));
       });
       bb.on("close", () => {
-        void this.updateMetadataAndNotify(key, actionType, fileInfo?.mimeType);
-        res.writeHead(200, { Connection: "close" });
-        res.end();
+        console.log("file uploaded", filename, hash);
+        void this.updateMetadataAndNotify(
+          key,
+          actionType,
+          fileInfo?.mimeType
+        ).then(() => {
+          res.writeHead(200, { Connection: "close" });
+          res.end();
+        });
       });
       req.pipe(bb);
       return;
     });
+
+    // Handle signed URL downloads.
     this.app.get("*", (req, res) => {
       const action = req.query.action;
       if (action === BucketSignedUrlAction.UPLOAD) {
@@ -151,7 +159,8 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         }
       }
 
-      const hash = this.hashKey(req.path);
+      const key = req.path.slice(1); // remove leading slash
+      const hash = this.hashKey(key);
       const filename = join(this._fileDir, hash);
       return res.download(filename);
     });
@@ -212,21 +221,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       }
     }
 
-    // `server.address()` returns `null` until the server is listening
-    // on a port. We use a promise to wait for the server to start
-    // listening before returning the URL.
-    const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
-      this.server = this.app.listen(lastPort ?? 0, LOCALHOST_ADDRESS, () => {
-        const addr = this.server?.address();
-        if (addr && typeof addr === "object" && (addr as AddressInfo).port) {
-          resolve(addr);
-        } else {
-          reject(new Error("No address found"));
-        }
-      });
-    });
-    this.port = addrInfo.port;
-    this.url = `http://${addrInfo.address}:${addrInfo.port}`;
+    const { server, address } = await listenExpress(this.app, lastPort);
+    this.server = server;
+    this.port = address.port;
+    this.url = `http://${address.address}:${address.port}`;
 
     this.addTrace(`Server listening on ${this.url}`, LogLevel.VERBOSE);
 
@@ -598,27 +596,4 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
   }
-}
-
-async function isPortAvailable(port: number): Promise<boolean> {
-  return new Promise((resolve, _reject) => {
-    const s = new Socket();
-    s.once("error", (err) => {
-      s.destroy();
-      if ((err as any).code !== "ECONNREFUSED") {
-        resolve(false);
-      } else {
-        // connection refused means the port is not used
-        resolve(true);
-      }
-    });
-
-    s.once("connect", () => {
-      s.destroy();
-      // connection successful means the port is used
-      resolve(false);
-    });
-
-    s.connect(port, LOCALHOST_ADDRESS);
-  });
 }
