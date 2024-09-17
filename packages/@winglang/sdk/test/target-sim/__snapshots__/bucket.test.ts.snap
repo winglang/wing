@@ -5,8 +5,10 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "root/my_bucket/OnCreate started",
   "root/my_bucket/OnUpdate started",
   "root/my_bucket/OnDelete started",
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
+  "Server listening on http://127.0.0.1:<port>",
   "root/log_bucket started",
   "root/my_bucket/OnCreate/OnMessage0 started",
   "root/my_bucket/OnCreate/Policy started",
@@ -40,6 +42,7 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "I am done",
   "Get (key=a).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
   "root/my_bucket/OnCreate/Policy stopped",
   "root/my_bucket/OnCreate/TopicEventMapping0 stopped",
@@ -54,6 +57,7 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "root/my_bucket/OnUpdate/OnMessage0 stopped",
   "root/my_bucket/OnDelete/OnMessage0 stopped",
   "root/log_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/log_bucket stopped",
 ]
 `;
@@ -61,12 +65,14 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
 exports[`can add file in preflight 1`] = `
 [
   "Adding object from preflight (key=test.txt).",
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Get (key=test.txt).",
   "Get (key=test.txt).",
   "List (prefix=null).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
@@ -224,12 +230,14 @@ exports[`can add file in preflight 2`] = `
 exports[`can add object in preflight 1`] = `
 [
   "Adding object from preflight (key=greeting.txt).",
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Get (key=greeting.txt).",
   "Get (key=greeting.txt).",
   "List (prefix=null).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
@@ -534,10 +542,12 @@ exports[`create a bucket 1`] = `
 
 exports[`get invalid object throws an error 1`] = `
 [
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Error: Object does not exist (key=unknown.txt). (Get (key=unknown.txt).)",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
@@ -692,6 +702,7 @@ exports[`get invalid object throws an error 2`] = `
 
 exports[`list respects prefixes 1`] = `
 [
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Put (key=path/dir1/file1.txt).",
@@ -701,12 +712,14 @@ exports[`list respects prefixes 1`] = `
   "List (prefix=path/dir1).",
   "List (prefix=path/dir2).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
 
 exports[`objects can have keys that look like directories 1`] = `
 [
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Put (key=foo).",
@@ -721,12 +734,14 @@ exports[`objects can have keys that look like directories 1`] = `
   "List (prefix=foo/bar/).",
   "List (prefix=foo/bar/baz).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
 
 exports[`put and get metadata of objects from bucket 1`] = `
 [
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Put (key=file1.main.w).",
@@ -736,23 +751,27 @@ exports[`put and get metadata of objects from bucket 1`] = `
   "Metadata (key=file2.txt).",
   "Metadata (key=file3.txt).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
 
 exports[`put and get object from bucket 1`] = `
 [
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Put (key=greeting.txt).",
   "Get (key=greeting.txt).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
 
 exports[`put multiple json objects and list all from bucket 1`] = `
 [
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Put Json (key=greeting1.json).",
@@ -760,12 +779,14 @@ exports[`put multiple json objects and list all from bucket 1`] = `
   "Put Json (key=greeting3.json).",
   "List (prefix=null).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
 
 exports[`put multiple objects and list all from bucket 1`] = `
 [
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Put (key=greeting1.txt).",
@@ -773,28 +794,33 @@ exports[`put multiple objects and list all from bucket 1`] = `
   "Put (key=greeting3.txt).",
   "List (prefix=null).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
 
 exports[`remove object from a bucket 1`] = `
 [
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Put (key=unknown.txt).",
   "Delete (key=unknown.txt).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
 
 exports[`remove object from a bucket with mustExist as option 1`] = `
 [
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "Put (key=unknown.txt).",
   "Delete (key=unknown.txt).",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
 ]
 `;
@@ -802,6 +828,7 @@ exports[`remove object from a bucket with mustExist as option 1`] = `
 exports[`removing a key will call onDelete method 1`] = `
 [
   "root/my_bucket/OnDelete started",
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "root/my_bucket/OnDelete/OnMessage0 started",
@@ -814,6 +841,7 @@ exports[`removing a key will call onDelete method 1`] = `
   "Delete (key=unknown.txt).",
   "Received unknown.txt",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
   "root/my_bucket/OnDelete/Policy stopped",
   "root/my_bucket/OnDelete/TopicEventMapping0 stopped",
@@ -825,6 +853,7 @@ exports[`removing a key will call onDelete method 1`] = `
 exports[`update an object in bucket 1`] = `
 [
   "root/my_bucket/OnCreate started",
+  "Server listening on http://127.0.0.1:<port>",
   "root/my_bucket started",
   "root/my_bucket/Policy started",
   "root/my_bucket/OnCreate/OnMessage0 started",
@@ -837,6 +866,7 @@ exports[`update an object in bucket 1`] = `
   "Put (key=1.txt).",
   "I am done",
   "root/my_bucket/Policy stopped",
+  "Closing server on http://127.0.0.1:<port>",
   "root/my_bucket stopped",
   "root/my_bucket/OnCreate/Policy stopped",
   "root/my_bucket/OnCreate/TopicEventMapping0 stopped",

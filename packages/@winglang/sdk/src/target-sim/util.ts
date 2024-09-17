@@ -1,6 +1,9 @@
 import { access, constants } from "fs";
+import { Server } from "http";
+import { AddressInfo, Socket } from "net";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
+import type { Application } from "express";
 import { isSimulatorInflightHost } from "./resource";
 import { simulatorHandleToken } from "./tokens";
 import { Duration, IInflightHost, Resource } from "../std";
@@ -170,4 +173,52 @@ export function convertDurationToCronExpression(dur: Duration): string {
   // Generate cron string based on the duration
   const cronString = `${minute} ${hour} ${dayInMonth} ${month} ${dayOfWeek}`;
   return cronString;
+}
+
+const LOCALHOST_ADDRESS = "127.0.0.1";
+
+export async function isPortAvailable(port: number): Promise<boolean> {
+  return new Promise((resolve, _reject) => {
+    const s = new Socket();
+    s.once("error", (err) => {
+      s.destroy();
+      if ((err as any).code !== "ECONNREFUSED") {
+        resolve(false);
+      } else {
+        // connection refused means the port is not used
+        resolve(true);
+      }
+    });
+
+    s.once("connect", () => {
+      s.destroy();
+      // connection successful means the port is used
+      resolve(false);
+    });
+
+    s.connect(port, LOCALHOST_ADDRESS);
+  });
+}
+
+export async function listenExpress(
+  app: Application,
+  port?: number
+): Promise<{ server: Server; address: AddressInfo }> {
+  // `server.address()` returns `null` until the server is listening
+  // on a port. We use a promise to wait for the server to start
+  // listening before returning the URL.
+  return new Promise((resolve, reject) => {
+    const server = app.listen(port ?? 0, LOCALHOST_ADDRESS, () => {
+      const address = server.address();
+      if (
+        address &&
+        typeof address === "object" &&
+        (address as AddressInfo).port
+      ) {
+        resolve({ server, address });
+      } else {
+        reject(new Error("No address found"));
+      }
+    });
+  });
 }

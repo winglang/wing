@@ -20,6 +20,7 @@ test("create a bucket", async () => {
   expect(s.getResourceConfig("/my_bucket")).toEqual({
     attrs: {
       handle: expect.any(String),
+      url: expect.any(String),
     },
     path: "root/my_bucket",
     addr: expect.any(String),
@@ -333,7 +334,9 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.status).toEqual("failure");
+  expect(
+    s.listTraces().filter((t) => t.data.status === "failure")
+  ).toHaveLength(1);
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -938,7 +941,7 @@ test("bucket ignores corrupted state file", async () => {
   expect(files).toEqual(["b"]);
 });
 
-test("signedUrl is not implemented for the simulator", async () => {
+test("signedUrl accepts simple uploads", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
@@ -946,10 +949,49 @@ test("signedUrl is not implemented for the simulator", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
+  // WHEN
+  const signedUrl = await client.signedUrl("key", {
+    action: cloud.BucketSignedUrlAction.UPLOAD,
+  });
+  const response = await fetch(signedUrl, {
+    method: "PUT",
+    body: new Blob(["Hello, World!"], { type: "text/utf8" }),
+  });
+
   // THEN
-  await expect(() => client.signedUrl("key")).rejects.toThrowError(
-    "signedUrl is not implemented yet"
+  expect(response.ok).toBe(true);
+  await expect(client.get("key")).resolves.toBe("Hello, World!");
+
+  await s.stop();
+});
+
+test("signedUrl doesn't accept multipart uploads yet", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  // WHEN
+  const signedUrl = await client.signedUrl("key", {
+    action: cloud.BucketSignedUrlAction.UPLOAD,
+  });
+  const response = await fetch(signedUrl, {
+    method: "PUT",
+    body: (() => {
+      const formData = new FormData();
+      formData.set("file", new Blob(["Hello, World!"], { type: "text/utf8" }));
+      return formData;
+    })(),
+  });
+
+  // THEN
+  expect(response.ok).toBe(false);
+  await expect(response.text()).resolves.toBe(
+    "Multipart uploads not supported"
   );
+
   await s.stop();
 });
 
