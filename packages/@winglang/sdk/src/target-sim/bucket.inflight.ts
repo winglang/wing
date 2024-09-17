@@ -106,6 +106,14 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         return res.status(403).send("Operation not allowed");
       }
 
+      const validUntil = req.query.validUntil?.toString();
+      if (validUntil) {
+        const validUntilMs = parseInt(validUntil) * 1000;
+        if (Date.now() > validUntilMs) {
+          return res.status(403).send("Signed URL has expired");
+        }
+      }
+
       const key = req.path;
       const hash = this.hashKey(key);
       const filename = join(this._fileDir, hash);
@@ -122,21 +130,9 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         file.pipe(fs.createWriteStream(filename));
       });
       bb.on("close", () => {
-        void (async () => {
-          const filestat = await fs.promises.stat(filename);
-          const determinedContentType =
-            fileInfo?.mimeType ?? "application/octet-stream";
-
-          this._metadata.set(key, {
-            size: filestat.size,
-            lastModified: Datetime.fromDate(filestat.mtime),
-            contentType: determinedContentType,
-          });
-
-          await this.notifyListeners(actionType, key);
-        })();
+        void this.updateMetadataAndNotify(key, actionType, fileInfo?.mimeType);
         res.writeHead(200, { Connection: "close" });
-        res.end(`That's all folks!`);
+        res.end();
       });
       req.pipe(bb);
       return;
@@ -145,6 +141,14 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       const action = req.query.action;
       if (action === BucketSignedUrlAction.UPLOAD) {
         return res.status(403).send("Operation not allowed");
+      }
+
+      const validUntil = req.query.validUntil?.toString();
+      if (validUntil) {
+        const validUntilMs = parseInt(validUntil) * 1000;
+        if (Date.now() > validUntilMs) {
+          return res.status(403).send("Signed URL has expired");
+        }
       }
 
       const hash = this.hashKey(req.path);
@@ -481,9 +485,11 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       url.searchParams.set("action", options.action);
     }
     if (options?.duration) {
+      // BUG: The `options?.duration` is supposed to be an instance of `Duration` but it is not. It's just
+      // a POJO with seconds, but TypeScript thinks otherwise.
       url.searchParams.set(
         "validUntil",
-        String(Datetime.utcNow().sec + options?.duration?.seconds)
+        String(Datetime.utcNow().ms + options.duration.seconds * 1000)
       );
     }
     return url.toString();
@@ -551,10 +557,19 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     await fs.promises.mkdir(dirName, { recursive: true });
     await fs.promises.writeFile(filename, value);
 
+    await this.updateMetadataAndNotify(key, actionType, contentType);
+  }
+
+  private async updateMetadataAndNotify(
+    key: string,
+    actionType: BucketEventType,
+    contentType?: string
+  ): Promise<void> {
+    const hash = this.hashKey(key);
+    const filename = join(this._fileDir, hash);
     const filestat = await fs.promises.stat(filename);
     const determinedContentType =
-      (contentType ?? mime.lookup(key)) || "application/octet-stream";
-
+      contentType ?? (mime.lookup(key) || "application/octet-stream");
     this._metadata.set(key, {
       size: filestat.size,
       lastModified: Datetime.fromDate(filestat.mtime),

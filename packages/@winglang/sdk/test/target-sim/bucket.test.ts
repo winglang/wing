@@ -938,7 +938,7 @@ test("bucket ignores corrupted state file", async () => {
   expect(files).toEqual(["b"]);
 });
 
-test("signedUrl is not implemented for the simulator", async () => {
+test("signedUrl is implemented for the simulator", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
@@ -947,8 +947,8 @@ test("signedUrl is not implemented for the simulator", async () => {
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
   // THEN
-  await expect(() => client.signedUrl("key")).rejects.toThrowError(
-    "signedUrl is not implemented yet"
+  await expect(() => client.signedUrl("key")).resolves.toMatch(
+    /^http:\/\/localhost:\d+\//i
   );
   await s.stop();
 });
