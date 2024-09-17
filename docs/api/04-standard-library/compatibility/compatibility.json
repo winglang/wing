@@ -366,7 +366,7 @@
     },
     "signedUrl": {
       "sim": {
-        "implemented": false,
+        "implemented": true,
         "issue": 1383
       },
       "tf-aws": {
