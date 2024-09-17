@@ -77,6 +77,7 @@ const project = new cdk.JsiiProject({
     "protobufjs@7.2.5",
     // simulator dependencies
     "express",
+    "busboy",
     "uuid",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
     "nanoid@^3.3.7",
@@ -114,6 +115,7 @@ const project = new cdk.JsiiProject({
     "eslint-plugin-sort-exports",
     "fs-extra",
     "vitest",
+    "@types/busboy",
     "@types/uuid",
     "nanoid", // for ESM import test in target-sim/function.test.ts
     "chalk",

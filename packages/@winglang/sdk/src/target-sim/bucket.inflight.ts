@@ -3,7 +3,8 @@ import * as fs from "fs";
 import { Server } from "http";
 import { AddressInfo, Socket } from "net";
 import { dirname, join } from "path";
-import * as url from "url";
+import { pathToFileURL } from "url";
+import busboy, { FileInfo } from "busboy";
 import express from "express";
 import mime from "mime-types";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
@@ -19,6 +20,8 @@ import {
   BucketGetOptions,
   BucketTryGetOptions,
   BUCKET_FQN,
+  BucketSignedUrlAction,
+  CorsHeaders,
 } from "../cloud";
 import { deserialize, serialize } from "../simulator/serialization";
 import {
@@ -63,6 +66,91 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     this._metadata = new Map();
 
     this.app = express();
+    // Enable cors for all requests.
+    this.app.use((req, res, next) => {
+      const corsHeaders: CorsHeaders = {
+        defaultResponse: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, PUT",
+          "Access-Control-Allow-Headers": "*",
+        },
+        optionsResponse: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, PUT",
+          "Access-Control-Allow-Headers": "*",
+          "Access-Control-Max-Age": "86400",
+        },
+      };
+      const method =
+        req.method && req.method.toUpperCase && req.method.toUpperCase();
+
+      if (method === "OPTIONS") {
+        for (const [key, value] of Object.entries(
+          corsHeaders.optionsResponse
+        )) {
+          res.setHeader(key, value);
+        }
+        res.status(204).send();
+      } else {
+        for (const [key, value] of Object.entries(
+          corsHeaders.defaultResponse
+        )) {
+          res.setHeader(key, value);
+        }
+        next();
+      }
+    });
+    this.app.put("*", (req, res) => {
+      const action = req.query.action;
+      if (action === BucketSignedUrlAction.DOWNLOAD) {
+        return res.status(403).send("Operation not allowed");
+      }
+
+      const key = req.path;
+      const hash = this.hashKey(key);
+      const filename = join(this._fileDir, hash);
+
+      const actionType: BucketEventType = this._metadata.has(key)
+        ? BucketEventType.UPDATE
+        : BucketEventType.CREATE;
+
+      let fileInfo: FileInfo | undefined;
+
+      const bb = busboy({ headers: req.headers });
+      bb.on("file", (_name, file, _info) => {
+        fileInfo = _info;
+        file.pipe(fs.createWriteStream(filename));
+      });
+      bb.on("close", () => {
+        void (async () => {
+          const filestat = await fs.promises.stat(filename);
+          const determinedContentType =
+            fileInfo?.mimeType ?? "application/octet-stream";
+
+          this._metadata.set(key, {
+            size: filestat.size,
+            lastModified: Datetime.fromDate(filestat.mtime),
+            contentType: determinedContentType,
+          });
+
+          await this.notifyListeners(actionType, key);
+        })();
+        res.writeHead(200, { Connection: "close" });
+        res.end(`That's all folks!`);
+      });
+      req.pipe(bb);
+      return;
+    });
+    this.app.get("*", (req, res) => {
+      const action = req.query.action;
+      if (action === BucketSignedUrlAction.UPLOAD) {
+        return res.status(403).send("Operation not allowed");
+      }
+
+      const hash = this.hashKey(req.path);
+      const filename = join(this._fileDir, hash);
+      return res.download(filename);
+    });
   }
 
   private get context(): ISimulatorContext {
@@ -143,7 +231,20 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     };
   }
 
-  public async cleanup(): Promise<void> {}
+  public async cleanup(): Promise<void> {
+    this.addTrace(`Closing server on ${this.url}`, LogLevel.VERBOSE);
+
+    return new Promise((resolve, reject) => {
+      this.server?.close((err) => {
+        if (err) {
+          return reject(err);
+        }
+
+        this.server?.closeAllConnections();
+        return resolve();
+      });
+    });
+  }
 
   public async plan() {
     return UpdatePlan.AUTO;
@@ -369,23 +470,23 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           );
         }
 
-        return url.pathToFileURL(filePath).href;
+        return pathToFileURL(filePath).href;
       },
     });
   }
 
   public async signedUrl(key: string, options?: BucketSignedUrlOptions) {
-    const params = new URLSearchParams();
+    const url = new URL(key, this.url);
     if (options?.action) {
-      params.set("action", options.action);
+      url.searchParams.set("action", options.action);
     }
     if (options?.duration) {
-      params.set(
+      url.searchParams.set(
         "validUntil",
         String(Datetime.utcNow().sec + options?.duration?.seconds)
       );
     }
-    return `${this.url}/${key}?${params.toString()}`;
+    return url.toString();
   }
 
   /**
