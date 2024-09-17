@@ -102,16 +102,13 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     // Handle signed URL uploads.
     this.app.put("*", (req, res) => {
       const action = req.query.action;
-      if (action === BucketSignedUrlAction.DOWNLOAD) {
+      if (action !== BucketSignedUrlAction.UPLOAD) {
         return res.status(403).send("Operation not allowed");
       }
 
       const validUntil = req.query.validUntil?.toString();
-      if (validUntil) {
-        const validUntilMs = parseInt(validUntil) * 1000;
-        if (Date.now() > validUntilMs) {
-          return res.status(403).send("Signed URL has expired");
-        }
+      if (!validUntil || Date.now() > parseInt(validUntil)) {
+        return res.status(403).send("Signed URL has expired");
       }
 
       const key = req.path.slice(1); // remove leading slash
@@ -124,39 +121,56 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
       let fileInfo: FileInfo | undefined;
 
-      const bb = busboy({ headers: req.headers });
-      bb.on("file", (_name, file, _info) => {
-        fileInfo = _info;
-        file.pipe(fs.createWriteStream(filename));
-      });
-      bb.on("close", () => {
-        console.log("file uploaded", filename, hash);
-        void this.updateMetadataAndNotify(
-          key,
-          actionType,
-          fileInfo?.mimeType
-        ).then(() => {
-          res.writeHead(200, { Connection: "close" });
-          res.end();
+      // Handle simple uploads.
+      if (!req.headers["content-type"]) {
+        const fileStream = fs.createWriteStream(filename);
+        req.pipe(fileStream);
+
+        fileStream.on("error", () => {
+          res.status(500).send("Failed to save the file.");
         });
-      });
-      req.pipe(bb);
-      return;
+
+        fileStream.on("finish", () => {
+          res.status(200).send();
+        });
+
+        return;
+      }
+      // Handle multipart uploads.
+      else {
+        const bb = busboy({
+          headers: req.headers,
+        });
+        bb.on("file", (_name, file, _info) => {
+          fileInfo = _info;
+          file.pipe(fs.createWriteStream(filename));
+        });
+        bb.on("close", () => {
+          console.log("file uploaded", filename, hash);
+          void this.updateMetadataAndNotify(
+            key,
+            actionType,
+            fileInfo?.mimeType
+          ).then(() => {
+            res.writeHead(200, { Connection: "close" });
+            res.end();
+          });
+        });
+        req.pipe(bb);
+        return;
+      }
     });
 
     // Handle signed URL downloads.
     this.app.get("*", (req, res) => {
       const action = req.query.action;
-      if (action === BucketSignedUrlAction.UPLOAD) {
+      if (action !== BucketSignedUrlAction.DOWNLOAD) {
         return res.status(403).send("Operation not allowed");
       }
 
       const validUntil = req.query.validUntil?.toString();
-      if (validUntil) {
-        const validUntilMs = parseInt(validUntil) * 1000;
-        if (Date.now() > validUntilMs) {
-          return res.status(403).send("Signed URL has expired");
-        }
+      if (!validUntil || Date.now() > parseInt(validUntil)) {
+        return res.status(403).send("Signed URL has expired");
       }
 
       const key = req.path.slice(1); // remove leading slash
@@ -481,18 +495,26 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Signed URL (key=${key}).`,
       activity: async () => {
-        const url = new URL(key, this.url);
-        if (options?.action) {
-          url.searchParams.set("action", options.action);
-        }
-        if (options?.duration) {
-          // BUG: The `options?.duration` is supposed to be an instance of `Duration` but it is not. It's just
-          // a POJO with seconds, but TypeScript thinks otherwise.
-          url.searchParams.set(
-            "validUntil",
-            String(Datetime.utcNow().ms + options.duration.seconds * 1000)
+        const action = options?.action ?? BucketSignedUrlAction.DOWNLOAD;
+        // BUG: The `options?.duration` is supposed to be an instance of `Duration` but it is not. It's just
+        // a POJO with seconds, but TypeScript thinks otherwise.
+        const duration = options?.duration?.seconds ?? 900;
+
+        if (
+          action === BucketSignedUrlAction.DOWNLOAD &&
+          !(await this.exists(key))
+        ) {
+          throw new Error(
+            `Cannot provide signed url for a non-existent key (key=${key})`
           );
         }
+
+        const url = new URL(key, this.url);
+        url.searchParams.set("action", action);
+        url.searchParams.set(
+          "validUntil",
+          String(Date.now() + duration * 1000)
+        );
         return url.toString();
       },
     });
