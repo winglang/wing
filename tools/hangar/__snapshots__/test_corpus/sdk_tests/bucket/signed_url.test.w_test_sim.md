@@ -2,9 +2,13 @@
 
 ## stdout.log
 ```log
-pass ─ signed_url.test.wsim (no tests)
+pass ─ signed_url.test.wsim » root/Default/test:signedUrl duration option is respected
+pass ─ signed_url.test.wsim » root/Default/test:signedUrl GET (explicit)              
+pass ─ signed_url.test.wsim » root/Default/test:signedUrl GET (implicit)              
+pass ─ signed_url.test.wsim » root/Default/test:signedUrl GET with non-existent key   
+pass ─ signed_url.test.wsim » root/Default/test:signedUrl PUT                         
 
-Tests 1 passed (1)
+Tests 5 passed (5)
 Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
