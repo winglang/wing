@@ -20,6 +20,7 @@ test("create a bucket", async () => {
   expect(s.getResourceConfig("/my_bucket")).toEqual({
     attrs: {
       handle: expect.any(String),
+      url: expect.any(String),
     },
     path: "root/my_bucket",
     addr: expect.any(String),
@@ -946,10 +947,20 @@ test("signedUrl is implemented for the simulator", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
+  // WHEN
+  const formData = new FormData();
+  formData.set("file", new Blob(["Hello, World!"], { type: "text/utf8" }));
+
+  const signedUrl = await client.signedUrl("key");
+  const response = await fetch(signedUrl, {
+    method: "PUT",
+    body: formData,
+  });
+
   // THEN
-  await expect(() => client.signedUrl("key")).resolves.toMatch(
-    /^http:\/\/localhost:\d+\//i
-  );
+  expect(response.ok).toBe(true);
+  await expect(client.get("key")).resolves.toBe("Hello, World!");
+
   await s.stop();
 });
 
