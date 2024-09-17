@@ -941,7 +941,7 @@ test("bucket ignores corrupted state file", async () => {
   expect(files).toEqual(["b"]);
 });
 
-test.only("signedUrl is implemented for the simulator", async () => {
+test("signedUrl is implemented for the simulator", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
