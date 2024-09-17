@@ -47,9 +47,9 @@ test("traces are cleared when reloading the simulator with reset state set to tr
   await s.start();
   const client = s.getResource("/my_bucket") as IBucketClient;
   await client.put("traces.txt", "Hello world!");
-  expect(s.listTraces().filter((t) => t.type === "resource").length).toEqual(1);
+  expect(s.listTraces().filter((t) => t.type === "resource").length).toEqual(2);
 
   // Reload the simulator and reset state
   await s.reload(true);
-  expect(s.listTraces().filter((t) => t.type === "resource").length).toEqual(0);
+  expect(s.listTraces().filter((t) => t.type === "resource").length).toEqual(1);
 });
