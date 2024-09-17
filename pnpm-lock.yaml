@@ -354,9 +354,6 @@ importers:
       ajv:
         specifier: ^8.16.0
         version: 8.17.1
-      busboy:
-        specifier: ^1.6.0
-        version: 1.6.0
       cdktf:
         specifier: 0.20.7
         version: 0.20.7(constructs@10.3.0)
@@ -428,9 +425,6 @@ importers:
       '@cdktf/provider-aws':
         specifier: ^19
         version: 19.23.0(cdktf@0.20.7)(constructs@10.3.0)
-      '@types/busboy':
-        specifier: ^1.5.4
-        version: 1.5.4
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
@@ -10573,12 +10567,6 @@ packages:
     resolution: {integrity: sha512-ZYbcE2x7yrvNFJiU7xJGrpF/ihpkM7zKgw8bha3LNJSesvTtUNxbpzaT7WXBIryf6jovisrxTBvymxMeLLj1Mg==}
     dev: true
 
-  /@types/busboy@1.5.4:
-    resolution: {integrity: sha512-kG7WrUuAKK0NoyxfQHsVE6j1m01s6kMma64E+OZenQABMQyTJop1DumUWcLwAQ2JzpefU7PDYoRDKl8uZosFjw==}
-    dependencies:
-      '@types/node': 22.5.5
-    dev: true
-
   /@types/cacache@17.0.2:
     resolution: {integrity: sha512-IrqHzVX2VRMDQQKa7CtKRnuoCLdRJiLW6hWU+w7i7+AaQ0Ii5bKwJxd5uRK4zBCyrHd3tG6G8zOm2LplxbSfQg==}
     dependencies:
@@ -12878,13 +12866,6 @@ packages:
       esbuild: 0.21.5
       load-tsconfig: 0.2.5
     dev: true
-
-  /busboy@1.6.0:
-    resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
-    engines: {node: '>=10.16.0'}
-    dependencies:
-      streamsearch: 1.1.0
-    dev: false
 
   /bytes@3.0.0:
     resolution: {integrity: sha512-pMhOfFDPiv9t5jjIXkHosWmkSyQbvsgEVNkz0ERHbuLh2T/7j4Mqqpz523Fe8MVY89KC6Sh/QfS2sM+SjgFDcw==}
@@ -21680,11 +21661,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /streamsearch@1.1.0:
-    resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
-    engines: {node: '>=10.0.0'}
-    dev: false
 
   /string-length@4.0.2:
     resolution: {integrity: sha512-+l6rNN5fYHNhZZy41RXsYptCjA2Igmq4EG7kZAYFQI1E1VTXarr6ZPXBg6eq7Y6eK4FEhY6AJlyuFIb/v/S0VQ==}

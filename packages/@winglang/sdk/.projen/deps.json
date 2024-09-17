@@ -10,10 +10,6 @@
       "type": "build"
     },
     {
-      "name": "@types/busboy",
-      "type": "build"
-    },
-    {
       "name": "@types/express",
       "type": "build"
     },
@@ -278,10 +274,6 @@
     },
     {
       "name": "ajv",
-      "type": "bundled"
-    },
-    {
-      "name": "busboy",
       "type": "bundled"
     },
     {

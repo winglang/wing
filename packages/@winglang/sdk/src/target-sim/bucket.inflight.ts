@@ -3,7 +3,6 @@ import * as fs from "fs";
 import { Server } from "http";
 import { dirname, join } from "path";
 import { pathToFileURL } from "url";
-import busboy, { FileInfo } from "busboy";
 import express from "express";
 import mime from "mime-types";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
@@ -119,43 +118,27 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         ? BucketEventType.UPDATE
         : BucketEventType.CREATE;
 
-      let fileInfo: FileInfo | undefined;
-
-      if (req.header("content-type")?.startsWith("multipart/form-data")) {
-        const bb = busboy({
-          headers: req.headers,
-        });
-        bb.on("file", (_name, file, _info) => {
-          fileInfo = _info;
-          file.pipe(fs.createWriteStream(filename));
-        });
-        bb.on("close", () => {
-          console.log("file uploaded", filename, hash);
-          void this.updateMetadataAndNotify(
-            key,
-            actionType,
-            fileInfo?.mimeType
-          ).then(() => {
-            res.writeHead(200, { Connection: "close" });
-            res.end();
-          });
-        });
-        req.pipe(bb);
-        return;
-      } else {
-        const fileStream = fs.createWriteStream(filename);
-        req.pipe(fileStream);
-
-        fileStream.on("error", () => {
-          res.status(500).send("Failed to save the file.");
-        });
-
-        fileStream.on("finish", () => {
-          res.status(200).send();
-        });
-
-        return;
+      const contentType = req.header("content-type");
+      if (contentType?.startsWith("multipart/form-data")) {
+        return res.status(400).send("Multipart uploads not supported");
       }
+
+      const fileStream = fs.createWriteStream(filename);
+      req.pipe(fileStream);
+
+      fileStream.on("error", () => {
+        res.status(500).send("Failed to save the file.");
+      });
+
+      fileStream.on("finish", () => {
+        void this.updateMetadataAndNotify(key, actionType, contentType).then(
+          () => {
+            res.status(200).send();
+          }
+        );
+      });
+
+      return;
     });
 
     // Handle signed URL downloads.
