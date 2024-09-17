@@ -77,6 +77,8 @@ test "signedUrl duration option is respected" {
       result = output.contains("<Code>AccessDenied</Code><Message>Request has expired</Message>");
     } else if target == "tf-gcp" {
       result = output.contains("<Code>ExpiredToken</Code><Message>Invalid argument.</Message>");
+    } else if target == "sim" {
+      result = output.contains("Signed URL has expired");
     }
 
     return result;
