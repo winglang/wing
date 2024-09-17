@@ -1,7 +1,10 @@
 import * as crypto from "crypto";
 import * as fs from "fs";
+import { Server } from "http";
+import { AddressInfo, Socket } from "net";
 import { dirname, join } from "path";
 import * as url from "url";
+import express from "express";
 import mime from "mime-types";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
 import { exists } from "./util";
@@ -27,6 +30,20 @@ import { Datetime, Json, LogLevel, TraceType } from "../std";
 
 export const METADATA_FILENAME = "metadata.json";
 
+const LOCALHOST_ADDRESS = "127.0.0.1";
+
+const STATE_FILENAME = "state.json";
+
+/**
+ * Contents of the state file for this resource.
+ */
+interface StateFileContents {
+  /**
+   * The last port used by the API server on a previous simulator run.
+   */
+  readonly lastPort?: number;
+}
+
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private _fileDir!: string;
   private _context: ISimulatorContext | undefined;
@@ -34,12 +51,18 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly _public: boolean;
   private readonly topicHandlers: Partial<Record<BucketEventType, string>>;
   private _metadata: Map<string, ObjectMetadata>;
+  private readonly app: express.Application;
+  private server: Server | undefined;
+  private url: string | undefined;
+  private port: number | undefined;
 
   public constructor(props: BucketSchema) {
     this.initialObjects = props.initialObjects ?? {};
     this._public = props.public ?? false;
     this.topicHandlers = props.topics;
     this._metadata = new Map();
+
+    this.app = express();
   }
 
   private get context(): ISimulatorContext {
@@ -86,13 +109,66 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       });
     }
 
-    return {};
+    // Check for a previous state file to see if there was a port that was previously being used
+    // if so, try to use it out of convenience
+    let lastPort: number | undefined;
+    const state: StateFileContents = await this.loadState();
+    if (state.lastPort) {
+      const portAvailable = await isPortAvailable(state.lastPort);
+      if (portAvailable) {
+        lastPort = state.lastPort;
+      }
+    }
+
+    // `server.address()` returns `null` until the server is listening
+    // on a port. We use a promise to wait for the server to start
+    // listening before returning the URL.
+    const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
+      this.server = this.app.listen(lastPort ?? 0, LOCALHOST_ADDRESS, () => {
+        const addr = this.server?.address();
+        if (addr && typeof addr === "object" && (addr as AddressInfo).port) {
+          resolve(addr);
+        } else {
+          reject(new Error("No address found"));
+        }
+      });
+    });
+    this.port = addrInfo.port;
+    this.url = `http://${addrInfo.address}:${addrInfo.port}`;
+
+    this.addTrace(`Server listening on ${this.url}`, LogLevel.VERBOSE);
+
+    return {
+      url: this.url,
+    };
   }
 
   public async cleanup(): Promise<void> {}
 
   public async plan() {
     return UpdatePlan.AUTO;
+  }
+
+  private async loadState(): Promise<StateFileContents> {
+    const stateFileExists = await exists(
+      join(this.context.statedir, STATE_FILENAME)
+    );
+    if (stateFileExists) {
+      const stateFileContents = await fs.promises.readFile(
+        join(this.context.statedir, STATE_FILENAME),
+        "utf-8"
+      );
+      return JSON.parse(stateFileContents);
+    } else {
+      return {};
+    }
+  }
+
+  private async saveState(state: StateFileContents): Promise<void> {
+    fs.writeFileSync(
+      join(this.context.statedir, STATE_FILENAME),
+      JSON.stringify(state)
+    );
   }
 
   public async save(): Promise<void> {
@@ -102,6 +178,8 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       join(this.context.statedir, METADATA_FILENAME),
       serialize(Array.from(this._metadata.entries())) // metadata contains Datetime values, so we need to serialize it
     );
+
+    await this.saveState({ lastPort: this.port });
   }
 
   private async notifyListeners(
@@ -297,15 +375,17 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   }
 
   public async signedUrl(key: string, options?: BucketSignedUrlOptions) {
-    options;
-    return this.context.withTrace({
-      message: `Signed URL (key=${key})`,
-      activity: async () => {
-        throw new Error(
-          `signedUrl is not implemented yet for the simulator (key=${key})`
-        );
-      },
-    });
+    const params = new URLSearchParams();
+    if (options?.action) {
+      params.set("action", options.action);
+    }
+    if (options?.duration) {
+      params.set(
+        "validUntil",
+        String(Datetime.utcNow().sec + options?.duration?.seconds)
+      );
+    }
+    return `${this.url}/${key}?${params.toString()}`;
   }
 
   /**
@@ -397,4 +477,27 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
   }
+}
+
+async function isPortAvailable(port: number): Promise<boolean> {
+  return new Promise((resolve, _reject) => {
+    const s = new Socket();
+    s.once("error", (err) => {
+      s.destroy();
+      if ((err as any).code !== "ECONNREFUSED") {
+        resolve(false);
+      } else {
+        // connection refused means the port is not used
+        resolve(true);
+      }
+    });
+
+    s.once("connect", () => {
+      s.destroy();
+      // connection successful means the port is used
+      resolve(false);
+    });
+
+    s.connect(port, LOCALHOST_ADDRESS);
+  });
 }
