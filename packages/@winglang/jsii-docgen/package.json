@@ -42,7 +42,7 @@
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^4.2.1",
-    "jsii": "~5.3.39",
+    "jsii": "~5.5.4",
     "prettier": "^2.8.8",
     "projen": "^0.71.163",
     "tsx": "^4.15.7",
