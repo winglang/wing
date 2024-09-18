@@ -247,11 +247,6 @@ export class BucketClient implements IBucketClient {
     if (!accessPolicy?.blobPublicAccess) {
       throw new Error("Cannot provide public url for a non-public bucket");
     }
-    if (!(await this.exists(key))) {
-      throw new Error(
-        `Cannot provide public url for a non-existent key (key=${key})`
-      );
-    }
 
     return encodeURI(
       `https://${this.storageAccount}.blob.core.windows.net/${this.bucketName}/${key}`

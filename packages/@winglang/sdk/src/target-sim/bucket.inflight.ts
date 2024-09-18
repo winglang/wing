@@ -2,7 +2,6 @@ import * as crypto from "crypto";
 import * as fs from "fs";
 import { Server } from "http";
 import { dirname, join } from "path";
-import { pathToFileURL } from "url";
 import express from "express";
 import mime from "mime-types";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
@@ -141,22 +140,24 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       return;
     });
 
-    // Handle signed URL downloads.
+    // Handle file accesses and signed URL downloads.
     this.app.get("*", (req, res) => {
       const action = req.query.action;
-      if (action !== BucketSignedUrlAction.DOWNLOAD) {
-        return res.status(403).send("Operation not allowed");
-      }
+      if (!this._public) {
+        if (action !== BucketSignedUrlAction.DOWNLOAD) {
+          return res.status(403).send("Operation not allowed");
+        }
 
-      const validUntil = req.query.validUntil?.toString();
-      if (!validUntil || Date.now() > parseInt(validUntil)) {
-        return res.status(403).send("Signed URL has expired");
+        const validUntil = req.query.validUntil?.toString();
+        if (!validUntil || Date.now() > parseInt(validUntil)) {
+          return res.status(403).send("Signed URL has expired");
+        }
       }
 
       const key = req.path.slice(1); // remove leading slash
       const hash = this.hashKey(key);
       const filename = join(this._fileDir, hash);
-      return res.download(filename);
+      return res.sendFile(filename);
     });
   }
 
@@ -458,15 +459,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Public URL (key=${key}).`,
       activity: async () => {
-        const filePath = join(this._fileDir, key);
-
-        if (!this._metadata.has(key)) {
-          throw new Error(
-            `Cannot provide public url for an non-existent key (key=${key})`
-          );
-        }
-
-        return pathToFileURL(filePath).href;
+        return new URL(key, this.url).toString();
       },
     });
   }
@@ -479,15 +472,6 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         // BUG: The `options?.duration` is supposed to be an instance of `Duration` but it is not. It's just
         // a POJO with seconds, but TypeScript thinks otherwise.
         const duration = options?.duration?.seconds ?? 900;
-
-        if (
-          action === BucketSignedUrlAction.DOWNLOAD &&
-          !(await this.exists(key))
-        ) {
-          throw new Error(
-            `Cannot provide signed url for a non-existent key (key=${key})`
-          );
-        }
 
         const url = new URL(key, this.url);
         url.searchParams.set("action", action);

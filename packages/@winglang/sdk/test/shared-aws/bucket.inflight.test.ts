@@ -254,38 +254,6 @@ test("Given a non public bucket when reaching to a key public url it should thro
   );
 });
 
-test("Given a public bucket when reaching to a non-existent key, public url it should throw an error", async () => {
-  // GIVEN
-  let error;
-  const BUCKET_NAME = "BUCKET_NAME";
-  const KEY = "KEY";
-
-  s3Mock.on(GetPublicAccessBlockCommand, { Bucket: BUCKET_NAME }).resolves({
-    PublicAccessBlockConfiguration: {
-      BlockPublicAcls: false,
-      BlockPublicPolicy: false,
-      RestrictPublicBuckets: false,
-      IgnorePublicAcls: false,
-    },
-  });
-  s3Mock
-    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
-
-  // WHEN
-  const client = new BucketClient({ $bucketName: BUCKET_NAME });
-  try {
-    await client.publicUrl(KEY);
-  } catch (err) {
-    error = err;
-  }
-
-  // THEN
-  expect(error?.message).toBe(
-    "Cannot provide public url for a non-existent key (key=KEY)"
-  );
-});
-
 test("Given a public bucket, when giving one of its keys, we should get its public url", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
@@ -555,30 +523,6 @@ test("tryDelete a non-existent object from the bucket", async () => {
 
   // THEN
   expect(objectTryDelete).toEqual(false);
-});
-
-test("Given a bucket when reaching to a non-existent key, signed url it should throw an error", async () => {
-  // GIVEN
-  let error;
-  const BUCKET_NAME = "BUCKET_NAME";
-  const KEY = "KEY";
-
-  s3Mock
-    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
-
-  // WHEN
-  const client = new BucketClient({ $bucketName: BUCKET_NAME });
-  try {
-    await client.signedUrl(KEY);
-  } catch (err) {
-    error = err;
-  }
-
-  // THEN
-  expect(error?.message).toBe(
-    `Cannot provide signed url for a non-existent key (key=${KEY})`
-  );
 });
 
 // Skipped due to issue with mocking getSignedUrl:

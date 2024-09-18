@@ -369,12 +369,6 @@ export class BucketClient implements IAwsBucketClient {
       throw new Error("Cannot provide public url for a non-public bucket");
     }
 
-    if (!(await this.exists(key))) {
-      throw new Error(
-        `Cannot provide public url for a non-existent key (key=${key})`
-      );
-    }
-
     const region = await this.getLocation();
 
     return encodeURI(
@@ -401,11 +395,6 @@ export class BucketClient implements IAwsBucketClient {
     // Set the S3 command
     switch (action) {
       case BucketSignedUrlAction.DOWNLOAD:
-        if (!(await this.exists(key))) {
-          throw new Error(
-            `Cannot provide signed url for a non-existent key (key=${key})`
-          );
-        }
         s3Command = new GetObjectCommand({
           Bucket: this.bucketName,
           Key: key,
