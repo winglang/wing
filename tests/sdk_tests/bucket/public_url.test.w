@@ -25,11 +25,7 @@ test "publicUrl" {
 
   let publicUrl = publicBucket.publicUrl("file1.txt");
   assert(publicUrl != "");
-  
-  // TODO: works in aws, doesn't work in sim since publicUrl is returning a path to the file, remove condition when #2833 is resolved.
-  if (util.env("WING_TARGET") != "sim") {
-    assert(http.get(publicUrl).body ==  "Foo");
-  }
+  assert(http.get(publicUrl).body ==  "Foo");
 
   assertThrows(BUCKET_NOT_PUBLIC_ERROR, () => {
     privateBucket.publicUrl("file2.txt");

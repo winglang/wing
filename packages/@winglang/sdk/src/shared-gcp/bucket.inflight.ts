@@ -228,12 +228,6 @@ export class BucketClient implements IBucketClient {
       throw new Error("Cannot provide public url for a non-public bucket");
     }
 
-    if (!(await this.exists(key))) {
-      throw new Error(
-        `Cannot provide public url for a non-existent key (key=${key})`
-      );
-    }
-
     return `https://storage.googleapis.com/${this.bucketName}/${key}`;
   }
 
@@ -257,11 +251,6 @@ export class BucketClient implements IBucketClient {
     // Set the GCS action
     switch (action) {
       case BucketSignedUrlAction.DOWNLOAD:
-        if (!(await this.exists(key))) {
-          throw new Error(
-            `Cannot provide signed url for a non-existent key (key=${key})`
-          );
-        }
         gcsAction = "read";
         break;
       case BucketSignedUrlAction.UPLOAD:

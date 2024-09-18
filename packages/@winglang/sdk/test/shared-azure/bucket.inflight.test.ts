@@ -409,31 +409,6 @@ test("Given a non public bucket when reaching to a key public url it should thro
   );
 });
 
-test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
-  // GIVEN
-  const BUCKET_NAME = "BUCKET_NAME";
-  const STORAGE_NAME = "STORAGE_NAME";
-  const KEY = "non-existent-key";
-
-  // WHEN
-  const client = new BucketClient({
-    $bucketName: BUCKET_NAME,
-    $storageAccount: STORAGE_NAME,
-    $blobServiceClient: mockBlobServiceClient,
-  });
-  TEST_PATH = "sad";
-  // @ts-expect-error - accessing private property
-  client.containerClient.getAccessPolicy = vi
-    .fn()
-    .mockResolvedValue({ blobPublicAccess: "container" });
-  client.exists = vi.fn().mockResolvedValue(false);
-
-  // THEN
-  await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    `Cannot provide public url for a non-existent key (key=${KEY})`
-  );
-});
-
 test("Given a public bucket, when giving one of its keys, we should get its public url", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";

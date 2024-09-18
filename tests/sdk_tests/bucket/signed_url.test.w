@@ -33,25 +33,6 @@ test "signedUrl GET (explicit)" {
   expect.equal(output, VALUE);
 }
 
-test "signedUrl GET with non-existent key" {
-  let assertThrows = (expected: str, block: (): void) => {
-    let var error = false;
-    try {
-      block();
-    } catch actual {
-      expect.equal(actual, expected);
-      error = true;
-    }
-      expect.equal(error, true);
-  };
-  let UNEXISTING_KEY = "no-such-file.txt";
-  let OBJECT_DOES_NOT_EXIST_ERROR = "Cannot provide signed url for a non-existent key (key={UNEXISTING_KEY})";
-
-  assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, () => {
-    bucket.signedUrl(UNEXISTING_KEY);
-  });
-}
-
 test "signedUrl PUT" {
   let KEY = "tempfile.txt";
   let VALUE = "Hello, Wing!";

@@ -574,23 +574,6 @@ test("Given a non public bucket when reaching to a key public url it should thro
   await s.stop();
 });
 
-test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
-  // GIVEN
-  const app = new SimApp();
-  new cloud.Bucket(app, "my_bucket", { public: true });
-
-  const s = await app.startSimulator();
-  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
-
-  const KEY = "KEY";
-
-  // THEN
-  await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    /Cannot provide public url for an non-existent key/
-  );
-  await s.stop();
-});
-
 test("Given a public bucket, when giving one of its keys, we should get its public url", async () => {
   // GIVEN
   const app = new SimApp();
@@ -608,8 +591,47 @@ test("Given a public bucket, when giving one of its keys, we should get its publ
 
   // THEN
   await s.stop();
-  // file paths are different on windows and linux
-  expect(response.endsWith("KEY")).toBe(true);
+  expect(response).toMatch(/https?:\/\/(localhost|127\.0\.0\.1):\d+\/KEY/);
+});
+
+test("accessing the publicUrl of a valid key should return the file contents", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket", { public: true });
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+
+  // WHEN
+  await client.put(KEY, VALUE);
+  const publicUrl = await client.publicUrl(KEY);
+
+  // THEN
+  const response = await fetch(publicUrl);
+  const text = await response.text();
+  expect(text).toBe(VALUE);
+});
+
+test("accessing the publicUrl of a non existent key should throw an error", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket", { public: true });
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+
+  // WHEN
+  const publicUrl = await client.publicUrl(KEY);
+  const response = await fetch(publicUrl);
+
+  // THEN
+  expect(response.status).toBe(404);
+  await s.stop();
 });
 
 test("check if an object exists in the bucket", async () => {
@@ -994,51 +1016,3 @@ test("signedUrl doesn't accept multipart uploads yet", async () => {
 
   await s.stop();
 });
-
-// Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)
-
-// test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
-//   //GIVEN
-//   let error;
-//   const app = new SimApp();
-//   new cloud.Bucket(app, "my_bucket", { public: true });
-
-//   const s = await app.startSimulator();
-//   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
-
-//   const KEY = "KEY";
-
-//   // WHEN
-//   try {
-//     await client.signedUrl(KEY);
-//   } catch (err) {
-//     error = err;
-//   }
-
-//   expect(error?.message).toBe(
-//     "Cannot provide signed url for an non-existent key (key=${KEY})"
-//   );
-//   // THEN
-//   await s.stop();
-// });
-
-// test("Given a bucket, when giving one of its keys, we should get it's signed url", async () => {
-//   // GIVEN
-//   const app = new SimApp();
-//   new cloud.Bucket(app, "my_bucket", { public: true });
-
-//   const s = await app.startSimulator();
-//   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
-
-//   const KEY = "KEY";
-//   const VALUE = "VALUE";
-
-//   // WHEN
-//   await client.put(KEY, VALUE);
-//   const response = await client.signedUrl(KEY);
-
-//   // THEN
-//   await s.stop();
-//   const filePath = `${client.fileDir}/${KEY}`;
-//   expect(response).toEqual(url.pathToFileURL(filePath).searchParams.append("Expires","86400"));
-// });
