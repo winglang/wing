@@ -8,7 +8,7 @@
 extern crate lazy_static;
 
 use ast::{Scope, Symbol};
-use camino::{Utf8Path, Utf8PathBuf};
+use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use const_format::formatcp;
@@ -328,6 +328,83 @@ pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
 	return initial_dir;
 }
 
+/// Calculate the common path of two Utf8Path objects.
+///
+/// This function takes two Utf8Path objects and returns the common path of the two.
+/// If one path is a parent directory of the other, it returns the shorter path.
+/// If the paths are not related, it returns the common prefix of the two paths.
+///
+/// Paths should be normalized before calling this function, so that there aren't
+/// oddities like "./foo/../bar" etc.
+///
+/// ```
+/// use camino::Utf8Path;
+/// use wingc::common_path;
+///
+/// let path = common_path("/home/user/project".into(), "/home/user/project/src/main.w".into());
+/// assert_eq!(path, Utf8Path::new("/home/user/project"));
+///
+/// let path = common_path("/home/user/project".into(), "/home/user/other".into());
+/// assert_eq!(path, Utf8Path::new("/home/user"));
+///
+/// let path = common_path("./foo".into(), "./bar".into());
+/// assert_eq!(path, Utf8Path::new("."));
+///
+/// let path = common_path("../foo/bar".into(), "../foo/baz".into());
+/// assert_eq!(path, Utf8Path::new("../foo"));
+///
+/// let path = common_path("../foo".into(), "../../bar".into());
+/// assert_eq!(path, Utf8Path::new("../../"));
+/// ```
+pub fn common_path(path1: &Utf8Path, path2: &Utf8Path) -> Utf8PathBuf {
+	let components1: Vec<_> = path1.components().collect();
+	let components2: Vec<_> = path2.components().collect();
+
+	if path1.is_absolute() && path2.is_absolute() {
+		// Both paths are absolute
+		components1
+			.iter()
+			.zip(components2.iter())
+			.take_while(|&(a, b)| a == b)
+			.map(|(component, _)| component)
+			.collect()
+	} else if !path1.is_absolute() && !path2.is_absolute() {
+		// Both paths are relative
+		let mut common = Vec::new();
+		let mut iter1 = components1.iter().peekable();
+		let mut iter2 = components2.iter().peekable();
+
+		// Skip common prefix of parent directory components
+		while iter1.peek() == Some(&&Utf8Component::ParentDir) && iter2.peek() == Some(&&Utf8Component::ParentDir) {
+			common.push(iter1.next().unwrap());
+			iter2.next();
+		}
+
+		// If one of the paths is a further parent directory, then we should return that
+		if iter1.peek() == Some(&&Utf8Component::ParentDir) {
+			common.push(iter1.next().unwrap());
+			return common.into_iter().collect();
+		}
+
+		if iter2.peek() == Some(&&Utf8Component::ParentDir) {
+			common.push(iter2.next().unwrap());
+			return common.into_iter().collect();
+		}
+
+		// Find common path after parent directory components
+		common.extend(
+			iter1
+				.zip(iter2)
+				.take_while(|&(a, b)| a == b)
+				.map(|(component, _)| component),
+		);
+
+		common.into_iter().collect()
+	} else {
+		panic!("path1 and path2 must be either both absolute or both relative");
+	}
+}
+
 pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Utf8Path) -> Result<CompilerOutput, ()> {
 	let project_dir = find_nearest_wing_project_dir(source_path);
 	let source_package = as_wing_library(&project_dir, false).unwrap_or_else(|| DEFAULT_PACKAGE_NAME.to_string());
@@ -336,7 +413,7 @@ pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Ut
 
 	// A map from package names to their root directories
 	let mut library_roots: IndexMap<String, Utf8PathBuf> = IndexMap::new();
-	library_roots.insert(source_package, project_dir.to_owned());
+	library_roots.insert(source_package.clone(), project_dir.to_owned());
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -352,6 +429,22 @@ pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Ut
 		&mut tree_sitter_trees,
 		&mut asts,
 	);
+
+	// If there's no wing.toml or package.json, then we don't know for sure where the root
+	// of the project is, so we simply find the common root of all files that are part of the
+	// default package.
+	if source_package == DEFAULT_PACKAGE_NAME {
+		let mut common_root = project_dir.to_owned();
+		for file in &topo_sorted_files {
+			if file.package != source_package {
+				continue;
+			}
+
+			common_root = common_path(&common_root, &file.path);
+		}
+		// Update the source package to be the common root
+		library_roots.insert(source_package.clone(), common_root);
+	}
 
 	emit_warning_for_unsupported_package_managers(&project_dir);
 

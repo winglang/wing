@@ -7496,27 +7496,58 @@ fn lookup_known_type(name: &'static str, env: &SymbolEnv) -> TypeRef {
 /// ```
 pub fn calculate_fqn_for_namespace(package_name: &str, package_root: &Utf8Path, path: &Utf8Path) -> String {
 	let normalized_root = normalize_path(&package_root, None);
-	let normalized = normalize_path(&path, None);
-	if normalized.starts_with("..") {
-		panic!(
-			"File path \"{}\" is not within the package root \"{}\"",
-			path, package_root
-		);
+	let normalized_path = normalize_path(&path, None);
+	if normalized_path.starts_with("..") {
+		report_diagnostic(Diagnostic {
+			message: format!(
+				"File path \"{}\" is not within the package root \"{}\"",
+				path, package_root
+			),
+			span: None,
+			annotations: vec![],
+			hints: vec![],
+			severity: DiagnosticSeverity::Error,
+		});
+		return package_name.to_string();
 	}
+
 	let assembly = package_name;
-	let normalized = if normalized.as_str().ends_with(".w") {
-		normalized.parent().expect("Expected a parent directory")
+	let normalized_dir = if normalized_path.as_str().ends_with(".w") {
+		if let Some(normalized_parent) = normalized_path.parent() {
+			normalized_parent
+		} else {
+			report_diagnostic(Diagnostic {
+				message: format!("Source file \"{}\" does not have a parent directory", path),
+				span: None,
+				annotations: vec![],
+				hints: vec![],
+				severity: DiagnosticSeverity::Error,
+			});
+			return package_name.to_string();
+		}
 	} else {
-		&normalized
+		&normalized_path
 	};
-	let relative_path = normalized
-		.strip_prefix(&normalized_root)
-		.expect(format!("not a prefix: {} {}", normalized_root, normalized).as_str());
-	if relative_path == Utf8Path::new("") {
-		return assembly.to_string();
+
+	if let Ok(relative_path) = normalized_dir.strip_prefix(&normalized_root) {
+		if relative_path == Utf8Path::new("") {
+			return assembly.to_string();
+		}
+		let namespace = relative_path.as_str().replace("/", ".");
+		return format!("{}.{}", assembly, namespace);
+	} else {
+		report_diagnostic(Diagnostic {
+			message: format!(
+				"Source file \"{}\" is not within the package root \"{}\"",
+				path, package_root
+			),
+			span: None,
+			annotations: vec![],
+			hints: vec![],
+			severity: DiagnosticSeverity::Error,
+		});
+		return package_name.to_string();
 	}
-	let namespace = relative_path.as_str().replace("/", ".");
-	format!("{}.{}", assembly, namespace)
 }
 
 #[derive(Debug)]
