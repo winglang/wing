@@ -1280,9 +1280,158 @@ let rawData: bytes = fs.readBytes("path/to/file");
 fs.writeBytes("path/to/file", rawData);
 ```
 
+#### Roadmap
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* `mutbytes` - see https://github.com/winglang/wing/issues/7144
+
 [`▲ top`][top]
 
 ---
+
+### 1.15 Type reflection
+
+Wing supports reflection on types in preflight code. This allows you to inspect and analyze the structure of types at compile-time, which can be useful for generating code, validating type constraints, or building generic utilities.
+
+Using reflection, you can obtain information about:
+- The methods of a type
+- The fields of a struct or class
+- The variants of an enum
+- The implemented interfaces of a class
+
+#### 1.15.1 Basic usage
+
+The `@type` intrinsic function is used to obtain type information:
+
+```TS
+let t: Type = @type(MyStruct);
+let t: Type = @type(IMyInterface);
+```
+
+The `Type` value has a `kind` field which indicates the general category of the type.
+
+```TS
+let t = @type(MyStruct);
+log(t.kind); // "struct", "class", "interface", "num", "str", "bool", etc.
+```
+
+#### 1.15.2 Specific type information
+
+The `Type` value can be converted to more specific type representations:
+
+```TS
+let t = @type(SomeType);
+
+if let st = t.asStruct() {
+  log(st.name);
+  for field in st.fields {
+    log(field.name);
+    log(field.type.kind);
+  }
+}
+
+if let cl = t.asClass() {
+  log(cl.name);
+  for method in cl.methods {
+    log(method.name);
+    log(method.returnType.kind);
+  }
+}
+
+if let en = t.asEnum() {
+  log(en.name);
+  for variant in en.variants {
+    log(variant);
+  }
+}
+```
+
+#### 1.15.3 Advanced examples
+
+Here are some more advanced examples of using preflight reflection:
+
+```TS
+// Generate a JSON schema for a struct
+let generateJsonSchema = (structType: Type): str => {
+  if let st = structType.asStruct() {
+    let schema = MutJson {
+      type: "object",
+      properties: {},
+      required: []
+    };
+
+    for field in st.fields {
+      let fieldSchema = {};
+      if field.type.kind == "str" {
+        fieldSchema.type = "string";
+      } else if field.type.kind == "num" {
+        fieldSchema.type = "number";
+      } // ... handle other types
+
+      schema.properties[field.name] = fieldSchema;
+      if !field.optional {
+        schema.required.push(field.name);
+      }
+    }
+
+    return Json.stringify(schema);
+  }
+  throw "Input must be a struct type";
+};
+
+struct User {
+  name: str;
+  age: num;
+  email: str?;
+}
+
+log(generateJsonSchema(@type(User)));
+
+// Check if a class implements an interface
+let implementsInterface = (classType: Type, interfaceType: Type): bool => {
+  if let cl = classType.asClass() {
+    if let int = interfaceType.asInterface() {
+      for impl in cl.implements {
+        if impl.name == int.name {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+};
+
+interface ILogger {
+  log(message: str): void;
+}
+
+class ConsoleLogger impl ILogger {
+  log(message: str) {
+    // ...
+  }
+}
+
+assert(implementsInterface(@type(ConsoleLogger), @type(ILogger)));
+```
+
+#### 1.15.4 Implementation sketch
+
+The preflight reflection system could be implemented as follows:
+
+1. During compilation, the Wing compiler builds a type information database for all types encountered in the code.
+
+2. The `@type` function is implemented as a compiler intrinsic that looks up the type information and emits a `Type` object into the generated JavaScript code.
+
+3. The `Type` class and its variants (`StructType`, `ClassType`, etc.) are implemented as special compiler-known types that provide an API for accessing the type information.
+
+5. The methods on `Type` (like `asStruct()`, `asClass()`, etc.) are implemented to return the appropriate specific type object if the conversion is valid, or `nil` if not.
+
+6. All of this happens at compile-time, so there's no runtime overhead for using reflection. The compiler can optimize away any reflection code that isn't used to affect the runtime behavior of the program.
+
+This implementation allows for powerful compile-time introspection while maintaining Wing's performance characteristics and type safety.
+
+[`▲ top`][top]
 
 ## 2. Statements
 
