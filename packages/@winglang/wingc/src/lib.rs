@@ -24,7 +24,6 @@ use jsify::JSifier;
 use lifting::LiftVisitor;
 use parser::{as_wing_library, is_entrypoint_file, parse_wing_project};
 use serde::Serialize;
-use serde_json::Value;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::SymbolEnvKind;
@@ -38,7 +37,7 @@ use wingii::type_system::TypeSystem;
 use crate::parser::normalize_path;
 use std::alloc::{alloc, dealloc, Layout};
 
-use std::{fs, mem};
+use std::mem;
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
@@ -300,7 +299,7 @@ pub fn type_check_file(
 
 /// Infer the root directory of the current Wing application or library.
 ///
-/// Check the current file's directory for a wing.toml file or package.json file that has a "wing" field,
+/// Check the current file's directory for a wing.toml file or package.json file,
 /// and continue searching up the directory tree until we find one.
 /// If we run out of parent directories, fall back to the first directory we found.
 pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
@@ -315,10 +314,7 @@ pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
 			return current_dir.to_owned();
 		}
 		if current_dir.join("package.json").exists() {
-			let package_json = fs::read_to_string(current_dir.join("package.json")).unwrap();
-			if serde_json::from_str(&package_json).map_or(false, |v: Value| v.get("wing").is_some()) {
-				return current_dir.to_owned();
-			}
+			return current_dir.to_owned();
 		}
 		if current_dir == "/" {
 			break;
@@ -326,6 +322,23 @@ pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
 		current_dir = current_dir.parent().unwrap_or_else(|| Utf8Path::new("/"));
 	}
 	return initial_dir;
+}
+
+fn common_path(path1: &Utf8Path, path2: &Utf8Path) -> Utf8PathBuf {
+	assert!(path1.is_absolute(), "path1 must be absolute");
+	assert!(path2.is_absolute(), "path2 must be absolute");
+
+	let components1: Vec<_> = path1.components().collect();
+	let components2: Vec<_> = path2.components().collect();
+
+	let common_prefix = components1
+		.iter()
+		.zip(components2.iter())
+		.take_while(|&(a, b)| a == b)
+		.map(|(component, _)| component)
+		.collect::<Vec<_>>();
+
+	common_prefix.into_iter().collect()
 }
 
 pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Utf8Path) -> Result<CompilerOutput, ()> {
@@ -336,7 +349,7 @@ pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Ut
 
 	// A map from package names to their root directories
 	let mut library_roots: IndexMap<String, Utf8PathBuf> = IndexMap::new();
-	library_roots.insert(source_package, project_dir.to_owned());
+	library_roots.insert(source_package.clone(), project_dir.to_owned());
 
 	// -- PARSING PHASE --
 	let mut files = Files::new();
@@ -352,6 +365,22 @@ pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Ut
 		&mut tree_sitter_trees,
 		&mut asts,
 	);
+
+	// If there's no wing.toml or package.json, then we don't know for sure where the root
+	// of the project is, so we simply find the common root of all files that are part of the
+	// default package.
+	if source_package == DEFAULT_PACKAGE_NAME {
+		let mut common_root = project_dir.to_owned();
+		for file in &topo_sorted_files {
+			if file.package != source_package {
+				continue;
+			}
+
+			common_root = common_path(&common_root, &file.path);
+		}
+		// Update the source package to be the common root
+		library_roots.insert(source_package.clone(), common_root);
+	}
 
 	emit_warning_for_unsupported_package_managers(&project_dir);
 
