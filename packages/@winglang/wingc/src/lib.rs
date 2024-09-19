@@ -8,7 +8,7 @@
 extern crate lazy_static;
 
 use ast::{Scope, Symbol};
-use camino::{Utf8Path, Utf8PathBuf};
+use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use const_format::formatcp;
@@ -328,21 +328,81 @@ pub fn find_nearest_wing_project_dir(source_path: &Utf8Path) -> Utf8PathBuf {
 	return initial_dir;
 }
 
-fn common_path(path1: &Utf8Path, path2: &Utf8Path) -> Utf8PathBuf {
-	assert!(path1.is_absolute(), "path1 must be absolute");
-	assert!(path2.is_absolute(), "path2 must be absolute");
-
+/// Calculate the common path of two Utf8Path objects.
+///
+/// This function takes two Utf8Path objects and returns the common path of the two.
+/// If one path is a parent directory of the other, it returns the shorter path.
+/// If the paths are not related, it returns the common prefix of the two paths.
+///
+/// Paths should be normalized before calling this function, so that there aren't
+/// oddities like "./foo/../bar" etc.
+///
+/// ```
+/// use camino::Utf8Path;
+/// use wingc::common_path;
+///
+/// let path = common_path("/home/user/project".into(), "/home/user/project/src/main.w".into());
+/// assert_eq!(path, Utf8Path::new("/home/user/project"));
+///
+/// let path = common_path("/home/user/project".into(), "/home/user/other".into());
+/// assert_eq!(path, Utf8Path::new("/home/user"));
+///
+/// let path = common_path("./foo".into(), "./bar".into());
+/// assert_eq!(path, Utf8Path::new("."));
+///
+/// let path = common_path("../foo/bar".into(), "../foo/baz".into());
+/// assert_eq!(path, Utf8Path::new("../foo"));
+///
+/// let path = common_path("../foo".into(), "../../bar".into());
+/// assert_eq!(path, Utf8Path::new("../../"));
+/// ```
+pub fn common_path(path1: &Utf8Path, path2: &Utf8Path) -> Utf8PathBuf {
 	let components1: Vec<_> = path1.components().collect();
 	let components2: Vec<_> = path2.components().collect();
 
-	let common_prefix = components1
-		.iter()
-		.zip(components2.iter())
-		.take_while(|&(a, b)| a == b)
-		.map(|(component, _)| component)
-		.collect::<Vec<_>>();
+	if path1.is_absolute() && path2.is_absolute() {
+		// Both paths are absolute
+		components1
+			.iter()
+			.zip(components2.iter())
+			.take_while(|&(a, b)| a == b)
+			.map(|(component, _)| component)
+			.collect()
+	} else if !path1.is_absolute() && !path2.is_absolute() {
+		// Both paths are relative
+		let mut common = Vec::new();
+		let mut iter1 = components1.iter().peekable();
+		let mut iter2 = components2.iter().peekable();
 
-	common_prefix.into_iter().collect()
+		// Skip common prefix of parent directory components
+		while iter1.peek() == Some(&&Utf8Component::ParentDir) && iter2.peek() == Some(&&Utf8Component::ParentDir) {
+			common.push(iter1.next().unwrap());
+			iter2.next();
+		}
+
+		// If one of the paths is a further parent directory, then we should return that
+		if iter1.peek() == Some(&&Utf8Component::ParentDir) {
+			common.push(iter1.next().unwrap());
+			return common.into_iter().collect();
+		}
+
+		if iter2.peek() == Some(&&Utf8Component::ParentDir) {
+			common.push(iter2.next().unwrap());
+			return common.into_iter().collect();
+		}
+
+		// Find common path after parent directory components
+		common.extend(
+			iter1
+				.zip(iter2)
+				.take_while(|&(a, b)| a == b)
+				.map(|(component, _)| component),
+		);
+
+		common.into_iter().collect()
+	} else {
+		panic!("path1 and path2 must be either both absolute or both relative");
+	}
 }
 
 pub fn compile(source_path: &Utf8Path, source_text: Option<String>, out_dir: &Utf8Path) -> Result<CompilerOutput, ()> {
