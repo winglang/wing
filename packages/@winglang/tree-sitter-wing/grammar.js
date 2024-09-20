@@ -41,7 +41,6 @@ module.exports = grammar({
 
     // These modifier conflicts should be solved through GLR parsing
     [$.field_modifiers, $.method_modifiers],
-    [$.class_modifiers, $.closure_modifiers, $.interface_modifiers],
   ],
 
   supertypes: ($) => [$.expression, $._literal],
@@ -672,7 +671,7 @@ module.exports = grammar({
       );
     },
 
-    closure_modifiers: ($) => repeat1(choice($.phase_specifier)),
+    closure_modifiers: ($) => choice($.phase_specifier),
 
     closure: ($) =>
       seq(

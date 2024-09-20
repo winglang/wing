@@ -3958,16 +3958,13 @@
       ]
     },
     "closure_modifiers": {
-      "type": "REPEAT1",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "phase_specifier"
-          }
-        ]
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "phase_specifier"
+        }
+      ]
     },
     "closure": {
       "type": "SEQ",
@@ -4612,11 +4609,6 @@
     [
       "field_modifiers",
       "method_modifiers"
-    ],
-    [
-      "class_modifiers",
-      "closure_modifiers",
-      "interface_modifiers"
     ]
   ],
   "precedences": [
