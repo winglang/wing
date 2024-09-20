@@ -377,7 +377,8 @@ module.exports = grammar({
         $.json_literal,
         $.struct_literal,
         $.optional_unwrap,
-        $.intrinsic
+        $.intrinsic,
+        $.type_intrinsic,
       ),
 
     intrinsic: ($) =>
@@ -388,6 +389,15 @@ module.exports = grammar({
         )
       ),
     intrinsic_identifier: ($) => /@[A-Za-z_$0-9]*/,
+
+    // TODO: is there some way to generalize this
+    // so we can define other intrinsics or functions that accept types?
+    type_intrinsic: ($) => seq(
+      "@type",
+      "(",
+      field("type", $._type),
+      ")"
+    ),
 
     // Primitives
     _literal: ($) =>

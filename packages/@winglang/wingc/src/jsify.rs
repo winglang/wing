@@ -14,7 +14,8 @@ use crate::{
 	ast::{
 		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElseIfs, Enum,
 		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, IntrinsicKind, Literal, New,
-		Phase, Reference, Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, TypeIntrinsic, UnaryOperator,
+		UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic, DiagnosticSeverity, WingSpan},
@@ -727,6 +728,7 @@ impl<'a> JSifier<'a> {
 					new_code!(expr_span, HELPERS_VAR, ".nodeof(this).app")
 				}
 			},
+			ExprKind::TypeIntrinsic(TypeIntrinsic { type_ }) => jsify_type_reflection(&type_, &expr_span),
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = match callee {
 					CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
@@ -2282,4 +2284,66 @@ fn escape_javascript_string(s: &str) -> String {
 	}
 
 	result
+}
+
+fn jsify_type_reflection(type_annotation: &TypeAnnotation, expr_span: &WingSpan) -> CodeMaker {
+	match &type_annotation.kind {
+		TypeAnnotationKind::String => new_code!(expr_span, "std.Type._ofStr()"),
+		TypeAnnotationKind::Number => new_code!(expr_span, "std.Type._ofNum()"),
+		TypeAnnotationKind::Bool => new_code!(expr_span, "std.Type._ofBool()"),
+		TypeAnnotationKind::Duration => new_code!(expr_span, "std.Type._ofDuration()"),
+		TypeAnnotationKind::Datetime => new_code!(expr_span, "std.Type._ofDatetime()"),
+		TypeAnnotationKind::Regex => new_code!(expr_span, "std.Type._ofRegex()"),
+		TypeAnnotationKind::Bytes => new_code!(expr_span, "std.Type._ofBytes()"),
+		TypeAnnotationKind::Json => new_code!(expr_span, "std.Type._ofJson()"),
+		TypeAnnotationKind::MutJson => new_code!(expr_span, "std.Type._ofMutJson()"),
+		TypeAnnotationKind::Inferred => panic!("Unexpected inferred type annotation"),
+		TypeAnnotationKind::Void => new_code!(expr_span, "std.Type._ofVoid()"),
+		TypeAnnotationKind::Optional(t) => new_code!(
+			expr_span,
+			"std.Type._ofOptional(",
+			jsify_type_reflection(&t, &t.span),
+			")"
+		),
+		TypeAnnotationKind::Array(t) => new_code!(expr_span, "std.Type._ofArray(", jsify_type_reflection(&t, &t.span), ")"),
+		TypeAnnotationKind::MutArray(t) => new_code!(
+			expr_span,
+			"std.Type._ofMutArray(",
+			jsify_type_reflection(&t, &t.span),
+			")"
+		),
+		TypeAnnotationKind::Map(t) => new_code!(expr_span, "std.Type._ofMap(", jsify_type_reflection(&t, &t.span), ")"),
+		TypeAnnotationKind::MutMap(t) => new_code!(
+			expr_span,
+			"std.Type._ofMutMap(",
+			jsify_type_reflection(&t, &t.span),
+			")"
+		),
+		TypeAnnotationKind::Set(t) => new_code!(expr_span, "std.Type._ofSet(", jsify_type_reflection(&t, &t.span), ")"),
+		TypeAnnotationKind::MutSet(t) => new_code!(
+			expr_span,
+			"std.Type._ofMutSet(",
+			jsify_type_reflection(&t, &t.span),
+			")"
+		),
+		TypeAnnotationKind::Function(t) => {
+			let mut func_code = new_code!(expr_span, "new std.FunctionType(");
+			func_code.append(match t.phase {
+				Phase::Inflight => "std.Phase.INFLIGHT",
+				Phase::Preflight => "std.Phase.PREFLIGHT",
+				Phase::Independent => "std.Phase.UNPHASED",
+			});
+			func_code.append(", [");
+			for p in &t.parameters {
+				func_code.append(jsify_type_reflection(&p.type_annotation, &p.type_annotation.span));
+				func_code.append(", ");
+			}
+			func_code.append("], ");
+			func_code.append(jsify_type_reflection(&t.return_type, &t.return_type.span));
+			func_code.append(")");
+
+			new_code!(expr_span, "std.Type._ofFunction(", func_code, ")")
+		}
+		TypeAnnotationKind::UserDefined(_udt) => todo!(),
+	}
 }

@@ -123,6 +123,7 @@ const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 const WINGSDK_NODE: &'static str = "std.Node";
 const WINGSDK_APP: &'static str = "std.IApp";
+const WINGSDK_TYPE: &'static str = "std.Type";
 
 const WINGSDK_SIM_IRESOURCE: &'static str = "sim.IResource";
 const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!(

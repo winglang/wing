@@ -585,6 +585,11 @@ pub struct Intrinsic {
 	pub kind: IntrinsicKind,
 }
 
+#[derive(Debug)]
+pub struct TypeIntrinsic {
+	pub type_: TypeAnnotation,
+}
+
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum IntrinsicKind {
 	/// Error state
@@ -651,6 +656,7 @@ pub enum ExprKind {
 	},
 	Reference(Reference),
 	Intrinsic(Intrinsic),
+	TypeIntrinsic(TypeIntrinsic),
 	Call {
 		callee: CalleeKind,
 		arg_list: ArgList,

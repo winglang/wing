@@ -8,7 +8,7 @@ pub(crate) mod type_reference_transform;
 
 use crate::ast::{
 	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExplicitLift, ExprId,
-	FunctionDefinition, IfLet, Intrinsic, IntrinsicKind, New, TypeAnnotationKind,
+	FunctionDefinition, IfLet, Intrinsic, IntrinsicKind, New, TypeAnnotationKind, TypeIntrinsic,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, ElseIfs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -32,7 +32,7 @@ use crate::{
 	UTIL_CLASS_NAME, WINGSDK_APP, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_BYTES,
 	WINGSDK_DATETIME, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
 	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REGEX, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT, WINGSDK_TYPE,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -1808,6 +1808,17 @@ impl Types {
 			.expect("Construct interface to be a type")
 	}
 
+	pub fn std_type(&self) -> TypeRef {
+		let std_type_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_TYPE);
+		self
+			.libraries
+			.lookup_nested_str(&std_type_fqn, None)
+			.expect("Type to be loaded")
+			.0
+			.as_type()
+			.expect("std.Type to be a type")
+	}
+
 	/// Stores the type and phase of a given expression node.
 	pub fn assign_type_to_expr(&mut self, expr: &Expr, type_: TypeRef, phase: Phase) {
 		let expr_idx = expr.id;
@@ -2359,6 +2370,7 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 			ExprKind::Range { start, end, .. } => self.type_check_range(start, env, end),
 			ExprKind::Reference(_ref) => self.type_check_reference(_ref, env),
 			ExprKind::Intrinsic(intrinsic) => self.type_check_intrinsic(intrinsic, env, exp),
+			ExprKind::TypeIntrinsic(type_intrinsic) => self.type_check_type_intrinsic(type_intrinsic, env),
 			ExprKind::New(new_expr) => self.type_check_new(new_expr, env, exp),
 			ExprKind::Call { callee, arg_list } => self.type_check_call(arg_list, env, callee, exp),
 			ExprKind::ArrayLiteral { type_, items } => self.type_check_array_lit(type_, env, exp, items),
@@ -2994,6 +3006,11 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 		};
 
 		(self.types.error(), Phase::Independent)
+	}
+
+	fn type_check_type_intrinsic(&mut self, type_intrinsic: &TypeIntrinsic, env: &mut SymbolEnv) -> (TypeRef, Phase) {
+		_ = self.resolve_type_annotation(&type_intrinsic.type_, env);
+		(self.types.std_type(), Phase::Preflight)
 	}
 
 	fn type_check_range(&mut self, start: &Expr, env: &mut SymbolEnv, end: &Expr) -> (TypeRef, Phase) {

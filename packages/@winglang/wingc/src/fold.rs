@@ -2,7 +2,7 @@ use crate::ast::{
 	ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElseIfBlock, ElseIfLetBlock, ElseIfs, Enum,
 	ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet,
 	Interface, InterpolatedString, InterpolatedStringPart, Intrinsic, LiftQualification, Literal, New, Reference, Scope,
-	Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+	Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, TypeIntrinsic, UserDefinedType,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -337,6 +337,9 @@ where
 			arg_list: intrinsic.arg_list.map(|arg_list| f.fold_args(arg_list)),
 			name: f.fold_symbol(intrinsic.name),
 			kind: intrinsic.kind,
+		}),
+		ExprKind::TypeIntrinsic(type_intrinsic) => ExprKind::TypeIntrinsic(TypeIntrinsic {
+			type_: f.fold_type_annotation(type_intrinsic.type_),
 		}),
 		ExprKind::Call { callee, arg_list } => ExprKind::Call {
 			callee: match callee {

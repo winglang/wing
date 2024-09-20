@@ -339,6 +339,9 @@ where
 				v.visit_args(arg_list);
 			}
 		}
+		ExprKind::TypeIntrinsic(type_intrinsic) => {
+			v.visit_type_annotation(&type_intrinsic.type_);
+		}
 		ExprKind::Call { callee, arg_list } => {
 			match callee {
 				CalleeKind::Expr(expr) => v.visit_expr(expr),
