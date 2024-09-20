@@ -617,6 +617,7 @@ Type Intrinsic
 
 @type(Array<num>);
 @type(inflight (): num);
+@type(foo.bar.Baz);
 
 --------------------------------------------------------------------------------
 
@@ -630,4 +631,10 @@ Type Intrinsic
       (function_type
         (phase_specifier)
         (parameter_type_list)
-        (builtin_type)))))
+        (builtin_type))))
+  (expression_statement
+    (type_intrinsic
+      (custom_type
+        (type_identifier)
+        (type_identifier)
+        (type_identifier)))))
