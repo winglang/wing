@@ -16,12 +16,15 @@ let t4 = @type(inflight (num): bool);
 expect.equal(t4.kind, "function");
 expect.equal(t4.toString(), "inflight (num): bool");
 
-let t4_fn = t4.asFunction()!;
-expect.equal(t4_fn.params.length, 1);
-expect.equal(t4_fn.params[0].kind, "num");
-expect.equal(t4_fn.returns.kind, "bool");
-expect.equal(t4_fn.phase, std.Phase.INFLIGHT);
-expect.equal(t4_fn.toString(), "inflight (num): bool");
+if let fn = t4.asFunction() {
+  expect.equal(fn.params.length, 1);
+  expect.equal(fn.params[0].kind, "num");
+  expect.equal(fn.returns.kind, "bool");
+  expect.equal(fn.phase, std.Phase.INFLIGHT);
+  expect.equal(fn.toString(), "inflight (num): bool");
+} else {
+  expect.fail("t4 is not a function");
+}
 
 // TODO: why doesn't this work?
 
