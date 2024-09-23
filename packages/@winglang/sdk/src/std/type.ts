@@ -248,7 +248,7 @@ export class Type {
  */
 export class ClassType {
   public readonly name: string;
-  public readonly fqn: string;
+  public readonly fqn: string | undefined;
   public readonly base: ClassType | undefined;
   public readonly interfaces: ClassType[];
   public readonly properties: { [key: string]: Property };
@@ -271,7 +271,7 @@ export class ClassType {
   }
 
   public toString(): string {
-    return this.fqn;
+    return this.name;
   }
 }
 
@@ -300,7 +300,7 @@ export class InterfaceType {
   }
 
   public toString(): string {
-    return this.fqn;
+    return this.name;
   }
 }
 
@@ -329,7 +329,7 @@ export class StructType {
   }
 
   public toString(): string {
-    return this.fqn;
+    return this.name;
   }
 }
 
@@ -348,7 +348,7 @@ export class EnumType {
   }
 
   public toString(): string {
-    return this.fqn;
+    return this.name;
   }
 }
 

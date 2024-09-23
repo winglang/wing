@@ -25,7 +25,7 @@ use crate::{
 	type_check::{
 		is_udt_struct_type,
 		lifts::{LiftQualification, Liftable, Lifts},
-		resolve_super_method, resolve_user_defined_type,
+		resolve_super_method, resolve_user_defined_type, resolve_user_defined_type_ref,
 		symbol_env::{SymbolEnv, SymbolEnvKind},
 		ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME,
 	},
@@ -728,7 +728,7 @@ impl<'a> JSifier<'a> {
 					new_code!(expr_span, HELPERS_VAR, ".nodeof(this).app")
 				}
 			},
-			ExprKind::TypeIntrinsic(TypeIntrinsic { type_ }) => jsify_type_reflection(&type_, &expr_span),
+			ExprKind::TypeIntrinsic(TypeIntrinsic { type_ }) => jsify_type_reflection(&type_, &expr_span, ctx),
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = match callee {
 					CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
@@ -2286,7 +2286,7 @@ fn escape_javascript_string(s: &str) -> String {
 	result
 }
 
-fn jsify_type_reflection(type_annotation: &TypeAnnotation, expr_span: &WingSpan) -> CodeMaker {
+fn jsify_type_reflection(type_annotation: &TypeAnnotation, expr_span: &WingSpan, ctx: &JSifyContext<'_>) -> CodeMaker {
 	match &type_annotation.kind {
 		TypeAnnotationKind::String => new_code!(expr_span, "std.Type._ofStr()"),
 		TypeAnnotationKind::Number => new_code!(expr_span, "std.Type._ofNum()"),
@@ -2302,43 +2302,43 @@ fn jsify_type_reflection(type_annotation: &TypeAnnotation, expr_span: &WingSpan)
 		TypeAnnotationKind::Optional(t) => new_code!(
 			expr_span,
 			"std.Type._ofOptional(",
-			jsify_type_reflection(&t, &t.span),
+			jsify_type_reflection(&t, &t.span, ctx),
 			")"
 		),
 		TypeAnnotationKind::Array(t) => new_code!(
 			expr_span,
 			"std.Type._ofArray(",
-			jsify_type_reflection(&t, &t.span),
+			jsify_type_reflection(&t, &t.span, ctx),
 			", false)"
 		),
 		TypeAnnotationKind::MutArray(t) => new_code!(
 			expr_span,
 			"std.Type._ofArray(",
-			jsify_type_reflection(&t, &t.span),
+			jsify_type_reflection(&t, &t.span, ctx),
 			", true)"
 		),
 		TypeAnnotationKind::Map(t) => new_code!(
 			expr_span,
 			"std.Type._ofMap(",
-			jsify_type_reflection(&t, &t.span),
+			jsify_type_reflection(&t, &t.span, ctx),
 			", false)"
 		),
 		TypeAnnotationKind::MutMap(t) => new_code!(
 			expr_span,
 			"std.Type._ofMap(",
-			jsify_type_reflection(&t, &t.span),
+			jsify_type_reflection(&t, &t.span, ctx),
 			", true)"
 		),
 		TypeAnnotationKind::Set(t) => new_code!(
 			expr_span,
 			"std.Type._ofSet(",
-			jsify_type_reflection(&t, &t.span),
+			jsify_type_reflection(&t, &t.span, ctx),
 			", false)"
 		),
 		TypeAnnotationKind::MutSet(t) => new_code!(
 			expr_span,
 			"std.Type._ofSet(",
-			jsify_type_reflection(&t, &t.span),
+			jsify_type_reflection(&t, &t.span, ctx),
 			", true)"
 		),
 		TypeAnnotationKind::Function(t) => {
@@ -2350,15 +2350,24 @@ fn jsify_type_reflection(type_annotation: &TypeAnnotation, expr_span: &WingSpan)
 			});
 			func_code.append(", [");
 			for p in &t.parameters {
-				func_code.append(jsify_type_reflection(&p.type_annotation, &p.type_annotation.span));
+				func_code.append(jsify_type_reflection(&p.type_annotation, &p.type_annotation.span, ctx));
 				func_code.append(", ");
 			}
 			func_code.append("], ");
-			func_code.append(jsify_type_reflection(&t.return_type, &t.return_type.span));
+			func_code.append(jsify_type_reflection(&t.return_type, &t.return_type.span, ctx));
 			func_code.append(")");
 
 			new_code!(expr_span, "std.Type._ofFunction(", func_code, ")")
 		}
-		TypeAnnotationKind::UserDefined(_udt) => todo!(),
+		TypeAnnotationKind::UserDefined(udt) => {
+			let type_ = resolve_user_defined_type_ref(
+				udt,
+				ctx.visit_ctx.current_env().expect("no current env"),
+				ctx.visit_ctx.current_stmt_idx(),
+			)
+			.expect("type reference");
+
+			todo!()
+		}
 	}
 }
