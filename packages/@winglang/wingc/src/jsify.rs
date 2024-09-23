@@ -2305,26 +2305,41 @@ fn jsify_type_reflection(type_annotation: &TypeAnnotation, expr_span: &WingSpan)
 			jsify_type_reflection(&t, &t.span),
 			")"
 		),
-		TypeAnnotationKind::Array(t) => new_code!(expr_span, "std.Type._ofArray(", jsify_type_reflection(&t, &t.span), ")"),
+		TypeAnnotationKind::Array(t) => new_code!(
+			expr_span,
+			"std.Type._ofArray(",
+			jsify_type_reflection(&t, &t.span),
+			", false)"
+		),
 		TypeAnnotationKind::MutArray(t) => new_code!(
 			expr_span,
-			"std.Type._ofMutArray(",
+			"std.Type._ofArray(",
 			jsify_type_reflection(&t, &t.span),
-			")"
+			", true)"
 		),
-		TypeAnnotationKind::Map(t) => new_code!(expr_span, "std.Type._ofMap(", jsify_type_reflection(&t, &t.span), ")"),
+		TypeAnnotationKind::Map(t) => new_code!(
+			expr_span,
+			"std.Type._ofMap(",
+			jsify_type_reflection(&t, &t.span),
+			", false)"
+		),
 		TypeAnnotationKind::MutMap(t) => new_code!(
 			expr_span,
-			"std.Type._ofMutMap(",
+			"std.Type._ofMap(",
 			jsify_type_reflection(&t, &t.span),
-			")"
+			", true)"
 		),
-		TypeAnnotationKind::Set(t) => new_code!(expr_span, "std.Type._ofSet(", jsify_type_reflection(&t, &t.span), ")"),
+		TypeAnnotationKind::Set(t) => new_code!(
+			expr_span,
+			"std.Type._ofSet(",
+			jsify_type_reflection(&t, &t.span),
+			", false)"
+		),
 		TypeAnnotationKind::MutSet(t) => new_code!(
 			expr_span,
-			"std.Type._ofMutSet(",
+			"std.Type._ofSet(",
 			jsify_type_reflection(&t, &t.span),
-			")"
+			", true)"
 		),
 		TypeAnnotationKind::Function(t) => {
 			let mut func_code = new_code!(expr_span, "new std.FunctionType(");

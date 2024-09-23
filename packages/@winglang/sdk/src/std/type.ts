@@ -93,33 +93,18 @@ export class Type {
   }
 
   /** @internal */
-  public static _ofArray(t: Type): Type {
-    return new Type("array", new ArrayType(t));
+  public static _ofArray(t: Type, isMut: boolean): Type {
+    return new Type(isMut ? "mutarray" : "array", new ArrayType(t, isMut));
   }
 
   /** @internal */
-  public static _ofMutArray(t: Type): Type {
-    return new Type("mutarray", new MutArrayType(t));
+  public static _ofMap(t: Type, isMut: boolean): Type {
+    return new Type(isMut ? "mutmap" : "map", new MapType(t, isMut));
   }
 
   /** @internal */
-  public static _ofMap(t: Type): Type {
-    return new Type("map", new MapType(t));
-  }
-
-  /** @internal */
-  public static _ofMutMap(t: Type): Type {
-    return new Type("mutmap", new MutMapType(t));
-  }
-
-  /** @internal */
-  public static _ofSet(t: Type): Type {
-    return new Type("set", new SetType(t));
-  }
-
-  /** @internal */
-  public static _ofMutSet(t: Type): Type {
-    return new Type("mutset", new MutSetType(t));
+  public static _ofSet(t: Type, isMut: boolean): Type {
+    return new Type(isMut ? "mutset" : "set", new SetType(t, isMut));
   }
 
   /** @internal */
@@ -195,19 +180,8 @@ export class Type {
    * @returns The ArrayType or undefined if this is not an array.
    */
   public asArray(): ArrayType | undefined {
-    if (this.kind === "array") {
+    if (this.kind === "array" || this.kind === "mutarray") {
       return this.data as ArrayType;
-    }
-    return undefined;
-  }
-
-  /**
-   * Get the MutArrayType if this is a mutable array.
-   * @returns The MutArrayType or undefined if this is not a mutable array.
-   */
-  public asMutArray(): MutArrayType | undefined {
-    if (this.kind === "mutarray") {
-      return this.data as MutArrayType;
     }
     return undefined;
   }
@@ -217,19 +191,8 @@ export class Type {
    * @returns The MapType or undefined if this is not a map.
    */
   public asMap(): MapType | undefined {
-    if (this.kind === "map") {
+    if (this.kind === "map" || this.kind === "mutmap") {
       return this.data as MapType;
-    }
-    return undefined;
-  }
-
-  /**
-   * Get the MutMapType if this is a mutable map.
-   * @returns The MutMapType or undefined if this is not a mutable map.
-   */
-  public asMutMap(): MutMapType | undefined {
-    if (this.kind === "mutmap") {
-      return this.data as MutMapType;
     }
     return undefined;
   }
@@ -239,19 +202,8 @@ export class Type {
    * @returns The SetType or undefined if this is not a set.
    */
   public asSet(): SetType | undefined {
-    if (this.kind === "set") {
+    if (this.kind === "set" || this.kind === "mutset") {
       return this.data as SetType;
-    }
-    return undefined;
-  }
-
-  /**
-   * Get the MutSetType if this is a mutable set.
-   * @returns The MutSetType or undefined if this is not a mutable set.
-   */
-  public asMutSet(): MutSetType | undefined {
-    if (this.kind === "mutset") {
-      return this.data as MutSetType;
     }
     return undefined;
   }
@@ -282,6 +234,10 @@ export class Type {
       case "mutset":
       case "optional":
         return this.data.toString();
+      case "json":
+        return "Json";
+      case "mutjson":
+        return "MutJson";
     }
     return this.kind;
   }
@@ -423,92 +379,53 @@ export class Method {
 }
 
 /**
- * ArrayType is a representation of a Wing array type.
+ * ArrayType is a representation of a Wing array or mutarray type.
  */
 export class ArrayType {
   public readonly child: Type;
+  public readonly isMut: boolean;
 
-  constructor(child: Type) {
+  constructor(child: Type, isMut: boolean) {
     this.child = child;
+    this.isMut = isMut;
   }
 
   public toString(): string {
-    return `Array<${this.child.toString()}>`;
+    return `${this.isMut ? "Mut" : ""}Array<${this.child.toString()}>`;
   }
 }
 
 /**
- * MutArrayType is a representation of a Wing mutable array type.
- */
-export class MutArrayType {
-  public readonly child: Type;
-
-  constructor(child: Type) {
-    this.child = child;
-  }
-
-  public toString(): string {
-    return `MutArray<${this.child.toString()}>`;
-  }
-}
-
-/**
- * MapType is a representation of a Wing map type.
+ * MapType is a representation of a Wing map or mutmap type.
  */
 export class MapType {
   public readonly child: Type;
+  public readonly isMut: boolean;
 
-  constructor(child: Type) {
+  constructor(child: Type, isMut: boolean) {
     this.child = child;
+    this.isMut = isMut;
   }
 
   public toString(): string {
-    return `Map<${this.child.toString()}>`;
+    return `${this.isMut ? "Mut" : ""}Map<${this.child.toString()}>`;
   }
 }
 
 /**
- * MutMapType is a representation of a Wing mutable map type.
- */
-export class MutMapType {
-  public readonly child: Type;
-
-  constructor(child: Type) {
-    this.child = child;
-  }
-
-  public toString(): string {
-    return `MutMap<${this.child.toString()}>`;
-  }
-}
-
-/**
- * SetType is a representation of a Wing set type.
+ * SetType is a representation of a Wing set or mutset type.
  */
 export class SetType {
   public readonly child: Type;
+  public readonly isMut: boolean;
 
-  constructor(child: Type) {
+  constructor(child: Type, isMut: boolean) {
     this.child = child;
+    this.isMut = isMut;
   }
 
   public toString(): string {
-    return `Set<${this.child.toString()}>`;
-  }
-}
-
-/**
- * MutSetType is a representation of a Wing mutable set type.
- */
-export class MutSetType {
-  public readonly child: Type;
-
-  constructor(child: Type) {
-    this.child = child;
-  }
-
-  public toString(): string {
-    return `MutSet<${this.child.toString()}>`;
+    return `${this.isMut ? "Mut" : ""}Set<${this.child.toString()}>`;
   }
 }
 

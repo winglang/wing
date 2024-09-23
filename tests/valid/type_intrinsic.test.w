@@ -53,6 +53,52 @@ if let opt = t7.asOptional() {
   expect.fail("t7 is not an optional");
 }
 
+let t8 = @type(Array<num>);
+expect.equal(t8.kind, "array");
+expect.equal(t8.toString(), "Array<num>");
+if let arr = t8.asArray() {
+  expect.equal(arr.child.kind, "num");
+  expect.equal(arr.toString(), "Array<num>");
+  expect.equal(arr.isMut, false);
+} else {
+  expect.fail("t8 is not an array");
+}
+
+let t9 = @type(MutMap<bool>);
+expect.equal(t9.kind, "mutmap");
+expect.equal(t9.toString(), "MutMap<bool>");
+if let map = t9.asMap() {
+  expect.equal(map.child.kind, "bool");
+  expect.equal(map.toString(), "MutMap<bool>");
+  expect.equal(map.isMut, true);
+} else {
+  expect.fail("t9 is not a map");
+}
+
+let t10 = @type(Json);
+expect.equal(t10.kind, "json");
+expect.equal(t10.toString(), "Json");
+
+let t11 = @type(MutJson);
+expect.equal(t11.kind, "mutjson");
+expect.equal(t11.toString(), "MutJson");
+
+let t12 = @type(duration);
+expect.equal(t12.kind, "duration");
+expect.equal(t12.toString(), "duration");
+
+let t13 = @type(bytes);
+expect.equal(t13.kind, "bytes");
+expect.equal(t13.toString(), "bytes");
+
+let t14 = @type(datetime);
+expect.equal(t14.kind, "datetime");
+expect.equal(t14.toString(), "datetime");
+
+let t15 = @type(bytes);
+expect.equal(t15.kind, "bytes");
+expect.equal(t15.toString(), "bytes");
+
 // TODO: why doesn't this work?
 
 // test "@type in inflight" {
