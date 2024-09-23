@@ -88,38 +88,38 @@ export class Type {
   }
 
   /** @internal */
-  public static _ofOptional(t: OptionalType): Type {
-    return new Type("optional", t);
+  public static _ofOptional(t: Type): Type {
+    return new Type("optional", new OptionalType(t));
   }
 
   /** @internal */
-  public static _ofArray(t: ArrayType): Type {
-    return new Type("array", t);
+  public static _ofArray(t: Type): Type {
+    return new Type("array", new ArrayType(t));
   }
 
   /** @internal */
-  public static _ofMutArray(t: MutArrayType): Type {
-    return new Type("mutarray", t);
+  public static _ofMutArray(t: Type): Type {
+    return new Type("mutarray", new MutArrayType(t));
   }
 
   /** @internal */
-  public static _ofMap(t: MapType): Type {
-    return new Type("map", t);
+  public static _ofMap(t: Type): Type {
+    return new Type("map", new MapType(t));
   }
 
   /** @internal */
-  public static _ofMutMap(t: MutMapType): Type {
-    return new Type("mutmap", t);
+  public static _ofMutMap(t: Type): Type {
+    return new Type("mutmap", new MutMapType(t));
   }
 
   /** @internal */
-  public static _ofSet(t: SetType): Type {
-    return new Type("set", t);
+  public static _ofSet(t: Type): Type {
+    return new Type("set", new SetType(t));
   }
 
   /** @internal */
-  public static _ofMutSet(t: MutSetType): Type {
-    return new Type("mutset", t);
+  public static _ofMutSet(t: Type): Type {
+    return new Type("mutset", new MutSetType(t));
   }
 
   /** @internal */
