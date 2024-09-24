@@ -121,7 +121,7 @@ vpc_api_gateway = true
 
 There might be times when you need to write code that is specific to a particular platform target. For example, you may want to activate a verbose logging service only when testing locally to save on cloud log storage costs.
 
-With the Wing `util` library, you can access environment variables. The `WING_TARGET` environment variable contains the current platform target as it's value, which you can use to conditionally run target-specific code. See the example below:
+The `@target` intrinsic returns the current platform target as a string value, which you can use to conditionally run target-specific code. See the example below:
 
 ```js playground example
 bring cloud;
@@ -138,7 +138,7 @@ new cloud.Function(inflight ()=> {
   // push a message to queue
   queue.push("m");
   // sleep according to target 
-  if util.env("WING_TARGET") == "sim" {
+  if @target == "sim" {
     log("Running on Simulator, sleeping for 1s");
     util.sleep(1s);
   } else {

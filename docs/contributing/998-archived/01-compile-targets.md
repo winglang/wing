@@ -74,7 +74,7 @@ new cloud.Function(inflight ()=> {
   // push a message to queue
   queue.push("m");
   // sleep according to target 
-  if util.env("WING_TARGET") == "sim" {
+  if @target == "sim" {
     log("Running on Simulator, sleeping for 1s");
     util.sleep(1s);
   } else {
@@ -85,7 +85,7 @@ new cloud.Function(inflight ()=> {
 });
 ```
 
-In this example, we want to sleep briefly for the Simulator target and for 30 seconds for cloud targets, this is achieved using the `WING_TARGET` environment variable. 
+In this example, we want to sleep briefly for the simulator target and for 30 seconds for cloud targets, this is achieved using the `@target` intrinsic function.
 
 ## Compiler plugins
 
