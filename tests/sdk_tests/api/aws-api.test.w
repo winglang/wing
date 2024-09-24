@@ -1,8 +1,5 @@
 bring cloud;
 bring aws;
-bring util;
-
-let target = util.env("WING_TARGET");
 
 let api = new cloud.Api() as "api";
 api.get("/api", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {

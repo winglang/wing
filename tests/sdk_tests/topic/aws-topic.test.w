@@ -1,8 +1,5 @@
 bring cloud;
 bring aws;
-bring util;
-
-let target = util.env("WING_TARGET");
 
 let topic = new cloud.Topic() as "aws-wing-topic";
 
@@ -20,7 +17,7 @@ let topicInfo = getTopicInfo(topic);
 
 test "validates the AWS topic name" {
   if let topic = topicInfo {
-    if target == "tf-aws" {
+    if @target == "tf-aws" {
       assert(topic.get("topicArn").contains("arn:aws:sns:"));
       assert(topic.get("topicArn").contains("aws-wing-topic"));
       assert(topic.get("topicName").contains("aws-wing-topic"));

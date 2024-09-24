@@ -30,8 +30,6 @@ let fn2 = new cloud.Function(inflight () => {
   return "{n}-fn2";
 }) as "fn2";
 
-let sim = util.env("WING_TARGET") == "sim";
-
 test "single instance of Foo" {
   let x = fn.invoke("");
   let y = fn.invoke("");
@@ -41,7 +39,7 @@ test "single instance of Foo" {
 
   // the simulator intentionally reuses the sandbox across invocations
   // but we can't trust that this will always happen on the cloud
-  if sim {
+  if @target == "sim" {
     expect.equal(y, "101");
     log("client has been reused");
   }

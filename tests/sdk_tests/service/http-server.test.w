@@ -1,5 +1,4 @@
 bring cloud;
-bring util;
 bring http;
 
 struct Address {
@@ -12,8 +11,8 @@ inflight interface IHttpServer {
 }
 
 
-// hack: only supported in the "sim" target for now
-if util.env("WING_TARGET") == "sim" {
+// only supported in the "sim" target for now
+if @target == "sim" {
   class MyService {
     b: cloud.Bucket;
     body: str;

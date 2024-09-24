@@ -22,7 +22,7 @@ if let arn = aws.Function.from(f)?.functionArn {
   }
 }
 
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   bring expect;
 
   let dummyArn = "arn:aws:lambda:us-east-1:111111111111:function:Function-11111111";

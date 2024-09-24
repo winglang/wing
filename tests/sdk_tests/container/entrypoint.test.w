@@ -6,11 +6,10 @@ skipPlatforms:
 
 bring sim;
 bring http;
-bring util;
 bring expect;
 
 // only relevant in simulator
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   let entrypoint = new sim.Container(
     name: "my-entrypoint-app",
     image: "./my-docker-image",

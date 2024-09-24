@@ -1,8 +1,5 @@
 bring cloud;
 bring aws;
-bring util;
-
-let target = util.env("WING_TARGET");
 
 let bucket = new cloud.Bucket() as "aws-wing-bucket";
 
@@ -20,7 +17,7 @@ let bucketInfo = getBucketInfo(bucket);
 
 test "validates the AWS Bucket" {
   if let bucket = bucketInfo {
-    if target == "tf-aws" {
+    if @target == "tf-aws" {
       assert(bucket.get("bucketArn").contains("arn:aws:s3:::aws-wing-bucket"));
       assert(bucket.get("bucketName").contains("aws-wing-bucket"));
     } else { // If it's not a 'tf-aws' target, it's an 'awscdk'
