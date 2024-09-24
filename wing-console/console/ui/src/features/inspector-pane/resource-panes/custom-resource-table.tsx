@@ -1,10 +1,10 @@
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { Button } from "@wingconsole/design-system";
 import { memo } from "react";
 
 import { trpc } from "../../../trpc.js";
 
 import { TableInteraction } from "./table-interaction.js";
-import { Button } from "@wingconsole/design-system";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
 export interface CustomResourceTableProps {
   scanHandler: string;
