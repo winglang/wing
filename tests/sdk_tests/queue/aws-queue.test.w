@@ -2,8 +2,6 @@ bring cloud;
 bring aws;
 bring util;
 
-let target = util.env("WING_TARGET");
-
 let queue = new cloud.Queue() as "aws-wing-queue";
 
 let getQueueInfo = (q: cloud.Queue): Map<str>? => {
@@ -21,7 +19,7 @@ let queueInfo = getQueueInfo(queue);
 
 test "validates the AWS queue name" {
   if let queue = queueInfo {
-    if target == "tf-aws" {
+    if @target == "tf-aws" {
       assert(queue.get("queueArn").contains("arn:aws:sqs:"));
       assert(queue.get("queueArn").contains("aws-wing-queue"));
       assert(queue.get("queueName").contains("aws-wing-queue"));

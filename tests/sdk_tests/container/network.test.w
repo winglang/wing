@@ -6,11 +6,10 @@ skipPlatforms:
 
 bring sim;
 bring http;
-bring util;
 bring expect;
 
 // only relevant in simulator
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   let networkHost = new sim.Container(
     name: "http-echo",
     image: "hashicorp/http-echo",

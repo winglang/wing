@@ -4,10 +4,9 @@ skipPlatforms:
   - darwin
 \*/
 bring sim;
-bring util;
 
 // only relevant in simulator
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   let container = new sim.Container(
     name: "postgres",
     image: "postgres:15",

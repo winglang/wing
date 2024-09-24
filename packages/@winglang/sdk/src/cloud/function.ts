@@ -122,10 +122,6 @@ export class Function extends Resource implements IInflightHost {
     const entrypoint = join(workdir, `${assetName}.cjs`);
     this.entrypoint = entrypoint;
 
-    if (process.env.WING_TARGET) {
-      this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
-    }
-
     if (props.concurrency !== undefined && props.concurrency <= 0) {
       throw new Error(
         "concurrency option on cloud.Function must be a positive integer"

@@ -2527,7 +2527,7 @@ impl<'s> Parser<'s> {
 		};
 
 		if matches!(kind, IntrinsicKind::Unknown) {
-			self.add_error("Invalid intrinsic", &expression_node);
+			self.add_error(format!("Unknown intrinsic: @{}", name), &expression_node);
 		}
 
 		Ok(Expr::new(

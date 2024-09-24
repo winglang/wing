@@ -1,5 +1,4 @@
 bring sim;
-bring util;
 
 inflight class BadTokenResolverBackend impl sim.IResource {
   ctx: sim.IResourceContext;
@@ -26,7 +25,7 @@ class BadTokenResolver {
 }
 
 // Only run these tests in the simulator
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   let r = new BadTokenResolver();
 
   test "calling resolveToken during a method call emits an error" {

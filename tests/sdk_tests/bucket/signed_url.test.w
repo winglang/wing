@@ -51,14 +51,13 @@ test "signedUrl PUT" {
 
 test "signedUrl duration option is respected" {
   let isExpiredTokenError = (output: str) => {
-    let target = util.env("WING_TARGET");
     let var result = false;
 
-    if target == "tf-aws" {
+    if @target == "tf-aws" {
       result = output.contains("<Code>AccessDenied</Code><Message>Request has expired</Message>");
-    } else if target == "tf-gcp" {
+    } else if @target == "tf-gcp" {
       result = output.contains("<Code>ExpiredToken</Code><Message>Invalid argument.</Message>");
-    } else if target == "sim" {
+    } else if @target == "sim" {
       result = output.contains("Signed URL has expired");
     }
 

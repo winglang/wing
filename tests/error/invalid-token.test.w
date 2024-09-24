@@ -1,5 +1,4 @@
 bring sim;
-bring util;
 
 inflight class MyResourceBackend impl sim.IResource {
   ctx: sim.IResourceContext;
@@ -22,7 +21,7 @@ class MyResource {
 }
 
 // Only run these tests in the simulator
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   let r = new MyResource();
   let fakeAttr = r.fakeAttr();
 

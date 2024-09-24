@@ -1,8 +1,5 @@
 bring cloud;
 bring aws;
-bring util;
-
-let target = util.env("WING_TARGET");
 
 let counter = new cloud.Counter(initial: 1) as "aws-wing-counter";
 
@@ -20,7 +17,7 @@ let counterInfo = getCounterInfo(counter);
 
 test "validates the AWS counter name" {
   if let counter = counterInfo {
-    if target == "tf-aws" {
+    if @target == "tf-aws" {
       assert(counter.get("dynamoTableArn").contains("arn:aws:dynamodb:"));
       assert(counter.get("dynamoTableArn").contains("aws-wing-counter"));
       assert(counter.get("dynamoTableName").contains("aws-wing-counter"));

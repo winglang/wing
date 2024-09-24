@@ -6,7 +6,6 @@ skip: true
 bring "@cdktf/provider-aws" as tfaws;
 bring aws;
 bring cloud;
-bring util;
 
 enum AttributeType {
   String,
@@ -23,9 +22,8 @@ class DynamoTable {
   table: tfaws.dynamodbTable.DynamodbTable;
   tableName: str;
   new() {
-    let target = util.env("WING_TARGET");
-    if target != "tf-aws" {
-      throw "Unsupported target: {target} (expected 'tf-aws')";
+    if @target != "tf-aws" {
+      throw "Unsupported target: {@target} (expected 'tf-aws')";
     }
 
     this.table = new tfaws.dynamodbTable.DynamodbTable(

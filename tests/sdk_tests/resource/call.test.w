@@ -154,7 +154,7 @@ class MyResource {
 }
 
 // Only run these tests in the simulator
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   let r1 = new MyResource();
 
   test "resource.call with a field name returns the field value" {

@@ -31,7 +31,7 @@ if let arn = aws.Queue.from(q)?.queueArn {
   }
 }
 
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   bring expect;
 
   let dummyArn = "arn:aws:sqs:us-east-1:111111111111:Queue-11111111";

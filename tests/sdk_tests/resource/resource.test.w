@@ -1,6 +1,5 @@
 bring cloud;
 bring sim;
-bring util;
 
 inflight class CounterBackend impl sim.IResource {
   var counter: num;
@@ -59,7 +58,7 @@ class Counter {
 let c = new Counter();
 
 // Only run these tests in the simulator
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   test "Counter" {
     assert(c.inc() == 0);
     assert(c.inc() == 1);
@@ -80,7 +79,7 @@ class DoubleCounter extends Counter {
 
 let dc = new DoubleCounter();
 
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   test "DoubleCounter" {
     assert(dc.inc() == 0);
     assert(dc.inc() == 2);

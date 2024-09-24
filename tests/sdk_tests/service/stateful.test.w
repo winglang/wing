@@ -3,7 +3,7 @@ bring util;
 bring http;
 
 // hack: only supported in the "sim" target for now
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   class MyService {
     b: cloud.Bucket;
     body: str;

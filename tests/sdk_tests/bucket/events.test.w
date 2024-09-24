@@ -62,7 +62,7 @@ new std.Test(inflight () => {
   b.delete("c");
 
 // https://github.com/winglang/wing/issues/2724
-  if (util.env("WING_TARGET") != "tf-aws") {
+  if @target != "tf-aws" {
     // assert that onCreate events about the "a", "b", and "c" objects were each produced exactly 1 time
     checkHitCount(key: "a", type: "OnCreate()", source: Source.anyEvent, count: 1);
     checkHitCount(key: "b", type: "OnCreate()", source: Source.anyEvent, count: 1);

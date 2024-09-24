@@ -3,7 +3,7 @@ bring util;
 
 // TODO: support concurrency on AWS
 
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   let c = new cloud.Counter();
   
   let f1 = new cloud.Function(inflight () => {

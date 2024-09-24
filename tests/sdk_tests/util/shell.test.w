@@ -2,10 +2,6 @@ bring util;
 bring expect;
 bring fs;
 
-class Util {
-  extern "./util.js" pub static inflight platform(): str;
-}
-
 let assertThrows = inflight (expected: str, block: (): void) => {
   let var error = false;
   try {
@@ -22,7 +18,7 @@ test "shell() with valid command" {
 
   let output = util.shell(command);
   
-  if Util.platform() != "win32" {
+  if util.os() != "win32" {
     expect.equal(output, "Hello, Wing!\n");
   } else {
     expect.equal(output, "Hello, Wing!\r\n");
@@ -51,7 +47,7 @@ test "shell() with explicit non-zero exit status" {
 
 test "shell() with env option" {
   let var command = "";
-  if Util.platform() != "win32" {
+  if util.os() != "win32" {
     command = "echo $WING_TARGET $ENV_VAR";
   } else {
     command = "echo %WING_TARGET% %ENV_VAR%";
@@ -62,7 +58,7 @@ test "shell() with env option" {
 
   let output = util.shell(command, opts);
 
-  if Util.platform() != "win32" {
+  if util.os() != "win32" {
     expect.equal(output, "Wing\n");
   } else {
     expect.equal(output, "%WING_TARGET% Wing\r\n");
@@ -70,10 +66,8 @@ test "shell() with env option" {
 }
 
 test "shell() with inheritEnv option" {
-  let target = util.env("WING_TARGET");
-
   let var command = "";
-  if Util.platform() != "win32" {
+  if util.os() != "win32" {
     command = "echo $WING_TARGET";
   } else {
     command = "echo %WING_TARGET%";
@@ -85,15 +79,15 @@ test "shell() with inheritEnv option" {
   let output1 = util.shell(command);
   let output2 = util.shell(command, opts);
 
-  if Util.platform() != "win32" {
+  if util.os() != "win32" {
     // \n
     expect.equal(output1.length, 1);
   } else {
     // %WING_TARGET%\r\n
     expect.equal(output1.length, 15);
   }
-  assert(output1.contains(target) == false);
-  assert(output2.contains(target) == true);
+  assert(output1.contains(@target) == false);
+  assert(output2.contains(@target) == true);
 }
 
 test "shell() with cwd option" {

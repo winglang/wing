@@ -1,5 +1,4 @@
 bring sim;
-bring util;
 
 inflight class OnStartThrowerBackend impl sim.IResource {
   new() {
@@ -24,7 +23,7 @@ class OnStartThrower {
 }
 
 // Only run these tests in the simulator
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   let r = new OnStartThrower();
 
   test "method calls fail if the resource fails to start" {
