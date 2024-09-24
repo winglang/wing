@@ -85,11 +85,10 @@ class $Root extends $stdlib.std.Resource {
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
     const cloud = $stdlib.cloud;
-    const util = $stdlib.util;
     const aws = require("@cdktf/provider-aws");
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const b = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
-    if ($helpers.eq((util.Util.env("WING_TARGET")), "tf-aws")) {
+    if ($helpers.eq(process.env.WING_TARGET, "tf-aws")) {
       const s3Bucket = ($helpers.nodeof(b).findChild("Default"));
       (s3Bucket.addOverride("bucket_prefix", "my-prefix-"));
       console.log($helpers.nodeof(s3Bucket).path);

@@ -134,6 +134,7 @@ class $Root extends $stdlib.std.Resource {
     (expect.Util.equal($helpers.resolve(__dirname, "../../../intrinsics.test.w"), currentFile));
     (expect.Util.equal((fs.Util.dirname(currentFile)), $helpers.resolve(__dirname, "../../..")));
     (expect.Util.equal((bar.Bar.getSubfile(this)), (fs.Util.join($helpers.resolve(__dirname, "../../.."), "subdir", "bar.w"))));
+    (expect.Util.ok($macros.__Array_contains(false, ["sim", "tf-aws", "tf-azure", "tf-gcp", "awscdk"], process.env.WING_TARGET)));
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "intrinsics.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
