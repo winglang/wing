@@ -2333,6 +2333,28 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 				AccessModifier::Public,
 				StatementIdx::Top,
 			);
+
+		// @target
+		let _ = self.types
+			.intrinsics
+			.define(
+				&Symbol::global(IntrinsicKind::Target.to_string()),
+				SymbolKind::Variable(VariableInfo {
+					access: AccessModifier::Public,
+					name: Symbol::global(IntrinsicKind::Target.to_string()),
+					docs: Some(Docs::with_summary(
+						r#"Returns a string identifying the current compilation platform.
+
+This value is set by the CLI at compile time and can be used to conditionally compile code that is dependent on the target platform."#,
+					)),
+					kind: VariableKind::StaticMember,
+					phase: Phase::Independent,
+					type_: self.types.string(),
+					reassignable: false,
+				}),
+				AccessModifier::Public,
+				StatementIdx::Top,
+			);
 	}
 
 	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
@@ -2981,7 +3003,11 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 				}
 
 				match intrinsic.kind {
-					IntrinsicKind::Dirname | IntrinsicKind::Filename | IntrinsicKind::App | IntrinsicKind::Unknown => {
+					IntrinsicKind::Dirname
+					| IntrinsicKind::Filename
+					| IntrinsicKind::App
+					| IntrinsicKind::Target
+					| IntrinsicKind::Unknown => {
 						return (sig.return_type, sig.phase);
 					}
 				}
