@@ -120,10 +120,6 @@ export class Resource
     const entrypoint = join(workdir, `${assetName}.cjs`);
     this.entrypoint = entrypoint;
 
-    if (process.env.WING_TARGET) {
-      this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
-    }
-
     this.factory = factory;
   }
 
