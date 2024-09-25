@@ -1437,6 +1437,38 @@ impl TypeRef {
 			_ => self.is_json_legal_value(),
 		}
 	}
+
+	pub fn short_friendly_name(&self) -> String {
+		match &**self {
+			Type::Anything => "any".to_string(),
+			Type::Number => "num".to_string(),
+			Type::String => "str".to_string(),
+			Type::Duration => "duration".to_string(),
+			Type::Datetime => "datetime".to_string(),
+			Type::Regex => "regex".to_string(),
+			Type::Bytes => "bytes".to_string(),
+			Type::Boolean => "bool".to_string(),
+			Type::Void => "void".to_string(),
+			Type::Json(_) => "json".to_string(),
+			Type::MutJson => "mutjson".to_string(),
+			Type::Nil => "nil".to_string(),
+			Type::Unresolved => "unresolved".to_string(),
+			Type::Inferred(_) => "unknown".to_string(),
+			Type::Optional(t) => format!("opt_{}", t.short_friendly_name()),
+			Type::Array(t) => format!("array_{}", t.short_friendly_name()),
+			Type::MutArray(t) => format!("mutarray_{}", t.short_friendly_name()),
+			Type::Map(t) => format!("map_{}", t.short_friendly_name()),
+			Type::MutMap(t) => format!("mutmap_{}", t.short_friendly_name()),
+			Type::Set(t) => format!("set_{}", t.short_friendly_name()),
+			Type::MutSet(t) => format!("mutset_{}", t.short_friendly_name()),
+			Type::Function(_) => "fn".to_string(),
+			Type::Class(class) => format!("class_{}", class.name),
+			Type::Interface(interface) => format!("interface_{}", interface.name),
+			Type::Struct(struct_) => format!("struct_{}", struct_.name),
+			Type::Enum(enum_) => format!("enum_{}", enum_.name),
+			Type::Stringable => "stringable".to_string(),
+		}
+	}
 }
 
 impl Subtype for TypeRef {

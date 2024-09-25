@@ -2287,7 +2287,8 @@ impl<'a> JSifier<'a> {
 		// Generate a unique name for referring to this type in the $types object
 		let mut type_variable_counter = self.type_variable_counter.borrow_mut();
 		*type_variable_counter += 1;
-		let type_variable_name = format!("t{}", type_variable_counter);
+		let friendly_name = type_.short_friendly_name();
+		let type_variable_name = format!("t{}_{}", type_variable_counter, friendly_name);
 		std::mem::drop(type_variable_counter);
 
 		// Insert a placeholder so that recursive references can be resolved
