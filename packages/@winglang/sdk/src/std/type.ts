@@ -287,13 +287,13 @@ export class ClassType implements ILiftable {
   public _toInflight(): string {
     const args = [
       `"${this.name}"`,
-      `"${this.fqn}"`,
+      this.fqn ? `"${this.fqn}"` : "undefined",
       this.base?._toInflight(),
       arrayToInflight(this.interfaces),
       mapToInflight(this.properties),
       mapToInflight(this.methods),
     ];
-    return `(require("${normalPath(__filename)}").ClassType)(${args.join(
+    return `new (require("${normalPath(__filename)}").ClassType)(${args.join(
       ", "
     )})`;
   }
@@ -331,14 +331,14 @@ export class InterfaceType implements ILiftable {
   public _toInflight(): string {
     const args = [
       `"${this.name}"`,
-      `"${this.fqn}"`,
+      this.fqn ? `"${this.fqn}"` : "undefined",
       arrayToInflight(this.bases),
       mapToInflight(this.properties),
       mapToInflight(this.methods),
     ];
-    return `(require("${normalPath(__filename)}").InterfaceType)(${args.join(
-      ", "
-    )})`;
+    return `new (require("${normalPath(
+      __filename
+    )}").InterfaceType)(${args.join(", ")})`;
   }
 
   public toString(): string {
@@ -371,11 +371,11 @@ export class StructType implements ILiftable {
   public _toInflight(): string {
     const args = [
       `"${this.name}"`,
-      `"${this.fqn}"`,
+      this.fqn ? `"${this.fqn}"` : "undefined",
       arrayToInflight(this.bases),
       mapToInflight(this.fields),
     ];
-    return `(require("${normalPath(__filename)}").StructType)(${args.join(
+    return `new (require("${normalPath(__filename)}").StructType)(${args.join(
       ", "
     )})`;
   }
@@ -406,10 +406,10 @@ export class EnumType implements ILiftable {
   public _toInflight(): string {
     const args = [
       `"${this.name}"`,
-      `"${this.fqn}"`,
+      this.fqn ? `"${this.fqn}"` : "undefined",
       mapToInflight(this.variants),
     ];
-    return `(require("${normalPath(__filename)}").EnumType)(${args.join(
+    return `new (require("${normalPath(__filename)}").EnumType)(${args.join(
       ", "
     )})`;
   }
@@ -431,7 +431,9 @@ export class EnumVariant implements ILiftable {
 
   /** @internal */
   public _toInflight(): string {
-    return `(require("${normalPath(__filename)}").EnumVariant)("${this.name}")`;
+    return `new (require("${normalPath(__filename)}").EnumVariant)("${
+      this.name
+    }")`;
   }
 
   public toString(): string {
@@ -453,7 +455,7 @@ export class Property implements ILiftable {
 
   /** @internal */
   public _toInflight(): string {
-    return `(require("${normalPath(__filename)}").Property)("${
+    return `new (require("${normalPath(__filename)}").Property)("${
       this.name
     }", ${this.child._toInflight()})`;
   }
@@ -475,7 +477,7 @@ export class Method implements ILiftable {
 
   /** @internal */
   public _toInflight(): string {
-    return `(require("${normalPath(__filename)}").Method)("${this.name}", ${
+    return `new (require("${normalPath(__filename)}").Method)("${this.name}", ${
       this.isStatic
     }, ${this.child._toInflight()})`;
   }
@@ -495,7 +497,7 @@ export class ArrayType implements ILiftable {
 
   /** @internal */
   public _toInflight(): string {
-    return `(require("${normalPath(
+    return `new (require("${normalPath(
       __filename
     )}").ArrayType)(${this.child._toInflight()}, ${this.isMut})`;
   }
@@ -519,7 +521,7 @@ export class MapType implements ILiftable {
 
   /** @internal */
   public _toInflight(): string {
-    return `(require("${normalPath(
+    return `new (require("${normalPath(
       __filename
     )}").MapType)(${this.child._toInflight()}, ${this.isMut})`;
   }
@@ -543,7 +545,7 @@ export class SetType implements ILiftable {
 
   /** @internal */
   public _toInflight(): string {
-    return `(require("${normalPath(
+    return `new (require("${normalPath(
       __filename
     )}").SetType)(${this.child._toInflight()}, ${this.isMut})`;
   }
@@ -565,7 +567,7 @@ export class OptionalType implements ILiftable {
 
   /** @internal */
   public _toInflight(): string {
-    return `(require("${normalPath(
+    return `new (require("${normalPath(
       __filename
     )}").OptionalType)(${this.child._toInflight()})`;
   }
@@ -591,7 +593,7 @@ export class FunctionType implements ILiftable {
 
   /** @internal */
   public _toInflight(): string {
-    return `(require("${normalPath(__filename)}").FunctionType)("${
+    return `new (require("${normalPath(__filename)}").FunctionType)("${
       this.phase
     }", ${arrayToInflight(this.params)}, ${this.returns._toInflight()})`;
   }
