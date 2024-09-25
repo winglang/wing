@@ -1,4 +1,6 @@
 import { InflightClient } from "../core/inflight";
+import { normalPath } from "../shared/misc";
+import { ILiftable } from "./resource";
 
 /**
  * Type is a representation of a Wing type.
@@ -6,10 +8,17 @@ import { InflightClient } from "../core/inflight";
  * Use the "kind" property to determine what kind of type this is, and use
  * one of the "as" methods to extract more specific information.
  */
-export class Type {
+export class Type implements ILiftable {
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(new (require("${normalPath(__filename)}").Type)("${this.kind}", ${
+      this.data?._toInflight() ?? "undefined"
+    }))`;
   }
 
   /** @internal */
@@ -113,9 +122,9 @@ export class Type {
   }
 
   public readonly kind: string;
-  private readonly data: any;
+  private readonly data: ILiftable | undefined;
 
-  private constructor(kind: string, data: any) {
+  private constructor(kind: string, data: ILiftable | undefined) {
     this.kind = kind;
     this.data = data;
   }
@@ -219,6 +228,10 @@ export class Type {
     return undefined;
   }
 
+  /**
+   * Get the string representation of this type.
+   * @returns The string representation of this type.
+   */
   public toString(): string {
     switch (this.kind) {
       case "class":
@@ -233,7 +246,7 @@ export class Type {
       case "set":
       case "mutset":
       case "optional":
-        return this.data.toString();
+        return this.data!.toString();
       case "json":
         return "Json";
       case "mutjson":
@@ -246,17 +259,43 @@ export class Type {
 /**
  * ClassType is a representation of a Wing class type.
  */
-export class ClassType {
+export class ClassType implements ILiftable {
   public readonly name: string;
   public readonly fqn: string | undefined;
-  public readonly base: ClassType | undefined = undefined;
+  public readonly base: ClassType | undefined;
   public readonly interfaces: ClassType[] = [];
-  public readonly properties: { [key: string]: Property } = {};
-  public readonly methods: { [key: string]: Method } = {};
+  public readonly properties: { [key: string]: Property };
+  public readonly methods: { [key: string]: Method };
 
-  constructor(name: string, fqn: string) {
+  constructor(
+    name: string,
+    fqn: string | undefined,
+    base?: ClassType,
+    interfaces: ClassType[] = [],
+    properties: { [key: string]: Property } = {},
+    methods: { [key: string]: Method } = {}
+  ) {
     this.name = name;
     this.fqn = fqn;
+    this.base = base;
+    this.interfaces = interfaces;
+    this.properties = properties;
+    this.methods = methods;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    const args = [
+      `"${this.name}"`,
+      `"${this.fqn}"`,
+      this.base?._toInflight(),
+      arrayToInflight(this.interfaces),
+      mapToInflight(this.properties),
+      mapToInflight(this.methods),
+    ];
+    return `(require("${normalPath(__filename)}").ClassType)(${args.join(
+      ", "
+    )})`;
   }
 
   public toString(): string {
@@ -267,16 +306,39 @@ export class ClassType {
 /**
  * InterfaceType is a representation of a Wing interface type.
  */
-export class InterfaceType {
+export class InterfaceType implements ILiftable {
   public readonly name: string;
   public readonly fqn: string | undefined;
-  public readonly bases: InterfaceType[] = [];
-  public readonly properties: { [key: string]: Property } = {};
-  public readonly methods: { [key: string]: Method } = {};
+  public readonly bases: InterfaceType[];
+  public readonly properties: { [key: string]: Property };
+  public readonly methods: { [key: string]: Method };
 
-  constructor(name: string, fqn: string) {
+  constructor(
+    name: string,
+    fqn: string | undefined,
+    bases: InterfaceType[] = [],
+    properties: { [key: string]: Property } = {},
+    methods: { [key: string]: Method } = {}
+  ) {
     this.name = name;
     this.fqn = fqn;
+    this.bases = bases;
+    this.properties = properties;
+    this.methods = methods;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    const args = [
+      `"${this.name}"`,
+      `"${this.fqn}"`,
+      arrayToInflight(this.bases),
+      mapToInflight(this.properties),
+      mapToInflight(this.methods),
+    ];
+    return `(require("${normalPath(__filename)}").InterfaceType)(${args.join(
+      ", "
+    )})`;
   }
 
   public toString(): string {
@@ -287,17 +349,36 @@ export class InterfaceType {
 /**
  * StructType is a representation of a Wing struct type.
  */
-export class StructType {
+export class StructType implements ILiftable {
   public readonly name: string;
   public readonly fqn: string | undefined;
-  public readonly bases: StructType[] = [];
-  public readonly fields: { [key: string]: Property } = {};
+  public readonly bases: StructType[];
+  public readonly fields: { [key: string]: Property };
 
-  constructor(name: string, fqn: string) {
+  constructor(
+    name: string,
+    fqn: string | undefined,
+    bases: StructType[] = [],
+    fields: { [key: string]: Property } = {}
+  ) {
     this.name = name;
     this.fqn = fqn;
+    this.bases = bases;
+    this.fields = fields;
   }
 
+  /** @internal */
+  public _toInflight(): string {
+    const args = [
+      `"${this.name}"`,
+      `"${this.fqn}"`,
+      arrayToInflight(this.bases),
+      mapToInflight(this.fields),
+    ];
+    return `(require("${normalPath(__filename)}").StructType)(${args.join(
+      ", "
+    )})`;
+  }
   public toString(): string {
     return this.name;
   }
@@ -306,19 +387,31 @@ export class StructType {
 /**
  * EnumType is a representation of a Wing enum type.
  */
-export class EnumType {
+export class EnumType implements ILiftable {
   public readonly name: string;
   public readonly fqn: string | undefined;
   public readonly variants: { [key: string]: EnumVariant };
 
   constructor(
     name: string,
-    fqn: string,
-    variants: { [key: string]: EnumVariant }
+    fqn: string | undefined,
+    variants: { [key: string]: EnumVariant } = {}
   ) {
     this.name = name;
     this.fqn = fqn;
     this.variants = variants;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    const args = [
+      `"${this.name}"`,
+      `"${this.fqn}"`,
+      mapToInflight(this.variants),
+    ];
+    return `(require("${normalPath(__filename)}").EnumType)(${args.join(
+      ", "
+    )})`;
   }
 
   public toString(): string {
@@ -329,11 +422,16 @@ export class EnumType {
 /**
  * EnumVariant is a representation of a Wing enum variant.
  */
-export class EnumVariant {
+export class EnumVariant implements ILiftable {
   public readonly name: string;
 
   constructor(name: string) {
     this.name = name;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(require("${normalPath(__filename)}").EnumVariant)("${this.name}")`;
   }
 
   public toString(): string {
@@ -344,7 +442,7 @@ export class EnumVariant {
 /**
  * Property is a representation of a Wing property.
  */
-export class Property {
+export class Property implements ILiftable {
   public readonly name: string;
   public readonly child: Type;
 
@@ -352,12 +450,19 @@ export class Property {
     this.name = name;
     this.child = child;
   }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(require("${normalPath(__filename)}").Property)("${
+      this.name
+    }", ${this.child._toInflight()})`;
+  }
 }
 
 /**
  * Method is a representation of a Wing method.
  */
-export class Method {
+export class Method implements ILiftable {
   public readonly name: string;
   public readonly isStatic: boolean;
   public readonly child: FunctionType;
@@ -367,18 +472,32 @@ export class Method {
     this.isStatic = isStatic;
     this.child = child;
   }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(require("${normalPath(__filename)}").Method)("${this.name}", ${
+      this.isStatic
+    }, ${this.child._toInflight()})`;
+  }
 }
 
 /**
  * ArrayType is a representation of a Wing array or mutarray type.
  */
-export class ArrayType {
+export class ArrayType implements ILiftable {
   public readonly child: Type;
   public readonly isMut: boolean;
 
   constructor(child: Type, isMut: boolean) {
     this.child = child;
     this.isMut = isMut;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(require("${normalPath(
+      __filename
+    )}").ArrayType)(${this.child._toInflight()}, ${this.isMut})`;
   }
 
   public toString(): string {
@@ -389,13 +508,20 @@ export class ArrayType {
 /**
  * MapType is a representation of a Wing map or mutmap type.
  */
-export class MapType {
+export class MapType implements ILiftable {
   public readonly child: Type;
   public readonly isMut: boolean;
 
   constructor(child: Type, isMut: boolean) {
     this.child = child;
     this.isMut = isMut;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(require("${normalPath(
+      __filename
+    )}").MapType)(${this.child._toInflight()}, ${this.isMut})`;
   }
 
   public toString(): string {
@@ -406,13 +532,20 @@ export class MapType {
 /**
  * SetType is a representation of a Wing set or mutset type.
  */
-export class SetType {
+export class SetType implements ILiftable {
   public readonly child: Type;
   public readonly isMut: boolean;
 
   constructor(child: Type, isMut: boolean) {
     this.child = child;
     this.isMut = isMut;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(require("${normalPath(
+      __filename
+    )}").SetType)(${this.child._toInflight()}, ${this.isMut})`;
   }
 
   public toString(): string {
@@ -423,11 +556,18 @@ export class SetType {
 /**
  * OptionalType is a representation of a Wing optional type.
  */
-export class OptionalType {
+export class OptionalType implements ILiftable {
   public readonly child: Type;
 
   constructor(child: Type) {
     this.child = child;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(require("${normalPath(
+      __filename
+    )}").OptionalType)(${this.child._toInflight()})`;
   }
 
   public toString(): string {
@@ -438,7 +578,7 @@ export class OptionalType {
 /**
  * FunctionType is a representation of a Wing function type.
  */
-export class FunctionType {
+export class FunctionType implements ILiftable {
   public readonly phase: Phase;
   public readonly params: Type[];
   public readonly returns: Type;
@@ -447,6 +587,13 @@ export class FunctionType {
     this.phase = phase;
     this.params = params;
     this.returns = returns;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(require("${normalPath(__filename)}").FunctionType)("${
+      this.phase
+    }", ${arrayToInflight(this.params)}, ${this.returns._toInflight()})`;
   }
 
   public toString(): string {
@@ -471,4 +618,18 @@ export enum Phase {
   INFLIGHT = "inflight",
   PREFLIGHT = "preflight",
   UNPHASED = "unphased",
+}
+
+function arrayToInflight(arr: ILiftable[]): string {
+  return "[" + arr.map((a) => a._toInflight()).join(", ") + "]";
+}
+
+function mapToInflight(obj: Record<string, ILiftable>): string {
+  return (
+    "{" +
+    Object.entries(obj)
+      .map(([key, value]) => `${key}: ${value._toInflight()}`)
+      .join(", ") +
+    "}"
+  );
 }
