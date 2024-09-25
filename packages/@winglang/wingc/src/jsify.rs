@@ -2424,16 +2424,19 @@ impl<'a> JSifier<'a> {
 					Phase::Preflight => "std.Phase.PREFLIGHT",
 					Phase::Independent => "std.Phase.UNPHASED",
 				});
-				func_code.append(", [");
-				for p in &function_signature.parameters {
-					func_code.append(self.jsify_reflection_type(p.typeref, &expr_span));
-					func_code.append(", ");
-				}
-				func_code.append("], ");
-				func_code.append(self.jsify_reflection_type(function_signature.return_type, &expr_span));
 				func_code.append("))");
 
-				(func_code, CodeMaker::with_source(expr_span))
+				let mut rest = CodeMaker::with_source(expr_span);
+				for p in &function_signature.parameters {
+					rest.line(format!("$types.{type_variable_name}.data.params.push("));
+					rest.append(self.jsify_reflection_type(p.typeref, &expr_span));
+					rest.append(".data);");
+				}
+				rest.line(format!("$types.{type_variable_name}.data.returns = "));
+				rest.append(self.jsify_reflection_type(function_signature.return_type, &expr_span));
+				rest.append(";");
+
+				(func_code, rest)
 			}
 			Type::Class(ref class) => {
 				let fqn_string = match &class.fqn {

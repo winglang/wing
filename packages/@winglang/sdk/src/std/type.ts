@@ -587,7 +587,7 @@ export class FunctionType implements ILiftable {
 
   constructor(phase: Phase, params: Type[], returns: Type) {
     this.phase = phase;
-    this.params = params;
+    this.params = params ?? [];
     this.returns = returns;
   }
 
