@@ -914,18 +914,6 @@ impl FunctionSignature {
 	}
 }
 
-impl PartialEq for FunctionSignature {
-	fn eq(&self, other: &Self) -> bool {
-		self
-			.parameters
-			.iter()
-			.zip(other.parameters.iter())
-			.all(|(x, y)| x.typeref.is_same_type_as(&y.typeref))
-			&& self.return_type.is_same_type_as(&other.return_type)
-			&& self.phase == other.phase
-	}
-}
-
 impl Display for SymbolKind {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
