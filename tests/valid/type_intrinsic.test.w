@@ -125,6 +125,7 @@ if let iface = t16.asInterface() {
 class MyClass impl MyInterface {
   pub field1: str;
   pub method1(): void {}
+  pub static method2(): void {}
   new() {
     this.field1 = "hello";
   }
@@ -144,9 +145,13 @@ if let cls = t17.asClass() {
   expect.equal(cls.properties.size(), 1);
   expect.equal(cls.properties["field1"].name, "field1");
   expect.equal(cls.properties["field1"].child.kind, "str");
-  expect.ok(cls.methods.size() >= 1); // all classes have some base methods
+  expect.ok(cls.methods.size() >= 2); // all classes have some base methods
   expect.equal(cls.methods["method1"].name, "method1");
+  expect.equal(cls.methods["method1"].isStatic, false);
   expect.equal(cls.methods["method1"].child.toString(), "preflight (): void");
+  expect.equal(cls.methods["method2"].name, "method2");
+  expect.equal(cls.methods["method2"].isStatic, true);
+  expect.equal(cls.methods["method2"].child.toString(), "preflight (): void");
 } else {
   expect.fail("t17 is not a class");
 }
