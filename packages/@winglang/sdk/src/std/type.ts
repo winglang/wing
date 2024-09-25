@@ -121,6 +121,9 @@ export class Type implements ILiftable {
     return new Type("function", f);
   }
 
+  /**
+   * What kind of type this is.
+   */
   public readonly kind: string;
   private readonly data: ILiftable | undefined;
 
@@ -379,6 +382,7 @@ export class StructType implements ILiftable {
       ", "
     )})`;
   }
+
   public toString(): string {
     return this.name;
   }

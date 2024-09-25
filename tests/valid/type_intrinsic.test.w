@@ -246,7 +246,7 @@ test "@type in inflight" {
     expect.fail("t4 is not a function");
   }
 
-  // skip t5 since preflight functions since we don't have a way to represent a preflight function type annotation in inflight
+  // skip t5 since we don't have a way to represent a preflight function type annotation in inflight
 
   let t6 = @type(void);
   expect.equal(t6.kind, "void");
