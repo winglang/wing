@@ -39,6 +39,7 @@ use derivative::Derivative;
 use indexmap::IndexMap;
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
+use std::hash::{Hash, Hasher};
 
 use std::cmp;
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -93,6 +94,26 @@ where
 }
 
 pub type TypeRef = UnsafeRef<Type>;
+
+// Comparing typerefs may be imprecise because the compiler doesn't do any de-duplication
+// of types -- so it's possible two function types with different spans will be considered
+// different typerefs, even though they represent the same type.
+// But this is ok if you are only using them for classes, enums, structs, and interfaces,
+// as these are all unique / nominally typed.
+
+impl Hash for TypeRef {
+	fn hash<H: Hasher>(&self, state: &mut H) {
+		self.0.hash(state);
+	}
+}
+
+impl PartialEq for TypeRef {
+	fn eq(&self, other: &Self) -> bool {
+		self.0 == other.0
+	}
+}
+
+impl Eq for TypeRef {}
 
 #[derive(Debug)]
 pub enum SymbolKind {

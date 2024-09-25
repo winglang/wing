@@ -249,25 +249,14 @@ export class Type {
 export class ClassType {
   public readonly name: string;
   public readonly fqn: string | undefined;
-  public readonly base: ClassType | undefined;
-  public readonly interfaces: ClassType[];
-  public readonly properties: { [key: string]: Property };
-  public readonly methods: { [key: string]: Method };
+  public readonly base: ClassType | undefined = undefined;
+  public readonly interfaces: ClassType[] = [];
+  public readonly properties: { [key: string]: Property } = {};
+  public readonly methods: { [key: string]: Method } = {};
 
-  constructor(
-    name: string,
-    fqn: string,
-    base: ClassType | undefined,
-    interfaces: ClassType[] = [],
-    properties: { [key: string]: Property } = {},
-    methods: { [key: string]: Method } = {}
-  ) {
+  constructor(name: string, fqn: string) {
     this.name = name;
     this.fqn = fqn;
-    this.base = base;
-    this.interfaces = interfaces;
-    this.properties = properties;
-    this.methods = methods;
   }
 
   public toString(): string {
@@ -280,23 +269,14 @@ export class ClassType {
  */
 export class InterfaceType {
   public readonly name: string;
-  public readonly fqn: string;
-  public readonly bases: InterfaceType[];
-  public readonly properties: { [key: string]: Property };
-  public readonly methods: { [key: string]: Method };
+  public readonly fqn: string | undefined;
+  public readonly bases: InterfaceType[] = [];
+  public readonly properties: { [key: string]: Property } = {};
+  public readonly methods: { [key: string]: Method } = {};
 
-  constructor(
-    name: string,
-    fqn: string,
-    bases: InterfaceType[],
-    properties: { [key: string]: Property } = {},
-    methods: { [key: string]: Method } = {}
-  ) {
+  constructor(name: string, fqn: string) {
     this.name = name;
     this.fqn = fqn;
-    this.bases = bases;
-    this.properties = properties;
-    this.methods = methods;
   }
 
   public toString(): string {
@@ -309,23 +289,13 @@ export class InterfaceType {
  */
 export class StructType {
   public readonly name: string;
-  public readonly fqn: string;
-  public readonly bases: StructType | undefined;
-  public readonly fields: { [key: string]: Property };
-  public readonly methods: { [key: string]: Method };
+  public readonly fqn: string | undefined;
+  public readonly bases: StructType[] = [];
+  public readonly fields: { [key: string]: Property } = {};
 
-  constructor(
-    name: string,
-    fqn: string,
-    bases: StructType | undefined,
-    fields: { [key: string]: Property } = {},
-    methods: { [key: string]: Method } = {}
-  ) {
+  constructor(name: string, fqn: string) {
     this.name = name;
     this.fqn = fqn;
-    this.bases = bases;
-    this.fields = fields;
-    this.methods = methods;
   }
 
   public toString(): string {
@@ -338,13 +308,32 @@ export class StructType {
  */
 export class EnumType {
   public readonly name: string;
-  public readonly fqn: string;
-  public readonly variants: { [key: string]: string };
+  public readonly fqn: string | undefined;
+  public readonly variants: { [key: string]: EnumVariant };
 
-  constructor(name: string, fqn: string, variants: { [key: string]: string }) {
+  constructor(
+    name: string,
+    fqn: string,
+    variants: { [key: string]: EnumVariant }
+  ) {
     this.name = name;
     this.fqn = fqn;
     this.variants = variants;
+  }
+
+  public toString(): string {
+    return this.name;
+  }
+}
+
+/**
+ * EnumVariant is a representation of a Wing enum variant.
+ */
+export class EnumVariant {
+  public readonly name: string;
+
+  constructor(name: string) {
+    this.name = name;
   }
 
   public toString(): string {
@@ -370,10 +359,12 @@ export class Property {
  */
 export class Method {
   public readonly name: string;
-  public readonly child: Type;
+  public readonly isStatic: boolean;
+  public readonly child: FunctionType;
 
-  constructor(name: string, child: Type) {
+  constructor(name: string, isStatic: boolean, child: FunctionType) {
     this.name = name;
+    this.isStatic = isStatic;
     this.child = child;
   }
 }

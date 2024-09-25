@@ -27,7 +27,7 @@ use crate::{
 		lifts::{LiftQualification, Liftable, Lifts},
 		resolve_super_method, resolve_user_defined_type, resolve_user_defined_type_ref,
 		symbol_env::{SymbolEnv, SymbolEnvKind},
-		ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME,
+		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::{VisitContext, VisitorWithContext},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_AUTOID_RESOURCE,
@@ -37,6 +37,7 @@ use crate::{
 use self::codemaker::CodeMaker;
 
 const PREFLIGHT_FILE_NAME: &str = "preflight.cjs";
+const TYPES_FILE_NAME: &str = "types.cjs";
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE: &str = formatcp!("{STDLIB}.core");
@@ -50,6 +51,7 @@ const PLATFORMS_VAR: &str = "$platforms";
 const HELPERS_VAR: &str = "$helpers";
 const MACROS_VAR: &str = "$macros";
 const EXTERN_VAR: &str = "$extern";
+const TYPES_VAR: &str = "$types";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
@@ -59,7 +61,7 @@ const __DIRNAME: &str = "__dirname";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
-const PREFLIGHT_TYPES_MAP: &str = "$helpers.nodeof(this).root.$preflightTypesMap";
+const PREFLIGHT_TYPES_MAP: &str = formatcp!("{HELPERS_VAR}.nodeof(this).root.$preflightTypesMap");
 const MODULE_PREFLIGHT_TYPES_MAP: &str = "$preflightTypesMap";
 
 const SCOPE_PARAM: &str = "$scope";
@@ -89,9 +91,14 @@ pub struct JSifier<'a> {
 	pub preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
 	source_file_graph: &'a FileGraph,
+
 	/// The path that compilation started at (file or directory)
 	compilation_init_path: &'a Utf8Path,
 	out_dir: &'a Utf8Path,
+
+	/// Map from types to their type reflection code (variable name, initializer code, and post-initialization code)
+	type_reflection_definitions: RefCell<IndexMap<TypeRef, (String, CodeMaker, CodeMaker)>>,
+	type_variable_counter: RefCell<usize>,
 }
 
 impl VisitorWithContext for JSifyContext<'_> {
@@ -130,6 +137,8 @@ impl<'a> JSifier<'a> {
 			preflight_file_counter: RefCell::new(0),
 			preflight_file_map: RefCell::new(IndexMap::new()),
 			output_files: RefCell::new(output_files),
+			type_reflection_definitions: RefCell::new(IndexMap::new()),
+			type_variable_counter: RefCell::new(0),
 		}
 	}
 
@@ -193,6 +202,7 @@ impl<'a> JSifier<'a> {
 		output.line(format!(
 			"const {EXTERN_VAR} = {HELPERS_VAR}.createExternRequire({__DIRNAME});"
 		));
+		output.line(format!("const {TYPES_VAR} = require(\"./{TYPES_FILE_NAME}\");"));
 
 		if is_entrypoint {
 			output.line(format!(
@@ -247,11 +257,11 @@ impl<'a> JSifier<'a> {
 				if file.path.is_dir() {
 					let directory_name = file.path.file_stem().unwrap();
 					output.line(format!(
-						"Object.assign(module.exports, {{ get {directory_name}() {{ return $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP}); }} }});"
+						"Object.assign(module.exports, {{ get {directory_name}() {{ return {HELPERS_VAR}.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP}); }} }});"
 					));
 				} else {
 					output.line(format!(
-						"Object.assign(module.exports, $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP}));"
+						"Object.assign(module.exports, {HELPERS_VAR}.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP}));"
 					));
 				}
 			}
@@ -324,6 +334,32 @@ impl<'a> JSifier<'a> {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
+
+		self.emit_types_file();
+	}
+
+	fn emit_types_file(&self) {
+		let mut code = CodeMaker::default();
+		code.line("const std = require(\"@winglang/sdk\").std;");
+		code.line("const $types = {};");
+		let type_reflection_definitions = self.type_reflection_definitions.borrow();
+		for (_, (_, initializer, _)) in type_reflection_definitions.iter() {
+			code.add_code(initializer.clone());
+		}
+		for (_, (_, _, rest)) in type_reflection_definitions.iter() {
+			code.add_code(rest.clone());
+		}
+		code.line("module.exports = $types;");
+
+		// Emit the type reflection file
+		match self
+			.output_files
+			.borrow_mut()
+			.add_file(TYPES_FILE_NAME, code.to_string())
+		{
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
 	}
 
 	fn jsify_struct_schemas(&self, source_file: &File) -> CodeMaker {
@@ -385,7 +421,8 @@ impl<'a> JSifier<'a> {
 			}
 			Reference::ElementAccess { object, index } => new_code!(
 				&object.span,
-				"$helpers.lookup(",
+				HELPERS_VAR,
+				".lookup(",
 				self.jsify_expression(object, ctx),
 				", ",
 				self.jsify_expression(index, ctx),
@@ -728,7 +765,7 @@ impl<'a> JSifier<'a> {
 					new_code!(expr_span, HELPERS_VAR, ".nodeof(this).app")
 				}
 			},
-			ExprKind::TypeIntrinsic(TypeIntrinsic { type_ }) => jsify_type_reflection(&type_, &expr_span, ctx),
+			ExprKind::TypeIntrinsic(TypeIntrinsic { type_ }) => self.jsify_reflection_udt(&type_, &expr_span, ctx),
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = match callee {
 					CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
@@ -852,7 +889,7 @@ impl<'a> JSifier<'a> {
 					UnaryOperator::Minus => new_code!(expr_span, "(-", js_exp, ")"),
 					UnaryOperator::Not => new_code!(expr_span, "(!", js_exp, ")"),
 					UnaryOperator::OptionalUnwrap => {
-						new_code!(expr_span, "$helpers.unwrap(", js_exp, ")")
+						new_code!(expr_span, HELPERS_VAR, ".unwrap(", js_exp, ")")
 					}
 				}
 			}
@@ -1267,7 +1304,8 @@ impl<'a> JSifier<'a> {
 						let index = self.jsify_expression(index, ctx);
 						code.line(new_code!(
 							&statement.span,
-							"$helpers.assign(",
+							HELPERS_VAR,
+							".assign(",
 							object,
 							", ",
 							index,
@@ -1374,7 +1412,7 @@ impl<'a> JSifier<'a> {
 		let preflight_file_map = self.preflight_file_map.borrow();
 		let preflight_file_name = preflight_file_map.get(path).unwrap();
 		code.line(format!(
-			"const {var_name} = $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP});"
+			"const {var_name} = {HELPERS_VAR}.bringJs(`${{__dirname}}/{preflight_file_name}`, {MODULE_PREFLIGHT_TYPES_MAP});"
 		));
 		code
 	}
@@ -1754,7 +1792,7 @@ impl<'a> JSifier<'a> {
 
 	pub fn class_singleton(&self, type_: TypeRef) -> String {
 		let c = type_.as_class().unwrap();
-		format!("$helpers.preflightClassSingleton(this, {})", c.uid)
+		format!("{HELPERS_VAR}.preflightClassSingleton(this, {})", c.uid)
 	}
 
 	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
@@ -2148,6 +2186,397 @@ impl<'a> JSifier<'a> {
 		};
 		format!("inflight.{}-{}.cjs", class.name.name, id)
 	}
+
+	fn jsify_reflection_udt(
+		&self,
+		type_annotation: &TypeAnnotation,
+		expr_span: &WingSpan,
+		ctx: &JSifyContext<'_>,
+	) -> CodeMaker {
+		match &type_annotation.kind {
+			TypeAnnotationKind::String => new_code!(expr_span, "std.Type._ofStr()"),
+			TypeAnnotationKind::Number => new_code!(expr_span, "std.Type._ofNum()"),
+			TypeAnnotationKind::Bool => new_code!(expr_span, "std.Type._ofBool()"),
+			TypeAnnotationKind::Duration => new_code!(expr_span, "std.Type._ofDuration()"),
+			TypeAnnotationKind::Datetime => new_code!(expr_span, "std.Type._ofDatetime()"),
+			TypeAnnotationKind::Regex => new_code!(expr_span, "std.Type._ofRegex()"),
+			TypeAnnotationKind::Bytes => new_code!(expr_span, "std.Type._ofBytes()"),
+			TypeAnnotationKind::Json => new_code!(expr_span, "std.Type._ofJson()"),
+			TypeAnnotationKind::MutJson => new_code!(expr_span, "std.Type._ofMutJson()"),
+			TypeAnnotationKind::Inferred => panic!("Unexpected inferred type annotation"),
+			TypeAnnotationKind::Void => new_code!(expr_span, "std.Type._ofVoid()"),
+			TypeAnnotationKind::Optional(t) => new_code!(
+				expr_span,
+				"std.Type._ofOptional(",
+				self.jsify_reflection_udt(&t, &t.span, ctx),
+				")"
+			),
+			TypeAnnotationKind::Array(t) => new_code!(
+				expr_span,
+				"std.Type._ofArray(",
+				self.jsify_reflection_udt(&t, &t.span, ctx),
+				", false)"
+			),
+			TypeAnnotationKind::MutArray(t) => new_code!(
+				expr_span,
+				"std.Type._ofArray(",
+				self.jsify_reflection_udt(&t, &t.span, ctx),
+				", true)"
+			),
+			TypeAnnotationKind::Map(t) => new_code!(
+				expr_span,
+				"std.Type._ofMap(",
+				self.jsify_reflection_udt(&t, &t.span, ctx),
+				", false)"
+			),
+			TypeAnnotationKind::MutMap(t) => new_code!(
+				expr_span,
+				"std.Type._ofMap(",
+				self.jsify_reflection_udt(&t, &t.span, ctx),
+				", true)"
+			),
+			TypeAnnotationKind::Set(t) => new_code!(
+				expr_span,
+				"std.Type._ofSet(",
+				self.jsify_reflection_udt(&t, &t.span, ctx),
+				", false)"
+			),
+			TypeAnnotationKind::MutSet(t) => new_code!(
+				expr_span,
+				"std.Type._ofSet(",
+				self.jsify_reflection_udt(&t, &t.span, ctx),
+				", true)"
+			),
+			TypeAnnotationKind::Function(t) => {
+				let mut func_code = new_code!(expr_span, "std.Type._ofFunction(new std.FunctionType(");
+				func_code.append(match t.phase {
+					Phase::Inflight => "std.Phase.INFLIGHT",
+					Phase::Preflight => "std.Phase.PREFLIGHT",
+					Phase::Independent => "std.Phase.UNPHASED",
+				});
+				func_code.append(", [");
+				for p in &t.parameters {
+					func_code.append(self.jsify_reflection_udt(&p.type_annotation, &p.type_annotation.span, ctx));
+					func_code.append(", ");
+				}
+				func_code.append("], ");
+				func_code.append(self.jsify_reflection_udt(&t.return_type, &t.return_type.span, ctx));
+				func_code.append("))");
+				func_code
+			}
+			TypeAnnotationKind::UserDefined(udt) => {
+				let type_ = resolve_user_defined_type_ref(
+					udt,
+					ctx.visit_ctx.current_env().expect("no current env"),
+					ctx.visit_ctx.current_stmt_idx(),
+				)
+				.expect("type reference");
+
+				self.jsify_reflection_type(*type_, expr_span)
+			}
+		}
+	}
+
+	fn jsify_reflection_type(&self, type_: TypeRef, expr_span: &WingSpan) -> CodeMaker {
+		let type_reflection_definitions = self.type_reflection_definitions.borrow();
+		if let Some((variable_name, _, _)) = type_reflection_definitions.get(&type_) {
+			return new_code!(expr_span, format!("$types.{variable_name}"));
+		}
+		std::mem::drop(type_reflection_definitions);
+
+		// Generate a unique name for referring to this type in the $types object
+		let mut type_variable_counter = self.type_variable_counter.borrow_mut();
+		*type_variable_counter += 1;
+		let type_variable_name = format!("t{}", type_variable_counter);
+		std::mem::drop(type_variable_counter);
+
+		// Insert a placeholder so that recursive references can be resolved
+		let mut type_reflection_definitions = self.type_reflection_definitions.borrow_mut();
+		type_reflection_definitions.insert(
+			type_,
+			(type_variable_name.clone(), CodeMaker::default(), CodeMaker::default()),
+		);
+		std::mem::drop(type_reflection_definitions);
+
+		// Generate code for initializing the type, and then for filling in its fields.
+		// We separate the two to allow definitions to refer to each other. In the end, the generated code
+		// will be something like:
+		//
+		// ```
+		// $types.t0 = std.Type._ofClass(new std.ClassType("MyClass"));
+		// $types.t1 = std.Type._ofClass(new std.ClassType("MyOtherClass"));
+		//
+		// $types.t0.fields = // ... may refer to $types.t1
+		// $types.t1.fields = // ... may refer to $types.t0
+		// ```
+		let (initializer, rest) = match *type_ {
+			Type::Anything => (
+				new_code!(expr_span, "std.Type._ofAny()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::Number => (
+				new_code!(expr_span, "std.Type._ofNum()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::String => (
+				new_code!(expr_span, "std.Type._ofStr()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::Duration => (
+				new_code!(expr_span, "std.Type._ofDuration()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::Datetime => (
+				new_code!(expr_span, "std.Type._ofDatetime()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::Regex => (
+				new_code!(expr_span, "std.Type._ofRegex()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::Bytes => (
+				new_code!(expr_span, "std.Type._ofBytes()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::Boolean => (
+				new_code!(expr_span, "std.Type._ofBool()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::Void => (
+				new_code!(expr_span, "std.Type._ofVoid()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::Json(_) => (
+				new_code!(expr_span, "std.Type._ofJson()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::MutJson => (
+				new_code!(expr_span, "std.Type._ofMutJson()"),
+				CodeMaker::with_source(expr_span),
+			),
+			Type::Optional(t) => {
+				let initializer = new_code!(expr_span, "std.Type._ofOptional(undefined)");
+
+				let mut rest = CodeMaker::with_source(expr_span);
+				rest.line(format!("$types.{type_variable_name}.data.child = "));
+				rest.append(self.jsify_reflection_type(t, &expr_span));
+				rest.append(";");
+				(initializer, rest)
+			}
+			Type::Array(t) => {
+				let initializer = new_code!(expr_span, "std.Type._ofArray(undefined, false)");
+
+				let mut rest = CodeMaker::with_source(expr_span);
+				rest.line(format!("$types.{type_variable_name}.data.child = "));
+				rest.append(self.jsify_reflection_type(t, &expr_span));
+				rest.append(";");
+				(initializer, rest)
+			}
+			Type::MutArray(t) => {
+				let initializer = new_code!(expr_span, "std.Type._ofArray(undefined, true)");
+
+				let mut rest = CodeMaker::with_source(expr_span);
+				rest.line(format!("$types.{type_variable_name}.data.child = "));
+				rest.append(self.jsify_reflection_type(t, &expr_span));
+				rest.append(";");
+				(initializer, rest)
+			}
+			Type::Map(t) => {
+				let initializer = new_code!(expr_span, "std.Type._ofMap(undefined, false)");
+
+				let mut rest = CodeMaker::with_source(expr_span);
+				rest.line(format!("$types.{type_variable_name}.data.child = "));
+				rest.append(self.jsify_reflection_type(t, &expr_span));
+				rest.append(";");
+				(initializer, rest)
+			}
+			Type::MutMap(t) => {
+				let initializer = new_code!(expr_span, "std.Type._ofMap(undefined, true)");
+
+				let mut rest = CodeMaker::with_source(expr_span);
+				rest.line(format!("$types.{type_variable_name}.data.child = "));
+				rest.append(self.jsify_reflection_type(t, &expr_span));
+				rest.append(";");
+				(initializer, rest)
+			}
+			Type::Set(t) => {
+				let initializer = new_code!(expr_span, "std.Type._ofSet(undefined, false)");
+
+				let mut rest = CodeMaker::with_source(expr_span);
+				rest.line(format!("$types.{type_variable_name}.data.child = "));
+				rest.append(self.jsify_reflection_type(t, &expr_span));
+				rest.append(";");
+				(initializer, rest)
+			}
+			Type::MutSet(t) => {
+				let initializer = new_code!(expr_span, "std.Type._ofSet(undefined, true)");
+
+				let mut rest = CodeMaker::with_source(expr_span);
+				rest.line(format!("$types.{type_variable_name}.data.child = "));
+				rest.append(self.jsify_reflection_type(t, &expr_span));
+				rest.append(";");
+				(initializer, rest)
+			}
+			Type::Function(ref function_signature) => {
+				let mut func_code = new_code!(expr_span, "std.Type._ofFunction(new std.FunctionType(");
+				func_code.append(match function_signature.phase {
+					Phase::Inflight => "std.Phase.INFLIGHT",
+					Phase::Preflight => "std.Phase.PREFLIGHT",
+					Phase::Independent => "std.Phase.UNPHASED",
+				});
+				func_code.append(", [");
+				for p in &function_signature.parameters {
+					func_code.append(self.jsify_reflection_type(p.typeref, &expr_span));
+					func_code.append(", ");
+				}
+				func_code.append("], ");
+				func_code.append(self.jsify_reflection_type(function_signature.return_type, &expr_span));
+				func_code.append("))");
+
+				(func_code, CodeMaker::with_source(expr_span))
+			}
+			Type::Class(ref class) => {
+				let fqn_string = match &class.fqn {
+					None => "undefined".to_string(),
+					Some(fqn) => format!("\"{fqn}\""),
+				};
+
+				let initializer = new_code!(
+					expr_span,
+					"std.Type._ofClass(new std.ClassType(\"",
+					jsify_symbol(&class.name),
+					"\", ",
+					fqn_string,
+					"))"
+				);
+
+				let mut rest = CodeMaker::with_source(expr_span);
+				if let Some(parent) = class.parent {
+					let parent_type_var = self.jsify_reflection_type(parent, &expr_span);
+					rest.line(format!("$types.{type_variable_name}.data.base = "));
+					rest.append(parent_type_var);
+					rest.append(".data;");
+				}
+				for interface in class.implements.iter() {
+					let interface_type_var = self.jsify_reflection_type(*interface, &expr_span);
+					rest.line(format!("$types.{type_variable_name}.data.interfaces.push("));
+					rest.append(interface_type_var);
+					rest.append(".data);");
+				}
+				for (name, var_info) in class.fields(true) {
+					if var_info.access != AccessModifier::Public {
+						continue;
+					}
+					let type_var = self.jsify_reflection_type(var_info.type_, &expr_span);
+					rest.line(format!(
+						"$types.{type_variable_name}.data.properties[\"{name}\"] = new std.Property(\"{name}\", {});",
+						type_var.to_string()
+					));
+				}
+				for (name, var_info) in class.methods(true) {
+					if var_info.access != AccessModifier::Public {
+						continue;
+					}
+					let type_var = self.jsify_reflection_type(var_info.type_, &expr_span);
+					let is_static = var_info.kind == VariableKind::StaticMember;
+					rest.line(format!(
+						"$types.{type_variable_name}.data.methods[\"{name}\"] = new std.Method(\"{name}\", {}, {}.data);",
+						is_static,
+						type_var.to_string()
+					));
+				}
+
+				(initializer, rest)
+			}
+			Type::Interface(ref interface) => {
+				let initializer = new_code!(
+					expr_span,
+					"std.Type._ofInterface(new std.InterfaceType(\"",
+					jsify_symbol(&interface.name),
+					"\", \"",
+					&interface.fqn,
+					"\"))"
+				);
+
+				let mut rest = CodeMaker::with_source(expr_span);
+				for base in interface.extends.iter() {
+					let base_type_var = self.jsify_reflection_type(*base, &expr_span);
+					rest.line(format!("$types.{type_variable_name}.data.bases.push("));
+					rest.append(base_type_var);
+					rest.append(".data);");
+				}
+				for (name, var_info) in interface.methods(true) {
+					let method_type_var = self.jsify_reflection_type(var_info.type_, &expr_span);
+					let is_static = var_info.kind == VariableKind::StaticMember;
+					rest.line(format!(
+						"$types.{type_variable_name}.data.methods[\"{name}\"] = new std.Method(\"{name}\", {}, {}.data);",
+						is_static,
+						method_type_var.to_string()
+					));
+				}
+
+				(initializer, rest)
+			}
+			Type::Struct(ref st) => {
+				let mut initializer = new_code!(expr_span, "std.Type._ofStruct(new std.StructType(\"");
+				initializer.append(jsify_symbol(&st.name));
+				initializer.append("\", \"");
+				initializer.append(&st.fqn);
+				initializer.append("\"))");
+
+				let mut rest = CodeMaker::with_source(expr_span);
+				for base in st.extends.iter() {
+					let base_type_var = self.jsify_reflection_type(*base, &expr_span);
+					rest.line(format!("$types.{type_variable_name}.data.bases.push("));
+					rest.append(base_type_var);
+					rest.append(".data);");
+				}
+				for (name, var_info) in st.fields(false) {
+					let type_var = self.jsify_reflection_type(var_info.type_, &expr_span);
+					rest.line(format!(
+						"$types.{type_variable_name}.data.fields[\"{name}\"] = new std.Property(\"{name}\", {});",
+						type_var.to_string()
+					));
+				}
+
+				(initializer, rest)
+			}
+			Type::Enum(ref e) => {
+				let mut initializer = new_code!(expr_span, "std.Type._ofEnum(new std.EnumType(\"");
+				initializer.append(jsify_symbol(&e.name));
+				initializer.append("\", \"");
+				initializer.append(&e.fqn);
+				initializer.append("\", {");
+				for (name, _docs) in e.values.iter() {
+					initializer.append("\"");
+					initializer.append(jsify_symbol(&name));
+					initializer.append("\": new std.EnumVariant(\"");
+					initializer.append(jsify_symbol(&name));
+					initializer.append("\"), ");
+				}
+				initializer.append("}));");
+				(initializer, CodeMaker::with_source(expr_span))
+			}
+			Type::Nil => panic!("Nil type cannot be used in reflection"),
+			Type::Unresolved => panic!("Unresolved type cannot be used in reflection"),
+			Type::Inferred(_) => panic!("Inferred type cannot be used in reflection"),
+			Type::Stringable => panic!("Stringable type cannot be used in reflection"),
+		};
+
+		let mut type_reflection_definitions = self.type_reflection_definitions.borrow_mut();
+		type_reflection_definitions.insert(
+			type_,
+			(
+				type_variable_name.clone(),
+				new_code!(
+					expr_span,
+					format!("$types.{type_variable_name} = {};", initializer.to_string())
+				),
+				rest,
+			),
+		);
+		new_code!(expr_span, "$types.", type_variable_name)
+	}
 }
 
 fn jsify_function_parameters(func_def: &FunctionDefinition) -> CodeMaker {
@@ -2284,90 +2713,4 @@ fn escape_javascript_string(s: &str) -> String {
 	}
 
 	result
-}
-
-fn jsify_type_reflection(type_annotation: &TypeAnnotation, expr_span: &WingSpan, ctx: &JSifyContext<'_>) -> CodeMaker {
-	match &type_annotation.kind {
-		TypeAnnotationKind::String => new_code!(expr_span, "std.Type._ofStr()"),
-		TypeAnnotationKind::Number => new_code!(expr_span, "std.Type._ofNum()"),
-		TypeAnnotationKind::Bool => new_code!(expr_span, "std.Type._ofBool()"),
-		TypeAnnotationKind::Duration => new_code!(expr_span, "std.Type._ofDuration()"),
-		TypeAnnotationKind::Datetime => new_code!(expr_span, "std.Type._ofDatetime()"),
-		TypeAnnotationKind::Regex => new_code!(expr_span, "std.Type._ofRegex()"),
-		TypeAnnotationKind::Bytes => new_code!(expr_span, "std.Type._ofBytes()"),
-		TypeAnnotationKind::Json => new_code!(expr_span, "std.Type._ofJson()"),
-		TypeAnnotationKind::MutJson => new_code!(expr_span, "std.Type._ofMutJson()"),
-		TypeAnnotationKind::Inferred => panic!("Unexpected inferred type annotation"),
-		TypeAnnotationKind::Void => new_code!(expr_span, "std.Type._ofVoid()"),
-		TypeAnnotationKind::Optional(t) => new_code!(
-			expr_span,
-			"std.Type._ofOptional(",
-			jsify_type_reflection(&t, &t.span, ctx),
-			")"
-		),
-		TypeAnnotationKind::Array(t) => new_code!(
-			expr_span,
-			"std.Type._ofArray(",
-			jsify_type_reflection(&t, &t.span, ctx),
-			", false)"
-		),
-		TypeAnnotationKind::MutArray(t) => new_code!(
-			expr_span,
-			"std.Type._ofArray(",
-			jsify_type_reflection(&t, &t.span, ctx),
-			", true)"
-		),
-		TypeAnnotationKind::Map(t) => new_code!(
-			expr_span,
-			"std.Type._ofMap(",
-			jsify_type_reflection(&t, &t.span, ctx),
-			", false)"
-		),
-		TypeAnnotationKind::MutMap(t) => new_code!(
-			expr_span,
-			"std.Type._ofMap(",
-			jsify_type_reflection(&t, &t.span, ctx),
-			", true)"
-		),
-		TypeAnnotationKind::Set(t) => new_code!(
-			expr_span,
-			"std.Type._ofSet(",
-			jsify_type_reflection(&t, &t.span, ctx),
-			", false)"
-		),
-		TypeAnnotationKind::MutSet(t) => new_code!(
-			expr_span,
-			"std.Type._ofSet(",
-			jsify_type_reflection(&t, &t.span, ctx),
-			", true)"
-		),
-		TypeAnnotationKind::Function(t) => {
-			let mut func_code = new_code!(expr_span, "new std.FunctionType(");
-			func_code.append(match t.phase {
-				Phase::Inflight => "std.Phase.INFLIGHT",
-				Phase::Preflight => "std.Phase.PREFLIGHT",
-				Phase::Independent => "std.Phase.UNPHASED",
-			});
-			func_code.append(", [");
-			for p in &t.parameters {
-				func_code.append(jsify_type_reflection(&p.type_annotation, &p.type_annotation.span, ctx));
-				func_code.append(", ");
-			}
-			func_code.append("], ");
-			func_code.append(jsify_type_reflection(&t.return_type, &t.return_type.span, ctx));
-			func_code.append(")");
-
-			new_code!(expr_span, "std.Type._ofFunction(", func_code, ")")
-		}
-		TypeAnnotationKind::UserDefined(udt) => {
-			let type_ = resolve_user_defined_type_ref(
-				udt,
-				ctx.visit_ctx.current_env().expect("no current env"),
-				ctx.visit_ctx.current_stmt_idx(),
-			)
-			.expect("type reference");
-
-			todo!()
-		}
-	}
 }

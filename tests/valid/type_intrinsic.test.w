@@ -99,7 +99,116 @@ let t15 = @type(bytes);
 expect.equal(t15.kind, "bytes");
 expect.equal(t15.toString(), "bytes");
 
-// TODO: why doesn't this work?
+interface BaseInterface {}
+
+interface MyInterface extends BaseInterface {
+  method1(): void;
+}
+
+let t16 = @type(MyInterface);
+expect.equal(t16.kind, "interface");
+expect.equal(t16.toString(), "MyInterface");
+if let iface = t16.asInterface() {
+  expect.equal(iface.name, "MyInterface");
+  expect.equal(iface.toString(), "MyInterface");
+
+  expect.equal(iface.bases.length, 1);
+  expect.equal(iface.bases[0].name, "BaseInterface");
+
+  expect.equal(iface.methods.size(), 1);
+  expect.equal(iface.methods["method1"].name, "method1");
+  expect.equal(iface.methods["method1"].child.toString(), "preflight (): void");
+} else {
+  expect.fail("t16 is not an interface");
+}
+
+class MyClass impl MyInterface {
+  pub field1: str;
+  pub method1(): void {}
+  new() {
+    this.field1 = "hello";
+  }
+}
+
+let t17 = @type(MyClass);
+expect.equal(t17.kind, "class");
+expect.equal(t17.toString(), "MyClass");
+if let cls = t17.asClass() {
+  expect.equal(cls.name, "MyClass");
+  expect.equal(cls.toString(), "MyClass");
+  if let base = cls.base {
+    expect.equal(base.name, "Resource");
+  } else {
+    expect.fail("t17 does not have a base class");
+  }
+  expect.equal(cls.properties.size(), 1);
+  expect.equal(cls.properties["field1"].name, "field1");
+  expect.equal(cls.properties["field1"].child.kind, "str");
+  expect.ok(cls.methods.size() >= 1); // all classes have some base methods
+  expect.equal(cls.methods["method1"].name, "method1");
+  expect.equal(cls.methods["method1"].child.toString(), "preflight (): void");
+} else {
+  expect.fail("t17 is not a class");
+}
+
+enum MyEnum {
+  VARIANT1,
+  VARIANT2,
+}
+
+let t18 = @type(MyEnum);
+expect.equal(t18.kind, "enum");
+expect.equal(t18.toString(), "MyEnum");
+if let enm = t18.asEnum() {
+  expect.equal(enm.name, "MyEnum");
+  expect.equal(enm.toString(), "MyEnum");
+  expect.equal(enm.variants.size(), 2);
+  expect.equal(enm.variants["VARIANT1"].name, "VARIANT1");
+  expect.equal(enm.variants["VARIANT2"].name, "VARIANT2");
+} else {
+  expect.fail("t18 is not an enum");
+}
+
+struct Base1 {
+  base1: bool;
+}
+
+struct Base2 {
+  base2: bool;
+}
+
+struct MyStruct extends Base1, Base2 {
+  field1: num;
+  field2: Array<Json?>;
+}
+
+let t19 = @type(MyStruct);
+expect.equal(t19.kind, "struct");
+expect.equal(t19.toString(), "MyStruct");
+if let st = t19.asStruct() {
+  expect.equal(st.name, "MyStruct");
+  expect.equal(st.toString(), "MyStruct");
+
+  expect.equal(st.bases.length, 2);
+  expect.equal(st.bases[0].name, "Base1");
+  expect.equal(st.bases[1].name, "Base2");
+
+  expect.equal(st.fields.size(), 4);
+  expect.equal(st.fields["base1"].name, "base1");
+  expect.equal(st.fields["base1"].child.kind, "bool");
+  expect.equal(st.fields["base2"].name, "base2");
+  expect.equal(st.fields["base2"].child.kind, "bool");
+  expect.equal(st.fields["field1"].name, "field1");
+  expect.equal(st.fields["field1"].child.kind, "num");
+  expect.equal(st.fields["field2"].name, "field2");
+  expect.equal(st.fields["field2"].child.kind, "array");
+  let arr = st.fields["field2"].child.asArray()!;
+  expect.equal(arr.child.kind, "optional");
+  let opt = arr.child.asOptional()!;
+  expect.equal(opt.child.kind, "json");
+} else {
+  expect.fail("t19 is not a struct");
+}
 
 // test "@type in inflight" {
 //   let t5 = @type(inflight (num): bool);
