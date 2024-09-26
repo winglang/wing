@@ -3,12 +3,12 @@ source: packages/@winglang/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\npreflight addMany(...items: Array<str>): void\n```"
+  value: "```wing\npreflight method(): void\n```\n---\nSome method docs"
 range:
   start:
     line: 8
     character: 6
   end:
     line: 8
-    character: 13
+    character: 12
 

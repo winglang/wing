@@ -1,9 +1,9 @@
 ---
-source: libs/wingc/src/lsp/hover.rs
+source: packages/@winglang/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nclass Foo {\n  // No public members\n}\n```"
+  value: "```wing\nclass Foo {\n  // No public members\n}\n```\n---\nShared behavior between all Wing SDK resources.\n\n*@noinflight*"
 range:
   start:
     line: 4
