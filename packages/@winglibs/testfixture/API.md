@@ -16,7 +16,9 @@
 
 ### PublicClass (preflight class) <a class="wing-docs-anchor" id="@winglibs/testfixture.PublicClass"></a>
 
-*No description*
+Shared behavior between all Wing SDK resources.
+
+*@noinflight*
 
 #### Constructor
 
@@ -38,7 +40,9 @@ new(): PublicClass
 
 ### Store (preflight class) <a class="wing-docs-anchor" id="@winglibs/testfixture.Store"></a>
 
-*No description*
+Shared behavior between all Wing SDK resources.
+
+*@noinflight*
 
 #### Constructor
 
@@ -62,7 +66,9 @@ new(options: StoreOptions?): Store
 
 ### subdir.Util (preflight class) <a class="wing-docs-anchor" id="@winglibs/testfixture.subdir.Util"></a>
 
-*No description*
+Shared behavior between all Wing SDK resources.
+
+*@noinflight*
 
 #### Constructor
 
