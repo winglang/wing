@@ -263,11 +263,17 @@ export class Type implements ILiftable {
  * ClassType is a representation of a Wing class type.
  */
 export class ClassType implements ILiftable {
+  /** The name of the class. */
   public readonly name: string;
+  /** The fully qualified name of the class. */
   public readonly fqn: string | undefined;
+  /** The base class of the class. */
   public readonly base: ClassType | undefined;
+  /** The interfaces that the class implements. */
   public readonly interfaces: ClassType[] = [];
+  /** The properties of the class. */
   public readonly properties: { [key: string]: Property };
+  /** The methods of the class. */
   public readonly methods: { [key: string]: Method };
 
   constructor(
@@ -310,10 +316,15 @@ export class ClassType implements ILiftable {
  * InterfaceType is a representation of a Wing interface type.
  */
 export class InterfaceType implements ILiftable {
+  /** The name of the interface. */
   public readonly name: string;
+  /** The fully qualified name of the interface. */
   public readonly fqn: string | undefined;
+  /** The interfaces that the interface extends. */
   public readonly bases: InterfaceType[];
+  /** The properties of the interface. */
   public readonly properties: { [key: string]: Property };
+  /** The methods of the interface. */
   public readonly methods: { [key: string]: Method };
 
   constructor(
@@ -353,9 +364,13 @@ export class InterfaceType implements ILiftable {
  * StructType is a representation of a Wing struct type.
  */
 export class StructType implements ILiftable {
+  /** The name of the struct. */
   public readonly name: string;
+  /** The fully qualified name of the struct. */
   public readonly fqn: string | undefined;
+  /** The structs that the struct extends. */
   public readonly bases: StructType[];
+  /** The fields of the struct. */
   public readonly fields: { [key: string]: Property };
 
   constructor(
@@ -392,8 +407,11 @@ export class StructType implements ILiftable {
  * EnumType is a representation of a Wing enum type.
  */
 export class EnumType implements ILiftable {
+  /** The name of the enum. */
   public readonly name: string;
+  /** The fully qualified name of the enum. */
   public readonly fqn: string | undefined;
+  /** The variants of the enum. */
   public readonly variants: { [key: string]: EnumVariant };
 
   constructor(
@@ -427,6 +445,7 @@ export class EnumType implements ILiftable {
  * EnumVariant is a representation of a Wing enum variant.
  */
 export class EnumVariant implements ILiftable {
+  /** The name of the enum variant. */
   public readonly name: string;
 
   constructor(name: string) {
@@ -449,7 +468,9 @@ export class EnumVariant implements ILiftable {
  * Property is a representation of a Wing property.
  */
 export class Property implements ILiftable {
+  /** The name of the property. */
   public readonly name: string;
+  /** The type of the property. */
   public readonly child: Type;
 
   constructor(name: string, child: Type) {
@@ -469,8 +490,11 @@ export class Property implements ILiftable {
  * Method is a representation of a Wing method.
  */
 export class Method implements ILiftable {
+  /** The name of the method. */
   public readonly name: string;
+  /** Whether the method is static. */
   public readonly isStatic: boolean;
+  /** The function type of the method. */
   public readonly child: FunctionType;
 
   constructor(name: string, isStatic: boolean, child: FunctionType) {
@@ -491,7 +515,9 @@ export class Method implements ILiftable {
  * ArrayType is a representation of a Wing array or mutarray type.
  */
 export class ArrayType implements ILiftable {
+  /** The type of the elements in the array. */
   public readonly child: Type;
+  /** Whether the array is mutable. */
   public readonly isMut: boolean;
 
   constructor(child: Type, isMut: boolean) {
@@ -515,7 +541,9 @@ export class ArrayType implements ILiftable {
  * MapType is a representation of a Wing map or mutmap type.
  */
 export class MapType implements ILiftable {
+  /** The type of the elements in the map. */
   public readonly child: Type;
+  /** Whether the map is mutable. */
   public readonly isMut: boolean;
 
   constructor(child: Type, isMut: boolean) {
@@ -539,7 +567,9 @@ export class MapType implements ILiftable {
  * SetType is a representation of a Wing set or mutset type.
  */
 export class SetType implements ILiftable {
+  /** The type of the elements in the set. */
   public readonly child: Type;
+  /** Whether the set is mutable. */
   public readonly isMut: boolean;
 
   constructor(child: Type, isMut: boolean) {
@@ -563,6 +593,7 @@ export class SetType implements ILiftable {
  * OptionalType is a representation of a Wing optional type.
  */
 export class OptionalType implements ILiftable {
+  /** The type of the optional. */
   public readonly child: Type;
 
   constructor(child: Type) {
@@ -585,8 +616,11 @@ export class OptionalType implements ILiftable {
  * FunctionType is a representation of a Wing function type.
  */
 export class FunctionType implements ILiftable {
+  /** The phase of the function. */
   public readonly phase: Phase;
+  /** The parameters of the function. */
   public readonly params: Type[];
+  /** The return type of the function. */
   public readonly returns: Type;
 
   constructor(phase: Phase, params: Type[], returns: Type) {
