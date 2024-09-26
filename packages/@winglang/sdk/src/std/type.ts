@@ -655,8 +655,11 @@ export class FunctionType implements ILiftable {
  * Phase is a representation of a Wing function type phase.
  */
 export enum Phase {
+  /** Inflight phase. */
   INFLIGHT = "inflight",
+  /** Preflight phase. */
   PREFLIGHT = "preflight",
+  /** Unphased phase. */
   UNPHASED = "unphased",
 }
 
