@@ -3,12 +3,24 @@ import { normalPath } from "../shared/misc";
 import { ILiftable } from "./resource";
 
 /**
+ * ITypeElement is a representation of a Wing type element.
+ */
+export interface ITypeElement extends ILiftable {
+  /**
+   * Get the immediate dependencies of this type element.
+   * @returns The immediate dependencies of this type element.
+   * @internal
+   */
+  _getDependencies(): Set<ITypeElement>;
+}
+
+/**
  * Type is a representation of a Wing type.
  *
  * Use the "kind" property to determine what kind of type this is, and use
  * one of the "as" methods to extract more specific information.
  */
-export class Type implements ILiftable {
+export class Type implements ITypeElement {
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
@@ -125,9 +137,9 @@ export class Type implements ILiftable {
    * What kind of type this is.
    */
   public readonly kind: string;
-  private readonly data: ILiftable | undefined;
+  private readonly data: ITypeElement | undefined;
 
-  private constructor(kind: string, data: ILiftable | undefined) {
+  private constructor(kind: string, data: ITypeElement | undefined) {
     this.kind = kind;
     this.data = data;
   }
@@ -257,12 +269,20 @@ export class Type implements ILiftable {
     }
     return this.kind;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    if (this.data === undefined) {
+      return new Set<ITypeElement>();
+    }
+    return this.data._getDependencies();
+  }
 }
 
 /**
  * ClassType is a representation of a Wing class type.
  */
-export class ClassType implements ILiftable {
+export class ClassType implements ITypeElement {
   /** The name of the class. */
   public readonly name: string;
   /** The fully qualified name of the class. */
@@ -310,12 +330,30 @@ export class ClassType implements ILiftable {
   public toString(): string {
     return this.name;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    const result = new Set<ITypeElement>();
+    if (this.base) {
+      result.add(this.base);
+    }
+    for (const iface of this.interfaces) {
+      result.add(iface);
+    }
+    for (const prop of Object.values(this.properties)) {
+      result.add(prop);
+    }
+    for (const method of Object.values(this.methods)) {
+      result.add(method);
+    }
+    return result;
+  }
 }
 
 /**
  * InterfaceType is a representation of a Wing interface type.
  */
-export class InterfaceType implements ILiftable {
+export class InterfaceType implements ITypeElement {
   /** The name of the interface. */
   public readonly name: string;
   /** The fully qualified name of the interface. */
@@ -358,12 +396,27 @@ export class InterfaceType implements ILiftable {
   public toString(): string {
     return this.name;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    const result = new Set<ITypeElement>();
+    for (const base of this.bases) {
+      result.add(base);
+    }
+    for (const prop of Object.values(this.properties)) {
+      result.add(prop);
+    }
+    for (const method of Object.values(this.methods)) {
+      result.add(method);
+    }
+    return result;
+  }
 }
 
 /**
  * StructType is a representation of a Wing struct type.
  */
-export class StructType implements ILiftable {
+export class StructType implements ITypeElement {
   /** The name of the struct. */
   public readonly name: string;
   /** The fully qualified name of the struct. */
@@ -401,12 +454,24 @@ export class StructType implements ILiftable {
   public toString(): string {
     return this.name;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    const result = new Set<ITypeElement>();
+    for (const base of this.bases) {
+      result.add(base);
+    }
+    for (const field of Object.values(this.fields)) {
+      result.add(field);
+    }
+    return result;
+  }
 }
 
 /**
  * EnumType is a representation of a Wing enum type.
  */
-export class EnumType implements ILiftable {
+export class EnumType implements ITypeElement {
   /** The name of the enum. */
   public readonly name: string;
   /** The fully qualified name of the enum. */
@@ -439,12 +504,21 @@ export class EnumType implements ILiftable {
   public toString(): string {
     return this.name;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    const result = new Set<ITypeElement>();
+    for (const variant of Object.values(this.variants)) {
+      result.add(variant);
+    }
+    return result;
+  }
 }
 
 /**
  * EnumVariant is a representation of a Wing enum variant.
  */
-export class EnumVariant implements ILiftable {
+export class EnumVariant implements ITypeElement {
   /** The name of the enum variant. */
   public readonly name: string;
 
@@ -462,12 +536,17 @@ export class EnumVariant implements ILiftable {
   public toString(): string {
     return this.name;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    return new Set<ITypeElement>();
+  }
 }
 
 /**
  * Property is a representation of a Wing property.
  */
-export class Property implements ILiftable {
+export class Property implements ITypeElement {
   /** The name of the property. */
   public readonly name: string;
   /** The type of the property. */
@@ -484,12 +563,17 @@ export class Property implements ILiftable {
       this.name
     }", ${this.child._toInflight()})`;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    return new Set<ITypeElement>([this.child]);
+  }
 }
 
 /**
  * Method is a representation of a Wing method.
  */
-export class Method implements ILiftable {
+export class Method implements ITypeElement {
   /** The name of the method. */
   public readonly name: string;
   /** Whether the method is static. */
@@ -509,12 +593,17 @@ export class Method implements ILiftable {
       this.isStatic
     }, ${this.child._toInflight()})`;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    return new Set<ITypeElement>([this.child]);
+  }
 }
 
 /**
  * ArrayType is a representation of a Wing array or mutarray type.
  */
-export class ArrayType implements ILiftable {
+export class ArrayType implements ITypeElement {
   /** The type of the elements in the array. */
   public readonly child: Type;
   /** Whether the array is mutable. */
@@ -535,12 +624,17 @@ export class ArrayType implements ILiftable {
   public toString(): string {
     return `${this.isMut ? "Mut" : ""}Array<${this.child.toString()}>`;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    return new Set<ITypeElement>([this.child]);
+  }
 }
 
 /**
  * MapType is a representation of a Wing map or mutmap type.
  */
-export class MapType implements ILiftable {
+export class MapType implements ITypeElement {
   /** The type of the elements in the map. */
   public readonly child: Type;
   /** Whether the map is mutable. */
@@ -561,12 +655,17 @@ export class MapType implements ILiftable {
   public toString(): string {
     return `${this.isMut ? "Mut" : ""}Map<${this.child.toString()}>`;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    return new Set<ITypeElement>([this.child]);
+  }
 }
 
 /**
  * SetType is a representation of a Wing set or mutset type.
  */
-export class SetType implements ILiftable {
+export class SetType implements ITypeElement {
   /** The type of the elements in the set. */
   public readonly child: Type;
   /** Whether the set is mutable. */
@@ -587,12 +686,17 @@ export class SetType implements ILiftable {
   public toString(): string {
     return `${this.isMut ? "Mut" : ""}Set<${this.child.toString()}>`;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    return new Set<ITypeElement>([this.child]);
+  }
 }
 
 /**
  * OptionalType is a representation of a Wing optional type.
  */
-export class OptionalType implements ILiftable {
+export class OptionalType implements ITypeElement {
   /** The type of the optional. */
   public readonly child: Type;
 
@@ -610,12 +714,17 @@ export class OptionalType implements ILiftable {
   public toString(): string {
     return `${this.child.toString()}?`;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    return new Set<ITypeElement>([this.child]);
+  }
 }
 
 /**
  * FunctionType is a representation of a Wing function type.
  */
-export class FunctionType implements ILiftable {
+export class FunctionType implements ITypeElement {
   /** The phase of the function. */
   public readonly phase: Phase;
   /** The parameters of the function. */
@@ -649,6 +758,11 @@ export class FunctionType implements ILiftable {
     str += `: ${this.returns.toString()}`;
     return str;
   }
+
+  /** @internal */
+  public _getDependencies(): Set<ITypeElement> {
+    return new Set<ITypeElement>([this.returns, ...this.params]);
+  }
 }
 
 /**
@@ -675,4 +789,18 @@ function mapToInflight(obj: Record<string, ILiftable>): string {
       .join(", ") +
     "}"
   );
+}
+
+function findAllTypeElements(root: ITypeElement): Map<ITypeElement, string> {
+  const result = new Map<ITypeElement, string>();
+  const queue: ITypeElement[] = [root];
+  let i = 0;
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (current !== undefined && !result.has(current)) {
+      result.set(current, `t${i++}`);
+      queue.push(...current._getDependencies());
+    }
+  }
+  return result;
 }
