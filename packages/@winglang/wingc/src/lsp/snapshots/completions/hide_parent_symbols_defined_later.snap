@@ -4,9 +4,6 @@ source: packages/@winglang/wingc/src/lsp/completions.rs
 - label: this
   kind: 6
   detail: "inflight (): void"
-  documentation:
-    kind: markdown
-    value: "Shared behavior between all Wing SDK resources.\n\n*@noinflight*"
   sortText: bb|this
 - label: x
   kind: 6
