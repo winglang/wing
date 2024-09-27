@@ -19,3 +19,8 @@ expect.equal(bar.Bar.getSubdir(), fs.join(@dirname, "subdir"));
 expect.equal(@filename, currentFile);
 expect.equal(fs.dirname(currentFile), @dirname);
 expect.equal(bar.Bar.getSubfile(), fs.join(@dirname, "subdir", "bar.w"));
+
+// @target
+
+// some of the targets we are testing in the monorepo - but any string is valid
+expect.ok(["sim", "tf-aws", "tf-azure", "tf-gcp", "awscdk"].contains(@target));

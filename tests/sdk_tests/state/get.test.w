@@ -1,8 +1,6 @@
 bring "./my-service.w" as my;
-bring util;
 
-if util.env("WING_TARGET") == "sim" {
-
+if @target == "sim" {
   let svc = new my.MyService();
 
   test "state.get() returns the runtime value" {

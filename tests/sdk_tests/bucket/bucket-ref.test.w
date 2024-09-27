@@ -1,7 +1,7 @@
 bring cloud;
 bring aws;
-bring util;
 bring expect;
+
 let b = new cloud.Bucket();
 
 // this will only work if we are testing on tf-aws
@@ -14,7 +14,7 @@ if let name = aws.Bucket.from(b)?.bucketName {
   }
 }
 
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   let dummyName = "wing-dummy-bucket";
   let dummyArn = "arn:aws:s3:::{dummyName}";
   let br = new aws.BucketRef(dummyName);

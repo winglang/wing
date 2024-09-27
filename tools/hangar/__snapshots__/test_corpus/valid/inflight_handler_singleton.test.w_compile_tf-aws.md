@@ -51,7 +51,7 @@ module.exports = function({ $foo }) {
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
-module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
+module.exports = function({ $expect_Util, $fn, $fn2 }) {
   class $Closure3 {
     constructor($args) {
       const {  } = $args;
@@ -64,7 +64,7 @@ module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
       const y = (await $fn.invoke(""));
       const z = (await $fn2.invoke(""));
       (await $expect_Util.equal(x, "100"));
-      if ($sim) {
+      if ($helpers.eq(process.env.WING_TARGET, "sim")) {
         (await $expect_Util.equal(y, "101"));
         console.log("client has been reused");
       }
@@ -546,7 +546,6 @@ class $Root extends $stdlib.std.Resource {
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
             $fn: ${$stdlib.core.liftObject(fn)},
             $fn2: ${$stdlib.core.liftObject(fn2)},
-            $sim: ${$stdlib.core.liftObject(sim)},
           })
         `;
       }
@@ -556,13 +555,11 @@ class $Root extends $stdlib.std.Resource {
             [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [fn, ["invoke"]],
             [fn2, ["invoke"]],
-            [sim, []],
           ],
           "$inflight_init": [
             [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), []],
             [fn, []],
             [fn2, []],
-            [sim, []],
           ],
         });
       }
@@ -630,7 +627,6 @@ class $Root extends $stdlib.std.Resource {
     const foo = new Foo(this, "Foo");
     const fn = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", new $Closure1(this, "$Closure1"));
     const fn2 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn2", new $Closure2(this, "$Closure2"));
-    const sim = $helpers.eq((util.Util.env("WING_TARGET")), "sim");
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:single instance of Foo", new $Closure3(this, "$Closure3"));
     const fn3 = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn3", new $Closure4(this, "$Closure4"));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:Foo state is not shared between function invocations", new $Closure5(this, "$Closure5"));

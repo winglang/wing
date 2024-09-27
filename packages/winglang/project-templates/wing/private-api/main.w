@@ -1,6 +1,5 @@
 bring cloud;
 bring http;
-bring util;
 
 /**
  * The example below is a simple note-taking app.
@@ -96,7 +95,7 @@ bring util;
 let noteService = new NoteService();
 
 // Consumer functions (not required for the app to work, but useful for testing)
-if util.env("WING_TARGET") == "tf-aws" {
+if @target == "tf-aws" {
   new cloud.Function(inflight (event) => {
     if let event = event?.tryAsStr() {
       let parts = event.split(":");

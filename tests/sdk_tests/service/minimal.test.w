@@ -1,9 +1,7 @@
 bring cloud;
-bring util;
 
 // hack: only supported in the "sim" target for now
-if util.env("WING_TARGET") == "sim" {
-
+if @target == "sim" {
   let s = new cloud.Service(inflight () => {
     log("hello, service!");
 

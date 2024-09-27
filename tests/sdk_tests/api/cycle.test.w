@@ -5,7 +5,7 @@ bring util;
 // This test checks that an API can have a route whose handler
 // references the API's URL.
 
-if ["sim", "tf-aws", "awscdk"].contains(util.env("WING_TARGET")) {
+if ["sim", "tf-aws", "awscdk"].contains(@target) {
   let api = new cloud.Api();
 
   api.get("/my_url", inflight () => {

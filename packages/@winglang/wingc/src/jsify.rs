@@ -764,6 +764,9 @@ impl<'a> JSifier<'a> {
 				IntrinsicKind::App => {
 					new_code!(expr_span, HELPERS_VAR, ".nodeof(this).app")
 				}
+				IntrinsicKind::Target => {
+					new_code!(expr_span, "process.env.WING_TARGET")
+				}
 			},
 			ExprKind::TypeIntrinsic(TypeIntrinsic { type_ }) => self.jsify_reflection_udt(&type_, &expr_span, ctx),
 			ExprKind::Call { callee, arg_list } => {

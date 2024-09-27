@@ -1,9 +1,8 @@
 bring aws;
 bring cloud;
 bring expect;
-bring util;
 
-if util.env("WING_TARGET") == "tf-aws" {
+if @target == "tf-aws" {
   let fn = new cloud.Function(inflight () => {
     return "Hello world!";
   });

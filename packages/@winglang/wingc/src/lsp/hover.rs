@@ -561,6 +561,97 @@ Json.stringify({});
 	);
 
 	test_hover_list!(
+		parent_class_docs_are_inherited_on_declaration,
+		r#"
+  /// Some parent docs
+class Parent {
+   /// Some method docs
+   pub method() {}
+}
+
+class Child extends Parent {
+       //^
+  pub method() {} 
+}
+
+new Child().method();
+ 	"#,
+	);
+
+	test_hover_list!(
+		parent_class_docs_are_inherited_on_method_declaration,
+		r#"
+  /// Some parent docs
+class Parent {
+   /// Some method docs
+   pub method() {}
+}
+
+class Child extends Parent {
+  pub method() {} 
+       //^
+}
+
+new Child().method();
+ 	"#,
+	);
+
+	test_hover_list!(
+		parent_class_docs_are_inherited_on_call,
+		r#"
+  /// Some parent docs
+class Parent {
+   /// Some method docs
+   pub method() {}
+}
+
+class Child extends Parent {
+  pub method() {} 
+}
+
+new Child().method();
+     //^
+ 	"#,
+	);
+
+	test_hover_list!(
+		parent_class_docs_are_inherited_on_method_call,
+		r#"
+  /// Some parent docs
+class Parent {
+   /// Some method docs
+   pub method() {}
+}
+
+class Child extends Parent {
+  pub method() {} 
+       //^
+}
+
+new Child().method();
+                //^
+ 	"#,
+	);
+
+	test_hover_list!(
+		parent_class_docs_are_overridden,
+		r#"
+  /// Some parent docs
+class Parent {
+   /// Some method docs
+   pub method() {}
+}
+
+  /// Some child docs
+class Child extends Parent {
+}
+
+new Child().method();
+     //^
+ 	"#,
+	);
+
+	test_hover_list!(
 		ignoe_empty_lines_in_doc,
 		r#"
   /// Class doc with empty lines after it

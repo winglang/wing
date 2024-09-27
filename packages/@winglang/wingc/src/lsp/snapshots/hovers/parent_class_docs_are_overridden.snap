@@ -1,0 +1,14 @@
+---
+source: packages/@winglang/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\nnew(): Child\n```\n---\nSome child docs"
+range:
+  start:
+    line: 11
+    character: 4
+  end:
+    line: 11
+    character: 9
+

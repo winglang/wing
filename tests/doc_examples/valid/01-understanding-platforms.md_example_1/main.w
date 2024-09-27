@@ -14,7 +14,7 @@ new cloud.Function(inflight ()=> {
   // push a message to queue
   queue.push("m");
   // sleep according to target 
-  if util.env("WING_TARGET") == "sim" {
+  if @target == "sim" {
     log("Running on Simulator, sleeping for 1s");
     util.sleep(1s);
   } else {

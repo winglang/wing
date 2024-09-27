@@ -2,6 +2,10 @@
 queue_rules:
   - name: default
     speculative_checks: 2
+    merge_method: squash
+    commit_message_template: |-
+      {{ title }} (#{{ number }})
+      {{ body }}
 
 pull_request_rules:
   - name: automatic merge
@@ -11,10 +15,6 @@ pull_request_rules:
           Thanks for contributing, @{{author}}! This PR will now be added to the [merge queue](https://mergify.com/merge-queue), or immediately merged if `{{head}}` is up-to-date with `{{base}}` and the queue is empty.
       queue:
         name: default
-        merge_method: squash
-        commit_message_template: |-
-          {{ title }} (#{{ number }})
-          {{ body }}
     conditions:
       - -files=.mergify.yml
       - -title~=(?i)wip

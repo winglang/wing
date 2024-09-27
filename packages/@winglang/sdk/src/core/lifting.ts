@@ -423,5 +423,9 @@ export class Lifting {
       // no lift-related methods to call - it's probably a primitive
       // so no capabilities need to be added to the inflight host
     }
+
+    if (process.env.WING_TARGET) {
+      host.addEnvironment("WING_TARGET", process.env.WING_TARGET!);
+    }
   }
 }

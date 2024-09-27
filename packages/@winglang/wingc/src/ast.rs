@@ -597,6 +597,7 @@ pub enum IntrinsicKind {
 	Dirname,
 	Filename,
 	App,
+	Target,
 }
 
 impl Display for IntrinsicKind {
@@ -606,6 +607,7 @@ impl Display for IntrinsicKind {
 			IntrinsicKind::Dirname => write!(f, "@dirname"),
 			IntrinsicKind::Filename => write!(f, "@filename"),
 			IntrinsicKind::App => write!(f, "@app"),
+			IntrinsicKind::Target => write!(f, "@target"),
 		}
 	}
 }
@@ -616,6 +618,7 @@ impl IntrinsicKind {
 			"@dirname" => IntrinsicKind::Dirname,
 			"@filename" => IntrinsicKind::Filename,
 			"@app" => IntrinsicKind::App,
+			"@target" => IntrinsicKind::Target,
 			_ => IntrinsicKind::Unknown,
 		}
 	}
@@ -635,6 +638,7 @@ impl IntrinsicKind {
 				Phase::Preflight => true,
 				_ => false,
 			},
+			IntrinsicKind::Target => true,
 		}
 	}
 }

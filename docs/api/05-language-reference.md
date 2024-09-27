@@ -593,6 +593,7 @@ the following properties (given an example intrinsic `@x`):
 | `@assert()`     | checks a condition and _throws_ if evaluated to false                                                                     |
 | `@filename`     | absolute path of the source file                                                                                          |
 | `@dirname`      | absolute path of the source file's directory                                                                              |
+| `@target`       | a string identifying the current target platform                                                                          |
 | `@app`          | the root of the construct tree                                                                                            |
 | `@unsafeCast()` | cast a value into a different type                                                                                        |
 | `@nodeof()`     | obtain the [tree node](/docs/concepts/application-tree) of a preflight object                                             |

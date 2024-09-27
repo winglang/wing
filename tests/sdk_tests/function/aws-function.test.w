@@ -1,9 +1,6 @@
 bring aws;
 bring cloud;
 bring expect;
-bring util;
-
-let target = util.env("WING_TARGET");
 
 let getFunctionInfo = (f: cloud.Function): Map<str>? => {
   if let lambda = aws.Function.from(f) {
@@ -27,7 +24,7 @@ let fn = new cloud.Function(inflight (msg: Json?) => {
     let remainingTime = ctx.remainingTimeInMillis();
     assert(remainingTime > 0);
   } else {
-    if target == "tf-aws" || target == "awscdk" {
+    if @target == "tf-aws" || @target == "awscdk" {
       expect.fail("Expected to have a context object");
     }
   }
@@ -39,18 +36,18 @@ let fnInfo = getFunctionInfo(fn);
 
 new std.Test(inflight () => {
   if let info = fnInfo {
-    if target == "tf-aws" {
+    if @target == "tf-aws" {
       assert(info.get("functionArn").contains("arn:aws:lambda:"));
       assert(info.get("functionArn").contains(":function:"));
       assert(info.get("functionArn").contains("aws-wing-function"));
       assert(info.get("functionName").contains("aws-wing-function"));
-    } else if target == "awscdk" {
+    } else if @target == "awscdk" {
       assert(info.get("functionArn").contains("arn:aws:lambda:"));
       assert(info.get("functionArn").contains(":function:"));
       assert(info.get("functionArn").contains("awswingfunction"));
       assert(info.get("functionName").contains("awswingfunction"));
     } else {
-      expect.fail("Unexpected target " + target);
+      expect.fail("Unexpected target " + @target);
     }
   } else {
     // If the test is not on AWS, it should not fail, so I am returning true.

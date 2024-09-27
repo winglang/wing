@@ -131,6 +131,11 @@ const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!(
 	assembly = WINGSDK_ASSEMBLY_NAME,
 	iface = WINGSDK_SIM_IRESOURCE
 );
+const WINGSDK_RESOURCE_FQN: &'static str = formatcp!(
+	"{assembly}.{class}",
+	assembly = WINGSDK_ASSEMBLY_NAME,
+	class = WINGSDK_RESOURCE
+);
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";

@@ -18,7 +18,7 @@ use crate::ast::{
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, DiagnosticSeverity, TypeError, WingSpan};
-use crate::docs::Docs;
+use crate::docs::{Docs, Documented};
 use crate::file_graph::{File, FileGraph};
 use crate::parser::normalize_path;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
@@ -32,7 +32,8 @@ use crate::{
 	UTIL_CLASS_NAME, WINGSDK_APP, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_BYTES,
 	WINGSDK_DATETIME, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
 	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REFLECT_TYPE, WINGSDK_REGEX,
-	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_RESOURCE, WINGSDK_RESOURCE_FQN, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -932,18 +933,6 @@ impl FunctionSignature {
 			.count();
 
 		self.parameters.len() - num_optionals
-	}
-}
-
-impl PartialEq for FunctionSignature {
-	fn eq(&self, other: &Self) -> bool {
-		self
-			.parameters
-			.iter()
-			.zip(other.parameters.iter())
-			.all(|(x, y)| x.typeref.is_same_type_as(&y.typeref))
-			&& self.return_type.is_same_type_as(&other.return_type)
-			&& self.phase == other.phase
 	}
 }
 
@@ -2397,6 +2386,28 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 				AccessModifier::Public,
 				StatementIdx::Top,
 			);
+
+		// @target
+		let _ = self.types
+			.intrinsics
+			.define(
+				&Symbol::global(IntrinsicKind::Target.to_string()),
+				SymbolKind::Variable(VariableInfo {
+					access: AccessModifier::Public,
+					name: Symbol::global(IntrinsicKind::Target.to_string()),
+					docs: Some(Docs::with_summary(
+						r#"Returns a string identifying the current compilation platform.
+
+This value is set by the CLI at compile time and can be used to conditionally compile code that is dependent on the target platform."#,
+					)),
+					kind: VariableKind::StaticMember,
+					phase: Phase::Independent,
+					type_: self.types.string(),
+					reassignable: false,
+				}),
+				AccessModifier::Public,
+				StatementIdx::Top,
+			);
 	}
 
 	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
@@ -3046,7 +3057,11 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 				}
 
 				match intrinsic.kind {
-					IntrinsicKind::Dirname | IntrinsicKind::Filename | IntrinsicKind::App | IntrinsicKind::Unknown => {
+					IntrinsicKind::Dirname
+					| IntrinsicKind::Filename
+					| IntrinsicKind::App
+					| IntrinsicKind::Target
+					| IntrinsicKind::Unknown => {
 						return (sig.return_type, sig.phase);
 					}
 				}
@@ -4213,7 +4228,7 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 		let interface_spec = Interface {
 			name: iface.name.clone(),
 			fqn: format!("{}.{}", self.base_fqn_for_current_file(), iface.name),
-			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
+			docs: doc.as_ref().map_or(Docs::default(), |s: &String| Docs::with_summary(s)),
 			env: dummy_env,
 			extends: extend_interfaces.clone(),
 			phase: iface.phase,
@@ -4804,6 +4819,21 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 			}
 		}
 
+		let mut default_docs = Docs::default();
+		// if parent docs exist we use them as the defualt
+		if let Some(parent_class) = parent_class {
+			// New classes defined in Wing shouldn't inherit docs from std.Resource
+			let is_parent_resource = parent_class
+				.as_class()
+				.map(|c| c.fqn.as_deref() == Some(WINGSDK_RESOURCE_FQN))
+				.unwrap_or(false);
+			if !is_parent_resource {
+				if let Some(parent_docs) = parent_class.docs() {
+					default_docs = parent_docs.clone();
+				}
+			}
+		}
+
 		// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 		let class_spec = Class {
 			name: ast_class.name.clone(),
@@ -4814,7 +4844,7 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 			is_abstract: false,
 			phase: ast_class.phase,
 			defined_in_phase: env.phase,
-			docs: stmt.doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
+			docs: stmt.doc.as_ref().map_or(default_docs, |s| Docs::with_summary(s)),
 			std_construct_args: ast_class.phase == Phase::Preflight,
 			lifts: None,
 			uid: self.types.class_counter,
@@ -4877,6 +4907,7 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 				method_def.access,
 				&mut class_env,
 				method_name,
+				parent_class,
 			);
 			method_types.insert(&method_name, method_type);
 		}
@@ -4895,6 +4926,7 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 			ast_class.initializer.access,
 			&mut class_env,
 			&init_symb,
+			parent_class,
 		);
 		method_types.insert(&init_symb, init_func_type);
 
@@ -4913,6 +4945,7 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 			ast_class.inflight_initializer.access,
 			&mut class_env,
 			&inflight_init_symb,
+			parent_class,
 		);
 		method_types.insert(&inflight_init_symb, inflight_init_func_type);
 
@@ -5815,6 +5848,7 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 		access: AccessModifier,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
+		parent_class: Option<UnsafeRef<Type>>,
 	) {
 		// Modify the method's type based on the fact we know it's a method and not just a function
 		let method_sig = method_type
@@ -5885,6 +5919,16 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 
 		let method_phase = method_type.as_function_sig().unwrap().phase;
 
+		// use the parent's method docs as default, if exist.
+		let mut default_method_docs = None;
+		if let Some(parent_class) = parent_class {
+			if let Some(c) = parent_class.as_class() {
+				if let Some(parent_method) = c.methods(true).find(|m| m.1.name.eq(&method_name)) {
+					default_method_docs = parent_method.1.docs;
+				}
+			}
+		};
+
 		match class_env.define(
 			method_name,
 			SymbolKind::make_member_variable(
@@ -5894,7 +5938,11 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 				instance_type.is_none(),
 				method_phase,
 				access,
-				method_def.doc.as_ref().map(|s| Docs::with_summary(s)),
+				method_def
+					.doc
+					.as_ref()
+					.map(|s| Docs::with_summary(s))
+					.or(default_method_docs),
 			),
 			access,
 			StatementIdx::Top,

@@ -1,6 +1,5 @@
 bring sim;
 bring expect;
-bring util;
 
 class Simple {
   pub foo: str;
@@ -14,7 +13,7 @@ class Simple {
 }
 
 // Only run these tests in the simulator
-if util.env("WING_TARGET") == "sim" {
+if @target == "sim" {
   let s = new Simple();
 
   test "token is resolved" {

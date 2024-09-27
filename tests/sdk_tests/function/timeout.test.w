@@ -5,9 +5,9 @@ bring expect;
 let c = new cloud.Counter();
 
 let ERROR_MSG_BY_TARGET: Map<str> = {"tf-gcp": "upstream request timeout"};
-let timeoutError = ERROR_MSG_BY_TARGET.tryGet(util.env("WING_TARGET")) ?? "Function timed out";
+let timeoutError = ERROR_MSG_BY_TARGET.tryGet(@target) ?? "Function timed out";
 let TIMEOUT_BY_TARGET: Map<num> = {"tf-gcp": 120}; 
-let timeoutValue = TIMEOUT_BY_TARGET.tryGet(util.env("WING_TARGET")) ?? 60;
+let timeoutValue = TIMEOUT_BY_TARGET.tryGet(@target) ?? 60;
 
 let f1 = new cloud.Function(inflight () => {
   util.sleep(1.5s);

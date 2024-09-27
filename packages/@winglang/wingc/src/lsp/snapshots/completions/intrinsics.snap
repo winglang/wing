@@ -22,4 +22,11 @@ source: packages/@winglang/wingc/src/lsp/completions.rs
     kind: markdown
     value: "Get the normalized absolute path of the current Wing source file.\n\nThe resolved path represents a path during preflight only and is not guaranteed to be valid while inflight."
   sortText: bb|@filename
+- label: "@target"
+  kind: 6
+  detail: str
+  documentation:
+    kind: markdown
+    value: "Returns a string identifying the current compilation platform.\n\nThis value is set by the CLI at compile time and can be used to conditionally compile code that is dependent on the target platform."
+  sortText: bb|@target
 
