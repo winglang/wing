@@ -4751,6 +4751,7 @@ This value is set by the CLI at compile time and can be used to conditionally co
 		let mut default_docs = Docs::default();
 		// if parent docs exist we use them as the defualt
 		if let Some(parent_class) = parent_class {
+			// New classes defined in Wing shouldn't inherit docs from std.Resource
 			let is_parent_resource = parent_class
 				.as_class()
 				.map(|c| c.fqn.as_deref() == Some(WINGSDK_RESOURCE_FQN))
