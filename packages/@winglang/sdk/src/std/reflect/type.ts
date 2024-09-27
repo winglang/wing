@@ -14,8 +14,12 @@ export interface ITypeElement extends ILiftable {
   _getDependencies(): Set<ITypeElement>;
 
   /**
-   * Get the inflight representation of this type element.
-   * @returns The inflight representation of this type element.
+   * Generate inflight code for this type element.
+   *
+   * The first return value is the code to initialize the type element
+   * (leaving fields uninitialized), and the second return value is
+   * the code to initialize the fields of the type element.
+   *
    * @internal
    */
   _toInflightWithContext(
@@ -48,7 +52,7 @@ export class Type implements ITypeElement {
     const declaration = `const ${varName} = new (require("${normalPath(
       __filename
     )}").Type)("${this.kind}", undefined);`;
-    const initialization = [];
+    const initialization: string[] = [];
     const dataVarName = context.get(this.data!);
     if (dataVarName) {
       initialization.push(`${varName}.data = ${dataVarName}`);
@@ -350,7 +354,7 @@ export class ClassType implements ITypeElement {
     )}").ClassType)("${this.name}", ${
       this.fqn ? `"${this.fqn}"` : "undefined"
     });`;
-    const initialization = [];
+    const initialization: string[] = [];
     if (this.base) {
       const baseVarName = context.get(this.base)!;
       initialization.push(`${varName}.base = ${baseVarName};`);
@@ -441,7 +445,7 @@ export class InterfaceType implements ITypeElement {
     )}").InterfaceType)("${this.name}", ${
       this.fqn ? `"${this.fqn}"` : "undefined"
     });`;
-    const initialization = [];
+    const initialization: string[] = [];
     for (const base of this.bases) {
       const baseVarName = context.get(base)!;
       initialization.push(`${varName}.bases.push(${baseVarName});`);
@@ -521,7 +525,7 @@ export class StructType implements ITypeElement {
     )}").StructType)("${this.name}", ${
       this.fqn ? `"${this.fqn}"` : "undefined"
     });`;
-    const initialization = [];
+    const initialization: string[] = [];
     for (const base of this.bases) {
       const baseVarName = context.get(base)!;
       initialization.push(`${varName}.bases.push(${baseVarName});`);
@@ -588,7 +592,7 @@ export class EnumType implements ITypeElement {
     )}").EnumType)("${this.name}", ${
       this.fqn ? `"${this.fqn}"` : "undefined"
     });`;
-    const initialization = [];
+    const initialization: string[] = [];
     for (const variant of Object.values(this.variants)) {
       const variantVarName = context.get(variant)!;
       initialization.push(
@@ -678,7 +682,7 @@ export class Property implements ITypeElement {
     const declaration = `const ${varName} = new (require("${normalPath(
       __filename
     )}").Property)("${this.name}");`;
-    const initialization = [];
+    const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
     initialization.push(`${varName}.child = ${childVarName};`);
     return [declaration, initialization];
@@ -720,7 +724,7 @@ export class Method implements ITypeElement {
     const declaration = `const ${varName} = new (require("${normalPath(
       __filename
     )}").Method)("${this.name}", ${this.isStatic});`;
-    const initialization = [];
+    const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
     initialization.push(`${varName}.child = ${childVarName};`);
     return [declaration, initialization];
@@ -759,7 +763,7 @@ export class ArrayType implements ITypeElement {
     const declaration = `const ${varName} = new (require("${normalPath(
       __filename
     )}").ArrayType)(undefined, ${this.isMut});`;
-    const initialization = [];
+    const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
     initialization.push(`${varName}.child = ${childVarName};`);
     return [declaration, initialization];
@@ -802,7 +806,7 @@ export class MapType implements ITypeElement {
     const declaration = `const ${varName} = new (require("${normalPath(
       __filename
     )}").MapType)(undefined, ${this.isMut});`;
-    const initialization = [];
+    const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
     initialization.push(`${varName}.child = ${childVarName};`);
     return [declaration, initialization];
@@ -845,7 +849,7 @@ export class SetType implements ITypeElement {
     const declaration = `const ${varName} = new (require("${normalPath(
       __filename
     )}").SetType)(undefined, ${this.isMut});`;
-    const initialization = [];
+    const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
     initialization.push(`${varName}.child = ${childVarName};`);
     return [declaration, initialization];
@@ -885,7 +889,7 @@ export class OptionalType implements ITypeElement {
     const declaration = `const ${varName} = new (require("${normalPath(
       __filename
     )}").OptionalType)(undefined);`;
-    const initialization = [];
+    const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
     initialization.push(`${varName}.child = ${childVarName};`);
     return [declaration, initialization];
@@ -931,7 +935,7 @@ export class FunctionType implements ITypeElement {
     const declaration = `const ${varName} = new (require("${normalPath(
       __filename
     )}").FunctionType)("${this.phase}", [], undefined);`;
-    const initialization = [];
+    const initialization: string[] = [];
     for (const param of this.params) {
       const paramVarName = context.get(param)!;
       initialization.push(`${varName}.params.push(${paramVarName});`);
@@ -975,8 +979,8 @@ export enum Phase {
 
 function toInflightTypeElement(root: ITypeElement): string {
   const context = findAllTypeElements(root);
-  const declarations = [];
-  const initializations = [];
+  const declarations: string[] = [];
+  const initializations: string[] = [];
   for (const element of context.keys()) {
     const [declaration, initialization] =
       element._toInflightWithContext(context);
