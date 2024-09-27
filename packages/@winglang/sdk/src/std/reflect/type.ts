@@ -40,27 +40,6 @@ export class Type implements ITypeElement {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return toInflightTypeElement(this);
-  }
-
-  /** @internal */
-  public _toInflightWithContext(
-    context: Map<ITypeElement, string>
-  ): [string, Array<string>] {
-    const varName = context.get(this)!;
-    const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
-    )}").Type)("${this.kind}", undefined);`;
-    const initialization: string[] = [];
-    const dataVarName = context.get(this.data!);
-    if (dataVarName) {
-      initialization.push(`${varName}.data = ${dataVarName}`);
-    }
-    return [declaration, initialization];
-  }
-
-  /** @internal */
   public static _ofClass(cls: ClassType): Type {
     return new Type("class", cls);
   }
@@ -295,6 +274,27 @@ export class Type implements ITypeElement {
         return "MutJson";
     }
     return this.kind;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
+      __filename
+    )}").Type)("${this.kind}", undefined);`;
+    const initialization: string[] = [];
+    const dataVarName = context.get(this.data!);
+    if (dataVarName) {
+      initialization.push(`${varName}.data = ${dataVarName}`);
+    }
+    return [declaration, initialization];
   }
 
   /** @internal */
