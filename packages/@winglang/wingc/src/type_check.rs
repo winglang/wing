@@ -31,8 +31,8 @@ use crate::{
 	debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, DEFAULT_PACKAGE_NAME,
 	UTIL_CLASS_NAME, WINGSDK_APP, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_BYTES,
 	WINGSDK_DATETIME, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
-	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REGEX, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REGEX, WINGSDK_RESOURCE,
+	WINGSDK_RESOURCE_FQN, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -4751,8 +4751,14 @@ This value is set by the CLI at compile time and can be used to conditionally co
 		let mut default_docs = Docs::default();
 		// if parent docs exist we use them as the defualt
 		if let Some(parent_class) = parent_class {
-			if let Some(parent_docs) = parent_class.docs() {
-				default_docs = parent_docs.clone();
+			let is_parent_resource = parent_class
+				.as_class()
+				.map(|c| c.fqn.as_deref() == Some(WINGSDK_RESOURCE_FQN))
+				.unwrap_or(false);
+			if !is_parent_resource {
+				if let Some(parent_docs) = parent_class.docs() {
+					default_docs = parent_docs.clone();
+				}
 			}
 		}
 
