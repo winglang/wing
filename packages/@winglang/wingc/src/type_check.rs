@@ -97,10 +97,8 @@ where
 pub type TypeRef = UnsafeRef<Type>;
 
 // Comparing typerefs may be imprecise because the compiler doesn't do any de-duplication
-// of types -- so it's possible two function types with different spans will be considered
-// different typerefs, even though they represent the same type.
-// But this is ok if you are only using them for classes, enums, structs, and interfaces,
-// as these are all unique / nominally typed.
+// of types. For example, it's possible two function types or Array<str> types created from different spans
+// will be considered different typerefs, even though they represent the same type.
 
 impl Hash for TypeRef {
 	fn hash<H: Hasher>(&self, state: &mut H) {
