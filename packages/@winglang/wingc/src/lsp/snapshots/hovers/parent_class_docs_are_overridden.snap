@@ -3,12 +3,12 @@ source: packages/@winglang/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nstatic preflight static_method(): void\n```"
+  value: "```wing\nnew(): Child\n```\n---\nSome child docs"
 range:
   start:
-    line: 4
+    line: 11
     character: 4
   end:
-    line: 4
-    character: 17
+    line: 11
+    character: 9
 

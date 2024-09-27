@@ -1,0 +1,14 @@
+---
+source: packages/@winglang/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\nclass Child extends Parent {\n  method(): void;\n}\n```\n---\nSome parent docs"
+range:
+  start:
+    line: 7
+    character: 6
+  end:
+    line: 7
+    character: 11
+

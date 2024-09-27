@@ -349,7 +349,7 @@ fn render_docs(markdown: &mut CodeMaker, docs: &Docs) {
 			// Psuedo-abstract marker, mostly useful internally
 			| "abstract"
 			// Marker type use, not for users
-			| "skipDocs" | "wingType"
+			| "skipDocs" | "wingType" | "noinflight"
 		) {
 			return;
 		}
