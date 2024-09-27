@@ -21,6 +21,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 let $preflightTypesMap = {};
 class Baz extends $stdlib.std.Resource {
   constructor($scope, $id, ) {

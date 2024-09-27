@@ -335,6 +335,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -459,6 +460,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 let $preflightTypesMap = {};
 module.exports = { $preflightTypesMap,  };
 //# sourceMappingURL=preflight.empty-1.cjs.map
@@ -472,6 +474,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 let $preflightTypesMap = {};
 const file3 = $helpers.bringJs(`${__dirname}/preflight.empty-1.cjs`, $preflightTypesMap);
 const math = $stdlib.math;
@@ -567,6 +570,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 let $preflightTypesMap = {};
 const math = $stdlib.math;
 class Q extends $stdlib.std.Resource {
