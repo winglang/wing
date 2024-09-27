@@ -335,7 +335,10 @@ impl<'a> JSifier<'a> {
 			Err(err) => report_diagnostic(err.into()),
 		}
 
-		self.emit_types_file();
+		// The entrypoint is the last file we emit, so at this point we can emit the types file
+		if is_entrypoint {
+			self.emit_types_file();
+		}
 	}
 
 	fn emit_types_file(&self) {
