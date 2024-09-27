@@ -12,6 +12,15 @@ export interface ITypeElement extends ILiftable {
    * @internal
    */
   _getDependencies(): Set<ITypeElement>;
+
+  /**
+   * Get the inflight representation of this type element.
+   * @returns The inflight representation of this type element.
+   * @internal
+   */
+  _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>];
 }
 
 /**
@@ -28,9 +37,23 @@ export class Type implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    return `(new (require("${normalPath(__filename)}").Type)("${this.kind}", ${
-      this.data?._toInflight() ?? "undefined"
-    }))`;
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
+      __filename
+    )}").Type)("${this.kind}", undefined);`;
+    const initialization = [];
+    const dataVarName = context.get(this.data!);
+    if (dataVarName) {
+      initialization.push(`${varName}.data = ${dataVarName}`);
+    }
+    return [declaration, initialization];
   }
 
   /** @internal */
@@ -275,7 +298,7 @@ export class Type implements ITypeElement {
     if (this.data === undefined) {
       return new Set<ITypeElement>();
     }
-    return this.data._getDependencies();
+    return new Set<ITypeElement>([this.data]);
   }
 }
 
@@ -314,17 +337,41 @@ export class ClassType implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    const args = [
-      `"${this.name}"`,
-      this.fqn ? `"${this.fqn}"` : "undefined",
-      this.base?._toInflight(),
-      arrayToInflight(this.interfaces),
-      mapToInflight(this.properties),
-      mapToInflight(this.methods),
-    ];
-    return `new (require("${normalPath(__filename)}").ClassType)(${args.join(
-      ", "
-    )})`;
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
+      __filename
+    )}").ClassType)("${this.name}", ${
+      this.fqn ? `"${this.fqn}"` : "undefined"
+    });`;
+    const initialization = [];
+    if (this.base) {
+      const baseVarName = context.get(this.base)!;
+      initialization.push(`${varName}.base = ${baseVarName};`);
+    }
+    for (const iface of this.interfaces) {
+      const ifaceVarName = context.get(iface)!;
+      initialization.push(`${varName}.interfaces.push(${ifaceVarName});`);
+    }
+    for (const prop of Object.values(this.properties)) {
+      const propVarName = context.get(prop)!;
+      initialization.push(
+        `${varName}.properties["${prop.name}"] = ${propVarName};`
+      );
+    }
+    for (const method of Object.values(this.methods)) {
+      const methodVarName = context.get(method)!;
+      initialization.push(
+        `${varName}.methods["${method.name}"] = ${methodVarName};`
+      );
+    }
+    return [declaration, initialization];
   }
 
   public toString(): string {
@@ -381,16 +428,37 @@ export class InterfaceType implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    const args = [
-      `"${this.name}"`,
-      this.fqn ? `"${this.fqn}"` : "undefined",
-      arrayToInflight(this.bases),
-      mapToInflight(this.properties),
-      mapToInflight(this.methods),
-    ];
-    return `new (require("${normalPath(
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
       __filename
-    )}").InterfaceType)(${args.join(", ")})`;
+    )}").InterfaceType)("${this.name}", ${
+      this.fqn ? `"${this.fqn}"` : "undefined"
+    });`;
+    const initialization = [];
+    for (const base of this.bases) {
+      const baseVarName = context.get(base)!;
+      initialization.push(`${varName}.bases.push(${baseVarName});`);
+    }
+    for (const prop of Object.values(this.properties)) {
+      const propVarName = context.get(prop)!;
+      initialization.push(
+        `${varName}.properties["${prop.name}"] = ${propVarName};`
+      );
+    }
+    for (const method of Object.values(this.methods)) {
+      const methodVarName = context.get(method)!;
+      initialization.push(
+        `${varName}.methods["${method.name}"] = ${methodVarName};`
+      );
+    }
+    return [declaration, initialization];
   }
 
   public toString(): string {
@@ -440,15 +508,31 @@ export class StructType implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    const args = [
-      `"${this.name}"`,
-      this.fqn ? `"${this.fqn}"` : "undefined",
-      arrayToInflight(this.bases),
-      mapToInflight(this.fields),
-    ];
-    return `new (require("${normalPath(__filename)}").StructType)(${args.join(
-      ", "
-    )})`;
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
+      __filename
+    )}").StructType)("${this.name}", ${
+      this.fqn ? `"${this.fqn}"` : "undefined"
+    });`;
+    const initialization = [];
+    for (const base of this.bases) {
+      const baseVarName = context.get(base)!;
+      initialization.push(`${varName}.bases.push(${baseVarName});`);
+    }
+    for (const field of Object.values(this.fields)) {
+      const fieldVarName = context.get(field)!;
+      initialization.push(
+        `${varName}.fields["${field.name}"] = ${fieldVarName};`
+      );
+    }
+    return [declaration, initialization];
   }
 
   public toString(): string {
@@ -491,14 +575,27 @@ export class EnumType implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    const args = [
-      `"${this.name}"`,
-      this.fqn ? `"${this.fqn}"` : "undefined",
-      mapToInflight(this.variants),
-    ];
-    return `new (require("${normalPath(__filename)}").EnumType)(${args.join(
-      ", "
-    )})`;
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
+      __filename
+    )}").EnumType)("${this.name}", ${
+      this.fqn ? `"${this.fqn}"` : "undefined"
+    });`;
+    const initialization = [];
+    for (const variant of Object.values(this.variants)) {
+      const variantVarName = context.get(variant)!;
+      initialization.push(
+        `${varName}.variants["${variant.name}"] = ${variantVarName};`
+      );
+    }
+    return [declaration, initialization];
   }
 
   public toString(): string {
@@ -528,9 +625,20 @@ export class EnumVariant implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    return `new (require("${normalPath(__filename)}").EnumVariant)("${
-      this.name
-    }")`;
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    return [
+      `const ${varName} = new (require("${normalPath(
+        __filename
+      )}").EnumVariant)("${this.name}");`,
+      [],
+    ];
   }
 
   public toString(): string {
@@ -559,9 +667,21 @@ export class Property implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    return `new (require("${normalPath(__filename)}").Property)("${
-      this.name
-    }", ${this.child._toInflight()})`;
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
+      __filename
+    )}").Property)("${this.name}");`;
+    const initialization = [];
+    const childVarName = context.get(this.child)!;
+    initialization.push(`${varName}.child = ${childVarName};`);
+    return [declaration, initialization];
   }
 
   /** @internal */
@@ -589,9 +709,21 @@ export class Method implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    return `new (require("${normalPath(__filename)}").Method)("${this.name}", ${
-      this.isStatic
-    }, ${this.child._toInflight()})`;
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
+      __filename
+    )}").Method)("${this.name}", ${this.isStatic});`;
+    const initialization = [];
+    const childVarName = context.get(this.child)!;
+    initialization.push(`${varName}.child = ${childVarName};`);
+    return [declaration, initialization];
   }
 
   /** @internal */
@@ -616,9 +748,21 @@ export class ArrayType implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    return `new (require("${normalPath(
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
       __filename
-    )}").ArrayType)(${this.child._toInflight()}, ${this.isMut})`;
+    )}").ArrayType)(undefined, ${this.isMut});`;
+    const initialization = [];
+    const childVarName = context.get(this.child)!;
+    initialization.push(`${varName}.child = ${childVarName};`);
+    return [declaration, initialization];
   }
 
   public toString(): string {
@@ -647,9 +791,21 @@ export class MapType implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    return `new (require("${normalPath(
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
       __filename
-    )}").MapType)(${this.child._toInflight()}, ${this.isMut})`;
+    )}").MapType)(undefined, ${this.isMut});`;
+    const initialization = [];
+    const childVarName = context.get(this.child)!;
+    initialization.push(`${varName}.child = ${childVarName};`);
+    return [declaration, initialization];
   }
 
   public toString(): string {
@@ -678,9 +834,21 @@ export class SetType implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    return `new (require("${normalPath(
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
       __filename
-    )}").SetType)(${this.child._toInflight()}, ${this.isMut})`;
+    )}").SetType)(undefined, ${this.isMut});`;
+    const initialization = [];
+    const childVarName = context.get(this.child)!;
+    initialization.push(`${varName}.child = ${childVarName};`);
+    return [declaration, initialization];
   }
 
   public toString(): string {
@@ -706,9 +874,21 @@ export class OptionalType implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    return `new (require("${normalPath(
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
       __filename
-    )}").OptionalType)(${this.child._toInflight()})`;
+    )}").OptionalType)(undefined);`;
+    const initialization = [];
+    const childVarName = context.get(this.child)!;
+    initialization.push(`${varName}.child = ${childVarName};`);
+    return [declaration, initialization];
   }
 
   public toString(): string {
@@ -740,9 +920,25 @@ export class FunctionType implements ITypeElement {
 
   /** @internal */
   public _toInflight(): string {
-    return `new (require("${normalPath(__filename)}").FunctionType)("${
-      this.phase
-    }", ${arrayToInflight(this.params)}, ${this.returns._toInflight()})`;
+    return toInflightTypeElement(this);
+  }
+
+  /** @internal */
+  public _toInflightWithContext(
+    context: Map<ITypeElement, string>
+  ): [string, Array<string>] {
+    const varName = context.get(this)!;
+    const declaration = `const ${varName} = new (require("${normalPath(
+      __filename
+    )}").FunctionType)("${this.phase}", [], undefined);`;
+    const initialization = [];
+    for (const param of this.params) {
+      const paramVarName = context.get(param)!;
+      initialization.push(`${varName}.params.push(${paramVarName});`);
+    }
+    const returnsVarName = context.get(this.returns)!;
+    initialization.push(`${varName}.returns = ${returnsVarName};`);
+    return [declaration, initialization];
   }
 
   public toString(): string {
@@ -777,18 +973,20 @@ export enum Phase {
   UNPHASED = "unphased",
 }
 
-function arrayToInflight(arr: ILiftable[]): string {
-  return "[" + arr.map((a) => a._toInflight()).join(", ") + "]";
-}
-
-function mapToInflight(obj: Record<string, ILiftable>): string {
-  return (
-    "{" +
-    Object.entries(obj)
-      .map(([key, value]) => `${key}: ${value._toInflight()}`)
-      .join(", ") +
-    "}"
-  );
+function toInflightTypeElement(root: ITypeElement): string {
+  const context = findAllTypeElements(root);
+  const declarations = [];
+  const initializations = [];
+  for (const element of context.keys()) {
+    const [declaration, initialization] =
+      element._toInflightWithContext(context);
+    declarations.push(declaration);
+    initializations.push(...initialization);
+  }
+  return `(function() {
+      ${declarations.concat(initializations).join("\n")}
+      return ${context.get(root)};
+    })()`;
 }
 
 function findAllTypeElements(root: ITypeElement): Map<ITypeElement, string> {
