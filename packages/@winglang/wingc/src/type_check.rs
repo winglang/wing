@@ -31,8 +31,8 @@ use crate::{
 	debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, DEFAULT_PACKAGE_NAME,
 	UTIL_CLASS_NAME, WINGSDK_APP, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_BYTES,
 	WINGSDK_DATETIME, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
-	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REGEX, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT, WINGSDK_TYPE,
+	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REFLECT_TYPE, WINGSDK_REGEX,
+	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -1861,15 +1861,15 @@ impl Types {
 			.expect("Construct interface to be a type")
 	}
 
-	pub fn std_type(&self) -> TypeRef {
-		let std_type_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_TYPE);
+	pub fn std_reflect_type(&self) -> TypeRef {
+		let std_reflect_type_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_REFLECT_TYPE);
 		self
 			.libraries
-			.lookup_nested_str(&std_type_fqn, None)
-			.expect("Type to be loaded")
+			.lookup_nested_str(&std_reflect_type_fqn, None)
+			.expect("std.reflect.Type to be loaded")
 			.0
 			.as_type()
-			.expect("std.Type to be a type")
+			.expect("std.reflect.Type to be a type")
 	}
 
 	/// Stores the type and phase of a given expression node.
@@ -3063,7 +3063,7 @@ See https://www.winglang.io/docs/concepts/application-tree for more information.
 
 	fn type_check_type_intrinsic(&mut self, type_intrinsic: &TypeIntrinsic, env: &mut SymbolEnv) -> (TypeRef, Phase) {
 		_ = self.resolve_type_annotation(&type_intrinsic.type_, env);
-		(self.types.std_type(), Phase::Preflight)
+		(self.types.std_reflect_type(), Phase::Preflight)
 	}
 
 	fn type_check_range(&mut self, start: &Expr, env: &mut SymbolEnv, end: &Expr) -> (TypeRef, Phase) {

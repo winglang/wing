@@ -16,4 +16,5 @@ export * from "./string";
 export * from "./struct";
 export * from "./test";
 export * from "./test-runner";
-export * from "./type";
+
+export * as reflect from "./reflect";

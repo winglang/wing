@@ -57,7 +57,7 @@ if let fn = t4.asFunction() {
   expect.equal(fn.params.length, 1);
   expect.equal(fn.params[0].kind, "num");
   expect.equal(fn.returns.kind, "bool");
-  expect.equal(fn.phase, std.Phase.INFLIGHT);
+  expect.equal(fn.phase, std.reflect.Phase.INFLIGHT);
   expect.equal(fn.toString(), "inflight (num): bool");
 } else {
   expect.fail("t4 is not a function");
@@ -240,7 +240,7 @@ test "@type in inflight" {
     expect.equal(fn.params.length, 1);
     expect.equal(fn.params[0].kind, "num");
     expect.equal(fn.returns.kind, "bool");
-    expect.equal(fn.phase, std.Phase.INFLIGHT);
+    expect.equal(fn.phase, std.reflect.Phase.INFLIGHT);
     expect.equal(fn.toString(), "inflight (num): bool");
   } else {
     expect.fail("t4 is not a function");

@@ -1,6 +1,6 @@
-import { InflightClient } from "../core/inflight";
-import { normalPath } from "../shared/misc";
-import { ILiftable } from "./resource";
+import { InflightClient } from "../../core/inflight";
+import { normalPath } from "../../shared/misc";
+import { ILiftable } from "../resource";
 
 /**
  * ITypeElement is a representation of a Wing type element.
