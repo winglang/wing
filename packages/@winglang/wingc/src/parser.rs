@@ -14,7 +14,7 @@ use crate::ast::{
 	ElseIfBlock, ElseIfLetBlock, ElseIfs, Enum, ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition,
 	FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic,
 	IntrinsicKind, LiftQualification, Literal, New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct,
-	StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	StructField, Symbol, TypeAnnotation, TypeAnnotationKind, TypeIntrinsic, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{
@@ -2301,6 +2301,7 @@ impl<'s> Parser<'s> {
 			"nil_value" => self.build_nil_expression(&expression_node, phase),
 			"bool" => self.build_bool_expression(&expression_node, phase),
 			"intrinsic" => self.build_intrinsic_expression(&expression_node, phase),
+			"type_intrinsic" => self.build_type_intrinsic_expression(&expression_node, phase),
 			"duration" => self.build_duration(&expression_node),
 			"reference" => self.build_reference(&expression_node, phase),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
@@ -2532,6 +2533,14 @@ impl<'s> Parser<'s> {
 
 		Ok(Expr::new(
 			ExprKind::Intrinsic(Intrinsic { name, arg_list, kind }),
+			self.node_span(&expression_node),
+		))
+	}
+
+	fn build_type_intrinsic_expression(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
+		let type_ = self.build_type_annotation(get_actual_child_by_field_name(*expression_node, "type"), phase)?;
+		Ok(Expr::new(
+			ExprKind::TypeIntrinsic(TypeIntrinsic { type_ }),
 			self.node_span(&expression_node),
 		))
 	}

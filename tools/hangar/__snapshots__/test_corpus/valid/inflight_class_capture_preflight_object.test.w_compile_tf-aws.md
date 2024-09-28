@@ -304,6 +304,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -516,6 +517,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 let $preflightTypesMap = {};
 const blah = $helpers.bringJs(`${__dirname}/preflight.inner-2.cjs`, $preflightTypesMap);
 const cloud = $stdlib.cloud;
@@ -555,6 +557,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 let $preflightTypesMap = {};
 const util = $stdlib.util;
 class Bar extends $stdlib.std.Resource {
@@ -607,6 +610,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 let $preflightTypesMap = {};
 class InflightClass extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
@@ -641,6 +645,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 const $preflightTypesMap = {};
 Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.widget-1.cjs`, $preflightTypesMap));
 module.exports = { ...module.exports, $preflightTypesMap };
@@ -655,6 +660,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 const $preflightTypesMap = {};
 Object.assign(module.exports, { get inner() { return $helpers.bringJs(`${__dirname}/preflight.inner-2.cjs`, $preflightTypesMap); } });
 Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.inflightclass-5.cjs`, $preflightTypesMap));
@@ -672,6 +678,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 let $preflightTypesMap = {};
 class Widget extends $stdlib.std.Resource {
   constructor($scope, $id, ) {

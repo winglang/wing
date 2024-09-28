@@ -1,5 +1,5 @@
 ---
-source: libs/wingc/src/dtsify/mod.rs
+source: packages/@winglang/wingc/src/dtsify/mod.rs
 ---
 ## Code
 
@@ -46,6 +46,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 const $preflightTypesMap = {};
 Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.lib-1.cjs`, $preflightTypesMap));
 module.exports = { ...module.exports, $preflightTypesMap };
@@ -67,6 +68,7 @@ const $macros = require("@winglang/sdk/lib/macros");
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $types = require("./types.cjs");
 let $preflightTypesMap = {};
 class ParentClass extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
@@ -123,5 +125,13 @@ export class ParentClass$Inflight implements ClassInterface$Inflight
 {
   constructor();
 }
+```
+
+## types.cjs
+
+```js
+const std = require("@winglang/sdk").std;
+const $types = {};
+module.exports = $types;
 ```
 

@@ -21,6 +21,8 @@ const skip = [
   "std.CONNECTIONS_FILE_PATH",
   "std.SDK_SOURCE_MODULE",
   "std.Node",
+  "std.reflect",
+  "std.default",
   "util.RequestCache", // an enum
   "util.RequestRedirect", // an enum
   "util.HttpMethod", // an enum

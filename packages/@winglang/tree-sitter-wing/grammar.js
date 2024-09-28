@@ -41,7 +41,6 @@ module.exports = grammar({
 
     // These modifier conflicts should be solved through GLR parsing
     [$.field_modifiers, $.method_modifiers],
-    [$.class_modifiers, $.closure_modifiers, $.interface_modifiers],
   ],
 
   supertypes: ($) => [$.expression, $._literal],
@@ -378,7 +377,8 @@ module.exports = grammar({
         $.json_literal,
         $.struct_literal,
         $.optional_unwrap,
-        $.intrinsic
+        $.intrinsic,
+        $.type_intrinsic,
       ),
 
     intrinsic: ($) =>
@@ -389,6 +389,15 @@ module.exports = grammar({
         )
       ),
     intrinsic_identifier: ($) => /@[A-Za-z_$0-9]*/,
+
+    // TODO: is there some way to generalize this
+    // so we can define other intrinsics or functions that accept types?
+    type_intrinsic: ($) => seq(
+      "@type",
+      "(",
+      field("type", $._type),
+      ")"
+    ),
 
     // Primitives
     _literal: ($) =>
@@ -672,7 +681,7 @@ module.exports = grammar({
       );
     },
 
-    closure_modifiers: ($) => repeat1(choice($.phase_specifier)),
+    closure_modifiers: ($) => choice($.phase_specifier),
 
     closure: ($) =>
       seq(

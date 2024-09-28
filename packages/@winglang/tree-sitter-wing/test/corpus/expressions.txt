@@ -610,3 +610,31 @@ Intrinsic
     (intrinsic
       (intrinsic_identifier)
       (argument_list))))
+
+================================================================================
+Type Intrinsic
+================================================================================
+
+@type(Array<num>);
+@type(inflight (): num);
+@type(foo.bar.Baz);
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (type_intrinsic
+      (immutable_container_type
+        (builtin_type))))
+  (expression_statement
+    (type_intrinsic
+      (function_type
+        (phase_specifier)
+        (parameter_type_list)
+        (builtin_type))))
+  (expression_statement
+    (type_intrinsic
+      (custom_type
+        (type_identifier)
+        (type_identifier)
+        (type_identifier)))))

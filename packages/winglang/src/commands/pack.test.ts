@@ -264,6 +264,7 @@ describe("wing pack", () => {
         "$lib/.wing/preflight.util-2.cjs",
         "$lib/.wing/preflight.util-2.cjs.map",
         "$lib/.wing/preflight.util-2.d.cts",
+        "$lib/.wing/types.cjs",
         "LICENSE",
         "README.md",
         "enums.w",

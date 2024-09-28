@@ -8,7 +8,7 @@ pub(crate) mod type_reference_transform;
 
 use crate::ast::{
 	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExplicitLift, ExprId,
-	FunctionDefinition, IfLet, Intrinsic, IntrinsicKind, New, TypeAnnotationKind,
+	FunctionDefinition, IfLet, Intrinsic, IntrinsicKind, New, TypeAnnotationKind, TypeIntrinsic,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, ElseIfs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -31,14 +31,16 @@ use crate::{
 	debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, DEFAULT_PACKAGE_NAME,
 	UTIL_CLASS_NAME, WINGSDK_APP, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_BYTES,
 	WINGSDK_DATETIME, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
-	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REGEX, WINGSDK_RESOURCE,
-	WINGSDK_RESOURCE_FQN, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_REFLECT_TYPE, WINGSDK_REGEX,
+	WINGSDK_RESOURCE, WINGSDK_RESOURCE_FQN, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
 use indexmap::IndexMap;
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
+use std::hash::{Hash, Hasher};
 
 use std::cmp;
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -93,6 +95,24 @@ where
 }
 
 pub type TypeRef = UnsafeRef<Type>;
+
+// Comparing typerefs may be imprecise because the compiler doesn't do any de-duplication
+// of types. For example, it's possible two function types or Array<str> types created from different spans
+// will be considered different typerefs, even though they represent the same type.
+
+impl Hash for TypeRef {
+	fn hash<H: Hasher>(&self, state: &mut H) {
+		self.0.hash(state);
+	}
+}
+
+impl PartialEq for TypeRef {
+	fn eq(&self, other: &Self) -> bool {
+		self.0 == other.0
+	}
+}
+
+impl Eq for TypeRef {}
 
 #[derive(Debug)]
 pub enum SymbolKind {
@@ -1404,6 +1424,38 @@ impl TypeRef {
 			_ => self.is_json_legal_value(),
 		}
 	}
+
+	pub fn short_friendly_name(&self) -> String {
+		match &**self {
+			Type::Anything => "any".to_string(),
+			Type::Number => "num".to_string(),
+			Type::String => "str".to_string(),
+			Type::Duration => "duration".to_string(),
+			Type::Datetime => "datetime".to_string(),
+			Type::Regex => "regex".to_string(),
+			Type::Bytes => "bytes".to_string(),
+			Type::Boolean => "bool".to_string(),
+			Type::Void => "void".to_string(),
+			Type::Json(_) => "json".to_string(),
+			Type::MutJson => "mutjson".to_string(),
+			Type::Nil => "nil".to_string(),
+			Type::Unresolved => "unresolved".to_string(),
+			Type::Inferred(_) => "unknown".to_string(),
+			Type::Optional(t) => format!("opt_{}", t.short_friendly_name()),
+			Type::Array(t) => format!("array_{}", t.short_friendly_name()),
+			Type::MutArray(t) => format!("mutarray_{}", t.short_friendly_name()),
+			Type::Map(t) => format!("map_{}", t.short_friendly_name()),
+			Type::MutMap(t) => format!("mutmap_{}", t.short_friendly_name()),
+			Type::Set(t) => format!("set_{}", t.short_friendly_name()),
+			Type::MutSet(t) => format!("mutset_{}", t.short_friendly_name()),
+			Type::Function(_) => "fn".to_string(),
+			Type::Class(class) => format!("class_{}", class.name),
+			Type::Interface(interface) => format!("interface_{}", interface.name),
+			Type::Struct(struct_) => format!("struct_{}", struct_.name),
+			Type::Enum(enum_) => format!("enum_{}", enum_.name),
+			Type::Stringable => "stringable".to_string(),
+		}
+	}
 }
 
 impl Subtype for TypeRef {
@@ -1794,6 +1846,17 @@ impl Types {
 			.0
 			.as_type()
 			.expect("Construct interface to be a type")
+	}
+
+	pub fn std_reflect_type(&self) -> TypeRef {
+		let std_reflect_type_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_REFLECT_TYPE);
+		self
+			.libraries
+			.lookup_nested_str(&std_reflect_type_fqn, None)
+			.expect("std.reflect.Type to be loaded")
+			.0
+			.as_type()
+			.expect("std.reflect.Type to be a type")
 	}
 
 	/// Stores the type and phase of a given expression node.
@@ -2369,6 +2432,7 @@ This value is set by the CLI at compile time and can be used to conditionally co
 			ExprKind::Range { start, end, .. } => self.type_check_range(start, env, end),
 			ExprKind::Reference(_ref) => self.type_check_reference(_ref, env),
 			ExprKind::Intrinsic(intrinsic) => self.type_check_intrinsic(intrinsic, env, exp),
+			ExprKind::TypeIntrinsic(type_intrinsic) => self.type_check_type_intrinsic(type_intrinsic, env),
 			ExprKind::New(new_expr) => self.type_check_new(new_expr, env, exp),
 			ExprKind::Call { callee, arg_list } => self.type_check_call(arg_list, env, callee, exp),
 			ExprKind::ArrayLiteral { type_, items } => self.type_check_array_lit(type_, env, exp, items),
@@ -3008,6 +3072,11 @@ This value is set by the CLI at compile time and can be used to conditionally co
 		};
 
 		(self.types.error(), Phase::Independent)
+	}
+
+	fn type_check_type_intrinsic(&mut self, type_intrinsic: &TypeIntrinsic, env: &mut SymbolEnv) -> (TypeRef, Phase) {
+		_ = self.resolve_type_annotation(&type_intrinsic.type_, env);
+		(self.types.std_reflect_type(), Phase::Preflight)
 	}
 
 	fn type_check_range(&mut self, start: &Expr, env: &mut SymbolEnv, end: &Expr) -> (TypeRef, Phase) {
