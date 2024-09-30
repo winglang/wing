@@ -29,14 +29,6 @@ log(Json.stringify(base64));
 log(Json.stringify(hex));
 ```
 
-```bash title="Wing console output"
-# Run locally with wing console
-{"_data":{"0":104,"1":101,"2":108,"3":108,"4":111}}
-{"_data":{"0":104,"1":101,"2":108,"3":108,"4":111}}
-{"_data":{"0":104,"1":101,"2":108,"3":108,"4":111}}
-{"_data":{"0":104,"1":101,"2":108,"3":108,"4":111}}
-```
-
 
 
 
