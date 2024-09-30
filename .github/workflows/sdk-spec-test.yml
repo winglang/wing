@@ -86,9 +86,9 @@ jobs:
           if [ "${{env.TARGET}}" = "all" ]; then
             target='["tf-aws", "tf-azure", "tf-gcp"]'
           elif [ "${{env.TARGET}}" = "all-stable" ]; then
-            target='["tf-aws", "sim", "tf-azure"]'
+            target='["tf-aws", "sim"]'
           elif [ "${{env.TARGET}}" = "all-unstable" ]; then
-            target='["tf-gcp"]'
+            target='["tf-gcp", "tf-azure"]'
           else
            target='["${{env.TARGET}}"]'
           fi
