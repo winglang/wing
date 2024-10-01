@@ -263,9 +263,13 @@ bring "./subdir/structs_2.w" as otherExternalStructs;
 
 enum Color { red, green, blue }
 
+/// MyStruct docs
 struct MyStruct {
+  /// m1 docs
   m1: externalStructs.MyStruct;
+  /// m2 docs
   m2: otherExternalStructs.MyStruct;
+  /// color docs
   color: Color;
 }
 
@@ -288,7 +292,31 @@ expect.equal(myStruct.color, Color.red);
 let schema = MyStruct.schema();
 schema.validate(jMyStruct); // Should not throw exception
 
-let expectedSchema = {"$id":"/MyStruct","type":"object","properties":{"color":{"type":"string","enum":["red","green","blue"]},"m1":{"type":"object","properties":{"val":{"type":"number"}},"required":["val"]},"m2":{"type":"object","properties":{"val":{"type":"string"}},"required":["val"]}},"required":["color","m1","m2"]};
+let expectedSchema = {
+  "$id": "/MyStruct",
+  "type": "object",
+  "properties": {
+    "color": {
+      "type": "string",
+      "enum": ["red", "green", "blue"],
+      "description": "color docs",
+    },
+    "m1": {
+      "type": "object",
+      "properties": { "val": { "type": "number", "description": "val docs" } },
+      "required": ["val"],
+      "description": "m1 docs",
+    },
+    "m2": {
+      "type": "object",
+      "properties": { "val": { "type": "string" } },
+      "required": ["val"],
+      "description": "m2 docs",
+    },
+  },
+  "required": ["color", "m1", "m2"],
+  "description": "MyStruct docs",
+};
 
 expect.equal(schema.asStr(), Json.stringify(expectedSchema));
 

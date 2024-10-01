@@ -1,4 +1,6 @@
+/// MyStruct docs in subdir
 pub struct MyStruct {
+  /// val docs
   val: num;
 }
 

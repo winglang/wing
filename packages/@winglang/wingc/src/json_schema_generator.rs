@@ -1,4 +1,5 @@
 use crate::{
+	docs::Docs,
 	jsify::{codemaker::CodeMaker, JSifier},
 	type_check::{symbol_env::SymbolEnv, Struct, Type, UnsafeRef},
 };
@@ -13,10 +14,12 @@ impl JsonSchemaGenerator {
 	fn get_struct_env_properties(&self, env: &SymbolEnv) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		for (field_name, entry) in env.symbol_map.iter() {
-			code.line(format!(
-				"{}: {},",
+			let var_info = entry.kind.as_variable().unwrap();
+			let docs = var_info.docs.clone();
+			code.append(format!(
+				"{}:{},",
 				field_name,
-				self.get_struct_schema_field(&entry.kind.as_variable().unwrap().type_)
+				self.get_struct_schema_field(&entry.kind.as_variable().unwrap().type_, docs)
 			));
 		}
 		code
@@ -24,62 +27,87 @@ impl JsonSchemaGenerator {
 
 	fn get_struct_schema_required_fields(&self, env: &SymbolEnv) -> CodeMaker {
 		let mut code = CodeMaker::default();
-		code.open("required: [");
+		code.append("required:[");
 		for (field_name, entry) in env.symbol_map.iter() {
 			if !matches!(*entry.kind.as_variable().unwrap().type_, Type::Optional(_)) {
-				code.line(format!("\"{}\",", field_name));
+				code.append(format!("\"{}\",", field_name));
 			}
 		}
-		code.close("]");
+		code.append("]");
 		code
 	}
 
-	fn get_struct_schema_field(&self, typ: &UnsafeRef<Type>) -> String {
+	fn get_struct_schema_field(&self, typ: &UnsafeRef<Type>, docs: Option<Docs>) -> String {
 		match **typ {
 			Type::String | Type::Number | Type::Boolean => {
-				format!("{{ type: \"{}\" }}", JSifier::jsify_type(typ).unwrap())
+				let jsified_type = JSifier::jsify_type(typ).unwrap();
+				match docs {
+					Some(docs) => format!(
+						"{{type:\"{}\",description:\"{}\"}}",
+						jsified_type,
+						docs.summary.unwrap_or_default()
+					),
+					None => format!("{{type:\"{}\"}}", jsified_type),
+				}
 			}
 			Type::Struct(ref s) => {
 				let mut code = CodeMaker::default();
-				code.open("{");
-				code.line("type: \"object\",");
-				code.open("properties: {");
-				code.add_code(self.get_struct_env_properties(&s.env));
-				code.close("},");
-				code.add_code(self.get_struct_schema_required_fields(&s.env));
-				code.close("}");
+				code.append("{");
+				code.append("type:\"object\",");
+				code.append("properties:{");
+				code.append(self.get_struct_env_properties(&s.env));
+				code.append("},");
+				code.append(self.get_struct_schema_required_fields(&s.env));
+				if let Some(docs) = docs {
+					code.append(format!(",description:\"{}\"", docs.summary.unwrap_or_default()));
+				}
+				code.append("}");
 				code.to_string()
 			}
 			Type::Array(ref t) | Type::Set(ref t) => {
 				let mut code = CodeMaker::default();
-				code.open("{");
+				code.append("{");
 
-				code.line("type: \"array\",");
+				code.append("type:\"array\"");
 
 				if matches!(**typ, Type::Set(_)) {
-					code.line("uniqueItems: true,");
+					code.append(",uniqueItems:true");
 				}
 
-				code.line(format!("items: {}", self.get_struct_schema_field(t)));
+				code.append(format!(",items:{}", self.get_struct_schema_field(t, None)));
 
-				code.close("}");
+				if let Some(docs) = docs {
+					code.append(format!(",description:\"{}\"", docs.summary.unwrap_or_default()));
+				}
+
+				code.append("}");
 				code.to_string()
 			}
 			Type::Map(ref t) => {
 				let mut code = CodeMaker::default();
-				code.open("{");
+				code.append("{");
 
-				code.line("type: \"object\",");
-				code.line(format!(
-					"patternProperties: {{ \".*\": {} }}",
-					self.get_struct_schema_field(t)
+				code.append("type:\"object\",");
+				code.append(format!(
+					"patternProperties: {{\".*\":{}}}",
+					self.get_struct_schema_field(t, None)
 				));
 
-				code.close("}");
+				if let Some(docs) = docs {
+					code.append(format!("description:\"{}\",", docs.summary.unwrap_or_default()));
+				}
+
+				code.append("}");
 				code.to_string()
 			}
-			Type::Optional(t) => self.get_struct_schema_field(&t),
-			Type::Json(_) => "{ type: [\"object\", \"string\", \"boolean\", \"number\", \"array\"] }".to_string(),
+			Type::Optional(ref t) => self.get_struct_schema_field(t, docs),
+			Type::Json(_) => match docs {
+				Some(docs) => format!(
+					"{{type:[\"object\",\"string\",\"boolean\",\"number\",\"array\"],description:\"{}\"}}",
+					docs.summary.unwrap_or_default()
+				),
+				None => "{type:[\"object\",\"string\",\"boolean\",\"number\",\"array\"]}".to_string(),
+			},
 			Type::Enum(ref enu) => {
 				let choices = enu
 					.values
@@ -87,33 +115,49 @@ impl JsonSchemaGenerator {
 					.map(|(s, _)| format!("\"{}\"", s))
 					.collect::<Vec<String>>()
 					.join(", ");
-				format!("{{ type: \"string\", enum: [{}] }}", choices)
+				match docs {
+					Some(docs) => format!(
+						"{{type:\"string\",enum:[{}],description:\"{}\"}}",
+						choices,
+						docs.summary.unwrap_or_default()
+					),
+					None => format!("{{type:\"string\",enum:[{}]}}", choices),
+				}
 			}
-			_ => "{ type: \"null\" }".to_string(),
+			_ => match docs {
+				Some(docs) => format!(
+					"{{type:\"null\",description:\"{}\" }}",
+					docs.summary.unwrap_or_default()
+				),
+				None => "{type:\"null\"}".to_string(),
+			},
 		}
 	}
 
 	pub fn create_from_struct(&self, struct_: &Struct) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
-		code.open("{");
-		code.line(format!("$id: \"/{}\",", struct_.name));
-		code.line("type: \"object\",".to_string());
+		code.append("{");
+		code.append(format!("$id:\"/{}\",", struct_.name));
+		code.append("type:\"object\",".to_string());
 
-		code.open("properties: {");
+		code.append("properties:{");
 
-		code.add_code(self.get_struct_env_properties(&struct_.env));
+		code.append(self.get_struct_env_properties(&struct_.env));
 
 		//close properties
-		code.close("},");
+		code.append("},");
 
-		code.add_code(self.get_struct_schema_required_fields(&struct_.env));
+		code.append(self.get_struct_schema_required_fields(&struct_.env));
+
+		code.append(format!(
+			",description:\"{}\"",
+			struct_.docs.summary.as_ref().unwrap_or(&String::new())
+		));
 
 		// close schema
-		code.close("}");
+		code.append("}");
 
-		let cleaned = code.to_string().replace("\n", "").replace(" ", "");
-
-		CodeMaker::one_line(cleaned)
+		code
 	}
 }
