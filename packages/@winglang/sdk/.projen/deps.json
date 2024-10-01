@@ -14,10 +14,6 @@
       "type": "build"
     },
     {
-      "name": "@types/fs-extra",
-      "type": "build"
-    },
-    {
       "name": "@types/glob",
       "type": "build"
     },
@@ -103,10 +99,6 @@
     {
       "name": "eslint",
       "version": "^8.56.0",
-      "type": "build"
-    },
-    {
-      "name": "fs-extra",
       "type": "build"
     },
     {
@@ -264,12 +256,24 @@
       "type": "bundled"
     },
     {
+      "name": "@types/adm-zip",
+      "type": "bundled"
+    },
+    {
       "name": "@types/aws-lambda",
+      "type": "bundled"
+    },
+    {
+      "name": "@types/fs-extra",
       "type": "bundled"
     },
     {
       "name": "@winglang/wingtunnels",
       "version": "workspace:^",
+      "type": "bundled"
+    },
+    {
+      "name": "adm-zip",
       "type": "bundled"
     },
     {
@@ -299,6 +303,10 @@
     },
     {
       "name": "express",
+      "type": "bundled"
+    },
+    {
+      "name": "fs-extra",
       "type": "bundled"
     },
     {
