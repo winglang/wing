@@ -98,6 +98,7 @@ const project = new cdk.JsiiProject({
     "dotenv",
     "dotenv-expand",
     "adm-zip",
+    "@types/adm-zip",
     "fs-extra",
     "@types/fs-extra",
   ],
