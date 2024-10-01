@@ -58,9 +58,8 @@ impl JsonSchemaGenerator {
 				code.append(self.get_struct_env_properties(&s.env));
 				code.append("},");
 				code.append(self.get_struct_schema_required_fields(&s.env));
-				if let Some(docs) = docs {
-					code.append(format!(",description:\"{}\"", docs.summary.unwrap_or_default()));
-				}
+				let docs = docs.unwrap_or(s.docs.clone());
+				code.append(format!(",description:\"{}\"", docs.summary.unwrap_or_default()));
 				code.append("}");
 				code.to_string()
 			}
@@ -115,14 +114,12 @@ impl JsonSchemaGenerator {
 					.map(|(s, _)| format!("\"{}\"", s))
 					.collect::<Vec<String>>()
 					.join(", ");
-				match docs {
-					Some(docs) => format!(
-						"{{type:\"string\",enum:[{}],description:\"{}\"}}",
-						choices,
-						docs.summary.unwrap_or_default()
-					),
-					None => format!("{{type:\"string\",enum:[{}]}}", choices),
-				}
+				let docs = docs.unwrap_or(enu.docs.clone());
+				format!(
+					"{{type:\"string\",enum:[{}],description:\"{}\"}}",
+					choices,
+					docs.summary.unwrap_or_default()
+				)
 			}
 			_ => match docs {
 				Some(docs) => format!(
