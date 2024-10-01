@@ -44,6 +44,7 @@
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.11.0",
     "@types/uuid": "^9.0.8",
+    "@types/adm-zip": "^0.5.5",
     "@typescript-eslint/eslint-plugin": "^7",
     "@typescript-eslint/parser": "^7",
     "@winglang/jsii-docgen": "workspace:^",
@@ -73,7 +74,8 @@
     "tsx": "^4.15.7",
     "typescript": "^5.5.2",
     "vitest": "^1.6.0",
-    "wing-api-checker": "workspace:^"
+    "wing-api-checker": "workspace:^",
+    "adm-zip": "^0.5.16"
   },
   "peerDependencies": {
     "constructs": "^10.3"

@@ -1,5 +1,7 @@
-import { AssetType, Lazy, TerraformAsset } from "cdktf";
+import { join } from "path";
+import { Lazy } from "cdktf";
 import { Construct } from "constructs";
+import { ensureDirSync } from "fs-extra";
 import { App } from "./app";
 import { CloudwatchLogGroup } from "../.gen/providers/aws/cloudwatch-log-group";
 import { IamRole } from "../.gen/providers/aws/iam-role";
@@ -26,6 +28,7 @@ import {
 import { makeAwsLambdaHandler } from "../shared-aws/function-util";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
+import AdmZip from "adm-zip";
 
 /**
  * Function names are limited to 64 characters.
@@ -284,15 +287,17 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     const bundle = createBundle(this.entrypoint, externalLibraries);
 
-    // would prefer to create TerraformAsset in the constructor, but using a CDKTF token for
-    // the "path" argument isn't supported
-    const asset = new TerraformAsset(this, "Asset", {
-      path: bundle.directory,
-      type: AssetType.ARCHIVE,
-    });
+    // we used to use terraformAsset- but it can't handle file paths that contain spaces- so we create the bundle zip manually.
+    const zip = new AdmZip();
+    zip.addLocalFolder(bundle.directory);
 
+    const folderPath = join(App.of(this).outdir, "assets");
+    const filename = `${this.node.addr}.zip`;
+    ensureDirSync(folderPath);
+    zip.writeZip(join(folderPath, filename));
+
+    this.assetPath = join("assets", filename);
     this.bundleHash = bundle.hash;
-    this.assetPath = asset.path;
   }
 
   /** @internal */
