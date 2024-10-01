@@ -97,13 +97,15 @@ const project = new cdk.JsiiProject({
     // env
     "dotenv",
     "dotenv-expand",
+    "adm-zip",
+    "fs-extra",
+    "@types/fs-extra",
   ],
   devDeps: [
     `@cdktf/provider-aws@^19`, // only for testing Wing plugins
     "wing-api-checker",
     "bump-pack",
     "@types/aws-lambda",
-    "@types/fs-extra",
     "@types/mime-types",
     "mock-gcs@^1.2.0",
     "@types/express",
@@ -112,7 +114,7 @@ const project = new cdk.JsiiProject({
     "aws-sdk-client-mock-jest@3.0.0",
     `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
-    "fs-extra",
+
     "vitest",
     "@types/uuid",
     "nanoid", // for ESM import test in target-sim/function.test.ts
