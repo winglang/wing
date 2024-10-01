@@ -197,13 +197,13 @@ class $Root extends $stdlib.std.Resource {
     const expect = $stdlib.expect;
     const externalStructs = $helpers.bringJs(`${__dirname}/preflight.structs-1.cjs`, $preflightTypesMap);
     const otherExternalStructs = $helpers.bringJs(`${__dirname}/preflight.structs2-2.cjs`, $preflightTypesMap);
-    const Bar = $stdlib.std.Struct._createJsonSchema({$id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
-    const Foo = $stdlib.std.Struct._createJsonSchema({$id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
-    const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
-    const MyStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyStruct",type:"object",properties:{color:{type:"string",enum:["red","green","blue"]},m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["color","m1","m2",]});
-    const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:["object","string","boolean","number","array"]},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
-    const cloud_CounterProps = $stdlib.std.Struct._createJsonSchema({$id:"/CounterProps",type:"object",properties:{initial:{type:"number"},},required:[]});
-    const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
+    const Bar = $stdlib.std.Struct._createJsonSchema({$id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",],description:""});
+    const Foo = $stdlib.std.Struct._createJsonSchema({$id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",],description:""});
+    const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[],description:""});
+    const MyStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyStruct",type:"object",properties:{color:{type:"string",enum:["red", "green", "blue"],description:"color docs"},m1:{type:"object",properties:{val:{type:"number",description:"val docs"},},required:["val",],description:"m1 docs"},m2:{type:"object",properties:{val:{type:"string"},},required:["val",],description:"m2 docs"},},required:["color","m1","m2",],description:"MyStruct docs"});
+    const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:["object","string","boolean","number","array"]},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",],description:""},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",],description:""},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",],description:""},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",],description:""},grade:{type:"string"},},required:["course","dateTaken","grade",],description:""}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",],description:""},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",],description:""}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",],description:""});
+    const cloud_CounterProps = $stdlib.std.Struct._createJsonSchema({$id:"/CounterProps",type:"object",properties:{initial:{type:"number",description:"The initial value of the counter."},},required:[],description:"Options for `Counter`."});
+    const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number",description:"val docs"},},required:["val",],description:"MyStruct docs in subdir"},},required:["data",],description:""});
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const Color =
       (function (tmp) {
@@ -478,7 +478,7 @@ class $Root extends $stdlib.std.Resource {
     (expect.Util.equal(myStruct.color, Color.red));
     const schema = $macros.__Struct_schema(false, MyStruct, );
     (schema.validate(jMyStruct));
-    const expectedSchema = ({"$id": "/MyStruct", "type": "object", "properties": ({"color": ({"type": "string", "enum": ["red", "green", "blue"]}), "m1": ({"type": "object", "properties": ({"val": ({"type": "number"})}), "required": ["val"]}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"]})}), "required": ["color", "m1", "m2"]});
+    const expectedSchema = ({"$id": "/MyStruct", "type": "object", "properties": ({"color": ({"type": "string", "enum": ["red", "green", "blue"], "description": "color docs"}), "m1": ({"type": "object", "properties": ({"val": ({"type": "number", "description": "val docs"})}), "required": ["val"], "description": "m1 docs"}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"], "description": "m2 docs"})}), "required": ["color", "m1", "m2"], "description": "MyStruct docs"});
     (expect.Util.equal((schema.asStr()), $macros.__Json_stringify(false, std.Json, expectedSchema)));
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
     (std.String.fromJson(10, { unsafe: true }));
@@ -518,7 +518,7 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const $types = require("./types.cjs");
 let $preflightTypesMap = {};
-const SomeStruct = $stdlib.std.Struct._createJsonSchema({$id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",]});
+const SomeStruct = $stdlib.std.Struct._createJsonSchema({$id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",],description:""});
 class UsesStructInImportedFile extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
