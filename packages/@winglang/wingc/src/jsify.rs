@@ -2704,7 +2704,7 @@ fn lookup_span(span: &WingSpan, files: &Files) -> String {
 	result
 }
 
-fn escape_javascript_string(s: &str) -> String {
+pub fn escape_javascript_string(s: &str) -> String {
 	let mut result = String::new();
 
 	// escape all escapable characters -- see the section "Escape sequences" in

@@ -264,12 +264,14 @@ bring "./subdir/structs_2.w" as otherExternalStructs;
 enum Color { red, green, blue }
 
 /// MyStruct docs
+/// @foo bar
 struct MyStruct {
   /// m1 docs
   m1: externalStructs.MyStruct;
   /// m2 docs
   m2: otherExternalStructs.MyStruct;
   /// color docs
+  /// @example Color.red
   color: Color;
 }
 
@@ -299,7 +301,7 @@ let expectedSchema = {
     "color": {
       "type": "string",
       "enum": ["red", "green", "blue"],
-      "description": "color docs",
+      "description": "color docs\n@example Color.red",
     },
     "m1": {
       "type": "object",
@@ -315,7 +317,7 @@ let expectedSchema = {
     },
   },
   "required": ["color", "m1", "m2"],
-  "description": "MyStruct docs",
+  "description": "MyStruct docs\n@foo bar",
 };
 
 expect.equal(schema.asStr(), Json.stringify(expectedSchema));

@@ -45,7 +45,7 @@ impl JsonSchemaGenerator {
 					Some(docs) => format!(
 						"{{type:\"{}\",description:\"{}\"}}",
 						jsified_type,
-						docs.summary.unwrap_or_default()
+						docs.to_escaped_string()
 					),
 					None => format!("{{type:\"{}\"}}", jsified_type),
 				}
@@ -59,7 +59,7 @@ impl JsonSchemaGenerator {
 				code.append("},");
 				code.append(self.get_struct_schema_required_fields(&s.env));
 				let docs = docs.unwrap_or(s.docs.clone());
-				code.append(format!(",description:\"{}\"", docs.summary.unwrap_or_default()));
+				code.append(format!(",description:\"{}\"", docs.to_escaped_string()));
 				code.append("}");
 				code.to_string()
 			}
@@ -76,7 +76,7 @@ impl JsonSchemaGenerator {
 				code.append(format!(",items:{}", self.get_struct_schema_field(t, None)));
 
 				if let Some(docs) = docs {
-					code.append(format!(",description:\"{}\"", docs.summary.unwrap_or_default()));
+					code.append(format!(",description:\"{}\"", docs.to_escaped_string()));
 				}
 
 				code.append("}");
@@ -93,7 +93,7 @@ impl JsonSchemaGenerator {
 				));
 
 				if let Some(docs) = docs {
-					code.append(format!("description:\"{}\",", docs.summary.unwrap_or_default()));
+					code.append(format!("description:\"{}\",", docs.to_escaped_string()));
 				}
 
 				code.append("}");
@@ -103,7 +103,7 @@ impl JsonSchemaGenerator {
 			Type::Json(_) => match docs {
 				Some(docs) => format!(
 					"{{type:[\"object\",\"string\",\"boolean\",\"number\",\"array\"],description:\"{}\"}}",
-					docs.summary.unwrap_or_default()
+					docs.to_escaped_string()
 				),
 				None => "{type:[\"object\",\"string\",\"boolean\",\"number\",\"array\"]}".to_string(),
 			},
@@ -118,14 +118,11 @@ impl JsonSchemaGenerator {
 				format!(
 					"{{type:\"string\",enum:[{}],description:\"{}\"}}",
 					choices,
-					docs.summary.unwrap_or_default()
+					docs.to_escaped_string()
 				)
 			}
 			_ => match docs {
-				Some(docs) => format!(
-					"{{type:\"null\",description:\"{}\" }}",
-					docs.summary.unwrap_or_default()
-				),
+				Some(docs) => format!("{{type:\"null\",description:\"{}\" }}", docs.to_escaped_string()),
 				None => "{type:\"null\"}".to_string(),
 			},
 		}
@@ -147,10 +144,7 @@ impl JsonSchemaGenerator {
 
 		code.append(self.get_struct_schema_required_fields(&struct_.env));
 
-		code.append(format!(
-			",description:\"{}\"",
-			struct_.docs.summary.as_ref().unwrap_or(&String::new())
-		));
+		code.append(format!(",description:\"{}\"", struct_.docs.to_escaped_string()));
 
 		// close schema
 		code.append("}");

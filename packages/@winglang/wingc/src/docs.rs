@@ -6,7 +6,7 @@ use regex::Regex;
 use crate::{
 	ast::{AccessModifier, Phase},
 	closure_transform::CLOSURE_CLASS_PREFIX,
-	jsify::codemaker::CodeMaker,
+	jsify::{codemaker::CodeMaker, escape_javascript_string},
 	type_check::{
 		jsii_importer::is_construct_base, symbol_env::SymbolEnvKind, Class, ClassLike, Enum, FunctionSignature, Interface,
 		Namespace, Struct, SymbolKind, Type, TypeRef, VariableInfo, VariableKind, CLASS_INFLIGHT_INIT_NAME,
@@ -45,6 +45,50 @@ impl Docs {
 		render_docs(&mut markdown, self);
 
 		markdown.to_string().trim().to_string()
+	}
+
+	pub fn to_escaped_string(&self) -> String {
+		let mut contents = String::new();
+		if let Some(summary) = &self.summary {
+			contents.push_str(summary);
+		}
+		if let Some(remarks) = &self.remarks {
+			contents.push_str("\n\n");
+			contents.push_str(remarks);
+		}
+		if let Some(example) = &self.example {
+			contents.push_str("\n@example ");
+			contents.push_str(example);
+		}
+		if let Some(returns) = &self.returns {
+			contents.push_str("\n@returns ");
+			contents.push_str(returns);
+		}
+		if let Some(deprecated) = &self.deprecated {
+			contents.push_str("\n@deprecated ");
+			contents.push_str(deprecated);
+		}
+		if let Some(see) = &self.see {
+			contents.push_str("\n@see ");
+			contents.push_str(see);
+		}
+		if let Some(default) = &self.default {
+			contents.push_str("\n@default ");
+			contents.push_str(default);
+		}
+		if let Some(stability) = &self.stability {
+			contents.push_str("\n@stability ");
+			contents.push_str(stability);
+		}
+		if let Some(_) = &self.subclassable {
+			contents.push_str("\n@subclassable");
+		}
+		for (k, v) in self.custom.iter() {
+			contents.push_str(&format!("\n@{} ", k));
+			contents.push_str(v);
+		}
+
+		escape_javascript_string(&contents)
 	}
 
 	pub(crate) fn with_summary(summary: &str) -> Docs {
