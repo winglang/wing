@@ -28,6 +28,11 @@ export interface ConstructTreeNode {
   readonly children?: { [key: string]: ConstructTreeNode };
 
   /**
+   * The default child node path, if any.
+   */
+  readonly defaultChild?: string;
+
+  /**
    * The node attributes.
    */
   readonly attributes?: { [key: string]: any };
@@ -216,6 +221,7 @@ export function synthesizeTree(app: App, outdir: string) {
       id: construct.node.id || "App",
       path: construct.node.path,
       children: Object.keys(childrenMap).length === 0 ? undefined : childrenMap,
+      defaultChild: construct.node.defaultChild?.node.path,
       constructInfo: constructInfoFromConstruct(construct),
       display: synthDisplay(construct),
     };

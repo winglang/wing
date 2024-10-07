@@ -98,6 +98,7 @@ exports[`bucket is public 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -137,6 +138,7 @@ exports[`bucket is public 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -266,6 +268,7 @@ exports[`bucket with two preflight files 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -305,6 +308,7 @@ exports[`bucket with two preflight files 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -434,6 +438,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -473,6 +478,7 @@ exports[`bucket with two preflight objects 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -572,6 +578,7 @@ exports[`create a bucket 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -611,6 +618,7 @@ exports[`create a bucket 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -728,6 +736,7 @@ exports[`two buckets 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket1/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -769,6 +778,7 @@ exports[`two buckets 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket2/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -808,6 +818,7 @@ exports[`two buckets 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",

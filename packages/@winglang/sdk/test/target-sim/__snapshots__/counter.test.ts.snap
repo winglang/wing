@@ -220,6 +220,7 @@ exports[`create a counter 1`] = `
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "defaultChild": "root/my_counter/Resource",
           "display": {
             "description": "A distributed atomic counter",
             "title": "Counter",
@@ -472,6 +473,7 @@ exports[`dec 2`] = `
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "defaultChild": "root/my_counter/Resource",
           "display": {
             "description": "A distributed atomic counter",
             "title": "Counter",
@@ -724,6 +726,7 @@ exports[`inc 2`] = `
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "defaultChild": "root/my_counter/Resource",
           "display": {
             "description": "A distributed atomic counter",
             "title": "Counter",
@@ -976,6 +979,7 @@ exports[`key dec 2`] = `
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "defaultChild": "root/my_counter/Resource",
           "display": {
             "description": "A distributed atomic counter",
             "title": "Counter",
@@ -1228,6 +1232,7 @@ exports[`key inc 2`] = `
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "defaultChild": "root/my_counter/Resource",
           "display": {
             "description": "A distributed atomic counter",
             "title": "Counter",
@@ -1478,6 +1483,7 @@ exports[`key set to new value 2`] = `
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "defaultChild": "root/my_counter/Resource",
           "display": {
             "description": "A distributed atomic counter",
             "title": "Counter",
@@ -1728,6 +1734,7 @@ exports[`set to new value 2`] = `
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "defaultChild": "root/my_counter/Resource",
           "display": {
             "description": "A distributed atomic counter",
             "title": "Counter",

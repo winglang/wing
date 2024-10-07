@@ -115,6 +115,7 @@ exports[`bucket is public 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -145,6 +146,7 @@ exports[`bucket is public 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -232,6 +234,7 @@ exports[`bucket prefix must be lowercase 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/The-Uncanny.Bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -271,6 +274,7 @@ exports[`bucket prefix must be lowercase 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -367,6 +371,7 @@ exports[`bucket prefix valid 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/the-uncanny.bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -397,6 +402,7 @@ exports[`bucket prefix valid 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -496,6 +502,7 @@ exports[`bucket with cors disabled 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -526,6 +533,7 @@ exports[`bucket with cors disabled 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -653,6 +661,7 @@ exports[`bucket with custom cors in constructor 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -683,6 +692,7 @@ exports[`bucket with custom cors in constructor 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -810,6 +820,7 @@ exports[`bucket with custom cors via addCorsRule 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -840,6 +851,7 @@ exports[`bucket with custom cors via addCorsRule 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -1108,6 +1120,7 @@ exports[`bucket with onCreate method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnCreate/Default",
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
@@ -1194,6 +1207,7 @@ exports[`bucket with onCreate method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnCreate-OnMessage0/Default",
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
@@ -1233,6 +1247,7 @@ exports[`bucket with onCreate method 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -1263,6 +1278,7 @@ exports[`bucket with onCreate method 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -1531,6 +1547,7 @@ exports[`bucket with onDelete method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnDelete/Default",
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
@@ -1617,6 +1634,7 @@ exports[`bucket with onDelete method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnDelete-OnMessage0/Default",
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
@@ -1656,6 +1674,7 @@ exports[`bucket with onDelete method 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -1686,6 +1705,7 @@ exports[`bucket with onDelete method 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -2100,6 +2120,7 @@ exports[`bucket with onEvent method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnCreate/Default",
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
@@ -2186,6 +2207,7 @@ exports[`bucket with onEvent method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnCreate-OnMessage0/Default",
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
@@ -2227,6 +2249,7 @@ exports[`bucket with onEvent method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnDelete/Default",
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
@@ -2313,6 +2336,7 @@ exports[`bucket with onEvent method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnDelete-OnMessage0/Default",
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
@@ -2354,6 +2378,7 @@ exports[`bucket with onEvent method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnUpdate/Default",
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
@@ -2440,6 +2465,7 @@ exports[`bucket with onEvent method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnUpdate-OnMessage0/Default",
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
@@ -2479,6 +2505,7 @@ exports[`bucket with onEvent method 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -2509,6 +2536,7 @@ exports[`bucket with onEvent method 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -2777,6 +2805,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnUpdate/Default",
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
@@ -2863,6 +2892,7 @@ exports[`bucket with onUpdate method 2`] = `
                       "fqn": "constructs.Construct",
                       "version": "10.3.0",
                     },
+                    "defaultChild": "root/Default/my_bucket/OnUpdate-OnMessage0/Default",
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
@@ -2902,6 +2932,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -2932,6 +2963,7 @@ exports[`bucket with onUpdate method 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -3094,6 +3126,7 @@ exports[`bucket with two preflight files 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -3124,6 +3157,7 @@ exports[`bucket with two preflight files 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -3286,6 +3320,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -3316,6 +3351,7 @@ exports[`bucket with two preflight objects 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",
@@ -3412,6 +3448,7 @@ exports[`create a bucket 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "defaultChild": "root/Default/my_bucket/Default",
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
@@ -3442,6 +3479,7 @@ exports[`create a bucket 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.7",
         },
+        "defaultChild": "root/Default",
         "display": {},
         "id": "root",
         "path": "root",

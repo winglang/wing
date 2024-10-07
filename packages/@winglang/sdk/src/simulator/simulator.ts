@@ -10,7 +10,7 @@ import { resolveTokens } from "./tokens";
 import { Tree } from "./tree";
 import { exists } from "./util";
 import { SDK_VERSION } from "../constants";
-import { TREE_FILE_PATH } from "../core";
+import { TREE_FILE_PATH, UIComponent } from "../core/tree";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, LogLevel, Trace, TraceType } from "../std";
 import { POLICY_FQN } from "../target-sim";
@@ -679,11 +679,22 @@ export class Simulator {
    * @returns An array of UIComponent objects
    */
   public getResourceUI(path: string): any {
+    let components: UIComponent[] = [];
     let treeData = this.tree().rawDataForNode(path);
     if (!treeData) {
       throw new Error(`Resource "${path}" not found.`);
     }
-    return treeData.display?.ui ?? [];
+    components = [...components, ...(treeData.display?.ui ?? [])];
+
+    // Inherit the default child's UI components
+    if (treeData.defaultChild) {
+      let defaultChild = this.tree().rawDataForNode(treeData.defaultChild);
+      if (defaultChild) {
+        components = [...components, ...(defaultChild.display?.ui ?? [])];
+      }
+    }
+
+    return components;
   }
 
   private typeInfo(fqn: string): TypeSchema {
