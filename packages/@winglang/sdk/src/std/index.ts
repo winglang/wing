@@ -9,12 +9,12 @@ export * from "./json_schema";
 export * from "./map";
 export * from "./node";
 export * from "./number";
+export * as reflect from "./reflect";
 export * from "./regex";
 export * from "./resource";
 export * from "./set";
 export * from "./string";
 export * from "./struct";
 export * from "./test";
-export * from "./test-runner";
 
-export * as reflect from "./reflect";
+export * from "./test-runner";
