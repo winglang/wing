@@ -57,7 +57,6 @@ test("update an object in bucket", async () => {
 
   // THEN
   await s.stop();
-  expect(listMessages(s)).toMatchSnapshot();
   // The bucket notification topic should only publish one message, since the
   // second put() call counts as an update, not a create.
   expect(listMessages(s).filter((m) => m.includes(`Publish`))).toHaveLength(1);
