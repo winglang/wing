@@ -10,7 +10,7 @@ image: /img/wing-by-example.png
 
 Wing incorporates a [lightweight testing framework](/docs/concepts/tests), which is built around the `wing test` command and the `test` keyword.
 
-```js playground example title="main.w"
+```js playground example{valid: false} title="main.w"
 bring math;
 bring cloud;
 let b = new cloud.Bucket();
@@ -31,7 +31,7 @@ test "bucket starts empty" {
 }
 
 test "this test fails" {
-  throw("test throws an exception fails");
+  throw "test throws an exception fails";
 }
 ```
 
