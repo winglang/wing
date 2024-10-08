@@ -1,4 +1,4 @@
-import { readdir, writeFile, readFile } from "node:fs/promises";
+import { readdir, writeFile, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Language, Documentation } from "@winglang/jsii-docgen";
@@ -183,6 +183,9 @@ await generateResourceApiDocs("target-sim", {
   filter: DocumentationFilter.ONLY_WITH_MD,
   jsiiModule: "sim",
 });
+
+// TODO: this file isn't generated correctly
+await rm(getStdlibDocsDir("std/reflect") + ".md");
 
 console.log(
   `${ANSI_LINE_CLEAR}${ANSI_LINE_CLEAR}${docCounter} Docs Generated!`

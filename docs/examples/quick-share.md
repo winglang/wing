@@ -9,13 +9,13 @@ platform:
   - "sim"
 language:
   - "wing"
-githubURL: "https://github.com/winglang/website-with-file-uploader"
+githubURL: "https://github.com/winglang/quickshare-demo"
 repoDirectory: "/"
 coverImage: "/img/examples/quickshare.png"
 coverImageInPage: true
 resources:
   - label: "Deploy your own version of this application"
-    href: "https://github.com/winglang/website-with-file-uploader"
+    href: "https://github.com/winglang/quickshare-demo"
 authors:
   - name: "David Boyne"
     role: "Developer Advocate, Wing"
@@ -25,9 +25,9 @@ cloudResources:
   - api
 ---
 
-This demo application shows how you can write Wing applications with cloud primitives and custom abstractions into services, routes and listening to database changes.
+This demo application ([source code](https://github.com/winglang/quickshare-demo)) shows how you can write Wing applications with cloud primitives and custom abstractions into services, routes and listening to database changes.
 
-To use the application
+To use the application:
 
 - Make sure you have Wing installed and clone the repo.
 - Run `wing it` in the `backend` project directory

@@ -36,7 +36,7 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{houses:{type:"array",items:{type:"object",properties:{address:{type:"string"},residents:{type:"array",items:{type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]}},},required:["address","residents",]}},},required:["houses",]});
+    const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{houses:{type:"array",items:{type:"object",properties:{address:{type:"string"},residents:{type:"array",items:{type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",],description:""}},},required:["address","residents",],description:""}},},required:["houses",],description:""});
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const myParams = $macros.__Struct_fromJson(false, MyParams, ($helpers.nodeof(this).app.parameters.read({ schema: $macros.__Struct_schema(false, MyParams, ) })));
     $helpers.assert($helpers.eq(myParams.houses.length, 2), "myParams.houses.length == 2");

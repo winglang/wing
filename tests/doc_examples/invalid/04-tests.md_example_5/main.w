@@ -17,5 +17,5 @@ test "bucket starts empty" {
 }
 
 test "this test should fail" {
-  throw("test throws an exception fails");
+  throw "test throws an exception fails";
 }

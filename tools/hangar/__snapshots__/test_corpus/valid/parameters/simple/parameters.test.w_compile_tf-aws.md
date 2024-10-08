@@ -36,7 +36,7 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{foo:{type:"string"},meaningOfLife:{type:"number"},},required:["meaningOfLife",]});
+    const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{foo:{type:"string"},meaningOfLife:{type:"number"},},required:["meaningOfLife",],description:""});
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const myParams = $macros.__Struct_fromJson(false, MyParams, ($helpers.nodeof(this).app.parameters.read({ schema: $macros.__Struct_schema(false, MyParams, ) })));
     {
