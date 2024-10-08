@@ -1570,7 +1570,7 @@ impl<'a> JSifier<'a> {
 
 				if let Some(require_path) = require_path {
 					let require = if ctx.visit_ctx.current_phase() == Phase::Inflight {
-						"require"
+						"await import"
 					} else {
 						EXTERN_VAR
 					};

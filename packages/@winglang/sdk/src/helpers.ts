@@ -173,7 +173,7 @@ export function createExternRequire(dirname: string) {
       interopDefault: true,
       transform(opts) {
         return esbuild.transformSync(opts.source, {
-          format: "cjs",
+          format: "esm",
           target: "node20",
           sourcemap: "inline",
           loader: opts.ts ? "ts" : "js",

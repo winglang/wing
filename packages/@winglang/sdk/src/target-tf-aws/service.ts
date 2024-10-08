@@ -330,7 +330,7 @@ process.on('SIGINT', handleShutdown);
     const dockerFile = `FROM --platform=linux/amd64 node:20-slim
     WORKDIR /app
     COPY ./${this.assetName}_wrapper.js.bundle .
-    CMD [ "node", "index.cjs" ]`;
+    CMD [ "node", "index.mjs" ]`;
 
     writeFileSync(join(this.workdir, this.dockerFileName), dockerFile);
   }

@@ -2,7 +2,7 @@
   "name": "@wingconsole/eslint-plugin",
   "version": "0.0.0",
   "private": true,
-  "exports": "./index.cjs",
+  "exports": "./index.mjs",
   "sideEffects": false,
   "files": [
     "dist"
