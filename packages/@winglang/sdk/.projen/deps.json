@@ -102,6 +102,10 @@
       "type": "build"
     },
     {
+      "name": "fs-extra",
+      "type": "build"
+    },
+    {
       "name": "jsii-diff",
       "type": "build"
     },
@@ -303,10 +307,6 @@
     },
     {
       "name": "express",
-      "type": "bundled"
-    },
-    {
-      "name": "fs-extra",
       "type": "bundled"
     },
     {

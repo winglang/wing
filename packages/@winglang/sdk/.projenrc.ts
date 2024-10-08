@@ -99,7 +99,6 @@ const project = new cdk.JsiiProject({
     "dotenv-expand",
     "adm-zip",
     "@types/adm-zip",
-    "fs-extra",
     "@types/fs-extra",
   ],
   devDeps: [
@@ -115,7 +114,7 @@ const project = new cdk.JsiiProject({
     "aws-sdk-client-mock-jest@3.0.0",
     `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
-
+    "fs-extra",
     "vitest",
     "@types/uuid",
     "nanoid", // for ESM import test in target-sim/function.test.ts
