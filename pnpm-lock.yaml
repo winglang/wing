@@ -346,19 +346,19 @@ importers:
         specifier: 2.0.0
         version: 2.0.0
       '@types/adm-zip':
-        specifier: '*'
+        specifier: ^0.5.5
         version: 0.5.5
       '@types/aws-lambda':
         specifier: ^8.10.140
         version: 8.10.145
       '@types/fs-extra':
-        specifier: '*'
+        specifier: ^11.0.4
         version: 11.0.4
       '@winglang/wingtunnels':
         specifier: workspace:^
         version: link:../wingtunnels
       adm-zip:
-        specifier: '*'
+        specifier: ^0.5.16
         version: 0.5.16
       ajv:
         specifier: ^8.16.0
@@ -384,6 +384,9 @@ importers:
       express:
         specifier: ^4.19.2
         version: 4.21.0
+      fs-extra:
+        specifier: ^11.2.0
+        version: 11.2.0
       glob:
         specifier: ^8.1.0
         version: 8.1.0
@@ -494,9 +497,6 @@ importers:
       eslint-plugin-sort-exports:
         specifier: ^0.8.0
         version: 0.8.0(eslint@8.57.1)
-      fs-extra:
-        specifier: '*'
-        version: 11.2.0
       jsii:
         specifier: ~5.5.4
         version: 5.5.4(patch_hash=in545kl6dgh5zsq3xp2uirvjzq)
@@ -6758,7 +6758,7 @@ packages:
       '@jest/schemas': 28.1.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 20.16.11
+      '@types/node': 22.7.5
       '@types/yargs': 17.0.33
       chalk: 4.1.2
     dev: true
@@ -10725,7 +10725,7 @@ packages:
   /@types/adm-zip@0.5.5:
     resolution: {integrity: sha512-YCGstVMjc4LTY5uK9/obvxBya93axZOVOyf2GSUulADzmLhYE45u2nAssCs/fWBs1Ifq5Vat75JTPwd5XZoPJw==}
     dependencies:
-      '@types/node': 20.16.11
+      '@types/node': 22.7.5
     dev: false
 
   /@types/aria-query@5.0.4:
@@ -10892,7 +10892,7 @@ packages:
     resolution: {integrity: sha512-yTbItCNreRooED33qjunPthRcSjERP1r4MqCZc7wv0u2sUkzTFp45tgUfS5+r7FrZPdmCCNflLhVSP/o+SemsQ==}
     dependencies:
       '@types/jsonfile': 6.1.4
-      '@types/node': 20.16.11
+      '@types/node': 22.7.5
 
   /@types/fs-extra@9.0.13:
     resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
@@ -11062,7 +11062,6 @@ packages:
     resolution: {integrity: sha512-jML7s2NAzMWc//QSJ1a3prpk78cOPchGvXJsC3C6R6PSMoooztvRVQEz89gmBTBY1SPMaqo5teB4uNHPdetShQ==}
     dependencies:
       undici-types: 6.19.8
-    dev: true
 
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -11283,7 +11282,7 @@ packages:
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
     requiresBuild: true
     dependencies:
-      '@types/node': 20.16.11
+      '@types/node': 22.7.5
     dev: true
     optional: true
 

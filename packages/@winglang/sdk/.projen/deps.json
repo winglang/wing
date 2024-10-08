@@ -102,10 +102,6 @@
       "type": "build"
     },
     {
-      "name": "fs-extra",
-      "type": "build"
-    },
-    {
       "name": "jsii-diff",
       "type": "build"
     },
@@ -261,6 +257,7 @@
     },
     {
       "name": "@types/adm-zip",
+      "version": "^0.5.5",
       "type": "bundled"
     },
     {
@@ -269,6 +266,7 @@
     },
     {
       "name": "@types/fs-extra",
+      "version": "^11.0.4",
       "type": "bundled"
     },
     {
@@ -278,6 +276,7 @@
     },
     {
       "name": "adm-zip",
+      "version": "^0.5.16",
       "type": "bundled"
     },
     {
@@ -307,6 +306,11 @@
     },
     {
       "name": "express",
+      "type": "bundled"
+    },
+    {
+      "name": "fs-extra",
+      "version": "^11.2.0",
       "type": "bundled"
     },
     {
