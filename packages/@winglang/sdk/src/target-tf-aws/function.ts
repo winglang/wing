@@ -1,4 +1,5 @@
 import { join } from "path";
+import AdmZip from "adm-zip";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { ensureDirSync } from "fs-extra";
@@ -28,7 +29,6 @@ import {
 import { makeAwsLambdaHandler } from "../shared-aws/function-util";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
-import AdmZip from "adm-zip";
 
 /**
  * Function names are limited to 64 characters.
