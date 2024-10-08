@@ -14313,7 +14313,7 @@ packages:
     dependencies:
       semver: 7.6.3
       shelljs: 0.8.5
-      typescript: 5.7.0-dev.20241001
+      typescript: 5.7.0-dev.20241008
     dev: true
 
   /dset@3.1.3:
@@ -22635,8 +22635,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.7.0-dev.20241001:
-    resolution: {integrity: sha512-E+sQ0WmFXNyLddzyWmBBVwyn4NpBRgVJoiq8lLy25nQBLTKFMPnHmrKq+09uOv35ey3XhMA6y3lVzayuukJRpQ==}
+  /typescript@5.7.0-dev.20241008:
+    resolution: {integrity: sha512-FZzeU/lVGUgdl8+Rl2MChV2+eD0ZciK1LuVeoL8+P8ePsJjduRhGrWGRBHvy5KQOhZpxm0QdjrcnGkGDQEphvQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
