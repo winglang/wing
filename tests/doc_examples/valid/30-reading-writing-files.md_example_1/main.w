@@ -2,7 +2,7 @@
 // Example metadata: {"valid":true}
 bring fs;
 
-let filename: str = "/tmp/test.txt";
+let filename: str = fs.join(@dirname, "test.txt");
 
 log(fs.exists(filename));
 
@@ -20,3 +20,5 @@ fs.appendFile(filename, "testing");
 let extendedValue = fs.readFile(filename);
 
 log(extendedValue);
+
+fs.remove(filename);
