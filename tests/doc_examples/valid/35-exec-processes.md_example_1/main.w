@@ -2,6 +2,8 @@
 // Example metadata: {"valid":true}
 bring util;
 
+let dir = @dirname;
+
 test "exec()" {
   let output = util.exec("echo", ["-n", "Hello, Wing!"]);
 
@@ -11,8 +13,8 @@ test "exec()" {
   // exec with inherited environment variables
   let output3 = util.exec("bash", ["--norc", "--noprofile", "-c", "echo $WING_TARGET $ENV_VAR"], { inheritEnv: true });
 
-  // exec with current working directory
-  let output4 = util.exec("bash", ["--norc", "--noprofile", "-c", "echo Hello"], { cwd: "/tmp" });
+  // exec with custom working directory
+  let output4 = util.exec("bash", ["--norc", "--noprofile", "-c", "echo Hello"], { cwd: dir });
 
   log(output);
   log(output2);
