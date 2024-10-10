@@ -345,3 +345,7 @@ test "unsafe flight" {
 
 // Check that imported files can use .fromJson on structs defined within them
 new otherExternalStructs.UsesStructInImportedFile();
+
+let resp = cloud.ApiResponse.fromJson({ status: 200, body: "ok"});
+expect.equal(resp.status, 200);
+expect.equal(resp.body, "ok");
