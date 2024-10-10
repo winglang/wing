@@ -88,7 +88,7 @@ impl JsonSchemaGenerator {
 
 				code.append("type:\"object\",");
 				code.append(format!(
-					"patternProperties: {{\".*\":{}}}",
+					"patternProperties: {{\".*\":{}}},",
 					self.get_struct_schema_field(t, None)
 				));
 
