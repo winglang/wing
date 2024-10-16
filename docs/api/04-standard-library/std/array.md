@@ -204,6 +204,7 @@ Mutable Array.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.MutArray.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.MutArray.clear">clear</a></code> | Removes all elements. |
 | <code><a href="#@winglang/sdk.std.MutArray.concat">concat</a></code> | Merge arr to the end of this array. |
 | <code><a href="#@winglang/sdk.std.MutArray.contains">contains</a></code> | Checks if this array includes searchElement. |
 | <code><a href="#@winglang/sdk.std.MutArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
@@ -235,6 +236,14 @@ Get the value at the given index.
 index of the value to get.
 
 ---
+
+##### `clear` <a name="clear" id="@winglang/sdk.std.MutArray.clear"></a>
+
+```wing
+clear(): void
+```
+
+Removes all elements.
 
 ##### `concat` <a name="concat" id="@winglang/sdk.std.MutArray.concat"></a>
 

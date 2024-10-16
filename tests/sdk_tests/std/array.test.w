@@ -20,6 +20,39 @@ test "length" {
 }
 
 //-----------------------------------------------------------------------------
+// clear()
+
+test "clear()" {
+  let arr = MutArray<str>["hello", "world", "wingcloud"];
+  assert(arr.length == 3);
+  
+  arr.clear();
+  
+  assert(arr.length == 0);
+  
+  // Verify that accessing elements throws an error
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
+  
+  assertThrows("Index out of bounds", () => {
+    arr.at(0);
+  });
+  
+  // Verify that we can add new elements after clearing
+  arr.push("new element");
+  assert(arr.length == 1);
+  assert(arr.at(0) == "new element");
+}
+
+//-----------------------------------------------------------------------------
 // at()
 
 assert(["hello"].at(0) == "hello");
