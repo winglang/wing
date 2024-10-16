@@ -187,15 +187,6 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                       "Queue-SetConsumer0": {
                         "children": {
-                          "Asset": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformAsset",
-                              "version": "0.0.0",
-                            },
-                            "display": {},
-                            "id": "Asset",
-                            "path": "root/Default/Default/BigPublisher/Queue-SetConsumer0/Asset",
-                          },
                           "CloudwatchLogGroup": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
@@ -296,15 +287,6 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                       "Topic-OnMessage0": {
                         "children": {
-                          "Asset": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformAsset",
-                              "version": "0.0.0",
-                            },
-                            "display": {},
-                            "id": "Asset",
-                            "path": "root/Default/Default/BigPublisher/Topic-OnMessage0/Asset",
-                          },
                           "CloudwatchLogGroup": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
@@ -443,15 +425,6 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                           "OnCreate-OnMessage0": {
                             "children": {
-                              "Asset": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformAsset",
-                                  "version": "0.0.0",
-                                },
-                                "display": {},
-                                "id": "Asset",
-                                "path": "root/Default/Default/BigPublisher/b2/OnCreate-OnMessage0/Asset",
-                              },
                               "CloudwatchLogGroup": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
