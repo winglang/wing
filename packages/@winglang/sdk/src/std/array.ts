@@ -166,6 +166,16 @@ export class MutArray {
   }
 
   /**
+   * Removes all elements
+   *
+   * @macro for (let i = 0; i < $self$.length; i++) {delete $self$[i];} $self$.length = 0;}
+   *
+   */
+  public clear(): void {
+    throw new Error("Macro");
+  }
+
+  /**
    * Get the value at the given index
    * @macro ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($self$, $args$)
    * @param index index of the value to get
