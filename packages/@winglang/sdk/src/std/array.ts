@@ -168,7 +168,7 @@ export class MutArray {
   /**
    * Removes all elements
    *
-   * @macro for (let i = 0; i < $self$.length; i++) {delete $self$[i];} $self$.length = 0;}
+   * @macro $self$.length = 0;
    *
    */
   public clear(): void {
