@@ -3,6 +3,7 @@
 ## stdout.log
 ```log
 pass ─ array.test.wsim » root/Default/test:at()                      
+pass ─ array.test.wsim » root/Default/test:clear()                   
 pass ─ array.test.wsim » root/Default/test:concatArray()             
 pass ─ array.test.wsim » root/Default/test:concatMutArray()          
 pass ─ array.test.wsim » root/Default/test:contains()                
@@ -21,7 +22,7 @@ pass ─ array.test.wsim » root/Default/test:removeFirst()
 pass ─ array.test.wsim » root/Default/test:set()                     
 pass ─ array.test.wsim » root/Default/test:slice()                   
 
-Tests 18 passed (18)
+Tests 19 passed (19)
 Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
