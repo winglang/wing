@@ -6,6 +6,7 @@ sidebar_label: Number Parsing
 description: Parse values into numbers
 keywords: [Wing language, random]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/26-number-parsing.md
 ---
 
 ```js playground example title="main.w"

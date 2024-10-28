@@ -6,6 +6,7 @@ sidebar_label: HTTP Server
 description: Directories
 keywords: [Wing language, HTTP]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/34-http-server.md
 ---
 
 You can create HTTP servers using the [cloud.Api](/docs/api/standard-library/cloud/api) standard library.

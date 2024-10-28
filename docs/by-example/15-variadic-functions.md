@@ -6,6 +6,7 @@ sidebar_label: Variadic Functions
 description: Using variadic functions with Wing
 keywords: [Wing language, variadic]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/15-variadic-functions.md
 ---
 
 

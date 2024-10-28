@@ -6,6 +6,7 @@ sidebar_label: Regular expressions
 description: Functions for string values in Wing
 keywords: [Wing language, string, functions]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/22-regex.md
 ---
 
 Wing offers built-in support for regular expressions. Here are some examples of common regexp-related tasks in Wing.

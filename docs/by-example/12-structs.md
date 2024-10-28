@@ -6,6 +6,7 @@ sidebar_label: Structs
 description: Using arrays with Wing
 keywords: [Wing language, example]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/12-structs.md
 ---
 
 Structs are custom data types you can define to store structured information. They're loosely modeled after typed JSON literals in JavaScript.

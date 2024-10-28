@@ -6,6 +6,7 @@ sidebar_label: URL parsing
 description: Parse urls in Wing
 keywords: [Wing language, URL]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/27-url-parsing.md
 ---
 
 Parse urls using the http module, works with inflight closures.

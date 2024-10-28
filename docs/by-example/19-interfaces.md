@@ -6,6 +6,7 @@ sidebar_label: Interfaces
 description: Interfaces with Wing
 keywords: [Wing language, interfaces]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/19-interfaces.md
 ---
 
 ```js playground example title="main.w"

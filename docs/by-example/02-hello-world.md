@@ -6,6 +6,7 @@ sidebar_label: Hello world
 description: Hello world wing example
 keywords: [Wing language, example]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/02-hello-world.md
 ---
 
 # Hello world

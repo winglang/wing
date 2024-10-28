@@ -6,6 +6,7 @@ sidebar_label: Testing
 description: Directories
 keywords: [Wing language, Directories]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/32-testing.md
 ---
 
 Wing incorporates a [lightweight testing framework](/docs/concepts/tests), which is built around the `wing test` command and the `test` keyword.
