@@ -6,6 +6,7 @@ sidebar_label: String functions
 description: Functions for string values in Wing
 keywords: [Wing language, string, functions]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/21-string-functions.md
 ---
 
 Wing provides many useful [string-related functions](/docs/api/standard-library/std/string#string-). Here are some examples to give you a sense of the usage.

@@ -6,6 +6,7 @@ sidebar_label: Time
 description: Create time/date values in Wing
 keywords: [Wing language, time, date]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/24-time.md
 ---
 
 ```js playground example title="main.w"

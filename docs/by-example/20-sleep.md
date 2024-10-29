@@ -6,6 +6,7 @@ sidebar_label: Sleep
 description: Suspends execution for a given duration.
 keywords: [Wing language, sleep]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/20-sleep.md
 ---
 
 `util.sleep` is an [inflight](/docs/concepts/inflights) api.

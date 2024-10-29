@@ -6,6 +6,7 @@ sidebar_label: Async inflight functions
 description: Using functions with Wing
 keywords: [Wing language, example]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/14-async-functions.md
 ---
 
 Wing supports two function types, [preflight and inflight](/docs/concepts/inflights).

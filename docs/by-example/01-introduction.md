@@ -6,6 +6,7 @@ sidebar_label: Introduction
 description: Hands-on introduction to Wing using annotated code
 keywords: [Wing language, api]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/01-introduction.md
 ---
 
 

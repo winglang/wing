@@ -6,6 +6,7 @@ sidebar_label: Variables
 description: Using variables with Wing
 keywords: [Wing language, example]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/04-variables.md
 ---
 
 Variables are declared with the `let` keyword. The type of most variables can be inferred automatically, but you can also add an explicit type annotation if needed.

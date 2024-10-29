@@ -6,6 +6,7 @@ sidebar_label: HTTP Client
 description: Directories
 keywords: [Wing language, HTTP]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/33-http-client.md
 ---
 
 The Wing standard library comes with [HTTP support](/docs/api/standard-library/http/api-reference).
