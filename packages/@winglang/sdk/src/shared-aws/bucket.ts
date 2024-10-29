@@ -16,6 +16,11 @@ export interface IAwsBucket {
   readonly bucketArn: string;
 
   /**
+   * Bucket domain name
+   */
+  readonly bucketDomainName: string;
+
+  /**
    * AWS Bucket name
    */
   readonly bucketName: string;
@@ -81,12 +86,17 @@ export class BucketRef extends Resource {
    */
   public readonly bucketArn: string;
 
+  /**
+   * The domain name of this bucket.
+   */
+  public readonly bucketDomainName: string;
+
   constructor(scope: Construct, id: string, bucketName: string) {
     super(scope, id);
 
     this.bucketName = bucketName;
     this.bucketArn = `arn:aws:s3:::${bucketName}`;
-
+    this.bucketDomainName = `${bucketName}.s3.amazonaws.com`;
     const target = App.of(this)._target;
     if (target === "sim") {
       this.addUserInterface();

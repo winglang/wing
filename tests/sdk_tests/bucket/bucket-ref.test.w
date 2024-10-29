@@ -22,6 +22,7 @@ if @target == "sim" {
   test "bucketArn returns the arn" {
     expect.equal(dummyArn, br.bucketArn);
     expect.equal(dummyName, br.bucketName);
+    expect.equal(dummyName + ".s3.amazonaws.com", br.bucketDomainName);
   }
 
   test "get() sends a request to aws, fails because we are using a dummy bucket" {
