@@ -20,18 +20,7 @@ jobs:
           message: |
             Thanks for opening this pull request! :tada:
             Please consult the [contributing guidelines](https://www.winglang.io/contributing) for details on how to contribute to this project.
-            If you need any assistance, don't hesitate to ping the relevant owner over [Discord](https://t.winglang.io/discord).
-
-            | Topic                                               | Owner                                                         |
-            |-----------------------------------------------------|---------------------------------------------------------------|
-            | Wing SDK and standard library                       | `@chriscbr`
-            | Wing Console                                        | `@skyrpex`
-            | Wing compiler and language design                   | `@chriscbr`
-            | VSCode extension and language server                | `@chriscbr`
-            | Wing CLI                                            | `@chriscbr`
-            | Documentation                                       | `@boyney123`
-            | Examples                                            | `@boyney123`
-            | Wing Playground                                     | `@skyrpex`
+            If you need any assistance, don't hesitate to ping use over [Discord](https://t.winglang.io/discord).
 
           comment_tag: New PR
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
