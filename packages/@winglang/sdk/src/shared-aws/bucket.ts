@@ -16,6 +16,11 @@ export interface IAwsBucket {
   readonly bucketArn: string;
 
   /**
+   * Bucket domain name
+   */
+  readonly bucketDomainName: string;
+
+  /**
    * AWS Bucket name
    */
   readonly bucketName: string;

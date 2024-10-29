@@ -245,6 +245,10 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   public get bucketName(): string {
     return this.bucket.bucketName;
   }
+
+  public get bucketDomainName(): string {
+    return this.bucket.bucketDomainName;
+  }
 }
 
 export function createEncryptedBucket(
