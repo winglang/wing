@@ -6,6 +6,7 @@ sidebar_label: Exec processes
 description: Exec'ing Processes
 keywords: [Wing language, HTTP]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/35-exec-processes.md
 ---
 
 ```js playground example title="main.w"

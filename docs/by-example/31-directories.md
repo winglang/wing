@@ -6,6 +6,7 @@ sidebar_label: Directories
 description: Directories
 keywords: [Wing language, Directories]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/31-directories.md
 ---
 
 Use the `fs` ("filesystem") module to make, read, check, remove directories.

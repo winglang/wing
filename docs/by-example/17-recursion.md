@@ -6,6 +6,7 @@ sidebar_label: Recursion
 description: Recursion with Wing
 keywords: [Wing language, variadic]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/17-recursion.md
 ---
 
 ```js playground example title="main.w"

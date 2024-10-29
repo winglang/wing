@@ -6,6 +6,7 @@ sidebar_label: Methods
 description: Methods with Wing
 keywords: [Wing language, variadic]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/18-methods.md
 ---
 
 ```js playground example title="main.w"

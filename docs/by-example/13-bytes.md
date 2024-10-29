@@ -6,6 +6,7 @@ sidebar_label: Bytes
 description: Hash values in Wing with SHA256
 keywords: [Wing language, Hash, SHA256]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/13-bytes.md
 ---
 
 When working with binary files like images, audio, or other binary formats, you often need to manipulate data at the byte level.

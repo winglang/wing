@@ -6,6 +6,7 @@ sidebar_label: Type reflection
 description: Type reflection
 keywords: [Wing language, Type reflection]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/36-reflection.md
 ---
 
 The `@type` intrinsic function returns a reflection of the type passed to it.

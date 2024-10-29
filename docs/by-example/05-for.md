@@ -6,6 +6,7 @@ sidebar_label: For
 description: Using for loops with Wing
 keywords: [Wing language, example]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/05-for.md
 ---
 
 Wing supports looping over collections with `for..in` statements.

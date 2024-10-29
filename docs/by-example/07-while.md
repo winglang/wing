@@ -6,6 +6,7 @@ sidebar_label: While
 description: Using while statements with Wing
 keywords: [Wing language, example]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/07-while.md
 ---
 
 While loops repeatedly check a condition and run a block of code until the condition is `false`.

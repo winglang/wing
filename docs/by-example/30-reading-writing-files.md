@@ -6,6 +6,7 @@ sidebar_label: Reading and writing files
 description: Reading and writing files with Wing
 keywords: [Wing language, Reading files, Writing files]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/30-reading-writing-files.md
 ---
 
 ```js playground example title="main.w"

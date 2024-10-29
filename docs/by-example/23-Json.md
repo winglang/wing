@@ -6,6 +6,7 @@ sidebar_label: Json
 description: Create Json values in Wing
 keywords: [Wing language, json]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/23-Json.md
 ---
 
 Wing has a dedicated type named `Json` for representing [JSON](https://www.json.org/json-en.html). A `Json` value can be an object, but it can also be an array, string, boolean, number, or null.

@@ -6,6 +6,7 @@ sidebar_label: Primitive values
 description: Hello world wing example
 keywords: [Wing language, example, primitives, values]
 image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/03-values.md
 ---
 
 Wing has primitive types including strings, integers, floats, booleans, etc. Here are a few basic examples.
