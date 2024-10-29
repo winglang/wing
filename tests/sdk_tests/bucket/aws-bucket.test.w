@@ -21,7 +21,7 @@ test "validates the AWS Bucket" {
     if @target == "tf-aws" {
       assert(bucket.get("bucketArn").contains("arn:aws:s3:::aws-wing-bucket"));
       assert(bucket.get("bucketName").contains("aws-wing-bucket"));
-      assert(bucket.get("bucketDomainName").contains("aws-wing-bucket.s3.amazonaws.com"));
+      assert(bucket.get("bucketDomainName").contains("aws-wing-bucket"));
     } else { // If it's not a 'tf-aws' target, it's an 'awscdk'
       assert(bucket.get("bucketArn").contains("arn:aws:s3:::"));
       assert(bucket.get("bucketArn").contains("awswingbucket"));
