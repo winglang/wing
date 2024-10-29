@@ -115,6 +115,7 @@ NOTE: This statement must be executed within an async context.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.aws.BucketRef.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.aws.BucketRef.property.bucketArn">bucketArn</a></code> | <code>str</code> | The ARN of this bucket. |
+| <code><a href="#@winglang/sdk.aws.BucketRef.property.bucketDomainName">bucketDomainName</a></code> | <code>str</code> | The domain name of this bucket. |
 | <code><a href="#@winglang/sdk.aws.BucketRef.property.bucketName">bucketName</a></code> | <code>str</code> | The Name of this bucket. |
 
 ---
@@ -140,6 +141,18 @@ bucketArn: str;
 - *Type:* str
 
 The ARN of this bucket.
+
+---
+
+##### `bucketDomainName`<sup>Required</sup> <a name="bucketDomainName" id="@winglang/sdk.aws.BucketRef.property.bucketDomainName"></a>
+
+```wing
+bucketDomainName: str;
+```
+
+- *Type:* str
+
+The domain name of this bucket.
 
 ---
 
@@ -1605,6 +1618,7 @@ A shared interface for AWS buckets.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.aws.IAwsBucket.property.bucketArn">bucketArn</a></code> | <code>str</code> | AWS Bucket arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsBucket.property.bucketDomainName">bucketDomainName</a></code> | <code>str</code> | Bucket domain name. |
 | <code><a href="#@winglang/sdk.aws.IAwsBucket.property.bucketName">bucketName</a></code> | <code>str</code> | AWS Bucket name. |
 
 ---
@@ -1618,6 +1632,18 @@ bucketArn: str;
 - *Type:* str
 
 AWS Bucket arn.
+
+---
+
+##### `bucketDomainName`<sup>Required</sup> <a name="bucketDomainName" id="@winglang/sdk.aws.IAwsBucket.property.bucketDomainName"></a>
+
+```wing
+bucketDomainName: str;
+```
+
+- *Type:* str
+
+Bucket domain name.
 
 ---
 
