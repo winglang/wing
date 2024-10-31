@@ -48,7 +48,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     super(scope, id, props);
 
     this.public = props.public ?? false;
-    this.forceDestroy = props.forceDeploy ?? false;
+    this.forceDestroy = props.forceDestroy ?? false;
 
     this.bucket = createEncryptedBucket(this, this.public, this.forceDestroy);
 
