@@ -10,6 +10,6 @@ signatures:
       - label: "...props"
         documentation:
           kind: markdown
-          value: "```wing\nstruct BucketProps {\n  cors?: bool;\n  corsOptions?: BucketCorsOptions;\n  public?: bool;\n}\n```\n"
+          value: "```wing\nstruct BucketProps {\n  cors?: bool;\n  corsOptions?: BucketCorsOptions;\n  forceDestroy?: bool;\n  public?: bool;\n}\n```\n"
     activeParameter: 0
 

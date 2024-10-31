@@ -319,7 +319,6 @@ exports[`dec() IAM permissions 1`] = `
         "depends_on": [
           "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -660,7 +659,6 @@ exports[`function with a counter binding 2`] = `
         "depends_on": [
           "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -948,7 +946,6 @@ exports[`inc() IAM permissions 1`] = `
         "depends_on": [
           "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -1236,7 +1233,6 @@ exports[`peek() IAM permissions 1`] = `
         "depends_on": [
           "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -1650,7 +1646,6 @@ exports[`set() IAM permissions 1`] = `
         "depends_on": [
           "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",

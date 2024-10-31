@@ -1,5 +1,143 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`bucket is force destroy 1`] = `
+{
+  "resource": {
+    "google_project_service": {
+      "my_bucket_IamServiceAccountCredentialsApi_0618BD85": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
+    "google_storage_bucket": {
+      "my_bucket": {
+        "depends_on": [
+          "google_project_service.my_bucket_IamServiceAccountCredentialsApi_0618BD85",
+        ],
+        "force_destroy": true,
+        "location": "us-central1",
+        "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
+        "public_access_prevention": "enforced",
+        "uniform_bucket_level_access": true,
+      },
+    },
+    "random_id": {
+      "my_bucket_Id_50F73A6B": {
+        "byte_length": 4,
+      },
+    },
+  },
+}
+`;
+
+exports[`bucket is force destroy 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "google": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "my_bucket": {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "IamServiceAccountCredentialsApi": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "IamServiceAccountCredentialsApi",
+                    "path": "root/Default/my_bucket/IamServiceAccountCredentialsApi",
+                  },
+                  "Id": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Id",
+                    "path": "root/Default/my_bucket/Id",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
+              },
+              "random": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
 exports[`bucket is public 1`] = `
 {
   "resource": {
@@ -15,7 +153,6 @@ exports[`bucket is public 1`] = `
         "depends_on": [
           "google_project_service.my_bucket_IamServiceAccountCredentialsApi_0618BD85",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
         "public_access_prevention": "inherited",
@@ -169,7 +306,6 @@ exports[`bucket with two preflight files 1`] = `
         "depends_on": [
           "google_project_service.my_bucket_IamServiceAccountCredentialsApi_0618BD85",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
         "public_access_prevention": "enforced",
@@ -337,7 +473,6 @@ exports[`bucket with two preflight objects 1`] = `
         "depends_on": [
           "google_project_service.my_bucket_IamServiceAccountCredentialsApi_0618BD85",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
         "public_access_prevention": "enforced",
@@ -505,7 +640,6 @@ exports[`create a bucket 1`] = `
         "depends_on": [
           "google_project_service.my_bucket_IamServiceAccountCredentialsApi_0618BD85",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
         "public_access_prevention": "enforced",
@@ -648,7 +782,6 @@ exports[`two buckets 1`] = `
         "depends_on": [
           "google_project_service.my_bucket1_IamServiceAccountCredentialsApi_5EA21318",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket1-\${random_id.my_bucket1_Id_D79FE240.hex}",
         "public_access_prevention": "enforced",
@@ -658,7 +791,6 @@ exports[`two buckets 1`] = `
         "depends_on": [
           "google_project_service.my_bucket2_IamServiceAccountCredentialsApi_4C3E6B90",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket2-\${random_id.my_bucket2_Id_0AB96F49.hex}",
         "public_access_prevention": "enforced",

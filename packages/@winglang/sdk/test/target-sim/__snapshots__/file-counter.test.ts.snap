@@ -264,6 +264,7 @@ async rename(...args) { return this.backend.rename(...args); }
         "addr": "c80e3625bbefd53d8c61fbb978711d410b5f2a41c8",
         "path": "root/HelloWorld/Bucket",
         "props": {
+          "forceDestroy": false,
           "initialObjects": {},
           "public": false,
           "topics": {},
