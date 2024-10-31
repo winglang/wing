@@ -91,7 +91,7 @@ export class Bucket extends cloud.Bucket {
       // recommended by GCP: https://cloud.google.com/storage/docs/uniform-bucket-level-access#should-you-use
       uniformBucketLevelAccess: true,
       publicAccessPrevention: props.public ? "inherited" : "enforced",
-      forceDestroy: !!isTestEnvironment,
+      forceDestroy: !!isTestEnvironment || props.forceDestroy,
       dependsOn: [iamServiceAccountCredentialsApi],
     });
 

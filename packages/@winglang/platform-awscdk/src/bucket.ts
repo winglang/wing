@@ -41,14 +41,16 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
+  private readonly forceDestroy: boolean;
   private bucketDeployment?: BucketDeployment;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
+    this.forceDestroy = props.forceDeploy ?? false;
 
-    this.bucket = createEncryptedBucket(this, this.public);
+    this.bucket = createEncryptedBucket(this, this.public, this.forceDestroy);
 
     if (props.cors ?? true) {
       this.addCorsRule(
@@ -254,6 +256,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 export function createEncryptedBucket(
   scope: Construct,
   isPublic: boolean,
+  forceDestroy: boolean,
   name: string = "Default"
 ): S3Bucket {
   const isTestEnvironment = App.of(scope).isTestEnvironment;
@@ -271,5 +274,6 @@ export function createEncryptedBucket(
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,
     autoDeleteObjects: isTestEnvironment ? true : false,
+    forceDestroy: forceDestroy,
   });
 }

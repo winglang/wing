@@ -62,6 +62,12 @@ export interface BucketProps {
   readonly public?: boolean;
 
   /**
+   * Whether to allow the bucket to be deleted even if it is not empty.
+   * @default false
+   */
+  readonly forceDestroy?: boolean;
+
+  /**
    * Whether to add default cors configuration.
    *
    * The default cors configuration is equivalent to calling `addCorsRule`

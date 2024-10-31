@@ -56,6 +56,20 @@ test("bucket is public", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("bucket is force destroy", () => {
+  // GIVEN
+  const app = new AwsApp();
+  new Bucket(app, "my_bucket", { forceDestroy: true });
+  const output = app.synth();
+
+  // THEN
+  expect(
+    JSON.parse(output).resource.aws_s3_bucket.my_bucket.force_destroy
+  ).toBe(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("bucket with cors disabled", () => {
   // GIVEN
   const app = new AwsApp();

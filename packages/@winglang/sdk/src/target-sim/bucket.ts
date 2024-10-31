@@ -25,6 +25,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   }
 
   private readonly public: boolean;
+  private readonly forceDestroy: boolean;
   private readonly initialObjects: Record<string, string> = {};
   private readonly policy: Policy;
 
@@ -32,6 +33,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     super(scope, id, props);
 
     this.public = props.public ?? false;
+    this.forceDestroy = props.forceDestroy ?? false;
     this.policy = new Policy(this, "Policy", { principal: this });
   }
 
@@ -129,6 +131,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   public toSimulator(): ToSimulatorOutput {
     const props: BucketSchema = {
       public: this.public,
+      forceDeploy: this.forceDestroy,
       initialObjects: this.initialObjects,
       topics: this.convertTopicsToHandles(),
     };
