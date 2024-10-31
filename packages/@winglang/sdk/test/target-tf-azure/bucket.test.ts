@@ -62,18 +62,6 @@ test("bucket is public", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("bucket is force destroy", () => {
-  // GIVEN
-  const app = new AzureApp();
-  new Bucket(app, "my_bucket", { forceDestroy: true });
-  const output = app.synth();
-
-  // THEN
-  expect(tfResourcesOfCount(output, "azurerm_storage_container")).toEqual(1);
-  expect(tfSanitize(output)).toMatchSnapshot();
-  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
-});
-
 test("bucket with two preflight objects", () => {
   // GIVEN
   const app = new AzureApp();

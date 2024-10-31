@@ -61,14 +61,12 @@ export class Bucket extends cloud.Bucket {
 
   public readonly storageContainer: StorageContainer;
   private readonly public: boolean;
-  private readonly forceDestroy: boolean;
   private readonly storageAccount: StorageAccount;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
-    this.forceDestroy = props.forceDestroy ?? false;
 
     const app = App.of(this) as App;
     if (app._target !== "tf-azure") {
@@ -95,7 +93,6 @@ export class Bucket extends cloud.Bucket {
       name: storageContainerName,
       storageAccountName: this.storageAccount.name,
       containerAccessType: this.public ? "blob" : "private",
-      rmDelete: this.forceDestroy,
     });
   }
 
