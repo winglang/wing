@@ -273,7 +273,6 @@ export function createEncryptedBucket(
       : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,
-    autoDeleteObjects: isTestEnvironment ? true : false,
-    forceDestroy: forceDestroy,
+    autoDeleteObjects: isTestEnvironment || forceDestroy ? true : false,
   });
 }
