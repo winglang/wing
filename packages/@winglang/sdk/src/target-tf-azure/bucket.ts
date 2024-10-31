@@ -95,7 +95,7 @@ export class Bucket extends cloud.Bucket {
       name: storageContainerName,
       storageAccountName: this.storageAccount.name,
       containerAccessType: this.public ? "blob" : "private",
-      rm_delete: this.forceDestroy,
+      rmDelete: this.forceDestroy,
     });
   }
 

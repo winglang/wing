@@ -34,7 +34,7 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
   constructor(scope: Construct, id: string, props: aws.AwsWebsiteProps) {
     super(scope, id, props);
 
-    this.bucket = createEncryptedBucket(this, false, "WebsiteBucket");
+    this.bucket = createEncryptedBucket(this, false, false,"WebsiteBucket");
 
     new S3BucketWebsiteConfiguration(this, "BucketWebsiteConfiguration", {
       bucket: this.bucket.bucket,

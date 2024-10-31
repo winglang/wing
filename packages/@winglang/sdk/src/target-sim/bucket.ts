@@ -131,7 +131,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   public toSimulator(): ToSimulatorOutput {
     const props: BucketSchema = {
       public: this.public,
-      forceDeploy: this.forceDestroy,
+      forceDestroy: this.forceDestroy,
       initialObjects: this.initialObjects,
       topics: this.convertTopicsToHandles(),
     };
