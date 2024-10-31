@@ -86,5 +86,5 @@ changes.
 
 ## Getting Help
 
-If you need help in contributing to this project please join our [Discord server](https://discord.gg/2PjJWDzdQw) where
+If you need help in contributing to this project please join our [Discord server](https://t.winglang.io/discord) where
 people are waiting to help in the #help channel.
