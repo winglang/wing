@@ -245,7 +245,7 @@ export function createEncryptedBucket(
 
   const bucket = new S3Bucket(scope, name, {
     bucketPrefix,
-    forceDestroy: !!isTestEnvironment,
+    forceDestroy: !!isTestEnvironment || forceDestroy,
   });
 
   if (isPublic) {
@@ -276,10 +276,6 @@ export function createEncryptedBucket(
       policy: JSON.stringify(policy),
       dependsOn: [publicAccessBlock],
     });
-  }
-
-  if (forceDestroy) {
-    bucket.forceDestroy = true;
   }
 
   return bucket;
