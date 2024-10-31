@@ -54,7 +54,7 @@ fi
 # Download wasi-sdk
 WASI_SDK_INSTALL_DIR="$TOOL_INSTALL_DIR/wasi-sdk-$WASI_SDK_VERSION_FULL"
 if [ ! -d $WASI_SDK_INSTALL_DIR ]; then
-    WASI_SDK_TARBALL="wasi-sdk-$WASI_SDK_VERSION_FULL-$SYS_OS.tar.gz"
+    WASI_SDK_TARBALL="wasi-sdk-$WASI_SDK_VERSION_FULL-x86_64-$SYS_OS.tar.gz"
     WASI_SDK_INSTALL_URL="https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-$WASI_SDK_VERSION/$WASI_SDK_TARBALL"
     OUTFILE="/tmp/$WASI_SDK_TARBALL"
 
