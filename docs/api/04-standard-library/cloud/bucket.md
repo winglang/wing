@@ -1080,6 +1080,7 @@ let BucketProps = cloud.BucketProps{ ... };
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.BucketProps.property.cors">cors</a></code> | <code>bool</code> | Whether to add default cors configuration. |
 | <code><a href="#@winglang/sdk.cloud.BucketProps.property.corsOptions">corsOptions</a></code> | <code><a href="#@winglang/sdk.cloud.BucketCorsOptions">BucketCorsOptions</a></code> | Custom cors configuration for the bucket. |
+| <code><a href="#@winglang/sdk.cloud.BucketProps.property.forceDestroy">forceDestroy</a></code> | <code>bool</code> | Whether to allow the bucket to be deleted even if it is not empty. |
 | <code><a href="#@winglang/sdk.cloud.BucketProps.property.public">public</a></code> | <code>bool</code> | Whether the bucket's objects should be publicly accessible. |
 
 ---
@@ -1127,6 +1128,19 @@ with the following options:
   exposeHeaders: [],
   maxAge: 0s
 }
+
+---
+
+##### `forceDestroy`<sup>Optional</sup> <a name="forceDestroy" id="@winglang/sdk.cloud.BucketProps.property.forceDestroy"></a>
+
+```wing
+forceDestroy: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Whether to allow the bucket to be deleted even if it is not empty.
 
 ---
 

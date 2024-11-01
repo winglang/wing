@@ -68,7 +68,6 @@ exports[`create a schedule 1`] = `
         "depends_on": [
           "google_project_service.Schedule_OnTick0_FunctionBucket_IamServiceAccountCredentialsApi_DF643D92",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Schedule_OnTick0_FunctionBucket_Id_79EDFDFF.hex}",
         "public_access_prevention": "enforced",

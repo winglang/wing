@@ -35,6 +35,7 @@ exports.handler = async function(event) {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "path": "root/my_bucket",
         "props": {
+          "forceDestroy": false,
           "initialObjects": {},
           "public": false,
           "topics": {},

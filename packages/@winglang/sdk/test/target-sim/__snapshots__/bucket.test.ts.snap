@@ -89,6 +89,7 @@ exports[`can add file in preflight 2`] = `
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "path": "root/my_bucket",
         "props": {
+          "forceDestroy": false,
           "initialObjects": {
             "test.txt": "test1",
           },
@@ -254,6 +255,7 @@ exports[`can add object in preflight 2`] = `
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "path": "root/my_bucket",
         "props": {
+          "forceDestroy": false,
           "initialObjects": {
             "greeting.txt": "Hello world!",
           },
@@ -404,6 +406,7 @@ exports[`create a bucket 1`] = `
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "path": "root/my_bucket",
         "props": {
+          "forceDestroy": false,
           "initialObjects": {},
           "public": false,
           "topics": {},
@@ -564,6 +567,7 @@ exports[`get invalid object throws an error 2`] = `
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "path": "root/my_bucket",
         "props": {
+          "forceDestroy": false,
           "initialObjects": {},
           "public": false,
           "topics": {},

@@ -1,5 +1,131 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`bucket is force destroy 1`] = `
+{
+  "resource": {
+    "aws_s3_bucket": {
+      "my_bucket": {
+        "bucket_prefix": "my-bucket-c8045fcc-",
+        "force_destroy": true,
+      },
+    },
+    "aws_s3_bucket_cors_configuration": {
+      "my_bucket_CorsConfiguration-c53a401a_67598037": {
+        "bucket": "\${aws_s3_bucket.my_bucket.id}",
+        "cors_rule": [
+          {
+            "allowed_headers": [
+              "*",
+            ],
+            "allowed_methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE",
+              "HEAD",
+            ],
+            "allowed_origins": [
+              "*",
+            ],
+            "expose_headers": [],
+            "max_age_seconds": 0,
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`bucket is force destroy 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.7",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "my_bucket": {
+                "children": {
+                  "CorsConfiguration-c53a401a": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "CorsConfiguration-c53a401a",
+                    "path": "root/Default/my_bucket/CorsConfiguration-c53a401a",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.7",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.7",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.7",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.7",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
 exports[`bucket is public 1`] = `
 {
   "resource": {

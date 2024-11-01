@@ -42,6 +42,17 @@ test("bucket is public", () => {
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
+test("bucket is force destroy", () => {
+  // GIVEN
+  const app = new AwsCdkApp();
+  new cloud.Bucket(app, "my_bucket", { forceDestroy: true });
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  expect(awscdkSanitize(template)).toMatchSnapshot();
+});
+
 test("bucket with two preflight objects", () => {
   // GIVEN
   const app = new AwsCdkApp();
