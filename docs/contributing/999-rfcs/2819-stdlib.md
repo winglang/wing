@@ -1,3 +1,6 @@
+---
+search: false
+---
 # #2819 Wing Utility Library (approved)
 
 - **Author(s):**: @eladb

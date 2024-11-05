@@ -1,6 +1,7 @@
 ---
 title: "Intrinsic Functions"
 description: Global compiler intrinsics
+search: false
 ---
 
 # Intrinsics

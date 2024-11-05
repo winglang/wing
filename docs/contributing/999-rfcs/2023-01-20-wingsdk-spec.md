@@ -1,6 +1,7 @@
 ---
 title: "#662 SDK Spec (approved)"
 description: Specification for the Wing SDK
+search: false
 ---
 
 :::caution Not fully implemented yet
