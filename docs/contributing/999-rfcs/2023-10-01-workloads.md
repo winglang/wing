@@ -1,6 +1,7 @@
 ---
 title: "#4350 Containerized Workloads - Requirements"
 description: Requirements for containerized workloads in the Wing Cloud Library
+search: false
 ---
 
 # Containerized Workloads - Requirements Specification

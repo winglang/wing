@@ -1,6 +1,7 @@
 ---
 title: "#3693 Wing Plugins (approved)"
 description: How to implement wing plugins
+search: false
 ---
 
 # Wing Plugin System

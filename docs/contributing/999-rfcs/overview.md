@@ -2,6 +2,7 @@
 title: RFC Workflow
 id: overview
 keywords: [rfcs, rfc, overview, process]
+search: false
 ---
 
 An RFC is short for "request for comments". It's a document that describes a new feature or change

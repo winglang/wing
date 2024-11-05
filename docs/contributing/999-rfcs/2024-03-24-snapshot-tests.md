@@ -1,6 +1,7 @@
 ---
 title: "#5958 Cloud Snapshot Tests"
 description: Spec and design for adding cloud snapshots to the Wing test framework
+search: false
 ---
 
 # Cloud Snapshot Tests

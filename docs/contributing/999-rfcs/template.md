@@ -1,6 +1,7 @@
 ---
 title: RFC Template
 description: Template for creating a new RFC
+search: false
 ---
 
 # #{RFC Number} - {RFC_TITLE}
