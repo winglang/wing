@@ -1,10 +1,23 @@
 ---
-title: Using JavaScript/TypeScript
-id: using-javascript
-keywords: [example, javascript, extern, typescript, js, ts]
+title: Externs
+id: extern
+slug: /extern
+sidebar_label: Using JavaScript with Wing
+description: Type reflection
+keywords: [Wing language, Type reflection]
+image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/36-reflection.md
 ---
 
-## Using `extern` to expose JavaScript/TypeScript functions in preflight and inflight
+Externs let you use JavaScript/TypeScript files within Wing. You can expose these functions and call them in Wing.
+
+Using externs give you the ability to use the JavaScript eco-system directly in Wing.
+
+:::tip Creating custom libraries 
+Want to create your own library? You can use externs to help. Externs give you the ability to pull in code from NPM directly into your custom Wing libraries. You can see some [examples on GitHub](https://github.com/winglang/winglibs).
+:::
+
+## Exposing JavaScript functions in preflight and inflight
 
 When you want to use a JavaScript/TypeScript file anywhere in Wing, you can use the `extern` keyword to expose functions from that file.
 
