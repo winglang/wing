@@ -1,6 +1,7 @@
 ---
 title: "#3696 Wing Cloud Preview Environments"
 description: This document describes an MVP for the first Wing Cloud product - Wing Cloud Preview Environments.
+search: false
 ---
 
 # Wing Cloud Preview Environments

@@ -1,6 +1,7 @@
 ---
 title: "#3690 Language Requirements (approved)"
 description: The original requirements documents for the wing language experience
+search: false
 ---
 
 - **Author(s):**: @eladb

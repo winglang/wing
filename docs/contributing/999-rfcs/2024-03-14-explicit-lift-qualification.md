@@ -1,6 +1,7 @@
 ---
 title: "Explicit lift qualification"
 description: Language spec for specifying explicit lift qualifications
+search: false
 ---
 
 # Explicit lift qualification
