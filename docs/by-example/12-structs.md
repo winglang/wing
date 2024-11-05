@@ -35,16 +35,33 @@ let data = MyData {
   }
 };
 
-log(data.a);        
-log(data.c.a);      
-log(data.c.b);      
+log(data.a); // prints hello    
+log(data.c.a); //prints world
+log(data.c.b); //prints 42
 ```
 
-```bash title="Wing console output"
-# Run locally with wing console
-wing it
 
-hello
-world
-42
+
+
+## Struct expansion in function calls
+
+```js playground example title="main.w"
+struct Options {
+  // optional
+  prefix: str?;
+  // required
+  delim: str;
+}
+
+let join_str = (a: Array<str>, opts: Options):str => {
+  let prefix = opts.prefix ?? "";
+  return prefix + a.join(opts.delim);
+};
+
+// pass options directly
+log(join_str(["hello", "world"], delim: ", ")); //  "hello, world"
+
+// also OK to pass an object
+let opts = Options { delim: "/" , prefix: "!!" };
+log(join_str(["hello", "world"], opts)); // "!!hello/world");
 ```
