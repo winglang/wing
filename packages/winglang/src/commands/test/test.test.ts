@@ -49,6 +49,7 @@ describe("printing test reports", () => {
   test("results for files with no tests", async () => {
     let inputResults: TestResult[] = [];
     const testReport = await renderTestReport("hello.w", inputResults);
+
     expect(testReport).toMatchSnapshot();
     expect(testReport).toContain("(no tests)");
 
