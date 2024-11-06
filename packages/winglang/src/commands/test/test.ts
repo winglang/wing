@@ -262,14 +262,10 @@ export async function renderTestReport(
     0
   );
 
-  // if there are no inflight tests, add a dummy "pass" result
+  // return early if there are no tests, return a pass output
   // to indicate that compilation and preflight checks passed
   if (results.length === 0) {
-    results.push({
-      pass: true,
-      path: "",
-      traces: [],
-    });
+    return `${chalk.green("pass")} ─ ${basename(entrypoint)} ${chalk.gray("(no tests)")}`;
   }
 
   for (const result of results.sort(sortTests)) {
@@ -307,13 +303,8 @@ export async function renderTestReport(
     }
 
     firstRow.push(basename(entrypoint));
-
-    if (result.path?.length > 0) {
-      firstRow.push(chalk.gray("»"));
-      firstRow.push(chalk.whiteBright(result.path.padEnd(longestPath)));
-    } else {
-      firstRow.push(chalk.gray("(no tests)"));
-    }
+    firstRow.push(chalk.gray("»"));
+    firstRow.push(chalk.whiteBright(result.path.padEnd(longestPath)));
 
     // okay we are ready to print the test result
 
