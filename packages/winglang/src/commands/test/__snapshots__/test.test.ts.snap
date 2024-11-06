@@ -1,5 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`printing test reports > results for files with no tests 1`] = `"pass ─ hello.w (no tests)"`;
+
 exports[`printing test reports > verbose traces are not shown if debug mode is disabled 1`] = `
 "fail ┌ hello.w » root/env0/test:test
      │ sleeping for 500 ms

@@ -6,49 +6,20 @@ let person = Json {
 };
 
 // stringify
-log(Json.stringify(person));
+log(Json.stringify(person)); // {"firstName":"John","lastName":"Smith"}
 
 // parse 
-log(Json.parse("\{\"firstName\":\"John\",\"lastName\":\"Smith\"}"));
+log(Json.parse("\{\"firstName\":\"John\",\"lastName\":\"Smith\"}")); // { firstName: 'John', lastName: 'Smith' }
 
 // Try and parse
 if let jsonFromTryParse = Json.tryParse("\{\"firstName\":\"John\",\"lastName\":\"Smith\"}") {
-  log("{jsonFromTryParse}");
+  log("{jsonFromTryParse}"); // {"firstName":"John","lastName":"Smith"}
 } else {
   log("failed to parse string to JSON");
 }
 
 // Deep copy of Json
 let newPerson = Json.deepCopy(person);
-log(Json.stringify(person));
+log(Json.stringify(person)); // {"firstName":"John","lastName":"Smith"}
 
-// iterate over keys
-for k in Json.keys(person) {
-  let value = person.get(k);
-  log("found key {k} with value {value}");
-}
 
-// iterate over values
-for value in Json.values(person) {
-  log("found value {value}");
-}
-
-// iterate over array
-let arrayValue = Json ["a", "b", "c"];
-for v in Json.values(arrayValue) {
-  log(str.fromJson(v));
-}
-
-// Convert to structs
-struct Foo {
-  val1: str;
-  val2: num;
-}
-
-let jFoo = {
-  val1: "cool",
-  val2: 21
-};
-
-let foo = Foo.fromJson(jFoo);
-log(Json.stringify(foo));
