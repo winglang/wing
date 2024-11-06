@@ -15,4 +15,4 @@ let func = new cloud.Function(inflight (payload:Json?) => {
 
 let value = plus(1, 2);
 
-log(value);
+log(value); // 3

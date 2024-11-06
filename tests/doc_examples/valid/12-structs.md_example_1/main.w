@@ -23,6 +23,6 @@ let data = MyData {
   }
 };
 
-log(data.a);        
-log(data.c.a);      
-log(data.c.b);      
+log(data.a); // prints hello    
+log(data.c.a); //prints world
+log(data.c.b); //prints 42
