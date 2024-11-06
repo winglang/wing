@@ -26,7 +26,7 @@
     "fflate": "^0.8.2",
     "npm": "^9.9.3",
     "octokit": "^3.2.1",
-    "tsx": "^4.15.7",
+    "tsx": "^4.19.2",
     "vitest": "^1.6.0",
     "winglang": "workspace:^",
     "yaml": "^2.4.5"

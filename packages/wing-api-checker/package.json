@@ -44,8 +44,8 @@
     "prettier": "^2.8.8",
     "projen": "^0.71.163",
     "standard-version": "^9",
-    "tsx": "^4.15.7",
-    "typescript": "^5.5.2"
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "chalk": "^4.1.2",

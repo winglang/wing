@@ -70,8 +70,8 @@
     "projen": "^0.71.163",
     "standard-version": "^9",
     "ts-morph": "^23.0.0",
-    "tsx": "^4.15.7",
-    "typescript": "^5.5.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
     "vitest": "^1.6.0",
     "wing-api-checker": "workspace:^"
   },
