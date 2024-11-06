@@ -1,16 +1,22 @@
 ---
 title: Singletons
 id: singletons
-keywords: [singleton]
+slug: /singletons
+sidebar_label: Singletons
+description: Using singletons with Wing
+keywords: [Wing language, singletons]
+image: /img/wing-by-example.png
+custom_edit_url: https://github.com/winglang/wing/blob/main/docs/by-example/15-singletons.md
 ---
 
-Sometimes, it makes sense for a resource to be defined only once per application. This example shows
-a pattern for how to implement singletons in Wing.
+Singletons let you define a resource only once per application. 
+
+This example shows a pattern for how to implement singletons in Wing.
 
 As an example, say we want to maintain a central bucket that can be accessed from any part of the
 application:
 
-```js playground example
+```js title="main.w" playground example
 bring cloud;
 
 class SingletonBucket {

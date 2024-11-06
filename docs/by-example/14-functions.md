@@ -33,12 +33,19 @@ let func = new cloud.Function(inflight (payload:Json?) => {
 
 let value = plus(1, 2);
 
-log(value);
+log(value); // 3
 ```
 
-```bash title="Wing console output"
-# Run locally with wing console
-wing it
-
-3
+### Inflight modifiers
+```js playground example title="main.w"
+let handler = inflight (message: str): void => {
+  // using the inflight modifier 
+  let dup = inflight (s: str, count: num) => {
+    // code
+  };
+  // inflight modifier is not required when function is declared in inflight context
+  let sup = (s: str, count: num) => {
+    // code
+  };
+};
 ```

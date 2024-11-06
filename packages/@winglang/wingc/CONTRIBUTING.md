@@ -1,6 +1,6 @@
 # Contributing to Winglang
 
-Thank you for wanting to contribute to Wing Language! This will guide you through everything you need to know to make changes 
+Thank you for wanting to contribute to Wing Language! This will guide you through everything you need to know to make changes
 and submit pull requests to the GitHub repository.
 
 - [Contributing to Winglang](#contributing-to-winglang)
@@ -36,9 +36,7 @@ These tools are needed to build the library and run unit tests:
 
 ## Orientation
 
-
 ### `src` folder
-
 
 ## Setting up and building the project
 
@@ -75,18 +73,18 @@ To ensure pull requests are reviewed and accepted as quickly as possible, please
 
 [ ] Your fork is in sync with the upstream repository.
 
-Create a new pull request [here](https://github.com/winglang/wingsdk/compare), selecting your fork for the 'compare' 
-and `main` for the 'base'. 
+Create a new pull request [here](https://github.com/winglang/wingsdk/compare), selecting your fork for the 'compare'
+and `main` for the 'base'.
 
-The title of the pull request should adhere to [conventional commits](https://www.conventionalcommits.org). For example, 
-if you're adding new features, the pull request title should start with `feat(sdk):`. If you are fixing a bug, then `fix(sdk):` 
+The title of the pull request should adhere to [conventional commits](https://www.conventionalcommits.org). For example,
+if you're adding new features, the pull request title should start with `feat(sdk):`. If you are fixing a bug, then `fix(sdk):`
 should be the title prefix.
 
 In the description reference any open issues that the changes resolve. Describe the changes you made and include anything
-you think would be useful for a reviewer to know. It's also a great place to add a shout-out to anyone who helped with the 
+you think would be useful for a reviewer to know. It's also a great place to add a shout-out to anyone who helped with the
 changes.
 
 ## Getting Help
 
-If you need help in contributing to this project please join our [Discord server](https://discord.gg/7wrggS3dZU) where 
+If you need help in contributing to this project please join our [Discord server](https://t.winglang.io/discord) where
 people are waiting to help in the #help channel.

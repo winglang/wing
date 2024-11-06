@@ -134,6 +134,8 @@ export interface TopicSubscriber extends EventSubscription {
 export interface BucketSchema {
   /** Whether the bucket should be publicly accessible. */
   readonly public: boolean;
+  /** Whether to allow the bucket to be deleted even if it is not empty. */
+  readonly forceDestroy: boolean;
   /** The initial objects uploaded to the bucket. */
   readonly initialObjects: Record<string, string>;
   /** Event notification topics- the record has BucketEventType as a key and a topic handle as a value  */

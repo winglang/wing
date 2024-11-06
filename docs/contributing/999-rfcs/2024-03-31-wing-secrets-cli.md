@@ -1,6 +1,7 @@
 ---
 title: "#6105 Wing Secrets CLI"
 description: Creating Wing secrets from the CLI
+search: false
 ---
 
 # Wing Secrets CLI

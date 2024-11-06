@@ -27,6 +27,7 @@ test("create a bucket", async () => {
     policy: [],
     props: {
       public: false,
+      forceDestroy: false,
       initialObjects: {},
       topics: {},
     },

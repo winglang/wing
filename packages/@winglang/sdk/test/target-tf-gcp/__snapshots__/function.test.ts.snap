@@ -39,7 +39,6 @@ exports[`basic function 1`] = `
         "depends_on": [
           "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -261,7 +260,6 @@ exports[`basic function with environment variables 1`] = `
         "depends_on": [
           "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -482,7 +480,6 @@ exports[`basic function with memory size specified 1`] = `
         "depends_on": [
           "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -703,7 +700,6 @@ exports[`basic function with timeout explicitly set 1`] = `
         "depends_on": [
           "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
         ],
-        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",

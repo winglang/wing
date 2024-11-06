@@ -3,6 +3,7 @@ title: "#3695 Wing Language Specification (approved)"
 id: language-spec
 description: The Wing Language Specification
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
+search: false
 ---
 
 :::caution Not fully implemented yet

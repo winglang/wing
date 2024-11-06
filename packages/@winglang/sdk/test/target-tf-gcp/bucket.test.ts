@@ -41,6 +41,17 @@ test("bucket is public", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("bucket is force destroy", () => {
+  // GIVEN
+  const app = new GcpApp();
+  new Bucket(app, "my_bucket", { forceDestroy: true });
+  const output = app.synth();
+
+  // THEN
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("two buckets", () => {
   // GIVEN
   const app = new GcpApp();
