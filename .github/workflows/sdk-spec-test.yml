@@ -43,7 +43,7 @@ env:
   REPO: ${{ inputs.repo || github.repository }}
   REF: ${{ inputs.ref || github.ref }}
   TARGET: ${{ inputs.target || (github.workflow == 'build' && 'all-stable') || (github.event_name == 'release' && 'all-unstable')  || 'all' }} #the build runs only stable targets, realease only unstable
-  PNPM_VERSION: "8.15.1"
+  PNPM_VERSION: "8.15.9"
   AZURE_LOCATION: "East US"
   CDK_STACK_NAME: "sdk-spec-tests"
   GOOGLE_PROJECT_ID: "sdk-spec-tests"
@@ -75,7 +75,8 @@ jobs:
       - name: Get list of directories and save them to the output
         id: setdirs
         shell: bash
-        run: | # TODO: skipping std, math and external folders, when https://github.com/winglang/wing/issues/3168 is resolve- we'll skip only the external folder.
+        run:
+          | # TODO: skipping std, math and external folders, when https://github.com/winglang/wing/issues/3168 is resolve- we'll skip only the external folder.
           dirs=$(ls -d tests/sdk_tests/*/ | sed 's/\/$//' | grep -v "external\|std\|math" | jq -R -s -c 'split("\n")[:-1]')
           processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
           wrapped_dirs=$(echo $processed_dirs | jq -c .)

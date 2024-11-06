@@ -4,7 +4,7 @@ on:
 
 env:
   NODE_VERSION: "20.11.1"
-  PNPM_VERSION: "8.15.1"
+  PNPM_VERSION: "8.15.9"
 
 jobs:
   update:

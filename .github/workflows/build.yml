@@ -18,7 +18,7 @@ concurrency:
 
 env:
   NODE_VERSION: "20.11.1"
-  PNPM_VERSION: "8.15.1"
+  PNPM_VERSION: "8.15.9"
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}

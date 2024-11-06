@@ -5,7 +5,7 @@
     "@winglang/compatibility-spy": "workspace:^",
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
-    "turbo": "^2.1.1"
+    "turbo": "^2.2.3"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",
@@ -21,7 +21,7 @@
   },
   "volta": {
     "node": "20.17.0",
-    "pnpm": "8.15.1"
+    "pnpm": "8.15.9"
   },
   "packageManager": "pnpm@8.15.9+sha512.499434c9d8fdd1a2794ebf4552b3b25c0a633abcee5bb15e7b5de90f32f47b513aca98cd5cfd001c31f0db454bc3804edccd578501e4ca293a6816166bbd9f81",
   "pnpm": {
