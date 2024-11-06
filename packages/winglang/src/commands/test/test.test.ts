@@ -56,7 +56,6 @@ describe("printing test reports", () => {
     // verify that the the no dummy test results were added
     expect(inputResults).toHaveLength(0);
   });
-
 });
 
 describe("wing test (custom platform)", () => {
