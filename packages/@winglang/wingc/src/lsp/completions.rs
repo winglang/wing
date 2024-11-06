@@ -485,7 +485,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							.pos_args
 							.iter()
 							.filter(|a| !types.get_expr_type(a).is_unresolved())
-							.count() == func.parameters.len() - 1
+							.count()
+							== func.parameters.len() - 1
 						{
 							completions.extend(get_inner_struct_completions(structy, arg_list_strings));
 						}
