@@ -67,4 +67,13 @@ if [ ! -d $WASI_SDK_INSTALL_DIR ]; then
 
     echo "Extracting to $WASI_SDK_INSTALL_DIR..."
     tar zxf $OUTFILE -C $TOOL_INSTALL_DIR
+    
+    # Rename the architecture-specific directory to a generic name
+    EXTRACTED_DIR="$TOOL_INSTALL_DIR/wasi-sdk-$WASI_SDK_VERSION_FULL-$SYS_ARCH-$SYS_OS"
+    GENERIC_DIR="$TOOL_INSTALL_DIR/wasi-sdk-$WASI_SDK_VERSION_FULL"
+    
+    if [ -d "$EXTRACTED_DIR" ]; then
+        echo "Renaming $EXTRACTED_DIR to $GENERIC_DIR..."
+        mv "$EXTRACTED_DIR" "$GENERIC_DIR"
+    fi
 fi
