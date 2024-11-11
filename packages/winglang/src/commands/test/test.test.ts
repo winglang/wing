@@ -5,7 +5,7 @@ import { join } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { LogLevel, TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
-import { describe, test, expect, beforeEach, afterEach, vi, SpyInstance } from "vitest";
+import { describe, test, expect, beforeEach, afterEach, vi, MockInstance } from "vitest";
 import { filterTests, renderTestReport, collectTestFiles, test as wingTest } from ".";
 import * as resultsFn from "./results";
 import { SnapshotMode } from "./snapshots";
@@ -45,10 +45,21 @@ describe("printing test reports", () => {
     expect(testReport).toMatchSnapshot();
     expect(testReport).toContain("Push (message=cool)");
   });
+
+  test("results for files with no tests", async () => {
+    let inputResults: TestResult[] = [];
+    const testReport = await renderTestReport("hello.w", inputResults);
+
+    expect(testReport).toMatchSnapshot();
+    expect(testReport).toContain("(no tests)");
+
+    // verify that the the no dummy test results were added
+    expect(inputResults).toHaveLength(0);
+  });
 });
 
 describe("wing test (custom platform)", () => {
-  let logSpy: SpyInstance;
+  let logSpy: MockInstance;
 
   beforeEach(() => {
     chalk.level = 0;
@@ -208,7 +219,7 @@ describe("collectTestFiles", () => {
 });
 
 describe("output-file option", () => {
-  let writeResultsSpy: SpyInstance;
+  let writeResultsSpy: MockInstance;
 
   beforeEach(() => {
     chalk.level = 0;
@@ -304,7 +315,7 @@ describe("test-filter option", () => {
 });
 
 describe("retry and parallel options", () => {
-  let logSpy: SpyInstance;
+  let logSpy: MockInstance;
 
   beforeEach(() => {
     chalk.level = 0;
