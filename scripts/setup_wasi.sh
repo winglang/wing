@@ -3,8 +3,8 @@ set -eo pipefail
 
 TOOL_INSTALL_DIR="./.cargo"
 
-BINARYEN_VERSION="version_117"
-WASI_SDK_VERSION="21"
+BINARYEN_VERSION="version_119"
+WASI_SDK_VERSION="24"
 WASI_SDK_VERSION_FULL="$WASI_SDK_VERSION.0"
 
 SYS_OS=$OSTYPE
@@ -54,7 +54,7 @@ fi
 # Download wasi-sdk
 WASI_SDK_INSTALL_DIR="$TOOL_INSTALL_DIR/wasi-sdk-$WASI_SDK_VERSION_FULL"
 if [ ! -d $WASI_SDK_INSTALL_DIR ]; then
-    WASI_SDK_TARBALL="wasi-sdk-$WASI_SDK_VERSION_FULL-$SYS_OS.tar.gz"
+    WASI_SDK_TARBALL="wasi-sdk-$WASI_SDK_VERSION_FULL-$SYS_ARCH-$SYS_OS.tar.gz"
     WASI_SDK_INSTALL_URL="https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-$WASI_SDK_VERSION/$WASI_SDK_TARBALL"
     OUTFILE="/tmp/$WASI_SDK_TARBALL"
 
@@ -67,4 +67,13 @@ if [ ! -d $WASI_SDK_INSTALL_DIR ]; then
 
     echo "Extracting to $WASI_SDK_INSTALL_DIR..."
     tar zxf $OUTFILE -C $TOOL_INSTALL_DIR
+    
+    # Rename the architecture-specific directory to a generic name
+    EXTRACTED_DIR="$TOOL_INSTALL_DIR/wasi-sdk-$WASI_SDK_VERSION_FULL-$SYS_ARCH-$SYS_OS"
+    GENERIC_DIR="$TOOL_INSTALL_DIR/wasi-sdk-$WASI_SDK_VERSION_FULL"
+    
+    if [ -d "$EXTRACTED_DIR" ]; then
+        echo "Renaming $EXTRACTED_DIR to $GENERIC_DIR..."
+        mv "$EXTRACTED_DIR" "$GENERIC_DIR"
+    fi
 fi
