@@ -1,7 +1,6 @@
 # See https://doc.mergify.io
 queue_rules:
   - name: default
-    speculative_checks: 2
     merge_method: squash
     commit_message_template: |-
       {{ title }} (#{{ number }})
@@ -48,10 +47,16 @@ pull_request_rules:
       - base=main
     actions:
       comment:
-        message: Thank you for contributing! Your pull request contains mergify configuration changes and needs manual merge from a maintainer (be sure to [allow changes to be pushed to your fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork)).
+        message: Thank you for contributing! Your pull request contains mergify configuration
+          changes and needs manual merge from a maintainer (be sure to [allow changes
+          to be pushed to your 
+          fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork)).
       label:
         add:
           - ⚠️ mergify/review-config
       request_reviews:
         teams:
           - "@winglang/maintainers"
+
+merge_queue:
+  max_parallel_checks: 2
