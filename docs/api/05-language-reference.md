@@ -659,6 +659,7 @@ For example (continuing the `Bucket` example above):
 
 ```TS
 let bucket = new Bucket();
+
 // OK! We are calling a preflight method from a preflight context
 bucket.allowPublicAccess();
 // ERROR: Cannot call into inflight phase while preflight
@@ -683,12 +684,114 @@ let handler2 = inflight() => {
 }
 ```
 
-Bridge between preflight and inflight is crossed with the help of immutable data
-structures, "structs" (user definable and `Struct`), and the capture mechanism.
+The bridge between preflight and inflight is crossed with the help of immutable data
+structures, user-defined structs, resources, and the capture mechanism.
 
 Preflight class methods and constructors can receive an inflight function as an argument. This
 enables preflight classes to define code that will be executed on a cloud compute platform such as
 lambda functions, docker, virtual machines etc.
+
+[`▲ top`][top]
+
+#### 1.3.1 Phase-independent code
+
+> **Note**: Phase-independent functions are not yet implemented. Subscribe to [issue #435](https://github.com/winglang/wing/issues/435) for updates.
+
+Code that is not dependent on the phase of execution can be designated as phase-independent using the `unphased` modifier.
+
+Using this modifier means that the function can be called from either preflight or inflight contexts.
+
+```TS
+let odd_numbers = unphased (nums: Array<num>): Array<num> => {
+  let result = MutArray<num>[];
+  for num in nums {
+    if num % 2 == 1 {
+      result.push(num);
+    }
+  }
+  return result.copy();
+};
+
+// OK! We are calling an unphased function from a preflight context
+let odds = odd_numbers([1, 2, 3]);
+
+let handler = inflight () => {
+  // OK! We are calling an unphased function from an inflight context
+  let big_odds = odd_numbers([7, 8, 9]);
+}
+```
+
+Phase-independent functions are useful for code that is useful across both
+execution phases, such as for data manipulation, utility functions, etc.
+
+Since phase-independent functions can be used inflight, they inherit the same restrictions as inflight functions, like not being able to call preflight functions or instantiate preflight classes.
+
+But phase-independent functions can also be used preflight, so they inherit the same restrictions as preflight functions, like not being able to call inflight functions or instantiate inflight classes.
+
+Phase-independent methods can be defined on resources:
+
+```TS
+class AwsBucket {
+  name: str; // preflight field
+
+  new() {
+    this.name = "my-bucket";
+  }
+
+  unphased object_url(key: str): str {
+    // This method references a preflight field (this.name) -- that is
+    // allowed in both phases so it is OK!
+    return `s3://${this.name}/${key}`;
+  }
+}
+```
+
+Phase-independent methods take on the additional restriction that they
+cannot mutate fields of the resource. For example, the following is disallowed:
+
+```TS
+class Bucket {
+  name: str; // preflight field
+
+  init() {
+    // initialize `name`
+  }
+
+  unphased set_name(name: str): void {
+    // ERROR: cannot mutate a preflight field from a phase-independent context
+    this.name = name;
+  }
+}
+```
+
+An unphased function can be passed to a function that expects a preflight function or an inflight function. In this way, we can say that an unphased functions are a superset of both preflight and inflight functions.
+
+However, a preflight or inflight function cannot be passed to a function that expects an unphased function.
+An exception to this rule is that if a function is unphased, then we can automatically assume any functions passed to it or returned by it have a matching phase.
+
+You can imagine that when a function is unphased, then "preflight" and "inflight" versions of it are generated at compile-time, and unphased-function types in parameters or return types are automatically converted to the appropriate phase.
+
+For example, `Array<T>.map` is modeled like the following pseudocode:
+
+```js
+unphased map<U>(f: unphased (T) => U): Array<U> {
+  // ...
+}
+```
+
+At compile-time, since the function is unphased, preflight and inflight versions are generated:
+
+```js
+preflight map<U>(f: preflight (T) => U): Array<U> {
+  // ...
+}
+inflight map<U>(f: inflight (T) => U): Array<U> {
+  // ...
+}
+```
+
+Notice how the type of "f" is automatically converted to the appropriate phase. This is possible because "map" is unphased.
+This way, when you call `Array<T>.map` with in preflight, it's possible to pass a preflight function to it, and when you call it in inflight, it's possible to pass an inflight function to it. (If you're calling `Array<T>.map` within another unphased function, then the unphased version of `Array<T>.map` is used.)
 
 [`▲ top`][top]
 
@@ -2206,6 +2309,36 @@ Given a method of name X, the compiler will map the method to the JavaScript exp
 matching name (without any case conversion).
 
 Extern methods do not support access to class's members through `this`, so they must be declared `static`.
+
+If an extern function is declared as `unphased`, a preflight and inflight implementation must be provided, by providing two separate functions in the JavaScript module.
+
+This can be useful when the implementation of the function is different in preflight and inflight phases (for example, inflight functions are allowed to be async).
+
+```TS
+// main.w
+class Util {
+  extern "./helper.js" static unphased randomHex(length: num): str;
+}
+
+// helper.js
+const { promisify } = require("node:util");
+const crypto = require("node:crypto");
+
+const randomFillAsync = promisify(crypto.randomFill);
+
+exports.randomHex = {
+  preflight: function (length) {
+    const buffer = Buffer.alloc(length);
+    crypto.randomFillSync(buffer);
+    return buffer.toString("hex");
+  },
+  inflight: async function (length) {
+    const buffer = Buffer.alloc(length);
+    await randomFillAsync(buffer);
+    return buffer.toString("hex");
+  }
+}
+```
 
 ### 5.2.1 Type model
 
