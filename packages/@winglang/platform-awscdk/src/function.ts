@@ -6,7 +6,7 @@ import {
   Code,
   Runtime,
   LayerVersion,
-  LogFormat,
+  LoggingFormat,
 } from "aws-cdk-lib/aws-lambda";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Asset } from "aws-cdk-lib/aws-s3-assets";
@@ -56,8 +56,7 @@ export function addPolicyStatements(
  */
 export class Function
   extends cloud.Function
-  implements IAwsCdkFunction, IAwsFunction
-{
+  implements IAwsCdkFunction, IAwsFunction {
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(
@@ -180,8 +179,8 @@ export class Function
       props.logRetentionDays === undefined
         ? 30
         : props.logRetentionDays < 0
-        ? RetentionDays.INFINITE // Negative value means Infinite retention
-        : props.logRetentionDays;
+          ? RetentionDays.INFINITE // Negative value means Infinite retention
+          : props.logRetentionDays;
 
     const logs = new LogGroup(this, "LogGroup", {
       retention: logRetentionDays,
@@ -201,7 +200,7 @@ export class Function
       memorySize: props.memory ?? 1024,
       architecture: Architecture.ARM_64,
       logGroup: logs,
-      logFormat: LogFormat.JSON,
+      logFormat: LoggingFormat.JSON,
     });
   }
 
