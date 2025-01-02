@@ -37,6 +37,23 @@ environment:
 - [Docker]
   - Needed to build the grammar as WASM for the web-based playground and to run unit tests
 
+Verify versions (any compatible version will do):
+
+```sh
+$ node --version
+v20.17.0
+```
+
+```sh
+$ pnpm --version
+8.15.1
+```
+
+```sh
+$ rustc --version
+rustc 1.82.0 (f6e511eec 2024-10-15)
+```
+
 Installation:
 
 ```sh
