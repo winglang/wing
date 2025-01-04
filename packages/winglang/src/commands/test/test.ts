@@ -610,7 +610,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const { TestRunnerClient } = await import(
         "@winglang/sdk/lib/shared-aws/test-runner.inflight"
       );
-      const runner = new TestRunnerClient(testArns);
+      const runner = new TestRunnerClient({ $tests: testArns });
 
       const allTests = await runner.listTests();
       const filteredTests = filterTests(allTests, testFilter);
