@@ -2,16 +2,25 @@ import { App } from "./app";
 import { Construct } from "constructs";
 import { cloud, core } from "@winglang/sdk/lib";
 import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
-import { IAwsInflightHost, NetworkConfig, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
+import { AwsInflightHost, IAwsInflightHost, NetworkConfig, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
 import { LiftMap } from "@winglang/sdk/lib/core";
-import { join, resolve } from "path";
+import { join } from "path";
 import { ContainerImage, FargateService, FargateTaskDefinition, ICluster, LogDrivers } from "aws-cdk-lib/aws-ecs";
 import { EcsCluster as CdkEcsCluster } from "./ecs-cluster";
 import { DockerImageAsset, Platform, } from "aws-cdk-lib/aws-ecr-assets";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { writeFileSync } from "fs";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
+import { createServiceDockerfile, createServiceWrapper } from "@winglang/sdk/lib/shared-aws";
+import { IInflightHost } from "@winglang/sdk/lib/std";
 
+/**
+ * Represents an ECS service in AWS.
+ *
+ * Converts the service handler into a DockerFile that is then built and published 
+ * to default AWS-CDK ECR repository, on deployment.
+ * The service is then run as a Fargate task in an ECS cluster.
+ */
 export class Service extends cloud.Service implements IAwsInflightHost {
   /** @internal */
   public static _toInflightType(): string {
@@ -24,7 +33,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
   private workdir: string;
   private wrapperEntrypoint: string;
   private dockerFileName: string;
-  private clusterInstante: ICluster;
+  private clusterInstance: ICluster;
   private subnets?: Set<string>;
   private securityGroups?: Set<string>;
   private service: FargateService;
@@ -44,9 +53,9 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     this.wrapperEntrypoint = join(this.workdir, `${this.assetName}_wrapper.js`);
     this.dockerFileName = `Dockerfile_${this.assetName}`;
 
-    this.clusterInstante = CdkEcsCluster.getOrCreate(this);
+    this.clusterInstance = CdkEcsCluster.getOrCreate(this);
 
-    this.create_dockerfile();
+    this.createDockerfile();
 
     const logGroup = new LogGroup(this, "LogGroup", {
       logGroupName: `/ecs/${this.assetName}`,
@@ -75,63 +84,10 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     container.addPortMappings({ containerPort: 80 });
 
     this.service = new FargateService(this, "Service", {
-      cluster: this.clusterInstante,
+      cluster: this.clusterInstance,
       taskDefinition: taskDef,
       desiredCount: 1,
     });
-  }
-
-  protected create_service_bundle(): string {
-    const wrapper = `
-const service = require("${resolve(this.entrypoint)}");
-let isShuttingDown = false;
-
-const startService = async () => {
-while (!isShuttingDown) {
-  // Check if shutting down at each iteration or task
-  await service.start();
-}
-};
-
-const handleShutdown = async () => {
-console.log("Received shutdown signal, stopping service...");
-isShuttingDown = true; // Signal to stop infinite loop
-await service.stop();
-process.exit(0);
-};
-
-process.on('SIGTERM', handleShutdown);
-process.on('SIGINT', handleShutdown);
-
-(async () => {
-try {
-  await startService();
-} catch (error) {
-  console.error("Error during service operation:", error);
-  process.exit(1);
-}
-})();
-  `;
-    writeFileSync(this.wrapperEntrypoint, wrapper);
-    const bundle = createBundle(this.wrapperEntrypoint);
-    return bundle.hash;
-  }
-
-  protected create_dockerfile(): void {
-    const dockerFile = `FROM --platform=linux/amd64 node:20-slim
-WORKDIR /app
-COPY ./${this.assetName}_wrapper.js.bundle .
-CMD [ "node", "index.cjs" ]`;
-
-    writeFileSync(join(this.workdir, this.dockerFileName), dockerFile);
-  }
-
-  /** @internal */
-  public _preSynthesize(): void {
-    super._preSynthesize();
-
-    this.create_service_bundle();
-    this.create_dockerfile();
   }
 
   addPolicyStatements(...statements: PolicyStatement[]): void {
@@ -147,6 +103,72 @@ CMD [ "node", "index.cjs" ]`;
 
     vpcConfig.subnetIds.forEach((subnet) => this.subnets!.add(subnet));
     vpcConfig.securityGroupIds.forEach((sg) => this.securityGroups!.add(sg));
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    const wrapper = createServiceWrapper(this.entrypoint);
+    writeFileSync(this.wrapperEntrypoint, wrapper);
+    createBundle(this.wrapperEntrypoint);
+
+    this.createDockerfile();
+  }
+
+  private createDockerfile() {
+    const dockerFile = createServiceDockerfile(this.assetName);
+    writeFileSync(join(this.workdir, this.dockerFileName), dockerFile);
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is not an AWS inflight host");
+    }
+
+    if (
+      ops.includes(cloud.ServiceInflightMethods.START) ||
+      ops.includes(cloud.ServiceInflightMethods.STOP)
+    ) {
+      host.addPolicyStatements({
+        actions: ["ecs:UpdateService"],
+        resources: [this.service.taskDefinition.taskDefinitionArn],
+      });
+    }
+
+    if (ops.includes(cloud.ServiceInflightMethods.STARTED)) {
+      host.addPolicyStatements({
+        actions: ["ecs:DescribeServices"],
+        resources: [this.service.taskDefinition.taskDefinitionArn],
+      });
+    }
+
+    host.addEnvironment(this.envName(), this.service.serviceName);
+    host.addEnvironment("ECS_CLUSTER_NAME", this.clusterInstance.clusterName);
+  }
+
+  /**
+   * Add an environment variable to the function
+   */
+  public addEnvironment(name: string, value: string): void {
+    if (this._env[name] !== undefined && this._env[name] !== value) {
+      throw new Error(
+        `Environment variable "${name}" already set with a different value.`
+      );
+    }
+    this._env[name] = value;
+  }
+
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return {
+      $clusterName: `process.env["ECS_CLUSTER_NAME"]`,
+      $serviceName: `process.env["${this.envName()}"]`,
+    };
+  }
+
+  private envName(): string {
+    return `SERVICE_NAME_${this.node.addr.slice(-8)}`;
   }
 
 }
