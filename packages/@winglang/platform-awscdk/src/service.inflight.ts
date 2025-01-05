@@ -1,0 +1,1 @@
+export { ServiceClient } from "@winglang/sdk/lib/shared-aws/service.inflight";

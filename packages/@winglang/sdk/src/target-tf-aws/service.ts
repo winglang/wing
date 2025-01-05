@@ -1,5 +1,5 @@
 import { writeFileSync } from "fs";
-import { join, resolve } from "path";
+import { join } from "path";
 import { Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -18,6 +18,8 @@ import { LiftMap } from "../core";
 import { createBundle } from "../shared/bundling";
 import {
   AwsInflightHost,
+  createServiceDockerfile,
+  createServiceWrapper,
   IAwsInflightHost,
   NetworkConfig,
   PolicyStatement,
@@ -293,45 +295,13 @@ export class Service extends cloud.Service implements IAwsInflightHost {
   /** @internal */
   public _preSynthesize(): void {
     super._preSynthesize();
-    const wrapper = `
-const service = require("${resolve(this.entrypoint)}");
-let isShuttingDown = false;
 
-const startService = async () => {
-  while (!isShuttingDown) {
-    // Check if shutting down at each iteration or task
-    await service.start();
-  }
-};
-
-const handleShutdown = async () => {
-  console.log("Received shutdown signal, stopping service...");
-  isShuttingDown = true; // Signal to stop infinite loop
-  await service.stop();
-  process.exit(0);
-};
-
-process.on('SIGTERM', handleShutdown);
-process.on('SIGINT', handleShutdown);
-
-(async () => {
-  try {
-    await startService();
-  } catch (error) {
-    console.error("Error during service operation:", error);
-    process.exit(1);
-  }
-})();
-    `;
+    const wrapper = createServiceWrapper(this.entrypoint);
     writeFileSync(this.wrapperEntrypoint, wrapper);
     const bundle = createBundle(this.wrapperEntrypoint);
     this.bundledHash = bundle.hash;
 
-    const dockerFile = `FROM --platform=linux/amd64 node:20-slim
-    WORKDIR /app
-    COPY ./${this.assetName}_wrapper.js.bundle .
-    CMD [ "node", "index.cjs" ]`;
-
+    const dockerFile = createServiceDockerfile(this.assetName);
     writeFileSync(join(this.workdir, this.dockerFileName), dockerFile);
   }
 

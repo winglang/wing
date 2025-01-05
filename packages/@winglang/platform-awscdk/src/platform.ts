@@ -14,6 +14,7 @@ import { Topic } from "./topic";
 import { Website } from "./website";
 import { cloud } from "@winglang/sdk";
 import { Construct } from "constructs";
+import { Service } from "./service";
 
 const {
   API_FQN,
@@ -27,6 +28,7 @@ const {
   TOPIC_FQN,
   SCHEDULE_FQN,
   WEBSITE_FQN,
+  SERVICE_FQN,
 } = cloud;
 
 /**
@@ -91,6 +93,9 @@ export class Platform implements platform.IPlatform {
 
       case ENDPOINT_FQN:
         return Endpoint;
+
+      case SERVICE_FQN:
+        return Service;
     }
     return undefined;
   }
