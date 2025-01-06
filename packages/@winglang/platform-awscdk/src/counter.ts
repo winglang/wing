@@ -2,9 +2,8 @@ import { RemovalPolicy } from "aws-cdk-lib";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
 import { cloud, std } from "@winglang/sdk";
-import { COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/commons";
 import { calculateCounterPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsCounter } from "@winglang/sdk/lib/shared-aws/counter";
+import { IAwsCounter, COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/counter";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { InflightClient, LiftMap } from "@winglang/sdk/lib/core";
 

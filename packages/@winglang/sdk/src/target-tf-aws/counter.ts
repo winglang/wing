@@ -4,8 +4,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { AwsInflightHost } from "../shared-aws";
-import { COUNTER_HASH_KEY } from "../shared-aws/commons";
-import { IAwsCounter } from "../shared-aws/counter";
+import { IAwsCounter, COUNTER_HASH_KEY } from "../shared-aws/counter";
 import { calculateCounterPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
 

@@ -232,7 +232,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   /** @internal */
   public _liftedState(): Record<string, string> {
     return {
-      $url: `process.env["${this.envName()}"]`,
+      $bucketName: `process.env["${this.envName()}"]`,
     };
   }
 
@@ -265,11 +265,11 @@ export function createEncryptedBucket(
     encryption: BucketEncryption.S3_MANAGED,
     blockPublicAccess: isPublic
       ? {
-          blockPublicAcls: false,
-          blockPublicPolicy: false,
-          ignorePublicAcls: false,
-          restrictPublicBuckets: false,
-        }
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      }
       : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,

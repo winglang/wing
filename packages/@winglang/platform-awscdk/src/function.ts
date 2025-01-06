@@ -200,7 +200,7 @@ export class Function
       memorySize: props.memory ?? 1024,
       architecture: Architecture.ARM_64,
       logGroup: logs,
-      logFormat: LoggingFormat.JSON,
+      loggingFormat: LoggingFormat.JSON,
     });
   }
 
