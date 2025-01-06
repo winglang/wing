@@ -1,5 +1,7 @@
 import { cloud } from "..";
 
+export const COUNTER_HASH_KEY = "id";
+
 /**
  * A shared interface for AWS Counter.
  */
