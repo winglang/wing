@@ -34,6 +34,8 @@ export class LanguageServerManager {
         env: {
           ...process.env,
         },
+        // Node will throw `EINVAL` in Windows if `shell` is not true. See https://github.com/winglang/wing/issues/7231.
+        shell: true,
       },
     };
     const serverOptions: ServerOptions = {
