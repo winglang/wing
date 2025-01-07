@@ -5,7 +5,6 @@ import { Template } from "aws-cdk-lib/assertions";
 import stringify from "safe-stable-stringify";
 import { TestRunner } from "./test-runner";
 import { CdkTokens } from "./tokens";
-
 import { core } from "@winglang/sdk";
 import { Util } from "@winglang/sdk/lib/util";
 import { registerTokenResolver } from "@winglang/sdk/lib/core/tokens";
@@ -45,6 +44,11 @@ export class App extends core.App {
 
   private awsAccount?: string;
   private awsRegion?: string;
+
+  private _vpc?: cdk.aws_ec2.IVpc;
+
+  /** Subnets shared across app */
+  public subnets: { [key: string]: (cdk.aws_ec2.ISubnet)[] };
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
@@ -92,7 +96,105 @@ export class App extends core.App {
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     registerTokenResolver(new CdkTokens());
 
+    this.subnets = {
+      private: [],
+      public: [],
+    };
+
     TestRunner._createTree(this, props.rootConstruct, this.isTestEnvironment);
+  }
+
+  /**
+   * Returns the VPC for this app. Will create a new VPC if one does not exist.
+   */
+  public get vpc(): cdk.aws_ec2.IVpc {
+    if (this._vpc) {
+      return this._vpc;
+    }
+
+    return this.parameters.value(`${this._target}/vpc`) === "existing"
+      ? this.importExistingVpc()
+      : this.createDefaultVpc();
+  }
+
+  private importExistingVpc(): cdk.aws_ec2.IVpc {
+    const vpcId: string = this.parameters.value(`${this._target}/vpc_id`);
+    const privateSubnetIds: string[] = this.parameters.value(`${this._target}/private_subnet_ids`);
+    const publicSubnetIds: string[] = this.parameters.value(`${this._target}/public_subnet_ids`);
+
+    this._vpc = cdk.aws_ec2.Vpc.fromLookup(this, "ExistingVpc", {
+      vpcId: vpcId,
+    });
+
+    for (const subnetId of privateSubnetIds) {
+      this.subnets.private.push(
+        cdk.aws_ec2.Subnet.fromSubnetId(this, `PrivateSubnet${subnetId.slice(-8)}`, subnetId)
+      );
+    }
+
+    if (publicSubnetIds) {
+      for (const subnetId of publicSubnetIds) {
+        this.subnets.public.push(
+          cdk.aws_ec2.Subnet.fromSubnetId(this, `PublicSubnet${subnetId.slice(-8)}`, subnetId)
+        );
+      }
+    }
+
+    return this._vpc;
+  }
+
+  private createDefaultVpc(): cdk.aws_ec2.IVpc {
+    let app = App.of(this) as App;
+
+    // create the app wide VPC
+    this._vpc = new cdk.aws_ec2.Vpc(this, "VPC", {
+      ipAddresses: cdk.aws_ec2.IpAddresses.cidr("10.0.0.0/16"),
+      enableDnsHostnames: true,
+      enableDnsSupport: true,
+      subnetConfiguration: [
+        {
+          cidrMask: 24,
+          name: `${app.node.id.replace(".", "")}-public-subnet-1`,
+          subnetType: cdk.aws_ec2.SubnetType.PUBLIC,
+        },
+        {
+          cidrMask: 22,
+          name: `${app.node.id.replace(".", "")}-private-subnet-1`,
+          subnetType: cdk.aws_ec2.SubnetType.PRIVATE_WITH_EGRESS,
+        },
+        {
+          cidrMask: 22,
+          name: `${app.node.id.replace(".", "")}-private-subnet-2`,
+          subnetType: cdk.aws_ec2.SubnetType.PRIVATE_WITH_EGRESS,
+        },
+      ],
+    });
+
+    this.subnets.public.push(...this._vpc.publicSubnets);
+    this.subnets.private.push(...this._vpc.privateSubnets);
+    return this._vpc;
+  }
+
+  /**
+   * Retrieve private subnet ids for the app
+   */
+  public get privateSubnetIds(): string[] {
+    // Ensure vpc exists
+    if (!this._vpc) {
+      this.vpc;
+    }
+    return this.subnets.private.map((s) => s.subnetId);
+  }
+
+  /**
+   * Retrieve public subnet ids for the app
+   */
+  public get publicSubnetIds(): string[] {
+    // Ensure vpc exists
+    if (!this._vpc) {
+      this.vpc;
+    }
+    return this.subnets.public.map((s) => s.subnetId);
   }
 
   /**
