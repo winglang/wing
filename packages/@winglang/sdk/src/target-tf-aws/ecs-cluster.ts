@@ -16,7 +16,7 @@ export class EcsCluster {
       app.dockerProvider;
 
       clusterInstance = new Cluster(scope, "ECSCluster", {
-        name: `${app.node.id}_cluster`,
+        name: `${app.node.id.replace(".", "_")}_cluster`,
       });
 
       new EcsClusterCapacityProviders(scope, "EcsClusterCapacityProviders", {
