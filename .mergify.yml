@@ -1,7 +1,9 @@
 # See https://doc.mergify.io
+merge_queue:
+  max_parallel_checks: 2
+
 queue_rules:
   - name: default
-    speculative_checks: 2
     merge_method: squash
     commit_message_template: |-
       {{ title }} (#{{ number }})
