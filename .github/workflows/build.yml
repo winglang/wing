@@ -71,6 +71,8 @@ jobs:
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
 
       - name: Derive appropriate SHAs for base and head
         id: shas
@@ -135,6 +137,8 @@ jobs:
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
 
       - name: Verify Terraform installation
         run: terraform -v
