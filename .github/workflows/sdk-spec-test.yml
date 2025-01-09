@@ -126,6 +126,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
       ##################### install a local wing version #########################
       - name: Download Dist Artifacts
         if: ${{ env.LOCAL_BUILD ==  'true' }}
