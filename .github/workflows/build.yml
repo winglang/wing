@@ -28,7 +28,7 @@ jobs:
   build:
     name: "Build"
     timeout-minutes: 30
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
@@ -44,7 +44,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -68,6 +68,11 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
 
       - name: Derive appropriate SHAs for base and head
         id: shas
@@ -97,13 +102,13 @@ jobs:
   test:
     name: Test
     timeout-minutes: 30
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -128,8 +133,15 @@ jobs:
       - name: Install Playwright
         working-directory: wing-console/console/app
         run: |
-          sudo rm /etc/apt/sources.list.d/microsoft-prod.list
           pnpm exec playwright install --with-deps
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Verify Terraform installation
+        run: terraform -v
 
       - name: Test
         run: pnpm test:ci
@@ -148,7 +160,7 @@ jobs:
   benchmark:
     name: Benchmark
     if: needs.build.outputs.bench-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - build
     steps:
@@ -162,7 +174,7 @@ jobs:
           path: dist
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -224,7 +236,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -277,7 +289,7 @@ jobs:
 
   console-preview:
     name: "Console Preview"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - build
     env:
@@ -324,7 +336,7 @@ jobs:
 
   quality-gate:
     name: Quality Gate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ !cancelled() }}
     needs:
       - build
@@ -362,7 +374,7 @@ jobs:
     needs:
       - quality-gate
       - build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4

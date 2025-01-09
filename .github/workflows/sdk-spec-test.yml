@@ -51,7 +51,7 @@ env:
 
 jobs:
   setup:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: test if is maintainer
         uses: tspascoal/get-user-teams-membership@v3
@@ -75,7 +75,8 @@ jobs:
       - name: Get list of directories and save them to the output
         id: setdirs
         shell: bash
-        run: | # TODO: skipping std, math and external folders, when https://github.com/winglang/wing/issues/3168 is resolve- we'll skip only the external folder.
+        run:
+          | # TODO: skipping std, math and external folders, when https://github.com/winglang/wing/issues/3168 is resolve- we'll skip only the external folder.
           dirs=$(ls -d tests/sdk_tests/*/ | sed 's/\/$//' | grep -v "external\|std\|math" | jq -R -s -c 'split("\n")[:-1]')
           processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
           wrapped_dirs=$(echo $processed_dirs | jq -c .)
@@ -99,7 +100,7 @@ jobs:
 
   test:
     needs: setup
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       max-parallel: 10
@@ -116,7 +117,7 @@ jobs:
 
       - name: Setup pnpm
         if: ${{ env.MANUAL ==  'true' }}
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 

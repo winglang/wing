@@ -8,7 +8,7 @@ on:
 jobs:
   release:
     name: "Post release comments"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: apexskier/github-release-commenter@v1
         with:

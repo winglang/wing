@@ -13,7 +13,7 @@ env:
 jobs:
   destroy:
     name: "Destroy"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
     steps:
       - name: Install flyctl

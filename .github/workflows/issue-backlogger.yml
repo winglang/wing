@@ -8,7 +8,7 @@ on:
 jobs:
   add-to-backlog:
     name: "Add issue to backlog"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/add-to-project@v0.5.0
         with:
