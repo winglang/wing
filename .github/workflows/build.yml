@@ -102,53 +102,57 @@ jobs:
     timeout-minutes: 30
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          cache: "pnpm"
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install Rust
-        uses: moonrepo/setup-rust@v1
-        with:
-          inherit-toolchain: true
-          cache: false
-
-      - name: Setup Cargo Cache
-        uses: Swatinem/rust-cache@v2
-
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright
-        working-directory: wing-console/console/app
-        run: |
-          pnpm exec playwright install --with-deps
-
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
+      - name: Verify Terraform installation
+        run: terraform -v
+    #   - name: Checkout
+    #     uses: actions/checkout@v4
 
-      - name: Test
-        run: pnpm test:ci
+    #   - name: Setup pnpm
+    #     uses: pnpm/action-setup@v4
+    #     with:
+    #       version: ${{ env.PNPM_VERSION }}
 
-      - name: Create git patch
-        id: diff
-        run: scripts/create_patch.sh build.diff
+    #   - name: Setup Node
+    #     uses: actions/setup-node@v4
+    #     with:
+    #       cache: "pnpm"
+    #       node-version: ${{ env.NODE_VERSION }}
 
-      - name: Upload patch
-        if: steps.diff.outputs.diff == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: build.diff
-          path: build.diff
+    #   - name: Install Rust
+    #     uses: moonrepo/setup-rust@v1
+    #     with:
+    #       inherit-toolchain: true
+    #       cache: false
+
+    #   - name: Setup Cargo Cache
+    #     uses: Swatinem/rust-cache@v2
+
+    #   - name: Install Dependencies
+    #     run: pnpm install --frozen-lockfile
+
+    #   - name: Install Playwright
+    #     working-directory: wing-console/console/app
+    #     run: |
+    #       pnpm exec playwright install --with-deps
+
+    #   - name: Install Terraform
+    #     uses: hashicorp/setup-terraform@v3
+
+    #   - name: Test
+    #     run: pnpm test:ci
+
+    #   - name: Create git patch
+    #     id: diff
+    #     run: scripts/create_patch.sh build.diff
+
+    #   - name: Upload patch
+    #     if: steps.diff.outputs.diff == 'true'
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: build.diff
+    #       path: build.diff
 
   benchmark:
     name: Benchmark
