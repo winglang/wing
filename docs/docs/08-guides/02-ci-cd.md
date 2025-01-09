@@ -1,7 +1,14 @@
 ---
 title: CI/CD
 id: ci-cd
-keywords: [CICD, Continuous Integration, Continuous Deployment, Deployment, GitHub Actions]
+keywords:
+  [
+    CICD,
+    Continuous Integration,
+    Continuous Deployment,
+    Deployment,
+    GitHub Actions,
+  ]
 ---
 
 Wing supports compilation to various targets including `tf-aws`, `tf-azure`, and `tf-gcp`. After compilation, Wing does not impose a specific deployment method for your infrastructure. Its Terraform target compatibility ensures that nearly all existing services can be utilized for deployment, offering considerable flexibility to choose the approach best aligned with your organizational needs or preferences.
@@ -9,6 +16,7 @@ Wing supports compilation to various targets including `tf-aws`, `tf-azure`, and
 This guide will detail the complete deployment lifecycle of a Wing application using GitHub Actions and the `tf-aws` target.
 
 ## Setup
+
 ### Managing Access for GitHub Actions and AWS
 
 It's generally discouraged to use static, long-lived IAM user credentials due to associated security risks.
@@ -53,16 +61,16 @@ concurrency:
 
 permissions:
   id-token: write # This is required for requesting the JWT
-  contents: read  # This is required for actions/checkout
+  contents: read # This is required for actions/checkout
 
 env:
-  AWS_REGION: 'us-east-1'
-  TF_BACKEND_BUCKET: 'my-terraform-state-bucket-with-a-globally-unique-name'
-  TF_BACKEND_BUCKET_REGION: 'us-east-1'
+  AWS_REGION: "us-east-1"
+  TF_BACKEND_BUCKET: "my-terraform-state-bucket-with-a-globally-unique-name"
+  TF_BACKEND_BUCKET_REGION: "us-east-1"
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -76,7 +84,7 @@ jobs:
         uses: winglang/wing-github-action/actions/deploy@main
         with:
           entry: main.w
-          target: 'tf-aws'
+          target: "tf-aws"
 ```
 
 ### Pull Request Diffs
@@ -88,17 +96,17 @@ on: [pull_request]
 
 permissions:
   id-token: write # This is required for requesting the JWT
-  contents: read  # This is required for actions/checkout
+  contents: read # This is required for actions/checkout
   pull-requests: write # This is required for commenting on PRs
 
 env:
-  AWS_REGION: 'us-east-1'
-  TF_BACKEND_BUCKET: 'my-terraform-state-bucket-with-a-globally-unique-name'
-  TF_BACKEND_BUCKET_REGION: 'us-east-1'
+  AWS_REGION: "us-east-1"
+  TF_BACKEND_BUCKET: "my-terraform-state-bucket-with-a-globally-unique-name"
+  TF_BACKEND_BUCKET_REGION: "us-east-1"
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -112,9 +120,10 @@ jobs:
         uses: winglang/wing-github-action/actions/pull-request-diff@main
         with:
           entry: main.w
-          target: 'tf-aws'
+          target: "tf-aws"
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
 ## Custom GitHub Actions Workflow for AWS
 
 Most users will find using the Wing GitHub Action within GitHub Actions as the simplest and most effective method. However, if you have specific requirements such as additional build steps, you may need to create your own custom GitHub Actions Workflow.
@@ -191,7 +200,7 @@ env:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

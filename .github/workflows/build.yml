@@ -28,7 +28,7 @@ jobs:
   build:
     name: "Build"
     timeout-minutes: 30
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
@@ -97,7 +97,7 @@ jobs:
   test:
     name: Test
     timeout-minutes: 30
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -148,7 +148,7 @@ jobs:
   benchmark:
     name: Benchmark
     if: needs.build.outputs.bench-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - build
     steps:
@@ -277,7 +277,7 @@ jobs:
 
   console-preview:
     name: "Console Preview"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - build
     env:
@@ -324,7 +324,7 @@ jobs:
 
   quality-gate:
     name: Quality Gate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ !cancelled() }}
     needs:
       - build
@@ -362,7 +362,7 @@ jobs:
     needs:
       - quality-gate
       - build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4

@@ -10,7 +10,7 @@ env:
 
 jobs:
   azure-cleanup:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: test if is maintainer
         uses: tspascoal/get-user-teams-membership@v3

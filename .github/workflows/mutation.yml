@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   mutate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'failure' && (!contains(fromJSON('["main", "dev"]'), github.event.workflow_run.head_branch) || github.event.workflow_run.head_repository.fork)
     steps:
       - name: Download artifacts
@@ -50,7 +50,7 @@ jobs:
             It requires private repo read/write permissions." >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
-      
+
       - name: Find associated pull request
         id: pr
         uses: actions/github-script@v7
