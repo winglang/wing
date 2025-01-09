@@ -69,6 +69,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+
       - name: Derive appropriate SHAs for base and head
         id: shas
         uses: nrwl/nx-set-shas@v3
@@ -129,6 +132,9 @@ jobs:
         working-directory: wing-console/console/app
         run: |
           pnpm exec playwright install --with-deps
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
 
       - name: Test
         run: pnpm test:ci
