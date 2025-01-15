@@ -27,7 +27,7 @@ resources, using Terraform as the provisioning engine.
 the box. In addition, we are planning support for other provisioning engines
 such as AWS CloudFormation and Kubernetes.
 
-Click :thumbsup: on the relevant issue and tell us what you think.
+Click 👍 on the relevant issue and tell us what you think.
 
 :::
 
@@ -147,7 +147,7 @@ through the AWS Management Console.
 
 1. Open the [Amazon SQS Console](https://console.aws.amazon.com/sqs)
 2. Select your AWS region
-3. You should be able to see that you have a queue there prefixed with `cloud-Queue-`
+3. You should be able to see that you have a queue there prefixed with `Queue-`
 4. Click **Send and receive messages**.
 5. In the **Message Body** box type `cloud` and hit **Send message**.
 6. Jump over to the [S3 Console](https://s3.console.aws.amazon.com/s3/buckets) 
