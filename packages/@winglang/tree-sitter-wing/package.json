@@ -16,20 +16,15 @@
     "queries/**",
     "src/**"
   ],
-  "tree-sitter": [
-    {
-      "scope": "source.wing",
-      "highlights": "queries/highlights.scm",
-      "file-types": [
-        "w"
-      ]
-    }
-  ],
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "tree-sitter-cli": "0.24.7"
+  },
   "dependencies": {
     "node-addon-api": "^7.1.0"
   },
   "peerDependencies": {
-    "tree-sitter": "^0.21.0"
+    "tree-sitter": "^0.22.0"
   },
   "peerDependenciesMeta": {
     "tree_sitter": {
@@ -40,7 +35,7 @@
     "test": "tree-sitter test --update",
     "parse": "tree-sitter parse",
     "test:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"turbo test\"",
-    "build:generate": "tree-sitter generate --no-bindings",
+    "build:generate": "tree-sitter generate",
     "build:wasm": "tree-sitter build --wasm --docker",
     "build:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"turbo compile\"",
     "playground": "tree-sitter playground",
@@ -49,9 +44,5 @@
   },
   "volta": {
     "extends": "../../../package.json"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.4",
-    "tree-sitter-cli": "0.22.5"
   }
 }
