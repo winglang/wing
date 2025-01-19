@@ -10,21 +10,19 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import {
-  AwsInflightHost,
   Effect,
-  IAwsFunction,
+  Function as AwsFunction,
   NetworkConfig,
   PolicyStatement,
   externalLibraries,
 } from "../shared-aws";
 import { makeAwsLambdaHandler } from "../shared-aws/function-util";
-import { IInflightHost, Resource } from "../std";
+import { Resource } from "../std";
 import { Duration } from "../std/duration";
 
 /**
@@ -51,16 +49,7 @@ export interface FunctionPermissionsOptions {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.Function implements IAwsFunction {
-  /** @internal */
-  public static _toInflightType(): string {
-    return core.InflightClient.forType(
-      __filename
-        .replace("target-tf-aws", "shared-aws")
-        .replace("function", "function.inflight"),
-      "FunctionClient"
-    );
-  }
+export class Function extends AwsFunction {
 
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
@@ -295,45 +284,6 @@ export class Function extends cloud.Function implements IAwsFunction {
     this.assetPath = asset.path;
   }
 
-  /** @internal */
-  public get _liftMap(): core.LiftMap {
-    return {
-      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
-      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
-        [this.handler, ["handle"]],
-      ],
-    };
-  }
-
-  public onLift(host: IInflightHost, ops: string[]): void {
-    if (!AwsInflightHost.isAwsInflightHost(host)) {
-      throw new Error("Host is expected to implement `IAwsInfightHost`");
-    }
-
-    if (
-      ops.includes(cloud.FunctionInflightMethods.INVOKE) ||
-      ops.includes(cloud.FunctionInflightMethods.INVOKE_ASYNC)
-    ) {
-      host.addPolicyStatements({
-        actions: ["lambda:InvokeFunction"],
-        resources: [`${this.function.arn}`],
-      });
-    }
-
-    // The function name needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
-    host.addEnvironment(this.envName(), this.function.arn);
-
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $functionArn: `process.env["${this.envName()}"]`,
-      $constructPath: `"${this.node.path}"`,
-    };
-  }
 
   /**
    * Add a Lambda Layer to the function
@@ -414,10 +364,6 @@ export class Function extends cloud.Function implements IAwsFunction {
         ...options,
       }
     );
-  }
-
-  private envName(): string {
-    return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 
   /**

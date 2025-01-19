@@ -1,6 +1,7 @@
 import { Domain } from "./domain";
 import { cloud } from "..";
 import { WebsiteOptions } from "../cloud";
+import { InflightClient } from "../core";
 
 /**
  * Options for AWS `Website`.
@@ -29,9 +30,18 @@ export interface IAwsWebsite {
 }
 
 /**
- * A helper class for working with AWS buckets.
+ * Base class for AWS Websites
  */
-export class Website {
+export abstract class Website extends cloud.Website implements IAwsWebsite {
+
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("website", "website.inflight"),
+      "WebsiteClient"
+    );
+  }
+
   /**
    * If the bucket is an AWS Bucket, return a helper interface for
    * working with it.
@@ -41,8 +51,11 @@ export class Website {
     if (this.isAwsWebsite(website)) {
       return website;
     }
-    return undefined;
+    return undefined; 
   }
+  
+  public abstract get bucketArn(): string;
+  public abstract get bucketName(): string;
 
   private static isAwsWebsite(obj: any): obj is IAwsWebsite {
     return (

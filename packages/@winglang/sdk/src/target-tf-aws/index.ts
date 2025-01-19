@@ -8,3 +8,4 @@ export * from "./schedule";
 export * from "./secret";
 export * from "./test-runner";
 export * from "./topic";
+export * from "./service";

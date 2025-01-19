@@ -1,1 +1,0 @@
-export { SecretClient } from "@winglang/sdk/lib/shared-aws/secret.inflight";

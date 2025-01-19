@@ -1,6 +1,5 @@
 import { readdirSync } from "fs";
 import { extname, join, resolve } from "path";
-
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import mime from "mime-types";
@@ -16,22 +15,20 @@ import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { normalPath } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import * as aws from "../shared-aws";
+import { Website as AwsWebsite, AwsWebsiteProps } from "../shared-aws";
 import { Node } from "../std";
 
 const INDEX_FILE = "index.html";
 
 /**
  * AWS implementation of `cloud.Website`.
- *
- * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
-export class Website extends cloud.Website implements aws.IAwsWebsite {
+export class Website extends AwsWebsite {
   public readonly bucket: S3Bucket;
   private readonly _url: string;
   private readonly endpoint: cloud.Endpoint;
 
-  constructor(scope: Construct, id: string, props: aws.AwsWebsiteProps) {
+  constructor(scope: Construct, id: string, props: AwsWebsiteProps) {
     super(scope, id, props);
 
     this.bucket = createEncryptedBucket(this, false, false, "WebsiteBucket");

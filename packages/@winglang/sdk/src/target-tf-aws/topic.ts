@@ -7,12 +7,9 @@ import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
 import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
 import { SqsQueuePolicy } from "../.gen/providers/aws/sqs-queue-policy";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { AwsInflightHost } from "../shared-aws";
-import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IAwsTopic, TopicOnMessageHandler } from "../shared-aws/topic";
-import { IInflightHost, Node, Resource } from "../std";
+import { Topic as AwsTopic, TopicOnMessageHandler } from "../shared-aws/topic";
+import { Node, Resource } from "../std";
 
 /**
  * Topic names are limited to 256 characters.
@@ -25,20 +22,8 @@ const NAME_OPTS: NameOptions = {
 
 /**
  * AWS Implementation of `cloud.Topic`.
- *
- * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export class Topic extends cloud.Topic implements IAwsTopic {
-  /** @internal */
-  public static _toInflightType(): string {
-    return core.InflightClient.forType(
-      __filename
-        .replace("target-tf-aws", "shared-aws")
-        .replace("topic", "topic.inflight"),
-      "TopicClient"
-    );
-  }
-
+export class Topic extends AwsTopic {
   private readonly topic: SnsTopic;
   private readonly handlers: Record<string, Function> = {};
 
@@ -179,36 +164,6 @@ export class Topic extends cloud.Topic implements IAwsTopic {
         }),
       }
     );
-  }
-
-  public onLift(host: IInflightHost, ops: string[]): void {
-    if (!AwsInflightHost.isAwsInflightHost(host)) {
-      throw new Error("Host is expected to implement `IAwsInfightHost`");
-    }
-
-    host.addPolicyStatements(...calculateTopicPermissions(this.topic.arn, ops));
-
-    host.addEnvironment(this.envName(), this.topic.arn);
-
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $topicArn: `process.env["${this.envName()}"]`,
-    };
-  }
-
-  /** @internal */
-  public get _liftMap(): core.LiftMap {
-    return {
-      [cloud.TopicInflightMethods.PUBLISH]: [],
-    };
-  }
-
-  private envName(): string {
-    return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
 
   public get topicArn(): string {

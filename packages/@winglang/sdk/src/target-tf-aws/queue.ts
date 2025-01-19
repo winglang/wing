@@ -4,15 +4,10 @@ import { Function } from "./function";
 import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-source-mapping";
 import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { AwsInflightHost, IAwsQueue } from "../shared-aws";
-import { calculateQueuePermissions } from "../shared-aws/permissions";
-import {
-  Queue as AwsQueue,
-  QueueSetConsumerHandler,
-} from "../shared-aws/queue";
-import { Duration, IInflightHost, Node } from "../std";
+import { AwsInflightHost, Queue as AwsQueue } from "../shared-aws";
+import { QueueSetConsumerHandler } from "../shared-aws/queue";
+import { Duration, Node } from "../std";
 
 /**
  * Queue names are limited to 80 characters.
@@ -25,20 +20,8 @@ const NAME_OPTS: NameOptions = {
 
 /**
  * AWS implementation of `cloud.Queue`.
- *
- * @inflight `@winglang/sdk.aws.IAwsQueueClient`
  */
-export class Queue extends cloud.Queue implements IAwsQueue {
-  /** @internal */
-  public static _toInflightType(): string {
-    return core.InflightClient.forType(
-      __filename
-        .replace("target-tf-aws", "shared-aws")
-        .replace("queue", "queue.inflight"),
-      "QueueClient"
-    );
-  }
-
+export class Queue extends AwsQueue {
   private readonly queue: SqsQueue;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
@@ -72,15 +55,6 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     this.queue = new SqsQueue(this, "Default", queueOpt);
   }
 
-  /** @internal */
-  public get _liftMap(): core.LiftMap {
-    return {
-      [cloud.QueueInflightMethods.PUSH]: [],
-      [cloud.QueueInflightMethods.PURGE]: [],
-      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
-      [cloud.QueueInflightMethods.POP]: [],
-    };
-  }
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
@@ -131,33 +105,6 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     });
 
     return fn;
-  }
-
-  public onLift(host: IInflightHost, ops: string[]): void {
-    const env = this.envName();
-
-    if (!AwsInflightHost.isAwsInflightHost(host)) {
-      throw new Error("Host is expected to implement `IAwsInfightHost`");
-    }
-
-    host.addPolicyStatements(...calculateQueuePermissions(this.queue.arn, ops));
-
-    // The queue url needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
-    host.addEnvironment(env, this.queue.url);
-
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $queueUrlOrArn: `process.env["${this.envName()}"]`,
-    };
-  }
-
-  private envName(): string {
-    return `QUEUE_URL_${this.node.addr.slice(-8)}`;
   }
 
   public get queueArn(): string {

@@ -10,6 +10,7 @@ import { cloud, std } from "@winglang/sdk";
 import {
   ScheduleOnTickHandler,
   convertUnixCronToAWSCron,
+  Schedule as AwsSchedule,
 } from "@winglang/sdk/lib/shared-aws/schedule";
 import { isAwsCdkFunction } from "./function";
 
@@ -18,7 +19,7 @@ import { isAwsCdkFunction } from "./function";
  *
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
-export class Schedule extends cloud.Schedule {
+export class Schedule extends AwsSchedule {
   private readonly scheduleExpression: EventSchedule;
   private readonly rule: Rule;
 

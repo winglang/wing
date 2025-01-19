@@ -25,7 +25,7 @@ test("secret with a name", () => {
   }) as awscdk.Secret;
 
   // THEN
-  expect(Stack.of(secret).resolve(secret.arn)).toEqual({
+  expect(Stack.of(secret).resolve(secret.secretArn)).toEqual({
     "Fn::Join": [
       "",
       [

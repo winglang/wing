@@ -12,6 +12,804 @@ sidebar_position: 100
 
 ## Resources <a name="Resources" id="Resources"></a>
 
+### Api <a name="Api" id="@winglang/sdk.aws.Api"></a>
+
+- *Implements:* <a href="#@winglang/sdk.aws.IAwsApi">IAwsApi</a>
+
+Base class for AWS API.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Api.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Api(props?: ApiProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Api.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Api.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given path. |
+| <code><a href="#@winglang/sdk.aws.Api.delete">delete</a></code> | Add a inflight handler to the api for DELETE requests on the given path. |
+| <code><a href="#@winglang/sdk.aws.Api.get">get</a></code> | Add a inflight handler to the api for GET requests on the given path. |
+| <code><a href="#@winglang/sdk.aws.Api.head">head</a></code> | Add a inflight handler to the api for HEAD requests on the given path. |
+| <code><a href="#@winglang/sdk.aws.Api.options">options</a></code> | Add a inflight handler to the api for OPTIONS requests on the given path. |
+| <code><a href="#@winglang/sdk.aws.Api.patch">patch</a></code> | Add a inflight handler to the api for PATCH requests on the given path. |
+| <code><a href="#@winglang/sdk.aws.Api.post">post</a></code> | Add a inflight handler to the api for POST requests on the given path. |
+| <code><a href="#@winglang/sdk.aws.Api.put">put</a></code> | Add a inflight handler to the api for PUT requests on the given path. |
+
+---
+
+##### `connect` <a name="connect" id="@winglang/sdk.aws.Api.connect"></a>
+
+```wing
+connect(path: str, inflight: IApiEndpointHandler, props?: ApiConnectOptions): void
+```
+
+Add a inflight handler to the api for CONNECT requests on the given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Api.connect.parameter.path"></a>
+
+- *Type:* str
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.aws.Api.connect.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Api.connect.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiConnectOptions">ApiConnectOptions</a>
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.aws.Api.delete"></a>
+
+```wing
+delete(path: str, inflight: IApiEndpointHandler, props?: ApiDeleteOptions): void
+```
+
+Add a inflight handler to the api for DELETE requests on the given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Api.delete.parameter.path"></a>
+
+- *Type:* str
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.aws.Api.delete.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Api.delete.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiDeleteOptions">ApiDeleteOptions</a>
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.aws.Api.get"></a>
+
+```wing
+get(path: str, inflight: IApiEndpointHandler, props?: ApiGetOptions): void
+```
+
+Add a inflight handler to the api for GET requests on the given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Api.get.parameter.path"></a>
+
+- *Type:* str
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.aws.Api.get.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Api.get.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiGetOptions">ApiGetOptions</a>
+
+---
+
+##### `head` <a name="head" id="@winglang/sdk.aws.Api.head"></a>
+
+```wing
+head(path: str, inflight: IApiEndpointHandler, props?: ApiHeadOptions): void
+```
+
+Add a inflight handler to the api for HEAD requests on the given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Api.head.parameter.path"></a>
+
+- *Type:* str
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.aws.Api.head.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Api.head.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiHeadOptions">ApiHeadOptions</a>
+
+---
+
+##### `options` <a name="options" id="@winglang/sdk.aws.Api.options"></a>
+
+```wing
+options(path: str, inflight: IApiEndpointHandler, props?: ApiOptionsOptions): void
+```
+
+Add a inflight handler to the api for OPTIONS requests on the given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Api.options.parameter.path"></a>
+
+- *Type:* str
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.aws.Api.options.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Api.options.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiOptionsOptions">ApiOptionsOptions</a>
+
+---
+
+##### `patch` <a name="patch" id="@winglang/sdk.aws.Api.patch"></a>
+
+```wing
+patch(path: str, inflight: IApiEndpointHandler, props?: ApiPatchOptions): void
+```
+
+Add a inflight handler to the api for PATCH requests on the given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Api.patch.parameter.path"></a>
+
+- *Type:* str
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.aws.Api.patch.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Api.patch.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPatchOptions">ApiPatchOptions</a>
+
+---
+
+##### `post` <a name="post" id="@winglang/sdk.aws.Api.post"></a>
+
+```wing
+post(path: str, inflight: IApiEndpointHandler, props?: ApiPostOptions): void
+```
+
+Add a inflight handler to the api for POST requests on the given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Api.post.parameter.path"></a>
+
+- *Type:* str
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.aws.Api.post.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Api.post.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPostOptions">ApiPostOptions</a>
+
+---
+
+##### `put` <a name="put" id="@winglang/sdk.aws.Api.put"></a>
+
+```wing
+put(path: str, inflight: IApiEndpointHandler, props?: ApiPutOptions): void
+```
+
+Add a inflight handler to the api for PUT requests on the given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Api.put.parameter.path"></a>
+
+- *Type:* str
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.aws.Api.put.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Api.put.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPutOptions">ApiPutOptions</a>
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Api.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Api.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+| <code><a href="#@winglang/sdk.aws.Api.renderCorsHeaders">renderCorsHeaders</a></code> | Generates an object containing default CORS response headers and OPTIONS response headers. |
+| <code><a href="#@winglang/sdk.aws.Api.renderOpenApiPath">renderOpenApiPath</a></code> | Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`). |
+| <code><a href="#@winglang/sdk.aws.Api.from">from</a></code> | If the api is an AWS RestApi, return a helper interface for working with it. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.Api.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.Api.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Api.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Api.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Api.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Api.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Api.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+##### `renderCorsHeaders` <a name="renderCorsHeaders" id="@winglang/sdk.aws.Api.renderCorsHeaders"></a>
+
+```wing
+bring aws;
+
+aws.Api.renderCorsHeaders(corsOptions?: ApiCorsOptions);
+```
+
+Generates an object containing default CORS response headers and OPTIONS response headers.
+
+###### `corsOptions`<sup>Optional</sup> <a name="corsOptions" id="@winglang/sdk.aws.Api.renderCorsHeaders.parameter.corsOptions"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a>
+
+The CORS options to generate the headers from.
+
+---
+
+##### `renderOpenApiPath` <a name="renderOpenApiPath" id="@winglang/sdk.aws.Api.renderOpenApiPath"></a>
+
+```wing
+bring aws;
+
+aws.Api.renderOpenApiPath(path: str);
+```
+
+Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`).
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Api.renderOpenApiPath.parameter.path"></a>
+
+- *Type:* str
+
+The path to convert (assumes path is valid).
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Api.from"></a>
+
+```wing
+bring aws;
+
+aws.Api.from(api: Api);
+```
+
+If the api is an AWS RestApi, return a helper interface for working with it.
+
+###### `api`<sup>Required</sup> <a name="api" id="@winglang/sdk.aws.Api.from.parameter.api"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Api">Api</a>
+
+The cloud.Api.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Api.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.Api.property.url">url</a></code> | <code>str</code> | The base URL of the API endpoint. |
+| <code><a href="#@winglang/sdk.aws.Api.property.deploymentId">deploymentId</a></code> | <code>str</code> | RestApi deployment id. |
+| <code><a href="#@winglang/sdk.aws.Api.property.invokeUrl">invokeUrl</a></code> | <code>str</code> | Invoke URL. |
+| <code><a href="#@winglang/sdk.aws.Api.property.restApiArn">restApiArn</a></code> | <code>str</code> | RestApi arn. |
+| <code><a href="#@winglang/sdk.aws.Api.property.restApiId">restApiId</a></code> | <code>str</code> | RestApi id. |
+| <code><a href="#@winglang/sdk.aws.Api.property.restApiName">restApiName</a></code> | <code>str</code> | RestApi id. |
+| <code><a href="#@winglang/sdk.aws.Api.property.stageName">stageName</a></code> | <code>str</code> | RestApi stage name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.Api.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.aws.Api.property.url"></a>
+
+```wing
+url: str;
+```
+
+- *Type:* str
+
+The base URL of the API endpoint.
+
+---
+
+##### `deploymentId`<sup>Required</sup> <a name="deploymentId" id="@winglang/sdk.aws.Api.property.deploymentId"></a>
+
+```wing
+deploymentId: str;
+```
+
+- *Type:* str
+
+RestApi deployment id.
+
+---
+
+##### `invokeUrl`<sup>Required</sup> <a name="invokeUrl" id="@winglang/sdk.aws.Api.property.invokeUrl"></a>
+
+```wing
+invokeUrl: str;
+```
+
+- *Type:* str
+
+Invoke URL.
+
+---
+
+##### `restApiArn`<sup>Required</sup> <a name="restApiArn" id="@winglang/sdk.aws.Api.property.restApiArn"></a>
+
+```wing
+restApiArn: str;
+```
+
+- *Type:* str
+
+RestApi arn.
+
+---
+
+##### `restApiId`<sup>Required</sup> <a name="restApiId" id="@winglang/sdk.aws.Api.property.restApiId"></a>
+
+```wing
+restApiId: str;
+```
+
+- *Type:* str
+
+RestApi id.
+
+---
+
+##### `restApiName`<sup>Required</sup> <a name="restApiName" id="@winglang/sdk.aws.Api.property.restApiName"></a>
+
+```wing
+restApiName: str;
+```
+
+- *Type:* str
+
+RestApi id.
+
+---
+
+##### `stageName`<sup>Required</sup> <a name="stageName" id="@winglang/sdk.aws.Api.property.stageName"></a>
+
+```wing
+stageName: str;
+```
+
+- *Type:* str
+
+RestApi stage name.
+
+---
+
+
+### Bucket <a name="Bucket" id="@winglang/sdk.aws.Bucket"></a>
+
+- *Implements:* <a href="#@winglang/sdk.aws.IAwsBucket">IAwsBucket</a>
+
+Base class for AWS Buckets.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Bucket.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Bucket(props?: BucketProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Bucket.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Bucket.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Bucket.addCorsRule">addCorsRule</a></code> | Add cors configuration to the bucket. |
+| <code><a href="#@winglang/sdk.aws.Bucket.addFile">addFile</a></code> | Add a file to the bucket from system folder. |
+| <code><a href="#@winglang/sdk.aws.Bucket.addObject">addObject</a></code> | Add a file to the bucket that is uploaded when the app is deployed. |
+| <code><a href="#@winglang/sdk.aws.Bucket.onCreate">onCreate</a></code> | Run an inflight whenever a file is uploaded to the bucket. |
+| <code><a href="#@winglang/sdk.aws.Bucket.onDelete">onDelete</a></code> | Run an inflight whenever a file is deleted from the bucket. |
+| <code><a href="#@winglang/sdk.aws.Bucket.onEvent">onEvent</a></code> | Run an inflight whenever a file is uploaded, modified, or deleted from the bucket. |
+| <code><a href="#@winglang/sdk.aws.Bucket.onUpdate">onUpdate</a></code> | Run an inflight whenever a file is updated in the bucket. |
+
+---
+
+##### `addCorsRule` <a name="addCorsRule" id="@winglang/sdk.aws.Bucket.addCorsRule"></a>
+
+```wing
+addCorsRule(value: BucketCorsOptions): void
+```
+
+Add cors configuration to the bucket.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.aws.Bucket.addCorsRule.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketCorsOptions">BucketCorsOptions</a>
+
+---
+
+##### `addFile` <a name="addFile" id="@winglang/sdk.aws.Bucket.addFile"></a>
+
+```wing
+addFile(key: str, path: str, encoding?: str): void
+```
+
+Add a file to the bucket from system folder.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.aws.Bucket.addFile.parameter.key"></a>
+
+- *Type:* str
+
+The key or name to associate with the file.
+
+---
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Bucket.addFile.parameter.path"></a>
+
+- *Type:* str
+
+The path to the file on the local system.
+
+---
+
+###### `encoding`<sup>Optional</sup> <a name="encoding" id="@winglang/sdk.aws.Bucket.addFile.parameter.encoding"></a>
+
+- *Type:* str
+
+The encoding to use when reading the file.
+
+Defaults to "utf-8".
+
+---
+
+##### `addObject` <a name="addObject" id="@winglang/sdk.aws.Bucket.addObject"></a>
+
+```wing
+addObject(path: str, content: str): void
+```
+
+Add a file to the bucket that is uploaded when the app is deployed.
+
+TODO: In the future this will support uploading any `Blob` type or
+referencing a file from the local filesystem.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Bucket.addObject.parameter.path"></a>
+
+- *Type:* str
+
+---
+
+###### `content`<sup>Required</sup> <a name="content" id="@winglang/sdk.aws.Bucket.addObject.parameter.content"></a>
+
+- *Type:* str
+
+---
+
+##### `onCreate` <a name="onCreate" id="@winglang/sdk.aws.Bucket.onCreate"></a>
+
+```wing
+onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateOptions): void
+```
+
+Run an inflight whenever a file is uploaded to the bucket.
+
+###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.aws.Bucket.onCreate.parameter.fn"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.aws.Bucket.onCreate.parameter.opts"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnCreateOptions">BucketOnCreateOptions</a>
+
+---
+
+##### `onDelete` <a name="onDelete" id="@winglang/sdk.aws.Bucket.onDelete"></a>
+
+```wing
+onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteOptions): void
+```
+
+Run an inflight whenever a file is deleted from the bucket.
+
+###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.aws.Bucket.onDelete.parameter.fn"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.aws.Bucket.onDelete.parameter.opts"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnDeleteOptions">BucketOnDeleteOptions</a>
+
+---
+
+##### `onEvent` <a name="onEvent" id="@winglang/sdk.aws.Bucket.onEvent"></a>
+
+```wing
+onEvent(fn: IBucketEventHandler, opts?: BucketOnEventOptions): void
+```
+
+Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
+
+###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.aws.Bucket.onEvent.parameter.fn"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.aws.Bucket.onEvent.parameter.opts"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnEventOptions">BucketOnEventOptions</a>
+
+---
+
+##### `onUpdate` <a name="onUpdate" id="@winglang/sdk.aws.Bucket.onUpdate"></a>
+
+```wing
+onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateOptions): void
+```
+
+Run an inflight whenever a file is updated in the bucket.
+
+###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.aws.Bucket.onUpdate.parameter.fn"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.aws.Bucket.onUpdate.parameter.opts"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnUpdateOptions">BucketOnUpdateOptions</a>
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Bucket.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Bucket.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+| <code><a href="#@winglang/sdk.aws.Bucket.from">from</a></code> | If the bucket is an AWS Bucket, return a helper interface for working with it. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.Bucket.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.Bucket.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Bucket.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Bucket.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Bucket.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Bucket.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Bucket.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Bucket.from"></a>
+
+```wing
+bring aws;
+
+aws.Bucket.from(bucket: Bucket);
+```
+
+If the bucket is an AWS Bucket, return a helper interface for working with it.
+
+###### `bucket`<sup>Required</sup> <a name="bucket" id="@winglang/sdk.aws.Bucket.from.parameter.bucket"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>
+
+The cloud.Bucket.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.Bucket.property.bucketArn">bucketArn</a></code> | <code>str</code> | AWS Bucket arn. |
+| <code><a href="#@winglang/sdk.aws.Bucket.property.bucketDomainName">bucketDomainName</a></code> | <code>str</code> | Bucket domain name. |
+| <code><a href="#@winglang/sdk.aws.Bucket.property.bucketName">bucketName</a></code> | <code>str</code> | AWS Bucket name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.Bucket.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `bucketArn`<sup>Required</sup> <a name="bucketArn" id="@winglang/sdk.aws.Bucket.property.bucketArn"></a>
+
+```wing
+bucketArn: str;
+```
+
+- *Type:* str
+
+AWS Bucket arn.
+
+---
+
+##### `bucketDomainName`<sup>Required</sup> <a name="bucketDomainName" id="@winglang/sdk.aws.Bucket.property.bucketDomainName"></a>
+
+```wing
+bucketDomainName: str;
+```
+
+- *Type:* str
+
+Bucket domain name.
+
+---
+
+##### `bucketName`<sup>Required</sup> <a name="bucketName" id="@winglang/sdk.aws.Bucket.property.bucketName"></a>
+
+```wing
+bucketName: str;
+```
+
+- *Type:* str
+
+AWS Bucket name.
+
+---
+
+
 ### BucketRef <a name="BucketRef" id="@winglang/sdk.aws.BucketRef"></a>
 
 A reference to an external S3 bucket.
@@ -169,6 +967,167 @@ The Name of this bucket.
 ---
 
 
+### Counter <a name="Counter" id="@winglang/sdk.aws.Counter"></a>
+
+- *Implements:* <a href="#@winglang/sdk.aws.IAwsCounter">IAwsCounter</a>
+
+Base class for AWS Counters.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Counter.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Counter(props?: CounterProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Counter.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.CounterProps">CounterProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Counter.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.CounterProps">CounterProps</a>
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Counter.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Counter.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+| <code><a href="#@winglang/sdk.aws.Counter.from">from</a></code> | If the table is an AWS Counter, return a helper interface for working with it. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.Counter.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.Counter.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Counter.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Counter.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Counter.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Counter.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Counter.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Counter.from"></a>
+
+```wing
+bring aws;
+
+aws.Counter.from(counter: Counter);
+```
+
+If the table is an AWS Counter, return a helper interface for working with it.
+
+###### `counter`<sup>Required</sup> <a name="counter" id="@winglang/sdk.aws.Counter.from.parameter.counter"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Counter">Counter</a>
+
+The cloud.Counter.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
+| <code><a href="#@winglang/sdk.aws.Counter.property.dynamoTableArn">dynamoTableArn</a></code> | <code>str</code> | AWS Dynamodb arn. |
+| <code><a href="#@winglang/sdk.aws.Counter.property.dynamoTableName">dynamoTableName</a></code> | <code>str</code> | AWS Dynamodb name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.Counter.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `initial`<sup>Required</sup> <a name="initial" id="@winglang/sdk.aws.Counter.property.initial"></a>
+
+```wing
+initial: num;
+```
+
+- *Type:* num
+
+The initial value of the counter.
+
+---
+
+##### `dynamoTableArn`<sup>Required</sup> <a name="dynamoTableArn" id="@winglang/sdk.aws.Counter.property.dynamoTableArn"></a>
+
+```wing
+dynamoTableArn: str;
+```
+
+- *Type:* str
+
+AWS Dynamodb arn.
+
+---
+
+##### `dynamoTableName`<sup>Required</sup> <a name="dynamoTableName" id="@winglang/sdk.aws.Counter.property.dynamoTableName"></a>
+
+```wing
+dynamoTableName: str;
+```
+
+- *Type:* str
+
+AWS Dynamodb name.
+
+---
+
+
 ### Domain <a name="Domain" id="@winglang/sdk.aws.Domain"></a>
 
 AWS implementation of `cloud.Domain`.
@@ -318,6 +1277,259 @@ iamCertificate: str;
 - *Type:* str
 
 The IAM certificate identifier value.
+
+---
+
+
+### Function <a name="Function" id="@winglang/sdk.aws.Function"></a>
+
+- *Implements:* <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>
+
+Base class for AWS Functions.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Function.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Function(handler: IFunctionHandler, props?: FunctionProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Function.Initializer.parameter.handler">handler</a></code> | <code><a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.aws.Function.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.FunctionProps">FunctionProps</a></code> | *No description.* |
+
+---
+
+##### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.Function.Initializer.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Function.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.FunctionProps">FunctionProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
+| <code><a href="#@winglang/sdk.aws.Function.addLambdaLayer">addLambdaLayer</a></code> | Add a Lambda layer to the function. |
+| <code><a href="#@winglang/sdk.aws.Function.addNetwork">addNetwork</a></code> | Adds the host to the specified network. |
+| <code><a href="#@winglang/sdk.aws.Function.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
+
+---
+
+##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.aws.Function.addEnvironment"></a>
+
+```wing
+addEnvironment(name: str, value: str): void
+```
+
+Add an environment variable to the function.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.aws.Function.addEnvironment.parameter.name"></a>
+
+- *Type:* str
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.aws.Function.addEnvironment.parameter.value"></a>
+
+- *Type:* str
+
+---
+
+##### `addLambdaLayer` <a name="addLambdaLayer" id="@winglang/sdk.aws.Function.addLambdaLayer"></a>
+
+```wing
+addLambdaLayer(layerArn: str): void
+```
+
+Add a Lambda layer to the function.
+
+###### `layerArn`<sup>Required</sup> <a name="layerArn" id="@winglang/sdk.aws.Function.addLambdaLayer.parameter.layerArn"></a>
+
+- *Type:* str
+
+---
+
+##### `addNetwork` <a name="addNetwork" id="@winglang/sdk.aws.Function.addNetwork"></a>
+
+```wing
+addNetwork(config: NetworkConfig): void
+```
+
+Adds the host to the specified network.
+
+###### `config`<sup>Required</sup> <a name="config" id="@winglang/sdk.aws.Function.addNetwork.parameter.config"></a>
+
+- *Type:* <a href="#@winglang/sdk.aws.NetworkConfig">NetworkConfig</a>
+
+---
+
+##### `addPolicyStatements` <a name="addPolicyStatements" id="@winglang/sdk.aws.Function.addPolicyStatements"></a>
+
+```wing
+addPolicyStatements(...policies: Array<PolicyStatement>): void
+```
+
+Add policy statements to the function's IAM role.
+
+###### `policies`<sup>Required</sup> <a name="policies" id="@winglang/sdk.aws.Function.addPolicyStatements.parameter.policies"></a>
+
+- *Type:* <a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Function.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Function.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+| <code><a href="#@winglang/sdk.aws.Function.context">context</a></code> | Returns the current Lambda invocation context, if the host is an AWS Lambda. |
+| <code><a href="#@winglang/sdk.aws.Function.from">from</a></code> | If the inflight host is an AWS Lambda, return a helper interface for working with it. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.Function.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.Function.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Function.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Function.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Function.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Function.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Function.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+##### `context` <a name="context" id="@winglang/sdk.aws.Function.context"></a>
+
+```wing
+bring aws;
+
+aws.Function.context();
+```
+
+Returns the current Lambda invocation context, if the host is an AWS Lambda.
+
+> [https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html)
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Function.from"></a>
+
+```wing
+bring aws;
+
+aws.Function.from(host: IInflightHost);
+```
+
+If the inflight host is an AWS Lambda, return a helper interface for working with it.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Function.from.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+The inflight host.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
+| <code><a href="#@winglang/sdk.aws.Function.property.functionArn">functionArn</a></code> | <code>str</code> | AWS Function arn. |
+| <code><a href="#@winglang/sdk.aws.Function.property.functionName">functionName</a></code> | <code>str</code> | AWS Function name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.Function.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `env`<sup>Required</sup> <a name="env" id="@winglang/sdk.aws.Function.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+Returns the set of environment variables for this function.
+
+---
+
+##### `functionArn`<sup>Required</sup> <a name="functionArn" id="@winglang/sdk.aws.Function.property.functionArn"></a>
+
+```wing
+functionArn: str;
+```
+
+- *Type:* str
+
+AWS Function arn.
+
+---
+
+##### `functionName`<sup>Required</sup> <a name="functionName" id="@winglang/sdk.aws.Function.property.functionName"></a>
+
+```wing
+functionName: str;
+```
+
+- *Type:* str
+
+AWS Function name.
 
 ---
 
@@ -482,6 +1694,194 @@ The ARN of this function.
 ---
 
 
+### Queue <a name="Queue" id="@winglang/sdk.aws.Queue"></a>
+
+- *Implements:* <a href="#@winglang/sdk.aws.IAwsQueue">IAwsQueue</a>
+
+Base class for AWS Queues.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Queue.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Queue(props?: QueueProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Queue.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.QueueProps">QueueProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Queue.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.QueueProps">QueueProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Queue.setConsumer">setConsumer</a></code> | Create a function to consume messages from this queue. |
+
+---
+
+##### `setConsumer` <a name="setConsumer" id="@winglang/sdk.aws.Queue.setConsumer"></a>
+
+```wing
+setConsumer(handler: IQueueSetConsumerHandler, props?: QueueSetConsumerOptions): Function
+```
+
+Create a function to consume messages from this queue.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.Queue.setConsumer.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Queue.setConsumer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.QueueSetConsumerOptions">QueueSetConsumerOptions</a>
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Queue.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Queue.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+| <code><a href="#@winglang/sdk.aws.Queue.from">from</a></code> | If the queue is an AWS SQS, return a helper interface for working with it. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.Queue.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.Queue.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Queue.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Queue.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Queue.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Queue.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Queue.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Queue.from"></a>
+
+```wing
+bring aws;
+
+aws.Queue.from(queue: Queue);
+```
+
+If the queue is an AWS SQS, return a helper interface for working with it.
+
+###### `queue`<sup>Required</sup> <a name="queue" id="@winglang/sdk.aws.Queue.from.parameter.queue"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
+
+The cloud.Queue.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.Queue.property.queueArn">queueArn</a></code> | <code>str</code> | AWS Queue arn. |
+| <code><a href="#@winglang/sdk.aws.Queue.property.queueName">queueName</a></code> | <code>str</code> | AWS Queue name. |
+| <code><a href="#@winglang/sdk.aws.Queue.property.queueUrl">queueUrl</a></code> | <code>str</code> | AWS Queue url. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.Queue.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `queueArn`<sup>Required</sup> <a name="queueArn" id="@winglang/sdk.aws.Queue.property.queueArn"></a>
+
+```wing
+queueArn: str;
+```
+
+- *Type:* str
+
+AWS Queue arn.
+
+---
+
+##### `queueName`<sup>Required</sup> <a name="queueName" id="@winglang/sdk.aws.Queue.property.queueName"></a>
+
+```wing
+queueName: str;
+```
+
+- *Type:* str
+
+AWS Queue name.
+
+---
+
+##### `queueUrl`<sup>Required</sup> <a name="queueUrl" id="@winglang/sdk.aws.Queue.property.queueUrl"></a>
+
+```wing
+queueUrl: str;
+```
+
+- *Type:* str
+
+AWS Queue url.
+
+---
+
+
 ### QueueRef <a name="QueueRef" id="@winglang/sdk.aws.QueueRef"></a>
 
 A reference to an external SQS queue.
@@ -609,6 +2009,135 @@ queueArn: str;
 - *Type:* str
 
 The ARN of this queue.
+
+---
+
+
+### Secret <a name="Secret" id="@winglang/sdk.aws.Secret"></a>
+
+- *Implements:* <a href="#@winglang/sdk.aws.IAwsSecret">IAwsSecret</a>
+
+Base class for AWS Secrets.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Secret.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Secret(props?: SecretProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Secret.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.SecretProps">SecretProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Secret.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.SecretProps">SecretProps</a>
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Secret.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Secret.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.Secret.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.Secret.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Secret.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Secret.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Secret.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Secret.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Secret.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Secret.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.Secret.property.name">name</a></code> | <code>str</code> | Get secret name. |
+| <code><a href="#@winglang/sdk.aws.Secret.property.secretArn">secretArn</a></code> | <code>str</code> | AWS Secret ARN. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.Secret.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.aws.Secret.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+
+Get secret name.
+
+---
+
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="@winglang/sdk.aws.Secret.property.secretArn"></a>
+
+```wing
+secretArn: str;
+```
+
+- *Type:* str
+
+AWS Secret ARN.
 
 ---
 
@@ -765,53 +2294,651 @@ The ARN of the secret.
 ---
 
 
-## Classes <a name="Classes" id="Classes"></a>
+### Service <a name="Service" id="@winglang/sdk.aws.Service"></a>
 
-### Api <a name="Api" id="@winglang/sdk.aws.Api"></a>
+- *Implements:* <a href="#@winglang/sdk.aws.IAwsService">IAwsService</a>
 
-A helper class for working with AWS apis.
+Base class for AWS Services.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Api.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Service.Initializer"></a>
 
 ```wing
 bring aws;
 
-new aws.Api();
+new aws.Service(handler: IServiceHandler, props?: ServiceProps);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Service.Initializer.parameter.handler">handler</a></code> | <code><a href="#@winglang/sdk.cloud.IServiceHandler">IServiceHandler</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.aws.Service.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.ServiceProps">ServiceProps</a></code> | *No description.* |
 
 ---
 
+##### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.Service.Initializer.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IServiceHandler">IServiceHandler</a>
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Service.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ServiceProps">ServiceProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Service.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
+| <code><a href="#@winglang/sdk.aws.Service.addNetwork">addNetwork</a></code> | Adds the host to the specified network. |
+| <code><a href="#@winglang/sdk.aws.Service.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
+
+---
+
+##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.aws.Service.addEnvironment"></a>
+
+```wing
+addEnvironment(name: str, value: str): void
+```
+
+Add an environment variable to the function.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.aws.Service.addEnvironment.parameter.name"></a>
+
+- *Type:* str
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.aws.Service.addEnvironment.parameter.value"></a>
+
+- *Type:* str
+
+---
+
+##### `addNetwork` <a name="addNetwork" id="@winglang/sdk.aws.Service.addNetwork"></a>
+
+```wing
+addNetwork(config: NetworkConfig): void
+```
+
+Adds the host to the specified network.
+
+###### `config`<sup>Required</sup> <a name="config" id="@winglang/sdk.aws.Service.addNetwork.parameter.config"></a>
+
+- *Type:* <a href="#@winglang/sdk.aws.NetworkConfig">NetworkConfig</a>
+
+---
+
+##### `addPolicyStatements` <a name="addPolicyStatements" id="@winglang/sdk.aws.Service.addPolicyStatements"></a>
+
+```wing
+addPolicyStatements(...policies: Array<PolicyStatement>): void
+```
+
+Add policy statements to the function's IAM role.
+
+###### `policies`<sup>Required</sup> <a name="policies" id="@winglang/sdk.aws.Service.addPolicyStatements.parameter.policies"></a>
+
+- *Type:* <a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.aws.Api.from">from</a></code> | If the api is an AWS RestApi, return a helper interface for working with it. |
+| <code><a href="#@winglang/sdk.aws.Service.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Service.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
-##### `from` <a name="from" id="@winglang/sdk.aws.Api.from"></a>
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.Service.onLiftType"></a>
 
 ```wing
 bring aws;
 
-aws.Api.from(api: Api);
+aws.Service.onLiftType(host: IInflightHost, ops: MutArray<str>);
 ```
 
-If the api is an AWS RestApi, return a helper interface for working with it.
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
 
-###### `api`<sup>Required</sup> <a name="api" id="@winglang/sdk.aws.Api.from.parameter.api"></a>
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
 
-- *Type:* <a href="#@winglang/sdk.cloud.Api">Api</a>
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
 
-The cloud.Api.
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Service.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Service.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Service.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Service.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Service.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Service.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.Service.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
+| <code><a href="#@winglang/sdk.aws.Service.property.clusterName">clusterName</a></code> | <code>str</code> | AWS ECS cluster name. |
+| <code><a href="#@winglang/sdk.aws.Service.property.serviceName">serviceName</a></code> | <code>str</code> | AWS ECS service name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.Service.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `env`<sup>Required</sup> <a name="env" id="@winglang/sdk.aws.Service.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+Returns the set of environment variables for this function.
+
+---
+
+##### `clusterName`<sup>Required</sup> <a name="clusterName" id="@winglang/sdk.aws.Service.property.clusterName"></a>
+
+```wing
+clusterName: str;
+```
+
+- *Type:* str
+
+AWS ECS cluster name.
+
+---
+
+##### `serviceName`<sup>Required</sup> <a name="serviceName" id="@winglang/sdk.aws.Service.property.serviceName"></a>
+
+```wing
+serviceName: str;
+```
+
+- *Type:* str
+
+AWS ECS service name.
 
 ---
 
 
+### Topic <a name="Topic" id="@winglang/sdk.aws.Topic"></a>
+
+- *Implements:* <a href="#@winglang/sdk.aws.IAwsTopic">IAwsTopic</a>
+
+Base class for AWS Topics.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Topic.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Topic(props?: TopicProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Topic.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.TopicProps">TopicProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Topic.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.TopicProps">TopicProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Topic.onMessage">onMessage</a></code> | Run an inflight whenever an message is published to the topic. |
+| <code><a href="#@winglang/sdk.aws.Topic.subscribeQueue">subscribeQueue</a></code> | Subscribing queue to the topic. |
+
+---
+
+##### `onMessage` <a name="onMessage" id="@winglang/sdk.aws.Topic.onMessage"></a>
+
+```wing
+onMessage(inflight: ITopicOnMessageHandler, props?: TopicOnMessageOptions): Function
+```
+
+Run an inflight whenever an message is published to the topic.
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.aws.Topic.onMessage.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Topic.onMessage.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.TopicOnMessageOptions">TopicOnMessageOptions</a>
+
+---
+
+##### `subscribeQueue` <a name="subscribeQueue" id="@winglang/sdk.aws.Topic.subscribeQueue"></a>
+
+```wing
+subscribeQueue(queue: Queue, props?: TopicSubscribeQueueOptions): void
+```
+
+Subscribing queue to the topic.
+
+###### `queue`<sup>Required</sup> <a name="queue" id="@winglang/sdk.aws.Topic.subscribeQueue.parameter.queue"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Topic.subscribeQueue.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions">TopicSubscribeQueueOptions</a>
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Topic.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Topic.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+| <code><a href="#@winglang/sdk.aws.Topic.from">from</a></code> | If the topic is an AWS SNS, return a helper interface for working with it. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.Topic.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.Topic.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Topic.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Topic.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Topic.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Topic.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Topic.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Topic.from"></a>
+
+```wing
+bring aws;
+
+aws.Topic.from(topic: Topic);
+```
+
+If the topic is an AWS SNS, return a helper interface for working with it.
+
+###### `topic`<sup>Required</sup> <a name="topic" id="@winglang/sdk.aws.Topic.from.parameter.topic"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Topic">Topic</a>
+
+The cloud.Topic.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Topic.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.Topic.property.topicArn">topicArn</a></code> | <code>str</code> | AWS Topic arn. |
+| <code><a href="#@winglang/sdk.aws.Topic.property.topicName">topicName</a></code> | <code>str</code> | AWS Topic name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.Topic.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `topicArn`<sup>Required</sup> <a name="topicArn" id="@winglang/sdk.aws.Topic.property.topicArn"></a>
+
+```wing
+topicArn: str;
+```
+
+- *Type:* str
+
+AWS Topic arn.
+
+---
+
+##### `topicName`<sup>Required</sup> <a name="topicName" id="@winglang/sdk.aws.Topic.property.topicName"></a>
+
+```wing
+topicName: str;
+```
+
+- *Type:* str
+
+AWS Topic name.
+
+---
+
+
+### Website <a name="Website" id="@winglang/sdk.aws.Website"></a>
+
+- *Implements:* <a href="#@winglang/sdk.aws.IAwsWebsite">IAwsWebsite</a>
+
+Base class for AWS Websites.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Website.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Website(props: WebsiteProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Website.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.aws.Website.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.WebsiteProps">WebsiteProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Website.addFile">addFile</a></code> | Add a file to the website during deployment. |
+| <code><a href="#@winglang/sdk.aws.Website.addJson">addJson</a></code> | Add a JSON file with custom values during the website's deployment. |
+
+---
+
+##### `addFile` <a name="addFile" id="@winglang/sdk.aws.Website.addFile"></a>
+
+```wing
+addFile(path: str, data: str, options?: AddFileOptions): str
+```
+
+Add a file to the website during deployment.
+
+If the path conflicts with file path from the website's static assets, an error will be thrown.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Website.addFile.parameter.path"></a>
+
+- *Type:* str
+
+the file path it will be uploaded as.
+
+---
+
+###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.aws.Website.addFile.parameter.data"></a>
+
+- *Type:* str
+
+the data to write to the file.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.aws.Website.addFile.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.AddFileOptions">AddFileOptions</a>
+
+configure the file's options.
+
+---
+
+##### `addJson` <a name="addJson" id="@winglang/sdk.aws.Website.addJson"></a>
+
+```wing
+addJson(path: str, data: Json): str
+```
+
+Add a JSON file with custom values during the website's deployment.
+
+If the path conflicts with file path from the website's static assets, an error will be thrown.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Website.addJson.parameter.path"></a>
+
+- *Type:* str
+
+the file path it will be uploaded as.
+
+---
+
+###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.aws.Website.addJson.parameter.data"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+the data to write to the file.
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Website.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Website.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+| <code><a href="#@winglang/sdk.aws.Website.from">from</a></code> | If the bucket is an AWS Bucket, return a helper interface for working with it. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.Website.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.Website.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Website.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Website.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Website.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Website.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Website.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Website.from"></a>
+
+```wing
+bring aws;
+
+aws.Website.from(website: Website);
+```
+
+If the bucket is an AWS Bucket, return a helper interface for working with it.
+
+###### `website`<sup>Required</sup> <a name="website" id="@winglang/sdk.aws.Website.from.parameter.website"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Website">Website</a>
+
+The cloud.Bucket.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Website.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.Website.property.path">path</a></code> | <code>str</code> | Absolute local path to the website's static files. |
+| <code><a href="#@winglang/sdk.aws.Website.property.url">url</a></code> | <code>str</code> | The website's url. |
+| <code><a href="#@winglang/sdk.aws.Website.property.bucketArn">bucketArn</a></code> | <code>str</code> | AWS Bucket arn. |
+| <code><a href="#@winglang/sdk.aws.Website.property.bucketName">bucketName</a></code> | <code>str</code> | AWS Bucket name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.Website.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.aws.Website.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+Absolute local path to the website's static files.
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.aws.Website.property.url"></a>
+
+```wing
+url: str;
+```
+
+- *Type:* str
+
+The website's url.
+
+---
+
+##### `bucketArn`<sup>Required</sup> <a name="bucketArn" id="@winglang/sdk.aws.Website.property.bucketArn"></a>
+
+```wing
+bucketArn: str;
+```
+
+- *Type:* str
+
+AWS Bucket arn.
+
+---
+
+##### `bucketName`<sup>Required</sup> <a name="bucketName" id="@winglang/sdk.aws.Website.property.bucketName"></a>
+
+```wing
+bucketName: str;
+```
+
+- *Type:* str
+
+AWS Bucket name.
+
+---
+
+
+## Classes <a name="Classes" id="Classes"></a>
 
 ### ApiEndpointHandler <a name="ApiEndpointHandler" id="@winglang/sdk.aws.ApiEndpointHandler"></a>
 
@@ -898,52 +3025,6 @@ Returns `true` if `obj` implements `IAwsInflightHost`.
 
 
 
-### Bucket <a name="Bucket" id="@winglang/sdk.aws.Bucket"></a>
-
-A helper class for working with AWS buckets.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Bucket.Initializer"></a>
-
-```wing
-bring aws;
-
-new aws.Bucket();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.Bucket.from">from</a></code> | If the bucket is an AWS Bucket, return a helper interface for working with it. |
-
----
-
-##### `from` <a name="from" id="@winglang/sdk.aws.Bucket.from"></a>
-
-```wing
-bring aws;
-
-aws.Bucket.from(bucket: Bucket);
-```
-
-If the bucket is an AWS Bucket, return a helper interface for working with it.
-
-###### `bucket`<sup>Required</sup> <a name="bucket" id="@winglang/sdk.aws.Bucket.from.parameter.bucket"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>
-
-The cloud.Bucket.
-
----
-
-
-
 ### BucketEventHandler <a name="BucketEventHandler" id="@winglang/sdk.aws.BucketEventHandler"></a>
 
 Utility class to work with bucket event handlers.
@@ -998,157 +3079,6 @@ the event type.
 
 
 
-### Counter <a name="Counter" id="@winglang/sdk.aws.Counter"></a>
-
-A helper class for working with AWS Counters.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Counter.Initializer"></a>
-
-```wing
-bring aws;
-
-new aws.Counter();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.Counter.from">from</a></code> | If the table is an AWS Counter, return a helper interface for working with it. |
-
----
-
-##### `from` <a name="from" id="@winglang/sdk.aws.Counter.from"></a>
-
-```wing
-bring aws;
-
-aws.Counter.from(counter: Counter);
-```
-
-If the table is an AWS Counter, return a helper interface for working with it.
-
-###### `counter`<sup>Required</sup> <a name="counter" id="@winglang/sdk.aws.Counter.from.parameter.counter"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.Counter">Counter</a>
-
-The cloud.Counter.
-
----
-
-
-
-### Function <a name="Function" id="@winglang/sdk.aws.Function"></a>
-
-A helper class for working with AWS functions.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Function.Initializer"></a>
-
-```wing
-bring aws;
-
-new aws.Function();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.Function.context">context</a></code> | Returns the current Lambda invocation context, if the host is an AWS Lambda. |
-| <code><a href="#@winglang/sdk.aws.Function.from">from</a></code> | If the inflight host is an AWS Lambda, return a helper interface for working with it. |
-
----
-
-##### `context` <a name="context" id="@winglang/sdk.aws.Function.context"></a>
-
-```wing
-bring aws;
-
-aws.Function.context();
-```
-
-Returns the current Lambda invocation context, if the host is an AWS Lambda.
-
-> [https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html)
-
-##### `from` <a name="from" id="@winglang/sdk.aws.Function.from"></a>
-
-```wing
-bring aws;
-
-aws.Function.from(host: IInflightHost);
-```
-
-If the inflight host is an AWS Lambda, return a helper interface for working with it.
-
-###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Function.from.parameter.host"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
-
-The inflight host.
-
----
-
-
-
-### Queue <a name="Queue" id="@winglang/sdk.aws.Queue"></a>
-
-A helper class for working with AWS queues.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Queue.Initializer"></a>
-
-```wing
-bring aws;
-
-new aws.Queue();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.Queue.from">from</a></code> | If the queue is an AWS SQS, return a helper interface for working with it. |
-
----
-
-##### `from` <a name="from" id="@winglang/sdk.aws.Queue.from"></a>
-
-```wing
-bring aws;
-
-aws.Queue.from(queue: Queue);
-```
-
-If the queue is an AWS SQS, return a helper interface for working with it.
-
-###### `queue`<sup>Required</sup> <a name="queue" id="@winglang/sdk.aws.Queue.from.parameter.queue"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
-
-The cloud.Queue.
-
----
-
-
-
 ### QueueSetConsumerHandler <a name="QueueSetConsumerHandler" id="@winglang/sdk.aws.QueueSetConsumerHandler"></a>
 
 Utility class for working with the queue consumer handler.
@@ -1195,52 +3125,6 @@ The queue consumer handler.
 
 
 
-### Topic <a name="Topic" id="@winglang/sdk.aws.Topic"></a>
-
-A helper class for working with AWS topics.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Topic.Initializer"></a>
-
-```wing
-bring aws;
-
-new aws.Topic();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.Topic.from">from</a></code> | If the topic is an AWS SNS, return a helper interface for working with it. |
-
----
-
-##### `from` <a name="from" id="@winglang/sdk.aws.Topic.from"></a>
-
-```wing
-bring aws;
-
-aws.Topic.from(topic: Topic);
-```
-
-If the topic is an AWS SNS, return a helper interface for working with it.
-
-###### `topic`<sup>Required</sup> <a name="topic" id="@winglang/sdk.aws.Topic.from.parameter.topic"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.Topic">Topic</a>
-
-The cloud.Topic.
-
----
-
-
-
 ### TopicOnMessageHandler <a name="TopicOnMessageHandler" id="@winglang/sdk.aws.TopicOnMessageHandler"></a>
 
 A helper class for working with AWS topic on message handlers.
@@ -1282,52 +3166,6 @@ Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`.
 - *Type:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
 
 The `onMessage` handler.
-
----
-
-
-
-### Website <a name="Website" id="@winglang/sdk.aws.Website"></a>
-
-A helper class for working with AWS buckets.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Website.Initializer"></a>
-
-```wing
-bring aws;
-
-new aws.Website();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.Website.from">from</a></code> | If the bucket is an AWS Bucket, return a helper interface for working with it. |
-
----
-
-##### `from` <a name="from" id="@winglang/sdk.aws.Website.from"></a>
-
-```wing
-bring aws;
-
-aws.Website.from(website: Website);
-```
-
-If the bucket is an AWS Bucket, return a helper interface for working with it.
-
-###### `website`<sup>Required</sup> <a name="website" id="@winglang/sdk.aws.Website.from.parameter.website"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.Website">Website</a>
-
-The cloud.Bucket.
 
 ---
 
@@ -1516,7 +3354,7 @@ Resources.
 
 ### IAwsApi <a name="IAwsApi" id="@winglang/sdk.aws.IAwsApi"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsApi">IAwsApi</a>
+- *Implemented By:* <a href="#@winglang/sdk.aws.Api">Api</a>, <a href="#@winglang/sdk.aws.IAwsApi">IAwsApi</a>
 
 A shared interface for AWS api.
 
@@ -1608,7 +3446,7 @@ RestApi stage name.
 
 ### IAwsBucket <a name="IAwsBucket" id="@winglang/sdk.aws.IAwsBucket"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsBucket">IAwsBucket</a>
+- *Implemented By:* <a href="#@winglang/sdk.aws.Bucket">Bucket</a>, <a href="#@winglang/sdk.aws.IAwsBucket">IAwsBucket</a>
 
 A shared interface for AWS buckets.
 
@@ -1661,7 +3499,7 @@ AWS Bucket name.
 
 ### IAwsCounter <a name="IAwsCounter" id="@winglang/sdk.aws.IAwsCounter"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsCounter">IAwsCounter</a>
+- *Implemented By:* <a href="#@winglang/sdk.aws.Counter">Counter</a>, <a href="#@winglang/sdk.aws.IAwsCounter">IAwsCounter</a>
 
 A shared interface for AWS Counter.
 
@@ -1703,7 +3541,7 @@ AWS Dynamodb name.
 
 - *Extends:* <a href="#@winglang/sdk.aws.IAwsInflightHost">IAwsInflightHost</a>
 
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>
+- *Implemented By:* <a href="#@winglang/sdk.aws.Function">Function</a>, <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>
 
 A shared interface for AWS functions.
 
@@ -1781,7 +3619,7 @@ AWS Function name.
 
 - *Extends:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
 
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>, <a href="#@winglang/sdk.aws.IAwsInflightHost">IAwsInflightHost</a>
+- *Implemented By:* <a href="#@winglang/sdk.aws.Function">Function</a>, <a href="#@winglang/sdk.aws.Service">Service</a>, <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>, <a href="#@winglang/sdk.aws.IAwsInflightHost">IAwsInflightHost</a>, <a href="#@winglang/sdk.aws.IAwsService">IAwsService</a>
 
 Represents an `IInflightHost` on AWS.
 
@@ -1846,7 +3684,7 @@ The tree node.
 
 ### IAwsQueue <a name="IAwsQueue" id="@winglang/sdk.aws.IAwsQueue"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsQueue">IAwsQueue</a>
+- *Implemented By:* <a href="#@winglang/sdk.aws.Queue">Queue</a>, <a href="#@winglang/sdk.aws.IAwsQueue">IAwsQueue</a>
 
 A shared interface for AWS queues.
 
@@ -1897,9 +3735,91 @@ AWS Queue url.
 
 ---
 
+### IAwsSecret <a name="IAwsSecret" id="@winglang/sdk.aws.IAwsSecret"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.Secret">Secret</a>, <a href="#@winglang/sdk.aws.IAwsSecret">IAwsSecret</a>
+
+Shared interface for AWS Secrets.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsSecret.property.secretArn">secretArn</a></code> | <code>str</code> | AWS Secret ARN. |
+
+---
+
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="@winglang/sdk.aws.IAwsSecret.property.secretArn"></a>
+
+```wing
+secretArn: str;
+```
+
+- *Type:* str
+
+AWS Secret ARN.
+
+---
+
+### IAwsService <a name="IAwsService" id="@winglang/sdk.aws.IAwsService"></a>
+
+- *Extends:* <a href="#@winglang/sdk.aws.IAwsInflightHost">IAwsInflightHost</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.Service">Service</a>, <a href="#@winglang/sdk.aws.IAwsService">IAwsService</a>
+
+Shared interface for AWS Services.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsService.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.IAwsService.property.clusterName">clusterName</a></code> | <code>str</code> | AWS ECS cluster name. |
+| <code><a href="#@winglang/sdk.aws.IAwsService.property.serviceName">serviceName</a></code> | <code>str</code> | AWS ECS service name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.IAwsService.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `clusterName`<sup>Required</sup> <a name="clusterName" id="@winglang/sdk.aws.IAwsService.property.clusterName"></a>
+
+```wing
+clusterName: str;
+```
+
+- *Type:* str
+
+AWS ECS cluster name.
+
+---
+
+##### `serviceName`<sup>Required</sup> <a name="serviceName" id="@winglang/sdk.aws.IAwsService.property.serviceName"></a>
+
+```wing
+serviceName: str;
+```
+
+- *Type:* str
+
+AWS ECS service name.
+
+---
+
 ### IAwsTopic <a name="IAwsTopic" id="@winglang/sdk.aws.IAwsTopic"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsTopic">IAwsTopic</a>
+- *Implemented By:* <a href="#@winglang/sdk.aws.Topic">Topic</a>, <a href="#@winglang/sdk.aws.IAwsTopic">IAwsTopic</a>
 
 A shared interface for AWS topics.
 
@@ -1939,7 +3859,7 @@ AWS Topic name.
 
 ### IAwsWebsite <a name="IAwsWebsite" id="@winglang/sdk.aws.IAwsWebsite"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsWebsite">IAwsWebsite</a>
+- *Implemented By:* <a href="#@winglang/sdk.aws.Website">Website</a>, <a href="#@winglang/sdk.aws.IAwsWebsite">IAwsWebsite</a>
 
 A shared interface for AWS website.
 

@@ -1,7 +1,8 @@
 import type { APIGatewayProxyEvent } from "aws-lambda";
-import { cloud } from "..";
-import { lift } from "../core";
-
+import { InflightClient, lift } from "../core";
+import { ResourceNames, CaseConventions } from "../shared/resource-names";
+import { IInflightHost } from "../std";
+import * as cloud from "../cloud";
 /**
  * The stage name for the API, used in its url.
  * @see https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html
@@ -44,9 +45,17 @@ export interface IAwsApi {
 }
 
 /**
- * A helper class for working with AWS apis.
+ * Base class for AWS API.
  */
-export class Api {
+export abstract class Api extends cloud.Api implements IAwsApi {
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("api", "api.inflight"),
+      "ApiClient"
+    );
+  }
+
   /**
    * If the api is an AWS RestApi, return a helper interface for
    * working with it.
@@ -69,6 +78,42 @@ export class Api {
       typeof obj.deploymentId === "string"
     );
   }
+
+  public abstract get restApiArn(): string;
+  public abstract get restApiId(): string;
+  public abstract get restApiName(): string;
+  public abstract get stageName(): string;
+  public abstract get invokeUrl(): string;
+  public abstract get deploymentId(): string;
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    host.addEnvironment(this.urlEnvName(), this.url);
+    super.onLift(host, ops);
+  }
+
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return {
+      $url: `process.env["${this.urlEnvName()}"]`,
+    };
+  }
+
+  private urlEnvName(): string {
+    return ResourceNames.generateName(this, {
+      disallowedRegex: /[^a-zA-Z0-9_]/,
+      sep: "_",
+      case: CaseConventions.UPPERCASE,
+    });
+  }
+
+  public abstract get(path: string, inflight: cloud.IApiEndpointHandler, props?: cloud.ApiGetOptions): void;
+  public abstract post(path: string, inflight: cloud.IApiEndpointHandler, props?: cloud.ApiPostOptions): void;
+  public abstract put(path: string, inflight: cloud.IApiEndpointHandler, props?: cloud.ApiPutOptions): void;
+  public abstract delete(path: string, inflight: cloud.IApiEndpointHandler, props?: cloud.ApiDeleteOptions): void;
+  public abstract patch(path: string, inflight: cloud.IApiEndpointHandler, props?: cloud.ApiPatchOptions): void;
+  public abstract options(path: string, inflight: cloud.IApiEndpointHandler, props?: cloud.ApiOptionsOptions): void;
+  public abstract head(path: string, inflight: cloud.IApiEndpointHandler, props?: cloud.ApiHeadOptions): void;
+  public abstract connect(path: string, inflight: cloud.IApiEndpointHandler, props?: cloud.ApiConnectOptions): void;
 }
 
 /**

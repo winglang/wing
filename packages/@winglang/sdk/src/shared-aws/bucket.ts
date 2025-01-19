@@ -27,9 +27,9 @@ export interface IAwsBucket {
 }
 
 /**
- * A helper class for working with AWS buckets.
+ * Base class for AWS Buckets
  */
-export class Bucket {
+export abstract class Bucket extends cloud.Bucket implements IAwsBucket {
   /**
    * If the bucket is an AWS Bucket, return a helper interface for
    * working with it.
@@ -46,6 +46,63 @@ export class Bucket {
     return (
       typeof obj.bucketArn === "string" && typeof obj.bucketName === "string"
     );
+  }
+
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("bucket", "bucket.inflight"),
+      "BucketClient"
+    );
+  }
+
+  public abstract get bucketArn(): string;
+  public abstract get bucketName(): string;
+  public abstract get bucketDomainName(): string;
+
+  public abstract addObject(path: string, content: string): void;
+  public abstract addCorsRule(value: cloud.BucketCorsOptions): void;
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    host.addEnvironment(this.envName(), this.bucketName);
+
+    if (AwsInflightHost.isAwsInflightHost(host)) {
+      host.addPolicyStatements(...calculateBucketPermissions(this.bucketArn, ops));
+    }
+
+    super.onLift(host, ops);
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.SIGNED_URL]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+    };
+  }
+
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return {
+      $bucketName: `process.env["${this.envName()}"]`,
+    };
+  }
+
+  private envName(): string {
+    return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 }
 
@@ -229,3 +286,4 @@ export class BucketEventHandler {
     });
   }
 }
+

@@ -10,14 +10,12 @@ import { LambdaDestination } from "aws-cdk-lib/aws-s3-notifications";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, std } from "@winglang/sdk";
-import { calculateBucketPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsBucket } from "@winglang/sdk/lib/shared-aws/bucket";
+import { Bucket as AwsBucket } from "@winglang/sdk/lib/shared-aws/bucket";
 import {
   IAwsCdkFunction,
-  addPolicyStatements,
   isAwsCdkFunction,
 } from "./function";
-import { LiftMap, lift, InflightClient } from "@winglang/sdk/lib/core";
+import { lift } from "@winglang/sdk/lib/core";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -30,15 +28,7 @@ const EVENTS = {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.Bucket implements IAwsBucket {
-  /** @internal */
-  public static _toInflightType(): string {
-    return InflightClient.forType(
-      __filename.replace("bucket", "bucket.inflight"),
-      "BucketClient"
-    );
-  }
-
+export class Bucket extends AwsBucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
   private readonly forceDestroy: boolean;
@@ -116,27 +106,6 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     return fn;
   }
 
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {
-      [cloud.BucketInflightMethods.DELETE]: [],
-      [cloud.BucketInflightMethods.GET]: [],
-      [cloud.BucketInflightMethods.GET_JSON]: [],
-      [cloud.BucketInflightMethods.LIST]: [],
-      [cloud.BucketInflightMethods.PUT]: [],
-      [cloud.BucketInflightMethods.PUT_JSON]: [],
-      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
-      [cloud.BucketInflightMethods.EXISTS]: [],
-      [cloud.BucketInflightMethods.TRY_GET]: [],
-      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
-      [cloud.BucketInflightMethods.TRY_DELETE]: [],
-      [cloud.BucketInflightMethods.SIGNED_URL]: [],
-      [cloud.BucketInflightMethods.METADATA]: [],
-      [cloud.BucketInflightMethods.COPY]: [],
-      [cloud.BucketInflightMethods.RENAME]: [],
-    };
-  }
-
   public onCreate(
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions
@@ -210,34 +179,6 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     this.onCreate(inflight, opts);
     this.onDelete(inflight, opts);
     this.onUpdate(inflight, opts);
-  }
-
-  public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!isAwsCdkFunction(host)) {
-      throw new Error("Expected 'host' to implement IAwsCdkFunction");
-    }
-
-    addPolicyStatements(
-      host.awscdkFunction,
-      calculateBucketPermissions(this.bucket.bucketArn, ops)
-    );
-
-    // The bucket name needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
-    host.addEnvironment(this.envName(), this.bucket.bucketName);
-
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $bucketName: `process.env["${this.envName()}"]`,
-    };
-  }
-
-  private envName(): string {
-    return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 
   public get bucketArn(): string {

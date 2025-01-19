@@ -28,9 +28,19 @@ export interface IAwsQueue {
 }
 
 /**
- * A helper class for working with AWS queues.
+ * Base class for AWS Queues
  */
-export class Queue {
+export abstract class Queue extends cloud.Queue implements IAwsQueue {
+
+    /** @internal */
+    public static _toInflightType(): string {
+      return InflightClient.forType(
+        __filename.replace("queue", "queue.inflight"),
+        "QueueClient"
+      );
+    }
+  
+
   /**
    * If the queue is an AWS SQS, return a helper interface for
    * working with it.
@@ -43,12 +53,55 @@ export class Queue {
     return undefined;
   }
 
+  public abstract get queueArn(): string;
+  public abstract get queueName(): string;
+  public abstract get queueUrl(): string;
+
+  public abstract setConsumer(handler: cloud.IQueueSetConsumerHandler, props?: cloud.QueueSetConsumerOptions): cloud.Function;
+
   private static isAwsQueue(obj: any): obj is IAwsQueue {
     return (
       typeof obj.queueArn === "string" &&
       typeof obj.queueName === "string" &&
       typeof obj.queueUrl === "string"
     );
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.QueueInflightMethods.PURGE]: [],
+      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
+      [cloud.QueueInflightMethods.POP]: [],
+    };
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    const env = this.envName();
+
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
+    host.addPolicyStatements(...calculateQueuePermissions(this.queueArn, ops));
+
+    // The queue url needs to be passed through an environment variable since
+    // it may not be resolved until deployment time.
+    host.addEnvironment(env, this.queueUrl);
+
+    super.onLift(host, ops);
+  }
+
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return {
+      $queueUrlOrArn: `process.env["${this.envName()}"]`,
+    };
+  }
+
+  private envName(): string {
+    return `QUEUE_URL_${this.node.addr.slice(-8)}`;
   }
 }
 

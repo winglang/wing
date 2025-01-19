@@ -4,29 +4,18 @@ import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { std, cloud } from "@winglang/sdk";
-import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import {
-  IAwsQueue,
   Queue as AwsQueue,
   QueueSetConsumerHandler,
 } from "@winglang/sdk/lib/shared-aws/queue";
-import { addPolicyStatements, isAwsCdkFunction } from "./function";
-import { InflightClient, LiftMap } from "@winglang/sdk/lib/core";
+import { isAwsCdkFunction } from "./function";
 
 /**
  * AWS implementation of `cloud.Queue`.
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
-export class Queue extends cloud.Queue implements IAwsQueue {
-  /** @internal */
-  public static _toInflightType(): string {
-    return InflightClient.forType(
-      __filename.replace("queue", "queue.inflight"),
-      "QueueClient"
-    );
-  }
-
+export class Queue extends AwsQueue  {
   private readonly queue: SQSQueue;
   private readonly timeout: std.Duration;
 
@@ -99,46 +88,6 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     });
 
     return fn;
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {
-      [cloud.QueueInflightMethods.PUSH]: [],
-      [cloud.QueueInflightMethods.PURGE]: [],
-      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
-      [cloud.QueueInflightMethods.POP]: [],
-    };
-  }
-
-  public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!isAwsCdkFunction(host)) {
-      throw new Error("Expected 'host' to implement IAwsCdkFunction");
-    }
-
-    const env = this.envName();
-
-    addPolicyStatements(
-      host.awscdkFunction,
-      calculateQueuePermissions(this.queue.queueArn, ops)
-    );
-
-    // The queue url needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
-    host.addEnvironment(env, this.queue.queueUrl);
-
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $queueUrlOrArn: `process.env["${this.envName()}"]`,
-    };
-  }
-
-  private envName(): string {
-    return `QUEUE_ARN_${this.node.addr.slice(-8)}`;
   }
 
   public get queueArn(): string {

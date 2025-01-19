@@ -4,6 +4,8 @@ import * as tfgcp from "../../src/target-tf-gcp";
 
 test("throw error when no projectId provided", () => {
   // GIVEN
+  delete process.env.GOOGLE_PROJECT_ID;
+
   const props = {
     projectId: undefined as any,
   };
@@ -33,6 +35,8 @@ test("throw error when no region provided", () => {
   const props = {
     region: undefined as any,
   };
+
+  delete process.env.GOOGLE_REGION;
 
   // THEN
   expect(() => new GcpApp(props)).toThrow(
