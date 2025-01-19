@@ -50,7 +50,6 @@ export interface FunctionPermissionsOptions {
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends AwsFunction {
-
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
@@ -283,7 +282,6 @@ export class Function extends AwsFunction {
     this.bundleHash = bundle.hash;
     this.assetPath = asset.path;
   }
-
 
   /**
    * Add a Lambda Layer to the function

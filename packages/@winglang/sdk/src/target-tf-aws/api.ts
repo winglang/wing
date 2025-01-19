@@ -12,10 +12,7 @@ import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { VpcEndpoint } from "../.gen/providers/aws/vpc-endpoint";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import {
-  NameOptions,
-  ResourceNames,
-} from "../shared/resource-names";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { ApiEndpointHandler, Api as AwsApi, STAGE_NAME } from "../shared-aws";
 import { createApiDefaultResponse } from "../shared-aws/api.default";
 import { Node } from "../std";

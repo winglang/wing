@@ -30,6 +30,14 @@ export interface IAwsBucket {
  * Base class for AWS Buckets
  */
 export abstract class Bucket extends cloud.Bucket implements IAwsBucket {
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("bucket", "bucket.inflight"),
+      "BucketClient"
+    );
+  }
+
   /**
    * If the bucket is an AWS Bucket, return a helper interface for
    * working with it.
@@ -48,14 +56,6 @@ export abstract class Bucket extends cloud.Bucket implements IAwsBucket {
     );
   }
 
-  /** @internal */
-  public static _toInflightType(): string {
-    return InflightClient.forType(
-      __filename.replace("bucket", "bucket.inflight"),
-      "BucketClient"
-    );
-  }
-
   public abstract get bucketArn(): string;
   public abstract get bucketName(): string;
   public abstract get bucketDomainName(): string;
@@ -67,7 +67,9 @@ export abstract class Bucket extends cloud.Bucket implements IAwsBucket {
     host.addEnvironment(this.envName(), this.bucketName);
 
     if (AwsInflightHost.isAwsInflightHost(host)) {
-      host.addPolicyStatements(...calculateBucketPermissions(this.bucketArn, ops));
+      host.addPolicyStatements(
+        ...calculateBucketPermissions(this.bucketArn, ops)
+      );
     }
 
     super.onLift(host, ops);
@@ -286,4 +288,3 @@ export class BucketEventHandler {
     });
   }
 }
-

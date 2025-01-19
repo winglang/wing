@@ -1,11 +1,13 @@
-import { cloud } from "..";
-import { TopicSubscribeQueueOptions } from "../cloud/topic";
-import { ITopicOnMessageHandler } from "../cloud/topic";
-import { TopicOnMessageOptions } from "../cloud/topic";
-import { InflightClient, lift, LiftMap } from "../core";
-import { IInflightHost } from "../std";
 import { AwsInflightHost } from "./inflight-host";
 import { calculateTopicPermissions } from "./permissions";
+import { cloud } from "..";
+import {
+  TopicSubscribeQueueOptions,
+  ITopicOnMessageHandler,
+  TopicOnMessageOptions,
+} from "../cloud/topic";
+import { InflightClient, lift, LiftMap } from "../core";
+import { IInflightHost } from "../std";
 
 /**
  * A shared interface for AWS topics.
@@ -26,7 +28,6 @@ export interface IAwsTopic {
  * Base class for AWS Topics
  */
 export abstract class Topic extends cloud.Topic implements IAwsTopic {
-
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(
@@ -60,13 +61,19 @@ export abstract class Topic extends cloud.Topic implements IAwsTopic {
    * Run an inflight whenever an message is published to the topic.
    * @abstract
    */
-  public abstract onMessage(inflight: ITopicOnMessageHandler, props?: TopicOnMessageOptions): cloud.Function;
+  public abstract onMessage(
+    inflight: ITopicOnMessageHandler,
+    props?: TopicOnMessageOptions
+  ): cloud.Function;
 
   /**
    * Subscribing queue to the topic
    * @abstract
    */
-  public abstract subscribeQueue(queue: cloud.Queue, props?: TopicSubscribeQueueOptions): void;
+  public abstract subscribeQueue(
+    queue: cloud.Queue,
+    props?: TopicSubscribeQueueOptions
+  ): void;
 
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!AwsInflightHost.isAwsInflightHost(host)) {
@@ -97,7 +104,6 @@ export abstract class Topic extends cloud.Topic implements IAwsTopic {
   private envName(): string {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
-
 }
 
 /**

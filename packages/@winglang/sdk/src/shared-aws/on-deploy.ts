@@ -4,9 +4,7 @@ import { InflightClient } from "../core";
 /**
  * Preflight interface for `OnDeploy`.
  */
-export interface IAwsOnDeploy {
-
-}
+export interface IAwsOnDeploy {}
 
 /**
  * AWS implementation of `cloud.OnDeploy`.

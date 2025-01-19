@@ -55,7 +55,6 @@ export class Queue extends AwsQueue {
     this.queue = new SqsQueue(this, "Default", queueOpt);
   }
 
-
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}

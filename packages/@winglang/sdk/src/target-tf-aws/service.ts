@@ -28,7 +28,7 @@ import {
  * Converts the service handler into a DockerFile that is then built and published to an ECR repository,
  * on deployment. The service is then run as a Fargate task in an ECS cluster.
  */
-export class Service extends AwsService  {
+export class Service extends AwsService {
   private workdir: string;
   private wrapperEntrypoint: string;
   private policyStatments?: any[];

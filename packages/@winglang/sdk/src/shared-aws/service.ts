@@ -1,7 +1,11 @@
 import { resolve } from "path";
-import { cloud, core } from "..";
-import { AwsInflightHost, IAwsInflightHost, NetworkConfig } from "./inflight-host";
+import {
+  AwsInflightHost,
+  IAwsInflightHost,
+  NetworkConfig,
+} from "./inflight-host";
 import { PolicyStatement } from "./types";
+import { cloud, core } from "..";
 import { IInflightHost } from "../std";
 
 /**
@@ -23,7 +27,6 @@ export interface IAwsService extends IAwsInflightHost {
  * Base class for AWS Services
  */
 export abstract class Service extends cloud.Service implements IAwsService {
-
   /** @internal */
   public static _toInflightType(): string {
     return core.InflightClient.forType(
@@ -79,7 +82,6 @@ export abstract class Service extends cloud.Service implements IAwsService {
   private envName(): string {
     return `SERVICE_NAME_${this.node.addr.slice(-8)}`;
   }
-
 }
 
 export function createServiceDockerfile(assetName: string) {

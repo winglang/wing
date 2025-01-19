@@ -1,8 +1,8 @@
+import { AwsInflightHost } from "./inflight-host";
+import { calculateCounterPermissions } from "./permissions";
 import { cloud } from "..";
 import { InflightClient, LiftMap } from "../core";
 import { IInflightHost } from "../std";
-import { AwsInflightHost } from "./inflight-host";
-import { calculateCounterPermissions } from "./permissions";
 
 export const COUNTER_HASH_KEY = "id";
 
@@ -25,7 +25,6 @@ export interface IAwsCounter {
  * Base class for AWS Counters
  */
 export abstract class Counter extends cloud.Counter implements IAwsCounter {
-
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(
@@ -46,49 +45,49 @@ export abstract class Counter extends cloud.Counter implements IAwsCounter {
     return undefined;
   }
 
-  public abstract get dynamoTableArn(): string;
-  public abstract get dynamoTableName(): string;
-
-    /** @internal */
-    public get _liftMap(): LiftMap {
-      return {
-        [cloud.CounterInflightMethods.INC]: [],
-        [cloud.CounterInflightMethods.DEC]: [],
-        [cloud.CounterInflightMethods.PEEK]: [],
-        [cloud.CounterInflightMethods.SET]: [],
-      };
-    }
-  
-    public onLift(host: IInflightHost, ops: string[]): void {
-      if (!AwsInflightHost.isAwsInflightHost(host)) {
-        throw new Error("Host is expected to implement `IAwsInfightHost`");
-      }
-  
-      host.addPolicyStatements(
-        ...calculateCounterPermissions(this.dynamoTableArn, ops)
-      );
-  
-      host.addEnvironment(this.envName(), this.dynamoTableName);
-  
-      super.onLift(host, ops);
-    }
-  
-    /** @internal */
-    public _liftedState(): Record<string, string> {
-      return {
-        $tableName: `process.env["${this.envName()}"]`,
-        $initial: `${this.initial}`,
-      };
-    }
-  
-    private envName(): string {
-      return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
-    }
-  
   private static isAwsCounter(obj: any): obj is IAwsCounter {
     return (
       typeof obj.dynamoTableArn === "string" &&
       typeof obj.dynamoTableName === "string"
     );
+  }
+
+  public abstract get dynamoTableArn(): string;
+  public abstract get dynamoTableName(): string;
+
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.CounterInflightMethods.INC]: [],
+      [cloud.CounterInflightMethods.DEC]: [],
+      [cloud.CounterInflightMethods.PEEK]: [],
+      [cloud.CounterInflightMethods.SET]: [],
+    };
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
+    host.addPolicyStatements(
+      ...calculateCounterPermissions(this.dynamoTableArn, ops)
+    );
+
+    host.addEnvironment(this.envName(), this.dynamoTableName);
+
+    super.onLift(host, ops);
+  }
+
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return {
+      $tableName: `process.env["${this.envName()}"]`,
+      $initial: `${this.initial}`,
+    };
+  }
+
+  private envName(): string {
+    return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 }

@@ -82,8 +82,6 @@ export interface IAwsSecret {
  * Base class for AWS Secrets
  */
 export abstract class Secret extends cloud.Secret implements IAwsSecret {
-  private readonly isImportedSecret: boolean;
-
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(
@@ -91,6 +89,8 @@ export abstract class Secret extends cloud.Secret implements IAwsSecret {
       "SecretClient"
     );
   }
+
+  private readonly isImportedSecret: boolean;
 
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
@@ -116,12 +116,11 @@ export abstract class Secret extends cloud.Secret implements IAwsSecret {
       throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
-    const arnForPolicy = this.isImportedSecret ? this.secretArn : `${this.secretArn}-??????`;
+    const arnForPolicy = this.isImportedSecret
+      ? this.secretArn
+      : `${this.secretArn}-??????`;
 
-    host.addPolicyStatements(
-      ...calculateSecretPermissions(arnForPolicy, ops)
-    );
-
+    host.addPolicyStatements(...calculateSecretPermissions(arnForPolicy, ops));
 
     host.addEnvironment(this.envName(), this.secretArn);
 
@@ -138,5 +137,4 @@ export abstract class Secret extends cloud.Secret implements IAwsSecret {
   private envName(): string {
     return `SECRET_ARN_${this.node.addr.slice(-8)}`;
   }
-
 }

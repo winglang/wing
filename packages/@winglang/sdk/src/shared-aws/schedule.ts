@@ -2,12 +2,9 @@ import * as cloud from "../cloud";
 import { ScheduleOnTickOptions } from "../cloud";
 import { InflightClient, lift } from "../core";
 
-export interface IAwsSchedule {
-
-}
+export interface IAwsSchedule {}
 
 export abstract class Schedule extends cloud.Schedule implements IAwsSchedule {
-
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(

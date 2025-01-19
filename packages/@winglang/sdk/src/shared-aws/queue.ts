@@ -31,15 +31,13 @@ export interface IAwsQueue {
  * Base class for AWS Queues
  */
 export abstract class Queue extends cloud.Queue implements IAwsQueue {
-
-    /** @internal */
-    public static _toInflightType(): string {
-      return InflightClient.forType(
-        __filename.replace("queue", "queue.inflight"),
-        "QueueClient"
-      );
-    }
-  
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("queue", "queue.inflight"),
+      "QueueClient"
+    );
+  }
 
   /**
    * If the queue is an AWS SQS, return a helper interface for
@@ -53,12 +51,6 @@ export abstract class Queue extends cloud.Queue implements IAwsQueue {
     return undefined;
   }
 
-  public abstract get queueArn(): string;
-  public abstract get queueName(): string;
-  public abstract get queueUrl(): string;
-
-  public abstract setConsumer(handler: cloud.IQueueSetConsumerHandler, props?: cloud.QueueSetConsumerOptions): cloud.Function;
-
   private static isAwsQueue(obj: any): obj is IAwsQueue {
     return (
       typeof obj.queueArn === "string" &&
@@ -66,6 +58,15 @@ export abstract class Queue extends cloud.Queue implements IAwsQueue {
       typeof obj.queueUrl === "string"
     );
   }
+
+  public abstract get queueArn(): string;
+  public abstract get queueName(): string;
+  public abstract get queueUrl(): string;
+
+  public abstract setConsumer(
+    handler: cloud.IQueueSetConsumerHandler,
+    props?: cloud.QueueSetConsumerOptions
+  ): cloud.Function;
 
   /** @internal */
   public get _liftMap(): LiftMap {

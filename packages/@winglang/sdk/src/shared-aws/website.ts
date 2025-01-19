@@ -33,7 +33,6 @@ export interface IAwsWebsite {
  * Base class for AWS Websites
  */
 export abstract class Website extends cloud.Website implements IAwsWebsite {
-
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(
@@ -51,9 +50,9 @@ export abstract class Website extends cloud.Website implements IAwsWebsite {
     if (this.isAwsWebsite(website)) {
       return website;
     }
-    return undefined; 
+    return undefined;
   }
-  
+
   public abstract get bucketArn(): string;
   public abstract get bucketName(): string;
 

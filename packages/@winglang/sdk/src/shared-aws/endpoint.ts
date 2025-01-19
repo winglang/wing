@@ -1,8 +1,6 @@
-import { core } from "..";
-import { cloud } from "..";
-import { CaseConventions } from "../shared/resource-names";
+import { cloud, core } from "..";
+import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { IInflightHost } from "../std";
-import { ResourceNames } from "../shared/resource-names";
 
 /**
  * AWS implementation of `cloud.Endpoint`.
@@ -15,7 +13,6 @@ export class Endpoint extends cloud.Endpoint {
       "EndpointClient"
     );
   }
-
 
   /** @internal */
   public onLift(host: IInflightHost, ops: string[]): void {

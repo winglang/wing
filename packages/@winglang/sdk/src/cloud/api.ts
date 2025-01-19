@@ -155,7 +155,6 @@ export interface CorsHeaders {
  * @abstract
  */
 export class Api extends Resource {
-
   /** @internal */
   public static _methods = [];
 

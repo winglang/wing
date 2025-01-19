@@ -3,8 +3,8 @@ import { Construct, IConstruct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import { DataAwsLambdaInvocation } from "../.gen/providers/aws/data-aws-lambda-invocation";
 import * as cloud from "../cloud";
-import { IInflight } from "../std";
 import { OnDeploy as AwsOnDeploy } from "../shared-aws/on-deploy";
+import { IInflight } from "../std";
 
 /**
  * AWS implementation of `cloud.OnDeploy`.

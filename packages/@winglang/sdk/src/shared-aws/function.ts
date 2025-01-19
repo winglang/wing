@@ -1,13 +1,17 @@
 import { Construct } from "constructs";
-import { AwsInflightHost, IAwsInflightHost, NetworkConfig } from "./inflight-host";
+import {
+  AwsInflightHost,
+  IAwsInflightHost,
+  NetworkConfig,
+} from "./inflight-host";
+import { PolicyStatement } from "./types";
 import { isValidArn } from "./util";
+import { cloud } from "..";
 import { FunctionInflightMethods, IFunctionClient } from "../cloud";
 import { App, InflightClient, lift, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { IInflightHost, Node, Resource } from "../std";
 import * as ui from "../ui";
-import { cloud } from "..";
-import { PolicyStatement } from "./types";
 
 export const externalLibraries = [
   "@aws-sdk/client-sso",
@@ -43,7 +47,7 @@ export interface IAwsFunction extends IAwsInflightHost {
 /**
  * Base class for AWS Functions
  */
-export abstract class Function extends cloud.Function implements IAwsFunction {  
+export abstract class Function extends cloud.Function implements IAwsFunction {
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(
@@ -86,7 +90,7 @@ export abstract class Function extends cloud.Function implements IAwsFunction {
   public abstract get functionName(): string;
   public abstract addLambdaLayer(layerArn: string): void;
   public abstract addPolicyStatements(...policies: PolicyStatement[]): void;
-  public abstract addNetwork(config: NetworkConfig): void;  
+  public abstract addNetwork(config: NetworkConfig): void;
 
   /** @internal */
   public get _liftMap(): LiftMap {
