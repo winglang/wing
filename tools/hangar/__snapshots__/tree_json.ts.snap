@@ -58,7 +58,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               },
                             },
                             "constructInfo": {
-                              "fqn": "@winglang/sdk.cloud.Counter",
+                              "fqn": "@winglang/sdk.aws.Counter",
                               "version": "0.0.0",
                             },
                             "display": {
@@ -143,7 +143,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Bucket",
+                          "fqn": "@winglang/sdk.aws.Bucket",
                           "version": "0.0.0",
                         },
                         "display": {
@@ -175,7 +175,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Queue",
+                          "fqn": "@winglang/sdk.aws.Queue",
                           "version": "0.0.0",
                         },
                         "display": {
@@ -252,7 +252,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Function",
+                          "fqn": "@winglang/sdk.aws.Function",
                           "version": "0.0.0",
                         },
                         "display": {
@@ -284,7 +284,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Topic",
+                          "fqn": "@winglang/sdk.aws.Topic",
                           "version": "0.0.0",
                         },
                         "display": {
@@ -370,7 +370,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Function",
+                          "fqn": "@winglang/sdk.aws.Function",
                           "version": "0.0.0",
                         },
                         "display": {
@@ -431,7 +431,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               },
                             },
                             "constructInfo": {
-                              "fqn": "@winglang/sdk.cloud.Topic",
+                              "fqn": "@winglang/sdk.aws.Topic",
                               "version": "0.0.0",
                             },
                             "display": {
@@ -517,7 +517,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               },
                             },
                             "constructInfo": {
-                              "fqn": "@winglang/sdk.cloud.Function",
+                              "fqn": "@winglang/sdk.aws.Function",
                               "version": "0.0.0",
                             },
                             "display": {
@@ -538,7 +538,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Bucket",
+                          "fqn": "@winglang/sdk.aws.Bucket",
                           "version": "0.0.0",
                         },
                         "display": {
@@ -579,7 +579,7 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.cloud.Bucket",
+                      "fqn": "@winglang/sdk.aws.Bucket",
                       "version": "0.0.0",
                     },
                     "display": {
