@@ -3,14 +3,13 @@ import { Construct, IConstruct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import { DataAwsLambdaInvocation } from "../.gen/providers/aws/data-aws-lambda-invocation";
 import * as cloud from "../cloud";
+import { OnDeploy as AwsOnDeploy } from "../shared-aws/on-deploy";
 import { IInflight } from "../std";
 
 /**
  * AWS implementation of `cloud.OnDeploy`.
- *
- * @inflight `@winglang/sdk.cloud.IOnDeployClient`
  */
-export class OnDeploy extends cloud.OnDeploy {
+export class OnDeploy extends AwsOnDeploy {
   constructor(
     scope: Construct,
     id: string,

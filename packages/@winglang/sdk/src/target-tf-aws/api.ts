@@ -3,7 +3,6 @@ import { Fn, Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
-import { core } from "..";
 import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
 import { ApiGatewayRestApi } from "../.gen/providers/aws/api-gateway-rest-api";
 import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
@@ -13,14 +12,10 @@ import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { VpcEndpoint } from "../.gen/providers/aws/vpc-endpoint";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import {
-  CaseConventions,
-  NameOptions,
-  ResourceNames,
-} from "../shared/resource-names";
-import { ApiEndpointHandler, IAwsApi, STAGE_NAME } from "../shared-aws";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { ApiEndpointHandler, Api as AwsApi, STAGE_NAME } from "../shared-aws";
 import { createApiDefaultResponse } from "../shared-aws/api.default";
-import { IInflightHost, Node } from "../std";
+import { Node } from "../std";
 
 /**
  * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
@@ -32,17 +27,7 @@ const NAME_OPTS: NameOptions = {
 /**
  * AWS Implementation of `cloud.Api`.
  */
-export class Api extends cloud.Api implements IAwsApi {
-  /** @internal */
-  public static _toInflightType(): string {
-    return core.InflightClient.forType(
-      __filename
-        .replace("target-tf-aws", "shared-aws")
-        .replace("api", "api.inflight"),
-      "ApiClient"
-    );
-  }
-
+export class Api extends AwsApi {
   private readonly api: WingRestApi;
   private readonly handlers: Record<string, Function> = {};
   private readonly endpoint: cloud.Endpoint;
@@ -251,27 +236,6 @@ export class Api extends cloud.Api implements IAwsApi {
     }
 
     return handler;
-  }
-
-  /** @internal */
-  public onLift(host: IInflightHost, ops: string[]): void {
-    host.addEnvironment(this.urlEnvName(), this.url);
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $url: `process.env["${this.urlEnvName()}"]`,
-    };
-  }
-
-  private urlEnvName(): string {
-    return ResourceNames.generateName(this, {
-      disallowedRegex: /[^a-zA-Z0-9_]/,
-      sep: "_",
-      case: CaseConventions.UPPERCASE,
-    });
   }
 
   public get restApiArn(): string {

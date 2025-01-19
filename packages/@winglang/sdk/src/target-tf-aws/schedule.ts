@@ -7,15 +7,14 @@ import * as cloud from "../cloud";
 import {
   ScheduleOnTickHandler,
   convertUnixCronToAWSCron,
+  Schedule as AwsSchedule,
 } from "../shared-aws/schedule";
 import { Node } from "../std";
 
 /**
  * AWS implementation of `cloud.Schedule`.
- *
- * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
-export class Schedule extends cloud.Schedule {
+export class Schedule extends AwsSchedule {
   private readonly scheduleExpression: string;
   private readonly rule: CloudwatchEventRule;
   private readonly handlers: Record<string, Function> = {};

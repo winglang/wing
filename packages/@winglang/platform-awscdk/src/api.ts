@@ -9,10 +9,10 @@ import {
 import { CfnPermission } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { cloud, core, std } from "@winglang/sdk";
+import { cloud, std } from "@winglang/sdk";
 import {
   ApiEndpointHandler,
-  IAwsApi,
+  Api as AwsApi,
   STAGE_NAME,
 } from "@winglang/sdk/lib/shared-aws/api";
 import { createApiDefaultResponse } from "@winglang/sdk/lib/shared-aws/api.default";
@@ -21,15 +21,7 @@ import { isAwsCdkFunction } from "./function";
 /**
  * AWS Implementation of `cloud.Api`.
  */
-export class Api extends cloud.Api implements IAwsApi {
-  /** @internal */
-  public static _toInflightType(): string {
-    return core.InflightClient.forType(
-      __filename.replace("api", "api.inflight"),
-      "ApiClient"
-    );
-  }
-
+export class Api extends AwsApi {
   private readonly api: WingRestApi;
   private readonly handlers: Record<string, cloud.Function> = {};
   private readonly endpoint: cloud.Endpoint;
@@ -228,23 +220,6 @@ export class Api extends cloud.Api implements IAwsApi {
     }
 
     return handler;
-  }
-
-  /** @internal */
-  public onLift(host: std.IInflightHost, ops: string[]): void {
-    host.addEnvironment(this.urlEnvName(), this.url);
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $url: `process.env["${this.urlEnvName()}"]`,
-    };
-  }
-
-  private urlEnvName(): string {
-    return `API_${this.node.addr.slice(-8)}`;
   }
 
   public get restApiArn(): string {

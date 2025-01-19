@@ -2,13 +2,12 @@ import { Trigger } from "aws-cdk-lib/triggers";
 import { Construct } from "constructs";
 import { cloud } from "@winglang/sdk";
 import { isAwsCdkFunction } from "./function";
+import { OnDeploy as AwsOnDeploy } from "@winglang/sdk/lib/shared-aws/on-deploy";
 
 /**
  * AWS implementation of `cloud.OnDeploy`.
- *
- * @inflight `@winglang/sdk.cloud.IOnDeployClient`
  */
-export class OnDeploy extends cloud.OnDeploy {
+export class OnDeploy extends AwsOnDeploy {
   constructor(
     scope: Construct,
     id: string,

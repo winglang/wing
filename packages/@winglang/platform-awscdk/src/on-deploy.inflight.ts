@@ -1,1 +1,0 @@
-export { OnDeployClient } from "@winglang/sdk/lib/shared-aws/on-deploy.inflight";

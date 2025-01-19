@@ -1,12 +1,8 @@
 import { Construct } from "constructs";
 import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { AwsInflightHost } from "../shared-aws";
-import { IAwsCounter, COUNTER_HASH_KEY } from "../shared-aws/counter";
-import { calculateCounterPermissions } from "../shared-aws/permissions";
-import { IInflightHost } from "../std";
+import { Counter as AwsCounter, COUNTER_HASH_KEY } from "../shared-aws/counter";
 
 /**
  * Counter (Table) names must be between 3 and 255 characters.
@@ -23,17 +19,7 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
-export class Counter extends cloud.Counter implements IAwsCounter {
-  /** @internal */
-  public static _toInflightType(): string {
-    return core.InflightClient.forType(
-      __filename
-        .replace("target-tf-aws", "shared-aws")
-        .replace("counter", "counter.inflight"),
-      "CounterClient"
-    );
-  }
-
+export class Counter extends AwsCounter {
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
@@ -45,42 +31,6 @@ export class Counter extends cloud.Counter implements IAwsCounter {
       hashKey: COUNTER_HASH_KEY,
       billingMode: "PAY_PER_REQUEST",
     });
-  }
-
-  /** @internal */
-  public get _liftMap(): core.LiftMap {
-    return {
-      [cloud.CounterInflightMethods.INC]: [],
-      [cloud.CounterInflightMethods.DEC]: [],
-      [cloud.CounterInflightMethods.PEEK]: [],
-      [cloud.CounterInflightMethods.SET]: [],
-    };
-  }
-
-  public onLift(host: IInflightHost, ops: string[]): void {
-    if (!AwsInflightHost.isAwsInflightHost(host)) {
-      throw new Error("Host is expected to implement `IAwsInfightHost`");
-    }
-
-    host.addPolicyStatements(
-      ...calculateCounterPermissions(this.table.arn, ops)
-    );
-
-    host.addEnvironment(this.envName(), this.table.name);
-
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $tableName: `process.env["${this.envName()}"]`,
-      $initial: `${this.initial}`,
-    };
-  }
-
-  private envName(): string {
-    return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 
   public get dynamoTableArn(): string {

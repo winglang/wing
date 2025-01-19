@@ -1,5 +1,13 @@
+import { AwsInflightHost } from "./inflight-host";
+import { calculateTopicPermissions } from "./permissions";
 import { cloud } from "..";
-import { lift } from "../core";
+import {
+  TopicSubscribeQueueOptions,
+  ITopicOnMessageHandler,
+  TopicOnMessageOptions,
+} from "../cloud/topic";
+import { InflightClient, lift, LiftMap } from "../core";
+import { IInflightHost } from "../std";
 
 /**
  * A shared interface for AWS topics.
@@ -17,9 +25,17 @@ export interface IAwsTopic {
 }
 
 /**
- * A helper class for working with AWS topics.
+ * Base class for AWS Topics
  */
-export class Topic {
+export abstract class Topic extends cloud.Topic implements IAwsTopic {
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("topic", "topic.inflight"),
+      "TopicClient"
+    );
+  }
+
   /**
    * If the topic is an AWS SNS, return a helper interface for
    * working with it.
@@ -36,6 +52,57 @@ export class Topic {
     return (
       typeof obj.topicArn === "string" && typeof obj.topicName === "string"
     );
+  }
+
+  public abstract get topicArn(): string;
+  public abstract get topicName(): string;
+
+  /**
+   * Run an inflight whenever an message is published to the topic.
+   * @abstract
+   */
+  public abstract onMessage(
+    inflight: ITopicOnMessageHandler,
+    props?: TopicOnMessageOptions
+  ): cloud.Function;
+
+  /**
+   * Subscribing queue to the topic
+   * @abstract
+   */
+  public abstract subscribeQueue(
+    queue: cloud.Queue,
+    props?: TopicSubscribeQueueOptions
+  ): void;
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
+    host.addPolicyStatements(...calculateTopicPermissions(this.topicArn, ops));
+
+    host.addEnvironment(this.envName(), this.topicArn);
+
+    super.onLift(host, ops);
+  }
+
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return {
+      $topicArn: `process.env["${this.envName()}"]`,
+    };
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.TopicInflightMethods.PUBLISH]: [],
+    };
+  }
+
+  private envName(): string {
+    return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
 }
 

@@ -1,1 +1,0 @@
-export { CounterClient } from "@winglang/sdk/lib/shared-aws/counter.inflight";

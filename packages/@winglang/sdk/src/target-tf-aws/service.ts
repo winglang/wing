@@ -13,18 +13,14 @@ import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { Image } from "../.gen/providers/docker/image";
 import { RegistryImage } from "../.gen/providers/docker/registry-image";
 import * as cloud from "../cloud";
-import * as core from "../core";
-import { LiftMap } from "../core";
 import { createBundle } from "../shared/bundling";
 import {
-  AwsInflightHost,
   createServiceDockerfile,
   createServiceWrapper,
-  IAwsInflightHost,
+  Service as AwsService,
   NetworkConfig,
   PolicyStatement,
 } from "../shared-aws";
-import { IInflightHost } from "../std";
 
 /**
  * Represents an ECS service in AWS.
@@ -32,17 +28,7 @@ import { IInflightHost } from "../std";
  * Converts the service handler into a DockerFile that is then built and published to an ECR repository,
  * on deployment. The service is then run as a Fargate task in an ECS cluster.
  */
-export class Service extends cloud.Service implements IAwsInflightHost {
-  /** @internal */
-  public static _toInflightType(): string {
-    return core.InflightClient.forType(
-      __filename
-        .replace("target-tf-aws", "shared-aws")
-        .replace("service", "service.inflight"),
-      "ServiceClient"
-    );
-  }
-
+export class Service extends AwsService {
   private workdir: string;
   private wrapperEntrypoint: string;
   private policyStatments?: any[];
@@ -52,9 +38,6 @@ export class Service extends cloud.Service implements IAwsInflightHost {
   private bundledHash?: string;
   private securityGroups?: Set<string>;
   private clusterInstance: EcsCluster;
-
-  /** @internal */
-  public _liftMap?: LiftMap | undefined;
 
   constructor(
     scope: Construct,
@@ -268,6 +251,14 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     });
   }
 
+  public get serviceName(): string {
+    return this.service.name;
+  }
+
+  public get clusterName(): string {
+    return this.clusterInstance.name;
+  }
+
   public addPolicyStatements(...policies: PolicyStatement[]): void {
     if (!this.policyStatments) {
       this.policyStatments = [];
@@ -305,36 +296,6 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     writeFileSync(join(this.workdir, this.dockerFileName), dockerFile);
   }
 
-  public onLift(host: IInflightHost, ops: string[]): void {
-    if (!AwsInflightHost.isAwsInflightHost(host)) {
-      throw new Error("Host is not an AWS inflight host");
-    }
-
-    if (
-      ops.includes(cloud.ServiceInflightMethods.START) ||
-      ops.includes(cloud.ServiceInflightMethods.STOP)
-    ) {
-      host.addPolicyStatements({
-        actions: ["ecs:UpdateService"],
-        resources: [
-          `arn:aws:ecs:*:*:service/${this.clusterInstance.name}/${this.service.name}`,
-        ],
-      });
-    }
-
-    if (ops.includes(cloud.ServiceInflightMethods.STARTED)) {
-      host.addPolicyStatements({
-        actions: ["ecs:DescribeServices"],
-        resources: [
-          `arn:aws:ecs:*:*:service/${this.clusterInstance.name}/${this.service.name}`,
-        ],
-      });
-    }
-
-    host.addEnvironment(this.envName(), this.service.name);
-    host.addEnvironment("ECS_CLUSTER_NAME", this.clusterInstance.name);
-  }
-
   /**
    * Add an environment variable to the function
    */
@@ -345,17 +306,5 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       );
     }
     this._env[name] = value;
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $clusterName: `process.env["ECS_CLUSTER_NAME"]`,
-      $serviceName: `process.env["${this.envName()}"]`,
-    };
-  }
-
-  private envName(): string {
-    return `SERVICE_NAME_${this.node.addr.slice(-8)}`;
   }
 }

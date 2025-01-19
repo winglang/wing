@@ -501,7 +501,7 @@ The website's custom domain object.
 
 ### IWebsite <a name="IWebsite" id="@winglang/sdk.cloud.IWebsite"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.cloud.IWebsite">IWebsite</a>
+- *Implemented By:* <a href="#@winglang/sdk.aws.Website">Website</a>, <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.cloud.IWebsite">IWebsite</a>
 
 Base interface for a website.
 

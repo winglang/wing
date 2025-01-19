@@ -1,5 +1,27 @@
 import * as cloud from "../cloud";
-import { lift } from "../core";
+import { ScheduleOnTickOptions } from "../cloud";
+import { InflightClient, lift } from "../core";
+
+export interface IAwsSchedule {}
+
+export abstract class Schedule extends cloud.Schedule implements IAwsSchedule {
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("schedule", "schedule.inflight"),
+      "ScheduleClient"
+    );
+  }
+
+  /**
+   * Create a function that runs when receiving the scheduled event.
+   * @abstract
+   */
+  public abstract onTick(
+    inflight: cloud.IScheduleOnTickHandler,
+    props?: ScheduleOnTickOptions
+  ): cloud.Function;
+}
 
 /**
  * Convert Unix cron to AWS cron

@@ -11,11 +11,11 @@ import {
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Asset } from "aws-cdk-lib/aws-s3-assets";
 import { Construct, IConstruct } from "constructs";
-import { cloud, std } from "@winglang/sdk";
+import { cloud } from "@winglang/sdk";
 import { NotImplementedError } from "@winglang/sdk/lib/core/errors";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
 import {
-  IAwsFunction,
+  Function as AwsFunction,
   NetworkConfig,
   PolicyStatement,
   externalLibraries,
@@ -24,7 +24,6 @@ import { makeAwsLambdaHandler } from "@winglang/sdk/lib/shared-aws/function-util
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
-import { InflightClient, LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * Implementation of `awscdk.Function` are expected to implement this
@@ -54,17 +53,7 @@ export function addPolicyStatements(
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function
-  extends cloud.Function
-  implements IAwsCdkFunction, IAwsFunction {
-  /** @internal */
-  public static _toInflightType(): string {
-    return InflightClient.forType(
-      __filename.replace("function", "function.inflight"),
-      "FunctionClient"
-    );
-  }
-
+export class Function extends AwsFunction implements IAwsCdkFunction {
   private readonly function: CdkFunction;
   private readonly assetPath: string;
 
@@ -128,42 +117,6 @@ export class Function
     renameSync(bundle.directory, assetDir);
   }
 
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {
-      [cloud.FunctionInflightMethods.INVOKE]: [],
-      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [],
-    };
-  }
-
-  public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!isAwsCdkFunction(host)) {
-      throw new Error("Expected host to implement IAwsCdkFunction");
-    }
-
-    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
-      host.awscdkFunction.addToRolePolicy(
-        new CdkPolicyStatement({
-          actions: ["lambda:InvokeFunction"],
-          resources: [`${this.function.functionArn}`],
-        })
-      );
-    }
-
-    // The function name needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
-    host.addEnvironment(this.envName(), this.function.functionArn);
-
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $functionArn: `process.env["${this.envName()}"]`,
-      $constructPath: `"${this.node.path}"`,
-    };
-  }
 
   /**
    * Can be overridden by subclasses to customize the AWS CDK function creation.
@@ -231,11 +184,6 @@ export class Function
       "The AWS CDK platform provider does not support adding network configurations to AWS Lambda functions at the moment."
     );
   }
-
-  private envName(): string {
-    return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
-  }
-
   public get awscdkFunction() {
     return this.function;
   }

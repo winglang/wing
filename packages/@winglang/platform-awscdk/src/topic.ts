@@ -6,29 +6,18 @@ import {
 } from "aws-cdk-lib/aws-sns-subscriptions";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { cloud, core, std } from "@winglang/sdk";
-import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
+import { cloud, std } from "@winglang/sdk";
 import {
-  IAwsTopic,
+  Topic as AwsTopic,
   TopicOnMessageHandler,
 } from "@winglang/sdk/lib/shared-aws/topic";
-import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { Queue } from "./queue";
-import { LiftMap } from "@winglang/sdk/lib/core";
+import { isAwsCdkFunction } from "./function";
 
 /**
  * AWS Implementation of `cloud.Topic`.
- *
- * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export class Topic extends cloud.Topic implements IAwsTopic {
-  /** @internal */
-  public static _toInflightType(): string {
-    return core.InflightClient.forType(
-      __filename.replace("topic", "topic.inflight"),
-      "TopicClient"
-    );
-  }
+export class Topic extends AwsTopic {
 
   private readonly topic: SNSTopic;
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
@@ -80,42 +69,9 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     baseTopic.addSubscription(new SqsSubscription(baseQueue));
   }
 
-  public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!isAwsCdkFunction(host)) {
-      throw new Error("Expected 'host' to implement 'IAwsCdkFunction' method");
-    }
-
-    addPolicyStatements(
-      host.awscdkFunction,
-      calculateTopicPermissions(this.topic.topicArn, ops)
-    );
-
-    host.addEnvironment(this.envName(), this.topic.topicArn);
-
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $topicArn: `process.env["${this.envName()}"]`,
-    };
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {
-      [cloud.TopicInflightMethods.PUBLISH]: [],
-    };
-  }
-
   /** @internal */
   public get _topic(): SNSTopic {
     return this.topic;
-  }
-
-  private envName(): string {
-    return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
 
   public get topicArn(): string {

@@ -1,6 +1,12 @@
 import { Construct } from "constructs";
-import { AwsInflightHost, IAwsInflightHost } from "./inflight-host";
+import {
+  AwsInflightHost,
+  IAwsInflightHost,
+  NetworkConfig,
+} from "./inflight-host";
+import { PolicyStatement } from "./types";
 import { isValidArn } from "./util";
+import { cloud } from "..";
 import { FunctionInflightMethods, IFunctionClient } from "../cloud";
 import { App, InflightClient, lift, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
@@ -39,9 +45,9 @@ export interface IAwsFunction extends IAwsInflightHost {
 }
 
 /**
- * A helper class for working with AWS functions.
+ * Base class for AWS Functions
  */
-export class Function {
+export abstract class Function extends cloud.Function implements IAwsFunction {
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(
@@ -78,6 +84,56 @@ export class Function {
       typeof obj.functionArn === "string" &&
       typeof obj.functionName === "string"
     );
+  }
+
+  public abstract get functionArn(): string;
+  public abstract get functionName(): string;
+  public abstract addLambdaLayer(layerArn: string): void;
+  public abstract addPolicyStatements(...policies: PolicyStatement[]): void;
+  public abstract addNetwork(config: NetworkConfig): void;
+
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
+        [this.handler, ["handle"]],
+      ],
+    };
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
+    if (
+      ops.includes(cloud.FunctionInflightMethods.INVOKE) ||
+      ops.includes(cloud.FunctionInflightMethods.INVOKE_ASYNC)
+    ) {
+      host.addPolicyStatements({
+        actions: ["lambda:InvokeFunction"],
+        resources: [`${this.functionArn}`],
+      });
+    }
+
+    // The function name needs to be passed through an environment variable since
+    // it may not be resolved until deployment time.
+    host.addEnvironment(this.envName(), this.functionArn);
+
+    super.onLift(host, ops);
+  }
+
+  /** @internal */
+  public _liftedState(): Record<string, string> {
+    return {
+      $functionArn: `process.env["${this.envName()}"]`,
+      $constructPath: `"${this.node.path}"`,
+    };
+  }
+
+  private envName(): string {
+    return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 }
 

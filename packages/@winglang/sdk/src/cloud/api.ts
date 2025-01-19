@@ -154,7 +154,6 @@ export interface CorsHeaders {
  * @inflight `@winglang/sdk.cloud.IApiClient`
  * @abstract
  */
-
 export class Api extends Resource {
   /** @internal */
   public static _methods = [];

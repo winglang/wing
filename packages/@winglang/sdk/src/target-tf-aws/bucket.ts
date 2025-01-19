@@ -14,16 +14,12 @@ import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketPublicAccessBlock } from "../.gen/providers/aws/s3-bucket-public-access-block";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { AwsInflightHost } from "../shared-aws";
-import { BucketEventHandler, IAwsBucket } from "../shared-aws/bucket";
-import { calculateBucketPermissions } from "../shared-aws/permissions";
-import { IInflightHost } from "../std";
+import { BucketEventHandler, Bucket as AwsBucket } from "../shared-aws/bucket";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
@@ -49,20 +45,8 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
 
 /**
  * AWS implementation of `cloud.Bucket`.
- *
- * @inflight `@winglang/sdk.aws.IAwsBucketClient`
  */
-export class Bucket extends cloud.Bucket implements IAwsBucket {
-  /** @internal */
-  public static _toInflightType(): string {
-    return core.InflightClient.forType(
-      __filename
-        .replace("target-tf-aws", "shared-aws")
-        .replace("bucket", "bucket.inflight"),
-      "BucketClient"
-    );
-  }
-
+export class Bucket extends AwsBucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
   private readonly forceDestroy: boolean;
@@ -120,27 +104,6 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     });
   }
 
-  /** @internal */
-  public get _liftMap(): core.LiftMap {
-    return {
-      [cloud.BucketInflightMethods.DELETE]: [],
-      [cloud.BucketInflightMethods.GET]: [],
-      [cloud.BucketInflightMethods.GET_JSON]: [],
-      [cloud.BucketInflightMethods.LIST]: [],
-      [cloud.BucketInflightMethods.PUT]: [],
-      [cloud.BucketInflightMethods.PUT_JSON]: [],
-      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
-      [cloud.BucketInflightMethods.EXISTS]: [],
-      [cloud.BucketInflightMethods.TRY_GET]: [],
-      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
-      [cloud.BucketInflightMethods.TRY_DELETE]: [],
-      [cloud.BucketInflightMethods.SIGNED_URL]: [],
-      [cloud.BucketInflightMethods.METADATA]: [],
-      [cloud.BucketInflightMethods.COPY]: [],
-      [cloud.BucketInflightMethods.RENAME]: [],
-    };
-  }
-
   protected createTopicHandler(
     eventType: cloud.BucketEventType,
     inflight: cloud.IBucketEventHandler
@@ -178,32 +141,6 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
         dependsOn: this.notificationDependencies,
       });
     }
-  }
-
-  public onLift(host: IInflightHost, ops: string[]): void {
-    if (!AwsInflightHost.isAwsInflightHost(host)) {
-      throw new Error("Host is expected to implement `IAwsInfightHost`");
-    }
-
-    host.addPolicyStatements(
-      ...calculateBucketPermissions(this.bucket.arn, ops)
-    );
-
-    // The bucket name needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
-    host.addEnvironment(this.envName(), this.bucket.bucket);
-    super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _liftedState(): Record<string, string> {
-    return {
-      $bucketName: `process.env["${this.envName()}"]`,
-    };
-  }
-
-  private envName(): string {
-    return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 
   public get bucketArn(): string {
