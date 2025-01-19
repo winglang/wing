@@ -119,6 +119,11 @@ export abstract class Queue extends cloud.Queue implements IAwsQueue {
     return fn;
   }
 
+  /**
+   * Adds an SQS queue event source to an AWS Lambda function.
+   * @param awsFunction The AWS Lambda function to add the event source to.
+   * @param props The properties for the event source.
+   */
   protected abstract addQueueEventSource(
     awsFunction: IAwsFunction,
     props?: cloud.QueueSetConsumerOptions
