@@ -1,11 +1,12 @@
 import { Construct } from "constructs";
+import { Function as AwsFunction, IAwsFunction } from "./function";
 import { AwsInflightHost } from "./inflight-host";
 import { calculateQueuePermissions } from "./permissions";
 import { isValidArn } from "./util";
 import { cloud, ui } from "..";
 import { lift, LiftMap, InflightClient, App } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
-import { IInflightHost, Node, Resource } from "../std";
+import { Duration, IInflightHost, Node, Resource } from "../std";
 
 /**
  * A shared interface for AWS queues.
@@ -63,10 +64,65 @@ export abstract class Queue extends cloud.Queue implements IAwsQueue {
   public abstract get queueName(): string;
   public abstract get queueUrl(): string;
 
-  public abstract setConsumer(
+  private readonly _timeout?: Duration;
+
+  constructor(scope: Construct, id: string, props: cloud.QueueProps) {
+    super(scope, id, props);
+
+    this._timeout = props.timeout;
+  }
+
+  public setConsumer(
     handler: cloud.IQueueSetConsumerHandler,
     props?: cloud.QueueSetConsumerOptions
-  ): cloud.Function;
+  ): cloud.Function {
+    const functionHandler = QueueSetConsumerHandler.toFunctionHandler(handler);
+
+    const fn = new cloud.Function(
+      // ok since we're not a tree root
+      this.node.scope!,
+      App.of(this).makeId(this, `${this.node.id}-SetConsumer`),
+      functionHandler,
+      {
+        ...props,
+        timeout: this._timeout ?? Duration.fromSeconds(30),
+      }
+    );
+
+    const awsFunction = AwsFunction.from(fn);
+
+    if (!awsFunction) {
+      throw new Error("Queue only supports creating IAwsFunction right now");
+    }
+
+    awsFunction.addPolicyStatements({
+      actions: [
+        "sqs:ReceiveMessage",
+        "sqs:ChangeMessageVisibility",
+        "sqs:GetQueueUrl",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+      ],
+      resources: [this.queueArn],
+    });
+
+    this.addQueueEventSource(awsFunction, props);
+
+    Node.of(this).addConnection({
+      source: this,
+      sourceOp: cloud.QueueInflightMethods.PUSH,
+      target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
+      name: "consumer",
+    });
+
+    return fn;
+  }
+
+  protected abstract addQueueEventSource(
+    awsFunction: IAwsFunction,
+    props?: cloud.QueueSetConsumerOptions
+  ): void;
 
   /** @internal */
   public get _liftMap(): LiftMap {
