@@ -17,7 +17,7 @@ export class SecretRef extends Resource {
   /** @internal */
   public static _toInflightType(): string {
     return InflightClient.forType(
-      require.resolve("./secret.inflight"),
+      __filename.replace("secret", "secret.inflight"),
       "SecretClient"
     );
   }
