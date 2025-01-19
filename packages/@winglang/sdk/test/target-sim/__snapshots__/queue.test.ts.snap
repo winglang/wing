@@ -544,7 +544,7 @@ exports.handler = async function(event) {
       if (!caller) {
         throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
       }
-      this.backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, $handle, caller);
+      this.backend = require("[REDACTED]/@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, $handle, caller);
     }
     async $inflight_init() {}
     async push(...args) { return this.backend.push(...args); }
