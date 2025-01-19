@@ -20,14 +20,18 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "safe-stable-stringify": "^2.4.3"
+  },
+  "peerDependencies": {
     "@winglang/sdk": "workspace:^",
     "aws-cdk-lib": "^2.147.0",
-    "constructs": "^10.3.0",
-    "safe-stable-stringify": "^2.4.3"
+    "constructs": "^10.3.0"
   },
   "devDependencies": {
     "@types/node": "^22.5.5",
     "bump-pack": "workspace:^",
+    "constructs": "10.3.0",
+    "aws-cdk-lib": "2.147.0",
     "tsup": "^8.1.0",
     "typescript": "^5.5.2",
     "vitest": "^1.6.0"

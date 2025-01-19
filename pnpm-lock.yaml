@@ -257,12 +257,6 @@ importers:
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../sdk
-      aws-cdk-lib:
-        specifier: ^2.147.0
-        version: 2.147.0(constructs@10.3.0)
-      constructs:
-        specifier: ^10.3.0
-        version: 10.3.0
       safe-stable-stringify:
         specifier: ^2.4.3
         version: 2.4.3
@@ -270,9 +264,15 @@ importers:
       '@types/node':
         specifier: ^22.5.5
         version: 22.5.5
+      aws-cdk-lib:
+        specifier: 2.147.0
+        version: 2.147.0(constructs@10.3.0)
       bump-pack:
         specifier: workspace:^
         version: link:../../../tools/bump-pack
+      constructs:
+        specifier: 10.3.0
+        version: 10.3.0
       tsup:
         specifier: ^8.1.0
         version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
@@ -1198,7 +1198,7 @@ importers:
         version: link:../ui
       autoprefixer:
         specifier: ^10.4.20
-        version: 10.4.20(postcss@8.4.39)
+        version: 10.4.20(postcss@8.4.49)
       bump-pack:
         specifier: workspace:^
         version: link:../../../tools/bump-pack
@@ -1222,7 +1222,7 @@ importers:
         version: 3.4.17
       tsup:
         specifier: ^8.3.5
-        version: 8.3.5(postcss@8.4.39)(tsx@4.19.2)(typescript@5.7.3)
+        version: 8.3.5(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)
       tsx:
         specifier: ^4.19.2
         version: 4.19.2
@@ -1555,7 +1555,7 @@ importers:
         version: link:../../../packages/@winglang/sdk
       autoprefixer:
         specifier: ^10.4.19
-        version: 10.4.19(postcss@8.4.39)
+        version: 10.4.19(postcss@8.4.49)
       bump-pack:
         specifier: workspace:^
         version: link:../../../tools/bump-pack
@@ -1573,7 +1573,7 @@ importers:
         version: 3.4.4
       tsup:
         specifier: ^8.1.0
-        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
+        version: 8.1.0(postcss@8.4.49)(typescript@5.5.2)
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -1736,15 +1736,12 @@ packages:
 
   /@aws-cdk/asset-awscli-v1@2.2.202:
     resolution: {integrity: sha512-JqlF0D4+EVugnG5dAsNZMqhu3HW7ehOXm5SDMxMbXNDMdsF0pxtQKNHRl52z1U9igsHmaFpUgSGjbhAJ+0JONg==}
-    dev: false
 
   /@aws-cdk/asset-kubectl-v20@2.1.2:
     resolution: {integrity: sha512-3M2tELJOxQv0apCIiuKQ4pAbncz9GuLwnKFqxifWfe77wuMxyTRPmxssYHs42ePqzap1LT6GDcPygGs+hHstLg==}
-    dev: false
 
   /@aws-cdk/asset-node-proxy-agent-v6@2.0.3:
     resolution: {integrity: sha512-twhuEG+JPOYCYPx/xy5uH2+VUsIEhPTzDY0F1KuB+ocjWWB/KEDiOVL19nHvbPCB6fhWnkykXEMJ4HHcKvjtvg==}
-    dev: false
 
   /@aws-cdk/aws-events@1.204.0(@aws-cdk/aws-iam@1.204.0)(@aws-cdk/core@1.204.0)(constructs@3.4.344):
     resolution: {integrity: sha512-KnfUmtv+4RhydD9+5CHFxNJxtgn7+Xftwfwg1G7qV/tWYPFHcNIvhlSOgwDrQPa+pTo1MmkiUN0lAR0G8B/cbw==}
@@ -13308,7 +13305,7 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /autoprefixer@10.4.19(postcss@8.4.39):
+  /autoprefixer@10.4.19(postcss@8.4.49):
     resolution: {integrity: sha512-BaENR2+zBZ8xXhM4pUaKUxlVdxZ0EZhjvbopwnXmxRUfqDmwSpC2lAi/QXvx7NRdPCo1WKEcEF6mV64si1z4Ew==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -13320,11 +13317,11 @@ packages:
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
-      postcss: 8.4.39
+      postcss: 8.4.49
       postcss-value-parser: 4.2.0
     dev: true
 
-  /autoprefixer@10.4.20(postcss@8.4.39):
+  /autoprefixer@10.4.20(postcss@8.4.49):
     resolution: {integrity: sha512-XY25y5xSv/wEoqzDyXXME4AFfkZI0P23z6Fs3YgymDnKJkCGOnkL0iTxCa85UTqaSgfcqyf3UA6+c7wUvx/16g==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -13336,7 +13333,7 @@ packages:
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
-      postcss: 8.4.39
+      postcss: 8.4.49
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -13356,7 +13353,6 @@ packages:
       '@aws-cdk/asset-kubectl-v20': 2.1.2
       '@aws-cdk/asset-node-proxy-agent-v6': 2.0.3
       constructs: 10.3.0
-    dev: false
     bundledDependencies:
       - '@balena/dockerignore'
       - case
@@ -15241,7 +15237,7 @@ packages:
     dependencies:
       semver: 7.6.3
       shelljs: 0.8.5
-      typescript: 5.8.0-dev.20250109
+      typescript: 5.8.0-dev.20250119
     dev: true
 
   /dset@3.1.3:
@@ -21146,7 +21142,7 @@ packages:
       yaml: 2.4.5
     dev: true
 
-  /postcss-load-config@6.0.1(postcss@8.4.39)(tsx@4.19.2):
+  /postcss-load-config@6.0.1(postcss@8.4.49)(tsx@4.19.2):
     resolution: {integrity: sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g==}
     engines: {node: '>= 18'}
     peerDependencies:
@@ -21165,7 +21161,7 @@ packages:
         optional: true
     dependencies:
       lilconfig: 3.1.2
-      postcss: 8.4.39
+      postcss: 8.4.49
       tsx: 4.19.2
     dev: true
 
@@ -23751,7 +23747,47 @@ packages:
       - ts-node
     dev: true
 
-  /tsup@8.3.5(postcss@8.4.39)(tsx@4.19.2)(typescript@5.7.3):
+  /tsup@8.1.0(postcss@8.4.49)(typescript@5.5.2):
+    resolution: {integrity: sha512-UFdfCAXukax+U6KzeTNO2kAARHcWxmKsnvSPXUcfA1D+kU05XDccCrkffCQpFaWDsZfV0jMyTsxU39VfCp6EOg==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      '@microsoft/api-extractor': ^7.36.0
+      '@swc/core': ^1
+      postcss: ^8.4.12
+      typescript: '>=4.5.0'
+    peerDependenciesMeta:
+      '@microsoft/api-extractor':
+        optional: true
+      '@swc/core':
+        optional: true
+      postcss:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 4.2.1(esbuild@0.21.5)
+      cac: 6.7.14
+      chokidar: 3.6.0
+      debug: 4.3.5(supports-color@5.5.0)
+      esbuild: 0.21.5
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      postcss: 8.4.49
+      postcss-load-config: 4.0.2(postcss@8.4.49)
+      resolve-from: 5.0.0
+      rollup: 4.18.0
+      source-map: 0.8.0-beta.0
+      sucrase: 3.35.0
+      tree-kill: 1.2.2
+      typescript: 5.5.2
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+    dev: true
+
+  /tsup@8.3.5(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3):
     resolution: {integrity: sha512-Tunf6r6m6tnZsG9GYWndg0z8dEV7fD733VBFzFJ5Vcm1FtlXB8xBD/rtrBi2a3YKEV7hHtxiZtW5EAVADoe1pA==}
     engines: {node: '>=18'}
     hasBin: true
@@ -23778,8 +23814,8 @@ packages:
       esbuild: 0.24.2
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss: 8.4.39
-      postcss-load-config: 6.0.1(postcss@8.4.39)(tsx@4.19.2)
+      postcss: 8.4.49
+      postcss-load-config: 6.0.1(postcss@8.4.49)(tsx@4.19.2)
       resolve-from: 5.0.0
       rollup: 4.30.1
       source-map: 0.8.0-beta.0
@@ -24052,8 +24088,8 @@ packages:
     hasBin: true
     dev: true
 
-  /typescript@5.8.0-dev.20250109:
-    resolution: {integrity: sha512-p7pWPypjuK2v/76T8q25sTmuG17m53WWranllky9WiG/PUcIJOMXoGfNrRF3r5ufFfi49QM9TipJyfmeKgXRjg==}
+  /typescript@5.8.0-dev.20250119:
+    resolution: {integrity: sha512-ZEz73dloOQ74lJ22QhVcmjYsHvgz9JOrLO3XvXJDbVqcU7qAYSr0zxOxJSaB7FSCi2T4LnDS3IbfwIdyqXE6JA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -24421,6 +24457,28 @@ packages:
       vfile-message: 4.0.2
     dev: false
 
+  /vite-node@1.6.0:
+    resolution: {integrity: sha512-de6HJgzC+TFzOu0NTC4RAIsyf/DY/ibWDYQUcuEA84EMHhcefTUGkjFHKKEJhQN4A+6I0u++kr3l36ZF2d7XRw==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    dependencies:
+      cac: 6.7.14
+      debug: 4.3.5(supports-color@5.5.0)
+      pathe: 1.1.2
+      picocolors: 1.1.1
+      vite: 5.4.11(@types/node@22.5.5)
+    transitivePeerDependencies:
+      - '@types/node'
+      - less
+      - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+    dev: true
+
   /vite-node@1.6.0(@types/node@20.14.8):
     resolution: {integrity: sha512-de6HJgzC+TFzOu0NTC4RAIsyf/DY/ibWDYQUcuEA84EMHhcefTUGkjFHKKEJhQN4A+6I0u++kr3l36ZF2d7XRw==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -24773,7 +24831,7 @@ packages:
       tinybench: 2.8.0
       tinypool: 0.8.4
       vite: 5.3.1(@types/node@22.5.5)
-      vite-node: 1.6.0(@types/node@22.5.5)
+      vite-node: 1.6.0
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
