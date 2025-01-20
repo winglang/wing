@@ -1,17 +1,16 @@
-import * as cp from "child_process";
-import { existsSync, readFile, readFileSync, realpathSync, rm, rmSync, statSync } from "fs";
+import { existsSync, readFileSync, realpathSync, rmSync, statSync } from "fs";
 import { basename, join, relative, resolve } from "path";
-import { promisify } from "util";
 import { PromisePool } from "@supercharge/promise-pool";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import { LogLevel } from "@winglang/sdk/lib/std";
-import { Util } from "@winglang/sdk/lib/util";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
-import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
+import { ITestHarness } from "./harness/api";
+import { AwsCdkTestHarness } from "./harness/awscdk";
+import { TerraformTestHarness } from "./harness/terraform";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
 import { SnapshotMode, SnapshotResult, captureSnapshot, determineSnapshotMode } from "./snapshots";
 import { SNAPSHOT_ERROR_PREFIX } from "./snapshots-help";
@@ -20,13 +19,6 @@ import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
 import { SpinnerStream } from "../spinner-stream";
-
-const log = debug("wing:test");
-
-const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS";
-const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
-
-const PARALLELISM = { [BuiltinPlatform.TF_AZURE]: 5 };
 
 /**
  * Options for the `test` command.
@@ -232,17 +224,29 @@ async function executeTest(
   target: string | undefined,
   options: TestOptions
 ): Promise<std.TestResult[]> {
+  if (!target) {
+    throw new Error("Unable to execute test without a target");
+  }
+
+  // special case for simulator
+  if (target === BuiltinPlatform.SIM) {
+    return testSimulator(synthDir, options);
+  }
+
+  const harness = createTestHarness(target, options);
+  return executeTestInHarness(harness, synthDir, options);
+}
+
+function createTestHarness(target: string, options: TestOptions) {
   switch (target) {
-    case BuiltinPlatform.SIM:
-      return testSimulator(synthDir, options);
     case BuiltinPlatform.TF_AZURE:
     case BuiltinPlatform.TF_AWS:
     case BuiltinPlatform.TF_GCP:
-      return testTf(synthDir, options);
+      return new TerraformTestHarness(options);
     case BuiltinPlatform.AWSCDK:
-      return testAwsCdk(synthDir, options);
+      return new AwsCdkTestHarness();
     default:
-      throw new Error(`unsupported target ${target}`);
+      throw new Error("Unable to create a harness for platform");
   }
 }
 
@@ -531,32 +535,13 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   return results.map((r) => ({ ...r, args }));
 }
 
-async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
-  const { clean, testFilter, platform = [BuiltinPlatform.SIM] } = options;
-  let tfParallelism = PARALLELISM[platform[0]];
-
+async function executeTestInHarness(harness: ITestHarness, synthDir: string, options: TestOptions) {
   try {
-    const installed = await isTerraformInstalled(synthDir);
-    if (!installed) {
-      throw new Error(
-        "Terraform is not installed. Please install Terraform to run tests in the cloud."
-      );
-    }
-
-    await withSpinner("terraform init", async () => terraformInit(synthDir));
-
-    await withSpinner("terraform apply", () => terraformApply(synthDir, tfParallelism));
+    const runner = await harness.deploy(synthDir);
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-      const target = determineTargetFromPlatforms(platform);
-      const testRunnerPath = `@winglang/sdk/lib/${targetFolder[target]}/test-runner.inflight`;
-
-      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
-      const { TestRunnerClient } = await import(testRunnerPath);
-      const runner = new TestRunnerClient({ $tests: testArns });
-
       const allTests = await runner.listTests();
-      const filteredTests = filterTests(allTests, testFilter);
+      const filteredTests = filterTests(allTests, options.testFilter);
       return [runner, filteredTests];
     });
 
@@ -583,147 +568,12 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    if (clean) {
-      await cleanupTf(synthDir, tfParallelism);
+    if (options.clean) {
+      await harness.cleanup(synthDir);
     } else {
       noCleanUp(synthDir);
     }
   }
-}
-
-async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
-  const { clean, testFilter } = options;
-  try {
-    await isAwsCdkInstalled(synthDir);
-
-    await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
-
-    const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-      const stackName = process.env.CDK_STACK_NAME! + Util.sha256(synthDir).slice(-8);
-
-      const testArns = await awsCdkOutput(
-        synthDir,
-        ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK,
-        stackName
-      );
-
-      const { TestRunnerClient } = await import(
-        "@winglang/sdk/lib/shared-aws/test-runner.inflight"
-      );
-      const runner = new TestRunnerClient({ $tests: testArns });
-
-      const allTests = await runner.listTests();
-      const filteredTests = filterTests(allTests, testFilter);
-      return [runner, filteredTests];
-    });
-
-    const results = await withSpinner("Running tests...", async () => {
-      return runTests(testRunner, tests);
-    });
-
-    const testReport = await renderTestReport(synthDir, results);
-    if (testReport.length > 0) {
-      console.log(testReport);
-    }
-
-    if (testResultsContainsFailure(results)) {
-      console.log("One or more tests failed. Cleaning up resources...");
-    }
-
-    return results;
-  } catch (err) {
-    console.warn((err as Error).message);
-    return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
-  } finally {
-    if (clean) {
-      await cleanupCdk(synthDir);
-    } else {
-      noCleanUp(synthDir);
-    }
-  }
-}
-
-async function cleanupCdk(synthDir: string) {
-  await withSpinner("aws-cdk destroy", () => awsCdkDestroy(synthDir));
-  rmSync(synthDir, { recursive: true, force: true });
-}
-
-async function isAwsCdkInstalled(synthDir: string) {
-  try {
-    await execCapture("cdk version --ci true", { cwd: synthDir });
-  } catch (err) {
-    throw new Error(
-      "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk)."
-    );
-  }
-}
-
-export async function awsCdkDeploy(synthDir: string) {
-  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", {
-    cwd: synthDir,
-  });
-}
-
-export async function awsCdkDestroy(synthDir: string) {
-  const removeFile = promisify(rm);
-  await removeFile(synthDir.concat("/output.json"));
-  await execCapture("cdk destroy -f --ci true --app ./", { cwd: synthDir });
-}
-
-async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
-  const readFileCmd = promisify(readFile);
-  const file = await readFileCmd(synthDir.concat("/output.json"));
-  const parsed = JSON.parse(Buffer.from(file).toString());
-  return parsed[stackName][name];
-}
-
-const targetFolder: Record<string, string> = {
-  [BuiltinPlatform.TF_AWS]: "shared-aws",
-  [BuiltinPlatform.TF_AZURE]: "shared-azure",
-  [BuiltinPlatform.TF_GCP]: "shared-gcp",
-};
-
-async function cleanupTf(synthDir: string, parallelism?: number) {
-  try {
-    await withSpinner("terraform destroy", () => terraformDestroy(synthDir, parallelism));
-    rmSync(synthDir, { recursive: true, force: true });
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-async function isTerraformInstalled(synthDir: string) {
-  const output = await execCapture("terraform version", { cwd: synthDir });
-  return output.startsWith("Terraform v");
-}
-
-export async function terraformInit(synthDir: string) {
-  return execCapture("terraform init", { cwd: synthDir });
-}
-
-async function terraformApply(synthDir: string, parallelism?: number) {
-  return execCapture(
-    `terraform apply -auto-approve ${parallelism ? `-parallelism=${parallelism}` : ""}`,
-    { cwd: synthDir }
-  );
-}
-
-async function terraformDestroy(synthDir: string, parallelism?: number) {
-  return execCapture(
-    `terraform destroy -auto-approve ${parallelism ? `-parallelism=${parallelism}` : ""}`,
-    {
-      cwd: synthDir,
-    }
-  );
-}
-
-async function terraformOutput(synthDir: string, name: string) {
-  const output = await execCapture("terraform output -json", { cwd: synthDir });
-  const parsed = JSON.parse(output);
-  if (!parsed[name]) {
-    throw new Error(`terraform output ${name} not found`);
-  }
-  return parsed[name].value;
 }
 
 function sortTests(a: std.TestResult, b: std.TestResult) {
@@ -747,23 +597,4 @@ function extractTestNameFromPath(path: string): string | undefined {
     }
   }
   return undefined;
-}
-
-const MAX_BUFFER = 10 * 1024 * 1024;
-
-/**
- * Executes command and returns STDOUT. If the command fails (non-zero), throws an error.
- */
-async function execCapture(command: string, options: { cwd: string }) {
-  log(command);
-  const exec = promisify(cp.exec);
-  const { stdout, stderr } = await exec(command, {
-    cwd: options.cwd,
-    maxBuffer: MAX_BUFFER,
-  });
-  if (stderr) {
-    throw new Error(stderr);
-  }
-  log(stdout);
-  return stdout;
 }
