@@ -26,7 +26,7 @@
     "npm-which": "^3.0.1",
     "tsx": "^4.15.7",
     "typescript": "^5.5.2",
-    "vitest": "^1.6.0"
+    "vitest": "^3.0.2"
   },
   "files": [
     "dist"

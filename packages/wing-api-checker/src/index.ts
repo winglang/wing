@@ -2,14 +2,14 @@ import * as fs from "fs";
 import * as path from "path";
 import chalk from "chalk";
 import chokidar from "chokidar";
-import * as glob from "glob-promise";
+import { glob } from "glob";
 import { SourceLocatable, TypeSystem } from "jsii-reflect";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 async function generateWarnings(packageDir: string): Promise<number> {
   const ts = new TypeSystem();
-  for (let dotJsii of await glob.promise(`${packageDir}/**/.jsii`)) {
+  for (let dotJsii of await glob(`${packageDir}/**/.jsii`)) {
     await ts.load(dotJsii);
   }
 

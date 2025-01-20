@@ -50,7 +50,7 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "chokidar": "^3.6.0",
-    "glob-promise": "^6.0.7",
+    "glob": "^10.4.2",
     "jsii-reflect": "^1.100.0",
     "yargs": "^17.7.2"
   },

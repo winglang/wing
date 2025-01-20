@@ -72,7 +72,7 @@
     "ts-morph": "^23.0.0",
     "tsx": "^4.15.7",
     "typescript": "^5.5.2",
-    "vitest": "^1.6.0",
+    "vitest": "^3.0.2",
     "wing-api-checker": "workspace:^"
   },
   "peerDependencies": {

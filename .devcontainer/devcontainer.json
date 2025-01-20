@@ -11,11 +11,11 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/rust:1": {},
     "ghcr.io/devcontainers-contrib/features/pnpm:2": {
-      "version": "8.6.5"
+      "version": "8.15.1"
     }
   },
   "hostRequirements": {
-    "cpus": 4,
+    "cpus": 4
   },
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind"

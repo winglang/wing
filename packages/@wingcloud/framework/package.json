@@ -33,7 +33,7 @@
     "@winglang/sdk": "workspace:^",
     "bump-pack": "workspace:^",
     "tsup": "^8.1.0",
-    "vitest": "^1.6.0"
+    "vitest": "^3.0.2"
   },
   "files": [
     "dist"

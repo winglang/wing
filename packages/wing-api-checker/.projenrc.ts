@@ -21,7 +21,7 @@ const project = new typescript.TypeScriptProject({
   package: false,
   depsUpgrade: false,
   jest: false,
-  deps: ["chalk", "chokidar", "glob-promise", "jsii-reflect", "yargs"],
+  deps: ["chalk", "chokidar", "glob", "jsii-reflect", "yargs"],
   devDeps: ["@types/yargs", "tsx"],
 });
 

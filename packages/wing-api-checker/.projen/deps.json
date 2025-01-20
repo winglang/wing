@@ -79,7 +79,7 @@
       "type": "runtime"
     },
     {
-      "name": "glob-promise",
+      "name": "glob",
       "type": "runtime"
     },
     {
