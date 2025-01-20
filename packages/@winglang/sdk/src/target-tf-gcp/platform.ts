@@ -6,7 +6,8 @@ import { Function } from "./function";
 import { Schedule } from "./schedule";
 import { TestRunner } from "./test-runner";
 import { BUCKET_FQN, COUNTER_FQN, FUNCTION_FQN, SCHEDULE_FQN } from "../cloud";
-import { IPlatform } from "../platform";
+import { IPlatform, ITestHarness } from "../platform";
+import { TerraformTestHarness } from "../shared-tf/harness";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
@@ -49,5 +50,11 @@ export class Platform implements IPlatform {
     }
 
     return undefined;
+  }
+
+  public async createTestHarness(): Promise<ITestHarness> {
+    return new TerraformTestHarness({
+      clientModule: require.resolve("../shared-gcp/test-runner.inflight"),
+    });
   }
 }

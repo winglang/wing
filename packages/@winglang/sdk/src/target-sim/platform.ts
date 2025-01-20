@@ -32,7 +32,7 @@ import {
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
-import { IPlatform } from "../platform";
+import { IPlatform, ITestHarness } from "../platform";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
@@ -145,5 +145,11 @@ export class Platform implements IPlatform {
     fs.writeFileSync(envFile, updatedContent);
 
     console.log(`${Object.keys(secrets).length} secret(s) stored in .env`);
+  }
+
+  public async createTestHarness(): Promise<ITestHarness> {
+    throw new Error(
+      "Unexpected: simulator test execution is hard coded into the CLI"
+    );
   }
 }

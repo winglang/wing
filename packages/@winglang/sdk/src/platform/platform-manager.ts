@@ -125,6 +125,13 @@ export class PlatformManager {
     return new ClassFactory(newInstanceOverrides, resolveTypeOverrides);
   }
 
+  /**
+   * Returns the target platform (the first platform in the list)
+   */
+  public get primary(): IPlatform {
+    return this.platformInstances[0];
+  }
+
   // This method is called from preflight.js in order to return an App instance
   // that can be synthesized
   public createApp(appProps: Omit<AppProps, "classFactory">): App {
@@ -133,7 +140,7 @@ export class PlatformManager {
     }
     (globalThis as any).$ClassFactory = this.createClassFactory();
 
-    let appCall = this.platformInstances[0].newApp;
+    let appCall = this.primary.newApp;
 
     if (!appCall) {
       throw new Error(

@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { App, AppProps } from "../core";
+import { ITestRunnerClient } from "../std";
 
 /**
  * Platform interface
@@ -66,4 +67,27 @@ export interface IPlatform {
    * Hook for creating and storing secrets
    */
   storeSecrets?(secrets: { [name: string]: string }): Promise<void>;
+
+  /**
+   * Create a Wing test harness for this platform.
+   */
+  createTestHarness(): Promise<ITestHarness>;
+}
+
+/**
+ * API for running wing tests.
+ */
+export interface ITestHarness {
+  /**
+   * Deploys the test program synthesized in the given directory and return an `ITestRunnerClient`
+   * that can be used to run the tests.
+   * @param synthDir - The directory containing the synthesized test program.
+   */
+  deploy(synthDir: string): Promise<ITestRunnerClient>;
+
+  /**
+   * Cleans up the test harness after the tests have been run.
+   * @param synthDir - The directory containing the synthesized test program.
+   */
+  cleanup(synthDir: string): Promise<void>;
 }

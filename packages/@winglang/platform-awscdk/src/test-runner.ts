@@ -2,8 +2,7 @@ import { CfnOutput, Lazy } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { core, std } from "@winglang/sdk";
 import { isAwsCdkFunction } from "./function";
-
-const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WingTestRunnerFunctionArns";
+import { WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK } from "./harness";
 
 /**
  * AWS implementation of `cloud.TestRunner`.
@@ -32,7 +31,7 @@ export class TestRunner extends std.TestRunner {
       }),
     });
 
-    output.overrideLogicalId(OUTPUT_TEST_RUNNER_FUNCTION_ARNS);
+    output.overrideLogicalId(WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK);
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {

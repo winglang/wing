@@ -5,7 +5,8 @@ import { Counter } from "./counter";
 import { Function } from "./function";
 import { TestRunner } from "./test-runner";
 import { BUCKET_FQN, COUNTER_FQN, FUNCTION_FQN } from "../cloud";
-import { IPlatform } from "../platform";
+import { IPlatform, ITestHarness } from "../platform";
+import { TerraformTestHarness } from "../shared-tf/harness";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
@@ -49,5 +50,12 @@ export class Platform implements IPlatform {
     }
 
     return undefined;
+  }
+
+  public async createTestHarness(): Promise<ITestHarness> {
+    return new TerraformTestHarness({
+      parallelism: 5,
+      clientModule: require.resolve("../shared-tf-azure/test-runner.inflight"),
+    });
   }
 }
