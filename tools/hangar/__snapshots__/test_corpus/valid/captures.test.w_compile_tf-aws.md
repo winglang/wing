@@ -500,7 +500,7 @@ module.exports = function({ $headers }) {
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.Queue-SetConsumer0_S3Object_2AD0A795.key}",
-        "timeout": "${aws_sqs_queue.Queue.visibility_timeout_seconds}",
+        "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []

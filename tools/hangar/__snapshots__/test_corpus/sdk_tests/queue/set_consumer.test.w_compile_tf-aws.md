@@ -268,7 +268,7 @@
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.Queue-SetConsumer0_S3Object_2AD0A795.key}",
-        "timeout": "${aws_sqs_queue.Queue.visibility_timeout_seconds}",
+        "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -304,7 +304,7 @@
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.q2-SetConsumer0_S3Object_FB40B099.key}",
-        "timeout": "${aws_sqs_queue.q2.visibility_timeout_seconds}",
+        "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -339,7 +339,7 @@
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.q3-SetConsumer0_S3Object_69810AFF.key}",
-        "timeout": "${aws_sqs_queue.q3.visibility_timeout_seconds}",
+        "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
