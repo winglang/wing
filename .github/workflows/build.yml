@@ -89,7 +89,7 @@ jobs:
         run: pnpm bump-pack
 
       - name: Build and Package
-        run: pnpm package:ci
+        run: pnpm package:ci --force
         env:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
 
@@ -144,7 +144,7 @@ jobs:
         run: terraform -v
 
       - name: Test
-        run: pnpm test:ci
+        run: pnpm test:ci --force
 
       - name: Create git patch
         id: diff
