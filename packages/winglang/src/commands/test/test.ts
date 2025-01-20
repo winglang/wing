@@ -235,7 +235,11 @@ async function executeTest(
     return testSimulator(synthDir, options);
   }
 
-  const harness = await platform.createTestHarness();
+  const harness = await platform.createTestHarness?.();
+  if (!harness) {
+    throw new Error(`Cannot run "wing test" against "${target}" platform`);
+  }
+
   return executeTestInHarness(harness, synthDir, options);
 }
 

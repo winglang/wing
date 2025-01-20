@@ -71,7 +71,7 @@ export interface IPlatform {
   /**
    * Create a Wing test harness for this platform.
    */
-  createTestHarness(): Promise<ITestHarness>;
+  createTestHarness?(): Promise<ITestHarness>;
 }
 
 /**
