@@ -10,12 +10,12 @@ exports.handler = async function(event) {
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
-  }
+  };
   if (process.env.PIG_LATIN) {
     msg = "Ellohay, " + event.name + "!";
   } else {
     msg = "Hello, " + event.name + "!";
-  }
+  };
   return { msg };
 }
   const $ctx = {
@@ -175,12 +175,12 @@ exports.handler = async function(event) {
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
-  }
+  };
   if (process.env.PIG_LATIN) {
     msg = "Ellohay, " + event.name + "!";
   } else {
     msg = "Hello, " + event.name + "!";
-  }
+  };
   return { msg };
 }
   const $ctx = {
@@ -338,12 +338,12 @@ exports.handler = async function(event) {
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
-  }
+  };
   if (process.env.PIG_LATIN) {
     msg = "Ellohay, " + event.name + "!";
   } else {
     msg = "Hello, " + event.name + "!";
-  }
+  };
   return { msg };
 }
   const $ctx = {
@@ -501,12 +501,12 @@ exports.handler = async function(event) {
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
-  }
+  };
   if (process.env.PIG_LATIN) {
     msg = "Ellohay, " + event.name + "!";
   } else {
     msg = "Hello, " + event.name + "!";
-  }
+  };
   return { msg };
 }
   const $ctx = {
@@ -814,7 +814,7 @@ exports.handler = async function(event) {
       const value = p.get("topic");
       if (!value) {
         throw new Error("URLSearchParams failed");
-      }
+      };
       return value;
     }
   const $ctx = {

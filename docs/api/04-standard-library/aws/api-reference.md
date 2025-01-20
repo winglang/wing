@@ -1705,7 +1705,7 @@ Base class for AWS Queues.
 ```wing
 bring aws;
 
-new aws.Queue(props?: QueueProps);
+new aws.Queue(props: QueueProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1714,7 +1714,7 @@ new aws.Queue(props?: QueueProps);
 
 ---
 
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.aws.Queue.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.aws.Queue.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.QueueProps">QueueProps</a>
 
