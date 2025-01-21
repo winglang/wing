@@ -544,7 +544,7 @@ inheritEnv: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* true
 
 Whether to inherit environment variables from the host's environment.
 
@@ -605,7 +605,7 @@ inheritEnv: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* true
 
 Whether to inherit environment variables from the host's environment.
 
@@ -771,7 +771,7 @@ inheritEnv: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* true
 
 Whether to inherit environment variables from the host's environment.
 
@@ -848,7 +848,7 @@ inheritEnv: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* true
 
 Whether to inherit environment variables from the host's environment.
 
