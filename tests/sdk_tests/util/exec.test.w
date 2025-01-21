@@ -57,15 +57,12 @@ test "exec()" {
   expect.equal(output3.status, 0);
 
 
-//  "exec() with inheritEnv option" 
+//  "exec() with inheritEnv option (default is "true")" 
   let program4 = "bash";
   let args4 = ["--norc", "--noprofile", "-c", "echo $WING_TARGET"];
-  let opts4 = {
-    inheritEnv: true,
-  };
 
-  let output4 = util.exec(program4, args4);
-  let output5 = util.exec(program4, args4, opts4);
+  let output4 = util.exec(program4, args4, { inheritEnv: false });
+  let output5 = util.exec(program4, args4);
 
   // LF (\n)
   expect.equal(output4.stdout.length, 1);
