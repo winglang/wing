@@ -33,7 +33,7 @@ export class Table extends VisualComponent {
   public static _newTable(
     scope: Construct,
     id: string,
-    handlers: TableHandlers
+    handlers: TableHandlers,
   ): Table {
     return Resource._newFromFactory(TABLE_FQN, scope, id, handlers);
   }
@@ -50,7 +50,7 @@ export class Table extends VisualComponent {
         } catch (e) {
           throw new Error("Invalid payload for table scan handler client");
         }
-      }
+      },
     );
 
     this.scanFn = new Function(this, "scan", scanHandler);

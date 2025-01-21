@@ -62,7 +62,7 @@ export function extractFieldsFromSchema(schema: any): Set<string> {
 
 export function filterParametersBySchema(
   fields: Set<string>,
-  parameters: any
+  parameters: any,
 ): any {
   const filtered: any = {};
 
@@ -128,7 +128,7 @@ export function loadPlatformSpecificValues() {
         return toml.parse(data);
       default:
         throw new Error(
-          `Unsupported file extension: ${fileExtension} (expected .yml, .json, or .toml)`
+          `Unsupported file extension: ${fileExtension} (expected .yml, .json, or .toml)`,
         );
     }
   })();

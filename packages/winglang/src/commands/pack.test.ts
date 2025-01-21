@@ -20,7 +20,7 @@ describe("wing pack", () => {
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
     await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow(
-      /No package.json found in the current directory./
+      /No package.json found in the current directory./,
     );
     await expectNoTarball(outdir);
   });
@@ -31,7 +31,7 @@ describe("wing pack", () => {
     process.chdir(projectDir);
 
     await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow(
-      /Missing required field "license" in package.json/
+      /Missing required field "license" in package.json/,
     );
     await expectNoTarball(outdir);
   });
@@ -78,7 +78,7 @@ describe("wing pack", () => {
 
     // WHEN
     await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow(
-      /Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead./
+      /Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead./,
     );
 
     // THEN
@@ -196,12 +196,12 @@ describe("wing pack", () => {
 
     await fs.symlink(
       require.resolve("@winglang/sdk/lib/index.js"),
-      join(outdir, "package", "node_modules", "@winglang", "sdk", "index.js")
+      join(outdir, "package", "node_modules", "@winglang", "sdk", "index.js"),
     );
 
     await fs.symlink(
       require.resolve("@winglang/sdk/lib/macros.js"),
-      join(outdir, "package", "node_modules", "@winglang", "sdk", "lib", "macros.js")
+      join(outdir, "package", "node_modules", "@winglang", "sdk", "lib", "macros.js"),
     );
 
     const packagePath = join(outdir, "package");

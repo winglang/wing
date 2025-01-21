@@ -13,14 +13,14 @@ export class AwsCdkTestHarness implements ITestHarness {
       await execCapture("cdk version --ci true", { cwd: synthDir });
     } catch (err) {
       throw new Error(
-        "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk)."
+        "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk).",
       );
     }
 
     await withSpinner("cdk deploy", () =>
       execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", {
         cwd: synthDir,
-      })
+      }),
     );
 
     const stackName = process.env.CDK_STACK_NAME! + Util.sha256(synthDir).slice(-8);

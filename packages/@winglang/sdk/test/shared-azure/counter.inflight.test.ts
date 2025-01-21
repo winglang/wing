@@ -21,7 +21,7 @@ vi.spyOn(azureDataTables, "TableClient").mockImplementation(() => {
       }) => {
         counter[entity.rowKey] = entity.counterValue;
         return Promise.resolve();
-      }
+      },
     ),
   };
 });

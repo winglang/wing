@@ -97,7 +97,7 @@ describe("wing test (custom platform)", () => {
           }
         }
       }
-      module.exports = { Platform }`
+      module.exports = { Platform }`,
     );
 
     // entrypoint array is empty because foo.test.w is inferred as the only entrypoint
@@ -108,7 +108,7 @@ describe("wing test (custom platform)", () => {
     });
 
     expect(logSpy).toHaveBeenCalledWith(
-      expect.stringMatching(/^pass ─ foo\.test\.tfaws\.\d+ \(no tests\)$/)
+      expect.stringMatching(/^pass ─ foo\.test\.tfaws\.\d+ \(no tests\)$/),
     );
   });
 });
@@ -278,11 +278,11 @@ describe("output-file option", () => {
     expect(resultsFn.validateOutputFilePath("out.json")).toBeUndefined();
 
     expect(() => resultsFn.validateOutputFilePath("/path/out.csv")).toThrow(
-      'only .json output files are supported. (found ".csv")'
+      'only .json output files are supported. (found ".csv")',
     );
 
     expect(() => resultsFn.validateOutputFilePath("/path/json")).toThrow(
-      'only .json output files are supported. (found "")'
+      'only .json output files are supported. (found "")',
     );
   });
 });
@@ -340,7 +340,7 @@ describe("retry and parallel options", () => {
         test "alwaysFail" {
           assert(false);
         }
-      `
+      `,
     );
 
     await wingTest(["fail.test.w"], {
@@ -364,7 +364,7 @@ describe("retry and parallel options", () => {
         test "alwaysFail" {
           assert(false);
         }
-      `
+      `,
     );
 
     // Equivalent to `wing test --retry` (default 3 retries)
@@ -393,7 +393,7 @@ test "t1" {
   log("t1 ends");
   assert(true);
 }
-  `
+  `,
     );
     fs.writeFileSync(
       "t2.test.w",
@@ -404,7 +404,7 @@ test "t2" {
   log("t2 ends");
   assert(true);
 }
-  `
+  `,
     );
 
     await wingTest(["t1.test.w", "t2.test.w"], {
@@ -434,7 +434,7 @@ util.sleep(1s);
 log("t1 ends");
 assert(true);
 }
-  `
+  `,
     );
     fs.writeFileSync(
       "t2.test.w",
@@ -445,7 +445,7 @@ test "t2" {
   log("t2 ends");
   assert(true);
 }
-  `
+  `,
     );
 
     await wingTest(["t1.test.w", "t2.test.w"], {

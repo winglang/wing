@@ -38,17 +38,17 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
       this.resolvedSourceCodeFile,
       (msg, level) => {
         this.addTrace(msg, TraceType.RESOURCE, level);
-      }
+      },
     );
   }
 
   public async init(
-    context: ISimulatorContext
+    context: ISimulatorContext,
   ): Promise<SimResourceAttributes> {
     this._context = context;
     this.resolvedSourceCodeFile = path.resolve(
       context.simdir,
-      this.sourceCodeFile
+      this.sourceCodeFile,
     );
     await this.createBundle();
     this.sandbox = new Sandbox(this.bundle!.outfilePath, {
@@ -60,7 +60,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
         this.addTrace(
           message,
           internal ? TraceType.SIMULATOR : TraceType.LOG,
-          level
+          level,
         );
       },
       // A resource needs to respond to method calls in a timely manner since
@@ -76,7 +76,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
     try {
       const attrs: Record<string, string> = await this.sandbox.call(
         "start",
-        this.context.statedir
+        this.context.statedir,
       );
       return attrs;
     } catch (err) {
@@ -108,7 +108,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
             this.addTrace(
               "Sandbox is busy, waiting and retrying...",
               TraceType.SIMULATOR,
-              LogLevel.VERBOSE
+              LogLevel.VERBOSE,
             );
             await new Promise((resolve) => setTimeout(resolve, 100));
           } else {
@@ -146,7 +146,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
     const bundleInvalidated = await isBundleInvalidated(
       this.resolvedSourceCodeFile,
       this.bundle!,
-      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE),
     );
     if (bundleInvalidated) {
       return UpdatePlan.REPLACE;
@@ -171,12 +171,12 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
               this.addTrace(
                 "Sandbox is busy, waiting and retrying...",
                 TraceType.SIMULATOR,
-                LogLevel.VERBOSE
+                LogLevel.VERBOSE,
               );
               await new Promise((resolve) => setTimeout(resolve, 100));
             } else if (err instanceof SandboxTimeoutError) {
               throw new Error(
-                `Call to resource "${this.context.resourcePath}" timed out after ${this.timeout}ms`
+                `Call to resource "${this.context.resourcePath}" timed out after ${this.timeout}ms`,
               );
             } else {
               throw err;

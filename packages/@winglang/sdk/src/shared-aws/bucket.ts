@@ -34,7 +34,7 @@ export abstract class Bucket extends cloud.Bucket implements IAwsBucket {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("bucket", "bucket.inflight"),
-      "BucketClient"
+      "BucketClient",
     );
   }
 
@@ -68,7 +68,7 @@ export abstract class Bucket extends cloud.Bucket implements IAwsBucket {
 
     if (AwsInflightHost.isAwsInflightHost(host)) {
       host.addPolicyStatements(
-        ...calculateBucketPermissions(this.bucketArn, ops)
+        ...calculateBucketPermissions(this.bucketArn, ops),
       );
     }
 
@@ -128,7 +128,7 @@ export class BucketRef extends Resource {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("bucket", "bucket.inflight"),
-      "BucketClient"
+      "BucketClient",
     );
   }
 
@@ -165,7 +165,7 @@ export class BucketRef extends Resource {
   public onLift(host: IInflightHost, ops: string[]): void {
     if (AwsInflightHost.isAwsInflightHost(host)) {
       host.addPolicyStatements(
-        ...calculateBucketPermissions(this.bucketArn, ops)
+        ...calculateBucketPermissions(this.bucketArn, ops),
       );
     }
 
@@ -241,7 +241,7 @@ export class BucketRef extends Resource {
       put: lift({ bucket: this }).inflight(
         async (ctx, fileName, fileContent) => {
           await ctx.bucket.put(fileName, fileContent);
-        }
+        },
       ),
       get: lift({ bucket: this }).inflight(async (ctx, fileName) => {
         return ctx.bucket.get(fileName);
@@ -268,7 +268,7 @@ export class BucketEventHandler {
    */
   public static toTopicOnMessageHandler(
     handler: cloud.IBucketEventHandler,
-    eventType: cloud.BucketEventType
+    eventType: cloud.BucketEventType,
   ): cloud.ITopicOnMessageHandler {
     return lift({ handler, eventType }).inflight(async (ctx, event) => {
       try {
@@ -279,7 +279,7 @@ export class BucketEventHandler {
         }
         return await ctx.handler(
           message.Records[0].s3.object.key,
-          ctx.eventType
+          ctx.eventType,
         );
       } catch (error) {
         console.warn("Error parsing the notification event message: ", error);

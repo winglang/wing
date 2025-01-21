@@ -29,7 +29,7 @@ export abstract class Counter extends cloud.Counter implements IAwsCounter {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("counter", "counter.inflight"),
-      "CounterClient"
+      "CounterClient",
     );
   }
 
@@ -71,7 +71,7 @@ export abstract class Counter extends cloud.Counter implements IAwsCounter {
     }
 
     host.addPolicyStatements(
-      ...calculateCounterPermissions(this.dynamoTableArn, ops)
+      ...calculateCounterPermissions(this.dynamoTableArn, ops),
     );
 
     host.addEnvironment(this.envName(), this.dynamoTableName);

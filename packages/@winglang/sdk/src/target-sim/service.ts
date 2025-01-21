@@ -29,7 +29,7 @@ export class Service
     scope: Construct,
     id: string,
     handler: cloud.IServiceHandler,
-    props: cloud.ServiceProps = {}
+    props: cloud.ServiceProps = {},
   ) {
     super(scope, id, handler, props);
     this.autoStart = props.autoStart ?? true;

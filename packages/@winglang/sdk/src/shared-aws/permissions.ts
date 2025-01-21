@@ -3,7 +3,7 @@ import * as cloud from "../cloud";
 
 export function calculateTopicPermissions(
   arn: string,
-  ops: string[]
+  ops: string[],
 ): PolicyStatement[] {
   const policies: PolicyStatement[] = [];
 
@@ -19,7 +19,7 @@ export function calculateTopicPermissions(
 
 export function calculateQueuePermissions(
   arn: string,
-  ops: string[]
+  ops: string[],
 ): PolicyStatement[] {
   const policies: PolicyStatement[] = [];
 
@@ -62,7 +62,7 @@ export function calculateQueuePermissions(
 
 export function calculateCounterPermissions(
   arn: string,
-  ops: string[]
+  ops: string[],
 ): PolicyStatement[] {
   const policies: PolicyStatement[] = [];
 
@@ -89,7 +89,7 @@ export function calculateCounterPermissions(
 
 export function calculateBucketPermissions(
   arn: string,
-  ops: string[]
+  ops: string[],
 ): PolicyStatement[] {
   const actions: string[] = [];
   // const policies: PolicyStatement[] = [];
@@ -149,7 +149,7 @@ export function calculateBucketPermissions(
     actions.push(
       "s3:DeleteObject*",
       "s3:DeleteObjectVersion*",
-      "s3:PutLifecycleConfiguration*"
+      "s3:PutLifecycleConfiguration*",
     );
   }
 
@@ -168,7 +168,7 @@ export function calculateBucketPermissions(
 
 export function calculateSecretPermissions(
   arn: string,
-  ops: string[]
+  ops: string[],
 ): PolicyStatement[] {
   const policies: PolicyStatement[] = [];
 

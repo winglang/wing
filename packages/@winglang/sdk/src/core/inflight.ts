@@ -48,7 +48,7 @@ export class InflightClient {
    */
   public static forV2(
     klass: any,
-    liftedFields: Record<string, string>
+    liftedFields: Record<string, string>,
   ): string {
     if (typeof klass !== "function") {
       throw new Error("Invalid inflight class");
@@ -97,7 +97,7 @@ export class InflightClient {
  * ```
  */
 export function lift<TToLift extends LiftableRecord>(
-  captures: TToLift
+  captures: TToLift,
 ): Lifter<LiftedMap<TToLift>, {}> {
   return new Lifter().lift(captures);
 }
@@ -112,7 +112,7 @@ export function lift<TToLift extends LiftableRecord>(
  * @wing inflight
  */
 export function inflight<TFunction extends AsyncFunction>(
-  fn: (ctx: {}, ...args: Parameters<TFunction>) => ReturnType<TFunction>
+  fn: (ctx: {}, ...args: Parameters<TFunction>) => ReturnType<TFunction>,
 ) {
   return new Lifter().inflight(fn);
 }
@@ -122,11 +122,11 @@ export function inflight<TFunction extends AsyncFunction>(
  */
 class Lifter<
   TLifted extends Record<string, any>,
-  TOperations extends Record<string, string[]>
+  TOperations extends Record<string, string[]>,
 > {
   constructor(
     private lifts: LiftableRecord = {},
-    private grants: Record<string, string[]> = {}
+    private grants: Record<string, string[]> = {},
   ) {}
 
   /**
@@ -163,7 +163,7 @@ class Lifter<
         ...this.lifts,
         ...captures,
       },
-      this.grants
+      this.grants,
     );
   }
 
@@ -189,14 +189,14 @@ class Lifter<
   public grant<
     TNewOps extends Partial<{
       [K in keyof TLifted]: OperationsOf<TLifted[K]>;
-    }>
+    }>,
   >(grants: TNewOps) {
     return new Lifter<TLifted, Omit<TOperations, keyof TNewOps> & TNewOps>(
       this.lifts,
       {
         ...this.grants,
         ...grants,
-      }
+      },
     );
   }
 
@@ -217,12 +217,13 @@ class Lifter<
       Omit<TLifted, keyof TOperations> & {
         // For each of the granted types, get the lifted type with only the granted operations available (and any fields as well)
         [K in keyof TOperations &
-          keyof TLifted]: TOperations[K] extends (infer TGrantedOps extends keyof TLifted[K])[]
+          keyof TLifted]: TOperations[K] extends (infer TGrantedOps extends
+          keyof TLifted[K])[]
           ? PickNonFunctions<TLifted[K]> & Pick<TLifted[K], TGrantedOps>
           : TLifted[K];
       },
       ...args: Parameters<TFunction>
-    ) => ReturnType<TFunction>
+    ) => ReturnType<TFunction>,
   ): Inflight<TFunction> {
     // This is a simplified version of the Wing compiler's _liftMap generation
     // It specifies what transitive permissions need to be added based on what
@@ -234,7 +235,7 @@ class Lifter<
       const knownOps =
         this.grants[key] ??
         Object.keys((obj as IHostedLiftable)._liftMap ?? {}).filter(
-          (x) => x !== INFLIGHT_INIT_METHOD_NAME // filter "$inflight_init"
+          (x) => x !== INFLIGHT_INIT_METHOD_NAME, // filter "$inflight_init"
         );
 
       _liftMap.handle.push([obj, knownOps]);
@@ -266,7 +267,7 @@ class Lifter<
       // @ts-expect-error This function's type doesn't actually match, but it will just throw anyways
       [INFLIGHT_SYMBOL]: () => {
         throw new Error(
-          "This is a inflight function and can only be invoked while inflight"
+          "This is a inflight function and can only be invoked while inflight",
         );
       },
     };

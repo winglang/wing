@@ -76,7 +76,7 @@ export class Schedule
 
   public async addEventSubscription(
     subscriber: string,
-    subscriptionProps: EventSubscription
+    subscriptionProps: EventSubscription,
   ) {
     const task = {
       functionHandle: subscriber,
@@ -95,7 +95,7 @@ export class Schedule
   private runTasks() {
     for (const task of this.tasks) {
       const fnClient = this.context.getClient(
-        task.functionHandle
+        task.functionHandle,
       ) as IFunctionClient;
       if (!fnClient) {
         throw new Error("No function client found for task.");

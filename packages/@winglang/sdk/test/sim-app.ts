@@ -38,7 +38,7 @@ export class SimApp extends App {
     const platform = new Platform();
     const classFactory = new ClassFactory(
       [platform.newInstance.bind(platform)],
-      [platform.resolveType.bind(platform)]
+      [platform.resolveType.bind(platform)],
     );
 
     super({
@@ -53,7 +53,7 @@ export class SimApp extends App {
     try {
       fs.symlinkSync(
         join(__dirname, "..", "node_modules"),
-        join(this.outdir, "node_modules")
+        join(this.outdir, "node_modules"),
       );
     } catch (e) {
       if (e.code !== "EEXIST") {

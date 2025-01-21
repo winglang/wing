@@ -52,7 +52,7 @@ export abstract class Function extends cloud.Function implements IAwsFunction {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("function", "function.inflight"),
-      "FunctionClient"
+      "FunctionClient",
     );
   }
 
@@ -194,7 +194,7 @@ export class FunctionRef extends Resource {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("function", "function.inflight"),
-      "FunctionClient"
+      "FunctionClient",
     );
   }
 
@@ -289,7 +289,7 @@ export class FunctionRef extends Resource {
       this,
       "FunctionArnField",
       "Function ARN",
-      this.functionArn
+      this.functionArn,
     );
   }
 }

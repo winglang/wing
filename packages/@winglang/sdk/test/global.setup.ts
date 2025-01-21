@@ -41,7 +41,7 @@ export async function teardown() {
  */
 async function findFilesWithExtension(
   directories: string[],
-  fileExtensions: string[]
+  fileExtensions: string[],
 ): Promise<string[]> {
   const results: Set<string> = new Set();
 
@@ -69,7 +69,7 @@ async function findFilesWithExtension(
 
         // Check if any file extension in the list matches the file extension
         const matchedExt = fileExtensions.some((ext) =>
-          filePath.toLowerCase().endsWith(ext.toLowerCase())
+          filePath.toLowerCase().endsWith(ext.toLowerCase()),
         );
 
         // We got one!

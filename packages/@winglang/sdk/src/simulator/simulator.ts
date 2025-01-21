@@ -236,7 +236,7 @@ export class Simulator {
       onCompromised: async (reason, error) => {
         console.error(
           `Simulator lockfile compromised. Stopping simulation.`,
-          `Reason: ${reason}.`
+          `Reason: ${reason}.`,
         );
         if (error) {
           console.error(error);
@@ -271,7 +271,7 @@ export class Simulator {
     const simJson = join(simdir, "simulator.json");
     if (!existsSync(simJson)) {
       throw new Error(
-        `Invalid Wing app (${simdir}) - simulator.json not found.`
+        `Invalid Wing app (${simdir}) - simulator.json not found.`,
       );
     }
 
@@ -281,19 +281,19 @@ export class Simulator {
     const expectedVersion = SDK_VERSION;
     if (foundVersion !== expectedVersion) {
       console.error(
-        `WARNING: The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+        `WARNING: The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`,
       );
     }
     if (schema.resources === undefined) {
       throw new Error(
-        `Incompatible .wsim file. The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+        `Incompatible .wsim file. The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`,
       );
     }
 
     const treeJson = join(simdir, TREE_FILE_PATH);
     if (!existsSync(treeJson)) {
       throw new Error(
-        `Invalid Wing app (${simdir}) - ${TREE_FILE_PATH} not found.`
+        `Invalid Wing app (${simdir}) - ${TREE_FILE_PATH} not found.`,
       );
     }
 
@@ -302,7 +302,7 @@ export class Simulator {
     const connectionJson = join(simdir, CONNECTIONS_FILE_PATH);
     if (!existsSync(connectionJson)) {
       throw new Error(
-        `Invalid Wing app (${simdir}) - ${CONNECTIONS_FILE_PATH} not found.`
+        `Invalid Wing app (${simdir}) - ${CONNECTIONS_FILE_PATH} not found.`,
       );
     }
     const connections = readJsonSync(connectionJson).connections;
@@ -326,7 +326,7 @@ export class Simulator {
   public async start(): Promise<void> {
     if (this._running !== "stopped") {
       throw new Error(
-        "A simulation is already running. Did you mean to call `await simulator.stop()` first?"
+        "A simulation is already running. Did you mean to call `await simulator.stop()` first?",
       );
     }
     this._running = "starting";
@@ -375,7 +375,7 @@ export class Simulator {
       await this.stop();
 
       throw new Error(
-        `Failed to start resources: ${failed.map((r) => `"${r}"`).join(", ")}`
+        `Failed to start resources: ${failed.map((r) => `"${r}"`).join(", ")}`,
       );
     }
   }
@@ -390,7 +390,7 @@ export class Simulator {
 
     const plan = await this.planUpdate(
       this._model.schema.resources,
-      newModel.schema.resources
+      newModel.schema.resources,
     );
 
     this.addTrace({
@@ -430,7 +430,7 @@ export class Simulator {
     }
     if (this._running === "stopped") {
       throw new Error(
-        "There is no running simulation to stop. Did you mean to call `await simulator.start()` first?"
+        "There is no running simulation to stop. Did you mean to call `await simulator.start()` first?",
       );
     }
     this._running = "stopping";
@@ -454,7 +454,7 @@ export class Simulator {
 
   private setResourceRunningState(
     path: string,
-    runningState: ResourceRunningState
+    runningState: ResourceRunningState,
   ) {
     this.runningState[path] = runningState;
 
@@ -476,7 +476,7 @@ export class Simulator {
     const handle = this.tryGetResourceHandle(path);
     if (!handle) {
       throw new Error(
-        `Resource ${path} could not be cleaned up, no handle for it was found.`
+        `Resource ${path} could not be cleaned up, no handle for it was found.`,
       );
     }
 
@@ -500,7 +500,7 @@ export class Simulator {
     this.addSimulatorTrace(
       path,
       { message: `${path} stopped` },
-      LogLevel.VERBOSE
+      LogLevel.VERBOSE,
     );
 
     delete this.state[path]; // delete the state of the resource
@@ -589,7 +589,7 @@ export class Simulator {
         const client = makeSimulatorClient(
           this.url,
           childHandle,
-          ADMIN_PERMISSION
+          ADMIN_PERMISSION,
         );
 
         const get = (_target: any, method: string, _receiver: any) => {
@@ -651,7 +651,7 @@ export class Simulator {
    * Get the running state of a resource.
    */
   public tryGetResourceRunningState(
-    path: string
+    path: string,
   ): ResourceRunningState | undefined {
     return this.runningState[path];
   }
@@ -727,7 +727,7 @@ export class Simulator {
   private checkPermission(
     callerHandle: string,
     calleeHandle: string,
-    method: string
+    method: string,
   ): { granted: boolean; reason?: string } {
     if (callerHandle === ADMIN_PERMISSION) {
       return { granted: true };
@@ -798,7 +798,7 @@ export class Simulator {
                 message: grant.reason,
               },
             }),
-            "utf-8"
+            "utf-8",
           );
           return;
         }
@@ -815,7 +815,7 @@ export class Simulator {
                   message: `Resource ${handle} not found. It may not have been initialized yet.`,
                 },
               }),
-              "utf-8"
+              "utf-8",
             );
             return;
           } else if (this._running === "stopping") {
@@ -825,7 +825,7 @@ export class Simulator {
                   message: `Resource ${handle} not found. It may have been cleaned up already.`,
                 },
               }),
-              "utf-8"
+              "utf-8",
             );
             return;
           } else {
@@ -835,7 +835,7 @@ export class Simulator {
                   message: `Internal error - resource ${handle} not found.`,
                 },
               }),
-              "utf-8"
+              "utf-8",
             );
             return;
           }
@@ -851,7 +851,7 @@ export class Simulator {
                 message: `Method "${method}" not found on resource ${handle} (${resourcePath}).`,
               },
             }),
-            "utf-8"
+            "utf-8",
           );
           return;
         }
@@ -872,7 +872,7 @@ export class Simulator {
                   name: err.name,
                 },
               }),
-              "utf-8"
+              "utf-8",
             );
           });
       });
@@ -996,13 +996,13 @@ export class Simulator {
           ? `${resourceConfig.path} failed to start: ${initError}`
           : `${resourceConfig.path} started`,
       },
-      initError ? LogLevel.ERROR : LogLevel.VERBOSE
+      initError ? LogLevel.ERROR : LogLevel.VERBOSE,
     );
   }
 
   private createContext(
     resourceConfig: BaseResourceSchema,
-    resourceHandle: string
+    resourceHandle: string,
   ): ISimulatorContext {
     return {
       simdir: this._model.simdir,
@@ -1060,7 +1060,7 @@ export class Simulator {
             {
               message: `${path}.${key} = ${value}`,
             },
-            LogLevel.VERBOSE
+            LogLevel.VERBOSE,
           );
         }
 
@@ -1099,7 +1099,7 @@ export class Simulator {
       const target = this._model.graph.tryFind(token.path);
       if (!target) {
         throw new Error(
-          `Could not resolve token "${token}" because the resource at path "${token.path}" does not exist.`
+          `Could not resolve token "${token}" because the resource at path "${token.path}" does not exist.`,
         );
       }
 
@@ -1109,7 +1109,7 @@ export class Simulator {
         const value = r.attrs[token.attr];
         if (value === undefined) {
           throw new UnresolvedTokenError(
-            `Unable to resolve attribute '${token.attr}' for resource "${target.path}" referenced by "${resolver}"`
+            `Unable to resolve attribute '${token.attr}' for resource "${target.path}" referenced by "${resolver}"`,
           );
         }
         return value;
@@ -1133,7 +1133,7 @@ export class Simulator {
    */
   private async planUpdate(
     current: Record<string, BaseResourceSchema>,
-    next: Record<string, BaseResourceSchema>
+    next: Record<string, BaseResourceSchema>,
   ) {
     // Make sure we're working on a copy of "current"
     current = { ...current };
@@ -1171,7 +1171,7 @@ export class Simulator {
   private async shouldReplace(
     path: string,
     oldConfig: BaseResourceSchema,
-    newConfig: BaseResourceSchema
+    newConfig: BaseResourceSchema,
   ) {
     const state = (r: BaseResourceSchema) =>
       JSON.stringify({
@@ -1216,7 +1216,7 @@ export interface ISimulatorFactory {
   resolve(
     type: string,
     props: any,
-    context: ISimulatorContext
+    context: ISimulatorContext,
   ): ISimulatorResourceInstance;
 }
 
@@ -1441,7 +1441,7 @@ class PolicyRegistry {
   public checkPermission(
     caller: string,
     callee: string,
-    method: string
+    method: string,
   ): boolean {
     for (const policy of Object.values(this.policies)) {
       if (policy.principal === caller) {

@@ -12,7 +12,7 @@ test("throw error when no projectId provided", () => {
 
   // THEN
   expect(() => new GcpApp(props)).toThrow(
-    /A Google Cloud project ID must be specified/
+    /A Google Cloud project ID must be specified/,
   );
 });
 
@@ -40,7 +40,7 @@ test("throw error when no region provided", () => {
 
   // THEN
   expect(() => new GcpApp(props)).toThrow(
-    /A Google Cloud region must be specified/
+    /A Google Cloud region must be specified/,
   );
 });
 

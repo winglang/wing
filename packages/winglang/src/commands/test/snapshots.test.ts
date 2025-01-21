@@ -21,7 +21,7 @@ describe("determineSnapshotMode", () => {
         clean: false,
         platform: [],
         snapshots: SnapshotMode.NEVER,
-      })
+      }),
     ).toBe(SnapshotMode.NEVER);
   });
 
@@ -31,7 +31,7 @@ describe("determineSnapshotMode", () => {
         clean: false,
         platform: [],
         snapshots: SnapshotMode.UPDATE,
-      })
+      }),
     ).toBe(SnapshotMode.UPDATE);
   });
 
@@ -41,7 +41,7 @@ describe("determineSnapshotMode", () => {
         clean: false,
         platform: [],
         snapshots: SnapshotMode.DEPLOY,
-      })
+      }),
     ).toBe(SnapshotMode.DEPLOY);
   });
 
@@ -51,7 +51,7 @@ describe("determineSnapshotMode", () => {
         clean: false,
         platform: [],
         snapshots: SnapshotMode.DEPLOY,
-      })
+      }),
     ).toBe(SnapshotMode.NEVER);
 
     expect(
@@ -59,7 +59,7 @@ describe("determineSnapshotMode", () => {
         clean: false,
         platform: [],
         snapshots: SnapshotMode.ASSERT,
-      })
+      }),
     ).toBe(SnapshotMode.NEVER);
 
     expect(
@@ -67,7 +67,7 @@ describe("determineSnapshotMode", () => {
         clean: false,
         platform: [],
         snapshots: SnapshotMode.UPDATE,
-      })
+      }),
     ).toBe(SnapshotMode.NEVER);
   });
 
@@ -82,7 +82,7 @@ describe("determineSnapshotMode", () => {
           determineSnapshotMode("sim", {
             clean: false,
             platform: [],
-          })
+          }),
         ).toBe(SnapshotMode.NEVER);
       });
 
@@ -92,7 +92,7 @@ describe("determineSnapshotMode", () => {
             clean: false,
             snapshots: SnapshotMode.AUTO,
             platform: [],
-          })
+          }),
         ).toBe(SnapshotMode.ASSERT);
       });
     });
@@ -103,7 +103,7 @@ describe("determineSnapshotMode", () => {
           determineSnapshotMode("sim", {
             clean: false,
             platform: [],
-          })
+          }),
         ).toBe(SnapshotMode.NEVER);
       });
       test("non sim => deploy", () => {
@@ -111,7 +111,7 @@ describe("determineSnapshotMode", () => {
           determineSnapshotMode("tf-azure", {
             clean: false,
             platform: [],
-          })
+          }),
         ).toBe(SnapshotMode.DEPLOY);
       });
     });
@@ -133,7 +133,7 @@ describe("captureSnapshot", async () => {
         b.put("key", "value");
         assert(b.get("key") == "value");
       }
-    `
+    `,
     );
 
     return entrypoint;
@@ -184,7 +184,7 @@ describe("captureSnapshot", async () => {
         clean: false,
         platform: ["tf-aws"],
         snapshots: SnapshotMode.ASSERT,
-      })
+      }),
     ).rejects.toThrowError(/Snapshot file does not exist/);
   });
 
@@ -193,7 +193,7 @@ describe("captureSnapshot", async () => {
 
     await writeFile(
       join(dirname(entrypoint), "main.w.tf-aws.snap.md"),
-      expected.replace(`"force_destroy": false`, `"force_destroy": true`)
+      expected.replace(`"force_destroy": false`, `"force_destroy": true`),
     );
 
     await expect(
@@ -201,7 +201,7 @@ describe("captureSnapshot", async () => {
         clean: false,
         platform: ["tf-aws"],
         snapshots: SnapshotMode.ASSERT,
-      })
+      }),
     ).rejects.toThrowError(/\+        "force_destroy": false/);
   });
 

@@ -51,7 +51,7 @@ export class TestRunner
     }
     const fnClient = this.context.getClient(
       functionHandle,
-      true
+      true,
     ) as IFunctionClient;
     let pass = false;
     let error: string | undefined;

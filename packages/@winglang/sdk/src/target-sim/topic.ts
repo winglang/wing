@@ -34,14 +34,14 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageOptions = {}
+    props: cloud.TopicOnMessageOptions = {},
   ): cloud.Function {
     const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnMessage"),
       functionHandler,
-      props
+      props,
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "Subscriber";
@@ -75,7 +75,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
           await ctx.queue.push(event as unknown as string);
           return undefined;
         }),
-      {}
+      {},
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "QueueSubscriber";
@@ -135,7 +135,7 @@ export class TopicOnMessageHandler {
    * @returns the function handler
    */
   public static toFunctionHandler(
-    handler: cloud.ITopicOnMessageHandler
+    handler: cloud.ITopicOnMessageHandler,
   ): cloud.IFunctionHandler {
     return lift({ handler }).inflight(async (ctx, event) => {
       await ctx.handler(event as unknown as string);

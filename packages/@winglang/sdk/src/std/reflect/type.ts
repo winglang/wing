@@ -23,7 +23,7 @@ export interface ITypeElement extends ILiftable {
    * @internal
    */
   _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>];
 }
 
@@ -283,11 +283,11 @@ export class Type implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").Type)("${this.kind}", undefined);`;
     const initialization: string[] = [];
     const dataVarName = context.get(this.data!);
@@ -329,7 +329,7 @@ export class ClassType implements ITypeElement {
     base?: ClassType,
     interfaces: ClassType[] = [],
     properties: { [key: string]: Property } = {},
-    methods: { [key: string]: Method } = {}
+    methods: { [key: string]: Method } = {},
   ) {
     this.name = name;
     this.fqn = fqn;
@@ -346,11 +346,11 @@ export class ClassType implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").ClassType)("${this.name}", ${
       this.fqn ? `"${this.fqn}"` : "undefined"
     });`;
@@ -366,13 +366,13 @@ export class ClassType implements ITypeElement {
     for (const prop of Object.values(this.properties)) {
       const propVarName = context.get(prop)!;
       initialization.push(
-        `${varName}.properties["${prop.name}"] = ${propVarName};`
+        `${varName}.properties["${prop.name}"] = ${propVarName};`,
       );
     }
     for (const method of Object.values(this.methods)) {
       const methodVarName = context.get(method)!;
       initialization.push(
-        `${varName}.methods["${method.name}"] = ${methodVarName};`
+        `${varName}.methods["${method.name}"] = ${methodVarName};`,
       );
     }
     return [declaration, initialization];
@@ -421,7 +421,7 @@ export class InterfaceType implements ITypeElement {
     fqn: string | undefined,
     bases: InterfaceType[] = [],
     properties: { [key: string]: Property } = {},
-    methods: { [key: string]: Method } = {}
+    methods: { [key: string]: Method } = {},
   ) {
     this.name = name;
     this.fqn = fqn;
@@ -437,11 +437,11 @@ export class InterfaceType implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").InterfaceType)("${this.name}", ${
       this.fqn ? `"${this.fqn}"` : "undefined"
     });`;
@@ -453,13 +453,13 @@ export class InterfaceType implements ITypeElement {
     for (const prop of Object.values(this.properties)) {
       const propVarName = context.get(prop)!;
       initialization.push(
-        `${varName}.properties["${prop.name}"] = ${propVarName};`
+        `${varName}.properties["${prop.name}"] = ${propVarName};`,
       );
     }
     for (const method of Object.values(this.methods)) {
       const methodVarName = context.get(method)!;
       initialization.push(
-        `${varName}.methods["${method.name}"] = ${methodVarName};`
+        `${varName}.methods["${method.name}"] = ${methodVarName};`,
       );
     }
     return [declaration, initialization];
@@ -502,7 +502,7 @@ export class StructType implements ITypeElement {
     name: string,
     fqn: string | undefined,
     bases: StructType[] = [],
-    fields: { [key: string]: Property } = {}
+    fields: { [key: string]: Property } = {},
   ) {
     this.name = name;
     this.fqn = fqn;
@@ -517,11 +517,11 @@ export class StructType implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").StructType)("${this.name}", ${
       this.fqn ? `"${this.fqn}"` : "undefined"
     });`;
@@ -533,7 +533,7 @@ export class StructType implements ITypeElement {
     for (const field of Object.values(this.fields)) {
       const fieldVarName = context.get(field)!;
       initialization.push(
-        `${varName}.fields["${field.name}"] = ${fieldVarName};`
+        `${varName}.fields["${field.name}"] = ${fieldVarName};`,
       );
     }
     return [declaration, initialization];
@@ -570,7 +570,7 @@ export class EnumType implements ITypeElement {
   constructor(
     name: string,
     fqn: string | undefined,
-    variants: { [key: string]: EnumVariant } = {}
+    variants: { [key: string]: EnumVariant } = {},
   ) {
     this.name = name;
     this.fqn = fqn;
@@ -584,11 +584,11 @@ export class EnumType implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").EnumType)("${this.name}", ${
       this.fqn ? `"${this.fqn}"` : "undefined"
     });`;
@@ -596,7 +596,7 @@ export class EnumType implements ITypeElement {
     for (const variant of Object.values(this.variants)) {
       const variantVarName = context.get(variant)!;
       initialization.push(
-        `${varName}.variants["${variant.name}"] = ${variantVarName};`
+        `${varName}.variants["${variant.name}"] = ${variantVarName};`,
       );
     }
     return [declaration, initialization];
@@ -634,12 +634,12 @@ export class EnumVariant implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     return [
       `const ${varName} = new (require("${normalPath(
-        __filename
+        __filename,
       )}").EnumVariant)("${this.name}");`,
       [],
     ];
@@ -676,11 +676,11 @@ export class Property implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").Property)("${this.name}");`;
     const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
@@ -718,11 +718,11 @@ export class Method implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").Method)("${this.name}", ${this.isStatic});`;
     const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
@@ -757,11 +757,11 @@ export class ArrayType implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").ArrayType)(undefined, ${this.isMut});`;
     const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
@@ -800,11 +800,11 @@ export class MapType implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").MapType)(undefined, ${this.isMut});`;
     const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
@@ -843,11 +843,11 @@ export class SetType implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").SetType)(undefined, ${this.isMut});`;
     const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
@@ -883,11 +883,11 @@ export class OptionalType implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").OptionalType)(undefined);`;
     const initialization: string[] = [];
     const childVarName = context.get(this.child)!;
@@ -929,11 +929,11 @@ export class FunctionType implements ITypeElement {
 
   /** @internal */
   public _toInflightWithContext(
-    context: Map<ITypeElement, string>
+    context: Map<ITypeElement, string>,
   ): [string, Array<string>] {
     const varName = context.get(this)!;
     const declaration = `const ${varName} = new (require("${normalPath(
-      __filename
+      __filename,
     )}").FunctionType)("${this.phase}", [], undefined);`;
     const initialization: string[] = [];
     for (const param of this.params) {

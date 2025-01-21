@@ -114,8 +114,8 @@ test("bucket name valid", () => {
       "azurerm_resource_group",
       {
         name: `Default-${app.node.addr.substring(0, 8)}`,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
 
   expect(
@@ -124,8 +124,8 @@ test("bucket name valid", () => {
       "azurerm_storage_account",
       {
         name: `default${app.node.addr.substring(0, 8)}`,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
 
   expect(
@@ -134,8 +134,8 @@ test("bucket name valid", () => {
       "azurerm_storage_container",
       {
         name: `the-uncanny-bucket-${bucket.node.addr.substring(0, 8)}`,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
 
   expect(tfSanitize(output)).toMatchSnapshot();
@@ -156,6 +156,6 @@ test("bucket onEvent is not implemented yet", () => {
 
   // THEN
   expect(error).toBe(
-    "onEvent method isn't implemented yet on the current target.\nFor more information see: https://github.com/winglang/wing/issues/1954.\nContributions welcome ❤️"
+    "onEvent method isn't implemented yet on the current target.\nFor more information see: https://github.com/winglang/wing/issues/1954.\nContributions welcome ❤️",
   );
 });

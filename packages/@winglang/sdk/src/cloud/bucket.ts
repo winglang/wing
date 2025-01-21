@@ -216,13 +216,13 @@ export class Bucket extends Resource {
   public addFile(
     key: string,
     path: string,
-    encoding: BufferEncoding = "utf-8"
+    encoding: BufferEncoding = "utf-8",
   ): void {
     const app = App.of(this);
 
     const data = fs.readFileSync(
       isAbsolute(path) ? path : resolve(app.entrypointDir, path),
-      { encoding: encoding }
+      { encoding: encoding },
     );
 
     this.addObject(key, data);
@@ -257,7 +257,7 @@ export class Bucket extends Resource {
    */
   protected createTopicHandler(
     eventType: BucketEventType,
-    inflight: IBucketEventHandler
+    inflight: IBucketEventHandler,
   ): ITopicOnMessageHandler {
     eventType;
     inflight;
@@ -273,12 +273,12 @@ export class Bucket extends Resource {
   private createBucketEvent(
     eventNames: BucketEventType[],
     inflight: IBucketEventHandler,
-    opts?: BucketOnCreateOptions
+    opts?: BucketOnCreateOptions,
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
       const topic = this.getTopic(BucketEventType.CREATE).onMessage(
-        this.createTopicHandler(BucketEventType.CREATE, inflight)
+        this.createTopicHandler(BucketEventType.CREATE, inflight),
       );
       for (const op of [
         BucketInflightMethods.PUT,
@@ -295,7 +295,7 @@ export class Bucket extends Resource {
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
       const topic = this.getTopic(BucketEventType.UPDATE).onMessage(
-        this.createTopicHandler(BucketEventType.UPDATE, inflight)
+        this.createTopicHandler(BucketEventType.UPDATE, inflight),
       );
       for (const op of [
         BucketInflightMethods.PUT,
@@ -312,7 +312,7 @@ export class Bucket extends Resource {
     }
     if (eventNames.includes(BucketEventType.DELETE)) {
       const topic = this.getTopic(BucketEventType.DELETE).onMessage(
-        this.createTopicHandler(BucketEventType.DELETE, inflight)
+        this.createTopicHandler(BucketEventType.DELETE, inflight),
       );
       for (const op of [
         BucketInflightMethods.DELETE,
@@ -369,7 +369,7 @@ export class Bucket extends Resource {
     this.createBucketEvent(
       [BucketEventType.CREATE, BucketEventType.UPDATE, BucketEventType.DELETE],
       fn,
-      opts
+      opts,
     );
   }
 }
@@ -514,7 +514,7 @@ export interface IBucketClient {
    */
   tryGet(
     key: string,
-    options?: BucketTryGetOptions
+    options?: BucketTryGetOptions,
   ): Promise<string | undefined>;
 
   /**

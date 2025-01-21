@@ -92,7 +92,7 @@ describe(
 
     test("should error if a nonexistent file is compiled", async () => {
       return expect(
-        compile("non-existent-file.w", { platform: [BuiltinPlatform.SIM] })
+        compile("non-existent-file.w", { platform: [BuiltinPlatform.SIM] }),
       ).rejects.toThrowError(/Source file cannot be found/);
     });
 
@@ -100,14 +100,14 @@ describe(
       const exampleErrorFile = join(exampleErrorDir, "bool_from_json.test.w");
 
       await expect(
-        compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] })
+        compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] }),
       ).rejects.not.toThrowError(/@winglang\/sdk/);
 
       const prevDebug = process.env.DEBUG;
       process.env.DEBUG = "true";
 
       await expect(
-        compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] })
+        compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] }),
       ).rejects.toThrowError(/@winglang\/sdk/);
 
       process.env.DEBUG = prevDebug;
@@ -191,5 +191,5 @@ describe(
       expectedFiles.forEach((file) => expect(files2).toContain(file));
     });
   },
-  { timeout: 1000 * 60 * 5 }
+  { timeout: 1000 * 60 * 5 },
 );

@@ -88,7 +88,7 @@ test("async invoke function cleanup while running", async () => {
       // sleep forever
       await new Promise(() => {});
       return undefined;
-    })
+    }),
   );
 
   const s = await app.startSimulator();
@@ -146,7 +146,7 @@ test("invoke function fails", async () => {
   // WHEN
   const PAYLOAD = { name: "alice" };
   await expect(client.invoke(Json._fromAny(PAYLOAD))).rejects.toThrow(
-    "Name must start with uppercase letter"
+    "Name must start with uppercase letter",
   );
 
   // THEN
@@ -209,7 +209,7 @@ test("invoke function with process.exit(1)", async () => {
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
   // WHEN
   await expect(client.invoke()).rejects.toThrow(
-    "Process exited with code 1, signal null"
+    "Process exited with code 1, signal null",
   );
   // THEN
   await s.stop();
@@ -232,7 +232,7 @@ test("runtime environment tests", async () => {
         throw new Error("URLSearchParams failed");
       }
       return value;
-    })
+    }),
   );
 
   // check that fetch is a function (we can't really make network calls here)
@@ -243,7 +243,7 @@ test("runtime environment tests", async () => {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const c = require("crypto");
       return typeof c.createHash;
-    })
+    }),
   );
 
   // check that we can import ESM modules
@@ -252,7 +252,7 @@ test("runtime environment tests", async () => {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { nanoid } = require("nanoid");
       return nanoid();
-    })
+    }),
   );
 
   // THEN
@@ -270,7 +270,7 @@ test("__dirname and __filename cannot be used within inflight code", async () =>
   const app = new SimApp();
   const dirnameInvoker = app.newCloudFunction(inflight(async () => __dirname));
   const filenameInvoker = app.newCloudFunction(
-    inflight(async () => __filename)
+    inflight(async () => __filename),
   );
 
   const s = await app.startSimulator();
@@ -283,8 +283,8 @@ test("__dirname and __filename cannot be used within inflight code", async () =>
   expect(
     listMessages(s).filter((m) =>
       m.includes(
-        "Warning: __dirname and __filename cannot be used within bundled cloud functions."
-      )
-    )
+        "Warning: __dirname and __filename cannot be used within bundled cloud functions.",
+      ),
+    ),
   ).toHaveLength(2);
 });

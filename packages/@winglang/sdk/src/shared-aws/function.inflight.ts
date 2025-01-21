@@ -45,7 +45,7 @@ export class FunctionClient implements IFunctionClient {
       // to ensure the received event will be `null` (which will be converted to `undefined` in the function code)
       // If the Payload is undefined, the resulting event will instead be `{}`
       Payload: fromUtf8(
-        payload !== undefined ? JSON.stringify(payload) : "null"
+        payload !== undefined ? JSON.stringify(payload) : "null",
       ),
     });
     const response = await this.lambdaClient.send(command);
@@ -68,7 +68,7 @@ export class FunctionClient implements IFunctionClient {
       console.error("Error: " + response.FunctionError);
       console.error(response.Payload ? toUtf8(response.Payload) : "");
       throw new Error(
-        `Failed to enqueue event. Received status code: ${response.StatusCode}`
+        `Failed to enqueue event. Received status code: ${response.StatusCode}`,
       );
     }
   }
@@ -95,7 +95,7 @@ export class FunctionClient implements IFunctionClient {
     }
     if (typeof value !== "string") {
       throw new Error(
-        `function returned value of type ${typeof value}, not string`
+        `function returned value of type ${typeof value}, not string`,
       );
     }
     return ["", traces];
@@ -104,7 +104,7 @@ export class FunctionClient implements IFunctionClient {
 
 function parseCommandOutput(
   payload: InvokeCommandOutput,
-  functionArn: string
+  functionArn: string,
 ): Json | undefined {
   if (payload.FunctionError) {
     let errorText = toUtf8(payload.Payload!);
@@ -119,7 +119,7 @@ function parseCommandOutput(
       }"\nLogs: ${cloudwatchLogsPath(functionArn)}`;
       errorMessage = errorMessage.replace(
         "Task timed out after",
-        "Function timed out after"
+        "Function timed out after",
       );
 
       const newError = new Error();
@@ -132,7 +132,7 @@ function parseCommandOutput(
     throw new Error(
       `Invoke failed with message: "${
         payload.FunctionError
-      }"\nLogs: ${cloudwatchLogsPath(functionArn)}\nFull Error: "${errorText}"`
+      }"\nLogs: ${cloudwatchLogsPath(functionArn)}\nFull Error: "${errorText}"`,
     );
   }
 

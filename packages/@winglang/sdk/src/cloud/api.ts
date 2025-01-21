@@ -173,7 +173,7 @@ export class Api extends Resource {
    * @returns An object containing default CORS response headers and OPTIONS response headers.
    */
   public static renderCorsHeaders(
-    corsOptions?: ApiCorsOptions
+    corsOptions?: ApiCorsOptions,
   ): CorsHeaders | undefined {
     if (corsOptions == undefined) {
       return;
@@ -275,7 +275,7 @@ export class Api extends Resource {
   public get(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiGetOptions
+    props?: ApiGetOptions,
   ): void {
     path;
     inflight;
@@ -293,7 +293,7 @@ export class Api extends Resource {
   public post(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiPostOptions
+    props?: ApiPostOptions,
   ): void {
     path;
     inflight;
@@ -311,7 +311,7 @@ export class Api extends Resource {
   public put(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiPutOptions
+    props?: ApiPutOptions,
   ): void {
     path;
     inflight;
@@ -329,7 +329,7 @@ export class Api extends Resource {
   public delete(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiDeleteOptions
+    props?: ApiDeleteOptions,
   ): void {
     path;
     inflight;
@@ -347,7 +347,7 @@ export class Api extends Resource {
   public patch(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiPatchOptions
+    props?: ApiPatchOptions,
   ): void {
     path;
     inflight;
@@ -365,7 +365,7 @@ export class Api extends Resource {
   public options(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiOptionsOptions
+    props?: ApiOptionsOptions,
   ): void {
     path;
     inflight;
@@ -383,7 +383,7 @@ export class Api extends Resource {
   public head(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiHeadOptions
+    props?: ApiHeadOptions,
   ): void {
     path;
     inflight;
@@ -401,7 +401,7 @@ export class Api extends Resource {
   public connect(
     path: string,
     inflight: IApiEndpointHandler,
-    props?: ApiConnectOptions
+    props?: ApiConnectOptions,
   ): void {
     path;
     inflight;
@@ -420,7 +420,7 @@ export class Api extends Resource {
       !/^((\/\:[a-zA-Z0-9_\-]+|\/[a-zA-Z0-9_\-\.]*)*(?:\?[^#]*)?)?$/g.test(path)
     ) {
       throw new Error(
-        `Invalid path ${path}. Url parts can only contain alpha-numeric chars, "-", "_" and ".". Params can only contain alpha-numeric chars and "_".`
+        `Invalid path ${path}. Url parts can only contain alpha-numeric chars, "-", "_" and ".". Params can only contain alpha-numeric chars and "_".`,
       );
     }
   }
@@ -510,14 +510,14 @@ export class Api extends Resource {
    */
   protected _findAmbiguousPath(
     path: string,
-    method: string
+    method: string,
   ): string | undefined {
     const existingPaths = Object.keys(this.apiSpec.paths);
 
     return existingPaths.find(
       (existingPath) =>
         !!this.apiSpec.paths[existingPath][method.toLowerCase()] &&
-        this._arePathsAmbiguous(existingPath, path)
+        this._arePathsAmbiguous(existingPath, path),
     );
   }
 
@@ -531,7 +531,7 @@ export class Api extends Resource {
     const existingPaths = Object.keys(this.apiSpec.paths);
 
     return existingPaths.find((existingPath) =>
-      this._arePathsSiblings(existingPath, path)
+      this._arePathsSiblings(existingPath, path),
     );
   }
 
@@ -568,23 +568,23 @@ export class Api extends Resource {
     path: string,
     method: string,
     apiSpecExtension: OpenApiSpecExtension,
-    corsOptions?: ApiCorsOptions
+    corsOptions?: ApiCorsOptions,
   ) {
     if (this.apiSpec.paths[path]?.[method.toLowerCase()]) {
       throw new Error(
-        `Endpoint for path '${path}' and method '${method}' already exists`
+        `Endpoint for path '${path}' and method '${method}' already exists`,
       );
     }
     const ambiguousPath = this._findAmbiguousPath(path, method);
     if (!!ambiguousPath) {
       throw new Error(
-        `Endpoint for path '${path}' and method '${method}' is ambiguous - it conflicts with existing endpoint for path '${ambiguousPath}'`
+        `Endpoint for path '${path}' and method '${method}' is ambiguous - it conflicts with existing endpoint for path '${ambiguousPath}'`,
       );
     }
     const siblingPath = this._findSiblingPath(path);
     if (!!siblingPath) {
       throw new Error(
-        `Endpoint for path '${path}' and method '${method}' conflicts with existing sibling endpoint for path '${siblingPath}'- try to match the parameter names to avoid this error.`
+        `Endpoint for path '${path}' and method '${method}' conflicts with existing sibling endpoint for path '${siblingPath}'- try to match the parameter names to avoid this error.`,
       );
     }
     const operationId = `${method.toLowerCase()}${
@@ -817,7 +817,7 @@ export function parseHttpMethod(method: string): HttpMethod {
  * single-valued parameters.
  */
 export function sanitizeParamLikeObject(
-  obj: Record<string, string | string[] | undefined>
+  obj: Record<string, string | string[] | undefined>,
 ) {
   const newObj: Record<string, string> = {};
   Object.keys(obj).forEach((key) => {

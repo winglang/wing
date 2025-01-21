@@ -9,7 +9,7 @@ export abstract class Schedule extends cloud.Schedule implements IAwsSchedule {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("schedule", "schedule.inflight"),
-      "ScheduleClient"
+      "ScheduleClient",
     );
   }
 
@@ -19,7 +19,7 @@ export abstract class Schedule extends cloud.Schedule implements IAwsSchedule {
    */
   public abstract onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props?: ScheduleOnTickOptions
+    props?: ScheduleOnTickOptions,
   ): cloud.Function;
 }
 
@@ -44,7 +44,7 @@ export const convertUnixCronToAWSCron = (cron: string) => {
 
   if (cron && dayOfMonth !== "*" && dayOfWeek !== "*") {
     throw new Error(
-      "Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'"
+      "Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'",
     );
   }
 
@@ -98,7 +98,7 @@ export class ScheduleOnTickHandler {
    * @returns The function handler.
    */
   public static toFunctionHandler(
-    handler: cloud.IScheduleOnTickHandler
+    handler: cloud.IScheduleOnTickHandler,
   ): cloud.IFunctionHandler {
     return lift({ handler }).inflight(async (ctx) => {
       await ctx.handler();

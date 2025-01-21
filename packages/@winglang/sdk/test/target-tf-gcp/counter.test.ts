@@ -15,7 +15,7 @@ const GCP_APP_OPTS = {
 
 function checkDatastorePermissions(
   output: string,
-  expectedPermissions: string[]
+  expectedPermissions: string[],
 ) {
   const outputObject = JSON.parse(output);
   const membersRoles = (
@@ -42,10 +42,10 @@ test("counter name valid", () => {
       {
         name: `wing-counter-the-amazing-counter-01-${counter.node.addr.substring(
           0,
-          8
+          8,
         )}`,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -65,10 +65,10 @@ test("replace invalid character from counter name", () => {
       {
         name: `wing-counter-the-amazing-counter-01-${counter.node.addr.substring(
           0,
-          8
+          8,
         )}`,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

@@ -58,7 +58,7 @@ export class Website extends AwsWebsite {
         originAccessControlOriginType: "s3",
         signingBehavior: "always",
         signingProtocol: "sigv4",
-      }
+      },
     );
 
     // create a cloudFront distribution
@@ -145,7 +145,7 @@ export class Website extends AwsWebsite {
             resources: [`${this.bucket.arn}/*`],
           },
         ],
-      }
+      },
     );
 
     // attach policy to s3 bucket
@@ -184,7 +184,7 @@ export class Website extends AwsWebsite {
   public addFile(
     path: string,
     data: string,
-    options?: cloud.AddFileOptions
+    options?: cloud.AddFileOptions,
   ): string {
     new S3Object(this, `File-${path}`, {
       dependsOn: [this.bucket],

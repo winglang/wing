@@ -44,7 +44,7 @@ type ProcessResponse =
 export class Sandbox {
   public static async createBundle(
     entrypoint: string,
-    log?: (message: string, level: LogLevel) => void
+    log?: (message: string, level: LogLevel) => void,
   ): Promise<Bundle> {
     let contents = await readFile(entrypoint, "utf-8");
 
@@ -52,7 +52,7 @@ export class Sandbox {
     if (contents.includes("__dirname") || contents.includes("__filename")) {
       log?.(
         `Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.`,
-        LogLevel.WARNING
+        LogLevel.WARNING,
       );
     }
 
@@ -125,7 +125,7 @@ process.on("message", async (message) => {${debugShim}
 
     if (this.child) {
       this.debugLog(
-        `Terminating sandbox child process (PID ${this.childPid}).`
+        `Terminating sandbox child process (PID ${this.childPid}).`,
       );
       this.child.kill("SIGTERM");
       this.child = undefined;
@@ -239,15 +239,15 @@ process.on("message", async (message) => {${debugShim}
           {
             fn,
             args,
-          }
-        )}`
+          },
+        )}`,
       );
 
       this.onChildMessage = (message: ProcessResponse) => {
         this.debugLog(
           `Received a message from the sandbox (PID ${
             this.childPid
-          }): ${JSON.stringify(message)}`
+          }): ${JSON.stringify(message)}`,
         );
         this.available = true;
         if (this.timeout) {
@@ -260,8 +260,8 @@ process.on("message", async (message) => {${debugShim}
         } else {
           reject(
             new Error(
-              `Unexpected message from the sandbox (PID ${this.childPid}): ${message}`
-            )
+              `Unexpected message from the sandbox (PID ${this.childPid}): ${message}`,
+            ),
           );
         }
       };
@@ -271,7 +271,7 @@ process.on("message", async (message) => {${debugShim}
       // Since this is unexpected, we kill the process with SIGKILL to ensure it's dead, and reject the promise.
       this.onChildError = (error: Error) => {
         this.debugLog(
-          `Unexpected error from the sandbox (PID ${this.childPid}).`
+          `Unexpected error from the sandbox (PID ${this.childPid}).`,
         );
         this.child?.kill("SIGKILL");
         this.child = undefined;
@@ -299,7 +299,7 @@ process.on("message", async (message) => {${debugShim}
           resolve(undefined);
         } else {
           reject(
-            new Error(`Process exited with code ${code}, signal ${signal}`)
+            new Error(`Process exited with code ${code}, signal ${signal}`),
           );
         }
       };
@@ -307,7 +307,7 @@ process.on("message", async (message) => {${debugShim}
       if (this.options.timeout && !inspectorUrl?.()) {
         this.timeout = setTimeout(() => {
           this.debugLog(
-            `Killing sandbox (PID ${this.childPid}) after timeout.`
+            `Killing sandbox (PID ${this.childPid}) after timeout.`,
           );
           this.child?.kill("SIGTERM");
           this.child = undefined;

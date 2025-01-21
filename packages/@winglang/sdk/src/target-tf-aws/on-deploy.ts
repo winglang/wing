@@ -14,7 +14,7 @@ export class OnDeploy extends AwsOnDeploy {
     scope: Construct,
     id: string,
     handler: cloud.IOnDeployHandler,
-    props: cloud.OnDeployProps = {}
+    props: cloud.OnDeployProps = {},
   ) {
     super(scope, id, handler, props);
 
@@ -57,13 +57,13 @@ export class OnDeploy extends AwsOnDeploy {
 }
 
 function isTerraformDependable(
-  x: IConstruct
+  x: IConstruct,
 ): x is ITerraformDependable & IConstruct {
   return "fqn" in x;
 }
 
 function isTerraformResource(
-  x: IConstruct
+  x: IConstruct,
 ): x is ITerraformResource & IConstruct {
   return "terraformResourceType" in x;
 }

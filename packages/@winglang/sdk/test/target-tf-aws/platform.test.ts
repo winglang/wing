@@ -90,7 +90,7 @@ describe("tf-aws platform parameters", () => {
     });
     // THEN
     expect(() => app.synth()).toThrow(
-      /must have required property 'private_subnet_ids'/
+      /must have required property 'private_subnet_ids'/,
     );
   });
 
@@ -137,7 +137,7 @@ describe("tf-aws platform parameters", () => {
       "Function",
       inflight(async () => {
         return undefined;
-      })
+      }),
     );
 
     // THEN
@@ -178,11 +178,11 @@ describe("tf-aws platoform storeSecrets", async () => {
       // THEN
       expect(secretsManagerClientMock).toHaveReceivedCommandTimes(
         CreateSecretCommand,
-        1
+        1,
       );
       expect(secretsManagerClientMock).toHaveReceivedCommandWith(
         CreateSecretCommand,
-        { SecretString: "value1" }
+        { SecretString: "value1" },
       );
     });
   });
@@ -203,11 +203,11 @@ describe("tf-aws platoform storeSecrets", async () => {
       // THEN
       expect(secretsManagerClientMock).toHaveReceivedCommandTimes(
         UpdateSecretCommand,
-        1
+        1,
       );
       expect(secretsManagerClientMock).toHaveReceivedCommandWith(
         UpdateSecretCommand,
-        { SecretString: "value1" }
+        { SecretString: "value1" },
       );
     });
   });

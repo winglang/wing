@@ -221,7 +221,7 @@ export class Resource
   public addEnvironment(name: string, value: string) {
     if (this._env[name] !== undefined && this._env[name] !== value) {
       throw new Error(
-        `Environment variable "${name}" already set with a different value.`
+        `Environment variable "${name}" already set with a different value.`,
       );
     }
     this._env[name] = value;
@@ -304,7 +304,7 @@ export interface ISimulatorInflightHost extends IInflightHost {
 }
 
 export function isSimulatorInflightHost(
-  obj: any
+  obj: any,
 ): obj is ISimulatorInflightHost {
   return (
     typeof obj == "object" &&

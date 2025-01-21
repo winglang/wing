@@ -43,7 +43,7 @@ export class Service extends AwsService {
     scope: Construct,
     id: string,
     handler: cloud.IServiceHandler,
-    props: cloud.ServiceProps = {}
+    props: cloud.ServiceProps = {},
   ) {
     super(scope, id, handler, props);
 
@@ -302,7 +302,7 @@ export class Service extends AwsService {
   public addEnvironment(name: string, value: string): void {
     if (this._env[name] !== undefined && this._env[name] !== value) {
       throw new Error(
-        `Environment variable "${name}" already set with a different value.`
+        `Environment variable "${name}" already set with a different value.`,
       );
     }
     this._env[name] = value;

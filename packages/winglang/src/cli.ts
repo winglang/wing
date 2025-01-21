@@ -109,7 +109,7 @@ async function main() {
       "Disable analytics collection (same as WING_DISABLE_ANALYTICS=1)",
       () => {
         process.env.WING_DISABLE_ANALYTICS = "1";
-      }
+      },
     )
     .option("--no-color", "Disable colors for all output", () => {
       process.env.NO_COLOR = "1";
@@ -146,13 +146,13 @@ async function main() {
     .option("--no-open", "Do not open the Wing Console in the browser")
     .option(
       "-w, --watch <globs...>",
-      "Watch additional paths for changes. Supports globs and '!' for negations."
+      "Watch additional paths for changes. Supports globs and '!' for negations.",
     )
     .option(
       "-t, --platform <platform> --platform <platform>",
       "Target platform provider (builtin: sim)",
       collectPlatformVariadic,
-      DEFAULT_PLATFORM
+      DEFAULT_PLATFORM,
     )
     .option("--statedir <dir>", "Directory for the resource's state")
     .hook("preAction", collectAnalyticsHook)
@@ -178,12 +178,12 @@ async function main() {
       "-t, --platform <platform> --platform <platform>",
       "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp)",
       collectPlatformVariadic,
-      DEFAULT_PLATFORM
+      DEFAULT_PLATFORM,
     )
     .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-o, --output <output>",
-      'path to the output directory- default is "./target/<entrypoint>.<target>"'
+      'path to the output directory- default is "./target/<entrypoint>.<target>"',
     )
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
     .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
@@ -199,7 +199,7 @@ async function main() {
       "-t, --platform <platform> --platform <platform>",
       "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
       collectPlatformVariadic,
-      DEFAULT_PLATFORM
+      DEFAULT_PLATFORM,
     )
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
     .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
@@ -211,44 +211,44 @@ async function main() {
   program
     .command("test")
     .description(
-      "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
+      "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers",
     )
     .argument("[entrypoint...]", "all files to test (globs are supported)")
     .option(
       "-t, --platform <platform> --platform <platform>",
       "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
       collectPlatformVariadic,
-      DEFAULT_PLATFORM
+      DEFAULT_PLATFORM,
     )
     .addOption(
       new Option("-s, --snapshots <mode>", "Capture snapshots of compiler output")
         .choices(["auto", "never", "update", "deploy", "assert"])
-        .default("auto")
+        .default("auto"),
     )
     .addHelpText("afterAll", SNAPSHOTS_HELP)
     .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-f, --test-filter <regex>",
-      "Run tests that match the provided regex pattern within the selected entrypoint files"
+      "Run tests that match the provided regex pattern within the selected entrypoint files",
     )
     .option("--no-clean", "Keep build output")
     .option("--no-stream", "Do not stream logs")
     .option(
       "-o, --output-file <outputFile>",
-      "File name to write test results to (file extension is required, supports only .json at the moment)"
+      "File name to write test results to (file extension is required, supports only .json at the moment)",
     )
     .addOption(
       new Option("-R, --retry [retries]", "Number of times to retry failed tests")
         .preset(3)
-        .argParser(parseInt)
+        .argParser(parseInt),
     )
     .addOption(
       new Option(
         "-p, --parallel [batch]",
-        `Number of tests to be executed on parallel- if not specified- ${DEFAULT_PARALLEL_SIZE} will run on parallel, 0 to run all at once`
+        `Number of tests to be executed on parallel- if not specified- ${DEFAULT_PARALLEL_SIZE} will run on parallel, 0 to run all at once`,
       )
         .preset(DEFAULT_PARALLEL_SIZE)
-        .argParser(parseInt)
+        .argParser(parseInt),
     )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
@@ -265,12 +265,12 @@ async function main() {
     .command("new")
     .description("Create a new Wing project")
     .addArgument(
-      new Argument("<template>", "Template name").choices(projectTemplateNames()).argOptional()
+      new Argument("<template>", "Template name").choices(projectTemplateNames()).argOptional(),
     )
     .addOption(
       new Option("-l --language [language]", "Language")
         .choices(["wing", "typescript"])
-        .argParser((value) => value ?? "wing")
+        .argParser((value) => value ?? "wing"),
     )
     .addOption(new Option("--list-templates", "List available templates"))
     .hook("postAction", collectAnalyticsHook) // to catch the options that are added later
@@ -286,7 +286,7 @@ function checkNodeVersion() {
 
   if (!satisfies(process.version, supportedVersion)) {
     console.warn(
-      `WARNING: You are running an incompatible node.js version ${process.version}. Compatible engine is: ${supportedVersion}.`
+      `WARNING: You are running an incompatible node.js version ${process.version}. Compatible engine is: ${supportedVersion}.`,
     );
   }
 }

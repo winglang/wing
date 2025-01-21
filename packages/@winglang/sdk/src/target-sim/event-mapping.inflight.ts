@@ -28,12 +28,12 @@ export class EventMapping implements ISimulatorResourceInstance {
   }
 
   public async init(
-    context: ISimulatorContext
+    context: ISimulatorContext,
   ): Promise<EventMappingAttributes> {
     this._context = context;
     const client = this.context.getClient(
       this.publisher,
-      true
+      true,
     ) as IEventPublisher;
     await client.addEventSubscription(this.subscriber, this.eventSubscription);
     return {};
@@ -42,7 +42,7 @@ export class EventMapping implements ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {
     const client = this.context.getClient(
       this.publisher,
-      true
+      true,
     ) as IEventPublisher;
     await client.removeEventSubscription(this.subscriber);
   }

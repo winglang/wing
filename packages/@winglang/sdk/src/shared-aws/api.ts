@@ -52,7 +52,7 @@ export abstract class Api extends cloud.Api implements IAwsApi {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("api", "api.inflight"),
-      "ApiClient"
+      "ApiClient",
     );
   }
 
@@ -109,42 +109,42 @@ export abstract class Api extends cloud.Api implements IAwsApi {
   public abstract get(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions
+    props?: cloud.ApiGetOptions,
   ): void;
   public abstract post(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPostOptions
+    props?: cloud.ApiPostOptions,
   ): void;
   public abstract put(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPutOptions
+    props?: cloud.ApiPutOptions,
   ): void;
   public abstract delete(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiDeleteOptions
+    props?: cloud.ApiDeleteOptions,
   ): void;
   public abstract patch(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPatchOptions
+    props?: cloud.ApiPatchOptions,
   ): void;
   public abstract options(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiOptionsOptions
+    props?: cloud.ApiOptionsOptions,
   ): void;
   public abstract head(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiHeadOptions
+    props?: cloud.ApiHeadOptions,
   ): void;
   public abstract connect(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiConnectOptions
+    props?: cloud.ApiConnectOptions,
   ): void;
 }
 
@@ -160,7 +160,7 @@ export class ApiEndpointHandler {
    */
   public static toFunctionHandler(
     handler: cloud.IApiEndpointHandler,
-    headers?: Record<string, string>
+    headers?: Record<string, string>,
   ): cloud.IFunctionHandler {
     return lift({
       handler,
@@ -173,7 +173,7 @@ export class ApiEndpointHandler {
       return apigwFunctionHandler(
         request as unknown as APIGatewayProxyEvent,
         ctx.handler,
-        ctx.headers
+        ctx.headers,
       );
     });
   }

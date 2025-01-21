@@ -81,7 +81,7 @@ export class Function extends cloud.Function {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps = {}
+    props: cloud.FunctionProps = {},
   ) {
     super(scope, id, inflight, props);
 
@@ -90,14 +90,14 @@ export class Function extends cloud.Function {
 
     if (props.concurrency != null) {
       throw new NotImplementedError(
-        "Function concurrency isn't implemented yet on the current target."
+        "Function concurrency isn't implemented yet on the current target.",
       );
     }
 
     // memory limits must be between 128 and 8192 MB
     if (props?.memory && (props.memory < 128 || props.memory > 8192)) {
       throw new Error(
-        "Memory must be between 128 and 8192 MB for GCP Cloud Functions"
+        "Memory must be between 128 and 8192 MB for GCP Cloud Functions",
       );
     }
 
@@ -107,7 +107,7 @@ export class Function extends cloud.Function {
       (props.timeout.seconds < 1 || props.timeout.seconds > 540)
     ) {
       throw new Error(
-        "Timeout must be between 1 and 540 seconds for GCP Cloud Functions"
+        "Timeout must be between 1 and 540 seconds for GCP Cloud Functions",
       );
     }
 
@@ -129,7 +129,7 @@ export class Function extends cloud.Function {
             return this.assetPath;
           },
         }),
-      }
+      },
     );
 
     // Create Custom Service Account
@@ -139,9 +139,9 @@ export class Function extends cloud.Function {
       {
         accountId: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
         displayName: `Custom Service Account for Cloud Function ${this.node.addr.substring(
-          -8
+          -8,
         )}`,
-      }
+      },
     );
     // Create the Cloud Function with Custom Service Account
     this.function = new CloudfunctionsFunction(this, "DefaultFunction", {
@@ -179,7 +179,7 @@ export class Function extends cloud.Function {
 
     inflightClient;
     lines.push(
-      "const functions = require('@google-cloud/functions-framework');\n"
+      "const functions = require('@google-cloud/functions-framework');\n",
     );
     lines.push(`functions.http('handler', async (req, res) => {`);
     lines.push("  res.set('Access-Control-Allow-Origin', '*')");
@@ -219,8 +219,8 @@ export class Function extends cloud.Function {
           },
         },
         null,
-        2
-      )
+        2,
+      ),
     );
 
     const asset = new TerraformAsset(this, "Asset", {
@@ -266,7 +266,7 @@ export class Function extends cloud.Function {
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error(
-        "tfgcp.Function can only be bound by tfgcp.Function for now"
+        "tfgcp.Function can only be bound by tfgcp.Function for now",
       );
     }
 

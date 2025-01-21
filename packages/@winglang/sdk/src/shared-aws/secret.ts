@@ -18,7 +18,7 @@ export class SecretRef extends Resource {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("secret", "secret.inflight"),
-      "SecretClient"
+      "SecretClient",
     );
   }
 
@@ -40,7 +40,7 @@ export class SecretRef extends Resource {
   public onLift(host: IInflightHost, ops: string[]): void {
     if (AwsInflightHost.isAwsInflightHost(host)) {
       host.addPolicyStatements(
-        ...calculateSecretPermissions(this.secretArn, ops)
+        ...calculateSecretPermissions(this.secretArn, ops),
       );
     }
 
@@ -86,7 +86,7 @@ export abstract class Secret extends cloud.Secret implements IAwsSecret {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("secret", "secret.inflight"),
-      "SecretClient"
+      "SecretClient",
     );
   }
 

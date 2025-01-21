@@ -112,7 +112,7 @@ export class TestRunner extends Resource {
     scope: Construct,
     id: string,
     inflight: IFunctionHandler,
-    props: FunctionProps
+    props: FunctionProps,
   ): Function | undefined {
     if (this._multipleSubtrees) {
       // searching exactly for `env${number}`

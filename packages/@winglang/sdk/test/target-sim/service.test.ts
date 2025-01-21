@@ -70,7 +70,7 @@ test("create a service with a on stop method", async () => {
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
-      .map((trace) => trace.data.message)
+      .map((trace) => trace.data.message),
   ).toEqual([
     "start!",
     "root/my_service started",
@@ -111,7 +111,7 @@ test("create a service without autostart", async () => {
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
-      .map((trace) => trace.data.message)
+      .map((trace) => trace.data.message),
   ).toEqual(["root/my_service started", "root/my_service stopped"]);
 });
 
@@ -136,7 +136,7 @@ test("start and stop service", async () => {
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
-      .map((trace) => trace.data.message)
+      .map((trace) => trace.data.message),
   ).toEqual(["root/my_service started", "start!", "stop!", "start!", "stop!"]);
 });
 
@@ -162,7 +162,7 @@ test("consecutive start and stop service", async () => {
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
-      .map((trace) => trace.data.message)
+      .map((trace) => trace.data.message),
   ).toEqual(["root/my_service started", "start!", "stop!"]);
 });
 
@@ -174,7 +174,7 @@ test("throws during service start", async () => {
     "my_service",
     inflight(async () => {
       throw new Error("ThisIsAnError");
-    })
+    }),
   );
 
   const s = await app.startSimulator();

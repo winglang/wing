@@ -9,7 +9,7 @@ describe("function with bucket binding", () => {
   const statementsContain = (
     config: any,
     actions: string[],
-    effect: string
+    effect: string,
   ): boolean => {
     const policies = config.resource.aws_iam_role_policy;
 
@@ -40,7 +40,7 @@ describe("function with bucket binding", () => {
         .inflight(async (ctx, event) => {
           await ctx.bucket.put("hello.txt", event ?? "none");
           return undefined;
-        })
+        }),
     );
     const output = app.synth();
 
@@ -70,7 +70,7 @@ describe("function with bucket binding", () => {
         .inflight(async (ctx, event) => {
           await ctx.bucket.putJson("hello.json", event as any);
           return undefined;
-        })
+        }),
     );
     const output = JSON.parse(app.synth());
     const hasActions = statementsContain(output, ["s3:PutObject*"], "Allow");
@@ -92,13 +92,13 @@ describe("function with bucket binding", () => {
         .inflight(async (ctx) => {
           await ctx.bucket.getJson("hello.txt");
           return undefined;
-        })
+        }),
     );
     const output = JSON.parse(app.synth());
     const hasActions = statementsContain(
       output,
       ["s3:GetObject*", "s3:GetBucket*"],
-      "Allow"
+      "Allow",
     );
 
     // THEN

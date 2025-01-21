@@ -63,7 +63,7 @@ describe("fetch", () => {
     for (let method in HttpMethod) {
       expectResponse(
         //@ts-expect-error- ts thinks method is a string
-        await Http.fetch("url", { method })
+        await Http.fetch("url", { method }),
       );
     }
   });
@@ -87,7 +87,7 @@ describe("fetch", () => {
     for (let method in HttpMethod) {
       expectResponse(
         //@ts-expect-error- ts thinks method is a string
-        await Http.fetch("url", { method })
+        await Http.fetch("url", { method }),
       );
     }
     expectResponse(await Http.get("url"));

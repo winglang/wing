@@ -128,11 +128,14 @@ export class Platform implements IPlatform {
     const existingSecrets = existingSecretsContent
       .split("\n")
       .filter((line) => line.trim() !== "")
-      .reduce((s, line) => {
-        const [key, value] = line.split("=", 2);
-        s[key] = value;
-        return s;
-      }, {} as { [key: string]: string });
+      .reduce(
+        (s, line) => {
+          const [key, value] = line.split("=", 2);
+          s[key] = value;
+          return s;
+        },
+        {} as { [key: string]: string },
+      );
 
     for (const key in secrets) {
       existingSecrets[key] = secrets[key];

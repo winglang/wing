@@ -114,7 +114,7 @@ export class Container extends Resource implements ISimulatorResource {
   constructor(
     scope: Construct,
     id: string,
-    private readonly props: ContainerProps
+    private readonly props: ContainerProps,
   ) {
     super(scope, id);
 

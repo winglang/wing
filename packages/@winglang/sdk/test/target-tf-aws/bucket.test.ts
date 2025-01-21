@@ -35,7 +35,7 @@ test("bucket has force_destroy if App is a test environment", () => {
 
   // THEN
   expect(
-    JSON.parse(output).resource.aws_s3_bucket.my_bucket.force_destroy
+    JSON.parse(output).resource.aws_s3_bucket.my_bucket.force_destroy,
   ).toBe(true);
 });
 
@@ -64,7 +64,7 @@ test("bucket is force destroy", () => {
 
   // THEN
   expect(
-    JSON.parse(output).resource.aws_s3_bucket.my_bucket.force_destroy
+    JSON.parse(output).resource.aws_s3_bucket.my_bucket.force_destroy,
   ).toBe(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -78,7 +78,7 @@ test("bucket with cors disabled", () => {
 
   // THEN
   expect(tfResourcesOf(output)).not.toContain(
-    "aws_s3_bucket_cors_configuration"
+    "aws_s3_bucket_cors_configuration",
   );
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -185,7 +185,7 @@ test("bucket prefix valid", () => {
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
       bucketPrefix: `the-uncanny-bucket-${bucket.node.addr.substring(0, 8)}-`,
-    })
+    }),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -201,7 +201,7 @@ test("bucket prefix must be lowercase", () => {
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
       bucketPrefix: `the-uncanny-bucket-${bucket.node.addr.substring(0, 8)}-`,
-    })
+    }),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -213,7 +213,7 @@ test("bucket prefix must begin with an alphanumeric character", () => {
 
   // THEN
   expect(() => new Bucket(app, "(%?#$The-Uncanny-Bucket.*!@¨)")).toThrow(
-    /AWS S3 bucket names must begin with a letter or number/
+    /AWS S3 bucket names must begin with a letter or number/,
   );
 });
 
@@ -223,7 +223,7 @@ test("bucket prefix can not begining with 'xn--'", () => {
 
   // THEN
   expect(() => new Bucket(app, "xn--The-Uncanny-Bucket")).toThrow(
-    /AWS S3 bucket names cannot begin with 'xn--'/
+    /AWS S3 bucket names cannot begin with 'xn--'/,
   );
 });
 
@@ -257,7 +257,7 @@ test("bucket with onCreate method", () => {
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
   const bucketNotification = getTfResource(
     output,
-    "aws_s3_bucket_notification"
+    "aws_s3_bucket_notification",
   );
   expect(bucketNotification.depends_on.length).toEqual(1);
   expect(bucketNotification.topic.length).toEqual(1);
@@ -296,7 +296,7 @@ test("bucket with onDelete method", () => {
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
   const bucketNotification = getTfResource(
     output,
-    "aws_s3_bucket_notification"
+    "aws_s3_bucket_notification",
   );
   expect(bucketNotification.depends_on.length).toEqual(1);
   expect(bucketNotification.topic.length).toEqual(1);
@@ -335,7 +335,7 @@ test("bucket with onUpdate method", () => {
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
   const bucketNotification = getTfResource(
     output,
-    "aws_s3_bucket_notification"
+    "aws_s3_bucket_notification",
   );
   expect(bucketNotification.depends_on.length).toEqual(1);
   expect(bucketNotification.topic.length).toEqual(1);
@@ -373,7 +373,7 @@ test("bucket with onEvent method", () => {
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
   const bucketNotification = getTfResource(
     output,
-    "aws_s3_bucket_notification"
+    "aws_s3_bucket_notification",
   );
   expect(bucketNotification.depends_on.length).toEqual(3);
   expect(bucketNotification.topic.length).toEqual(3);

@@ -31,10 +31,10 @@ test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = inflight(async (_, message) =>
-    console.log("Received " + message)
+    console.log("Received " + message),
   );
   const otherHandler = inflight(async (_, message) =>
-    console.log("Also received " + message)
+    console.log("Also received " + message),
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
@@ -48,10 +48,10 @@ test("topic publishes messages to multiple subscribers", async () => {
 
   // THEN
   await waitUntilTrace(s, (trace) =>
-    trace.data.message.startsWith("Received Alpha")
+    trace.data.message.startsWith("Received Alpha"),
   );
   await waitUntilTrace(s, (trace) =>
-    trace.data.message.startsWith("Also received Alpha")
+    trace.data.message.startsWith("Also received Alpha"),
   );
   await s.stop();
 });

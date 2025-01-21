@@ -88,7 +88,7 @@ export class Graph<T extends Definition> {
     const visit = (path: string) => {
       if (stack.has(path)) {
         throw new Error(
-          `cyclic dependency detected: ${[...stack, path].join(" -> ")}`
+          `cyclic dependency detected: ${[...stack, path].join(" -> ")}`,
         );
       }
 
