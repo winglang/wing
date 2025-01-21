@@ -10,5 +10,4 @@
 * text=auto eol=lf
 package.json linguist-generated=true
 pnpm-workspace.yaml linguist-generated=true
-tsconfig.json linguist-generated=true
 turbo.json linguist-generated=true

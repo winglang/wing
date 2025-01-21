@@ -14,6 +14,8 @@ const monorepo = new MonorepoProject({
   ],
 });
 
+monorepo.tryRemoveFile("tsconfig.json");
+
 ///////////////////////////////////////////////////////////////////////////////
 monorepo
   .tryFindObjectFile("pnpm-workspace.yaml")
