@@ -272,7 +272,9 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
       ? "Ensure the path to the platform is correct"
       : `Ensure you have installed the platform provider by running 'npm install ${customPlatformPath}'`;
     console.error(
-      `An error occurred while loading the custom platform: ${customPlatformPath}\n\n(hint: ${hint})`
+      `An error occurred while loading the custom platform: ${customPlatformPath}\n\n(hint: ${hint})\n${
+        (error as any).stack
+      }`
     );
   }
 }

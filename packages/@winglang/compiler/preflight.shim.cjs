@@ -7,17 +7,19 @@
 /// 2. Runs in a child process with an IPC channel to the parent process
 
 process.on("uncaughtException", (reason) => {
-  if (reason instanceof Error) {
-    // The Error object does not serialize well over IPC (even with 'advanced' serialization)
-    // So we extract the properties we need to recreate most error objects
-    reason = {
-      message: reason.message,
-      stack: reason.stack,
-      name: reason.name,
-      code: reason.code,
-    };
+
+  if (typeof reason === "string") {
+    reason = new Error(reason);
   }
-  process.send(reason);
+
+  // The Error object does not serialize well over IPC (even with 'advanced' serialization)
+  // So we extract the properties we need to recreate most error objects
+  process.send({
+    message: reason.message,
+    stack: reason.stack,
+    name: reason.name,
+    code: reason.code,
+  });
 });
 
 if (!process.send) {

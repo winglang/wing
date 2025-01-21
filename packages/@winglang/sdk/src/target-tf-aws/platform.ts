@@ -211,7 +211,7 @@ export class Platform implements IPlatform {
 
   public async createTestHarness(): Promise<ITestHarness> {
     return new TerraformTestHarness({
-      clientModule: require.resolve("../shared-tf-aws/test-runner.inflight"),
+      clientModule: require.resolve("../shared-aws/test-runner.inflight"),
     });
   }
 }

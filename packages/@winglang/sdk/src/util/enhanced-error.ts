@@ -224,7 +224,7 @@ function printItem(item: StackTracey.Entry) {
 }
 
 export function rewriteCommonError(error: Error): Error {
-  if (error.message.startsWith("There is already a Construct with name")) {
+  if (error.message?.startsWith("There is already a Construct with name")) {
     const newMessage = [];
     newMessage.push(error.message);
     newMessage.push(

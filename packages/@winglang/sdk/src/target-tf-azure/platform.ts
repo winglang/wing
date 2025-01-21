@@ -55,7 +55,7 @@ export class Platform implements IPlatform {
   public async createTestHarness(): Promise<ITestHarness> {
     return new TerraformTestHarness({
       parallelism: 5,
-      clientModule: require.resolve("../shared-tf-azure/test-runner.inflight"),
+      clientModule: require.resolve("../shared-azure/test-runner.inflight"),
     });
   }
 }

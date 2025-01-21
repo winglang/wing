@@ -76,7 +76,7 @@ describe("wing test (custom platform)", () => {
     const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
     // can't be resolved within tmp directory
-    const targetTfAws = require.resolve("@winglang/sdk/lib/target-tf-aws");
+    const targetTfAws = require.resolve("@winglang/sdk/lib/target-tf-aws/platform");
 
     process.chdir(outDir);
     fs.writeFileSync("foo.test.w", `bring cloud;`);
@@ -84,17 +84,22 @@ describe("wing test (custom platform)", () => {
       "custom-platform.js",
       `
       const tfaws = require("${targetTfAws}");
-      class Platform {
-        target = "tf-aws";
+      class Platform extends tfaws.Platform {
 
         newApp(appProps) {
-          return new tfaws.App(appProps);
+          return super.newApp(appProps);
         }
 
-        newInstance(fqn, scope, id, ...args) {
-          if (fqn === "@winglang/sdk.std.TestRunner") {
-            return new tfaws.TestRunner(scope, id, ...args);
-          }
+        // newInstance(fqn, scope, id, ...args) {
+        //   if (fqn === "@winglang/sdk.std.TestRunner") {
+        //     return new tfaws.TestRunner(scope, id, ...args);
+        //   }
+
+        //   return super.newInstance(fqn, scope, id, ...args);
+        // }
+
+        async createTestHarness() {
+          return super.createTestHarness();
         }
       }
       module.exports = { Platform }`
