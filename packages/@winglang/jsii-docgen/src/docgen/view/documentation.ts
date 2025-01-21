@@ -133,13 +133,13 @@ export class Documentation {
    */
   public static async forPackage(
     target: string,
-    options: ForPackageDocumentationOptions = {}
+    options: ForPackageDocumentationOptions = {},
   ): Promise<Documentation> {
     const workdir = await fs.mkdtemp(path.join(os.tmpdir(), path.sep));
 
     if ((await fs.pathExists(target)) && !options.name) {
       throw new Error(
-        "'options.name' must be provided when installing local packages."
+        "'options.name' must be provided when installing local packages.",
       );
     }
 
@@ -152,7 +152,7 @@ export class Documentation {
 
     const docs = await Documentation.forProject(
       path.join(workdir, "node_modules", name),
-      { ...options, assembliesDir: workdir }
+      { ...options, assembliesDir: workdir },
     );
 
     // we cannot delete this directory immediately since it is used during `render` calls.
@@ -170,7 +170,7 @@ export class Documentation {
    */
   public static async forProject(
     root: string,
-    options: ForLocalPackageDocumentationOptions = {}
+    options: ForLocalPackageDocumentationOptions = {},
   ): Promise<Documentation> {
     const manifestPath = path.join(root, "package.json");
     if (!(await fs.pathExists(manifestPath))) {
@@ -193,7 +193,7 @@ export class Documentation {
    */
   public static async forAssembly(
     assemblyName: string,
-    assembliesDir: string
+    assembliesDir: string,
   ): Promise<Documentation> {
     return new Documentation(assemblyName, assembliesDir);
   }
@@ -207,7 +207,7 @@ export class Documentation {
 
   private constructor(
     private readonly assemblyName: string,
-    private readonly assembliesDir: string
+    private readonly assembliesDir: string,
   ) {}
 
   /**
@@ -231,13 +231,13 @@ export class Documentation {
 
     if (!isSupported) {
       throw new LanguageNotSupportedError(
-        `Language ${language} is not supported for package ${this.assemblyFqn}`
+        `Language ${language} is not supported for package ${this.assemblyFqn}`,
       );
     }
 
     if (allSubmodules && options?.submodule) {
       throw new Error(
-        "Cannot call toJson with allSubmodules and a specific submodule both selected."
+        "Cannot call toJson with allSubmodules and a specific submodule both selected.",
       );
     }
 
@@ -249,7 +249,7 @@ export class Documentation {
 
     if (!targets) {
       throw new Error(
-        `Assembly ${this.assemblyFqn} does not have any targets defined`
+        `Assembly ${this.assemblyFqn} does not have any targets defined`,
       );
     }
 
@@ -269,7 +269,7 @@ export class Documentation {
           transpile,
           assembly,
           submodule,
-          allSubmodules
+          allSubmodules,
         );
       } catch (error) {
         if (!(error instanceof Error)) {
@@ -295,7 +295,7 @@ export class Documentation {
   }
 
   public async toMarkdown(
-    options: MarkdownRenderOptions
+    options: MarkdownRenderOptions,
   ): Promise<MarkdownDocument> {
     const json = (await this.toJson(options)).content;
     return MarkdownRenderer.fromSchema(json, {
@@ -321,13 +321,13 @@ export class Documentation {
 
   private async languageSpecific(
     lang: Language,
-    options: Required<TransliterationOptions>
+    options: Required<TransliterationOptions>,
   ): Promise<{ assembly: reflect.Assembly; transpile: Transpile }> {
     const { rosettaTarget, transpile } = LANGUAGE_SPECIFIC[lang.toString()];
     return {
       assembly: await this.createAssembly(
         rosettaTarget as TargetLanguage,
-        options
+        options,
       ),
       transpile,
     };
@@ -338,18 +338,18 @@ export class Documentation {
    */
   private findPartialSubmodule(
     assembly: reflect.Assembly,
-    submodule: string
+    submodule: string,
   ): reflect.Submodule {
     const parent = submodule.split("/")[0];
     const submodules = assembly.submodules.filter((s) => s.name === parent);
     if (submodules.length === 0) {
       throw new Error(
-        `Submodule ${parent} not found in assembly ${assembly.name}@${assembly.version}`
+        `Submodule ${parent} not found in assembly ${assembly.name}@${assembly.version}`,
       );
     }
     if (submodules.length > 1) {
       throw new Error(
-        `Found multiple submodules with name: ${parent} in assembly ${assembly.name}@${assembly.version}`
+        `Found multiple submodules with name: ${parent} in assembly ${assembly.name}@${assembly.version}`,
       );
     }
 
@@ -368,7 +368,7 @@ export class Documentation {
       submodules[0].fqn,
       //@ts-expect-error submoduleMap is protected
       submodules[0].submoduleMap,
-      typeMap
+      typeMap,
     );
   }
 
@@ -377,7 +377,7 @@ export class Documentation {
    */
   private findSubmodule(
     assembly: reflect.Assembly,
-    submodule: string
+    submodule: string,
   ): reflect.Submodule {
     if (submodule.includes("/")) {
       return this.findPartialSubmodule(assembly, submodule);
@@ -386,13 +386,13 @@ export class Documentation {
 
     if (submodules.length === 0) {
       throw new Error(
-        `Submodule ${submodule} not found in assembly ${assembly.name}@${assembly.version}`
+        `Submodule ${submodule} not found in assembly ${assembly.name}@${assembly.version}`,
       );
     }
 
     if (submodules.length > 1) {
       throw new Error(
-        `Found multiple submodules with name: ${submodule} in assembly ${assembly.name}@${assembly.version}`
+        `Found multiple submodules with name: ${submodule} in assembly ${assembly.name}@${assembly.version}`,
       );
     }
 
@@ -401,7 +401,7 @@ export class Documentation {
 
   private async createAssembly(
     language: TargetLanguage | undefined,
-    options: Required<TransliterationOptions>
+    options: Required<TransliterationOptions>,
   ): Promise<reflect.Assembly> {
     const cacheKey = `lang:${language ?? "ts"}.loose:${
       options.loose
@@ -413,7 +413,7 @@ export class Documentation {
 
     const ts = new reflect.TypeSystem();
     for (let dotJsii of await glob.promise(
-      `${this.assembliesDir}/**/${SPEC_FILE_NAME}`
+      `${this.assembliesDir}/**/${SPEC_FILE_NAME}`,
     )) {
       await ts.load(dotJsii, { validate: options.validate });
     }
@@ -491,7 +491,7 @@ export function extractPackageName(spec: string) {
  *    then the assembly is considered corrupt.
  */
 function maybeCorruptedAssemblyError(
-  error: Error
+  error: Error,
 ): CorruptedAssemblyError | undefined {
   const match = error.message.match(NOT_FOUND_IN_ASSEMBLY_REGEX);
   if (!match) {

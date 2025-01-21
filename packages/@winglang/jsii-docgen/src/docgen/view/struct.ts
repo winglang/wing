@@ -8,7 +8,7 @@ export class Struct {
   private readonly properties: Properties;
   constructor(
     transpile: Transpile,
-    private readonly iface: reflect.InterfaceType
+    private readonly iface: reflect.InterfaceType,
   ) {
     this.transpiled = transpile.struct(iface);
     this.properties = new Properties(transpile, this.iface.allProperties);

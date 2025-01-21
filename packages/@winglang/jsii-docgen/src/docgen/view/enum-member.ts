@@ -4,7 +4,10 @@ import { Transpile, TranspiledEnumMember } from "../transpile/transpile";
 
 export class EnumMember {
   private readonly transpiled: TranspiledEnumMember;
-  constructor(transpile: Transpile, private readonly em: reflect.EnumMember) {
+  constructor(
+    transpile: Transpile,
+    private readonly em: reflect.EnumMember,
+  ) {
     this.transpiled = transpile.enumMember(em);
   }
 

@@ -118,7 +118,7 @@ export class Language {
   }
 
   public isValidConfiguration(
-    config: Record<string, unknown> | undefined
+    config: Record<string, unknown> | undefined,
   ): boolean {
     // TypeScript does not need configuration, all other languages do
     if (config == null) {
@@ -171,7 +171,7 @@ function validateWingConfig(_config: Record<string, any>): boolean {
 export class UnsupportedLanguageError extends Error {
   constructor(lang: string, supported: Language[]) {
     super(
-      `Unsupported language: ${lang}. Supported languages are: [${supported}]`
+      `Unsupported language: ${lang}. Supported languages are: [${supported}]`,
     );
   }
 }
@@ -391,7 +391,7 @@ export class TranspiledTypeReference {
   public static primitive(
     transpile: Transpile,
     ref: reflect.TypeReference,
-    primitive: string
+    primitive: string,
   ): TranspiledTypeReference {
     return new TranspiledTypeReference(transpile, ref, primitive);
   }
@@ -400,7 +400,7 @@ export class TranspiledTypeReference {
    */
   public static any(
     transpile: Transpile,
-    ref: reflect.TypeReference
+    ref: reflect.TypeReference,
   ): TranspiledTypeReference {
     return new TranspiledTypeReference(transpile, ref, undefined, true);
   }
@@ -409,7 +409,7 @@ export class TranspiledTypeReference {
    */
   public static void(
     transpile: Transpile,
-    ref: reflect.TypeReference
+    ref: reflect.TypeReference,
   ): TranspiledTypeReference {
     return new TranspiledTypeReference(
       transpile,
@@ -420,7 +420,7 @@ export class TranspiledTypeReference {
       undefined,
       undefined,
       undefined,
-      true
+      true,
     );
   }
   /**
@@ -429,14 +429,14 @@ export class TranspiledTypeReference {
   public static type(
     transpile: Transpile,
     ref: reflect.TypeReference,
-    type: TranspiledType
+    type: TranspiledType,
   ): TranspiledTypeReference {
     return new TranspiledTypeReference(
       transpile,
       ref,
       undefined,
       undefined,
-      type
+      type,
     );
   }
   /**
@@ -445,7 +445,7 @@ export class TranspiledTypeReference {
   public static arrayOfType(
     transpile: Transpile,
     ref: reflect.TypeReference,
-    tf: TranspiledTypeReference
+    tf: TranspiledTypeReference,
   ): TranspiledTypeReference {
     return new TranspiledTypeReference(
       transpile,
@@ -453,7 +453,7 @@ export class TranspiledTypeReference {
       undefined,
       undefined,
       undefined,
-      tf
+      tf,
     );
   }
   /**
@@ -462,7 +462,7 @@ export class TranspiledTypeReference {
   public static mapOfType(
     transpile: Transpile,
     ref: reflect.TypeReference,
-    tf: TranspiledTypeReference
+    tf: TranspiledTypeReference,
   ): TranspiledTypeReference {
     return new TranspiledTypeReference(
       transpile,
@@ -471,7 +471,7 @@ export class TranspiledTypeReference {
       undefined,
       undefined,
       undefined,
-      tf
+      tf,
     );
   }
   /**
@@ -480,7 +480,7 @@ export class TranspiledTypeReference {
   public static unionOfTypes(
     transpile: Transpile,
     ref: reflect.TypeReference,
-    tfs: TranspiledTypeReference[]
+    tfs: TranspiledTypeReference[],
   ): TranspiledTypeReference {
     return new TranspiledTypeReference(
       transpile,
@@ -490,7 +490,7 @@ export class TranspiledTypeReference {
       undefined,
       undefined,
       undefined,
-      tfs
+      tfs,
     );
   }
 
@@ -530,7 +530,7 @@ export class TranspiledTypeReference {
     /**
      * 'Void' type ref.
      */
-    private readonly isVoid?: boolean
+    private readonly isVoid?: boolean,
   ) {}
 
   public toString(options?: TranspiledTypeReferenceToStringOptions): string {
@@ -573,7 +573,7 @@ export class TranspiledTypeReference {
     if (this.type) {
       if (!this.ref.fqn) {
         throw new Error(
-          `Original type reference for ${this.type.fqn} does not have a fqn.`
+          `Original type reference for ${this.type.fqn} does not have a fqn.`,
         );
       }
 
@@ -916,7 +916,7 @@ export abstract class TranspileBase implements Transpile {
         type.namespace.split(".")[0]
       }`;
       const submodules = type.assembly.submodules.filter(
-        (s) => s.fqn === submoduleFqn
+        (s) => s.fqn === submoduleFqn,
       );
 
       if (submodules.length > 1) {
@@ -943,7 +943,7 @@ export abstract class TranspileBase implements Transpile {
     const types = moduleLike.types;
     if (types.length === 0) {
       throw new Error(
-        `unable to determine assembly since module does not have any types: ${moduleLike.fqn}`
+        `unable to determine assembly since module does not have any types: ${moduleLike.fqn}`,
       );
     }
     const parent = types[0].assembly;
@@ -953,7 +953,7 @@ export abstract class TranspileBase implements Transpile {
 
   protected optionalityCompare(
     p1: reflect.Parameter,
-    p2: reflect.Parameter
+    p2: reflect.Parameter,
   ): number {
     if (!p1.optional && p2.optional) {
       return -1;

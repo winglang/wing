@@ -171,7 +171,7 @@ export const Combobox = ({
                         >
                           {renderItem
                             ? renderItem(item)
-                            : item.label ?? item.value}
+                            : (item.label ?? item.value)}
                         </span>
                         {selected && showSelected ? (
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">

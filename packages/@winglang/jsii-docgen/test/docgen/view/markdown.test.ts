@@ -6,7 +6,7 @@ let docs: Documentation;
 
 beforeAll(async () => {
   docs = await Documentation.forProject(
-    path.join(__dirname, "../../__fixtures__/libraries/construct-library")
+    path.join(__dirname, "../../__fixtures__/libraries/construct-library"),
   );
 });
 
@@ -50,14 +50,14 @@ function getAssemblyRelativeName(type: JsiiEntity): string {
   let name = type.id;
   if (!name.startsWith(type.packageName)) {
     throw new Error(
-      `Expected first part of "${type.id}" to start with "${type.packageName}".`
+      `Expected first part of "${type.id}" to start with "${type.packageName}".`,
     );
   }
   name = name.slice(type.packageName.length + 1); // remove "aws-cdk-lib.""
   if (type.submodule) {
     if (!name.startsWith(type.submodule)) {
       throw new Error(
-        `Expected second part of "${type.id}" to start with "${type.submodule}".`
+        `Expected second part of "${type.id}" to start with "${type.submodule}".`,
       );
     }
     name = name.slice(type.submodule.length + 1); // remove "aws_s3."

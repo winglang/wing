@@ -22,13 +22,13 @@ export class Interface {
 
   constructor(
     transpile: Transpile,
-    private readonly iface: reflect.InterfaceType
+    private readonly iface: reflect.InterfaceType,
   ) {
     this.transpiled = transpile.interface(iface);
     this.instanceMethods = new InstanceMethods(transpile, iface.ownMethods);
     this.properties = new Properties(transpile, iface.allProperties);
     this.implementations = iface.allImplementations.map((impl) =>
-      transpile.type(impl)
+      transpile.type(impl),
     );
     this.bases = iface.interfaces.map((base) => transpile.type(base));
   }
