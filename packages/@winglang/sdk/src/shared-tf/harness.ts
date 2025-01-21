@@ -23,19 +23,19 @@ export class TerraformTestHarness implements ITestHarness {
   }
 
   public async deploy(synthDir: string): Promise<ITestRunnerClient> {
+    const opts = {
+      cwd: synthDir,
+      inheritEnv: true,
+    };
+
     // Check if Terraform is installed
-    const tfVersion = Util.exec("terraform", ["version"], { cwd: synthDir });
+    const tfVersion = Util.exec("terraform", ["version"], opts);
     const installed = tfVersion.stdout.startsWith("Terraform v");
     if (!installed) {
       throw new Error(
         "Terraform is not installed. Please install Terraform to run tests in the cloud."
       );
     }
-
-    const opts = {
-      cwd: synthDir,
-      inheritEnv: true,
-    };
 
     Util.exec("terraform", ["init"], opts);
     Util.exec("terraform", ["apply", "-auto-approve", this.parallelism], opts);
