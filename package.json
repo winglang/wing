@@ -19,9 +19,6 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "build": "projen build",
-    "compile": "projen compile",
-    "test": "turbo test",
     "package": "turbo package",
     "package:ci": "turbo package --color && tar -czvf dist/docs.tgz docs/*",
     "test:ci": "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar",
@@ -29,7 +26,9 @@
     "install": "bash scripts/setup_wasi.sh",
     "postinstall": "link-bundles && generate-workspace",
     "wing": "turbo compile -F winglang --output-logs=new-only && ./packages/winglang/bin/wing",
-    "dev": "turbo dev"
+    "build": "projen build",
+    "compile": "projen compile",
+    "test": "turbo lint eslint test"
   },
   "private": true,
   "packageManager": "pnpm@8.15.1",

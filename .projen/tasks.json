@@ -2,31 +2,17 @@
   "tasks": {
     "build": {
       "name": "build",
-      "description": "Full release build",
       "steps": [
         {
           "spawn": "default"
         },
         {
-          "spawn": "pre-compile"
-        },
-        {
-          "spawn": "compile"
-        },
-        {
-          "spawn": "post-compile"
-        },
-        {
-          "spawn": "test"
-        },
-        {
-          "spawn": "package"
+          "exec": "turbo compile post-compile lint eslint test package"
         }
       ]
     },
     "compile": {
       "name": "compile",
-      "description": "Only compile",
       "steps": [
         {
           "exec": "turbo compile"
@@ -44,12 +30,7 @@
     },
     "dev": {
       "name": "dev",
-      "description": "Start the development task",
-      "steps": [
-        {
-          "exec": "turbo dev"
-        }
-      ]
+      "description": "Start the development task"
     },
     "eject": {
       "name": "eject",
@@ -106,7 +87,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "turbo test"
+          "exec": "turbo lint eslint test"
         }
       ]
     }

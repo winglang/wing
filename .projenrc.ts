@@ -34,12 +34,15 @@ monorepo
   );
 
 ///////////////////////////////////////////////////////////////////////////////
-monorepo.addScript(
-  "build",
-  "turbo compile post-compile lint eslint test package",
-);
-monorepo.addScript("compile", "turbo compile");
-monorepo.addScript("test", "turbo lint eslint test");
+monorepo.tasks.removeTask("build");
+const buildTask = monorepo.addTask("build");
+buildTask.spawn(monorepo.defaultTask!);
+buildTask.exec("turbo compile post-compile lint eslint test package");
+monorepo.tasks.removeTask("compile");
+const compileTask = monorepo.addTask("compile");
+compileTask.exec("turbo compile");
+monorepo.testTask.reset("turbo lint eslint test");
+monorepo.devTask.reset();
 monorepo.addScript("package", "turbo package");
 monorepo.addScript(
   "package:ci",
