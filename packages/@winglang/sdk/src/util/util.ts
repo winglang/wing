@@ -62,7 +62,7 @@ export interface CommandOptions {
   readonly env?: { [key: string]: string };
   /**
    * Whether to inherit environment variables from the host's environment.
-   * @default true
+   * @default false
    */
   readonly inheritEnv?: boolean;
 }
@@ -227,7 +227,7 @@ export class Util {
     args: Array<string>,
     opts?: ExecOptions
   ): Output {
-    const inheritEnv = opts?.inheritEnv ?? true;
+    const inheritEnv = opts?.inheritEnv ?? false;
     const execOpts = {
       windowsHide: true,
       shell: false,

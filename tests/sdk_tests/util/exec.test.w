@@ -33,7 +33,7 @@ test "exec()" {
 
 
 // "exec() with invalid program" 
-  let NOT_FOUND_ERROR = "ENOENT";
+  let NOT_FOUND_ERROR = "Program not found:";
 
   assertThrows(NOT_FOUND_ERROR, () => {
     util.exec("no-such-program",  [""]);
@@ -55,17 +55,20 @@ test "exec()" {
 
   let output3 = util.exec(program3, args3, opts3);
 
-  expect.equal(output3.stdout, "sim Wing\n");
+  expect.equal(output3.stdout, "Wing\n");
   expect.equal(output3.stderr, "");
   expect.equal(output3.status, 0);
 
 
-//  "exec() with inheritEnv option (default is "true")" 
+//  "exec() with inheritEnv option" 
   let program4 = "bash";
   let args4 = ["--norc", "--noprofile", "-c", "echo $WING_TARGET"];
+  let opts4 = {
+    inheritEnv: true,
+  };
 
-  let output4 = util.exec(program4, args4, { inheritEnv: false });
-  let output5 = util.exec(program4, args4);
+  let output4 = util.exec(program4, args4);
+  let output5 = util.exec(program4, args4, opts4);
 
   // LF (\n)
   expect.equal(output4.stdout.length, 1);

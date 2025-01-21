@@ -32,16 +32,16 @@ export class TerraformTestHarness implements ITestHarness {
       );
     }
 
-    Util.exec("terraform", ["init"], { cwd: synthDir });
-
-    Util.exec("terraform", ["apply", "-auto-approve", this.parallelism], {
+    const opts = {
       cwd: synthDir,
-    });
+      inheritEnv: true,
+    };
+
+    Util.exec("terraform", ["init"], opts);
+    Util.exec("terraform", ["apply", "-auto-approve", this.parallelism], opts);
 
     // Get the test runner function ARNs
-    const output = Util.exec("terraform", ["output", "-json"], {
-      cwd: synthDir,
-    });
+    const output = Util.exec("terraform", ["output", "-json"], opts);
 
     const parsed = JSON.parse(output.stdout);
     const testArns = parsed[WING_TEST_RUNNER_FUNCTION_IDENTIFIERS]?.value;
@@ -61,6 +61,7 @@ export class TerraformTestHarness implements ITestHarness {
     try {
       Util.exec("terraform", ["destroy", "-auto-approve", this.parallelism], {
         cwd: synthDir,
+        inheritEnv: true,
       });
 
       await rm(synthDir, { recursive: true, force: true });
