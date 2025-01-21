@@ -34,6 +34,142 @@ monorepo
   );
 
 ///////////////////////////////////////////////////////////////////////////////
+const turbo = monorepo.tryFindObjectFile("turbo.json");
+turbo?.addOverride("globalDependencies", [
+  "*.json",
+  "*.toml",
+  ".node-version",
+  "insta.yaml",
+  ".github/workflows/build.yml",
+  "scripts/*",
+  "patches/*",
+  "tools/bump-pack/**",
+  "!tools/bump-pack/node_modules/**",
+]);
+turbo?.addOverride("tasks", {
+  default: {
+    inputs: ["*.json", ".projenrc.ts"],
+  },
+  compile: {
+    dependsOn: ["^compile"],
+    inputs: [
+      "bin/*",
+      "*.ts",
+      "*.js",
+      "*.cjs",
+      "*.json",
+      "*.toml",
+      "*.lock",
+      "src/**/*.rs",
+      "!src/**/*.test.ts",
+      "!src/**/*.test.tsx",
+      "src/**/*.ts",
+      "src/**/*.tsx",
+    ],
+  },
+  test: {
+    dependsOn: ["compile"],
+    inputs: [
+      "*.ts",
+      "*.js",
+      "*.cjs",
+      "*.json",
+      "*.toml",
+      "*.lock",
+      "src/**/*.rs",
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "src/**/*.test.ts",
+      "src/**/*.test.tsx",
+      "test/**",
+    ],
+    outputs: ["**/__snapshots__/**", "**/*.snap"],
+  },
+  bench: {
+    dependsOn: ["compile"],
+    inputs: [
+      "*.ts",
+      "*.js",
+      "*.cjs",
+      "*.json",
+      "*.toml",
+      "*.lock",
+      "src/**/*.rs",
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "src/**/*.test.ts",
+      "src/**/*.test.tsx",
+      "test/**",
+    ],
+  },
+  "test:playwright": {
+    dependsOn: ["compile"],
+    inputs: [
+      "*.ts",
+      "*.js",
+      "*.cjs",
+      "*.json",
+      "*.toml",
+      "*.lock",
+      "src/**",
+      "test/**",
+    ],
+  },
+  "post-compile": {
+    inputs: [""],
+    dependsOn: ["compile"],
+  },
+  lint: {
+    inputs: [
+      "*.ts",
+      "*.js",
+      "*.cjs",
+      "*.json",
+      "*.toml",
+      "*.lock",
+      "src/**/*.rs",
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "test/**",
+    ],
+  },
+  eslint: {
+    inputs: [
+      "*.ts",
+      "*.js",
+      "*.cjs",
+      "*.json",
+      "*.toml",
+      "*.lock",
+      "src/**/*.rs",
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "test/**",
+    ],
+  },
+  package: {
+    dependsOn: ["compile", "post-compile"],
+    env: ["PROJEN_BUMP_VERSION"],
+    inputs: ["*.md", "LICENSE"],
+  },
+  topo: {
+    inputs: ["**", "!node_modules/**", "!*/**/target/**"],
+    dependsOn: ["^topo"],
+  },
+  dev: {
+    cache: false,
+    persistent: true,
+  },
+  "wing:e2e": {
+    dependsOn: ["hangar#test"],
+  },
+  "wing:bench": {
+    dependsOn: ["hangar#bench"],
+  },
+});
+turbo?.addDeletionOverride("tasks.compile.outputs");
+
+///////////////////////////////////////////////////////////////////////////////
 monorepo.tasks.removeTask("build");
 const buildTask = monorepo.addTask("build");
 buildTask.spawn(monorepo.defaultTask!);

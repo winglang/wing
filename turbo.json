@@ -9,11 +9,163 @@
       "dependsOn": [
         "^compile"
       ],
-      "outputs": [
-        "lib/**"
+      "inputs": [
+        "bin/*",
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**/*.rs",
+        "!src/**/*.test.ts",
+        "!src/**/*.test.tsx",
+        "src/**/*.ts",
+        "src/**/*.tsx"
       ]
     },
-    "lint": {},
-    "test": {}
-  }
+    "lint": {
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**/*.rs",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "test/**"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "compile"
+      ],
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**/*.rs",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "test/**"
+      ],
+      "outputs": [
+        "**/__snapshots__/**",
+        "**/*.snap"
+      ]
+    },
+    "default": {
+      "inputs": [
+        "*.json",
+        ".projenrc.ts"
+      ]
+    },
+    "bench": {
+      "dependsOn": [
+        "compile"
+      ],
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**/*.rs",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "test/**"
+      ]
+    },
+    "test:playwright": {
+      "dependsOn": [
+        "compile"
+      ],
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**",
+        "test/**"
+      ]
+    },
+    "post-compile": {
+      "inputs": [
+        ""
+      ],
+      "dependsOn": [
+        "compile"
+      ]
+    },
+    "eslint": {
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**/*.rs",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "test/**"
+      ]
+    },
+    "package": {
+      "dependsOn": [
+        "compile",
+        "post-compile"
+      ],
+      "env": [
+        "PROJEN_BUMP_VERSION"
+      ],
+      "inputs": [
+        "*.md",
+        "LICENSE"
+      ]
+    },
+    "topo": {
+      "inputs": [
+        "**",
+        "!node_modules/**",
+        "!*/**/target/**"
+      ],
+      "dependsOn": [
+        "^topo"
+      ]
+    },
+    "wing:e2e": {
+      "dependsOn": [
+        "hangar#test"
+      ]
+    },
+    "wing:bench": {
+      "dependsOn": [
+        "hangar#bench"
+      ]
+    }
+  },
+  "globalDependencies": [
+    "*.json",
+    "*.toml",
+    ".node-version",
+    "insta.yaml",
+    ".github/workflows/build.yml",
+    "scripts/*",
+    "patches/*",
+    "tools/bump-pack/**",
+    "!tools/bump-pack/node_modules/**"
+  ]
 }
