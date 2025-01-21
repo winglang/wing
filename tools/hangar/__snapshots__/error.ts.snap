@@ -3,13 +3,16 @@
 exports[`bool_from_json.test.w 1`] = `
 "Error: unable to parse bool:
 - bool must be boolean
-  --> ../../../tests/error/bool_from_json.test.w:5:15
-  | // If it is run with other tests, subsequent failures will be ignored in snapshot.
-  | let j = Json { a: 123 };
-  | 
-5 | let a: bool = bool.fromJson(j.get("a"));
-  |               ^
-at <ABSOLUTE>/bool_from_json.test.w:5:15
+    at JsonSchema.validate (<ABSOLUTE>:LINE:COL)
+    at Boolean.fromJson (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
+    at new App (<ABSOLUTE>:LINE:COL)
+    at newApp (<ABSOLUTE>:LINE:COL)
+    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
+    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -21,7 +24,18 @@ exports[`fail_to_start_simulator.test.w 1`] = `
 "[ERROR] dep_on_failing_resource | Error: Failed to start container: Command "docker pull" exited with non-zero code 1 (see verbose logs)
 [ERROR] dep_on_failing_resource | Error: Unable to resolve attribute 'host_port' for resource "root/Default/Container" referenced by "root/Default/test:dep_on_failing_resource/Handler"
 [ERROR] dep_on_failing_resource | Error: Unable to resolve attribute 'host_port' for resource "root/Default/Container" referenced by "root/Default/test:dep_on_failing_resource/Handler"
-Failed to start resources: "root/Default/test:dep_on_failing_resource/Handler", "root/cloud.TestRunner"
+Error: Failed to start resources: "root/Default/test:dep_on_failing_resource/Handler", "root/cloud.TestRunner"
+    at Simulator.startResources (<ABSOLUTE>:LINE:COL)
+    at async Simulator.start (<ABSOLUTE>:LINE:COL)
+    at async testSimulator (<ABSOLUTE>:LINE:COL)
+    at async testOne (<ABSOLUTE>:LINE:COL)
+    at async testFile (<ABSOLUTE>:LINE:COL)
+    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
+    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
+    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
+    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
+    at async Object.test (<ABSOLUTE>:LINE:COL)
+    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -89,7 +103,19 @@ Duration <DURATION>"
 exports[`invalid-token.test.w 1`] = `
 "[ERROR] test cannot access unresolved token | Error: Unable to resolve attribute 'fake-attr' for resource "root/Default/MyResource/Resource" referenced by "root/Default/test:test cannot access unresolved token/Handler"
 [ERROR] test cannot access unresolved token | Error: Unable to resolve attribute 'fake-attr' for resource "root/Default/MyResource/Resource" referenced by "root/Default/test:test cannot access unresolved token/Handler"
-Failed to start resources: "root/Default/test:test cannot access unresolved token/Handler", "root/cloud.TestRunner"
+Error: Failed to start resources: "root/Default/test:test cannot access unresolved token/Handler", "root/cloud.TestRunner"
+    at Simulator.startResources (<ABSOLUTE>:LINE:COL)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Simulator.start (<ABSOLUTE>:LINE:COL)
+    at async testSimulator (<ABSOLUTE>:LINE:COL)
+    at async testOne (<ABSOLUTE>:LINE:COL)
+    at async testFile (<ABSOLUTE>:LINE:COL)
+    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
+    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
+    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
+    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
+    at async Object.test (<ABSOLUTE>:LINE:COL)
+    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -99,12 +125,16 @@ Duration <DURATION>"
 
 exports[`num_from_str.test.w 1`] = `
 "Error: unable to parse "123a" as a number
-  --> ../../../tests/error/num_from_str.test.w:3:14
-  | // Note that this test has to be alone because it needs to compile successfully and fail at preflight.
-  | // If it is run with other tests, subsequent failures will be ignored in snapshot.
-3 | let a: num = num.fromStr("123a");
-  |              ^
-at <ABSOLUTE>/num_from_str.test.w:3:14
+    at <ABSOLUTE>/macros.js:361:55
+    at exports.__Number_fromStr (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
+    at new App (<ABSOLUTE>:LINE:COL)
+    at newApp (<ABSOLUTE>:LINE:COL)
+    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
+    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -115,13 +145,16 @@ Duration <DURATION>"
 exports[`number_from_json.test.w 1`] = `
 "Error: unable to parse num:
 - num must be number
-  --> ../../../tests/error/number_from_json.test.w:5:14
-  | // If it is run with other tests, subsequent failures will be ignored in snapshot.
-  | let j = Json { a: "apples" };
-  | 
-5 | let a: num = num.fromJson(j.get("a"));
-  |              ^
-at <ABSOLUTE>/number_from_json.test.w:5:14
+    at JsonSchema.validate (<ABSOLUTE>:LINE:COL)
+    at Number.fromJson (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
+    at new App (<ABSOLUTE>:LINE:COL)
+    at newApp (<ABSOLUTE>:LINE:COL)
+    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
+    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -131,19 +164,16 @@ Duration <DURATION>"
 
 exports[`repeat_construct_id.test.w 1`] = `
 "Error: There is already a Construct with name 'Bucket' in $Root [Default]
-
-hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:
-
-> new cloud.Bucket() as "MyBucket";
-
-For more information, see https://www.winglang.io/docs/concepts/application-tree
-  --> ../../../tests/error/repeat_construct_id.test.w:4:15
-  | bring cloud;
-  | 
-  | let bucket1 = new cloud.Bucket();
-4 | let bucket2 = new cloud.Bucket();
-  |               ^
-at <ABSOLUTE>/repeat_construct_id.test.w:4:15
+    at Node.addChild (<ABSOLUTE>:LINE:COL)
+    at new Node (<ABSOLUTE>:LINE:COL)
+    at new Construct (<ABSOLUTE>:LINE:COL)
+    at new Bucket (<ABSOLUTE>:LINE:COL)
+    at new Bucket (<ABSOLUTE>:LINE:COL)
+    at Platform.newInstance (<ABSOLUTE>:LINE:COL)
+    at ClassFactory.tryNewInstance (<ABSOLUTE>:LINE:COL)
+    at ClassFactory.new (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -153,19 +183,16 @@ Duration <DURATION>"
 
 exports[`repeat_construct_id2.test.w 1`] = `
 "Error: There is already a Construct with name 'bucket-name' in $Root [Default]
-
-hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:
-
-> new cloud.Bucket() as "MyBucket";
-
-For more information, see https://www.winglang.io/docs/concepts/application-tree
-  --> ../../../tests/error/repeat_construct_id2.test.w:8:15
-  | };
-  | 
-  | let bucket1 = new cloud.Bucket() as "{make_name()}";
-8 | let bucket2 = new cloud.Bucket() as "{make_name()}";
-  |               ^
-at <ABSOLUTE>/repeat_construct_id2.test.w:8:15
+    at Node.addChild (<ABSOLUTE>:LINE:COL)
+    at new Node (<ABSOLUTE>:LINE:COL)
+    at new Construct (<ABSOLUTE>:LINE:COL)
+    at new Bucket (<ABSOLUTE>:LINE:COL)
+    at new Bucket (<ABSOLUTE>:LINE:COL)
+    at Platform.newInstance (<ABSOLUTE>:LINE:COL)
+    at ClassFactory.tryNewInstance (<ABSOLUTE>:LINE:COL)
+    at ClassFactory.new (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -176,13 +203,16 @@ Duration <DURATION>"
 exports[`string_from_json.test.w 1`] = `
 "Error: unable to parse string:
 - string must be string
-  --> ../../../tests/error/string_from_json.test.w:5:14
-  | // If it is run with other tests, subsequent failures will be ignored in snapshot.
-  | let j = Json { a: 123 };
-  | 
-5 | let a: str = str.fromJson(j.get("a"));
-  |              ^
-at <ABSOLUTE>/string_from_json.test.w:5:14
+    at JsonSchema.validate (<ABSOLUTE>:LINE:COL)
+    at String.fromJson (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
+    at new App (<ABSOLUTE>:LINE:COL)
+    at newApp (<ABSOLUTE>:LINE:COL)
+    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
+    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -193,13 +223,16 @@ Duration <DURATION>"
 exports[`struct_from_json_1.test.w 1`] = `
 "Error: unable to parse Person:
 - Person/age must be number
-   --> ../../../tests/error/struct_from_json_1.test.w:11:1
-   | 
-   | let j = {name: "cool", age: "not a number"};
-   | 
-11 | Person.fromJson(j);
-   | ^
-at <ABSOLUTE>/struct_from_json_1.test.w:11:1
+    at JsonSchema.validate (<ABSOLUTE>:LINE:COL)
+    at JsonSchema._fromJson (<ABSOLUTE>:LINE:COL)
+    at exports.__Struct_fromJson (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
+    at new App (<ABSOLUTE>:LINE:COL)
+    at newApp (<ABSOLUTE>:LINE:COL)
+    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
+    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -211,13 +244,16 @@ exports[`struct_from_json_2.test.w 1`] = `
 "Error: unable to parse Student:
 - Student must have required property 'advisor'
 - Student/age must be number
-   --> ../../../tests/error/struct_from_json_2.test.w:22:1
-   |   age: "not a number"
-   | };
-   | 
-22 | Student.fromJson(missingAdvisor);
-   | ^
-at <ABSOLUTE>/struct_from_json_2.test.w:22:1
+    at JsonSchema.validate (<ABSOLUTE>:LINE:COL)
+    at JsonSchema._fromJson (<ABSOLUTE>:LINE:COL)
+    at exports.__Struct_fromJson (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
+    at new App (<ABSOLUTE>:LINE:COL)
+    at newApp (<ABSOLUTE>:LINE:COL)
+    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
+    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -229,13 +265,16 @@ exports[`struct_from_json_3.test.w 1`] = `
 "Error: unable to parse Student:
 - Student/advisors/1/id must be string
 - Student/age must be number
-   --> ../../../tests/error/struct_from_json_3.test.w:26:1
-   |   ]
-   | };
-   | 
-26 | Student.fromJson(invalidAdvisorInArray);
-   | ^
-at <ABSOLUTE>/struct_from_json_3.test.w:26:1
+    at JsonSchema.validate (<ABSOLUTE>:LINE:COL)
+    at JsonSchema._fromJson (<ABSOLUTE>:LINE:COL)
+    at exports.__Struct_fromJson (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
+    at new App (<ABSOLUTE>:LINE:COL)
+    at newApp (<ABSOLUTE>:LINE:COL)
+    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
+    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -246,13 +285,16 @@ Duration <DURATION>"
 exports[`struct_from_json_4.test.w 1`] = `
 "Error: unable to parse Student:
 - Student/advisors must NOT have duplicate items (items ## 0 and 1 are identical)
-   --> ../../../tests/error/struct_from_json_4.test.w:27:1
-   |   ]
-   | };
-   | 
-27 | Student.fromJson(invalidAdvisorInArray);
-   | ^
-at <ABSOLUTE>/struct_from_json_4.test.w:27:1
+    at JsonSchema.validate (<ABSOLUTE>:LINE:COL)
+    at JsonSchema._fromJson (<ABSOLUTE>:LINE:COL)
+    at exports.__Struct_fromJson (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
+    at new App (<ABSOLUTE>:LINE:COL)
+    at newApp (<ABSOLUTE>:LINE:COL)
+    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
+    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -263,13 +305,16 @@ Duration <DURATION>"
 exports[`struct_from_json_5.test.w 1`] = `
 "Error: unable to parse Foo:
 - Foo/names/c must be string
-   --> ../../../tests/error/struct_from_json_5.test.w:16:1
-   |   }
-   | };
-   | 
-16 | Foo.fromJson(jFoo);
-   | ^
-at <ABSOLUTE>/struct_from_json_5.test.w:16:1
+    at JsonSchema.validate (<ABSOLUTE>:LINE:COL)
+    at JsonSchema._fromJson (<ABSOLUTE>:LINE:COL)
+    at exports.__Struct_fromJson (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
+    at new App (<ABSOLUTE>:LINE:COL)
+    at newApp (<ABSOLUTE>:LINE:COL)
+    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
+    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -279,10 +324,16 @@ Duration <DURATION>"
 
 exports[`utilities.test.w 1`] = `
 "Error: assertion failed: false
-  --> ../../../tests/error/utilities.test.w:1:1
-1 | assert(false);
-  | ^
-at <ABSOLUTE>/utilities.test.w:1:1
+    at Object.assert (<ABSOLUTE>:LINE:COL)
+    at new $Root (<ABSOLUTE>:LINE:COL)
+    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
+    at new App (<ABSOLUTE>:LINE:COL)
+    at newApp (<ABSOLUTE>:LINE:COL)
+    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
+    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
+    at Module.load (node:internal/modules/cjs/loader:1288:32)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
