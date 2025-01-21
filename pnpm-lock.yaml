@@ -25,7 +25,17 @@ patchedDependencies:
 importers:
 
   .:
+    dependencies:
+      turbo:
+        specifier: ^2
+        version: 2.1.1
     devDependencies:
+      '@skyrpex/wingen':
+        specifier: ^0.6.347
+        version: 0.6.347(projen@0.91.6)
+      '@types/node':
+        specifier: '20'
+        version: 20.14.8
       '@winglang/compatibility-spy':
         specifier: workspace:^
         version: link:packages/@winglang/compatibility-spy
@@ -35,9 +45,18 @@ importers:
       generate-workspace:
         specifier: workspace:^
         version: link:tools/generate-workspace
-      turbo:
-        specifier: ^2.1.1
-        version: 2.1.1
+      prettier:
+        specifier: ^3.4.2
+        version: 3.4.2
+      projen:
+        specifier: ^0.91.6
+        version: 0.91.6(constructs@10.3.0)
+      tsx:
+        specifier: ^4.19.2
+        version: 4.19.2
+      typescript:
+        specifier: ^5.7.3
+        version: 5.7.3
 
   docs:
     devDependencies:
@@ -73,7 +92,7 @@ importers:
         version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
 
   packages/@winglang/compatibility-spy:
     dependencies:
@@ -95,7 +114,7 @@ importers:
         version: 5.5.2
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(happy-dom@9.20.3)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
 
   packages/@winglang/compiler:
     dependencies:
@@ -129,7 +148,7 @@ importers:
         version: 5.5.2
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
 
   packages/@winglang/jsii-docgen:
     dependencies:
@@ -214,7 +233,7 @@ importers:
         version: 5.3.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
 
   packages/@winglang/jsii-docgen/test/__fixtures__/libraries/construct-library:
     devDependencies:
@@ -523,7 +542,7 @@ importers:
         version: 5.5.2
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
       wing-api-checker:
         specifier: workspace:^
         version: link:../../wing-api-checker
@@ -587,7 +606,7 @@ importers:
         version: 5.5.2
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
 
   packages/@winglibs/testfixture:
     devDependencies:
@@ -896,13 +915,13 @@ importers:
         version: 2.29.1(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       eslint-plugin-prettier:
         specifier: ^4.2.1
-        version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.57.0)(prettier@2.8.8)
+        version: 4.2.1(eslint-config-prettier@8.10.0)(eslint@8.57.0)(prettier@3.4.2)
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
 
   tests/doc_examples: {}
 
@@ -1030,7 +1049,7 @@ importers:
         version: 5.5.2
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
 
   tools/compatibility-matrix-automation:
     dependencies:
@@ -1055,7 +1074,7 @@ importers:
         version: 5.5.2
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.8)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
 
   tools/generate-workspace:
     dependencies:
@@ -1131,7 +1150,7 @@ importers:
         version: 4.15.7
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(happy-dom@9.20.3)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
       winglang:
         specifier: workspace:^
         version: link:../../packages/winglang
@@ -1198,7 +1217,7 @@ importers:
         version: link:../ui
       autoprefixer:
         specifier: ^10.4.20
-        version: 10.4.20(postcss@8.4.39)
+        version: 10.4.20(postcss@8.4.49)
       bump-pack:
         specifier: workspace:^
         version: link:../../../tools/bump-pack
@@ -1222,7 +1241,7 @@ importers:
         version: 3.4.17
       tsup:
         specifier: ^8.3.5
-        version: 8.3.5(postcss@8.4.39)(tsx@4.19.2)(typescript@5.7.3)
+        version: 8.3.5(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)
       tsx:
         specifier: ^4.19.2
         version: 4.19.2
@@ -1231,7 +1250,7 @@ importers:
         version: 5.7.3
       vite:
         specifier: ^5.4.11
-        version: 5.4.11(@types/node@22.5.5)
+        version: 5.4.11(@types/node@20.14.8)
 
   wing-console/console/design-system:
     dependencies:
@@ -1319,10 +1338,10 @@ importers:
         version: 5.5.2
       vite:
         specifier: ^5.3.1
-        version: 5.3.1(@types/node@22.5.5)
+        version: 5.3.1(@types/node@20.14.8)
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(happy-dom@9.20.3)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
       webpack:
         specifier: ^5.92.1
         version: 5.92.1(esbuild@0.21.5)
@@ -1419,7 +1438,7 @@ importers:
         version: 5.5.2
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(happy-dom@9.20.3)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
       ws:
         specifier: ^8.17.1
         version: 8.17.1
@@ -1555,7 +1574,7 @@ importers:
         version: link:../../../packages/@winglang/sdk
       autoprefixer:
         specifier: ^10.4.19
-        version: 10.4.19(postcss@8.4.39)
+        version: 10.4.19(postcss@8.4.49)
       bump-pack:
         specifier: workspace:^
         version: link:../../../tools/bump-pack
@@ -1573,16 +1592,16 @@ importers:
         version: 3.4.4
       tsup:
         specifier: ^8.1.0
-        version: 8.1.0(postcss@8.4.39)(typescript@5.5.2)
+        version: 8.1.0(postcss@8.4.49)(typescript@5.5.2)
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
       vite:
         specifier: ^5.3.1
-        version: 5.3.1(@types/node@22.5.5)
+        version: 5.3.1(@types/node@20.14.8)
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(happy-dom@9.20.3)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
       webpack:
         specifier: ^5.92.1
         version: 5.92.1(esbuild@0.21.5)
@@ -1642,7 +1661,7 @@ importers:
         version: 5.5.2
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(happy-dom@9.20.3)
+        version: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
 
   wing-console/tools/eslint-plugin:
     dependencies:
@@ -7199,7 +7218,7 @@ packages:
       magic-string: 0.27.0
       react-docgen-typescript: 2.2.2(typescript@5.5.2)
       typescript: 5.5.2
-      vite: 5.3.1(@types/node@22.5.5)
+      vite: 5.3.1(@types/node@20.14.8)
     dev: true
 
   /@jridgewell/gen-mapping@0.3.5:
@@ -9724,6 +9743,17 @@ packages:
     resolution: {integrity: sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==}
     dev: true
 
+  /@skyrpex/wingen@0.6.347(projen@0.91.6):
+    resolution: {integrity: sha512-kKDzP2SI7hN93UnozjLICHbVNqdaGG0wJrY79rjkAmrO6PlC8Ctb5dNyDn9CwXuk63vdgEMIRjwM4+LefrVDFQ==}
+    engines: {node: '>= 18.17.1'}
+    peerDependencies:
+      projen: ^0.90.3
+    dependencies:
+      projen: 0.91.6(constructs@10.3.0)
+    dev: true
+    bundledDependencies:
+      - case
+
   /@smithy/abort-controller@2.2.0:
     resolution: {integrity: sha512-wRlta7GuLWpTqtFfGo+nZyOO1vEvewdNR1R4rTxpC8XU6vG/NDyrFBhwLZsqg1NUoR1noVaXJPC/7ZK47QCySw==}
     engines: {node: '>=14.0.0'}
@@ -10545,7 +10575,7 @@ packages:
       magic-string: 0.30.10
       rollup: 3.29.4
       typescript: 5.5.2
-      vite: 5.3.1(@types/node@22.5.5)
+      vite: 5.3.1(@types/node@20.14.8)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -10912,7 +10942,7 @@ packages:
       react: 18.3.1
       react-docgen: 7.0.3
       react-dom: 18.3.1(react@18.3.1)
-      vite: 5.3.1(@types/node@22.5.5)
+      vite: 5.3.1(@types/node@20.14.8)
     transitivePeerDependencies:
       - '@preact/preset-vite'
       - encoding
@@ -11524,7 +11554,7 @@ packages:
   /@types/graceful-fs@4.1.9:
     resolution: {integrity: sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ==}
     dependencies:
-      '@types/node': 22.5.5
+      '@types/node': 20.14.8
     dev: true
 
   /@types/hast@3.0.4:
@@ -11921,7 +11951,7 @@ packages:
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
     requiresBuild: true
     dependencies:
-      '@types/node': 22.5.5
+      '@types/node': 20.14.8
     dev: true
     optional: true
 
@@ -12426,7 +12456,7 @@ packages:
       vite: ^4 || ^5
     dependencies:
       '@swc/core': 1.6.5
-      vite: 5.3.1(@types/node@22.5.5)
+      vite: 5.3.1(@types/node@20.14.8)
     transitivePeerDependencies:
       - '@swc/helpers'
     dev: true
@@ -12442,7 +12472,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.24.7)
       magic-string: 0.27.0
       react-refresh: 0.14.2
-      vite: 5.3.1(@types/node@22.5.5)
+      vite: 5.3.1(@types/node@20.14.8)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -12458,7 +12488,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.24.7)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.3.1(@types/node@22.5.5)
+      vite: 5.3.1(@types/node@20.14.8)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -12474,7 +12504,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.0)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.4.11(@types/node@22.5.5)
+      vite: 5.4.11(@types/node@20.14.8)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -12497,7 +12527,7 @@ packages:
       std-env: 3.7.0
       strip-literal: 2.1.0
       test-exclude: 6.0.0
-      vitest: 1.6.0(happy-dom@9.20.3)
+      vitest: 1.6.0(@types/node@20.14.8)(happy-dom@9.20.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13308,7 +13338,7 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /autoprefixer@10.4.19(postcss@8.4.39):
+  /autoprefixer@10.4.19(postcss@8.4.49):
     resolution: {integrity: sha512-BaENR2+zBZ8xXhM4pUaKUxlVdxZ0EZhjvbopwnXmxRUfqDmwSpC2lAi/QXvx7NRdPCo1WKEcEF6mV64si1z4Ew==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -13320,11 +13350,11 @@ packages:
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
-      postcss: 8.4.39
+      postcss: 8.4.49
       postcss-value-parser: 4.2.0
     dev: true
 
-  /autoprefixer@10.4.20(postcss@8.4.39):
+  /autoprefixer@10.4.20(postcss@8.4.49):
     resolution: {integrity: sha512-XY25y5xSv/wEoqzDyXXME4AFfkZI0P23z6Fs3YgymDnKJkCGOnkL0iTxCa85UTqaSgfcqyf3UA6+c7wUvx/16g==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -13336,7 +13366,7 @@ packages:
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
-      postcss: 8.4.39
+      postcss: 8.4.49
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -15241,7 +15271,7 @@ packages:
     dependencies:
       semver: 7.6.3
       shelljs: 0.8.5
-      typescript: 5.8.0-dev.20250109
+      typescript: 5.8.0-dev.20250121
     dev: true
 
   /dset@3.1.3:
@@ -16105,6 +16135,23 @@ packages:
       eslint-config-prettier: 8.10.0(eslint@8.57.0)
       prettier: 2.8.8
       prettier-linter-helpers: 1.0.0
+
+  /eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.10.0)(eslint@8.57.0)(prettier@3.4.2):
+    resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      eslint: '>=7.28.0'
+      eslint-config-prettier: '*'
+      prettier: '>=2.0.0'
+    peerDependenciesMeta:
+      eslint-config-prettier:
+        optional: true
+    dependencies:
+      eslint: 8.57.0
+      eslint-config-prettier: 8.10.0(eslint@8.57.0)
+      prettier: 3.4.2
+      prettier-linter-helpers: 1.0.0
+    dev: true
 
   /eslint-plugin-react-hooks@4.6.2(eslint@8.57.0):
     resolution: {integrity: sha512-QzliNJq4GinDBcD8gPB5v0wh6g8q3SUi6EFF0x8N/BL9PoVs0atuGc47ozMRyOWAKdwaZ5OnbOEa3WR+dSGKuQ==}
@@ -18412,7 +18459,7 @@ packages:
     resolution: {integrity: sha512-eIz2msL/EzL9UFTFFx7jBTkeZfku0yUAyZZZmJ93H2TYEiroIx2PQjEXcwYtYl8zXCxb+PAmA2hLIt/6ZEkPHw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@types/node': 22.5.5
+      '@types/node': 20.14.8
       jest-util: 29.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
@@ -21146,7 +21193,7 @@ packages:
       yaml: 2.4.5
     dev: true
 
-  /postcss-load-config@6.0.1(postcss@8.4.39)(tsx@4.19.2):
+  /postcss-load-config@6.0.1(postcss@8.4.49)(tsx@4.19.2):
     resolution: {integrity: sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g==}
     engines: {node: '>= 18'}
     peerDependencies:
@@ -21165,7 +21212,7 @@ packages:
         optional: true
     dependencies:
       lilconfig: 3.1.2
-      postcss: 8.4.39
+      postcss: 8.4.49
       tsx: 4.19.2
     dev: true
 
@@ -21264,6 +21311,12 @@ packages:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
     hasBin: true
+
+  /prettier@3.4.2:
+    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
 
   /pretty-bytes@5.6.0:
     resolution: {integrity: sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==}
@@ -21366,6 +21419,30 @@ packages:
       xmlbuilder2: 3.1.1
       yaml: 2.3.2
       yargs: 17.7.2
+    bundledDependencies:
+      - '@iarna/toml'
+      - case
+      - chalk
+      - comment-json
+      - conventional-changelog-config-spec
+      - fast-json-patch
+      - glob
+      - ini
+      - semver
+      - shx
+      - xmlbuilder2
+      - yaml
+      - yargs
+
+  /projen@0.91.6(constructs@10.3.0):
+    resolution: {integrity: sha512-azGxE8BDX7jkS+PovP8s70+wuURVOwtXYUh2z+kXbP11WDq4Gpfo5F/IyRQTI1kPrHR8sQbXkEnLGi2xIroBxA==}
+    engines: {node: '>= 16.0.0'}
+    hasBin: true
+    peerDependencies:
+      constructs: ^10.0.0
+    dependencies:
+      constructs: 10.3.0
+    dev: true
     bundledDependencies:
       - '@iarna/toml'
       - case
@@ -23751,7 +23828,47 @@ packages:
       - ts-node
     dev: true
 
-  /tsup@8.3.5(postcss@8.4.39)(tsx@4.19.2)(typescript@5.7.3):
+  /tsup@8.1.0(postcss@8.4.49)(typescript@5.5.2):
+    resolution: {integrity: sha512-UFdfCAXukax+U6KzeTNO2kAARHcWxmKsnvSPXUcfA1D+kU05XDccCrkffCQpFaWDsZfV0jMyTsxU39VfCp6EOg==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      '@microsoft/api-extractor': ^7.36.0
+      '@swc/core': ^1
+      postcss: ^8.4.12
+      typescript: '>=4.5.0'
+    peerDependenciesMeta:
+      '@microsoft/api-extractor':
+        optional: true
+      '@swc/core':
+        optional: true
+      postcss:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 4.2.1(esbuild@0.21.5)
+      cac: 6.7.14
+      chokidar: 3.6.0
+      debug: 4.3.5(supports-color@5.5.0)
+      esbuild: 0.21.5
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      postcss: 8.4.49
+      postcss-load-config: 4.0.2(postcss@8.4.49)
+      resolve-from: 5.0.0
+      rollup: 4.18.0
+      source-map: 0.8.0-beta.0
+      sucrase: 3.35.0
+      tree-kill: 1.2.2
+      typescript: 5.5.2
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+    dev: true
+
+  /tsup@8.3.5(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3):
     resolution: {integrity: sha512-Tunf6r6m6tnZsG9GYWndg0z8dEV7fD733VBFzFJ5Vcm1FtlXB8xBD/rtrBi2a3YKEV7hHtxiZtW5EAVADoe1pA==}
     engines: {node: '>=18'}
     hasBin: true
@@ -23778,8 +23895,8 @@ packages:
       esbuild: 0.24.2
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss: 8.4.39
-      postcss-load-config: 6.0.1(postcss@8.4.39)(tsx@4.19.2)
+      postcss: 8.4.49
+      postcss-load-config: 6.0.1(postcss@8.4.49)(tsx@4.19.2)
       resolve-from: 5.0.0
       rollup: 4.30.1
       source-map: 0.8.0-beta.0
@@ -23860,7 +23977,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo-darwin-arm64@2.1.1:
@@ -23868,7 +23985,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo-linux-64@2.1.1:
@@ -23876,7 +23993,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo-linux-arm64@2.1.1:
@@ -23884,7 +24001,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo-windows-64@2.1.1:
@@ -23892,7 +24009,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo-windows-arm64@2.1.1:
@@ -23900,7 +24017,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /turbo@2.1.1:
@@ -23913,7 +24030,7 @@ packages:
       turbo-linux-arm64: 2.1.1
       turbo-windows-64: 2.1.1
       turbo-windows-arm64: 2.1.1
-    dev: true
+    dev: false
 
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -24052,8 +24169,8 @@ packages:
     hasBin: true
     dev: true
 
-  /typescript@5.8.0-dev.20250109:
-    resolution: {integrity: sha512-p7pWPypjuK2v/76T8q25sTmuG17m53WWranllky9WiG/PUcIJOMXoGfNrRF3r5ufFfi49QM9TipJyfmeKgXRjg==}
+  /typescript@5.8.0-dev.20250121:
+    resolution: {integrity: sha512-cRbtTDQVu4ZV28kEzT6EgGd1mT75C92i/5pFcQHVqa60S2HhbFbY+4Wpo0ebumER/YMoC63sfTzruaR2Z6kOJw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -24615,7 +24732,7 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vitest@1.6.0(@types/node@20.14.8):
+  /vitest@1.6.0(@types/node@20.14.8)(happy-dom@9.20.3):
     resolution: {integrity: sha512-H5r/dN06swuFnzNFhq/dnz37bPXnq8xB2xB5JOVk8K09rUtoeNN+LHWkoQ0A/i3hvbUKKcCei9KpbxqHMLhLLA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -24650,6 +24767,7 @@ packages:
       chai: 4.4.1
       debug: 4.3.5(supports-color@5.5.0)
       execa: 8.0.1
+      happy-dom: 9.20.3
       local-pkg: 0.5.0
       magic-string: 0.30.10
       pathe: 1.1.2
@@ -24707,63 +24825,6 @@ packages:
       chai: 4.4.1
       debug: 4.3.5(supports-color@5.5.0)
       execa: 8.0.1
-      local-pkg: 0.5.0
-      magic-string: 0.30.10
-      pathe: 1.1.2
-      picocolors: 1.0.1
-      std-env: 3.7.0
-      strip-literal: 2.1.0
-      tinybench: 2.8.0
-      tinypool: 0.8.4
-      vite: 5.3.1(@types/node@22.5.5)
-      vite-node: 1.6.0(@types/node@22.5.5)
-      why-is-node-running: 2.2.2
-    transitivePeerDependencies:
-      - less
-      - lightningcss
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-    dev: true
-
-  /vitest@1.6.0(happy-dom@9.20.3):
-    resolution: {integrity: sha512-H5r/dN06swuFnzNFhq/dnz37bPXnq8xB2xB5JOVk8K09rUtoeNN+LHWkoQ0A/i3hvbUKKcCei9KpbxqHMLhLLA==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@edge-runtime/vm': '*'
-      '@types/node': ^18.0.0 || >=20.0.0
-      '@vitest/browser': 1.6.0
-      '@vitest/ui': 1.6.0
-      happy-dom: '*'
-      jsdom: '*'
-    peerDependenciesMeta:
-      '@edge-runtime/vm':
-        optional: true
-      '@types/node':
-        optional: true
-      '@vitest/browser':
-        optional: true
-      '@vitest/ui':
-        optional: true
-      happy-dom:
-        optional: true
-      jsdom:
-        optional: true
-    dependencies:
-      '@vitest/expect': 1.6.0
-      '@vitest/runner': 1.6.0
-      '@vitest/snapshot': 1.6.0
-      '@vitest/spy': 1.6.0
-      '@vitest/utils': 1.6.0
-      acorn-walk: 8.3.3
-      chai: 4.4.1
-      debug: 4.3.5(supports-color@5.5.0)
-      execa: 8.0.1
-      happy-dom: 9.20.3
       local-pkg: 0.5.0
       magic-string: 0.30.10
       pathe: 1.1.2
