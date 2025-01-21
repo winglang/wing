@@ -27,7 +27,10 @@ export async function activate(context: ExtensionContext) {
   // For some reason, the word pattern is not set correctly by the language config file
   // https://github.com/microsoft/vscode/issues/42649
   const languageConfig = JSON.parse(
-    await readFile(join(__dirname, "..", "language-configuration.json"), "utf8")
+    await readFile(
+      join(__dirname, "..", "language-configuration.json"),
+      "utf8",
+    ),
   );
   languages.setLanguageConfiguration("wing", {
     brackets: languageConfig.brackets,
@@ -36,10 +39,10 @@ export async function activate(context: ExtensionContext) {
     wordPattern: new RegExp(languageConfig.wordPattern, "g"),
     indentationRules: {
       increaseIndentPattern: new RegExp(
-        languageConfig.indentationRules.increaseIndentPattern
+        languageConfig.indentationRules.increaseIndentPattern,
       ),
       decreaseIndentPattern: new RegExp(
-        languageConfig.indentationRules.decreaseIndentPattern
+        languageConfig.indentationRules.decreaseIndentPattern,
       ),
     },
   });
@@ -49,7 +52,7 @@ export async function activate(context: ExtensionContext) {
   debug.registerDebugConfigurationProvider("wing", {
     async resolveDebugConfiguration(_, _config: DebugConfiguration) {
       Loggers.default.appendLine(
-        `Resolving debug configuration... ${JSON.stringify(_config)}`
+        `Resolving debug configuration... ${JSON.stringify(_config)}`,
       );
       const editor = window.activeTextEditor;
 
@@ -63,17 +66,17 @@ export async function activate(context: ExtensionContext) {
       } else {
         let uriOptions = await workspace.findFiles(
           `**/*.{main,test}.w`,
-          "**/{node_modules,target}/**"
+          "**/{node_modules,target}/**",
         );
         uriOptions.concat(
-          await workspace.findFiles(`**/main.w`, "**/{node_modules,target}/**")
+          await workspace.findFiles(`**/main.w`, "**/{node_modules,target}/**"),
         );
 
         const entrypoint = await window.showQuickPick(
           uriOptions.map((f) => f.fsPath),
           {
             placeHolder: "Choose entrypoint to debug",
-          }
+          },
         );
 
         if (!entrypoint) {
@@ -127,7 +130,7 @@ export async function activate(context: ExtensionContext) {
           await new Promise((resolve) => setTimeout(resolve, 1000, undefined));
 
           await wingBinChanged();
-        }
+        },
       );
 
       if (hasWingBin) {
@@ -152,7 +155,7 @@ export async function activate(context: ExtensionContext) {
     const terminalName = `Wing it: ${filePath.split("/").pop()}`;
 
     const existingTerminal = window.terminals.find(
-      (t) => t.name === terminalName
+      (t) => t.name === terminalName,
     );
     if (existingTerminal) {
       existingTerminal.dispose();
@@ -172,7 +175,7 @@ export async function activate(context: ExtensionContext) {
 
   // add command to preview wing files
   context.subscriptions.push(
-    commands.registerCommand(COMMAND_OPEN_CONSOLE, wingIt)
+    commands.registerCommand(COMMAND_OPEN_CONSOLE, wingIt),
   );
 
   await wingBinChanged();

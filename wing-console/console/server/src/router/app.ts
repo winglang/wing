@@ -157,7 +157,7 @@ export const createAppRouter = () => {
               ({
                 ...entry,
                 message: entry.message.trim(),
-              } as LogEntry),
+              }) as LogEntry,
           ),
           hiddenLogs: noVerboseLogsCount - filteredLogs.length,
         };
@@ -574,7 +574,7 @@ function createExplorerItemFromConstructTreeNode(
   const label =
     node.display?.title === cloudResourceType
       ? node.id
-      : node.display?.title ?? node.id;
+      : (node.display?.title ?? node.id);
 
   return {
     id: node.path,
