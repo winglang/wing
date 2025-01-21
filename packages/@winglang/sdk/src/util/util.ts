@@ -227,12 +227,14 @@ export class Util {
     args: Array<string>,
     opts?: ExecOptions
   ): Output {
-    const inheritEnv = opts?.inheritEnv ?? false;
     const execOpts = {
       windowsHide: true,
       shell: false,
       cwd: opts?.cwd,
-      env: inheritEnv ? { ...process.env, ...opts?.env } : { ...opts?.env },
+      env:
+        opts?.inheritEnv === true
+          ? { ...process.env, ...opts?.env }
+          : { ...opts?.env },
     };
 
     try {
@@ -244,7 +246,7 @@ export class Util {
       };
     } catch (error: any) {
       if (error.code === "ENOENT") {
-        throw new Error(`Program "${program}" not found: ${error.message}`);
+        throw new Error(`Program not found: ${error.message}`);
       } else {
         return {
           stdout: error.stdout.toString(),
