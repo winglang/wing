@@ -90,14 +90,6 @@ describe("wing test (custom platform)", () => {
           return super.newApp(appProps);
         }
 
-        // newInstance(fqn, scope, id, ...args) {
-        //   if (fqn === "@winglang/sdk.std.TestRunner") {
-        //     return new tfaws.TestRunner(scope, id, ...args);
-        //   }
-
-        //   return super.newInstance(fqn, scope, id, ...args);
-        // }
-
         async createTestHarness() {
           return super.createTestHarness();
         }

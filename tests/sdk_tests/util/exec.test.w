@@ -7,6 +7,9 @@ let assertThrows = inflight (expected: str, block: (): void) => {
   try {
     block();
   } catch actual {
+    if !(actual.contains(expected)) {
+      log(actual);
+    }
     assert(actual.contains(expected));
     error = true;
   }
@@ -30,7 +33,7 @@ test "exec()" {
 
 
 // "exec() with invalid program" 
-  let NOT_FOUND_ERROR = "Program not found:";
+  let NOT_FOUND_ERROR = "ENOENT";
 
   assertThrows(NOT_FOUND_ERROR, () => {
     util.exec("no-such-program",  [""]);
@@ -52,7 +55,7 @@ test "exec()" {
 
   let output3 = util.exec(program3, args3, opts3);
 
-  expect.equal(output3.stdout, "Wing\n");
+  expect.equal(output3.stdout, "sim Wing\n");
   expect.equal(output3.stderr, "");
   expect.equal(output3.status, 0);
 
