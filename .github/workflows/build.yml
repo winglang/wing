@@ -250,6 +250,18 @@ jobs:
           cache: "pnpm"
           node-version: ${{ matrix.node }}
 
+      - name: Install Rust
+        uses: moonrepo/setup-rust@v1
+        with:
+          inherit-toolchain: true
+          cache: false
+
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          # Don't save cache here, to avoid thrashing with test job
+          save-if: false
+
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -257,9 +269,14 @@ jobs:
           path: dist
 
       - name: Install dependencies
+        # run: |
+        #   pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+        #   pnpm run compile --filter jsii-fixture
         run: |
-          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
-          pnpm run compile --filter jsii-fixture
+          pnpm install --frozen-lockfile
+
+      - name: Build and Package
+        run: pnpm package:ci
 
       - name: Run Hangar Tests
         working-directory: tools/hangar
