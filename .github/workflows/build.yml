@@ -263,6 +263,11 @@ jobs:
           # Don't save cache here, to avoid thrashing with test job
           save-if: false
 
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v4
         with:
