@@ -3,6 +3,8 @@
     ".editorconfig",
     ".gitattributes",
     ".gitignore",
+    ".node-version",
+    ".nvmrc",
     ".prettierrc.json",
     ".projen/deps.json",
     ".projen/files.json",

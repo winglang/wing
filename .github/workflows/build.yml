@@ -67,13 +67,13 @@ jobs:
           # Don't save cache here, to avoid thrashing with test job
           save-if: false
 
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_wrapper: false
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Derive appropriate SHAs for base and head
         id: shas
@@ -88,6 +88,9 @@ jobs:
         env:
           GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
         run: pnpm bump-pack
+
+      - name: Run Projen
+        run: pnpm projen
 
       - name: Build and Package
         run: pnpm package:ci

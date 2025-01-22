@@ -10,6 +10,8 @@
 !/turbo.json
 !/.prettierrc.json
 !/.editorconfig
+!/.node-version
+!/.nvmrc
 node_modules/
 .DS_Store
 .pnpm-store/

@@ -1,9 +1,10 @@
 import { MonorepoProject } from "@skyrpex/wingen";
+import { TextFile } from "projen";
 
 const PNPM_VERSION = "8.15.1";
 const NODE_VERSION = "20.17.0";
 
-///////////////////////////////////////////////////////////////////////////////
+// Use a monorepo project to manage the workspace.
 const monorepo = new MonorepoProject({
   name: "@winglang/monorepo",
   devDeps: [
@@ -14,9 +15,10 @@ const monorepo = new MonorepoProject({
   ],
 });
 
+// No need for tsconfig.json in the monorepo root.
 monorepo.tryRemoveFile("tsconfig.json");
 
-///////////////////////////////////////////////////////////////////////////////
+// Wingen manages the workspace file for us, but we still don't use projen to manage these workspace packages.
 monorepo
   .tryFindObjectFile("pnpm-workspace.yaml")
   ?.addToArray(
@@ -35,7 +37,7 @@ monorepo
     "packages/@winglang/jsii-docgen/test/__fixtures__/**",
   );
 
-///////////////////////////////////////////////////////////////////////////////
+// Customize the turbo config. Ideally, the projen project should allow us to do this.
 const turbo = monorepo.tryFindObjectFile("turbo.json");
 turbo?.addOverride("globalDependencies", [
   "*.json",
@@ -171,7 +173,7 @@ turbo?.addOverride("tasks", {
 });
 turbo?.addDeletionOverride("tasks.compile.outputs");
 
-///////////////////////////////////////////////////////////////////////////////
+// Customize the tasks. Need to run some hacks in order to customize all of them.
 monorepo.tasks.removeTask("build");
 const buildTask = monorepo.addTask("build");
 buildTask.spawn(monorepo.defaultTask!);
@@ -198,13 +200,25 @@ monorepo.addScript(
   "turbo compile -F winglang --output-logs=new-only && ./packages/winglang/bin/wing",
 );
 
-///////////////////////////////////////////////////////////////////////////////
+// Specify engine and package manager versions.
 monorepo.addFields({
   packageManager: `pnpm@${PNPM_VERSION}`,
   volta: {
     node: NODE_VERSION,
     pnpm: PNPM_VERSION,
   },
+});
+
+new TextFile(monorepo, ".node-version", {
+  lines: [NODE_VERSION, ""],
+});
+
+new TextFile(monorepo, ".nvmrc", {
+  lines: [NODE_VERSION, ""],
+});
+
+// Specify pnpm overrides and patches.
+monorepo.addFields({
   pnpm: {
     overrides: {
       mime: "^3.0.0",
@@ -219,7 +233,7 @@ monorepo.addFields({
   },
 });
 
-///////////////////////////////////////////////////////////////////////////////
+// Customize the gitignore.
 monorepo.addGitIgnore("node_modules/");
 monorepo.addGitIgnore(".DS_Store");
 monorepo.addGitIgnore(".pnpm-store/");
@@ -246,5 +260,4 @@ monorepo.addGitIgnore(".turbo/");
 monorepo.addGitIgnore(".history/");
 
 ///////////////////////////////////////////////////////////////////////////////
-
 monorepo.synth();
