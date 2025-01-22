@@ -22,7 +22,7 @@ env:
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-  TURBO_FORCE: true
+  TURBO_FORCE: true # force a cache miss until we fix the turbo cache config
   IS_SAME_REPO_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
 
 jobs:
@@ -30,8 +30,6 @@ jobs:
     name: "Build"
     timeout-minutes: 30
     runs-on: ubuntu-24.04
-    # env:
-    #   TURBO_FORCE: true # force a cache miss until we fix the turbo cache config
     outputs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
@@ -106,8 +104,6 @@ jobs:
     name: Test
     timeout-minutes: 30
     runs-on: ubuntu-24.04
-    # env:
-    #   TURBO_FORCE: true # force a cache miss until we fix the turbo cache config
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -275,9 +271,6 @@ jobs:
           path: dist
 
       - name: Install dependencies
-        # run: |
-        #   pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
-        #   pnpm run compile --filter jsii-fixture
         run: |
           pnpm install --frozen-lockfile
 
