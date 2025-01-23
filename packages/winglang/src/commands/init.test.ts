@@ -98,7 +98,7 @@ describe("new", () => {
     process.chdir(workdir);
 
     await expect(init("invalid-template")).rejects.toThrow(
-      /Template "invalid-template" is not available/
+      /Template "invalid-template" is not available/,
     );
   });
 
@@ -116,7 +116,7 @@ describe("new", () => {
     process.chdir(workdir);
 
     await expect(init("http-api", { language: "typescript" })).rejects.toThrow(
-      /Template "http-api" is not available in typescript/
+      /Template "http-api" is not available in typescript/,
     );
   });
 
@@ -128,7 +128,7 @@ describe("new", () => {
     await writeFile(join(workdir, "main.w"), "hello");
 
     await expect(init("http-api", { language: "wing" })).rejects.toThrow(
-      /The following files already exist in the current directory and will be overwritten/
+      /The following files already exist in the current directory and will be overwritten/,
     );
   });
 

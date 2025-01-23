@@ -65,7 +65,7 @@ export async function formatDiagnostics(diagnostics: WingDiagnostic[]): Promise<
       {
         chars: CHARS_ASCII,
       },
-      COLORING
+      COLORING,
     );
     result.push(diagnosticText);
   }

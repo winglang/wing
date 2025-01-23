@@ -82,14 +82,14 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
       if (method === "OPTIONS") {
         for (const [key, value] of Object.entries(
-          corsHeaders.optionsResponse
+          corsHeaders.optionsResponse,
         )) {
           res.setHeader(key, value);
         }
         res.status(204).send();
       } else {
         for (const [key, value] of Object.entries(
-          corsHeaders.defaultResponse
+          corsHeaders.defaultResponse,
         )) {
           res.setHeader(key, value);
         }
@@ -133,7 +133,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         void this.updateMetadataAndNotify(key, actionType, contentType).then(
           () => {
             res.status(200).send();
-          }
+          },
         );
       });
 
@@ -178,12 +178,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     }
 
     const metadataFileExists = await exists(
-      join(this.context.statedir, METADATA_FILENAME)
+      join(this.context.statedir, METADATA_FILENAME),
     );
     if (metadataFileExists) {
       const metadataContents = await fs.promises.readFile(
         join(this.context.statedir, METADATA_FILENAME),
-        "utf-8"
+        "utf-8",
       );
       try {
         const metadata = deserialize(metadataContents);
@@ -191,7 +191,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       } catch (e) {
         this.addTrace(
           `Failed to deserialize metadata: ${(e as Error).stack}`,
-          LogLevel.ERROR
+          LogLevel.ERROR,
         );
       }
     }
@@ -249,12 +249,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   private async loadState(): Promise<StateFileContents> {
     const stateFileExists = await exists(
-      join(this.context.statedir, STATE_FILENAME)
+      join(this.context.statedir, STATE_FILENAME),
     );
     if (stateFileExists) {
       const stateFileContents = await fs.promises.readFile(
         join(this.context.statedir, STATE_FILENAME),
-        "utf-8"
+        "utf-8",
       );
       return JSON.parse(stateFileContents);
     } else {
@@ -265,7 +265,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private async saveState(state: StateFileContents): Promise<void> {
     fs.writeFileSync(
       join(this.context.statedir, STATE_FILENAME),
-      JSON.stringify(state)
+      JSON.stringify(state),
     );
   }
 
@@ -274,7 +274,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     // during the bucket's lifecycle
     fs.writeFileSync(
       join(this.context.statedir, METADATA_FILENAME),
-      serialize(Array.from(this._metadata.entries())) // metadata contains Datetime values, so we need to serialize it
+      serialize(Array.from(this._metadata.entries())), // metadata contains Datetime values, so we need to serialize it
     );
 
     await this.saveState({ lastPort: this.port });
@@ -282,14 +282,14 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   private async notifyListeners(
     actionType: BucketEventType,
-    key: string
+    key: string,
   ): Promise<void> {
     if (!this.topicHandlers[actionType]) {
       return;
     }
 
     const topicClient = this.context.getClient(
-      this.topicHandlers[actionType]!
+      this.topicHandlers[actionType]!,
     ) as ITopicClient;
 
     return topicClient.publish(key);
@@ -307,7 +307,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   public async put(
     key: string,
     value: string,
-    opts?: BucketPutOptions
+    opts?: BucketPutOptions,
   ): Promise<void> {
     return this.context.withTrace({
       message: `Put (key=${key}).`,
@@ -324,7 +324,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         await this.addFile(
           key,
           JSON.stringify(body, null, 2),
-          "application/json"
+          "application/json",
         );
       },
     });
@@ -368,7 +368,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           throw new Error(
             `Object content could not be read as text (key=${key}): ${
               (e as Error).stack
-            })}`
+            })}`,
           );
         }
       },
@@ -377,7 +377,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   public async tryGet(
     key: string,
-    options?: BucketTryGetOptions
+    options?: BucketTryGetOptions,
   ): Promise<string | undefined> {
     if (await this.exists(key)) {
       return this.get(key, options);
@@ -477,7 +477,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         url.searchParams.set("action", action);
         url.searchParams.set(
           "validUntil",
-          String(Date.now() + duration * 1000)
+          String(Date.now() + duration * 1000),
         );
         return url.toString();
       },
@@ -522,7 +522,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   public async rename(srcKey: string, dstKey: string): Promise<void> {
     if (srcKey === dstKey) {
       throw new Error(
-        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`
+        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`,
       );
     }
 
@@ -533,7 +533,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private async addFile(
     key: string,
     value: string,
-    contentType?: string
+    contentType?: string,
   ): Promise<void> {
     const actionType: BucketEventType = this._metadata.has(key)
       ? BucketEventType.UPDATE
@@ -552,7 +552,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private async updateMetadataAndNotify(
     key: string,
     actionType: BucketEventType,
-    contentType?: string
+    contentType?: string,
   ): Promise<void> {
     const hash = this.hashKey(key);
     const filename = join(this._fileDir, hash);

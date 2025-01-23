@@ -46,14 +46,14 @@ export class FileBrowser extends VisualComponent {
     scope: Construct,
     id: string,
     label: string,
-    handlers: FileBrowserHandlers
+    handlers: FileBrowserHandlers,
   ): FileBrowser {
     return Resource._newFromFactory(
       FILE_BROWSER_FQN,
       scope,
       id,
       label,
-      handlers
+      handlers,
     );
   }
 
@@ -67,7 +67,7 @@ export class FileBrowser extends VisualComponent {
     scope: Construct,
     id: string,
     label: string,
-    handlers: FileBrowserHandlers
+    handlers: FileBrowserHandlers,
   ) {
     super(scope, id);
     this.label = label;
@@ -79,10 +79,10 @@ export class FileBrowser extends VisualComponent {
           return await ctx.handler(fileName);
         } catch (e) {
           throw new Error(
-            "Invalid payload for file browser get handler client"
+            "Invalid payload for file browser get handler client",
           );
         }
-      }
+      },
     );
 
     const putHandler = lift({ handler: handlers.put }).inflight(
@@ -92,10 +92,10 @@ export class FileBrowser extends VisualComponent {
           return await ctx.handler(fileName, fileContent);
         } catch (e) {
           throw new Error(
-            "Invalid payload for file browser put handler client"
+            "Invalid payload for file browser put handler client",
           );
         }
-      }
+      },
     );
 
     const deleteHandler = lift({ handler: handlers.delete }).inflight(
@@ -105,10 +105,10 @@ export class FileBrowser extends VisualComponent {
           return await ctx.handler(fileName);
         } catch (e) {
           throw new Error(
-            "Invalid payload for file browser delete handler client"
+            "Invalid payload for file browser delete handler client",
           );
         }
-      }
+      },
     );
 
     const listHandler = lift({ handler: handlers.list }).inflight(
@@ -117,10 +117,10 @@ export class FileBrowser extends VisualComponent {
           return await ctx.handler();
         } catch (e) {
           throw new Error(
-            "Invalid payload for file browser list handler client"
+            "Invalid payload for file browser list handler client",
           );
         }
-      }
+      },
     );
 
     this.getFn = new Function(this, "get", getHandler);

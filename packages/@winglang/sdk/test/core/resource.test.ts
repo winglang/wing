@@ -41,9 +41,9 @@ describe("resource onLift", () => {
     const example = new Example(app, "example");
 
     expect(() =>
-      Lifting.lift(example, new Example(app, "host"), ["nonExistentOp"])
+      Lifting.lift(example, new Example(app, "host"), ["nonExistentOp"]),
     ).toThrow(
-      `Resource root/example does not support inflight operation nonExistentOp.\nIt might not be implemented yet.`
+      `Resource root/example does not support inflight operation nonExistentOp.\nIt might not be implemented yet.`,
     );
   });
 
@@ -51,7 +51,7 @@ describe("resource onLift", () => {
     const notApp = new Construct(undefined as any, "notApp");
 
     expect(() => new ExampleAbstract(notApp, "example")).toThrow(
-      `Cannot find root app`
+      `Cannot find root app`,
     );
   });
 });

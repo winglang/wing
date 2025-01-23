@@ -65,7 +65,7 @@ export class BucketClient implements IBucketClient {
   public async rename(srcKey: string, dstKey: string): Promise<void> {
     if (srcKey === dstKey) {
       throw new Error(
-        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`
+        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`,
       );
     }
 
@@ -80,7 +80,7 @@ export class BucketClient implements IBucketClient {
       return metadata.iamConfiguration?.publicAccessPrevention === "inherited";
     } catch (error) {
       throw new Error(
-        `Failed to check if bucket is public. (bucket=${this.bucketName})`
+        `Failed to check if bucket is public. (bucket=${this.bucketName})`,
       );
     }
   }
@@ -103,7 +103,7 @@ export class BucketClient implements IBucketClient {
   public async put(
     key: string,
     body: string,
-    opts?: BucketPutOptions
+    opts?: BucketPutOptions,
   ): Promise<void> {
     const options = {
       contentType:
@@ -130,7 +130,7 @@ export class BucketClient implements IBucketClient {
       .download({ start: options?.startByte, end: options?.endByte })
       .catch((e) => {
         throw new Error(
-          `Failed to get object (key=${key}): ${(e as Error).stack})}`
+          `Failed to get object (key=${key}): ${(e as Error).stack})}`,
         );
       });
 
@@ -140,14 +140,14 @@ export class BucketClient implements IBucketClient {
       throw new Error(
         `Object content could not be read as text (key=${key}): ${
           (e as Error).stack
-        })}`
+        })}`,
       );
     }
   }
 
   public async tryGet(
     key: string,
-    options?: BucketTryGetOptions
+    options?: BucketTryGetOptions,
   ): Promise<string | undefined> {
     try {
       if (await this.exists(key)) {
@@ -156,7 +156,7 @@ export class BucketClient implements IBucketClient {
       return undefined;
     } catch (error) {
       throw new Error(
-        `Failed to tryGet object. (key=${key}) ${(error as Error).stack}`
+        `Failed to tryGet object. (key=${key}) ${(error as Error).stack}`,
       );
     }
   }
@@ -165,7 +165,7 @@ export class BucketClient implements IBucketClient {
     try {
       if (!(await this.exists(key))) {
         throw new Error(
-          `Cannot get JSON object that does not exist. (key=${key})`
+          `Cannot get JSON object that does not exist. (key=${key})`,
         );
       }
       return JSON.parse(await this.get(key));
@@ -187,7 +187,7 @@ export class BucketClient implements IBucketClient {
 
   public async delete(
     key: string,
-    opts: BucketDeleteOptions = {}
+    opts: BucketDeleteOptions = {},
   ): Promise<void> {
     const mustExist = opts?.mustExist ?? false;
 
@@ -240,7 +240,7 @@ export class BucketClient implements IBucketClient {
    */
   public async signedUrl(
     key: string,
-    opts: BucketSignedUrlOptions
+    opts: BucketSignedUrlOptions,
   ): Promise<string> {
     const gcsFile = this.bucket.file(key);
     let gcsAction: "read" | "write" | "delete" | "resumable";

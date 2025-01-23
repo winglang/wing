@@ -71,13 +71,13 @@ describe("deepStrictEqual", () => {
   // Special objects and edge cases
   it("should return true for equal Date objects", () => {
     expect(
-      deepStrictEqual(new Date("2020-01-01"), new Date("2020-01-01"))
+      deepStrictEqual(new Date("2020-01-01"), new Date("2020-01-01")),
     ).toBe(true);
   });
 
   it("should return false for different Date objects", () => {
     expect(
-      deepStrictEqual(new Date("2020-01-01"), new Date("2021-01-01"))
+      deepStrictEqual(new Date("2020-01-01"), new Date("2021-01-01")),
     ).toBe(false);
   });
 
@@ -133,8 +133,8 @@ describe("deepStrictEqual", () => {
         new Map([
           [1, "a"],
           [2, "b"],
-        ])
-      )
+        ]),
+      ),
     ).toBe(true);
   });
 
@@ -148,8 +148,8 @@ describe("deepStrictEqual", () => {
         new Map([
           [1, "a"],
           [2, "c"],
-        ])
-      )
+        ]),
+      ),
     ).toBe(false);
   });
 
@@ -166,8 +166,8 @@ describe("deepStrictEqual", () => {
     expect(
       deepStrictEqual(
         new Set([1, new Set([2, new Set([3])])]),
-        new Set([1, new Set([2, new Set([3])])])
-      )
+        new Set([1, new Set([2, new Set([3])])]),
+      ),
     ).toBe(true);
   });
 
@@ -175,8 +175,8 @@ describe("deepStrictEqual", () => {
     expect(
       deepStrictEqual(
         new Set([1, new Set([2, new Set([3])])]),
-        new Set([1, new Set([2, new Set([4])])])
-      )
+        new Set([1, new Set([2, new Set([4])])]),
+      ),
     ).toBe(false);
   });
 
@@ -184,8 +184,8 @@ describe("deepStrictEqual", () => {
     expect(
       deepStrictEqual(
         new Map([[1, new Map([[2, new Map([[3, "value"]])]])]]),
-        new Map([[1, new Map([[2, new Map([[3, "value"]])]])]])
-      )
+        new Map([[1, new Map([[2, new Map([[3, "value"]])]])]]),
+      ),
     ).toBe(true);
   });
 
@@ -193,8 +193,8 @@ describe("deepStrictEqual", () => {
     expect(
       deepStrictEqual(
         new Map([[1, new Map([[2, new Map([[3, "value"]])]])]]),
-        new Map([[1, new Map([[2, new Map([[3, "different"]])]])]])
-      )
+        new Map([[1, new Map([[2, new Map([[3, "different"]])]])]]),
+      ),
     ).toBe(false);
   });
 

@@ -184,7 +184,7 @@ export class Platform implements IPlatform {
           new UpdateSecretCommand({
             SecretId: name,
             SecretString: value,
-          })
+          }),
         );
       } catch (error: any) {
         if (error.name === "ResourceNotFoundException") {
@@ -194,7 +194,7 @@ export class Platform implements IPlatform {
             new CreateSecretCommand({
               Name: name,
               SecretString: value,
-            })
+            }),
           );
         } else {
           console.error(`Failed to store secret ${name}:`, error);
@@ -204,7 +204,7 @@ export class Platform implements IPlatform {
     }
 
     console.log(
-      `${Object.keys(secrets).length} secret(s) stored AWS Secrets Manager`
+      `${Object.keys(secrets).length} secret(s) stored AWS Secrets Manager`,
     );
   }
 }

@@ -75,7 +75,7 @@ export async function collectTestFiles(entrypoints: string[] = []): Promise<stri
 
   // check if any of the entrypoints are exact files
   const exactEntrypoints = entrypoints.filter(
-    (e) => statSync(e, { throwIfNoEntry: false })?.isFile() === true
+    (e) => statSync(e, { throwIfNoEntry: false })?.isFile() === true,
   );
   const fuzzyEntrypoints = entrypoints.filter((e) => !exactEntrypoints.includes(e));
 
@@ -83,7 +83,7 @@ export async function collectTestFiles(entrypoints: string[] = []): Promise<stri
   if (fuzzyEntrypoints.length > 0) {
     // if entrypoints are specified, filter the expanded entrypoints to ones that contain them
     finalEntrypoints = finalEntrypoints.concat(
-      expandedEntrypoints.filter((e) => fuzzyEntrypoints.some((f) => e.includes(f)))
+      expandedEntrypoints.filter((e) => fuzzyEntrypoints.some((f) => e.includes(f))),
     );
   } else if (exactEntrypoints.length === 0) {
     finalEntrypoints = finalEntrypoints.concat(expandedEntrypoints);
@@ -109,7 +109,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   process.env.WING_TARGET = determineTargetFromPlatforms(options.platform ?? []);
   const testFile = async (
     entrypoint: string,
-    retries: number = options.retry || 1
+    retries: number = options.retry || 1,
   ): Promise<void> => {
     const testName = renderTestName(entrypoint);
     try {
@@ -177,7 +177,7 @@ export type SingleTestResult = {
 async function testOne(
   testName: string,
   entrypoint: string,
-  options: TestOptions
+  options: TestOptions,
 ): Promise<SingleTestResult> {
   const target = determineTargetFromPlatforms(options.platform);
 
@@ -186,7 +186,7 @@ async function testOne(
   const shouldExecute = snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.DEPLOY;
   const testOptions = {
     ...options,
-    rootId: options.rootId ?? target === BuiltinPlatform.SIM ? "root" : `Test.${nanoid(10)}`,
+    rootId: (options.rootId ?? target === BuiltinPlatform.SIM) ? "root" : `Test.${nanoid(10)}`,
   };
 
   let results: std.TestResult[] = [];
@@ -197,7 +197,7 @@ async function testOne(
         compile(entrypoint, {
           ...testOptions,
           testing: true,
-        })
+        }),
     );
 
     results = await executeTest(synthDir, target, testOptions);
@@ -222,7 +222,7 @@ async function testOne(
 async function executeTest(
   synthDir: string,
   target: string | undefined,
-  options: TestOptions
+  options: TestOptions,
 ): Promise<std.TestResult[]> {
   if (!target) {
     throw new Error("Unable to execute test without a target");
@@ -256,14 +256,14 @@ function createTestHarness(target: string, options: TestOptions) {
 export async function renderTestReport(
   entrypoint: string,
   results: std.TestResult[],
-  includeLogs: boolean = true
+  includeLogs: boolean = true,
 ): Promise<string> {
   const out = new Array<string>();
 
   // find the longest `path` of all the tests
   const longestPath = results.reduce(
     (longest, result) => (result.path.length > longest ? result.path.length : longest),
-    0
+    0,
   );
 
   // return early if there are no tests, return a pass output
@@ -331,7 +331,7 @@ function testResultsContainsFailure(results: std.TestResult[]): boolean {
 
 function noCleanUp(synthDir: string) {
   console.log(
-    chalk.yellowBright.bold(`Cleanup is disabled!\nOutput files available at ${resolve(synthDir)}`)
+    chalk.yellowBright.bold(`Cleanup is disabled!\nOutput files available at ${resolve(synthDir)}`),
   );
 }
 
@@ -352,7 +352,7 @@ export function filterTests(tests: Array<string>, regexString?: string): Array<s
 
 async function runTests(
   testRunner: std.ITestRunnerClient,
-  tests: string[]
+  tests: string[],
 ): Promise<std.TestResult[]> {
   const results: std.TestResult[] = [];
 
@@ -381,7 +381,7 @@ const LOG_STREAM_COLORS = {
 async function formatTrace(
   trace: std.Trace,
   testName: string,
-  mode: "short" | "full"
+  mode: "short" | "full",
 ): Promise<string> {
   const level = trace.level;
   const date = new Date(trace.timestamp);
@@ -495,7 +495,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
       await s.start();
       const testRunner = s.getResource(
-        `${options.rootId}/cloud.TestRunner`
+        `${options.rootId}/cloud.TestRunner`,
       ) as std.ITestRunnerClient;
       const result = await testRunner.runTest(t);
       results.push(result);

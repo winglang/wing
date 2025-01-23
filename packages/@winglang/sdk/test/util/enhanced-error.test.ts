@@ -32,7 +32,7 @@ describe("prettyPrintError", () => {
 
   test("stack", async () => {
     const result = await prettyPrintError(
-      new Error("message\nwith extra line").stack!
+      new Error("message\nwith extra line").stack!,
     );
 
     const interestingPart = result.split("\n").slice(0, 8).join("\n");
@@ -43,7 +43,7 @@ describe("prettyPrintError", () => {
          | 
          | test("stack", async () => {
          |   const result = await prettyPrintError(
-      35 |     new Error("message\\nwith extra line").stack!
+      35 |     new Error("message\\nwith extra line").stack!,
          |     ^"
     `);
   });

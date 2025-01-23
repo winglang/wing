@@ -9,7 +9,7 @@ export class GoTranspile extends transpile.TranspileBase {
   }
 
   public moduleLike(
-    moduleLike: reflect.ModuleLike
+    moduleLike: reflect.ModuleLike,
   ): transpile.TranspiledModuleLike {
     if (moduleLike instanceof reflect.Submodule) {
       const parent = this.moduleLike(this.getParentModule(moduleLike));
@@ -33,7 +33,7 @@ export class GoTranspile extends transpile.TranspileBase {
       // Validation in `Documentation` class prevents this
       if (!moduleName) {
         throw new Error(
-          '"jsii.targets.go.moduleName" is a required field for Go enabled JSII modules'
+          '"jsii.targets.go.moduleName" is a required field for Go enabled JSII modules',
         );
       }
 
@@ -43,7 +43,7 @@ export class GoTranspile extends transpile.TranspileBase {
           .toLowerCase()
           .replace(/[^a-z0-9]/g, "");
       const version = Number.parseInt(
-        (moduleLike as reflect.Assembly).version.split(".")[0]
+        (moduleLike as reflect.Assembly).version.split(".")[0],
       );
       const versionSegment = version >= 2 ? `/v${version}` : "";
 
@@ -148,7 +148,7 @@ export class GoTranspile extends transpile.TranspileBase {
   }
 
   public interface(
-    iface: reflect.InterfaceType
+    iface: reflect.InterfaceType,
   ): transpile.TranspiledInterface {
     return {
       name: iface.name,
@@ -157,7 +157,7 @@ export class GoTranspile extends transpile.TranspileBase {
   }
 
   public parameter(
-    parameter: reflect.Parameter
+    parameter: reflect.Parameter,
   ): transpile.TranspiledParameter {
     const typeRef = this.typeReference(parameter.type);
     const name = parameter.name;
@@ -241,7 +241,7 @@ export class GoTranspile extends transpile.TranspileBase {
   }
 
   private formatFnParam(
-    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty
+    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty,
   ): string {
     return this.formatParameter(transpiled.name, transpiled.typeReference);
   }
@@ -254,7 +254,7 @@ export class GoTranspile extends transpile.TranspileBase {
 
   private formatParameter(
     name: string,
-    typeReference: transpile.TranspiledTypeReference
+    typeReference: transpile.TranspiledTypeReference,
   ) {
     const tf = typeReference.toString({
       typeFormatter: (t) => t.name,
@@ -265,7 +265,7 @@ export class GoTranspile extends transpile.TranspileBase {
 
   private formatStructBuilder(
     type: transpile.TranspiledType,
-    properties: string[]
+    properties: string[],
   ): string {
     return [
       `&${this.packageName(type)}.${type.name} {`,
@@ -277,7 +277,7 @@ export class GoTranspile extends transpile.TranspileBase {
   private formatProperty(
     name: string,
     typeReference: transpile.TranspiledTypeReference,
-    property: reflect.Property
+    property: reflect.Property,
   ): string {
     const tf = typeReference.toString({
       typeFormatter: (t) => t.name,

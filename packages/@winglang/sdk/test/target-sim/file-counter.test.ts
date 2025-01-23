@@ -34,7 +34,7 @@ test(
               let next = await ctx.counter.inc();
               let key = "file-" + next + ".txt";
               await ctx.bucket.put(key, event);
-            })
+            }),
         );
       }
     }
@@ -63,5 +63,5 @@ test(
     await s.stop();
 
     expect(app.snapshot()).toMatchSnapshot();
-  }
+  },
 );

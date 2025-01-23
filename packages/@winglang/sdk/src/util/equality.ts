@@ -139,7 +139,7 @@ function keyCheck(
   val2: any,
   memos: any,
   iterationType: number,
-  aKeys?: Array<any>
+  aKeys?: Array<any>,
 ) {
   // For all remaining Object pairs, including Array, objects and Maps,
   // equivalence is determined by having:
@@ -246,7 +246,7 @@ function objEquiv(
   b: any,
   keys: any,
   memos: any,
-  iterationType: Number
+  iterationType: Number,
 ) {
   // Sets and maps don't have their entries accessible via normal object
   // properties.
@@ -387,7 +387,7 @@ function mapHasEqualEntry(
   map: Map<any, any>,
   key1: any,
   item1: any,
-  memo: any
+  memo: any,
 ) {
   // To be able to handle cases like:
   //   Map([[{}, 'a'], [{}, 'b']]) vs Map([[{}, 'b'], [{}, 'a']])
@@ -435,7 +435,7 @@ function areSimilarTypedArrays(a: ArrayBufferView, b: ArrayBufferView) {
   return (
     Buffer.compare(
       new Uint8Array(a.buffer, a.byteOffset, a.byteLength),
-      new Uint8Array(b.buffer, b.byteOffset, b.byteLength)
+      new Uint8Array(b.buffer, b.byteOffset, b.byteLength),
     ) === 0
   );
 }
@@ -459,7 +459,7 @@ const getOwnNonIndexProperties = (val1: any) => {
       .concat(
         val1
           ?.getOwnPropertySymbols(val1)
-          .filter(Object.prototype.propertyIsEnumerable.bind(val1))
+          .filter(Object.prototype.propertyIsEnumerable.bind(val1)),
       ) ?? []
   );
 };

@@ -30,7 +30,7 @@ export class TerraformTestHarness implements ITestHarness {
     const installed = tfVersion.startsWith("Terraform v");
     if (!installed) {
       throw new Error(
-        "Terraform is not installed. Please install Terraform to run tests in the cloud."
+        "Terraform is not installed. Please install Terraform to run tests in the cloud.",
       );
     }
 
@@ -39,7 +39,7 @@ export class TerraformTestHarness implements ITestHarness {
 
     // Apply Terraform
     await withSpinner("terraform apply", () =>
-      execCapture(`terraform apply -auto-approve ${this.parallelism}`, { cwd: synthDir })
+      execCapture(`terraform apply -auto-approve ${this.parallelism}`, { cwd: synthDir }),
     );
 
     // Get the test runner function ARNs
@@ -61,7 +61,7 @@ export class TerraformTestHarness implements ITestHarness {
   public async cleanup(synthDir: string): Promise<void> {
     try {
       await withSpinner("terraform destroy", () =>
-        execCapture(`terraform destroy -auto-approve ${this.parallelism}`, { cwd: synthDir })
+        execCapture(`terraform destroy -auto-approve ${this.parallelism}`, { cwd: synthDir }),
       );
 
       await rm(synthDir, { recursive: true, force: true });

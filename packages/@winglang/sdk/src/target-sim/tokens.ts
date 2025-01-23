@@ -16,7 +16,7 @@ export function simulatorHandleToken(resource: IResource): string {
  */
 export function simulatorAttrToken(
   resource: IResource,
-  attrName: string
+  attrName: string,
 ): string {
   return `\${wsim#${resource.node.path}#attrs.${attrName}}`;
 }
@@ -33,7 +33,7 @@ export const SIMULATOR_TOKEN_REGEX = /\$\{wsim#[^#\{\}]+#[a-zA-Z0-9_\-\/\.]+\}/;
  * The same as SIMULATOR_TOKEN_REGEX, but it must match the entire string.
  */
 export const SIMULATOR_TOKEN_REGEX_FULL = new RegExp(
-  `^${SIMULATOR_TOKEN_REGEX.source}$`
+  `^${SIMULATOR_TOKEN_REGEX.source}$`,
 );
 
 /**

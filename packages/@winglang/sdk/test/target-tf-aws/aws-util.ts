@@ -10,7 +10,7 @@ export class AwsApp extends App {
     const platform = new Platform();
     const classFactory = new ClassFactory(
       [platform.newInstance.bind(platform)],
-      [platform.resolveType.bind(platform)]
+      [platform.resolveType.bind(platform)],
     );
 
     super({

@@ -38,7 +38,7 @@ export enum SnapshotMode {
 
 export function determineSnapshotMode(
   target: string | undefined,
-  options: TestOptions
+  options: TestOptions,
 ): SnapshotMode {
   // no snapshots for sim, ever!
   if (target === BuiltinPlatform.SIM) {
@@ -69,7 +69,7 @@ export enum SnapshotResult {
 export async function captureSnapshot(
   entrypoint: string,
   target: string,
-  options: TestOptions
+  options: TestOptions,
 ): Promise<SnapshotResult> {
   const snapshotMode = determineSnapshotMode(target, options);
 
@@ -109,7 +109,7 @@ export async function captureSnapshot(
               `Snapshot file does not exist: ${snapshotFile}`,
               "",
               SNAPSHOTS_ERROR_HELP,
-            ].join("\n")
+            ].join("\n"),
           );
         }
 

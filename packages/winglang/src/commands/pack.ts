@@ -66,7 +66,7 @@ async function validateWingDir(dir: string) {
       if (await containsWingFile(entryPath)) {
         if (!/^([A-Za-z_][A-Za-z_0-9]*|[A-Z][A-Z0-9_]*)$/.test(entry)) {
           throw new Error(
-            `Directories that contain wing files cannot contain non-symbolic characters: ${entryPath}`
+            `Directories that contain wing files cannot contain non-symbolic characters: ${entryPath}`,
           );
         }
         await validateWingDir(entryPath);
@@ -125,7 +125,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     // Check if package.json has non-empty "dependencies"
     if (pkgJson.dependencies && Object.keys(pkgJson.dependencies).length > 0) {
       throw new Error(
-        `Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead.`
+        `Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead.`,
       );
     }
 
@@ -180,7 +180,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
         portable: true,
         noPax: true,
       },
-      files
+      files,
     );
 
     console.log("Created tarball:", tarballPath);
@@ -238,7 +238,7 @@ async function withTempDir<T>(work: (workdir: string) => Promise<T>): Promise<T>
  */
 export async function exists(
   filePath: string,
-  permissions: number = constants.R_OK | constants.W_OK // eslint-disable-line no-bitwise
+  permissions: number = constants.R_OK | constants.W_OK, // eslint-disable-line no-bitwise
 ): Promise<boolean> {
   try {
     await fs.access(filePath, permissions);

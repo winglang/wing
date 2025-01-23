@@ -57,8 +57,8 @@ test("basic function with environment variables", () => {
           BOOM: "BAM",
           FOO: "BAR",
         },
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -84,8 +84,8 @@ test("permissions resources are added to function after constructor has been ini
       "azurerm_role_assignment",
       {
         role_definition_name: "some_role",
-      }
-    )
+      },
+    ),
   ).toEqual(true);
 });
 
@@ -104,8 +104,8 @@ test("replace invalid character from function name", () => {
       "azurerm_linux_function_app",
       {
         name: `somefunction01-${func.node.addr.substring(0, 8)}`,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

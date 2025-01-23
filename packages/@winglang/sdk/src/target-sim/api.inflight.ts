@@ -74,14 +74,14 @@ export class Api
 
         if (method === "OPTIONS") {
           for (const [key, value] of Object.entries(
-            corsHeaders.optionsResponse
+            corsHeaders.optionsResponse,
           )) {
             res.setHeader(key, value);
           }
           res.status(204).send();
         } else {
           for (const [key, value] of Object.entries(
-            corsHeaders.defaultResponse
+            corsHeaders.defaultResponse,
           )) {
             res.setHeader(key, value);
           }
@@ -148,12 +148,12 @@ export class Api
 
   private async loadState(): Promise<StateFileContents> {
     const stateFileExists = await exists(
-      join(this.context.statedir, STATE_FILENAME)
+      join(this.context.statedir, STATE_FILENAME),
     );
     if (stateFileExists) {
       const stateFileContents = await fs.promises.readFile(
         join(this.context.statedir, STATE_FILENAME),
-        "utf-8"
+        "utf-8",
       );
       return JSON.parse(stateFileContents);
     } else {
@@ -164,13 +164,13 @@ export class Api
   private async saveState(state: StateFileContents): Promise<void> {
     fs.writeFileSync(
       join(this.context.statedir, STATE_FILENAME),
-      JSON.stringify(state)
+      JSON.stringify(state),
     );
   }
 
   public async addEventSubscription(
     subscriber: string,
-    subscriptionProps: EventSubscription
+    subscriptionProps: EventSubscription,
   ): Promise<void> {
     const routes = (subscriptionProps as any).routes as ApiRoute[];
     for (const route of routes) {
@@ -207,7 +207,7 @@ export class Api
     if (index === -1) {
       this.addTrace(
         `Internal error: No route found for subscriber ${subscriber}.`,
-        LogLevel.WARNING
+        LogLevel.WARNING,
       );
       return;
     }
@@ -216,7 +216,7 @@ export class Api
     if (layerIndex === -1) {
       this.addTrace(
         `Internal error: No express layer found for route ${this.routes[index].pathPattern}.`,
-        LogLevel.WARNING
+        LogLevel.WARNING,
       );
       return;
     }
@@ -242,26 +242,26 @@ export class Api
         async (
           req: express.Request,
           res: express.Response,
-          next: express.NextFunction
+          next: express.NextFunction,
         ) => {
           this.addTrace(
             `Processing "${route.method} ${
               route.pathPattern
             }" params=${JSON.stringify(req.params)}).`,
-            LogLevel.VERBOSE
+            LogLevel.VERBOSE,
           );
 
           const apiRequest = transformRequest(req);
 
           try {
             const response = ((await fnClient.invoke(
-              Json._fromAny(apiRequest)
+              Json._fromAny(apiRequest),
             )) ?? {}) as ApiResponse;
 
             const status = response.status ?? DEFAULT_RESPONSE_STATUS;
             res.status(status);
             for (const [key, value] of Object.entries(
-              response?.headers ?? {}
+              response?.headers ?? {},
             )) {
               res.set(key, value);
             }
@@ -272,13 +272,13 @@ export class Api
             }
             this.addTrace(
               `${route.method} ${route.pathPattern} - ${status}.`,
-              LogLevel.VERBOSE
+              LogLevel.VERBOSE,
             );
           } catch (err) {
             return next(err);
           }
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -318,13 +318,13 @@ function asyncMiddleware(
   fn: (
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction
-  ) => Promise<any>
+    next: express.NextFunction,
+  ) => Promise<any>,
 ) {
   return (
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction
+    next: express.NextFunction,
   ) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };

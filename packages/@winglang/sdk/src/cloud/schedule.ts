@@ -101,7 +101,7 @@ export class Schedule extends Resource {
    */
   public onTick(
     inflight: IScheduleOnTickHandler,
-    props?: ScheduleOnTickOptions
+    props?: ScheduleOnTickOptions,
   ): Function {
     inflight;
     props;

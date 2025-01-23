@@ -16,7 +16,7 @@ export class JsonSchema {
   public static _toInflightType(schema: Json) {
     return InflightClient.forType(
       __filename,
-      `${this.name}._createJsonSchema(${JSON.stringify(schema)})`
+      `${this.name}._createJsonSchema(${JSON.stringify(schema)})`,
     );
   }
 
@@ -55,9 +55,9 @@ export class JsonSchema {
       throw new Error(
         `unable to parse ${schemaId}:\n- ${validator.errors
           ?.map(
-            (error: any) => schemaId + error.instancePath + " " + error.message
+            (error: any) => schemaId + error.instancePath + " " + error.message,
           )
-          .join("\n- ")}`
+          .join("\n- ")}`,
       );
     }
   }

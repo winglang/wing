@@ -44,7 +44,7 @@ export class TopicClient implements ITopicClient {
           throw new Error(
             `The Id of a batch entry in a batch request doesn't abide by the specification. (message=${messages}): ${
               (e as Error).stack
-            })}`
+            })}`,
           );
         }
         throw new Error((e as Error).stack);
@@ -54,7 +54,7 @@ export class TopicClient implements ITopicClient {
 
   private processBatchMessages(
     messages: string[],
-    idx: number
+    idx: number,
   ): PublishBatchRequestEntry[] {
     let batchMessages: Array<PublishBatchRequestEntry> = [];
     let index = idx;

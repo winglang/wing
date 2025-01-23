@@ -43,7 +43,7 @@ export class Topic extends AwsTopic {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageOptions = {}
+    props: cloud.TopicOnMessageOptions = {},
   ): cloud.Function {
     const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
     let fn = this.handlers[inflight._id];
@@ -56,7 +56,7 @@ export class Topic extends AwsTopic {
       this.node.scope!,
       App.of(this).makeId(this, `${this.node.id}-OnMessage`),
       functionHandler,
-      props
+      props,
     );
     this.handlers[inflight._id] = fn;
 
@@ -72,7 +72,7 @@ export class Topic extends AwsTopic {
         topicArn: this.topicArn,
         protocol: "lambda",
         endpoint: fn.functionArn,
-      }
+      },
     );
 
     fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn, {});
@@ -91,7 +91,7 @@ export class Topic extends AwsTopic {
   public subscribeQueue(queue: cloud.Queue): void {
     if (!(queue instanceof Queue)) {
       throw new Error(
-        "'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic"
+        "'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic",
       );
     }
 
@@ -103,7 +103,7 @@ export class Topic extends AwsTopic {
         protocol: "sqs",
         endpoint: queue.queueArn,
         rawMessageDelivery: true,
-      }
+      },
     );
 
     new SqsQueuePolicy(this, `SqsQueuePolicy-${queue.node.addr}`, {
@@ -138,7 +138,7 @@ export class Topic extends AwsTopic {
   public addPermissionToPublish(
     source: Resource,
     principal: string,
-    sourceArn: string
+    sourceArn: string,
   ): void {
     this.permissions = new SnsTopicPolicy(
       this,
@@ -162,7 +162,7 @@ export class Topic extends AwsTopic {
             },
           ],
         }),
-      }
+      },
     );
   }
 

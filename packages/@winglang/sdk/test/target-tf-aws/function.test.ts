@@ -37,8 +37,8 @@ test("basic function", () => {
       "aws_cloudwatch_log_group",
       {
         retention_in_days: 30,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -85,7 +85,7 @@ test("basic function with environment variables", () => {
           FOO: "BAR",
         },
       },
-    })
+    }),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -100,7 +100,7 @@ test("function name valid", () => {
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
       function_name: `The-Mighty_Function-01-${func.node.addr.substring(0, 8)}`,
-    })
+    }),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -115,7 +115,7 @@ test("replace invalid character from function name", () => {
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
       function_name: `The-Mighty-Function-${func.node.addr.substring(0, 8)}`,
-    })
+    }),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -131,7 +131,7 @@ test("basic function with timeout explicitly set", () => {
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
       timeout: 30,
-    })
+    }),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -166,8 +166,8 @@ test("basic function with custom log retention", () => {
       "aws_cloudwatch_log_group",
       {
         retention_in_days: 7,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -181,8 +181,8 @@ test("basic function with infinite log retention", () => {
   expect(
     cdktf.Testing.toHaveResourceWithProperties(
       output,
-      "aws_cloudwatch_log_group"
-    )
+      "aws_cloudwatch_log_group",
+    ),
   ).toEqual(false);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

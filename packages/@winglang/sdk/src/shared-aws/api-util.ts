@@ -11,9 +11,9 @@ import {
 export async function apigwFunctionHandler(
   request: APIGatewayProxyEvent,
   handlerFunction: (
-    request: cloud.ApiRequest
+    request: cloud.ApiRequest,
   ) => Promise<void | cloud.ApiResponse>,
-  headers?: Record<string, string>
+  headers?: Record<string, string>,
 ): Promise<APIGatewayProxyResult> {
   const apiRequest = mapApigatewayEventToCloudApiRequest(request);
   const apiResponse = (await handlerFunction(apiRequest)) ?? {};
@@ -27,7 +27,7 @@ export async function apigwFunctionHandler(
  */
 function mapCloudApiResponseToApigatewayResponse(
   resp: ApiResponse,
-  corsHeaders?: Record<string, string>
+  corsHeaders?: Record<string, string>,
 ): APIGatewayProxyResult {
   return {
     statusCode: resp.status ?? DEFAULT_RESPONSE_STATUS,
@@ -46,7 +46,7 @@ function mapCloudApiResponseToApigatewayResponse(
  * @returns Cloud API request
  */
 function mapApigatewayEventToCloudApiRequest(
-  request: APIGatewayProxyEvent
+  request: APIGatewayProxyEvent,
 ): ApiRequest {
   const query = {
     ...request.queryStringParameters,
@@ -72,11 +72,11 @@ function parseBody(request: APIGatewayProxyEvent): string {
   if (!request.body) return "";
 
   const contentType = Object.entries(request.headers).find(
-    ([key, _]) => key.toLowerCase() === "content-type"
+    ([key, _]) => key.toLowerCase() === "content-type",
   )?.[1];
   if (contentType === "application/x-www-form-urlencoded") {
     return JSON.stringify(
-      Object.fromEntries(new URLSearchParams(request.body))
+      Object.fromEntries(new URLSearchParams(request.body)),
     );
   }
   return request.body;

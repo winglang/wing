@@ -9,6 +9,6 @@ test("binding throws if a method is unsupported", () => {
   const handler = inflight(async () => {});
   const host = new Function(app, "Function", handler);
   expect(() => Lifting.lift(bucket, host, ["foo", "bar"])).toThrow(
-    /Resource root\/Bucket does not support inflight operation foo/
+    /Resource root\/Bucket does not support inflight operation foo/,
   );
 });

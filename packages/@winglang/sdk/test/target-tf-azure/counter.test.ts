@@ -47,7 +47,7 @@ test("function with a counter binding", () => {
       .inflight(async (ctx) => {
         const val = await ctx.my_counter.inc(2);
         console.log(val);
-      })
+      }),
   );
   const output = app.synth();
 
@@ -78,7 +78,7 @@ test("inc() policy statement", () => {
       .inflight(async (ctx) => {
         const val = await ctx.my_counter.inc(2);
         console.log(val);
-      })
+      }),
   );
   const output = app.synth();
 
@@ -98,7 +98,7 @@ test("dec() policy statement", () => {
       .inflight(async (ctx) => {
         const val = await ctx.my_counter.dec(2);
         console.log(val);
-      })
+      }),
   );
   const output = app.synth();
 
@@ -118,7 +118,7 @@ test("peek() policy statement", () => {
       .inflight(async (ctx) => {
         const val = await ctx.my_counter.peek();
         console.log(val);
-      })
+      }),
   );
   const output = app.synth();
 
@@ -138,7 +138,7 @@ test("set() policy statement", () => {
       .inflight(async (ctx) => {
         const val = await ctx.my_counter.set(12);
         console.log(val);
-      })
+      }),
   );
   const output = app.synth();
   expect(output).toContain(StorageAccountPermissions.READ_WRITE);
@@ -158,8 +158,8 @@ test("counter name valid", () => {
       "azurerm_storage_table",
       {
         name: `wingcounterx${counter.node.addr.substring(0, 8)}`,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -178,8 +178,8 @@ test("replace invalid character from counter name", () => {
       "azurerm_storage_table",
       {
         name: `thexamazingxcounterx01x${counter.node.addr.substring(0, 8)}`,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

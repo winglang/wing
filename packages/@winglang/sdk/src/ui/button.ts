@@ -23,7 +23,7 @@ export class Button extends VisualComponent {
     scope: Construct,
     id: string,
     label: string,
-    handler: IButtonHandler
+    handler: IButtonHandler,
   ): Button {
     return Resource._newFromFactory(BUTTON_FQN, scope, id, label, handler);
   }
@@ -35,7 +35,7 @@ export class Button extends VisualComponent {
     scope: Construct,
     id: string,
     label: string,
-    handler: IButtonHandler
+    handler: IButtonHandler,
   ) {
     super(scope, id);
     this.label = label;

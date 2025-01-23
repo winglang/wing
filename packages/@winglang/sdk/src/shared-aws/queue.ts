@@ -35,7 +35,7 @@ export abstract class Queue extends cloud.Queue implements IAwsQueue {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("queue", "queue.inflight"),
-      "QueueClient"
+      "QueueClient",
     );
   }
 
@@ -65,7 +65,7 @@ export abstract class Queue extends cloud.Queue implements IAwsQueue {
 
   public abstract setConsumer(
     handler: cloud.IQueueSetConsumerHandler,
-    props?: cloud.QueueSetConsumerOptions
+    props?: cloud.QueueSetConsumerOptions,
   ): cloud.Function;
 
   /** @internal */
@@ -127,7 +127,7 @@ export class QueueRef extends Resource {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("queue", "queue.inflight"),
-      "QueueClient"
+      "QueueClient",
     );
   }
 
@@ -158,7 +158,7 @@ export class QueueRef extends Resource {
     // if this is an AWS function, add the necessary IAM permissions
     if (AwsInflightHost.isAwsInflightHost(host)) {
       host.addPolicyStatements(
-        ...calculateQueuePermissions(this.queueArn, ops)
+        ...calculateQueuePermissions(this.queueArn, ops),
       );
     }
 
@@ -240,7 +240,7 @@ export class QueueSetConsumerHandler {
    * @returns The function handler.
    */
   public static toFunctionHandler(
-    handler: cloud.IQueueSetConsumerHandler
+    handler: cloud.IQueueSetConsumerHandler,
   ): cloud.IFunctionHandler {
     return lift({ handler }).inflight(async (ctx, event) => {
       const batchItemFailures = [];

@@ -9,7 +9,7 @@ import { StringDecoder } from "string_decoder";
  */
 export function processStream(
   stream: Readable,
-  callback: (message: string) => void
+  callback: (message: string) => void,
 ) {
   let remainder = "";
   // StringDecoder to handle potentially incomplete multi-byte characters
@@ -33,7 +33,7 @@ function processStreamData(
   data: Buffer,
   remainder: string,
   decoder: StringDecoder,
-  log: (message: string) => void
+  log: (message: string) => void,
 ): string {
   let str = decoder.write(data);
   let lines = (remainder + str).split("\n");

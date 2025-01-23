@@ -559,7 +559,7 @@ const RenderNode = ({
   const name =
     node.display?.title === cloudResourceType
       ? node.id
-      : node.display?.title ?? node.id;
+      : (node.display?.title ?? node.id);
 
   const children = Object.values(node.children ?? {});
   const canBeExpanded =

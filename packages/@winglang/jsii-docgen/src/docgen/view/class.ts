@@ -36,23 +36,23 @@ export class Class {
 
   constructor(
     private readonly transpile: Transpile,
-    private readonly klass: reflect.ClassType
+    private readonly klass: reflect.ClassType,
   ) {
     if (klass.initializer) {
       this.initializer = new Initializer(transpile, klass.initializer);
     }
     this.instanceMethods = new InstanceMethods(
       transpile,
-      klass.allMethods.filter((m) => !HIDDEN_METHODS.includes(m.name))
+      klass.allMethods.filter((m) => !HIDDEN_METHODS.includes(m.name)),
     );
     this.staticFunctions = new StaticFunctions(
       transpile,
-      klass.allMethods.filter((m) => !HIDDEN_STATIC.includes(m.name))
+      klass.allMethods.filter((m) => !HIDDEN_STATIC.includes(m.name)),
     );
     this.constants = new Constants(transpile, klass.allProperties);
     this.properties = new Properties(transpile, klass.allProperties);
     this.interfaces = klass.interfaces.map((iface) =>
-      this.transpile.type(iface)
+      this.transpile.type(iface),
     );
     this.transpiled = transpile.class(klass);
   }

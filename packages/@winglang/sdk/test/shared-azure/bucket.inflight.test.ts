@@ -27,7 +27,7 @@ type TestPath = "happy" | "sad" | "happyJson" | "sadJson";
 let TEST_PATH: TestPath;
 
 const mockBlobServiceClient = new BlobServiceClient(
-  "https://some-fake-url.com"
+  "https://some-fake-url.com",
 );
 
 mockBlobServiceClient.getContainerClient = vi.fn(() => {
@@ -133,7 +133,7 @@ test("get a non-existent object from the bucket", async () => {
 
   // THEN
   await expect(() => client.get(KEY)).rejects.toThrowError(
-    /Object does not exist/
+    /Object does not exist/,
   );
 });
 
@@ -173,7 +173,7 @@ test("getJson a non-existent object from the bucket", async () => {
 
   // THEN
   await expect(() => client.getJson(KEY)).rejects.toThrowError(
-    /Object does not exist/
+    /Object does not exist/,
   );
 });
 
@@ -405,7 +405,7 @@ test("Given a non public bucket when reaching to a key public url it should thro
 
   // THEN
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    `Cannot provide public url for a non-public bucket`
+    `Cannot provide public url for a non-public bucket`,
   );
 });
 
@@ -475,7 +475,7 @@ test("fetch metadata of an unexisting object from the bucket", async () => {
 
   // THEN
   await expect(() => client.metadata(KEY)).rejects.toThrowError(
-    `Object does not exist (key=${KEY}).`
+    `Object does not exist (key=${KEY}).`,
   );
 });
 
@@ -519,7 +519,7 @@ test("copy a non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
-    `Source object does not exist (srcKey=${SRC_KEY}).`
+    `Source object does not exist (srcKey=${SRC_KEY}).`,
   );
 });
 
@@ -536,7 +536,7 @@ class MockBlobClient extends BlobClient {
         return Promise.resolve({
           _response: null as any,
           readableStreamBody: createMockStream(
-            JSON.stringify({ cool: "beans" })
+            JSON.stringify({ cool: "beans" }),
           ),
         });
       case "sadJson":
@@ -550,7 +550,7 @@ class MockBlobClient extends BlobClient {
   }
 
   public async getProperties(
-    options?: BlobGetPropertiesOptions
+    options?: BlobGetPropertiesOptions,
   ): Promise<BlobGetPropertiesResponse> {
     options;
     if (TEST_PATH === "happy") {
@@ -604,7 +604,7 @@ class MockBlockBlobClient extends BlockBlobClient {
 
   public syncCopyFromURL(
     copySource: string,
-    options?: BlobSyncCopyFromURLOptions
+    options?: BlobSyncCopyFromURLOptions,
   ): Promise<BlobCopyFromURLResponse> {
     if (TEST_PATH === "happy") {
       return Promise.resolve({} as BlobCopyFromURLResponse);
@@ -622,7 +622,7 @@ class MockContainerClient extends ContainerClient {
   }
 
   public listBlobsFlat(
-    options?: ContainerListBlobsOptions | undefined
+    options?: ContainerListBlobsOptions | undefined,
   ): PagedAsyncIterableIterator<
     BlobItem,
     ContainerListBlobFlatSegmentResponse,

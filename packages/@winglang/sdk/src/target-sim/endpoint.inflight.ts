@@ -89,12 +89,12 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
 
   private async loadState(): Promise<StateFileContents> {
     const stateFileExists = await exists(
-      join(this.context.statedir, STATE_FILENAME)
+      join(this.context.statedir, STATE_FILENAME),
     );
     if (stateFileExists) {
       const stateFileContents = await readFile(
         join(this.context.statedir, STATE_FILENAME),
-        "utf-8"
+        "utf-8",
       );
       return JSON.parse(stateFileContents);
     } else {
@@ -105,7 +105,7 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
   private async saveState(state: StateFileContents): Promise<void> {
     writeFileSync(
       join(this.context.statedir, STATE_FILENAME),
-      JSON.stringify(state)
+      JSON.stringify(state),
     );
   }
 
@@ -121,7 +121,7 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
             subdomain,
           });
           this.lastSubdomain = new URL(this.connectResponse.url).hostname.split(
-            "."
+            ".",
           )[0];
           this.status = "connected";
         },

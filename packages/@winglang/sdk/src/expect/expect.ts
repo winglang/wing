@@ -46,7 +46,7 @@ export class Util {
   public static nil(actual: unknown): void {
     nodeAssert.ok(
       actual === null || actual === undefined,
-      `Expected "${actual}" to be nil`
+      `Expected "${actual}" to be nil`,
     );
   }
 
@@ -59,7 +59,7 @@ export class Util {
   public static notNil(actual: unknown): void {
     nodeAssert.ok(
       actual !== null && actual !== undefined,
-      `Expected "${actual}" to be not nil`
+      `Expected "${actual}" to be not nil`,
     );
   }
 

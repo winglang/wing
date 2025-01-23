@@ -69,7 +69,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     const bundleInvalidated = await isBundleInvalidated(
       this.originalFile,
       this.bundle!,
-      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE),
     );
     if (bundleInvalidated) {
       return UpdatePlan.REPLACE;
@@ -85,7 +85,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         const worker = await this.findAvailableWorker();
         if (!worker) {
           throw new Error(
-            "Too many requests, the function has reached its concurrency limit."
+            "Too many requests, the function has reached its concurrency limit.",
           );
         }
         try {
@@ -93,7 +93,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         } catch (err) {
           if (err instanceof SandboxTimeoutError) {
             throw new Error(
-              `Function timed out (it was configured with a timeout of ${this.timeout}ms).`
+              `Function timed out (it was configured with a timeout of ${this.timeout}ms).`,
             );
           } else {
             throw err;
@@ -110,7 +110,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         const worker = await this.findAvailableWorker();
         if (!worker) {
           throw new Error(
-            "Too many requests, the function has reached its concurrency limit."
+            "Too many requests, the function has reached its concurrency limit.",
           );
         }
         process.nextTick(() => {
@@ -120,7 +120,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
             this.context.addTrace({
               data: {
                 message: `InvokeAsync (payload=${JSON.stringify(
-                  payload
+                  payload,
                 )}) failure.`,
                 status: "failure",
                 error: e,
@@ -142,7 +142,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       this.originalFile,
       (msg, level) => {
         this.addTrace(msg, TraceType.RESOURCE, level);
-      }
+      },
     );
   }
 
@@ -191,7 +191,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         this.addTrace(
           message,
           internal ? TraceType.SIMULATOR : TraceType.LOG,
-          level
+          level,
         );
       },
     });

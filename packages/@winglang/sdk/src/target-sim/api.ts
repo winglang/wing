@@ -42,7 +42,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       this,
       "Endpoint",
       simulatorAttrToken(this, "url"),
-      { label: `Api ${this.node.path}` }
+      { label: `Api ${this.node.path}` },
     );
 
     Node.of(this.endpoint).hidden = true;
@@ -58,7 +58,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: cloud.IApiEndpointHandler,
     props: cloud.FunctionProps,
     pathPattern: string,
-    method: cloud.HttpMethod
+    method: cloud.HttpMethod,
   ): Function {
     let handler = this.handlers[inflight._id];
 
@@ -84,14 +84,14 @@ export class Api extends cloud.Api implements ISimulatorResource {
         } else {
           return response;
         }
-      }
+      },
     );
 
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnRequestHandler"),
       functionHandler,
-      props
+      props,
     ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = `${method.toUpperCase()} ${pathPattern}`;
@@ -110,7 +110,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
             },
           ],
         },
-      }
+      },
     );
     this.handlers[inflight._id] = {
       func: fn,
@@ -124,7 +124,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     path: string,
     method: cloud.HttpMethod,
     inflight: cloud.IApiEndpointHandler,
-    props: any
+    props: any,
   ): void {
     this._validatePath(path);
 
@@ -150,7 +150,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public get(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions | undefined
+    props?: cloud.ApiGetOptions | undefined,
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.GET, inflight, props);
   }
@@ -164,7 +164,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public post(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPostOptions | undefined
+    props?: cloud.ApiPostOptions | undefined,
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.POST, inflight, props);
   }
@@ -178,7 +178,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public put(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPutOptions | undefined
+    props?: cloud.ApiPutOptions | undefined,
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.PUT, inflight, props);
   }
@@ -192,7 +192,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public delete(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiDeleteOptions | undefined
+    props?: cloud.ApiDeleteOptions | undefined,
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.DELETE, inflight, props);
   }
@@ -206,7 +206,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public patch(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPatchOptions | undefined
+    props?: cloud.ApiPatchOptions | undefined,
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.PATCH, inflight, props);
   }
@@ -220,7 +220,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public options(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiOptionsOptions | undefined
+    props?: cloud.ApiOptionsOptions | undefined,
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.OPTIONS, inflight, props);
   }
@@ -234,7 +234,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public head(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiHeadOptions | undefined
+    props?: cloud.ApiHeadOptions | undefined,
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.HEAD, inflight, props);
   }
@@ -248,7 +248,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public connect(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiConnectOptions | undefined
+    props?: cloud.ApiConnectOptions | undefined,
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.CONNECT, inflight, props);
   }

@@ -38,8 +38,8 @@ test("schedule behavior with rate", () => {
       "aws_cloudwatch_event_rule",
       {
         schedule_expression: "rate(2 minutes)",
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -74,8 +74,8 @@ test("schedule behavior with cron", () => {
       "aws_cloudwatch_event_rule",
       {
         schedule_expression: "cron(0/1 * * * ? *)",
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -109,8 +109,8 @@ test("convert single dayOfWeek from Unix to AWS", () => {
       "aws_cloudwatch_event_rule",
       {
         schedule_expression: "cron(* * ? * 1 *)",
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -144,8 +144,8 @@ test("convert the range of dayOfWeek from Unix to AWS", () => {
       "aws_cloudwatch_event_rule",
       {
         schedule_expression: "cron(* * ? * 1-7 *)",
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -179,8 +179,8 @@ test("convert the list of dayOfWeek from Unix to AWS", () => {
       "aws_cloudwatch_event_rule",
       {
         schedule_expression: "cron(* * ? * 1,3,5,7 *)",
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -223,7 +223,7 @@ test("schedule with rate and cron simultaneously", () => {
       new cloud.Schedule(app, "Schedule", {
         rate: std.Duration.fromSeconds(30),
         cron: "0/1 * * * ?",
-      })
+      }),
   ).toThrow("rate and cron cannot be configured simultaneously.");
 });
 
@@ -236,7 +236,7 @@ test("cron with more than five values", () => {
     () =>
       new cloud.Schedule(app, "Schedule", {
         cron: "0/1 * * * * *",
-      })
+      }),
   ).toThrow("cron string must be in UNIX cron format");
 });
 
@@ -246,7 +246,7 @@ test("schedule without rate or cron", () => {
 
   // THEN
   expect(() => new cloud.Schedule(app, "Schedule")).toThrow(
-    "rate or cron need to be filled."
+    "rate or cron need to be filled.",
   );
 });
 
@@ -259,7 +259,7 @@ test("schedule with rate less than 1 minute", () => {
     () =>
       new cloud.Schedule(app, "Schedule", {
         rate: std.Duration.fromSeconds(30),
-      })
+      }),
   ).toThrow("rate can not be set to less than 1 minute.");
 });
 
@@ -272,8 +272,8 @@ test("cron with day of month and day of week configured at the same time", () =>
     () =>
       new cloud.Schedule(app, "Schedule", {
         cron: "* * 1 * 1",
-      })
+      }),
   ).toThrow(
-    "Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'"
+    "Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'",
   );
 });

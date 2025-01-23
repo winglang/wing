@@ -8,7 +8,7 @@ test("throw error when no location provided", () => {
 
   // THEN
   expect(() => new AzureApp({ location: undefined as any })).toThrow(
-    /Location must be specified in the AZURE_LOCATION environment variable/
+    /Location must be specified in the AZURE_LOCATION environment variable/,
   );
 });
 
@@ -20,7 +20,7 @@ test("can read location from environment variable", () => {
 
   // THEN
   expect(
-    () => (app = new AzureApp({ location: undefined as any }))
+    () => (app = new AzureApp({ location: undefined as any })),
   ).not.toThrow();
   expect(app!.location).toEqual(expectedLocation);
 });

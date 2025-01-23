@@ -5,7 +5,7 @@ describe("parseToken", () => {
   test("parses path", () => {
     expect(parseToken("${wsim#foo#attrs.bar}")?.path).toBe("foo");
     expect(parseToken("${wsim#foo/jang/bang#props.bar}")?.path).toBe(
-      "foo/jang/bang"
+      "foo/jang/bang",
     );
   });
 
@@ -26,7 +26,7 @@ describe("parseToken", () => {
   test("invalid tokens", () => {
     expect(() => parseToken("${foo#baz}")).toThrow(/Invalid token reference/);
     expect(() => parseToken("${wsim#foo#baz}")).toThrow(
-      /Invalid token reference/
+      /Invalid token reference/,
     );
   });
 });
@@ -43,7 +43,7 @@ describe("tryResolveTokens", () => {
         expect(token.attr).toBe("bar");
         expect(token.prop).toBeUndefined();
         return "resolved_token";
-      })
+      }),
     ).toBe("resolved_token");
 
     expect(
@@ -52,7 +52,7 @@ describe("tryResolveTokens", () => {
         expect(token.prop).toBe("bar");
         expect(token.attr).toBeUndefined();
         return "resolved_token_2";
-      })
+      }),
     ).toBe("resolved_token_2");
   });
 
@@ -70,8 +70,8 @@ describe("tryResolveTokens", () => {
           }
 
           expect.fail(`unexpected token: ${JSON.stringify(token)}`);
-        }
-      )
+        },
+      ),
     ).toBe("hello, I am a cool nested token inside a cool string");
   });
 
@@ -93,7 +93,7 @@ describe("tryResolveTokens", () => {
         }
 
         expect.fail(`unexpected token: ${JSON.stringify(token)}`);
-      }
+      },
     );
 
     expect(result).toEqual(["bla", "T1", "blabla", "nested nested T2 nested"]);
@@ -121,7 +121,7 @@ describe("tryResolveTokens", () => {
         }
 
         expect.fail(`unexpected token: ${JSON.stringify(token)}`);
-      }
+      },
     );
 
     expect(result).toEqual({

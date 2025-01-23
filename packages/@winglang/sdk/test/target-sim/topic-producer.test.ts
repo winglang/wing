@@ -36,14 +36,14 @@ test("publishing messages to topic", async () => {
   const s = await app.startSimulator();
 
   const publisher = s.getResource(
-    "/TopicTester/Function"
+    "/TopicTester/Function",
   ) as cloud.IFunctionClient;
 
   // WHEN
   await publisher.invoke("ABC");
 
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.includes("Message received")
+    trace.data.message.includes("Message received"),
   );
 
   // THEN
@@ -79,14 +79,14 @@ test("publishing multiple messages to topic", async () => {
   const s = await app.startSimulator();
 
   const publisher = s.getResource(
-    "/TopicTester/Function"
+    "/TopicTester/Function",
   ) as cloud.IFunctionClient;
 
   // WHEN
   await publisher.invoke("ABC");
 
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.includes("A", "B", "C")
+    trace.data.message.includes("A", "B", "C"),
   );
 
   // THEN

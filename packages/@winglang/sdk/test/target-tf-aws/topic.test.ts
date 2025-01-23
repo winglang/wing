@@ -60,10 +60,10 @@ test("topic with multiple subscribers", () => {
 
   // WHEN
   topic.onMessage(
-    inflight(async (_, event) => console.log("Got Event: ", event))
+    inflight(async (_, event) => console.log("Got Event: ", event)),
   );
   topic.onMessage(
-    inflight(async (_, event) => console.log("Ohh yea!! ", event))
+    inflight(async (_, event) => console.log("Ohh yea!! ", event)),
   );
 
   const output = app.synth();
@@ -74,7 +74,7 @@ test("topic with multiple subscribers", () => {
   expect(tfResourcesOfCount(output, "aws_iam_role")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_iam_role_policy")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_iam_role_policy_attachment")).toEqual(
-    2
+    2,
   );
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_lambda_permission")).toEqual(2);
@@ -93,7 +93,7 @@ test("topic name valid", () => {
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_sns_topic", {
       name: `The-Spectacular_Topic-01-${topic.node.addr.substring(0, 8)}`,
-    })
+    }),
   );
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -109,7 +109,7 @@ test("replace invalid character from queue name", () => {
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_sns_topic", {
       name: `The-Spectacular-Topic-${topic.node.addr.substring(0, 8)}`,
-    })
+    }),
   );
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -130,6 +130,6 @@ test("topic with subscriber function timeout", () => {
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
       timeout: 30,
-    })
+    }),
   ).toEqual(true);
 });

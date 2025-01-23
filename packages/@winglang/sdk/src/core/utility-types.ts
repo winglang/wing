@@ -55,8 +55,8 @@ export type Liftable =
 export type Lifted<T> = T extends { [INFLIGHT_SYMBOL]?: infer TClient }
   ? TClient
   : T extends Liftable
-  ? T
-  : never;
+    ? T
+    : never;
 
 /**
  * Map of strings to lifted objects.

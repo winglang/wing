@@ -22,7 +22,7 @@ export class OnDeploy extends cloud.OnDeploy implements ISimulatorResource {
     scope: Construct,
     id: string,
     handler: cloud.IOnDeployHandler,
-    props: cloud.OnDeployProps = {}
+    props: cloud.OnDeployProps = {},
   ) {
     super(scope, id, handler, props);
 

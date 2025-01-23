@@ -19,7 +19,7 @@ export class TestRunner extends std.TestRunner {
       __filename
         .replace("target-tf-azure", "shared-azure")
         .replace("test-runner", "test-runner.inflight"),
-      "TestRunnerClient"
+      "TestRunnerClient",
     );
   }
 
@@ -43,14 +43,14 @@ export class TestRunner extends std.TestRunner {
   public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof AzureFunction)) {
       throw new Error(
-        "TestRunner can only be bound by tfazure.Function for now"
+        "TestRunner can only be bound by tfazure.Function for now",
       );
     }
 
     const testFunctions = this.getTestFunctionIdentifiers();
     host.addEnvironment(
       this.envTestFunctionIdentifiers(),
-      JSON.stringify([...testFunctions.entries()])
+      JSON.stringify([...testFunctions.entries()]),
     );
 
     super.onLift(host, ops);
@@ -74,7 +74,7 @@ export class TestRunner extends std.TestRunner {
       if (test._fn) {
         if (!(test._fn instanceof AzureFunction)) {
           throw new Error(
-            `Unsupported test function type, ${test._fn.node.path} was not a tfazure.Function`
+            `Unsupported test function type, ${test._fn.node.path} was not a tfazure.Function`,
           );
         }
         arns.set(test.node.path, (test._fn as AzureFunction).name);
