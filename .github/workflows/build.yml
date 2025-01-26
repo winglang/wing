@@ -148,7 +148,7 @@ jobs:
         run: terraform -v
 
       - name: Test
-        run: pnpm test:ci --force
+        run: pnpm test:ci
 
       - name: Create git patch
         id: diff
