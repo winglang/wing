@@ -7,9 +7,6 @@ let assertThrows = inflight (expected: str, block: (): void) => {
   try {
     block();
   } catch actual {
-    if !(actual.contains(expected)) {
-      log(actual);
-    }
     assert(actual.contains(expected));
     error = true;
   }
