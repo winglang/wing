@@ -119,7 +119,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       }
       results.push(singleTestResults);
     } catch (error: any) {
-      console.log(error.stack);
+      console.log(error.message);
       if (retries > 1) {
         console.log(`Retrying failed tests. ${retries - 1} retries left.`);
         return await testFile(entrypoint, retries - 1);
