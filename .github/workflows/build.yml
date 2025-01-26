@@ -239,8 +239,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Set up Docker
+        run: |
+          brew install --cask docker
+          open --background -a Docker
+          sleep 30  # Give Docker some time to start
+          until docker info > /dev/null 2>&1; do
+            echo "Waiting for Docker to start..."
+            sleep 5
+          done
+          echo "Docker is ready"
+
+      - name: Verify Docker installation
+        run: docker version
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
