@@ -46,7 +46,7 @@ function makeHttpRequest(options: HttpRequestOptions): Promise<string> {
 export function makeSimulatorClient(
   url: string,
   handle: string,
-  caller: string
+  caller: string,
 ) {
   let proxy: any;
   let hasThenMethod = true; // assume that the object has a "then" method until proven otherwise
@@ -83,7 +83,7 @@ export function makeSimulatorClient(
         if (
           method === "then" &&
           parsed.error?.message?.startsWith(
-            'Method "then" not found on resource'
+            'Method "then" not found on resource',
           )
         ) {
           hasThenMethod = false;

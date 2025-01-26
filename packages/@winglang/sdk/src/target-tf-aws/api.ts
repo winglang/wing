@@ -62,7 +62,7 @@ export class Api extends AwsApi {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiEndpointOptions
+    props?: cloud.ApiEndpointOptions,
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
@@ -91,7 +91,7 @@ export class Api extends AwsApi {
   public get(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions
+    props?: cloud.ApiGetOptions,
   ): void {
     this.httpRequests("GET", path, inflight, props);
   }
@@ -104,7 +104,7 @@ export class Api extends AwsApi {
   public post(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPostOptions
+    props?: cloud.ApiPostOptions,
   ): void {
     this.httpRequests("POST", path, inflight, props);
   }
@@ -117,7 +117,7 @@ export class Api extends AwsApi {
   public put(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPutOptions
+    props?: cloud.ApiPutOptions,
   ): void {
     this.httpRequests("PUT", path, inflight, props);
   }
@@ -130,7 +130,7 @@ export class Api extends AwsApi {
   public delete(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiDeleteOptions
+    props?: cloud.ApiDeleteOptions,
   ): void {
     this.httpRequests("DELETE", path, inflight, props);
   }
@@ -143,7 +143,7 @@ export class Api extends AwsApi {
   public patch(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPatchOptions
+    props?: cloud.ApiPatchOptions,
   ): void {
     this.httpRequests("PATCH", path, inflight, props);
   }
@@ -156,7 +156,7 @@ export class Api extends AwsApi {
   public options(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiOptionsOptions
+    props?: cloud.ApiOptionsOptions,
   ): void {
     this.httpRequests("OPTIONS", path, inflight, props);
   }
@@ -169,7 +169,7 @@ export class Api extends AwsApi {
   public head(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiHeadOptions
+    props?: cloud.ApiHeadOptions,
   ): void {
     this.httpRequests("HEAD", path, inflight, props);
   }
@@ -182,7 +182,7 @@ export class Api extends AwsApi {
   public connect(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiConnectOptions
+    props?: cloud.ApiConnectOptions,
   ): void {
     this.httpRequests("CONNECT", path, inflight, props);
   }
@@ -197,7 +197,7 @@ export class Api extends AwsApi {
     inflight: cloud.IApiEndpointHandler,
     method: string,
     path: string,
-    props?: cloud.ApiEndpointOptions
+    props?: cloud.ApiEndpointOptions,
   ): Function {
     let fn = this.addInflightHandler(inflight, method, path, props);
     if (!(fn instanceof Function)) {
@@ -216,20 +216,20 @@ export class Api extends AwsApi {
     inflight: cloud.IApiEndpointHandler,
     method: string,
     path: string,
-    props?: cloud.ApiEndpointOptions
+    props?: cloud.ApiEndpointOptions,
   ): Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
       const newInflight = ApiEndpointHandler.toFunctionHandler(
         inflight,
-        cloud.Api.renderCorsHeaders(this.corsOptions)?.defaultResponse
+        cloud.Api.renderCorsHeaders(this.corsOptions)?.defaultResponse,
       );
       const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}`;
       handler = new Function(
         this,
         App.of(this).makeId(this, prefix),
         newInflight,
-        props
+        props,
       );
       Node.of(handler).hidden = true;
       this.handlers[inflight._id] = handler;
@@ -284,7 +284,7 @@ class WingRestApi extends Construct {
     props: {
       getApiSpec: () => OpenApiSpec;
       cors?: cloud.ApiCorsOptions;
-    }
+    },
   ) {
     super(scope, id);
     const app = App.of(this) as App;
@@ -334,7 +334,7 @@ class WingRestApi extends Construct {
       `${this.id}ServiceLookup`,
       {
         service: "execute-api",
-      }
+      },
     );
 
     const vpcEndpoint = new VpcEndpoint(this, `${this.id}-vpc-endpoint`, {
@@ -354,7 +354,7 @@ class WingRestApi extends Construct {
     props: {
       getApiSpec: () => OpenApiSpec;
       cors?: cloud.ApiCorsOptions;
-    }
+    },
   ): ApiGatewayRestApi {
     /**
      * Configures the default response for requests to undefined routes (`/{proxy+}`).
@@ -378,7 +378,7 @@ class WingRestApi extends Construct {
           const apiSpec = props.getApiSpec();
           const defaultResponse = createApiDefaultResponse(
             Object.keys(apiSpec.paths),
-            props.cors
+            props.cors,
           );
 
           // Merges the specification with `defaultResponse` to handle requests to undefined routes (`/{proxy+}`).
@@ -511,7 +511,7 @@ class WingRestApi extends Construct {
   private _addHandlerPermissions = (
     path: string,
     method: string,
-    handler: Function
+    handler: Function,
   ) => {
     const pathHash = createHash("sha1").update(path).digest("hex").slice(-8);
     const permissionId = `${method}-${pathHash}`;
@@ -521,7 +521,7 @@ class WingRestApi extends Construct {
       functionName: handler.functionName,
       principal: "apigateway.amazonaws.com",
       sourceArn: `${this.api.executionArn}/*/${method}${Api.renderOpenApiPath(
-        path
+        path,
       )}`,
     });
   };

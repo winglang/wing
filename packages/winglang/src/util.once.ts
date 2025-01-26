@@ -1,5 +1,5 @@
 export function once<T extends (...args: any[]) => any>(
-  func: T
+  func: T,
 ): (...args: Parameters<T>) => ReturnType<T> {
   let called = false;
   let result: ReturnType<T>;

@@ -31,7 +31,7 @@ export abstract class Service extends cloud.Service implements IAwsService {
   public static _toInflightType(): string {
     return core.InflightClient.forType(
       __filename.replace("service", "service.inflight"),
-      "ServiceClient"
+      "ServiceClient",
     );
   }
 

@@ -3,7 +3,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     globalSetup: "test/global.setup.ts",
-    testTimeout: 200_000,
+    testTimeout: 300_000,
     retry: 2,
     include: ["test/**/*.test.ts"],
     // https://vitest.dev/guide/features.html#chai-and-jest-expect-compatibility

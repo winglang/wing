@@ -51,7 +51,7 @@ const INFLIGHT_CODE_WITH_CONTENTTYPE_RESPONSE_HEADER = inflight(
   async (_, req) => ({
     body: req.headers,
     headers: { "Content-Type": "application/octet-stream; charset=utf-8" },
-  })
+  }),
 );
 
 // Handler that responds to a request without a response body
@@ -189,7 +189,7 @@ test("api doesn't allow duplicated routes", () => {
 
   // THEN
   expect(() => api.get("/hello", INFLIGHT_CODE_ECHO_BODY)).toThrowError(
-    "Endpoint for path '/hello' and method 'GET' already exists"
+    "Endpoint for path '/hello' and method 'GET' already exists",
   );
 });
 
@@ -220,7 +220,7 @@ test("api doesn't allow ambiguous routes", () => {
 
   // THEN
   expect(() => api.get(ambiguousPath, INFLIGHT_CODE_ECHO_BODY)).toThrowError(
-    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`,
   );
 });
 
@@ -237,7 +237,7 @@ test("api doesn't allow ambiguous routes containing only variables", () => {
 
   // THEN
   expect(() => api.get(ambiguousPath, INFLIGHT_CODE_ECHO_BODY)).toThrowError(
-    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`,
   );
 });
 
@@ -253,7 +253,7 @@ test("api doesn't allow ambiguous routes containing different number of varaible
 
   // THEN
   expect(() => api.get(ambiguousPath, INFLIGHT_CODE_ECHO_BODY)).toThrowError(
-    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`,
   );
 });
 
@@ -498,7 +498,7 @@ test("api url can be used as environment variable", async () => {
       env: {
         API_URL: api.url,
       },
-    }
+    },
   );
 
   // WHEN
@@ -540,7 +540,7 @@ test("api response returns Content-Type header from inflight", async () => {
 
   expect(response.status).toEqual(200);
   expect(response.headers.get("Content-Type")).toEqual(
-    "application/octet-stream; charset=utf-8"
+    "application/octet-stream; charset=utf-8",
   );
 
   expect(listMessages(s)).toMatchSnapshot();
@@ -569,7 +569,7 @@ test("api response returns default Content-Type header", async () => {
   expect(response.status).toEqual(200);
   // the default for no body requests
   expect(response.headers.get("Content-Type")).toEqual(
-    "text/html; charset=utf-8"
+    "text/html; charset=utf-8",
   );
 
   expect(listMessages(s)).toMatchSnapshot();
@@ -676,7 +676,7 @@ test("api with CORS defaults", async () => {
   expect(await response.text()).toEqual(RESPONSE);
   expect(response.headers.get("access-control-allow-origin")).toEqual("*");
   expect(response.headers.get("access-control-allow-credentials")).toEqual(
-    "false"
+    "false",
   );
 });
 
@@ -708,13 +708,13 @@ test("api with custom CORS settings", async () => {
   expect(response.status).toEqual(200);
   expect(await response.text()).toEqual(RESPONSE);
   expect(response.headers.get("access-control-allow-origin")).toEqual(
-    "https://example.com"
+    "https://example.com",
   );
   expect(response.headers.get("access-control-allow-credentials")).toEqual(
-    "true"
+    "true",
   );
   expect(response.headers.get("access-control-expose-headers")).toEqual(
-    "x-wingnuts"
+    "x-wingnuts",
   );
 });
 
@@ -737,10 +737,10 @@ test("api with CORS settings responds to OPTIONS request", async () => {
 
   expect(response.status).toEqual(204);
   expect(response.headers.get("access-control-allow-headers")).toEqual(
-    "Content-Type,Authorization,X-Requested-With"
+    "Content-Type,Authorization,X-Requested-With",
   );
   expect(response.headers.get("access-control-allow-methods")).toEqual(
-    "GET,POST,PUT,DELETE,HEAD,OPTIONS"
+    "GET,POST,PUT,DELETE,HEAD,OPTIONS",
   );
   expect(response.headers.get("access-control-max-age")).toEqual("300");
 });
@@ -812,7 +812,7 @@ describe("sibling paths are found", () => {
       expect(false).toBeTruthy();
     } catch (e) {
       expect(e.message).toBe(
-        "Endpoint for path '/:id/b' and method 'GET' conflicts with existing sibling endpoint for path '/:username/a'- try to match the parameter names to avoid this error."
+        "Endpoint for path '/:id/b' and method 'GET' conflicts with existing sibling endpoint for path '/:username/a'- try to match the parameter names to avoid this error.",
       );
     }
   });
@@ -827,7 +827,7 @@ describe("sibling paths are found", () => {
       expect(false).toBeTruthy();
     } catch (e) {
       expect(e.message).toBe(
-        "Endpoint for path '/something_else/:id' and method 'GET' conflicts with existing sibling endpoint for path '/something/:username'- try to match the parameter names to avoid this error."
+        "Endpoint for path '/something_else/:id' and method 'GET' conflicts with existing sibling endpoint for path '/something/:username'- try to match the parameter names to avoid this error.",
       );
     }
   });

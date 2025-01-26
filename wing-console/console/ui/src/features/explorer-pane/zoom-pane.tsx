@@ -416,16 +416,12 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     [boundingBox?.height, boundingBox?.width, setViewTransform],
   );
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        zoomToFit,
-        shouldDoInitialZoomToFit: !viewTransformExists,
-      };
-    },
-    [viewTransformExists, zoomToFit],
-  );
+  useImperativeHandle(ref, () => {
+    return {
+      zoomToFit,
+      shouldDoInitialZoomToFit: !viewTransformExists,
+    };
+  }, [viewTransformExists, zoomToFit]);
 
   // Whether the bounding box is out of bounds of the transform view.
   const outOfBounds = useMemo(() => {

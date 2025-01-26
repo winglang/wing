@@ -26,7 +26,7 @@ describe("ApiResponseMapper", () => {
     const response = await apigwFunctionHandler(
       apiRequestEvent as APIGatewayProxyEvent,
       async () => handlerResponse,
-      {}
+      {},
     );
 
     // THEN
@@ -58,7 +58,7 @@ describe("ApiResponseMapper", () => {
     // WHEN
     const response = await apigwFunctionHandler(
       apiRequestEvent as APIGatewayProxyEvent,
-      async () => handlerResponse
+      async () => handlerResponse,
     );
 
     // THEN
@@ -88,7 +88,7 @@ describe("ApiResponseMapper", () => {
     // WHEN
     const response = await apigwFunctionHandler(
       apiRequestEvent as APIGatewayProxyEvent,
-      async () => handlerResponse
+      async () => handlerResponse,
     );
 
     // THEN
@@ -122,7 +122,7 @@ describe("ApiResponseMapper", () => {
     // WHEN
     const response = await apigwFunctionHandler(
       apiRequestEvent as APIGatewayProxyEvent,
-      async () => handlerResponse
+      async () => handlerResponse,
     );
 
     // THEN
@@ -155,7 +155,7 @@ describe("ApiResponseMapper", () => {
       async () => handlerResponse,
       {
         "Access-Control-Allow-Origin": "*",
-      }
+      },
     );
 
     // THEN
@@ -199,7 +199,7 @@ describe("ApiRequest", () => {
     // WHEN
     await apigwFunctionHandler(
       apiRequestEvent as APIGatewayProxyEvent,
-      handlerMock
+      handlerMock,
     );
 
     // THEN
@@ -228,7 +228,7 @@ describe("ApiRequest", () => {
     // WHEN
     await apigwFunctionHandler(
       apiRequestEvent as APIGatewayProxyEvent,
-      handlerMock
+      handlerMock,
     );
 
     // THEN
@@ -256,7 +256,7 @@ describe("ApiRequest", () => {
     // WHEN
     await apigwFunctionHandler(
       apiRequestEvent as APIGatewayProxyEvent,
-      handlerMock
+      handlerMock,
     );
 
     // THEN
@@ -288,7 +288,7 @@ describe("ApiRequest", () => {
     // WHEN
     await apigwFunctionHandler(
       apiRequestEvent as APIGatewayProxyEvent,
-      handlerMock
+      handlerMock,
     );
 
     // THEN

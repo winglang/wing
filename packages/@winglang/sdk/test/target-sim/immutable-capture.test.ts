@@ -20,7 +20,7 @@ captureTest("array", () =>
     assert(ctx.my_capture[0] === "hello");
     assert(ctx.my_capture[1] === "dude");
     return undefined;
-  })
+  }),
 );
 
 captureTest("string", () =>
@@ -28,21 +28,21 @@ captureTest("string", () =>
     assert(ctx.my_capture.length === 11);
     assert(ctx.my_capture === "bam bam bam");
     return undefined;
-  })
+  }),
 );
 
 captureTest("number", () =>
   lift({ my_capture: 123 }).inflight(async (ctx, assert) => {
     assert(ctx.my_capture + 20 === 143);
     return undefined;
-  })
+  }),
 );
 
 captureTest("boolean", () =>
   lift({ my_capture: false }).inflight(async (ctx, assert) => {
     assert(ctx.my_capture === false);
     return undefined;
-  })
+  }),
 );
 
 captureTest("struct", () =>
@@ -54,7 +54,7 @@ captureTest("struct", () =>
     assert(ctx.my_capture.foo === "bar");
     assert(Object.keys(ctx.my_capture).length === 3);
     return undefined;
-  })
+  }),
 );
 
 captureTest("set", () =>
@@ -65,8 +65,8 @@ captureTest("set", () =>
       assert(ctx.my_capture.has("bang"));
       assert(ctx.my_capture.size === 3);
       return undefined;
-    }
-  )
+    },
+  ),
 );
 
 captureTest("duration", () =>
@@ -75,7 +75,7 @@ captureTest("duration", () =>
     assert(ctx.my_capture.seconds === 7200);
     assert(ctx.my_capture.hours === 2);
     return undefined;
-  })
+  }),
 );
 
 captureTest("map", () =>
@@ -91,7 +91,7 @@ captureTest("map", () =>
     assert(ctx.my_capture.get("foo") === 123);
     assert(ctx.my_capture.get("bar") === 456);
     return undefined;
-  })
+  }),
 );
 
 captureTest("array of durations", () =>
@@ -102,7 +102,7 @@ captureTest("array of durations", () =>
     assert(ctx.my_array[0].minutes === 10);
     assert(ctx.my_array[1].minutes === 20);
     return undefined;
-  })
+  }),
 );
 
 captureTest("map of arrays", () =>
@@ -120,7 +120,7 @@ captureTest("map of arrays", () =>
     assert(ctx.my_map.get("bar")?.[0] === 3);
     assert(ctx.my_map.get("bar")?.[1] === 4);
     return undefined;
-  })
+  }),
 );
 
 // array of maps
@@ -140,7 +140,7 @@ captureTest("array of maps", () =>
     assert(ctx.my_array[0].get("foo") === 1);
     assert(ctx.my_array[1].get("bar") === 4);
     return undefined;
-  })
+  }),
 );
 
 // set of durations
@@ -152,7 +152,7 @@ captureTest("set of durations", () =>
     assert(Array.from(ctx.my_set)[0].hours === 0.16666666666666666);
     assert(Array.from(ctx.my_set)[1].seconds === 1200);
     return undefined;
-  })
+  }),
 );
 
 // map of arrays of durations
@@ -168,7 +168,7 @@ captureTest("map of arrays of durations", () =>
     assert(ctx.my_map.get("bar")?.[0].minutes === 30);
     assert(ctx.my_map.get("bar")?.[1].seconds === 40 * 60);
     return undefined;
-  })
+  }),
 );
 
 // struct of maps
@@ -190,7 +190,7 @@ captureTest("struct of maps", () =>
     assert(ctx.my_struct.bar.get("foo") === 3);
     assert(ctx.my_struct.bar.get("bar") === 4);
     return undefined;
-  })
+  }),
 );
 
 // capturing collections of buckets isn't supported yet
@@ -277,7 +277,7 @@ function captureTest(name: string, t: (scope: Construct) => ITestHandler) {
         const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return undefined;
-      })
+      }),
     );
 
     const sim = await app.startSimulator();

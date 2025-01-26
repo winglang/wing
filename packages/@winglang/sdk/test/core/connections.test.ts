@@ -40,7 +40,7 @@ test("implict connections based on tokens", async () => {
     lift({ url: api.url }).inflight(async (ctx) => {
       console.log(ctx.url);
       return undefined;
-    })
+    }),
   );
 
   expect(app.snapshot()[CONNECTIONS_FILE_PATH].connections).containSubset([

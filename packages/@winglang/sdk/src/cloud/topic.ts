@@ -53,7 +53,7 @@ export class Topic extends Resource {
    */
   public onMessage(
     inflight: ITopicOnMessageHandler,
-    props?: TopicOnMessageOptions
+    props?: TopicOnMessageOptions,
   ): Function {
     inflight;
     props;
@@ -66,7 +66,7 @@ export class Topic extends Resource {
    */
   public subscribeQueue(
     queue: Queue,
-    props?: TopicSubscribeQueueOptions
+    props?: TopicSubscribeQueueOptions,
   ): void {
     queue;
     props;

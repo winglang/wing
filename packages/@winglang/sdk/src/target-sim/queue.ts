@@ -43,7 +43,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
           issue: "https://github.com/winglang/wing/issues/1980",
           resource: this.constructor.name,
           operation: "timeout",
-        }
+        },
       );
     }
 
@@ -52,7 +52,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
     if (this.retentionPeriod.seconds < this.timeout.seconds) {
       throw new Error(
-        "Retention period must be greater than or equal to timeout"
+        "Retention period must be greater than or equal to timeout",
       );
     }
 
@@ -85,14 +85,14 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
-    props: cloud.QueueSetConsumerOptions = {}
+    props: cloud.QueueSetConsumerOptions = {},
   ): cloud.Function {
     const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
     const fn = new cloud.Function(
       this,
       App.of(this).makeId(this, "Consumer"),
       functionHandler,
-      props
+      props,
     );
     const fnNode = Node.of(fn);
     fnNode.sourceModule = SDK_SOURCE_MODULE;
@@ -107,13 +107,13 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
         subscriptionProps: {
           batchSize: props.batchSize ?? 1,
         },
-      }
+      },
     );
 
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
     this.policy.addStatement(
       fn,
-      SimFunctionInflightMethods.HAS_AVAILABLE_WORKERS
+      SimFunctionInflightMethods.HAS_AVAILABLE_WORKERS,
     );
     mapping.node.addDependency(this.policy);
 
@@ -167,7 +167,7 @@ export class QueueSetConsumerHandler {
    * @returns The function handler.
    */
   public static toFunctionHandler(
-    handler: cloud.IQueueSetConsumerHandler
+    handler: cloud.IQueueSetConsumerHandler,
   ): cloud.IFunctionHandler {
     return lift({ handler }).inflight(async (ctx, event) => {
       const batchItemFailures = [];

@@ -39,10 +39,10 @@ export class BucketClient implements IBucketClient {
       $blobServiceClient ??
       new BlobServiceClient(
         `https://${$storageAccount}.blob.core.windows.net`,
-        this.defaultAzureCredential
+        this.defaultAzureCredential,
       );
     this.containerClient = this.blobServiceClient.getContainerClient(
-      this.bucketName
+      this.bucketName,
     );
   }
 
@@ -65,7 +65,7 @@ export class BucketClient implements IBucketClient {
   public async put(
     key: string,
     body: string,
-    opts?: BucketPutOptions
+    opts?: BucketPutOptions,
   ): Promise<void> {
     const blobClient = this.containerClient.getBlockBlobClient(key);
     const options = {
@@ -115,13 +115,13 @@ export class BucketClient implements IBucketClient {
 
     try {
       return new TextDecoder("utf8", { fatal: true }).decode(
-        await this.streamToBuffer(downloadResponse.readableStreamBody)
+        await this.streamToBuffer(downloadResponse.readableStreamBody),
       );
     } catch (e) {
       throw new Error(
         `Object contents could not be read as text (key=${key}): ${
           (e as Error).stack
-        })}`
+        })}`,
       );
     }
   }
@@ -134,7 +134,7 @@ export class BucketClient implements IBucketClient {
    */
   public async tryGet(
     key: string,
-    options?: BucketTryGetOptions
+    options?: BucketTryGetOptions,
   ): Promise<string | undefined> {
     if (await this.exists(key)) {
       return this.get(key, options);
@@ -175,7 +175,7 @@ export class BucketClient implements IBucketClient {
    */
   public async delete(
     key: string,
-    opts: BucketDeleteOptions = {}
+    opts: BucketDeleteOptions = {},
   ): Promise<void> {
     const mustExist = opts.mustExist ?? false;
 
@@ -228,11 +228,11 @@ export class BucketClient implements IBucketClient {
 
   public async signedUrl(
     key: string,
-    options?: BucketSignedUrlOptions
+    options?: BucketSignedUrlOptions,
   ): Promise<string> {
     options;
     throw new Error(
-      `signedUrl is not implemented yet for tf-azure (key=${key})`
+      `signedUrl is not implemented yet for tf-azure (key=${key})`,
     );
   }
 
@@ -249,7 +249,7 @@ export class BucketClient implements IBucketClient {
     }
 
     return encodeURI(
-      `https://${this.storageAccount}.blob.core.windows.net/${this.bucketName}/${key}`
+      `https://${this.storageAccount}.blob.core.windows.net/${this.bucketName}/${key}`,
     );
   }
 
@@ -300,7 +300,7 @@ export class BucketClient implements IBucketClient {
    */
   public async rename(srcKey: string, dstKey: string): Promise<void> {
     return Promise.reject(
-      `rename is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
+      `rename is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`,
     );
   }
 

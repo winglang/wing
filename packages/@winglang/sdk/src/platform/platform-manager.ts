@@ -76,7 +76,7 @@ export class PlatformManager {
     this.platformInstances.push(
       isBuiltin
         ? this.loadBuiltinPlatform(pathToRead)
-        : _loadCustomPlatform(pathToRead)
+        : _loadCustomPlatform(pathToRead),
     );
   }
 
@@ -144,7 +144,7 @@ export class PlatformManager {
 
     if (!appCall) {
       throw new Error(
-        `No newApp method found on platform: ${this.platformPaths[0]} (Hint: The first platform provided must have a newApp method)`
+        `No newApp method found on platform: ${this.platformPaths[0]} (Hint: The first platform provided must have a newApp method)`,
       );
     }
 
@@ -167,7 +167,7 @@ export class PlatformManager {
     if (secretNames.length > 0) {
       writeFileSync(
         join(app.outdir, SECRETS_FILE_NAME),
-        JSON.stringify(secretNames)
+        JSON.stringify(secretNames),
       );
     }
 
@@ -184,7 +184,7 @@ export class PlatformManager {
     const hooks = collectHooks(this.platformInstances);
     if (!hooks.storeSecretsHook) {
       throw new Error(
-        `Cannot find a platform or platform extension that supports storing secrets`
+        `Cannot find a platform or platform extension that supports storing secrets`,
       );
     }
     await hooks.storeSecretsHook(secrets);
@@ -215,8 +215,8 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
   const fullCustomPlatformPath = customPlatformPath.endsWith(".js")
     ? customPlatformPath
     : isScoped
-    ? join(platformDir, `${customPlatformPath}/lib/index.js`)
-    : `${customPlatformPath}/index.js`;
+      ? join(platformDir, `${customPlatformPath}/lib/index.js`)
+      : `${customPlatformPath}/index.js`;
 
   // enable relative imports from the platform file
   const customPlatformBaseDir = customPlatformPath.endsWith(".js")

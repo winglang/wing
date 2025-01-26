@@ -33,13 +33,13 @@ export class CounterBackend implements ICounterClient, IResource {
     // Save the values to disk
     fs.writeFileSync(
       join(await this.ctx.statedir(), VALUES_FILENAME),
-      JSON.stringify(Array.from(this.values.entries()))
+      JSON.stringify(Array.from(this.values.entries())),
     );
   }
 
   public async inc(
     amount: number = 1,
-    key: string = "default"
+    key: string = "default",
   ): Promise<number> {
     const prev = this.values.get(key) ?? this.initial;
     this.values.set(key, prev + amount);
@@ -48,7 +48,7 @@ export class CounterBackend implements ICounterClient, IResource {
 
   public async dec(
     amount: number = 1,
-    key: string = "default"
+    key: string = "default",
   ): Promise<number> {
     const prev = this.values.get(key) ?? this.initial;
     this.values.set(key, prev - amount);

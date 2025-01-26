@@ -24,7 +24,7 @@ export class HttpClient extends VisualComponent {
     id: string,
     label: string,
     getUrlHandler: IHttpClientGetUrlHandler,
-    getApiSpecHandler: IHttpClientGetApiSpecHandler
+    getApiSpecHandler: IHttpClientGetApiSpecHandler,
   ): HttpClient {
     return Resource._newFromFactory(
       API_FQN,
@@ -32,7 +32,7 @@ export class HttpClient extends VisualComponent {
       id,
       label,
       getUrlHandler,
-      getApiSpecHandler
+      getApiSpecHandler,
     );
   }
 
@@ -45,7 +45,7 @@ export class HttpClient extends VisualComponent {
     id: string,
     label: string,
     getUrlHandler: IHttpClientGetUrlHandler,
-    getApiSpecHandler: IHttpClientGetApiSpecHandler
+    getApiSpecHandler: IHttpClientGetApiSpecHandler,
   ) {
     super(scope, id);
 
@@ -54,7 +54,7 @@ export class HttpClient extends VisualComponent {
     this.getApiSpecfn = new Function(
       this,
       "GetApiSpecHandler",
-      getApiSpecHandler
+      getApiSpecHandler,
     );
   }
 

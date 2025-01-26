@@ -5,7 +5,7 @@ import { Test } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = inflight(async () =>
-  console.log("this test should pass!")
+  console.log("this test should pass!"),
 );
 
 test("create a test", async () => {

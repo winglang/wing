@@ -23,7 +23,7 @@ export class CdkTfTokens implements ITokenResolver {
    */
   public lift(value: any): string {
     return `JSON.parse(process.env[${JSON.stringify(
-      tokenEnvName(JSON.stringify(value))
+      tokenEnvName(JSON.stringify(value)),
     )}])`;
   }
 

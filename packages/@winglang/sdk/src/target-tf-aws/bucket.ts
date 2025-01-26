@@ -65,7 +65,7 @@ export class Bucket extends AwsBucket {
 
     if (props.cors ?? true) {
       this.addCorsRule(
-        props.corsOptions ?? cloud.DEFAULT_BUCKET_CORS_CONFIGURATION
+        props.corsOptions ?? cloud.DEFAULT_BUCKET_CORS_CONFIGURATION,
       );
     }
   }
@@ -91,7 +91,7 @@ export class Bucket extends AwsBucket {
                 };
               }),
           }),
-        }
+        },
       );
     }
   }
@@ -106,7 +106,7 @@ export class Bucket extends AwsBucket {
 
   protected createTopicHandler(
     eventType: cloud.BucketEventType,
-    inflight: cloud.IBucketEventHandler
+    inflight: cloud.IBucketEventHandler,
   ): cloud.ITopicOnMessageHandler {
     return BucketEventHandler.toTopicOnMessageHandler(inflight, eventType);
   }
@@ -160,7 +160,7 @@ export function createEncryptedBucket(
   scope: Construct,
   isPublic: boolean,
   forceDestroy: boolean,
-  name: string = "Default"
+  name: string = "Default",
 ): S3Bucket {
   const bucketPrefix = ResourceNames.generateName(scope, BUCKET_PREFIX_OPTS);
 
@@ -195,7 +195,7 @@ export function createEncryptedBucket(
         blockPublicPolicy: false,
         ignorePublicAcls: false,
         restrictPublicBuckets: false,
-      }
+      },
     );
     const policy = {
       Version: "2012-10-17",

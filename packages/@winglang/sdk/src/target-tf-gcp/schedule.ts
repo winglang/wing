@@ -34,7 +34,7 @@ export class Schedule extends cloud.Schedule {
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props: cloud.ScheduleOnTickOptions = {}
+    props: cloud.ScheduleOnTickOptions = {},
   ): cloud.Function {
     const uniqueId = this.node.addr.substring(0, 8);
 
@@ -51,7 +51,7 @@ export class Schedule extends cloud.Schedule {
       this,
       App.of(this).makeId(this, "OnTick"),
       functionHandler,
-      props
+      props,
     );
     this.handlers[inflight._id] = cronFunction;
 
@@ -62,7 +62,7 @@ export class Schedule extends cloud.Schedule {
       {
         accountId: `scheduler-${uniqueId}-sa`,
         displayName: `Service Account for scheduler-${uniqueId}`,
-      }
+      },
     );
 
     // allow scheduler service account to invoke cron function

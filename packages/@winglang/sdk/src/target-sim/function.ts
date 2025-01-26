@@ -41,7 +41,7 @@ export class Function
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps = {}
+    props: cloud.FunctionProps = {},
   ) {
     super(scope, id, inflight, props);
 

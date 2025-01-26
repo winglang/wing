@@ -53,7 +53,7 @@ export class Counter extends cloud.Counter {
       __filename
         .replace("target-tf-azure", "shared-azure")
         .replace("counter", "counter.inflight"),
-      "CounterClient"
+      "CounterClient",
     );
   }
 
@@ -66,7 +66,7 @@ export class Counter extends cloud.Counter {
     const app = App.of(this) as App;
     if (app._target !== "tf-azure") {
       throw new Error(
-        `Bucket can only be created in a tf-azure app, got ${app._target}`
+        `Bucket can only be created in a tf-azure app, got ${app._target}`,
       );
     }
 
@@ -114,7 +114,7 @@ export class Counter extends cloud.Counter {
 
     host.addEnvironment(
       this.envAccountKeyVariable(),
-      this.storageAccount.primaryAccessKey
+      this.storageAccount.primaryAccessKey,
     );
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
     host.addEnvironment(this.envStorageTableName(), this.storageTable.name);

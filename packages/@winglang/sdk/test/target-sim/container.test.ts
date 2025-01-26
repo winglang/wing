@@ -97,13 +97,13 @@ test("rebuild only if content had changes", async () => {
   const r2 = await app2.cycle();
 
   expect(r2[1]).toBe(
-    "Image my-app:a9ae83b54b1ec21faa1a3255f05c095c found, No need to build or pull."
+    "Image my-app:a9ae83b54b1ec21faa1a3255f05c095c found, No need to build or pull.",
   );
 
   // add a file to the workdir and see that we are rebuilding
   writeFileSync(
     join(workdir, "new-file"),
-    `${new Date().toISOString()}-${Math.random() * 9999}`
+    `${new Date().toISOString()}-${Math.random() * 9999}`,
   );
 
   const app3 = new MyApp();

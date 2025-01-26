@@ -53,7 +53,7 @@ test("update an object in bucket", async () => {
   await client.put(KEY, JSON.stringify({ msg: "Hello world 1!" }));
   await client.put(KEY, JSON.stringify({ msg: "Hello world 2!" }));
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.includes(`I am done`)
+    trace.data.message.includes(`I am done`),
   );
 
   // THEN
@@ -85,17 +85,17 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   await client.put("a", "1");
   // wait for the subscriber to finish
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.includes("I am done")
+    trace.data.message.includes("I am done"),
   );
   expect(await logClient.get("a")).toBe(BucketEventType.CREATE);
   await client.put("a", "2");
   await waitUntilTraceCount(s, 2, (trace) =>
-    trace.data.message.startsWith("I am done")
+    trace.data.message.startsWith("I am done"),
   );
   expect(await logClient.get("a")).toBe(BucketEventType.UPDATE);
   await client.delete("a");
   await waitUntilTraceCount(s, 3, (trace) =>
-    trace.data.message.startsWith("I am done")
+    trace.data.message.startsWith("I am done"),
   );
   expect(await logClient.get("a")).toBe(BucketEventType.DELETE);
   await s.stop();
@@ -329,13 +329,13 @@ test("get invalid object throws an error", async () => {
 
   // THEN
   await expect(() => client.get("unknown.txt")).rejects.toThrowError(
-    /Object does not exist/
+    /Object does not exist/,
   );
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(
-    s.listTraces().filter((t) => t.data.status === "failure")
+    s.listTraces().filter((t) => t.data.status === "failure"),
   ).toHaveLength(1);
   expect(app.snapshot()).toMatchSnapshot();
 });
@@ -388,7 +388,7 @@ test("removing a key will call onDelete method", async () => {
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
   const response = await client.delete(fileName);
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.startsWith("Received unknown.txt")
+    trace.data.message.startsWith("Received unknown.txt"),
   );
 
   // THEN
@@ -459,7 +459,7 @@ test("remove non-existent object from a bucket with mustExist option", async () 
   await s.stop();
 
   await expect(async () =>
-    client.delete(fileName, { mustExist: true })
+    client.delete(fileName, { mustExist: true }),
   ).rejects.toThrowError();
 });
 
@@ -569,7 +569,7 @@ test("Given a non public bucket when reaching to a key public url it should thro
 
   // THEN
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    /Cannot provide public url for a non-public bucket/
+    /Cannot provide public url for a non-public bucket/,
   );
   await s.stop();
 });
@@ -773,12 +773,12 @@ test("copy objects within the bucket", async () => {
   expect(file1SrcMetadata.contentType).toEqual(file1DstMetadata.contentType);
   expect(file1SrcMetadata.size).toEqual(file1DstMetadata.size);
   expect(file1SrcMetadata.lastModified).not.toEqual(
-    file1DstMetadata.lastModified
+    file1DstMetadata.lastModified,
   );
   expect(file2SrcMetadata.contentType).toEqual(file2DstMetadata.contentType);
   expect(file2SrcMetadata.size).toEqual(file2DstMetadata.size);
   expect(file2SrcMetadata.lastModified).not.toEqual(
-    file2DstMetadata.lastModified
+    file2DstMetadata.lastModified,
   );
 });
 
@@ -795,7 +795,7 @@ test("copy non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
-    /Source object does not exist/
+    /Source object does not exist/,
   );
   await s.stop();
 });
@@ -872,7 +872,7 @@ test("rename invalid object within the bucket", async () => {
 
   // THEN
   await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
-    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`
+    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`,
   );
   await s.stop();
 });
@@ -891,7 +891,7 @@ test("rename non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(
-    /Source object does not exist/
+    /Source object does not exist/,
   );
   await s.stop();
 });
@@ -1011,7 +1011,7 @@ test("signedUrl doesn't accept multipart uploads yet", async () => {
   // THEN
   expect(response.ok).toBe(false);
   await expect(response.text()).resolves.toBe(
-    "Multipart uploads not supported"
+    "Multipart uploads not supported",
   );
 
   await s.stop();

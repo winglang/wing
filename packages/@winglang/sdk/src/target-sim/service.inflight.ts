@@ -46,7 +46,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       this.resolvedSourceCodeFile,
       (msg, level) => {
         this.addTrace(msg, TraceType.RESOURCE, level);
-      }
+      },
     );
   }
 
@@ -79,7 +79,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     const bundleInvalidated = await isBundleInvalidated(
       this.resolvedSourceCodeFile,
       this.bundle!,
-      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE),
     );
     if (bundleInvalidated) {
       return UpdatePlan.REPLACE;
@@ -100,7 +100,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       this.addTrace(
         "Failed to start service: bundle is not created",
         TraceType.RESOURCE,
-        LogLevel.ERROR
+        LogLevel.ERROR,
       );
       return;
     }
@@ -115,7 +115,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
         this.addTrace(
           message,
           internal ? TraceType.SIMULATOR : TraceType.LOG,
-          level
+          level,
         );
       },
     });
@@ -127,7 +127,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       this.addTrace(
         `Failed to start service: ${e.message}`,
         TraceType.RESOURCE,
-        LogLevel.ERROR
+        LogLevel.ERROR,
       );
     }
   }
@@ -147,7 +147,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       this.addTrace(
         `Failed to stop service: ${e.message} ${e.stack}`,
         TraceType.RESOURCE,
-        LogLevel.ERROR
+        LogLevel.ERROR,
       );
     }
   }

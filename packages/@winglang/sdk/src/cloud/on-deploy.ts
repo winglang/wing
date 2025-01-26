@@ -49,7 +49,7 @@ export class OnDeploy extends Resource {
     scope: Construct,
     id: string,
     handler: IOnDeployHandler,
-    props: OnDeployProps = {}
+    props: OnDeployProps = {},
   ) {
     if (new.target === OnDeploy) {
       return Resource._newFromFactory(ON_DEPLOY_FQN, scope, id, handler, props);

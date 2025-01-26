@@ -72,14 +72,14 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
     const wingFiles = (await glob("{main,*.main}.{w,ts}")).sort();
     if (wingFiles.length === 0) {
       throw new Error(
-        "Cannot find an entrypoint file (main.w, main.ts, *.main.w, *.main.ts) in the current directory."
+        "Cannot find an entrypoint file (main.w, main.ts, *.main.w, *.main.ts) in the current directory.",
       );
     }
     if (wingFiles.length > 1) {
       throw new Error(
         `Multiple entrypoints found in the current directory (${wingFiles.join(
-          ", "
-        )}). Please specify which one to use.`
+          ", ",
+        )}). Please specify which one to use.`,
       );
     }
     entrypoint = wingFiles[0];
@@ -127,7 +127,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
   if (compileOutput.outputDir === undefined) {
     // If "outputDir" is undefined, then one or more errors should have been found, so there must be a logical bug.
     throw new Error(
-      "Internal compilation error. Please report this as a bug on the Wing issue tracker."
+      "Internal compilation error. Please report this as a bug on the Wing issue tracker.",
     );
   }
 

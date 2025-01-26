@@ -39,7 +39,7 @@ export class GitCollector extends Collector {
     const results = await this.runCommand(
       "git",
       ["config", "--get", "remote.origin.url"],
-      this.dir
+      this.dir,
     );
     return results.trim();
   }

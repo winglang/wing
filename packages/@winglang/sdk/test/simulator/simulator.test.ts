@@ -27,7 +27,7 @@ describe("lock mechanism", () => {
 
     const sim1 = await app.startSimulator(stateDir);
     await expect(app.startSimulator(stateDir)).rejects.toThrow(
-      "Another instance of the simulator is already running on the same state directory."
+      "Another instance of the simulator is already running on the same state directory.",
     );
     await sim1.stop();
   });
@@ -44,7 +44,7 @@ describe("lock mechanism", () => {
       (async () => {
         const sim2 = await app.startSimulator(stateDir);
         await sim2.stop();
-      })()
+      })(),
     ).resolves.not.toThrow();
   });
 });
@@ -60,10 +60,10 @@ describe("run single test", () => {
     const app = new SimApp({ isTestEnvironment: true });
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     await expect(testRunner.runTest("test_not_found")).rejects.toThrowError(
-      'No test found at path "test_not_found"'
+      'No test found at path "test_not_found"',
     );
     await sim.stop();
   });
@@ -73,12 +73,12 @@ describe("run single test", () => {
     makeTest(
       app,
       "test",
-      inflight(async () => console.log("hi"))
+      inflight(async () => console.log("hi")),
     );
     app.synth();
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const result = await testRunner.runTest("root/test");
     await sim.stop();
@@ -93,12 +93,12 @@ describe("run single test", () => {
       inflight(async () => {
         console.log("I am about to fail");
         throw new Error("test failed");
-      })
+      }),
     );
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const result = await testRunner.runTest("root/test");
     await sim.stop();
@@ -111,10 +111,10 @@ describe("run single test", () => {
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     await expect(testRunner.runTest("root/test")).rejects.toThrowError(
-      'No test found at path "root/test"'
+      'No test found at path "root/test"',
     );
     await sim.stop();
   });
@@ -125,7 +125,7 @@ describe("run all tests", () => {
     const app = new SimApp({ isTestEnvironment: true });
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const tests = await testRunner.listTests();
     await sim.stop();
@@ -137,12 +137,12 @@ describe("run all tests", () => {
     makeTest(
       app,
       "test",
-      inflight(async () => console.log("hi"))
+      inflight(async () => console.log("hi")),
     );
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const results = await runAllTests(testRunner);
     await sim.stop();
@@ -156,17 +156,17 @@ describe("run all tests", () => {
         makeTest(
           this,
           "test",
-          inflight(async () => console.log("hi"))
+          inflight(async () => console.log("hi")),
         );
         makeTest(
           this,
           "test:bla",
-          inflight(async () => console.log("hi"))
+          inflight(async () => console.log("hi")),
         );
         makeTest(
           this,
           "test:blue",
-          inflight(async () => console.log("hi"))
+          inflight(async () => console.log("hi")),
         );
       }
     }
@@ -174,7 +174,7 @@ describe("run all tests", () => {
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const results = await runAllTests(testRunner);
     await sim.stop();
@@ -193,7 +193,7 @@ describe("run all tests", () => {
         makeTest(
           this,
           "test",
-          inflight(async () => console.log("hi"))
+          inflight(async () => console.log("hi")),
         );
       }
     }
@@ -205,7 +205,7 @@ describe("run all tests", () => {
         makeTest(
           this,
           "test",
-          inflight(async () => console.log("hi"))
+          inflight(async () => console.log("hi")),
         );
         new ConstructWithTest(this, "scope1");
         new ConstructWithTest(this, "scope2");
@@ -215,7 +215,7 @@ describe("run all tests", () => {
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const results = await runAllTests(testRunner);
     await sim.stop();
@@ -244,7 +244,7 @@ test("calling an invalid method returns an error to the client", async () => {
   const sim = await app.startSimulator();
   const bucketClient = sim.getResource("/test");
   await expect(bucketClient.invalidMethod()).rejects.toThrowError(
-    /Method "invalidMethod" not found on resource/
+    /Method "invalidMethod" not found on resource/,
   );
   await sim.stop();
 });
@@ -254,7 +254,7 @@ test("provides raw tree data", async () => {
   makeTest(
     app,
     "test",
-    inflight(async () => console.log("hi"))
+    inflight(async () => console.log("hi")),
   );
   const sim = await app.startSimulator();
   const treeData = sim.tree().rawData();
@@ -277,7 +277,7 @@ test("unable to resolve token during initialization", async () => {
   }
   expect(error).toBeDefined();
   expect(error.message).toMatch(
-    /Failed to start resources: \"root\/Bucket\", "root\/Bucket\/Policy\"/
+    /Failed to start resources: \"root\/Bucket\", "root\/Bucket\/Policy\"/,
   );
 });
 
@@ -643,7 +643,7 @@ describe("in-place updates", () => {
         .inflight(async (ctx) => {
           await ctx.myState.set(`${ctx.stateKey}`, "bang" as any);
         }),
-      { env: { VER: "1" } }
+      { env: { VER: "1" } },
     );
 
     new Function(
@@ -652,7 +652,7 @@ describe("in-place updates", () => {
       inflight(async (ctx) => process.env.MY_VALUE),
       {
         env: { MY_VALUE: myState.token(stateKey) },
-      }
+      },
     );
 
     const sim = await app.startSimulator();
@@ -674,7 +674,7 @@ describe("in-place updates", () => {
         .inflight(async (ctx) => {
           await ctx.myState.set(`${ctx.stateKey}`, "bing" as any);
         }),
-      { env: { VER: "2" } }
+      { env: { VER: "2" } },
     );
 
     new Function(
@@ -683,7 +683,7 @@ describe("in-place updates", () => {
       inflight(async (ctx) => process.env.MY_VALUE),
       {
         env: { MY_VALUE: myState.token(stateKey) },
-      }
+      },
     );
 
     await sim.update(app2.synth());
@@ -909,7 +909,7 @@ test("debugging inspector inherited by sandbox", async () => {
   expect(
     sim
       .listTraces()
-      .some((t) => t.data.message.startsWith("Debugger listening on "))
+      .some((t) => t.data.message.startsWith("Debugger listening on ")),
   );
 });
 

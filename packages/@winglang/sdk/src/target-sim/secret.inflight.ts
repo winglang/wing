@@ -51,7 +51,7 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
 
     if (!secretValue) {
       throw new Error(
-        `No value for secret ${this.name}\n(hint: try running the "wing secrets -t TARGET" to store secret)`
+        `No value for secret ${this.name}\n(hint: try running the "wing secrets -t TARGET" to store secret)`,
       );
     }
 

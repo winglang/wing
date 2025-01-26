@@ -55,7 +55,7 @@ export class Function extends cloud.Function {
       __filename
         .replace("target-tf-azure", "shared-azure")
         .replace("function", "function.inflight"),
-      "FunctionClient"
+      "FunctionClient",
     );
   }
 
@@ -72,14 +72,14 @@ export class Function extends cloud.Function {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps = {}
+    props: cloud.FunctionProps = {},
   ) {
     super(scope, id, inflight, props);
 
     const app = App.of(this) as App;
     if (app._target !== "tf-azure") {
       throw new Error(
-        `Bucket can only be created in a tf-azure app, got ${app._target}`
+        `Bucket can only be created in a tf-azure app, got ${app._target}`,
       );
     }
 
@@ -98,7 +98,7 @@ export class Function extends cloud.Function {
 
     if (props.concurrency != null) {
       throw new NotImplementedError(
-        "Function concurrency isn't implemented yet on the current target."
+        "Function concurrency isn't implemented yet on the current target.",
       );
     }
 
@@ -119,7 +119,7 @@ export class Function extends cloud.Function {
           issue: "https://github.com/winglang/wing/issues/4494",
           resource: this.constructor.name,
           operation: "timeout",
-        }
+        },
       );
     }
 
@@ -171,7 +171,7 @@ export class Function extends cloud.Function {
     // Apply permissions from bound resources
     for (const key of this.permissions.keys() || []) {
       const scopedRoleAssignment = this.permissions?.get(
-        key
+        key,
       ) as ScopedRoleAssignment;
       new RoleAssignment(this, `RoleAssignment${key}`, {
         scope: scopedRoleAssignment.scope,
@@ -192,7 +192,7 @@ export class Function extends cloud.Function {
       `${this.storageAccount.node.addr.substring(-8)}_${
         StorageAccountPermissions.READ
       }`,
-      roleAssignment
+      roleAssignment,
     );
   }
 
@@ -233,7 +233,7 @@ export class Function extends cloud.Function {
             name: "res",
           },
         ],
-      })
+      }),
     );
 
     // Write host.json file to set function timeout (must be set in root of function app)
@@ -246,7 +246,7 @@ export class Function extends cloud.Function {
         //TODO: need to read the documentation and parse the number in the right way,
         // while not surpassing the limits, since it will be resulted in a hard to detect error
         functionTimeout: `00:01:00`,
-      })
+      }),
     );
 
     // Create zip asset from function code
@@ -273,7 +273,7 @@ export class Function extends cloud.Function {
    */
   public addPermission(
     scopedResource: Construct,
-    scopedRoleAssignment: ScopedRoleAssignment
+    scopedRoleAssignment: ScopedRoleAssignment,
   ) {
     const uniqueId = scopedResource.node.addr.substring(-8);
     const permissionsKey = `${uniqueId}_${scopedRoleAssignment.roleDefinitionName}`;
@@ -309,7 +309,7 @@ export class Function extends cloud.Function {
         };
      } catch (error) {
         context.res = { body: error.message, status: 500 };
-    }`
+    }`,
     );
     lines.push(`};`);
 

@@ -37,7 +37,7 @@ export abstract class Website extends cloud.Website implements IAwsWebsite {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("website", "website.inflight"),
-      "WebsiteClient"
+      "WebsiteClient",
     );
   }
 

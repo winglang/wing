@@ -14,7 +14,7 @@ export abstract class OnDeploy extends cloud.OnDeploy implements IAwsOnDeploy {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("on-deploy", "on-deploy.inflight"),
-      "OnDeployClient"
+      "OnDeployClient",
     );
   }
 

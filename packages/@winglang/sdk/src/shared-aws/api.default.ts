@@ -12,7 +12,7 @@ import * as cloud from "../cloud";
  */
 export const createApiDefaultResponse = (
   paths: string[],
-  corsOptions?: cloud.ApiCorsOptions
+  corsOptions?: cloud.ApiCorsOptions,
 ) => {
   const defaultKey =
     // the longest a sequence of parameters starts form the root

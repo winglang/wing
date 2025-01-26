@@ -30,7 +30,7 @@ export function normalPath(path: string) {
 export async function runCommand(
   cmd: string,
   args: string[],
-  options?: ExecFileOptions
+  options?: ExecFileOptions,
 ): Promise<any> {
   const { stdout } = await execFilePromise(cmd, args, options);
   return stdout;
@@ -43,7 +43,7 @@ export async function runCommand(
 export async function shell(
   cmd: string,
   args: string[],
-  options?: ExecOptions
+  options?: ExecOptions,
 ): Promise<any> {
   const { stdout } = await execPromise(cmd + " " + args.join(" "), options);
   return stdout;

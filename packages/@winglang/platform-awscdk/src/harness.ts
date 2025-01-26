@@ -18,7 +18,7 @@ export class AwsCdkTestHarness implements ITestHarness {
       Util.exec("cdk", ["version", "--ci", "true"], opts);
     } catch (err) {
       throw new Error(
-        "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk)."
+        "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk).",
       );
     }
 

@@ -78,7 +78,7 @@ export function lookup(obj: any, index: string | number): any {
 
   if (typeof obj !== "object") {
     throw new TypeError(
-      `Lookup failed, value is not an object (found "${typeof obj}")`
+      `Lookup failed, value is not an object (found "${typeof obj}")`,
     );
   }
 
@@ -93,7 +93,7 @@ export function assign(
   obj: any,
   index: string | number,
   kind: "=" | "+=" | "-=",
-  value: any
+  value: any,
 ) {
   if (isBytes(obj)) {
     obj = obj._data;
@@ -107,7 +107,7 @@ export function assign(
 
   if (typeof index === "string" && typeof obj !== "object") {
     throw new TypeError(
-      `Assignment failed, value is not an object (found \"${typeof obj}\")`
+      `Assignment failed, value is not an object (found \"${typeof obj}\")`,
     );
   }
 
@@ -129,7 +129,7 @@ export function assign(
 function checkIndex(index: string | number) {
   if (typeof index !== "string" && typeof index !== "number") {
     throw new TypeError(
-      `Index must be a string or number (found "${typeof index}")`
+      `Index must be a string or number (found "${typeof index}")`,
     );
   }
 }
@@ -142,7 +142,7 @@ function checkArrayAccess(obj: any, index: number): number {
     typeof obj !== "string"
   ) {
     throw new TypeError(
-      "Index is a number but collection is not an array or string"
+      "Index is a number but collection is not an array or string",
     );
   }
   if (index < 0 && index >= -obj.length) {
@@ -150,7 +150,7 @@ function checkArrayAccess(obj: any, index: number): number {
   }
   if (index < 0 || index >= obj.length) {
     throw new RangeError(
-      `Index ${index} out of bounds for array of length ${obj.length}`
+      `Index ${index} out of bounds for array of length ${obj.length}`,
     );
   }
   return index;
@@ -198,7 +198,7 @@ export function resolve(outdir: string, relativeSourcePath: string): string {
  */
 export function bringJs(
   moduleFile: string,
-  outPreflightTypesObject: any
+  outPreflightTypesObject: any,
 ): Object {
   /* eslint-disable @typescript-eslint/no-require-imports */
   return Object.fromEntries(
@@ -210,7 +210,7 @@ export function bringJs(
           const otherValue = outPreflightTypesObject[key];
           if (key in outPreflightTypesObject && otherValue !== value) {
             throw new Error(
-              `Key collision (${key} is both ${value.name} and ${otherValue.name}) in preflight types map`
+              `Key collision (${key} is both ${value.name} and ${otherValue.name}) in preflight types map`,
             );
           }
         });
@@ -218,7 +218,7 @@ export function bringJs(
         return false;
       }
       return true;
-    })
+    }),
   );
 }
 
@@ -232,7 +232,7 @@ export function bringJs(
  */
 export function preflightClassSingleton(
   scope: Construct,
-  typeId: number
+  typeId: number,
 ): Resource {
   const root: any = nodeof(scope).root;
   const type: any = root.$preflightTypesMap[typeId];
@@ -245,7 +245,7 @@ export function preflightClassSingleton(
   }
   root.resourceSingletons[type] = new type(
     scope,
-    `${type.name}_singleton_${typeId}`
+    `${type.name}_singleton_${typeId}`,
   );
   return root.resourceSingletons[type];
 }
@@ -274,7 +274,7 @@ export interface EnvLoadOptions {
  * - `.env.{mode}.local`
  */
 export function loadEnvVariables(
-  options?: EnvLoadOptions
+  options?: EnvLoadOptions,
 ): Record<string, string> | undefined {
   const envDir = options?.cwd ?? process.cwd();
   const envFiles = [
@@ -294,7 +294,7 @@ export function loadEnvVariables(
       } catch (_) {
         return [];
       }
-    })
+    }),
   );
 
   // Expand and force load the environment variables

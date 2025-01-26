@@ -54,7 +54,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       this.addTrace(
         `Failed to start container: ${e.message}`,
         TraceType.RESOURCE,
-        LogLevel.ERROR
+        LogLevel.ERROR,
       );
 
       return {};
@@ -125,7 +125,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     this.addTrace(
       `Starting container from ${this.imageTag}`,
       TraceType.RESOURCE,
-      LogLevel.VERBOSE
+      LogLevel.VERBOSE,
     );
 
     this.child = this.dockerSpawn("run", dockerRun, {
@@ -139,7 +139,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
           : "start"
       }`,
       TraceType.RESOURCE,
-      LogLevel.VERBOSE
+      LogLevel.VERBOSE,
     );
 
     let hostPort: string | undefined;
@@ -176,7 +176,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     this.addTrace(
       `Container ${this.imageTag} started`,
       TraceType.RESOURCE,
-      LogLevel.VERBOSE
+      LogLevel.VERBOSE,
     );
 
     return {
@@ -193,7 +193,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       this.addTrace(
         `Image ${this.imageTag} found, No need to build or pull.`,
         TraceType.RESOURCE,
-        LogLevel.VERBOSE
+        LogLevel.VERBOSE,
       );
 
       return;
@@ -204,7 +204,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       this.addTrace(
         `Building ${this.imageTag} from ${this.props.image}...`,
         TraceType.RESOURCE,
-        LogLevel.VERBOSE
+        LogLevel.VERBOSE,
       );
       await this.docker("build", ["-t", this.imageTag, this.props.image], {
         logLevel: LogLevel.VERBOSE,
@@ -213,7 +213,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       this.addTrace(
         `Pulling ${this.imageTag}...`,
         TraceType.RESOURCE,
-        LogLevel.VERBOSE
+        LogLevel.VERBOSE,
       );
       await this.docker("pull", [this.imageTag], {
         logLevel: LogLevel.VERBOSE,
@@ -242,7 +242,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       return JSON.parse(
         await this.docker("inspect", [name], {
           quiet: true,
-        })
+        }),
       );
     } catch {
       return undefined;
@@ -253,7 +253,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     this.addTrace(
       `Stopping container ${this.containerName}`,
       TraceType.RESOURCE,
-      LogLevel.VERBOSE
+      LogLevel.VERBOSE,
     );
 
     await this.child?.kill();
@@ -265,12 +265,12 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
 
   private async loadState(): Promise<StateFileContents> {
     const stateFileExists = await exists(
-      join(this.context.statedir, STATE_FILENAME)
+      join(this.context.statedir, STATE_FILENAME),
     );
     if (stateFileExists) {
       const stateFileContents = await fs.readFile(
         join(this.context.statedir, STATE_FILENAME),
-        "utf-8"
+        "utf-8",
       );
       return JSON.parse(stateFileContents);
     } else {
@@ -281,7 +281,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   private async docker(
     command: string,
     args: string[],
-    options: DockerOptions = {}
+    options: DockerOptions = {},
   ): Promise<string> {
     const child = this.dockerSpawn(command, args, options);
     return child.join();
@@ -290,7 +290,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   private dockerSpawn(
     command: string,
     args: string[],
-    options: DockerOptions = {}
+    options: DockerOptions = {},
   ): DockerProcess {
     let quiet = options.quiet ?? false;
     const level = options.logLevel ?? LogLevel.INFO;
@@ -308,7 +308,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     this.addTrace(
       `$ ${commandDesc} ${args.join(" ")}`,
       TraceType.RESOURCE,
-      LogLevel.VERBOSE
+      LogLevel.VERBOSE,
     );
 
     const child = spawn("docker", [command, ...args], {
@@ -335,11 +335,11 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
 
     if (!quiet) {
       child.stdout.on("data", (data) =>
-        this.addTrace(data.toString(), TraceType.LOG, level)
+        this.addTrace(data.toString(), TraceType.LOG, level),
       );
 
       child.stderr.on("data", (data) =>
-        this.addTrace(data.toString(), TraceType.LOG, level)
+        this.addTrace(data.toString(), TraceType.LOG, level),
       );
     }
 
@@ -366,7 +366,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
           self.addTrace(
             "Sending SIGTERM to container",
             TraceType.RESOURCE,
-            LogLevel.VERBOSE
+            LogLevel.VERBOSE,
           );
 
           // if the process doesn't exit in 2 seconds, kill it
@@ -374,7 +374,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
             self.addTrace(
               `Timeout waiting for container ${self._context?.resourcePath} to shutdown, removing forcefully`,
               TraceType.RESOURCE,
-              LogLevel.WARNING
+              LogLevel.WARNING,
             );
 
             self
@@ -386,7 +386,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
             self.addTrace(
               `Error when shutting down container: ${err.stack ?? err.message}`,
               TraceType.RESOURCE,
-              LogLevel.ERROR
+              LogLevel.ERROR,
             );
 
             clearTimeout(timeout);
@@ -397,7 +397,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
             self.addTrace(
               "Container shutdown successfully",
               TraceType.RESOURCE,
-              LogLevel.VERBOSE
+              LogLevel.VERBOSE,
             );
             clearTimeout(timeout);
             resolve();
@@ -422,7 +422,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
                 self.addTrace(
                   `${message}}\n${allOutput.join("")}`,
                   TraceType.RESOURCE,
-                  LogLevel.VERBOSE
+                  LogLevel.VERBOSE,
                 );
               }
 
@@ -437,7 +437,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   private async saveState(state: StateFileContents): Promise<void> {
     await fs.writeFile(
       join(this.context.statedir, STATE_FILENAME),
-      JSON.stringify(state)
+      JSON.stringify(state),
     );
   }
 

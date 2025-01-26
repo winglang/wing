@@ -23,7 +23,7 @@ test("state can be resolved at any time", async () => {
       env: {
         MY_KEY: token,
       },
-    }
+    },
   );
 
   new OnDeploy(
@@ -34,7 +34,7 @@ test("state can be resolved at any time", async () => {
       .inflight(async (ctx) => {
         console.log(`setting ${ctx.tokenKey}`);
         await ctx.my_state.set(`${ctx.tokenKey}`, "bang bang" as any);
-      })
+      }),
   );
 
   const s = await app.startSimulator();

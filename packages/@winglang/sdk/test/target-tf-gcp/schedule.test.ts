@@ -14,7 +14,7 @@ const GCP_APP_OPTS = {
 };
 
 const CODE_LOG_EVENT = inflight(async (_, event) =>
-  console.log("Received: ", event)
+  console.log("Received: ", event),
 );
 
 test("create a schedule", () => {

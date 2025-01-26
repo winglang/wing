@@ -32,7 +32,7 @@ export abstract class Topic extends cloud.Topic implements IAwsTopic {
   public static _toInflightType(): string {
     return InflightClient.forType(
       __filename.replace("topic", "topic.inflight"),
-      "TopicClient"
+      "TopicClient",
     );
   }
 
@@ -63,7 +63,7 @@ export abstract class Topic extends cloud.Topic implements IAwsTopic {
    */
   public abstract onMessage(
     inflight: ITopicOnMessageHandler,
-    props?: TopicOnMessageOptions
+    props?: TopicOnMessageOptions,
   ): cloud.Function;
 
   /**
@@ -72,7 +72,7 @@ export abstract class Topic extends cloud.Topic implements IAwsTopic {
    */
   public abstract subscribeQueue(
     queue: cloud.Queue,
-    props?: TopicSubscribeQueueOptions
+    props?: TopicSubscribeQueueOptions,
   ): void;
 
   public onLift(host: IInflightHost, ops: string[]): void {
@@ -116,7 +116,7 @@ export class TopicOnMessageHandler {
    * @returns The `cloud.Function` handler.
    */
   public static toFunctionHandler(
-    handler: cloud.ITopicOnMessageHandler
+    handler: cloud.ITopicOnMessageHandler,
   ): cloud.IFunctionHandler {
     return lift({ handler }).inflight(async (ctx, event) => {
       for (const record of (event as any).Records ?? []) {

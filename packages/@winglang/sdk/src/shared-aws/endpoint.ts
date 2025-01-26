@@ -10,7 +10,7 @@ export class Endpoint extends cloud.Endpoint {
   public static _toInflightType(): string {
     return core.InflightClient.forType(
       __filename.replace("endpoint", "endpoint.inflight"),
-      "EndpointClient"
+      "EndpointClient",
     );
   }
 

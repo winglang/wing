@@ -17,7 +17,7 @@ export async function exists(filePath: string): Promise<boolean> {
   try {
     await promisify(access)(
       filePath,
-      constants.F_OK | constants.R_OK | constants.W_OK //eslint-disable-line no-bitwise
+      constants.F_OK | constants.R_OK | constants.W_OK, //eslint-disable-line no-bitwise
     );
     return true;
   } catch (er) {
@@ -27,7 +27,7 @@ export async function exists(filePath: string): Promise<boolean> {
 
 export function makeEnvVarName(
   resource: IConstruct,
-  typeName?: string
+  typeName?: string,
 ): string {
   typeName = typeName ?? resource.constructor.name;
   return `${typeName
@@ -48,12 +48,12 @@ export function simulatorLiftedFieldsFor(resource: IConstruct) {
 export function bindSimulatorResource(
   resource: Resource,
   host: IInflightHost,
-  ops: string[]
+  ops: string[],
 ) {
   // Check if host implements ISimulatorInflightHost
   if (!isSimulatorInflightHost(host)) {
     throw new Error(
-      "Host resource must implement sim.ISimulatorInflightHost to bind simulator resources"
+      "Host resource must implement sim.ISimulatorInflightHost to bind simulator resources",
     );
   }
   const env = makeEnvVarName(resource);
@@ -92,7 +92,7 @@ export function makeSimulatorJsClientType(type: string, methods: string[]) {
   const methodLines = [];
   for (const method of methods) {
     methodLines.push(
-      `async ${method}(...args) { return this.backend.${method}(...args); }`
+      `async ${method}(...args) { return this.backend.${method}(...args); }`,
     );
   }
   return `(function() {
@@ -121,12 +121,12 @@ export function makeSimulatorJsClientType(type: string, methods: string[]) {
  */
 export function makeSimulatorJsClientTypeProxy(
   type: string,
-  methods: string[]
+  methods: string[],
 ) {
   const methodLines = [];
   for (const method of methods) {
     methodLines.push(
-      `async ${method}(...args) { return this.backend.call("${method}", args); }`
+      `async ${method}(...args) { return this.backend.call("${method}", args); }`,
     );
   }
   return `(function() {
@@ -202,7 +202,7 @@ export async function isPortAvailable(port: number): Promise<boolean> {
 
 export async function listenExpress(
   app: Application,
-  port?: number
+  port?: number,
 ): Promise<{ server: Server; address: AddressInfo }> {
   // `server.address()` returns `null` until the server is listening
   // on a port. We use a promise to wait for the server to start

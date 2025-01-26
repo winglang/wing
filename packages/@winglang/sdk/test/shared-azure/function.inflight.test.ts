@@ -46,6 +46,6 @@ test("invoke with unsuccessful response", async () => {
   const client = new FunctionClient({ $functionName: FUNCTION_NAME });
 
   await expect(() =>
-    client.invoke(Json._fromAny(PAYLOAD))
+    client.invoke(Json._fromAny(PAYLOAD)),
   ).rejects.toThrowError(ERROR);
 });

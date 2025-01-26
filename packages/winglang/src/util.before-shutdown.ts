@@ -60,7 +60,7 @@ async function shutdownHandler(codeOrSignal: string | number) {
       console.warn(
         `A shutdown handler failed before completing with: ${
           error instanceof Error ? error.message : error
-        }`
+        }`,
       );
     }
   }

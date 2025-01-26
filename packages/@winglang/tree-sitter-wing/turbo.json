@@ -11,7 +11,7 @@
       "outputs": ["tree-sitter-wing.wasm"]
     },
     "compile": {
-      "dependsOn": ["build:generate"],
+      "dependsOn": ["build:generate", "build:wasm"],
       "inputs": [""]
     },
     "test": {

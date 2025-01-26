@@ -55,7 +55,7 @@ export class Bucket extends cloud.Bucket {
       __filename
         .replace("target-tf-azure", "shared-azure")
         .replace("bucket", "bucket.inflight"),
-      "BucketClient"
+      "BucketClient",
     );
   }
 
@@ -71,7 +71,7 @@ export class Bucket extends cloud.Bucket {
     const app = App.of(this) as App;
     if (app._target !== "tf-azure") {
       throw new Error(
-        `Bucket can only be created in a tf-azure app, got ${app._target}`
+        `Bucket can only be created in a tf-azure app, got ${app._target}`,
       );
     }
 
@@ -79,13 +79,13 @@ export class Bucket extends cloud.Bucket {
 
     const storageContainerName = ResourceNames.generateName(
       this,
-      BUCKET_NAME_OPTS
+      BUCKET_NAME_OPTS,
     );
 
     // name must begin and end with alphanumeric character
     if (storageContainerName.match(/(^\W{1,})|(\W{1,}$)/g)?.length) {
       throw new Error(
-        "Bucket names must begin and end with alphanumeric character."
+        "Bucket names must begin and end with alphanumeric character.",
       );
     }
 
@@ -102,7 +102,7 @@ export class Bucket extends cloud.Bucket {
       "addCorsRule method isn't implemented yet on the current target.",
       {
         resource: this.constructor.name,
-      }
+      },
     );
   }
 
@@ -188,7 +188,7 @@ export class Bucket extends cloud.Bucket {
         issue: "https://github.com/winglang/wing/issues/1954",
         resource: this.constructor.name,
         operation: cloud.BucketEventType.CREATE,
-      }
+      },
     );
   }
 
@@ -204,7 +204,7 @@ export class Bucket extends cloud.Bucket {
         issue: "https://github.com/winglang/wing/issues/1954",
         resource: this.constructor.name,
         operation: cloud.BucketEventType.DELETE,
-      }
+      },
     );
   }
 
@@ -220,7 +220,7 @@ export class Bucket extends cloud.Bucket {
         issue: "https://github.com/winglang/wing/issues/1954",
         resource: this.constructor.name,
         operation: cloud.BucketEventType.UPDATE,
-      }
+      },
     );
   }
 
@@ -236,7 +236,7 @@ export class Bucket extends cloud.Bucket {
         issue: "https://github.com/winglang/wing/issues/1954",
         resource: this.constructor.name,
         operation: "onEvent",
-      }
+      },
     );
   }
 

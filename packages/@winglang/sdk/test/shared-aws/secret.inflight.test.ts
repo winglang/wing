@@ -28,11 +28,11 @@ test("value", async () => {
   // THEN
   expect(secretsManagerClientMock).toHaveReceivedCommandTimes(
     GetSecretValueCommand,
-    1
+    1,
   );
   expect(secretsManagerClientMock).toHaveReceivedCommandWith(
     GetSecretValueCommand,
-    { SecretId: SECRET_ARN }
+    { SecretId: SECRET_ARN },
   );
   expect(secretValue).toBe(SECRET_VALUE);
 });
@@ -55,7 +55,7 @@ test("caches the value", async () => {
   // THEN
   expect(secretsManagerClientMock).toHaveReceivedCommandTimes(
     GetSecretValueCommand,
-    1
+    1,
   );
 });
 
@@ -68,6 +68,6 @@ test("can bypass cache", async () => {
   // THEN
   expect(secretsManagerClientMock).toHaveReceivedCommandTimes(
     GetSecretValueCommand,
-    2
+    2,
   );
 });

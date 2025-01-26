@@ -18,7 +18,7 @@ export class TestRunner extends std.TestRunner {
       __filename
         .replace("target-tf-aws", "shared-aws")
         .replace("test-runner", "test-runner.inflight"),
-      "TestRunnerClient"
+      "TestRunnerClient",
     );
   }
 
@@ -51,7 +51,7 @@ export class TestRunner extends std.TestRunner {
     const testFunctions = this.getTestFunctionArns();
     host.addEnvironment(
       this.envTestFunctionArns(),
-      JSON.stringify([...testFunctions.entries()])
+      JSON.stringify([...testFunctions.entries()]),
     );
 
     super.onLift(host, ops);
@@ -75,7 +75,7 @@ export class TestRunner extends std.TestRunner {
       if (test._fn) {
         if (!(test._fn instanceof AwsFunction)) {
           throw new Error(
-            `Unsupported test function type, ${test._fn.node.path} was not a tfaws.Function`
+            `Unsupported test function type, ${test._fn.node.path} was not a tfaws.Function`,
           );
         }
         arns.set(test.node.path, (test._fn as AwsFunction).functionArn);

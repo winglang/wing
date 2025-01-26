@@ -4,7 +4,7 @@ import { Documentation, Language } from "../../../src";
 describe("wing", () => {
   test("single package", async () => {
     const docs = await Documentation.forProject(
-      path.join(__dirname, "../../__fixtures__/libraries/construct-library")
+      path.join(__dirname, "../../__fixtures__/libraries/construct-library"),
     );
     try {
       const json = await docs.toJson({ language: Language.WING });

@@ -36,7 +36,7 @@ export class QueueClient implements IAwsQueueClient {
           throw new Error(
             `The message contains characters outside the allowed set (message=${message}): ${
               (e as Error).stack
-            })}`
+            })}`,
           );
         }
         throw new Error((e as Error).stack);
@@ -57,7 +57,7 @@ export class QueueClient implements IAwsQueueClient {
         const queueName = arnParts[arnParts.length - 1].split("/").pop();
         if (!queueName) {
           throw new Error(
-            `Unable to extract queue name from ARN: ${this._queueUrlOrArn}`
+            `Unable to extract queue name from ARN: ${this._queueUrlOrArn}`,
           );
         }
 
@@ -65,7 +65,7 @@ export class QueueClient implements IAwsQueueClient {
         const data = await this.client.send(command);
         if (!data.QueueUrl) {
           throw new Error(
-            `Unable to resolve queue URL from SQS queue ARN: ${this._queueUrlOrArn}`
+            `Unable to resolve queue URL from SQS queue ARN: ${this._queueUrlOrArn}`,
           );
         }
 
@@ -113,8 +113,8 @@ export class QueueClient implements IAwsQueueClient {
     } else {
       console.warn(
         `No receipt handle found, message not deleted. Message: ${JSON.stringify(
-          message
-        )}`
+          message,
+        )}`,
       );
     }
 

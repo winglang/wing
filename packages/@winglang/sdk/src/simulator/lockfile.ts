@@ -23,7 +23,7 @@ export interface LockfileProps {
    */
   readonly onCompromised?: (
     reason: string,
-    error?: unknown
+    error?: unknown,
   ) => void | Promise<void>;
 }
 
@@ -35,7 +35,7 @@ export class Lockfile {
   private compromised = false;
   private onCompromised?: (
     reason: string,
-    error?: unknown
+    error?: unknown,
   ) => void | Promise<void>;
 
   public constructor(props: LockfileProps) {
@@ -74,7 +74,7 @@ export class Lockfile {
     } catch (error) {
       if (isNodeError(error) && error.code === "EEXIST") {
         throw new Error(
-          "Another instance of the simulator is already running on the same state directory."
+          "Another instance of the simulator is already running on the same state directory.",
         );
       }
       throw error;

@@ -197,7 +197,7 @@ describe("match", () => {
     }).toThrow(
       new nodeAssert.AssertionError({
         message: 'The input "abc" did not match the regular expression def',
-      })
+      }),
     );
   });
 });
@@ -209,7 +209,7 @@ describe("does not match", () => {
     }).toThrow(
       new nodeAssert.AssertionError({
         message: "The input should not match the regular expression abc",
-      })
+      }),
     );
   });
 

@@ -33,19 +33,19 @@ export class CounterClient implements ICounterClient {
 
     const credentials = new AzureNamedKeyCredential(
       this.storageAccountName,
-      process.env[this.accountKeyVariable] as string
+      process.env[this.accountKeyVariable] as string,
     );
 
     this.client = new TableClient(
       `https://${this.storageAccountName}.table.core.windows.net`,
       this.storageTableName,
-      credentials
+      credentials,
     );
   }
 
   public async inc(
     amount: number = 1,
-    key: string = COUNTER_ID
+    key: string = COUNTER_ID,
   ): Promise<number> {
     const entity = await this._getEntity(key);
     const currentValue = (entity?.counterValue as number) ?? this.initial;
@@ -68,7 +68,7 @@ export class CounterClient implements ICounterClient {
   }
 
   private async _getEntity(
-    key: string
+    key: string,
   ): Promise<Record<string, unknown> | undefined> {
     try {
       return await this.client.getEntity(PARTITION_KEY, key);

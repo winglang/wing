@@ -36,7 +36,7 @@ export interface Bundle {
 export function createBundle(
   entrypoint: string,
   external: string[] = [],
-  outputDir?: string
+  outputDir?: string,
 ): Bundle {
   const normalEntrypoint = normalPath(realpathSync(entrypoint));
   const outdir = outputDir
@@ -101,7 +101,7 @@ export function createBundle(
 
   // ensure source paths have posix path separators
   const sourcemapData = JSON.parse(
-    new TextDecoder().decode(esbuild.outputFiles[0].contents)
+    new TextDecoder().decode(esbuild.outputFiles[0].contents),
   );
   fixSourcemaps(sourcemapData);
 
@@ -232,10 +232,10 @@ export function fixSourcemaps(sourcemapData: SourceMap): void {
 export async function filesModifiedSince(
   filePaths: string[],
   directory: string,
-  dateTime: Date
+  dateTime: Date,
 ): Promise<string[]> {
   const absolutePaths = filePaths.map((filePath) =>
-    resolve(directory, filePath)
+    resolve(directory, filePath),
   );
 
   try {
@@ -248,7 +248,7 @@ export async function filesModifiedSince(
         console.error(
           `File ${absolutePaths[i]} has been modified since the last bundle`,
           stats[i].mtime,
-          dateTime
+          dateTime,
         );
         changedFiles.push(absolutePaths[i]);
       }
@@ -264,12 +264,12 @@ export async function filesModifiedSince(
 export async function isBundleInvalidated(
   entrypoint: string,
   bundle: Bundle,
-  log?: (msg: string) => void
+  log?: (msg: string) => void,
 ): Promise<boolean> {
   const modifiedFiles = await filesModifiedSince(
     [entrypoint, ...bundle.inputFiles],
     process.cwd(),
-    bundle.time
+    bundle.time,
   );
   if (modifiedFiles.length === 0) {
     return false;
@@ -279,7 +279,7 @@ export async function isBundleInvalidated(
     log?.(
       `Files modified since last bundling: [${modifiedFiles
         .map((x) => `"${x}"`)
-        .join(", ")}]`
+        .join(", ")}]`,
     );
   }
 

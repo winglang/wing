@@ -20,7 +20,7 @@ const formatStructInitialization = (type: transpile.TranspiledType) => {
 
 const formatClassInitialization = (
   type: transpile.TranspiledType,
-  inputs: string[]
+  inputs: string[],
 ) => {
   const target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
   return `new ${target}(${formatArguments(inputs)})`;
@@ -29,7 +29,7 @@ const formatClassInitialization = (
 const formatInvocation = (
   type: transpile.TranspiledType,
   inputs: string[],
-  method: string
+  method: string,
 ) => {
   let target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
   if (method) {
@@ -137,7 +137,7 @@ export class TypeScriptTranspile extends transpile.TranspileBase {
   }
 
   public parameter(
-    parameter: reflect.Parameter
+    parameter: reflect.Parameter,
   ): transpile.TranspiledParameter {
     const typeRef = this.typeReference(parameter.type);
     return {
@@ -164,7 +164,7 @@ export class TypeScriptTranspile extends transpile.TranspileBase {
     const parameters = callable.parameters.sort(this.optionalityCompare);
     const name = callable.name;
     const inputs = parameters.map((p) =>
-      this.formatParameters(this.parameter(p))
+      this.formatParameters(this.parameter(p)),
     );
 
     const invocation = reflect.Initializer.isInitializer(callable)
@@ -193,7 +193,7 @@ export class TypeScriptTranspile extends transpile.TranspileBase {
   }
 
   public interface(
-    iface: reflect.InterfaceType
+    iface: reflect.InterfaceType,
   ): transpile.TranspiledInterface {
     return {
       name: iface.name,
@@ -225,7 +225,7 @@ export class TypeScriptTranspile extends transpile.TranspileBase {
   }
 
   public moduleLike(
-    moduleLike: reflect.ModuleLike
+    moduleLike: reflect.ModuleLike,
   ): transpile.TranspiledModuleLike {
     if (moduleLike instanceof reflect.Submodule) {
       const fqnParts = moduleLike.fqn.split(".");
@@ -235,7 +235,7 @@ export class TypeScriptTranspile extends transpile.TranspileBase {
   }
 
   private formatParameters(
-    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty
+    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty,
   ): string {
     const tf = transpiled.typeReference.toString({
       typeFormatter: (t) => t.name,
@@ -245,7 +245,7 @@ export class TypeScriptTranspile extends transpile.TranspileBase {
 
   private formatProperty(
     name: string,
-    typeReference: transpile.TranspiledTypeReference
+    typeReference: transpile.TranspiledTypeReference,
   ): string {
     const tf = typeReference.toString({
       typeFormatter: (t) => t.name,

@@ -231,7 +231,7 @@ export abstract class Resource extends Construct implements IResource {
 function addConnectionsFromLiftMap(
   construct: IConstruct,
   liftData: LiftMap,
-  baseOp?: string
+  baseOp?: string,
 ) {
   for (const [op, liftEntries] of Object.entries(liftData)) {
     for (const [dep, depOps] of liftEntries) {

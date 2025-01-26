@@ -37,7 +37,7 @@ export async function main() {
     })
     .example(
       "$0",
-      "Generate documentation for the current module as a single file (auto-resolves node depedencies)"
+      "Generate documentation for the current module as a single file (auto-resolves node depedencies)",
     ).argv;
 
   const language = Language.fromString(args.language);

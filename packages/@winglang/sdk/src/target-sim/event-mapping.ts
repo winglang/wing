@@ -30,7 +30,7 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
    */
   addEventSubscription: (
     subscriber: ResourceHandle,
-    subscriptionProps: EventSubscription
+    subscriptionProps: EventSubscription,
   ) => Promise<void>;
 
   /**

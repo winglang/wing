@@ -40,7 +40,7 @@ export class Counter extends cloud.Counter {
       __filename
         .replace("target-tf-gcp", "shared-gcp")
         .replace("counter", "counter.inflight"),
-      "CounterClient"
+      "CounterClient",
     );
   }
 

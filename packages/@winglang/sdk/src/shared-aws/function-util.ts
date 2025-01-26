@@ -1,7 +1,7 @@
 import * as cloud from "../cloud";
 
 export function makeAwsLambdaHandler(
-  handler: cloud.IFunctionHandler
+  handler: cloud.IFunctionHandler,
 ): string[] {
   const inflightClient = handler._toInflight();
   const lines = new Array<string>();
@@ -23,7 +23,7 @@ export function makeAwsLambdaHandler(
   // important: we're calling handle() within a try block, but there's no catch block
   // because we want to let the error propagate to the AWS Lambda runtime
   lines.push(
-    `    return await ${client}.handle(event === null ? undefined : event);`
+    `    return await ${client}.handle(event === null ? undefined : event);`,
   );
   lines.push("  } finally {");
   lines.push("    globalThis.$awsLambdaContext = undefined;");

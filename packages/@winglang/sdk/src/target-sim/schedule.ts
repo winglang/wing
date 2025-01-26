@@ -40,14 +40,14 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props: cloud.ScheduleOnTickOptions = {}
+    props: cloud.ScheduleOnTickOptions = {},
   ): cloud.Function {
     const functionHandler = ScheduleOnTickHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnTick"),
       functionHandler,
-      props
+      props,
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "Tick";
@@ -101,7 +101,7 @@ export class ScheduleOnTickHandler {
    * @returns the function handler
    */
   public static toFunctionHandler(
-    handler: cloud.IScheduleOnTickHandler
+    handler: cloud.IScheduleOnTickHandler,
   ): cloud.IFunctionHandler {
     return lift({ handler }).inflight(async (ctx) => {
       await ctx.handler();

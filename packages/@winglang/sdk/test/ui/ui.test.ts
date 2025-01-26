@@ -20,13 +20,13 @@ test("can obtain ui components", async () => {
         this,
         "Button",
         "Button Label",
-        inflight(async () => "button worked")
+        inflight(async () => "button worked"),
       );
       const field = new ui.Field(
         this,
         "Field",
         "Field Label",
-        inflight(async () => "field worked")
+        inflight(async () => "field worked"),
       );
       section.add(button, field);
     }
@@ -36,10 +36,10 @@ test("can obtain ui components", async () => {
   // WHEN
   const s = await app.startSimulator();
   const buttonClient = s.getResource(
-    "/MyClass/Button/Handler"
+    "/MyClass/Button/Handler",
   ) as cloud.IFunctionClient;
   const fieldClient = s.getResource(
-    "/MyClass/Field/Handler"
+    "/MyClass/Field/Handler",
   ) as cloud.IFunctionClient;
 
   // WHEN

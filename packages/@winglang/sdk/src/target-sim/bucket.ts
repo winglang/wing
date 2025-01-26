@@ -83,14 +83,14 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   protected createTopicHandler(
     eventType: cloud.BucketEventType,
-    inflight: cloud.IBucketEventHandler
+    inflight: cloud.IBucketEventHandler,
   ): cloud.ITopicOnMessageHandler {
     return BucketEventHandler.toTopicOnMessageHandler(inflight, eventType);
   }
 
   public onCreate(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnCreateOptions | undefined
+    opts?: cloud.BucketOnCreateOptions | undefined,
   ): void {
     super.onCreate(fn, opts);
     const topic = this.getTopic(cloud.BucketEventType.CREATE);
@@ -99,7 +99,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   public onDelete(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnDeleteOptions | undefined
+    opts?: cloud.BucketOnDeleteOptions | undefined,
   ): void {
     super.onDelete(fn, opts);
     const topic = this.getTopic(cloud.BucketEventType.DELETE);
@@ -108,7 +108,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   public onUpdate(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnUpdateOptions | undefined
+    opts?: cloud.BucketOnUpdateOptions | undefined,
   ): void {
     super.onUpdate(fn, opts);
     const topic = this.getTopic(cloud.BucketEventType.UPDATE);
@@ -117,7 +117,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   public onEvent(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnEventOptions
+    opts?: cloud.BucketOnEventOptions,
   ): void {
     super.onEvent(fn, opts);
     const createTopic = this.getTopic(cloud.BucketEventType.CREATE);
@@ -164,7 +164,7 @@ export class BucketEventHandler {
    */
   public static toTopicOnMessageHandler(
     handler: cloud.IBucketEventHandler,
-    eventType: cloud.BucketEventType
+    eventType: cloud.BucketEventType,
   ): cloud.ITopicOnMessageHandler {
     return lift({ handler, eventType }).inflight(async (ctx, event) => {
       return ctx.handler(event, ctx.eventType);

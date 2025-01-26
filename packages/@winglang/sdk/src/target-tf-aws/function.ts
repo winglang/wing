@@ -78,13 +78,13 @@ export class Function extends AwsFunction {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps = {}
+    props: cloud.FunctionProps = {},
   ) {
     super(scope, id, inflight, props);
 
     if (props.concurrency != null) {
       throw new NotImplementedError(
-        "Function concurrency isn't implemented yet on the current target."
+        "Function concurrency isn't implemented yet on the current target.",
       );
     }
 
@@ -178,7 +178,7 @@ export class Function extends AwsFunction {
     // validate memory size
     if (props.memory && (props.memory < 128 || props.memory > 10240)) {
       throw new Error(
-        "Memory for AWS Lambda function should be in between 128 and 10240"
+        "Memory for AWS Lambda function should be in between 128 and 10240",
       );
     }
 
@@ -349,7 +349,7 @@ export class Function extends AwsFunction {
     source: Resource,
     principal: string,
     sourceArn: string,
-    options: FunctionPermissionsOptions = { qualifier: this.function.version }
+    options: FunctionPermissionsOptions = { qualifier: this.function.version },
   ): void {
     this.permissions = new LambdaPermission(
       this,
@@ -360,7 +360,7 @@ export class Function extends AwsFunction {
         principal: principal,
         sourceArn: sourceArn,
         ...options,
-      }
+      },
     );
   }
 

@@ -226,7 +226,7 @@ export class Node {
    * Return this construct and all of its children in the given order
    */
   public findAll(
-    order: ConstructOrder = ConstructOrder.PREORDER
+    order: ConstructOrder = ConstructOrder.PREORDER,
   ): IConstruct[] {
     return this._constructsNode.findAll(order);
   }
@@ -287,7 +287,7 @@ export class Node {
   public addMetadata(
     type: string,
     data: any,
-    options: MetadataOptions = {}
+    options: MetadataOptions = {},
   ): void {
     this._constructsNode.addMetadata(type, data, options);
   }

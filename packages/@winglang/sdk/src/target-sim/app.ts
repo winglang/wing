@@ -243,7 +243,7 @@ export class App extends core.App {
     fs.writeFileSync(
       path.join(outdir, SIMULATOR_FILE_PATH),
       JSON.stringify(contents, undefined, 2),
-      { encoding: "utf8" }
+      { encoding: "utf8" },
     );
 
     return contents;

@@ -8,11 +8,11 @@ export class InstanceMethod {
   private readonly parameters: Parameter[];
   constructor(
     private readonly transpile: Transpile,
-    private readonly method: reflect.Method
+    private readonly method: reflect.Method,
   ) {
     this.transpiled = transpile.callable(method);
     this.parameters = this.transpiled.parameters.map(
-      (p) => new Parameter(this.transpile, p)
+      (p) => new Parameter(this.transpile, p),
     );
   }
 

@@ -34,7 +34,7 @@ export class Section extends VisualComponent {
   public static _newSection(
     scope: Construct,
     id: string,
-    props: SectionProps = {}
+    props: SectionProps = {},
   ): Section {
     return Resource._newFromFactory(SECTION_FQN, scope, id, props);
   }
@@ -59,7 +59,7 @@ export class Section extends VisualComponent {
     for (const component of components) {
       if (component._newParent !== undefined) {
         throw new Error(
-          `Cannot add ${component.node.path} to ${this.node.path} because it already belongs to ${component._newParent}.`
+          `Cannot add ${component.node.path} to ${this.node.path} because it already belongs to ${component._newParent}.`,
         );
       }
       component._newParent = this.node.path;
@@ -81,7 +81,7 @@ export class Section extends VisualComponent {
   public addField(
     label: string,
     handler: IFieldHandler,
-    props: FieldProps = {}
+    props: FieldProps = {},
   ): void {
     const id = `Field-${this.fieldIdx++}`;
     this.add(new Field(this, id, label, handler, props));

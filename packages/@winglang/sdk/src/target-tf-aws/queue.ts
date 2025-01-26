@@ -57,7 +57,7 @@ export class Queue extends AwsQueue {
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
-    props: cloud.QueueSetConsumerOptions = {}
+    props: cloud.QueueSetConsumerOptions = {},
   ): cloud.Function {
     const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
     const fn = new Function(
@@ -68,9 +68,9 @@ export class Queue extends AwsQueue {
       {
         ...props,
         timeout: Duration.fromSeconds(
-          this.queue.visibilityTimeoutSeconds ?? 30
+          this.queue.visibilityTimeoutSeconds ?? 30,
         ),
-      }
+      },
     );
 
     if (!AwsInflightHost.isAwsInflightHost(fn)) {

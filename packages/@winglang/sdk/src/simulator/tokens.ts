@@ -68,7 +68,7 @@ export function resolveTokens(obj: any, resolver: TokenResolver): any {
         throw new Error(
           `Expected token "${
             match[0]
-          }" to resolve to a string, but it resolved to ${typeof value}.`
+          }" to resolve to a string, but it resolved to ${typeof value}.`,
         );
       }
 
