@@ -274,7 +274,7 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
     console.error(
       `An error occurred while loading the custom platform: ${customPlatformPath}\n\n(hint: ${hint})\n${
         (error as any).stack
-      }`
+      }`,
     );
   }
 }

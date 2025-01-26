@@ -33,7 +33,7 @@ export class TerraformTestHarness implements ITestHarness {
     const installed = tfVersion.stdout.startsWith("Terraform v");
     if (!installed) {
       throw new Error(
-        "Terraform is not installed. Please install Terraform to run tests in the cloud."
+        "Terraform is not installed. Please install Terraform to run tests in the cloud.",
       );
     }
 
@@ -47,7 +47,7 @@ export class TerraformTestHarness implements ITestHarness {
     const testArns = parsed[WING_TEST_RUNNER_FUNCTION_IDENTIFIERS]?.value;
     if (!testArns) {
       throw new Error(
-        `terraform output ${WING_TEST_RUNNER_FUNCTION_IDENTIFIERS} not found`
+        `terraform output ${WING_TEST_RUNNER_FUNCTION_IDENTIFIERS} not found`,
       );
     }
 
