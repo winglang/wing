@@ -239,17 +239,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Docker
+      - name: Setup Docker on macOS
         if: runner.os == 'macOS'
-        run: |
-          brew install --cask docker
-          open --background -a Docker
-          sleep 30  # Give Docker some time to start
-          until docker info > /dev/null 2>&1; do
-            echo "Waiting for Docker to start..."
-            sleep 5
-          done
-          echo "Docker is ready"
+        uses: douglascamata/setup-docker-macos-action@v1-alpha
 
       - name: Verify Docker installation
         run: docker version
