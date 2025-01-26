@@ -1,20 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`access_hidden_namespace.test.w 1`] = `
-"Error: error: Unknown symbol "core"
+"error: Unknown symbol "core"
   --> ../../../tests/invalid/access_hidden_namespace.test.w:7:5
   |
 7 | new core.NodeJsCode("<ABSOLUTE>/test.txt"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
   |     ^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -23,7 +14,7 @@ Duration <DURATION>"
 `;
 
 exports[`access_modifiers.test.w 1`] = `
-"Error: error: Method "private_method" is private in "Foo" but it's an implementation of "SomeInterface". Interface members must be public.
+"error: Method "private_method" is private in "Foo" but it's an implementation of "SomeInterface". Interface members must be public.
    --> ../../../tests/invalid/access_modifiers.test.w:49:3
    |
 49 |   private_method() {}
@@ -295,15 +286,6 @@ error: Cannot access private member "private_static_method" of "Foo"
     |         ^^^^^^^^^^^^^^^^^^^^^
     |
     = hint: the definition of "private_static_method" needs a broader access modifier like "pub" or "protected" to be used outside of "Foo"
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -312,7 +294,7 @@ Duration <DURATION>"
 `;
 
 exports[`access_private_apis.test.w 1`] = `
-"Error: error: Class "subdir2.MyPrivateClass" is private
+"error: Class "subdir2.MyPrivateClass" is private
   --> ../../../tests/invalid/access_private_apis.test.w:3:5
   |
 3 | new subdir2.MyPrivateClass();
@@ -372,15 +354,6 @@ error: Expected identifier "subdir2" to be a variable, but it's a namespace
    |
 17 | let e = subdir2.MyPrivateEnum.A;
    |         ^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -389,7 +362,7 @@ Duration <DURATION>"
 `;
 
 exports[`access_static_from_instance.test.w 1`] = `
-"Error: error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
+"error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../tests/invalid/access_static_from_instance.test.w:4:3
   |
 4 |   pub static f: num;
@@ -422,15 +395,6 @@ error: Member "f" does not exist in "Construct"
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
   |          ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -440,16 +404,13 @@ Duration <DURATION>"
 
 exports[`ambiguous_api_paths.test.w 1`] = `
 "Error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
-    at Api._addToSpec (<ABSOLUTE>:LINE:COL)
-    at Api.addEndpoint (<ABSOLUTE>:LINE:COL)
-    at Api.get (<ABSOLUTE>:LINE:COL)
-    at new $Root (<ABSOLUTE>:LINE:COL)
-    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
-    at new App (<ABSOLUTE>:LINE:COL)
-    at newApp (<ABSOLUTE>:LINE:COL)
-    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
-    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
-    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+   --> ../../../tests/invalid/ambiguous_api_paths.test.w:12:1
+   | };
+   | 
+   | api.get("<ABSOLUTE>/path", handler);
+12 | api.get("<ABSOLUTE>/:variable", handler);
+   | ^
+at <ABSOLUTE>/ambiguous_api_paths.test.w:12:1
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -458,7 +419,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring.test.w 1`] = `
-"Error: error: Expected module specification (see https://www.winglang.io/docs/libraries)
+"error: Expected module specification (see https://www.winglang.io/docs/libraries)
   --> ../../../tests/invalid/bring.test.w:6:7
   |
 6 | bring ;
@@ -498,15 +459,6 @@ error: "cloud" is already defined
   |
 4 | bring cloud;
   |       ^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -515,7 +467,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_invalid_dir.w 1`] = `
-"Error: error: Cannot explicitly bring directory with no Wing files "no_wing_files"
+"error: Cannot explicitly bring directory with no Wing files "no_wing_files"
   --> ../../../tests/invalid/bring_invalid_dir.w:4:7
   |
 4 | bring "./subdir3/no_wing_files" as whatchaGonnaBring;
@@ -538,15 +490,6 @@ error: Cannot bring Wing directories that contain sub-directories with invalid c
   |       ^^^^^^^^^^^
   |
   = hint: Directory names must start with a letter or underscore and contain only letters, numbers, and underscores.
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -555,7 +498,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_jsii.test.w 1`] = `
-"Error: error: bring "jsii-code-samples" must be assigned to an identifier (e.g. bring "foo" as foo)
+"error: bring "jsii-code-samples" must be assigned to an identifier (e.g. bring "foo" as foo)
   --> ../../../tests/invalid/bring_jsii.test.w:1:1
   |
 1 | bring "jsii-code-samples";
@@ -567,15 +510,6 @@ error: Unable to load "foobar": Module not found in "<ABSOLUTE>/bring_jsii.test.
   |
 4 | bring "foobar" as baz;
   | ^^^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -584,7 +518,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_dir.test.w 1`] = `
-"Error: error: Cannot bring "/subdir" since it is not a relative path
+"error: Cannot bring "/subdir" since it is not a relative path
   --> ../../../tests/invalid/bring_local_dir.test.w:4:7
   |
 4 | bring "/subdir" as baz;
@@ -603,15 +537,6 @@ error: Symbol "Foo" has multiple definitions in "<ABSOLUTE>/inner"
   |
 1 | bring "./subdir" as subdir;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -620,7 +545,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_self.test.w 1`] = `
-"Error: error: Cannot find module "./bring_local_self.main.w"
+"error: Cannot find module "./bring_local_self.main.w"
   --> ../../../tests/invalid/bring_local_self.test.w:1:7
   |
 1 | bring "./bring_local_self.main.w" as foo;
@@ -646,15 +571,6 @@ error: Cannot bring module "./bring_local_dir.test.w" since it is an entrypoint 
    |
 10 | bring "./bring_local_dir.test.w" as qux;
    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -663,7 +579,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_variables.test.w 1`] = `
-"Error: error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
+"error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../tests/invalid/file_with_variables.w:5:1
   |
 5 | let x = 5;
@@ -689,15 +605,6 @@ error: Preflight field "x" is not initialized
    |
 10 |   x: num;
    |   ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -706,7 +613,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_non_std_construct.test.w 1`] = `
-"Error: error: Expected 2 positional argument(s) or named arguments for the last parameter but got 0
+"error: Expected 2 positional argument(s) or named arguments for the last parameter but got 0
   --> ../../../tests/invalid/bring_non_std_construct.test.w:8:1
   |
 8 | new cdktf.S3Backend();
@@ -725,15 +632,6 @@ error: Cannot set scope of non-standard preflight class "S3Backend" using \`in\`
    |
 15 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: "foo", key: "bar"}) in this;
    |                                                                                     ^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -742,7 +640,7 @@ Duration <DURATION>"
 `;
 
 exports[`bypass_return.test.w 1`] = `
-"Error: error: Expected type to be "num", but got "str" instead
+"error: Expected type to be "num", but got "str" instead
   --> ../../../tests/invalid/bypass_return.test.w:2:12
   |
 2 |     return "a";
@@ -768,15 +666,6 @@ error: Expected type to be "num", but got "str" instead
    |
 20 |     return "a";
    |            ^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -785,7 +674,7 @@ Duration <DURATION>"
 `;
 
 exports[`call_inflight_from_preflight.test.w 1`] = `
-"Error: error: Cannot call into inflight phase while preflight
+"error: Cannot call into inflight phase while preflight
   --> ../../../tests/invalid/call_inflight_from_preflight.test.w:4:1
   |
 4 | util.sleep(1s);
@@ -797,15 +686,6 @@ error: Cannot call into inflight phase while preflight
    |
 12 | foo.do();
    | ^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -814,7 +694,7 @@ Duration <DURATION>"
 `;
 
 exports[`capture_redefinition.test.w 1`] = `
-"Error: error: Cannot access "y" because it is shadowed by another symbol with the same name
+"error: Cannot access "y" because it is shadowed by another symbol with the same name
   --> ../../../tests/invalid/capture_redefinition.test.w:5:7
   |
 5 |   log(y);
@@ -833,15 +713,6 @@ error: Cannot access "x" because it is shadowed by another symbol with the same 
    |
 22 |   log(x);
    |       ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -850,7 +721,7 @@ Duration <DURATION>"
 `;
 
 exports[`class.test.w 1`] = `
-"Error: error: Reserved method name. Constructors are declared with a method named "new"
+"error: Reserved method name. Constructors are declared with a method named "new"
     --> ../../../tests/invalid/class.test.w:171:3
     |
 171 |   constructor() {
@@ -1202,15 +1073,6 @@ error: internal class "InternalClass" must be declared at the top-level of the f
     |
 235 |   internal class InternalClass {
     |                  ^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1219,7 +1081,7 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"Error: error: Expected type to be "inflight (event: Json?): Json?", but got "preflight (name: Json?): Json?" instead
+"error: Expected type to be "inflight (event: Json?): Json?", but got "preflight (name: Json?): Json?" instead
   --> ../../../tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: Json?): Json? => {
@@ -1240,15 +1102,6 @@ error: Expected type to be "inflight (message: str): void", but got "inflight (x
 11 | |   return;
 12 | | });
    | \\-^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1257,7 +1110,7 @@ Duration <DURATION>"
 `;
 
 exports[`constructs.test.w 1`] = `
-"Error: error: Member "node" does not exist in "A"
+"error: Member "node" does not exist in "A"
   --> ../../../tests/invalid/constructs.test.w:5:10
   |
 5 |     this.node.hidden;
@@ -1273,15 +1126,6 @@ error: Member "node" does not exist in "IConstruct"
    |                       ^^^^
    |
    = hint: use nodeof(x) to access the tree node on a preflight class
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1290,7 +1134,7 @@ Duration <DURATION>"
 `;
 
 exports[`container_types.test.w 1`] = `
-"Error: error: Unknown parser error
+"error: Unknown parser error
    --> ../../../tests/invalid/container_types.test.w:14:25
    |
 14 | let m2: Map<num> = ["a" => 1, "b" => "2", "c" => 3];
@@ -1470,15 +1314,6 @@ error: Member "copyMut" does not exist in "MutSet"
    |
 46 | let ss4 = ss3.copyMut();
    |               ^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1487,7 +1322,7 @@ Duration <DURATION>"
 `;
 
 exports[`ctor_super.test.w 1`] = `
-"Error: error: Missing super() call in PreflighChild1's constructor
+"error: Missing super() call in PreflighChild1's constructor
   --> ../../../tests/invalid/ctor_super.test.w:9:7
   |
 9 | class PreflighChild1 extends PreflightBaseWithCtorParam {}
@@ -1562,15 +1397,6 @@ error: Expected 1 positional argument(s) but got 0
    |
 65 |       super();
    |       ^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1579,7 +1405,7 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring1.w 1`] = `
-"Error: error: Could not compile "<ABSOLUTE>/cyclic_bring1.w" due to cyclic bring statements:
+"error: Could not compile "<ABSOLUTE>/cyclic_bring1.w" due to cyclic bring statements:
 - <ABSOLUTE>/cyclic_bring3.w
 - <ABSOLUTE>/cyclic_bring2.w
 - <ABSOLUTE>/cyclic_bring1.w
@@ -1597,15 +1423,6 @@ error: Could not type check "<ABSOLUTE>/cyclic_bring3.w" due to cyclic bring sta
   |
 1 | bring "./cyclic_bring3.w" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1614,7 +1431,7 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring2.w 1`] = `
-"Error: error: Could not compile "<ABSOLUTE>/cyclic_bring2.w" due to cyclic bring statements:
+"error: Could not compile "<ABSOLUTE>/cyclic_bring2.w" due to cyclic bring statements:
 - <ABSOLUTE>/cyclic_bring1.w
 - <ABSOLUTE>/cyclic_bring3.w
 - <ABSOLUTE>/cyclic_bring2.w
@@ -1632,15 +1449,6 @@ error: Could not type check "<ABSOLUTE>/cyclic_bring1.w" due to cyclic bring sta
   |
 1 | bring "./cyclic_bring1.w" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1649,7 +1457,7 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring3.w 1`] = `
-"Error: error: Could not compile "<ABSOLUTE>/cyclic_bring3.w" due to cyclic bring statements:
+"error: Could not compile "<ABSOLUTE>/cyclic_bring3.w" due to cyclic bring statements:
 - <ABSOLUTE>/cyclic_bring2.w
 - <ABSOLUTE>/cyclic_bring1.w
 - <ABSOLUTE>/cyclic_bring3.w
@@ -1667,15 +1475,6 @@ error: Could not type check "<ABSOLUTE>/cyclic_bring2.w" due to cyclic bring sta
   |
 1 | bring "./cyclic_bring2.w" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1684,20 +1483,11 @@ Duration <DURATION>"
 `;
 
 exports[`diags_with_multibyte_chars.test.w 1`] = `
-"Error: error: Unknown symbol "asdf"
+"error: Unknown symbol "asdf"
   --> ../../../tests/invalid/diags_with_multibyte_chars.test.w:4:1
   |
 4 | asdf;
   | ^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1706,7 +1496,7 @@ Duration <DURATION>"
 `;
 
 exports[`enums.test.w 1`] = `
-"Error: error: Enum "SomeEnum" does not contain value "FOUR"
+"error: Enum "SomeEnum" does not contain value "FOUR"
   --> ../../../tests/invalid/enums.test.w:5:21
   |
 5 | let four = SomeEnum.FOUR;
@@ -1725,15 +1515,6 @@ error: enum "AnotherEnum" must be declared at the top-level of the file
    |
 12 |   enum AnotherEnum {
    |        ^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1742,7 +1523,7 @@ Duration <DURATION>"
 `;
 
 exports[`equality.test.w 1`] = `
-"Error: error: Expected type to be "Array<num>", but got "Array<str>" instead
+"error: Expected type to be "Array<num>", but got "Array<str>" instead
   --> ../../../tests/invalid/equality.test.w:8:8
   |
 8 | assert([1,2] == ["a", "b"]);
@@ -1847,15 +1628,6 @@ error: Expected type to be "MutSet<bool>", but got "Set<num>" instead
    |
 72 | assert(e1 == e2);
    |        ^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1864,7 +1636,7 @@ Duration <DURATION>"
 `;
 
 exports[`explicit_lift_qualification.test.w 1`] = `
-"Error: error: Lift blocks are only allowed in inflight code blocks
+"error: Lift blocks are only allowed in inflight code blocks
    --> ../../../tests/invalid/explicit_lift_qualification.test.w:11:5
    |
 11 |     lift {bucket: [put]}{} // Lift statment in preflight method
@@ -1975,15 +1747,6 @@ error: Expression of type "IPreflightInterface" references an unknown preflight 
    |
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -1992,20 +1755,11 @@ Duration <DURATION>"
 `;
 
 exports[`extern.test.w 1`] = `
-"Error: error: File not found: "./sad.js"
+"error: File not found: "./sad.js"
   --> ../../../tests/invalid/extern.test.w:2:3
   |
 2 |   extern "./sad.js" static getNum(): num;
   |   ^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2014,20 +1768,11 @@ Duration <DURATION>"
 `;
 
 exports[`extern_static.test.w 1`] = `
-"Error: error: Extern methods must be declared "static" (they cannot access instance members)
+"error: Extern methods must be declared "static" (they cannot access instance members)
   --> ../../../tests/invalid/extern_static.test.w:2:45
   |
 2 |   extern "../valid/external_ts.ts" inflight getGreeting(name: str): str;
   |                                             ^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2036,7 +1781,7 @@ Duration <DURATION>"
 `;
 
 exports[`file_with_variables.w 1`] = `
-"Error: error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
+"error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../tests/invalid/file_with_variables.w:5:1
   |
 5 | let x = 5;
@@ -2062,15 +1807,6 @@ error: Preflight field "x" is not initialized
    |
 10 |   x: num;
    |   ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2079,7 +1815,7 @@ Duration <DURATION>"
 `;
 
 exports[`for_loop.test.w 1`] = `
-"Error: error: Reserved word
+"error: Reserved word
   --> ../../../tests/invalid/for_loop.test.w:5:5
   |
 5 | for test in bucket {
@@ -2091,15 +1827,6 @@ error: Unable to iterate over "Bucket"
   |
 5 | for test in bucket {
   |             ^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2108,7 +1835,7 @@ Duration <DURATION>"
 `;
 
 exports[`function_call_arity.test.w 1`] = `
-"Error: error: Positional arguments must come before named arguments
+"error: Positional arguments must come before named arguments
    --> ../../../tests/invalid/function_call_arity.test.w:31:61
    |
 31 | invalidCombinationFunc2(1, 2, prefix: "debug", priority: 0, "hello", "world");
@@ -2197,15 +1924,6 @@ error: Expected type to be "Options", but got "str" instead
    |
 31 | invalidCombinationFunc2(1, 2, prefix: "debug", priority: 0, "hello", "world");
    |                                                             ^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2214,7 +1932,7 @@ Duration <DURATION>"
 `;
 
 exports[`function_call_variadic.test.w 1`] = `
-"Error: error: Expected type to be "str", but got "num" instead
+"error: Expected type to be "str", but got "num" instead
   --> ../../../tests/invalid/function_call_variadic.test.w:3:6
   |
 3 | func(1, 2, 3); // should fail due to wrong type for variadic
@@ -2240,15 +1958,6 @@ error: Expected type to be "str", but got "Array<str>" instead
   |
 4 | func(["a", "b", "c"]); // should fail as the parameter is variadic
   |      ^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2257,7 +1966,7 @@ Duration <DURATION>"
 `;
 
 exports[`function_type.test.w 1`] = `
-"Error: error: Expected function return type
+"error: Expected function return type
   --> ../../../tests/invalid/function_type.test.w:3:3
   |
 3 |   my_method(x: num);
@@ -2276,15 +1985,6 @@ error: Optional parameters must always be after all non-optional parameters.
   |
 9 | let my_func3 = (a: num, b: str?, c: bool) => {};
   |                         ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2293,7 +1993,7 @@ Duration <DURATION>"
 `;
 
 exports[`function_variadic_definition.test.w 1`] = `
-"Error: error: Positional arguments must come before named arguments
+"error: Positional arguments must come before named arguments
    --> ../../../tests/invalid/function_variadic_definition.test.w:15:13
    |
 15 | f5(args: 1, 2);
@@ -2340,15 +2040,6 @@ error: Expected type to be "Bucket", but got "bool" instead
    |
 24 | funcBucket(bucket1, true, bucket2);
    |                     ^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2357,7 +2048,7 @@ Duration <DURATION>"
 `;
 
 exports[`global_symbols.test.w 1`] = `
-"Error: error: Symbol "log" already defined in this scope
+"error: Symbol "log" already defined in this scope
   --> ../../../tests/invalid/global_symbols.test.w:1:5
   |
 1 | let log = "hi";
@@ -2439,15 +2130,6 @@ error: Expected type to be "preflight (construct: IConstruct): Node", but got "s
    |
 16 | nodeof = "!";
    |          ^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2456,7 +2138,7 @@ Duration <DURATION>"
 `;
 
 exports[`immutable_container_types.test.w 1`] = `
-"Error: error: Member "set" does not exist in "Map"
+"error: Member "set" does not exist in "Map"
   --> ../../../tests/invalid/immutable_container_types.test.w:3:4
   |
 3 | m1.set("a", "bye");
@@ -2545,15 +2227,6 @@ error: Expected type to be "bool", but got "Array<num>" instead
    |
 32 | let s4: Set<bool> = Set<bool>[[3]];
    |                               ^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2562,7 +2235,7 @@ Duration <DURATION>"
 `;
 
 exports[`impl_interface.test.w 1`] = `
-"Error: error: Class "A" does not implement method "handle" of interface "IQueueSetConsumerHandler"
+"error: Class "A" does not implement method "handle" of interface "IQueueSetConsumerHandler"
   --> ../../../tests/invalid/impl_interface.test.w:3:7
   |
 3 | class A impl cloud.IQueueSetConsumerHandler {
@@ -2602,15 +2275,6 @@ error: Class "r" does not implement method "method3" of interface "I3"
    |
 30 | class r impl I3 {
    |       ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2619,7 +2283,7 @@ Duration <DURATION>"
 `;
 
 exports[`indexing.test.w 1`] = `
-"Error: error: Cannot update elements of an immutable Array
+"error: Cannot update elements of an immutable Array
   --> ../../../tests/invalid/indexing.test.w:6:1
   |
 6 | arr[0] = 5;
@@ -2702,15 +2366,6 @@ error: Indexing into an inferred type is not supported
    |
 41 |   log(x[0]);
    |       ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2719,7 +2374,7 @@ Duration <DURATION>"
 `;
 
 exports[`inference.test.w 1`] = `
-"Error: error: Missing required type annotation for method signature
+"error: Missing required type annotation for method signature
    --> ../../../tests/invalid/inference.test.w:78:8
    |
 78 |   args(nice) {
@@ -2889,15 +2544,6 @@ error: Unable to infer type by usage, an explicit type annotation is required
   |
 4 | let preflightClosureArgs = (nice) => { return true; };
   |     ^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2906,7 +2552,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_created_in_preflight.test.w 1`] = `
-"Error: error: Cannot create inflight class "Foo" in preflight phase
+"error: Cannot create inflight class "Foo" in preflight phase
   --> ../../../tests/invalid/inflight_class_created_in_preflight.test.w:3:1
   |
 3 | new Foo();
@@ -2932,15 +2578,6 @@ error: Cannot create preflight class "PreflightClass" in inflight phase
    |
 19 |   new PreflightClass();
    |   ^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2949,22 +2586,13 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_dup_init.test.w 1`] = `
-"Error: error: Multiple inflight constructors defined in class Foo
+"error: Multiple inflight constructors defined in class Foo
   --> ../../../tests/invalid/inflight_class_dup_init.test.w:6:3
   |  
 6 | /   inflight new() {
 7 | | 
 8 | |   }
   | \\---^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2973,20 +2601,11 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_in_preflight.test.w 1`] = `
-"Error: error: Cannot create inflight class "Foo" in preflight phase
+"error: Cannot create inflight class "Foo" in preflight phase
   --> ../../../tests/invalid/inflight_class_in_preflight.test.w:5:1
   |
 5 | new Foo();
   | ^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -2995,20 +2614,11 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_interface_structural_typing.test.w 1`] = `
-"Error: error: Expected type to be "IGoo", but got "NotGoo" instead
+"error: Expected type to be "IGoo", but got "NotGoo" instead
    --> ../../../tests/invalid/inflight_class_interface_structural_typing.test.w:26:17
    |
 26 |   let x: IGoo = new NotGoo();
    |                 ^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3017,7 +2627,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_reassign.test.w 1`] = `
-"Error: error: Variable cannot be reassigned from inflight
+"error: Variable cannot be reassigned from inflight
   --> ../../../tests/invalid/inflight_reassign.test.w:5:3
   |
 5 |   xvar = "hi";
@@ -3032,15 +2642,6 @@ error: Variable is not reassignable
   .
 8 |   ylet = 456;
   |   ^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3049,7 +2650,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.test.w 1`] = `
-"Error: error: Expression of type "Bucket" references an unknown preflight object, can't qualify its capabilities
+"error: Expression of type "Bucket" references an unknown preflight object, can't qualify its capabilities
    --> ../../../tests/invalid/inflight_ref_explicit_ops.test.w:36:5
    |
 36 |     x.put("hello", "world");
@@ -3077,15 +2678,6 @@ error: Expression of type "Bucket" references an unknown preflight object, can't
    |
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3094,7 +2686,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.test.w 1`] = `
-"Error: error: Expression of type "Queue" references an unknown preflight object, can't qualify its capabilities
+"error: Expression of type "Queue" references an unknown preflight object, can't qualify its capabilities
    --> ../../../tests/invalid/inflight_ref_resource_sub_method.test.w:32:5
    |
 32 |     q.push("push!");
@@ -3112,15 +2704,6 @@ error: Expression of type "Queue" references an unknown preflight object, can't 
    |
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3129,7 +2712,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.test.w 1`] = `
-"Error: error: Expression of type "Bucket" references an unknown preflight object, can't qualify its capabilities
+"error: Expression of type "Bucket" references an unknown preflight object, can't qualify its capabilities
    --> ../../../tests/invalid/inflight_ref_unknown_op.test.w:15:5
    |
 15 |     x.put("hello", "world");
@@ -3147,15 +2730,6 @@ error: Expression of type "Bucket" references an unknown preflight object, can't
    |
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3164,7 +2738,7 @@ Duration <DURATION>"
 `;
 
 exports[`interface.test.w 1`] = `
-"Error: error: Properties are not supported in interfaces
+"error: Properties are not supported in interfaces
    --> ../../../tests/invalid/interface.test.w:32:3
    |
 32 |   bar: str;
@@ -3294,15 +2868,6 @@ error: interface "INestedInterface" must be declared at the top-level of the fil
    |
 72 |   interface INestedInterface {
    |             ^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3311,7 +2876,7 @@ Duration <DURATION>"
 `;
 
 exports[`internal_access_modifiers.test.w 1`] = `
-"Error: error: Expected identifier "fixture" to be a variable, but it's a namespace
+"error: Expected identifier "fixture" to be a variable, but it's a namespace
   --> ../../../tests/invalid/internal_access_modifiers.test.w:3:9
   |
 3 | let e = fixture.FavoritePlanets.MARS;
@@ -3407,15 +2972,6 @@ error: Struct "fixture.InternalStruct" is internal
    |                 -------------- defined here
    |
    = hint: the definition of "fixture.InternalStruct" needs a broader access modifier like "pub" to be used outside of "@winglibs/testfixture"
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3424,7 +2980,7 @@ Duration <DURATION>"
 `;
 
 exports[`intrinsics.test.w 1`] = `
-"Error: error: @dirname does not expect arguments
+"error: @dirname does not expect arguments
   --> ../../../tests/invalid/intrinsics.test.w:8:20
   |
 8 | let path = @dirname();
@@ -3443,15 +2999,6 @@ error: @filename cannot be used in inflight
   |
 4 |   let y = @filename;
   |           ^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3468,7 +3015,7 @@ exports[`invalid compile directory 1`] = `
 `;
 
 exports[`invalid_call_before_super.w 1`] = `
-"Error: error: 'super()' must be called before accessing 'this' in the constructor of a derived class
+"error: 'super()' must be called before accessing 'this' in the constructor of a derived class
    --> ../../../tests/invalid/invalid_call_before_super.w:15:5
    |
 15 |     this.b = 3;
@@ -3550,15 +3097,6 @@ error: super() should be called at the top scope of the constructor
    |
 73 |       super(5); // Super can't be called from inner scope
    |       ^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3567,20 +3105,11 @@ Duration <DURATION>"
 `;
 
 exports[`issue_2767.test.w 1`] = `
-"Error: error: Expected type to be "MutJson", but got "Bucket" instead
+"error: Expected type to be "MutJson", but got "Bucket" instead
   --> ../../../tests/invalid/issue_2767.test.w:4:16
   |
 4 | x.set("hello", new cloud.Bucket());
   |                ^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3589,22 +3118,13 @@ Duration <DURATION>"
 `;
 
 exports[`jsii_access_modifiers.test.w 1`] = `
-"Error: error: Cannot access protected member "createTopic" of "Bucket"
+"error: Cannot access protected member "createTopic" of "Bucket"
    --> ../../../tests/invalid/jsii_access_modifiers.test.w:13:3
    |
 13 | b.createTopic(cloud.BucketEventType.CREATE);
    |   ^^^^^^^^^^^
    |
    = hint: the definition of "createTopic" needs a broader access modifier like "pub" to be used outside of "Bucket"
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3613,7 +3133,7 @@ Duration <DURATION>"
 `;
 
 exports[`json.test.w 1`] = `
-"Error: error: Json literal must have an element
+"error: Json literal must have an element
    --> ../../../tests/invalid/json.test.w:29:26
    |
 29 | let jsonIncomplete = Json;
@@ -3802,15 +3322,6 @@ error: "Bucket" is not a legal JSON value
     |
 137 | Json { bucket };
     |        ^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3819,7 +3330,7 @@ Duration <DURATION>"
 `;
 
 exports[`json_is_not_nil.test.w 1`] = `
-"Error: error: Expected type to be "Json", but got "Json?" instead
+"error: Expected type to be "Json", but got "Json?" instead
    --> ../../../tests/invalid/json_is_not_nil.test.w:63:11
    |
 63 | outerJson(innerOptional());
@@ -3831,15 +3342,6 @@ error: Expected type to be "Json", but got "str?" instead
    |
 67 | outerJson(optionalStr());
    |           ^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3848,20 +3350,11 @@ Duration <DURATION>"
 `;
 
 exports[`json_static.test.w 1`] = `
-"Error: error: Member "set" does not exist in "Json"
+"error: Member "set" does not exist in "Json"
   --> ../../../tests/invalid/json_static.test.w:4:10
   |
 4 | immutObj.set("a", "foo");
   |          ^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3870,7 +3363,7 @@ Duration <DURATION>"
 `;
 
 exports[`json_values.test.w 1`] = `
-"Error: error: "MutArray<num>" is not a legal JSON value
+"error: "MutArray<num>" is not a legal JSON value
    --> ../../../tests/invalid/json_values.test.w:11:20
    |
 11 | takeJson({ values: arr }); 
@@ -3882,15 +3375,6 @@ error: "MutMap<str>" is not a legal JSON value
    |
 13 | takeJson({ values: map }); 
    |                    ^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3899,20 +3383,11 @@ Duration <DURATION>"
 `;
 
 exports[`map_entries.test.w 1`] = `
-"Error: error: Expected type to be "str", but got "num" instead
+"error: Expected type to be "str", but got "num" instead
   --> ../../../tests/invalid/map_entries.test.w:2:20
   |
 2 | let someStr: str = mapToNumber.entries().at(0).value;
   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3921,7 +3396,7 @@ Duration <DURATION>"
 `;
 
 exports[`missing_return.test.w 1`] = `
-"Error: error: A function whose return type is "str" must return a value.
+"error: A function whose return type is "str" must return a value.
   --> ../../../tests/invalid/missing_return.test.w:1:40
   |  
 1 |   let returnString = inflight (): str => {
@@ -3955,15 +3430,6 @@ error: A function whose return type is "str" must return a value.
 41 | |   }
 42 | | };
    | \\-^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3972,7 +3438,7 @@ Duration <DURATION>"
 `;
 
 exports[`missing_semicolon.test.w 1`] = `
-"Error: error: Expected ';'
+"error: Expected ';'
   --> ../../../tests/invalid/missing_semicolon.test.w:9:3
   |
 9 | })
@@ -3991,15 +3457,6 @@ error: Expected '}'
    |
 19 | if (x > 10) {
    |             ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4008,7 +3465,7 @@ Duration <DURATION>"
 `;
 
 exports[`mut_container_types.test.w 1`] = `
-"Error: error: Expected type to be "num", but got "str" instead
+"error: Expected type to be "num", but got "str" instead
   --> ../../../tests/invalid/mut_container_types.test.w:2:29
   |
 2 | let arr1 = MutArray<num>[1, "2", 3];
@@ -4090,15 +3547,6 @@ error: Expected type to be "MutMap<str>", but got "MutMap<num>" instead
    |
 24 | let m5: MutMap<str> = m4;
    |                       ^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4107,7 +3555,7 @@ Duration <DURATION>"
 `;
 
 exports[`nil.test.w 1`] = `
-"Error: error: Expected type to be "str", but got "nil" instead
+"error: Expected type to be "str", but got "nil" instead
   --> ../../../tests/invalid/nil.test.w:3:14
   |
 3 | let x: str = nil;
@@ -4137,15 +3585,6 @@ error: Expected type to be "num", but got "nil" instead
    |              ^^^
    |
    = hint: to allow "nil" assignment use optional type: "num?"
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4154,7 +3593,7 @@ Duration <DURATION>"
 `;
 
 exports[`optionals.test.w 1`] = `
-"Error: error: Unexpected 'parameter_type_list'
+"error: Unexpected 'parameter_type_list'
    --> ../../../tests/invalid/optionals.test.w:95:36
    |
 95 | let optionalFunctionWithNoRetType: ()? = () => {};
@@ -4274,15 +3713,6 @@ error: Variable is not reassignable
    .
 50 |   hi = "bye";
    |   ^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4296,16 +3726,6 @@ exports[`parameters.test.w 1`] = `
 
 (hint: make sure to use --values to provide the required parameters file)
         
-    at ParameterRegistrar._preSynthesize (<ABSOLUTE>:LINE:COL)
-    at preSynthesizeAllConstructs (<ABSOLUTE>:LINE:COL)
-    at App.synth (<ABSOLUTE>:LINE:COL)
-    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
-    at Module._compile (node:internal/modules/cjs/loader:1469:14)
-    at Module._extensions..js (node:internal/modules/cjs/loader:1548:10)
-    at Module.load (node:internal/modules/cjs/loader:1288:32)
-    at Module._load (node:internal/modules/cjs/loader:1104:12)
-    at Module.require (node:internal/modules/cjs/loader:1311:19)
-    at require (node:internal/modules/helpers:179:18)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4314,7 +3734,7 @@ Duration <DURATION>"
 `;
 
 exports[`phase_mismatch.test.w 1`] = `
-"Error: error: Expected type to be "inflight (num): num", but got "preflight (n: num): num" instead
+"error: Expected type to be "inflight (num): num", but got "preflight (n: num): num" instead
   --> ../../../tests/invalid/phase_mismatch.test.w:2:10
   |
 2 | my_func1((n: num): num => { return n * 2; });
@@ -4355,15 +3775,6 @@ error: Expected type to be "preflight (inflight (str): str): void", but got "pre
    |
 25 | accepts_callback(callback); // error
    |                  ^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4372,20 +3783,11 @@ Duration <DURATION>"
 `;
 
 exports[`preflight_from_inflight.test.w 1`] = `
-"Error: error: Cannot call into preflight phase while inflight
+"error: Cannot call into preflight phase while inflight
    --> ../../../tests/invalid/preflight_from_inflight.test.w:15:5
    |
 15 |     this.r.myPreflight();
    |     ^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4394,7 +3796,7 @@ Duration <DURATION>"
 `;
 
 exports[`primitives.test.w 1`] = `
-"Error: error: Member "blabla" does not exist in "Array"
+"error: Member "blabla" does not exist in "Array"
   --> ../../../tests/invalid/primitives.test.w:6:16
   |
 6 | let join = arr.blabla(",");
@@ -4413,15 +3815,6 @@ error: Expected type to be "str", but got "num" instead
    |
 10 | let n: str = arr.at(0);
    |              ^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4430,20 +3823,11 @@ Duration <DURATION>"
 `;
 
 exports[`private_constructor.test.w 1`] = `
-"Error: error: Constructor for class "JsiiClassWithPrivateConstructor" is private
+"error: Constructor for class "JsiiClassWithPrivateConstructor" is private
   --> ../../../tests/invalid/private_constructor.test.w:3:1
   |
 3 | new jsii_fixture.JsiiClassWithPrivateConstructor();
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4452,7 +3836,7 @@ Duration <DURATION>"
 `;
 
 exports[`protected_access_modifiers.test.w 1`] = `
-"Error: error: Structs must be public ("pub") or private
+"error: Structs must be public ("pub") or private
   --> ../../../tests/invalid/protected_access_modifiers.test.w:1:1
   |
 1 | protected struct MyStruct {}
@@ -4478,15 +3862,6 @@ error: Enums must be public ("pub") or private
    |
 10 | protected enum MyEnum {}
    | ^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4495,7 +3870,7 @@ Duration <DURATION>"
 `;
 
 exports[`reassign_to_nonreassignable.test.w 1`] = `
-"Error: error: Variable is not reassignable
+"error: Variable is not reassignable
   --> ../../../tests/invalid/reassign_to_nonreassignable.test.w:3:1
   |
 2 | let x = 5;
@@ -4541,15 +3916,6 @@ error: Variable is not reassignable
    |          --- defined here (try adding "var" in front)
 42 |   arg = 0;
    |   ^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4558,7 +3924,7 @@ Duration <DURATION>"
 `;
 
 exports[`redundant_modifiers.w 1`] = `
-"Error: error: Multiple or ambiguous modifiers found
+"error: Multiple or ambiguous modifiers found
   --> ../../../tests/invalid/redundant_modifiers.w:3:3
   |
 3 |   pub pub m1() {}
@@ -4666,15 +4032,6 @@ error: Multiple or ambiguous modifiers found
    | |            |
    | |            possible redundant modifier
    | possible redundant modifier
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4683,20 +4040,11 @@ Duration <DURATION>"
 `;
 
 exports[`resource_access_field_as_method.test.w 1`] = `
-"Error: error: Expected a function or method, found "str"
+"error: Expected a function or method, found "str"
   --> ../../../tests/invalid/resource_access_field_as_method.test.w:9:1
   |
 9 | x.name();
   | ^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4705,7 +4053,7 @@ Duration <DURATION>"
 `;
 
 exports[`resource_captures.test.w 1`] = `
-"Error: error: Expression of type "Bucket" references an unknown preflight object, can't qualify its capabilities
+"error: Expression of type "Bucket" references an unknown preflight object, can't qualify its capabilities
    --> ../../../tests/invalid/resource_captures.test.w:14:5
    |
 14 |     b.put("hello", "world");
@@ -4723,15 +4071,6 @@ error: Expression of type "Bucket" references an unknown preflight object, can't
    |
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4740,20 +4079,11 @@ Duration <DURATION>"
 `;
 
 exports[`resource_inflight.test.w 1`] = `
-"Error: error: Cannot create preflight class "Bucket" in inflight phase
+"error: Cannot create preflight class "Bucket" in inflight phase
   --> ../../../tests/invalid/resource_inflight.test.w:4:3
   |
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
   |   ^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4762,7 +4092,7 @@ Duration <DURATION>"
 `;
 
 exports[`resource_init.test.w 1`] = `
-"Error: error: Multiple constructors defined in class R
+"error: Multiple constructors defined in class R
   --> ../../../tests/invalid/resource_init.test.w:3:3
   |
 3 |   new() {}
@@ -4788,15 +4118,6 @@ error: Inflight constructors cannot have parameters
   |
 9 |   inflight new(x: num) {}
   |               ^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4805,7 +4126,7 @@ Duration <DURATION>"
 `;
 
 exports[`return_types.test.w 1`] = `
-"Error: error: Return statement outside of function cannot return a value
+"error: Return statement outside of function cannot return a value
   --> ../../../tests/invalid/return_types.test.w:1:5
   |
 1 |     return 9;
@@ -4838,15 +4159,6 @@ error: Unexpected return value from void function. Return type annotations are r
    |
 19 |     return 9;
    |     ^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4855,7 +4167,7 @@ Duration <DURATION>"
 `;
 
 exports[`scope_and_id.test.w 1`] = `
-"Error: error: Expected type to be "str", but got "num" instead
+"error: Expected type to be "str", but got "num" instead
   --> ../../../tests/invalid/scope_and_id.test.w:6:25
   |
 6 | new PreflightClass() as x;
@@ -4881,15 +4193,6 @@ error: Inflight classes cannot have a scope
    |
 17 |   new InflightClass() in pc;
    |                          ^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -4898,7 +4201,7 @@ Duration <DURATION>"
 `;
 
 exports[`sim_resource.test.w 1`] = `
-"Error: error: Parameter "a" cannot have a mutable type "MutJson" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+"error: Parameter "a" cannot have a mutable type "MutJson" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
    --> ../../../tests/invalid/sim_resource.test.w:16:3
    |
 16 |   pub methodWithMutJsons(a: MutJson): MutJson { return {}; }
@@ -5180,15 +4483,6 @@ error: Return value cannot have a non-serializable type "MyStructWithNonSerializ
 52 | |     return a;
 53 | |   }
    | \\---^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5197,7 +4491,7 @@ Duration <DURATION>"
 `;
 
 exports[`simulator_permissions.test.w 1`] = `
-"Error: error: Expected expression
+"error: Expected expression
    --> ../../../tests/invalid/simulator_permissions.test.w:10:21
    |
 10 |   lift(buckets.at(1), ["put"]);
@@ -5243,15 +4537,6 @@ error: Expression of type "Bucket" references an unknown preflight object, can't
    |
    = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
    = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5260,7 +4545,7 @@ Duration <DURATION>"
 `;
 
 exports[`sorted_errors_no_span.test.w 1`] = `
-"Error: error: Expected type to be "num", but got "str" instead
+"error: Expected type to be "num", but got "str" instead
   --> ../../../tests/invalid/sorted_errors_no_span.test.w:1:14
   |
 1 | let a: num = "s";
@@ -5286,15 +4571,6 @@ error: Expected "b" to be a type but it's a variable
   |
 5 | inflight class e extends b {}
   |                          ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5303,7 +4579,7 @@ Duration <DURATION>"
 `;
 
 exports[`statement_invalid_scope.test.w 1`] = `
-"Error: error: Expected break statement to be inside of a loop (while/for)
+"error: Expected break statement to be inside of a loop (while/for)
   --> ../../../tests/invalid/statement_invalid_scope.test.w:3:5
   |
 3 |     break;
@@ -5329,15 +4605,6 @@ error: Expected continue statement to be inside of a loop (while/for)
    |
 15 |     continue;
    |     ^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5346,7 +4613,7 @@ Duration <DURATION>"
 `;
 
 exports[`statements_if.test.w 1`] = `
-"Error: error: Unexpected unary operator "--"
+"error: Unexpected unary operator "--"
   --> ../../../tests/invalid/statements_if.test.w:2:1
   |
 2 | --n;
@@ -5365,15 +4632,6 @@ error: Expected type to be "bool", but got "num" instead
   |
 8 | if !n || true {}
   |     ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5382,20 +4640,11 @@ Duration <DURATION>"
 `;
 
 exports[`std_containers.test.w 1`] = `
-"Error: error: Expected type to be "Array<num>", but got "Array<str>" instead
+"error: Expected type to be "Array<num>", but got "Array<str>" instead
   --> ../../../tests/invalid/std_containers.test.w:3:18
   |
 3 | let c = a.concat(b); 
   |                  ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5404,7 +4653,7 @@ Duration <DURATION>"
 `;
 
 exports[`stringify.test.w 1`] = `
-"Error: error: Expected type to be "stringable", but got "B" instead
+"error: Expected type to be "stringable", but got "B" instead
    --> ../../../tests/invalid/stringify.test.w:10:13
    |
 10 | log("hello {b}");
@@ -5456,15 +4705,6 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
    |     ^^^^^^^^^^^^^^^^^^^
    |
    = hint: Consider using string interpolation: "Hello, {name}"
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5473,7 +4713,7 @@ Duration <DURATION>"
 `;
 
 exports[`struct_expansion.test.w 1`] = `
-"Error: error: Positional arguments must come before named arguments
+"error: Positional arguments must come before named arguments
    --> ../../../tests/invalid/struct_expansion.test.w:11:33
    |
 11 |   bucket1.put(file: "file.txt", "data");
@@ -5525,15 +4765,6 @@ error: Missing required field "contentType" from "BucketPutOptions"
    |
 11 |   bucket1.put(file: "file.txt", "data");
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5546,16 +4777,13 @@ exports[`struct_from_parameter.test.w 1`] = `
 - MyParams must have required property 'bar'
 - MyParams must have required property 'baz'
 - MyParams must have required property 'foo'
-    at JsonSchema.validate (<ABSOLUTE>:LINE:COL)
-    at JsonSchema._fromJson (<ABSOLUTE>:LINE:COL)
-    at exports.__Struct_fromJson (<ABSOLUTE>:LINE:COL)
-    at new $Root (<ABSOLUTE>:LINE:COL)
-    at TestRunner._createTree (<ABSOLUTE>:LINE:COL)
-    at new App (<ABSOLUTE>:LINE:COL)
-    at newApp (<ABSOLUTE>:LINE:COL)
-    at PlatformManager.createApp (<ABSOLUTE>:LINE:COL)
-    at Object.<anonymous> (<ABSOLUTE>:LINE:COL)
-    at Module._compile (node:internal/modules/cjs/loader:1469:14)
+   --> ../../../tests/invalid/struct_from_parameter.test.w:11:1
+   | // technically we never enforced the parameters must have been
+   | // provided
+   | 
+11 | MyParams.fromJson(@app.parameters.read());
+   | ^
+at <ABSOLUTE>/struct_from_parameter.test.w:11:1
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5564,7 +4792,7 @@ Duration <DURATION>"
 `;
 
 exports[`struct_json_conversion.test.w 1`] = `
-"Error: error: Struct "A" contains field "b" which cannot be represented in Json
+"error: Struct "A" contains field "b" which cannot be represented in Json
   --> ../../../tests/invalid/struct_json_conversion.test.w:8:3
   |
 8 | A.fromJson({});
@@ -5604,15 +4832,6 @@ error: Struct "C" contains field "b" which cannot be represented in Json
    |
 28 | C.schema();
    |   ^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5621,7 +4840,7 @@ Duration <DURATION>"
 `;
 
 exports[`structs.test.w 1`] = `
-"Error: error: Struct "C" extends "B" which introduces a conflicting member "x" (str != num)
+"error: Struct "C" extends "B" which introduces a conflicting member "x" (str != num)
    --> ../../../tests/invalid/structs.test.w:13:3
    |
 13 |   x: num;
@@ -5703,15 +4922,6 @@ error: struct "InflightStruct" must be declared at the top-level of the file
    |
 58 |   struct InflightStruct {
    |          ^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5720,7 +4930,7 @@ Duration <DURATION>"
 `;
 
 exports[`super_call.test.w 1`] = `
-"Error: error: Cannot call super method because class Construct has no parent
+"error: Cannot call super method because class Construct has no parent
    --> ../../../tests/invalid/super_call.test.w:32:7
    |
 32 | super.do();
@@ -5767,15 +4977,6 @@ error: \`super\` calls inside inflight closures not supported yet, see: https://
    |
 52 |       return "this: {this.m1()}, super: {super.m1()}";
    |                                                ^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5784,20 +4985,11 @@ Duration <DURATION>"
 `;
 
 exports[`this.w 1`] = `
-"Error: error: Unknown symbol "this"
+"error: Unknown symbol "this"
   --> ../../../tests/invalid/this.w:3:9
   |
 3 |     log(this.node.id);
   |         ^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5806,20 +4998,11 @@ Duration <DURATION>"
 `;
 
 exports[`throw_non_string.test.w 1`] = `
-"Error: error: Expected type to be "str", but got "num" instead
+"error: Expected type to be "str", but got "num" instead
   --> ../../../tests/invalid/throw_non_string.test.w:1:7
   |
 1 | throw 42;
   |       ^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5828,7 +5011,7 @@ Duration <DURATION>"
 `;
 
 exports[`try_catch_parenthesis.test.w 1`] = `
-"Error: error: Unexpected parentheses in catch block. Use 'catch e' instead of 'catch (e)'.
+"error: Unexpected parentheses in catch block. Use 'catch e' instead of 'catch (e)'.
   --> ../../../tests/invalid/try_catch_parenthesis.test.w:3:9
   |
 3 | } catch (e) {
@@ -5840,15 +5023,6 @@ error: Unexpected parentheses in catch block. Use 'catch longError' instead of '
    |
 10 | } catch (longError) {
    |         ^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5857,22 +5031,13 @@ Duration <DURATION>"
 `;
 
 exports[`try_no_catch_or_finally.test.w 1`] = `
-"Error: error: Missing \`catch\` or \`finally\` blocks for this try statement
+"error: Missing \`catch\` or \`finally\` blocks for this try statement
   --> ../../../tests/invalid/try_no_catch_or_finally.test.w:1:1
   |  
 1 | / try {
 2 | |   log("Hello World");
 3 | | }
   | \\-^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5881,7 +5046,7 @@ Duration <DURATION>"
 `;
 
 exports[`types_strings_arithmetic.test.w 1`] = `
-"Error: error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+"error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
   --> ../../../tests/invalid/types_strings_arithmetic.test.w:1:10
   |
 1 | let e1 = 2 + "2";
@@ -5909,15 +5074,6 @@ error: Expected type to be "num", but got "str" instead
    |
 15 | a += b;
    |      ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5926,7 +5082,7 @@ Duration <DURATION>"
 `;
 
 exports[`un_mut_lifted_objects.test.w 1`] = `
-"Error: error: Member "push" does not exist in "Array"
+"error: Member "push" does not exist in "Array"
    --> ../../../tests/invalid/un_mut_lifted_objects.test.w:22:6
    |
 22 |   ar.push(2); // Error: push doesn't exist in Array
@@ -5982,15 +5138,6 @@ error: Member "push" does not exist in "Array"
    |
 29 |   recursive_ar.at(0).push(3); // Error: push doesn't exist in Array
    |                      ^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -5999,7 +5146,7 @@ Duration <DURATION>"
 `;
 
 exports[`unimplemented_grammar.test.w 1`] = `
-"Error: error: builtin "any" is not supported yet - see https://github.com/winglang/wing/issues/434
+"error: builtin "any" is not supported yet - see https://github.com/winglang/wing/issues/434
   --> ../../../tests/invalid/unimplemented_grammar.test.w:1:8
   |
 1 | let b: any = 0;
@@ -6032,15 +5179,6 @@ error: Unable to infer type by usage, an explicit type annotation is required
   |
 2 | let somePromise = Promise<str>{};
   |     ^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -6049,20 +5187,11 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_field.test.w 1`] = `
-"Error: error: Member "a" does not exist in "String"
+"error: Member "a" does not exist in "String"
   --> ../../../tests/invalid/unknown_field.test.w:1:12
   |
 1 | std.String.a.b.c.fromJson();
   |            ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -6071,20 +5200,11 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_submodule.test.w 1`] = `
-"Error: error: Expected identifier "std" to be a variable, but it's a namespace
+"error: Expected identifier "std" to be a variable, but it's a namespace
   --> ../../../tests/invalid/unknown_submodule.test.w:1:1
   |
 1 | std.random.String.fromJson("hello");
   | ^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -6093,7 +5213,7 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_symbol.test.w 1`] = `
-"Error: error: Reserved word
+"error: Reserved word
    --> ../../../tests/invalid/unknown_symbol.test.w:43:5
    |
 43 | let let = 2;
@@ -6163,15 +5283,6 @@ error: Member "methodWhichIsNotPartOfBucketApi" does not exist in "Bucket"
    |
 23 |     return this.bucket.methodWhichIsNotPartOfBucketApi(id);
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -6180,7 +5291,7 @@ Duration <DURATION>"
 `;
 
 exports[`unphased.test.w 1`] = `
-"Error: error: Unphased classes are not yet supported - see https://github.com/winglang/wing/issues/435
+"error: Unphased classes are not yet supported - see https://github.com/winglang/wing/issues/435
   --> ../../../tests/invalid/unphased.test.w:1:1
   |
 1 | unphased class UnphasedClass {}
@@ -6248,15 +5359,6 @@ error: Unphased methods on interfaces are not yet supported - see https://github
 32 | |   // ^ Error: Unphased methods on interfaces are not yet supported
 33 | | }
    | \\-^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -6268,18 +5370,7 @@ exports[`unresolved_state.test.w 1`] = `
 "[ERROR]  | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/Default/State" referenced by "root/Default/Function"
 [ERROR]  | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/Default/State" referenced by "root/Default/Function"
 [ERROR]  | Error: Unable to resolve attribute 'my_unresolved_token' for resource "root/Default/State" referenced by "root/Default/Function"
-Error: Failed to start resources: "root/Default/Function", "root/Default/test:/Handler", "root/cloud.TestRunner"
-    at Simulator.startResources (<ABSOLUTE>:LINE:COL)
-    at async Simulator.start (<ABSOLUTE>:LINE:COL)
-    at async testSimulator (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
+Failed to start resources: "root/Default/Function", "root/Default/test:/Handler", "root/cloud.TestRunner"
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -6288,7 +5379,7 @@ Duration <DURATION>"
 `;
 
 exports[`use_before_defined.test.w 1`] = `
-"Error: error: Unknown symbol "y"
+"error: Unknown symbol "y"
   --> ../../../tests/invalid/use_before_defined.test.w:1:7
   |
 1 | log("{y}"); // Access y before it's defined
@@ -6303,15 +5394,6 @@ error: Symbol "x" used before being defined
   .
 8 | let x = "hi";
   |     - defined later here
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -6320,20 +5402,11 @@ Duration <DURATION>"
 `;
 
 exports[`variable_scoping.test.w 1`] = `
-"Error: error: Unknown symbol "x"
+"error: Unknown symbol "x"
   --> ../../../tests/invalid/variable_scoping.test.w:6:11
   |
 6 |   let z = x;
   |           ^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -6342,7 +5415,7 @@ Duration <DURATION>"
 `;
 
 exports[`void_in_expression_position.test.w 1`] = `
-"Error: error: Property not found
+"error: Property not found
   --> ../../../tests/invalid/void_in_expression_position.test.w:1:12
   |
 1 | log("hey").get("x");
@@ -6384,15 +5457,6 @@ error: Expected type to be "str?", but got "void" instead
    |
 15 | let w: str? = returnsNothing2();
    |               ^^^^^^^^^^^^^^^^^
-    at compile (<ABSOLUTE>:LINE:COL)
-    at async testOne (<ABSOLUTE>:LINE:COL)
-    at async testFile (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForActiveTaskToFinish (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.waitForProcessingSlot (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.process (<ABSOLUTE>:LINE:COL)
-    at async PromisePoolExecutor.start (<ABSOLUTE>:LINE:COL)
-    at async Object.test (<ABSOLUTE>:LINE:COL)
-    at async Command.<anonymous> (<ABSOLUTE>:LINE:COL)
 
 Tests 1 failed (1)
 Snapshots 1 skipped
