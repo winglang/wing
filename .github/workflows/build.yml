@@ -99,15 +99,9 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dist
-          path: dist/*
-
-      - name: Upload Turbo Cache
-        uses: actions/upload-artifact@v4
-        with:
-          name: turbo-cache
-          path: .turbo/cache/*
-          if-no-files-found: ignore
+          path: |
+            dist/*
+            .turbo/cache/*
 
       - name: Upload Turbo Runs
         if: always()
@@ -121,15 +115,14 @@ jobs:
     name: Test
     timeout-minutes: 30
     runs-on: ubuntu-24.04
+    needs:
+      - build
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Turbo Cache
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
-        with:
-          name: turbo-cache
-          path: .turbo/cache
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -199,17 +192,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Turbo Cache
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
-        with:
-          name: turbo-cache
-          path: .turbo/cache
-
-      - name: Download Dist Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -284,17 +268,8 @@ jobs:
           cache: "pnpm"
           node-version: ${{ matrix.node }}
 
-      - name: Download Turbo Cache
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
-        with:
-          name: turbo-cache
-          path: .turbo/cache
-
-      - name: Download Dist Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
 
       - name: Install dependencies
         run: |
