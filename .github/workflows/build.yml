@@ -96,78 +96,10 @@ jobs:
         env:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/*
-
-      - name: Upload Turbo Cache
-        uses: actions/upload-artifact@v4
-        with:
-          name: turbo-cache
-          path: .turbo/cache/*
-          if-no-files-found: ignore
-
-      - name: Upload Turbo Runs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-turbo-runs
-          path: .turbo/runs/*
-          if-no-files-found: ignore
-
-  test:
-    name: Test
-    timeout-minutes: 30
-    runs-on: ubuntu-24.04
-    needs:
-      - build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download Turbo Cache
-        uses: actions/download-artifact@v4
-        with:
-          name: turbo-cache
-          path: .turbo/cache
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          cache: "pnpm"
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install Rust
-        uses: moonrepo/setup-rust@v1
-        with:
-          inherit-toolchain: true
-          cache: false
-
-      - name: Setup Cargo Cache
-        uses: Swatinem/rust-cache@v2
-
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Install Playwright
         working-directory: wing-console/console/app
         run: |
           pnpm exec playwright install --with-deps
-
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
-
-      - name: Verify Terraform installation
-        run: terraform -v
 
       - name: Test
         run: pnpm test:ci
@@ -183,20 +115,11 @@ jobs:
           name: build.diff
           path: build.diff
 
-      - name: Upload Turbo Cache
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: test-turbo-cache
-          path: .turbo/cache/*
-          if-no-files-found: ignore
-
-      - name: Upload Turbo Runs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-turbo-runs
-          path: .turbo/runs/*
-          if-no-files-found: ignore
+          name: dist
+          path: dist/*
 
   benchmark:
     name: Benchmark
@@ -207,12 +130,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Download Turbo Cache
-        uses: actions/download-artifact@v4
-        with:
-          name: turbo-cache
-          path: .turbo/cache
 
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v4
@@ -260,7 +177,6 @@ jobs:
     runs-on: "${{ matrix.runner }}-latest"
     needs:
       - build
-      - test
     if: needs.build.outputs.e2e-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     strategy:
       fail-fast: true
@@ -282,12 +198,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Download Turbo Cache
-        uses: actions/download-artifact@v4
-        with:
-          name: test-turbo-cache
-          path: .turbo/cache
 
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v4
@@ -399,7 +309,6 @@ jobs:
       - build
       - e2e-test
       - benchmark
-      - test
       - sdk-spec-test
     steps:
       - name: Check failure
