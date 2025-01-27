@@ -1,16 +1,13 @@
 import { existsSync, readFileSync, realpathSync, rmSync, statSync } from "fs";
 import { basename, join, relative, resolve } from "path";
 import { PromisePool } from "@supercharge/promise-pool";
-import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
+import { IPlatform, ITestHarness, PlatformManager } from "@winglang/sdk/lib/platform";
 import { LogLevel } from "@winglang/sdk/lib/std";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
-import { ITestHarness } from "./harness/api";
-import { AwsCdkTestHarness } from "./harness/awscdk";
-import { TerraformTestHarness } from "./harness/terraform";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
 import { SnapshotMode, SnapshotResult, captureSnapshot, determineSnapshotMode } from "./snapshots";
 import { SNAPSHOT_ERROR_PREFIX } from "./snapshots-help";
@@ -104,16 +101,18 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
     throw new Error(`No matching test or entrypoint files found: [${entrypoints.join(", ")}]`);
   }
 
+  const platform = new PlatformManager({ platformPaths: options.platform }).primary;
+
   const startTime = Date.now();
   const results: SingleTestResult[] = [];
-  process.env.WING_TARGET = determineTargetFromPlatforms(options.platform ?? []);
+  process.env.WING_TARGET = platform.target;
   const testFile = async (
     entrypoint: string,
     retries: number = options.retry || 1,
   ): Promise<void> => {
     const testName = renderTestName(entrypoint);
     try {
-      const singleTestResults = await testOne(testName, entrypoint, options);
+      const singleTestResults = await testOne(platform, testName, entrypoint, options);
       if (singleTestResults.results.some((t) => !t.pass) && retries > 1) {
         console.log(`Retrying failed tests. ${retries - 1} retries left.`);
         return await testFile(entrypoint, retries - 1);
@@ -175,18 +174,19 @@ export type SingleTestResult = {
 };
 
 async function testOne(
+  platform: IPlatform,
   testName: string,
   entrypoint: string,
   options: TestOptions,
 ): Promise<SingleTestResult> {
-  const target = determineTargetFromPlatforms(options.platform);
+  const target = platform.target;
 
   // determine snapshot behavior
   const snapshotMode = determineSnapshotMode(target, options);
   const shouldExecute = snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.DEPLOY;
   const testOptions = {
     ...options,
-    rootId: (options.rootId ?? target === BuiltinPlatform.SIM) ? "root" : `Test.${nanoid(10)}`,
+    rootId: (options.rootId ?? target === "sim") ? "root" : `Test.${nanoid(10)}`,
   };
 
   let results: std.TestResult[] = [];
@@ -200,7 +200,7 @@ async function testOne(
         }),
     );
 
-    results = await executeTest(synthDir, target, testOptions);
+    results = await executeTest(synthDir, platform, testOptions);
   }
 
   // if one of the tests failed, return the results without updating any snapshots.
@@ -221,33 +221,26 @@ async function testOne(
 
 async function executeTest(
   synthDir: string,
-  target: string | undefined,
+  platform: IPlatform,
   options: TestOptions,
 ): Promise<std.TestResult[]> {
+  const target = platform.target;
+
   if (!target) {
     throw new Error("Unable to execute test without a target");
   }
 
   // special case for simulator
-  if (target === BuiltinPlatform.SIM) {
+  if (target === "sim") {
     return testSimulator(synthDir, options);
   }
 
-  const harness = createTestHarness(target, options);
-  return executeTestInHarness(harness, synthDir, options);
-}
-
-function createTestHarness(target: string, options: TestOptions) {
-  switch (target) {
-    case BuiltinPlatform.TF_AZURE:
-    case BuiltinPlatform.TF_AWS:
-    case BuiltinPlatform.TF_GCP:
-      return new TerraformTestHarness(options);
-    case BuiltinPlatform.AWSCDK:
-      return new AwsCdkTestHarness();
-    default:
-      throw new Error("Unable to create a harness for platform");
+  const harness = await platform.createTestHarness?.();
+  if (!harness) {
+    throw new Error(`Cannot run "wing test" against "${target}" platform`);
   }
+
+  return executeTestInHarness(harness, synthDir, options);
 }
 
 /**

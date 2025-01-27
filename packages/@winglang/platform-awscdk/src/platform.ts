@@ -15,6 +15,8 @@ import { Website } from "./website";
 import { cloud } from "@winglang/sdk";
 import { Construct } from "constructs";
 import { Service } from "./service";
+import { AwsCdkTestHarness } from "./harness";
+import { ITestHarness } from "@winglang/sdk/lib/platform";
 
 const {
   API_FQN,
@@ -98,5 +100,9 @@ export class Platform implements platform.IPlatform {
         return Service;
     }
     return undefined;
+  }
+
+  public async createTestHarness(): Promise<ITestHarness> {
+    return new AwsCdkTestHarness();
   }
 }

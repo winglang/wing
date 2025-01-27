@@ -1,48 +1,45 @@
 import { readFile, rm } from "fs/promises";
 import { ITestRunnerClient } from "@winglang/sdk/lib/std";
 import { Util } from "@winglang/sdk/lib/util";
-import { ITestHarness } from "./api";
-import { withSpinner } from "../../../util";
-import { execCapture } from "../util";
+import { ITestHarness } from "@winglang/sdk/lib/platform";
+import * as path from "path";
 
-const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
+export const WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
+
+const OUTPUT_FILE = "output.json";
 
 export class AwsCdkTestHarness implements ITestHarness {
   public async deploy(synthDir: string): Promise<ITestRunnerClient> {
+    const opts = {
+      cwd: synthDir,
+      inheritEnv: true,
+    };
     try {
-      await execCapture("cdk version --ci true", { cwd: synthDir });
+      Util.exec("cdk", ["version", "--ci", "true"], opts);
     } catch (err) {
       throw new Error(
         "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk).",
       );
     }
 
-    await withSpinner("cdk deploy", () =>
-      execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", {
-        cwd: synthDir,
-      }),
-    );
+    Util.exec("cdk", ["deploy", "--require-approval", "never", "--ci", "true", "-O", OUTPUT_FILE, "--app", "."], opts);
 
     const stackName = process.env.CDK_STACK_NAME! + Util.sha256(synthDir).slice(-8);
     const testArns = await this.getFunctionArnsOutput(synthDir, stackName);
 
     const { TestRunnerClient } = await import("@winglang/sdk/lib/shared-aws/test-runner.inflight");
-    const runner = new TestRunnerClient({ $tests: testArns });
-    return runner;
+    return new TestRunnerClient({ $tests: testArns });
   }
 
   public async cleanup(synthDir: string): Promise<void> {
-    await withSpinner("aws-cdk destroy", async () => {
-      await rm(synthDir.concat("/output.json"));
-      await execCapture("cdk destroy -f --ci true --app ./", { cwd: synthDir });
-    });
-
+    await rm(path.join(synthDir, OUTPUT_FILE));
+    Util.exec("cdk", ["destroy", "-f", "--ci", "true", "--app", "."], { cwd: synthDir, inheritEnv: true });
     await rm(synthDir, { recursive: true, force: true });
   }
 
   private async getFunctionArnsOutput(synthDir: string, stackName: string) {
-    const file = await readFile(synthDir.concat("/output.json"));
+    const file = await readFile(path.join(synthDir, OUTPUT_FILE));
     const parsed = JSON.parse(Buffer.from(file).toString());
-    return parsed[stackName][ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK];
+    return parsed[stackName][WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK];
   }
 }
