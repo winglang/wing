@@ -186,11 +186,11 @@ monorepo.devTask.reset();
 monorepo.addScript("package", "turbo package");
 monorepo.addScript(
   "package:ci",
-  "turbo package --color --summarize && tar -czvf dist/docs.tgz docs/*",
+  "turbo package --color && tar -czvf dist/docs.tgz docs/*",
 );
 monorepo.addScript(
   "test:ci",
-  "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar --summarize",
+  "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar",
 );
 monorepo.addScript("docs", "./scripts/docsite.sh");
 monorepo.addScript("install", "bash scripts/setup_wasi.sh");
