@@ -13,16 +13,16 @@ SYS_ARCH=$(uname -m)
 # Check if mac or linux
 if [[ "$SYS_OS" == "linux"* ]]; then
     SYS_OS="linux"
-elif [[ "$SYS_OS" == "darwin"* ]]; then
+elif [[ "$SYS_OS" == "darwin"* ]] || [[ "$SYS_OS" == "msys" ]]; then
     SYS_OS="macos"
 else
-    echo "Unsupported OS"
+    echo "Unsupported OS $SYS_OS"
     exit 1
 fi
 
 # Check if x86_64 or arm64
 if [[ "$SYS_ARCH" != "x86_64" && "$SYS_ARCH" != "arm64" ]]; then
-    echo "Unsupported architecture"
+    echo "Unsupported architecture $SYS_ARCH"
     exit 1
 fi
 

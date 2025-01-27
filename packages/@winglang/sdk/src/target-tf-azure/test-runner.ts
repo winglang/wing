@@ -2,10 +2,8 @@ import { TerraformOutput, Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { Function as AzureFunction } from "./function";
 import * as core from "../core";
+import { WING_TEST_RUNNER_FUNCTION_IDENTIFIERS } from "../shared-tf/harness";
 import * as std from "../std";
-
-const OUTPUT_TEST_RUNNER_FUNCTION_IDENTIFIERS =
-  "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS";
 
 /**
  * Tf-Azure implementation of `cloud.TestRunner`.
@@ -37,7 +35,7 @@ export class TestRunner extends std.TestRunner {
       }),
     });
 
-    output.overrideLogicalId(OUTPUT_TEST_RUNNER_FUNCTION_IDENTIFIERS);
+    output.overrideLogicalId(WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {

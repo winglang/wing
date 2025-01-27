@@ -232,30 +232,34 @@ jobs:
 
   e2e-test:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
-    runs-on: "${{ matrix.runner }}-latest"
+    runs-on: "${{ matrix.runner }}"
     needs:
       - build
     if: needs.build.outputs.e2e-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     strategy:
       fail-fast: true
       matrix:
-        runner: [windows, macos, ubuntu]
+        runner: [ubuntu-latest, macos-13]
         node: ["20", "18"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
           - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
         exclude:
-          - runner: macos
+          - runner: macos-13
             full_run: false
-          - runner: windows
+          - runner: windows-latest
             full_run: false
-          - runner: ubuntu
+          - runner: ubuntu-latest
             node: "18"
             full_run: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Docker on macOS
+        if: runner.os == 'macOS'
+        uses: douglascamata/setup-docker-macos-action@v1-alpha
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4

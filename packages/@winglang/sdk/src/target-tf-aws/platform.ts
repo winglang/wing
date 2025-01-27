@@ -28,8 +28,9 @@ import {
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
-import { IPlatform } from "../platform";
+import { IPlatform, ITestHarness } from "../platform";
 import { Domain } from "../shared-aws/domain";
+import { TerraformTestHarness } from "../shared-tf/harness";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
@@ -206,5 +207,11 @@ export class Platform implements IPlatform {
     console.log(
       `${Object.keys(secrets).length} secret(s) stored AWS Secrets Manager`,
     );
+  }
+
+  public async createTestHarness(): Promise<ITestHarness> {
+    return new TerraformTestHarness({
+      clientModule: require.resolve("../shared-aws/test-runner.inflight"),
+    });
   }
 }

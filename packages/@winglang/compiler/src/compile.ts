@@ -9,7 +9,7 @@ import { BuiltinPlatform } from "./constants";
 import { PreflightError } from "./errors";
 import { readFile } from "fs/promises";
 import { fork } from "child_process";
-
+import { PlatformManager } from "@winglang/sdk/lib/platform";
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
 Error.stackTraceLimit = 50;
@@ -18,14 +18,6 @@ Error.stackTraceLimit = 50;
 const WINGC_COMPILE = "wingc_compile";
 const WINGC_PREFLIGHT = "preflight.cjs";
 const DOT_WING = ".wing";
-
-const BUILTIN_PLATFORMS = [
-  BuiltinPlatform.SIM,
-  BuiltinPlatform.TF_AWS,
-  BuiltinPlatform.TF_AZURE,
-  BuiltinPlatform.TF_GCP,
-  BuiltinPlatform.AWSCDK, // TODO: remove this when awscdk platform is implemented external platform
-];
 
 const defaultSynthDir = (model: string): string => {
   switch (model) {
@@ -110,20 +102,8 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: string, tes
  * @returns the resolved model
  */
 export function determineTargetFromPlatforms(platforms: string[]): string {
-  if (platforms.length === 0) {
-    return "";
-  }
-  // determine target based on first platform
-  const platform = platforms[0];
-
-  // If its a builtin platform just return
-  if (BUILTIN_PLATFORMS.includes(platform)) {
-    return platform;
-  }
-
-  // load custom platform to retrieve the target
-  const { _loadCustomPlatform } = require("@winglang/sdk/lib/platform");
-  return _loadCustomPlatform(platform).target;
+  const p = new PlatformManager({ platformPaths: platforms });
+  return p.primary.target;
 }
 
 export interface CompileOutput {
