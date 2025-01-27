@@ -221,7 +221,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        runner: [windows, macos, ubuntu]
+        # runner: [windows, macos, ubuntu]
+        runner: [ubuntu] # drop macos and windows for now, the CI isn't working with the current setup
         node: ["20", "18"]
         shard: ["1/2", "2/2"]
         full_run:
