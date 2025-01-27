@@ -74,6 +74,11 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install Playwright
+        working-directory: wing-console/console/app
+        run: |
+          pnpm exec playwright install --with-deps
+
       - name: Derive appropriate SHAs for base and head
         id: shas
         uses: nrwl/nx-set-shas@v3
@@ -91,18 +96,13 @@ jobs:
       - name: Run Projen
         run: pnpm projen
 
-      - name: Build and Package
-        run: pnpm package:ci
+      - name: Build, Test and Package
+        run: |
+          pnpm turbo default --color --concurrency 1
+          pnpm turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar --summarize
+          tar -czvf dist/docs.tgz docs/*
         env:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
-
-      - name: Install Playwright
-        working-directory: wing-console/console/app
-        run: |
-          pnpm exec playwright install --with-deps
-
-      - name: Test
-        run: pnpm test:ci
 
       - name: Create git patch
         id: diff
