@@ -190,7 +190,7 @@ monorepo.addScript(
 );
 monorepo.addScript(
   "test:ci",
-  "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar",
+  "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test test:playwright --color --filter=!hangar --summarize",
 );
 monorepo.addScript("docs", "./scripts/docsite.sh");
 monorepo.addScript("install", "bash scripts/setup_wasi.sh");

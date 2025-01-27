@@ -216,6 +216,7 @@ jobs:
     runs-on: "${{ matrix.runner }}-latest"
     needs:
       - build
+      - test
     if: needs.build.outputs.e2e-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     strategy:
       fail-fast: true
