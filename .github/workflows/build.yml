@@ -99,9 +99,15 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: |
-            dist/*
-            .turbo/cache/*
+          name: dist
+          path: dist/*
+
+      - name: Upload Turbo Cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: turbo-cache
+          path: .turbo/cache/*
+          if-no-files-found: ignore
 
       - name: Upload Turbo Runs
         if: always()
@@ -115,14 +121,15 @@ jobs:
     name: Test
     timeout-minutes: 30
     runs-on: ubuntu-24.04
-    needs:
-      - build
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Artifacts
+      - name: Download Turbo Cache
         uses: actions/download-artifact@v4
+        with:
+          name: turbo-cache
+          path: .turbo/cache
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -192,8 +199,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Artifacts
+      - name: Download Turbo Cache
         uses: actions/download-artifact@v4
+        with:
+          name: turbo-cache
+          path: .turbo/cache
+
+      - name: Download Dist Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -232,34 +248,42 @@ jobs:
 
   e2e-test:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
-    runs-on: "${{ matrix.runner }}"
+    runs-on: "${{ matrix.runner }}-latest"
     needs:
       - build
     if: needs.build.outputs.e2e-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     strategy:
       fail-fast: true
       matrix:
-        runner: [ubuntu-latest, macos-13]
+        runner: [windows, macos, ubuntu]
         node: ["20", "18"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
           - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
         exclude:
-          - runner: macos-13
+          - runner: macos
             full_run: false
-          - runner: windows-latest
+          - runner: windows
             full_run: false
-          - runner: ubuntu-latest
+          - runner: ubuntu
             node: "18"
             full_run: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Docker on macOS
-        if: runner.os == 'macOS'
-        uses: douglascamata/setup-docker-macos-action@v1-alpha
+      - name: Download Turbo Cache
+        uses: actions/download-artifact@v4
+        with:
+          name: turbo-cache
+          path: .turbo/cache
+
+      - name: Download Dist Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -271,9 +295,6 @@ jobs:
         with:
           cache: "pnpm"
           node-version: ${{ matrix.node }}
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
 
       - name: Install dependencies
         run: |
