@@ -284,6 +284,12 @@ jobs:
           cache: "pnpm"
           node-version: ${{ matrix.node }}
 
+      - name: Download Turbo Cache
+        uses: actions/download-artifact@v4
+        with:
+          name: turbo-cache
+          path: .turbo/cache
+
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v4
         with:
