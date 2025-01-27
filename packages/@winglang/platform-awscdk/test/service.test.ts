@@ -2,7 +2,7 @@ import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud } from "@winglang/sdk";
 import { AwsCdkApp } from "./util";
-import { inflight } from "@winglang/sdk/src/core";
+import { inflight } from "@winglang/sdk/lib/core";
 
 const INFLIGHT_CODE = inflight(async (_, name) => {
   console.log("Hello " + name);
