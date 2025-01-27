@@ -13,7 +13,7 @@ SYS_ARCH=$(uname -m)
 # Check if mac or linux
 if [[ "$SYS_OS" == "linux"* ]]; then
     SYS_OS="linux"
-elif [[ "$SYS_OS" == "darwin"* ]]; then
+elif [[ "$SYS_OS" == "darwin"* ]] || [[ "$SYS_OS" == "msys" ]]; then
     SYS_OS="macos"
 else
     echo "Unsupported OS $SYS_OS"
