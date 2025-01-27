@@ -183,6 +183,13 @@ jobs:
           name: build.diff
           path: build.diff
 
+      - name: Upload Turbo Cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-turbo-cache
+          path: .turbo/cache/*
+          if-no-files-found: ignore
+
       - name: Upload Turbo Runs
         if: always()
         uses: actions/upload-artifact@v4
@@ -253,6 +260,7 @@ jobs:
     runs-on: "${{ matrix.runner }}-latest"
     needs:
       - build
+      - test
     if: needs.build.outputs.e2e-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     strategy:
       fail-fast: true
@@ -278,7 +286,7 @@ jobs:
       - name: Download Turbo Cache
         uses: actions/download-artifact@v4
         with:
-          name: turbo-cache
+          name: test-turbo-cache
           path: .turbo/cache
 
       - name: Download Dist Artifacts

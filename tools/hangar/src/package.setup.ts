@@ -19,6 +19,8 @@ const shellEnv = {
 };
 
 const getInstallArgs = async () => {
+  console.log("HANGAR_WINGLANG_PACKAGE", process.env.HANGAR_WINGLANG_PACKAGE);
+  console.log("CI", process.env.CI);
   if (process.env.HANGAR_WINGLANG_PACKAGE) {
     return [
       "install",
@@ -33,6 +35,7 @@ const getInstallArgs = async () => {
     const tarballs = (await fs.readdir(tarballsDir))
       .filter((filename) => /^.+-\d+\.\d+\.\d+\.tgz$/.test(filename))
       .map((tarball) => `file:${tarballsDir}/${tarball}`);
+    console.log({ tarballs });
     return [
       "install",
       "--no-package-lock",
@@ -78,7 +81,7 @@ export default async function () {
   // trusted install hooks we are expecting to expose to users
   const allowedInstallHooks = ["> esbuild@0.19.12 postinstall"];
   const badInstallHooks = installHooks.filter(
-    (hook) => !allowedInstallHooks.includes(hook)
+    (hook) => !allowedInstallHooks.includes(hook),
   );
 
   assert.equal(
@@ -86,17 +89,17 @@ export default async function () {
     0,
     `Install contains unexpected script hooks: \n${badInstallHooks
       .map((h) => `"${h}"`)
-      .join("\n")}`
+      .join("\n")}`,
   );
   assert.equal(
     installResult.exitCode,
     0,
-    `Failed to install npm deps: \n${installResult.stderr}`
+    `Failed to install npm deps: \n${installResult.stderr}`,
   );
   assert.doesNotMatch(
     installResult.stdout,
     / warn /,
-    `Install contains unexpected warning: \n${installResult.stdout}`
+    `Install contains unexpected warning: \n${installResult.stdout}`,
   );
 
   console.debug(`Done!`);
@@ -108,12 +111,12 @@ export default async function () {
   assert.equal(
     versionOutput.exitCode,
     0,
-    `Failed to get wing version: ${versionOutput.stderr}`
+    `Failed to get wing version: ${versionOutput.stderr}`,
   );
 
   assert.match(
     versionOutput.stdout,
     /^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/,
-    `Wing version invalid: ${versionOutput.stderr}`
+    `Wing version invalid: ${versionOutput.stderr}`,
   );
 }
