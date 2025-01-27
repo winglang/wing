@@ -6,10 +6,10 @@
       "outputs": ["dist/**", "lib/**"]
     },
     "test": {
-      "dependsOn": ["compile"]
+      "dependsOn": ["^compile"]
     },
     "package": {
-      "dependsOn": ["compile"],
+      "dependsOn": ["^compile"],
       "outputs": ["../../../dist/winglang-platform-awscdk-*.tgz"]
     }
   }
