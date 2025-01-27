@@ -3,9 +3,29 @@ import { test, expect } from "vitest";
 import { cloud } from "@winglang/sdk";
 import { AwsCdkApp, awscdkSanitize } from "./util";
 import { inflight } from "@winglang/sdk/lib/core";
+import { execSync } from "node:child_process";
 
 const EVENT_HANDLER = inflight(async (_, event) => {
   console.log("Received: ", event.name);
+});
+
+execSync("ls -al /home/runner/work/wing/wing/packages/@winglang/sdk/src", {
+  stdio: "inherit",
+});
+execSync("ls -al /home/runner/work/wing/wing/packages/@winglang/sdk/lib", {
+  stdio: "inherit",
+});
+execSync("ls -al /home/runner/work/wing/wing/packages/@winglang/sdk/src/std", {
+  stdio: "inherit",
+});
+execSync("ls -al /home/runner/work/wing/wing/packages/@winglang/sdk/lib/std", {
+  stdio: "inherit",
+});
+execSync("ls -al /home/runner/work/wing/wing/packages/@winglang/sdk/src/core", {
+  stdio: "inherit",
+});
+execSync("ls -al /home/runner/work/wing/wing/packages/@winglang/sdk/lib/core", {
+  stdio: "inherit",
 });
 
 test("create a bucket", async () => {
@@ -25,7 +45,7 @@ test("create a bucket", async () => {
         IgnorePublicAcls: true,
         RestrictPublicBuckets: true,
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -71,7 +91,7 @@ test("bucket with two preflight objects", () => {
         Match.stringLikeRegexp(".zip"),
         Match.stringLikeRegexp(".zip"),
       ]),
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -94,7 +114,7 @@ test("bucket with two preflight files", () => {
         Match.stringLikeRegexp(".zip"),
         Match.stringLikeRegexp(".zip"),
       ]),
-    })
+    }),
   );
   expect(template.toJSON()).toMatchSnapshot();
 });
@@ -118,7 +138,7 @@ test("bucket with onCreate method", () => {
           },
         ],
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -142,7 +162,7 @@ test("bucket with onDelete method", () => {
           },
         ],
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -166,7 +186,7 @@ test("bucket with onUpdate method", () => {
           },
         ],
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -190,7 +210,7 @@ test("bucket with onEvent method", () => {
           { Events: ["s3:ObjectCreated:Post"] },
         ],
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
