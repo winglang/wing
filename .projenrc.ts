@@ -186,7 +186,7 @@ monorepo.devTask.reset();
 monorepo.addScript("package", "turbo package");
 monorepo.addScript(
   "package:ci",
-  "turbo package --color && tar -czvf dist/docs.tgz docs/*",
+  "turbo package --color --summarize && tar -czvf dist/docs.tgz docs/*",
 );
 monorepo.addScript(
   "test:ci",

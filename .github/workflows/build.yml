@@ -102,6 +102,13 @@ jobs:
           name: dist
           path: dist/*
 
+      - name: Upload Turbo Runs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turbo-runs
+          path: .turbo/runs/*
+
   test:
     name: Test
     timeout-minutes: 30
@@ -159,6 +166,13 @@ jobs:
         with:
           name: build.diff
           path: build.diff
+
+      - name: Upload Turbo Runs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: turbo-runs
+          path: .turbo/runs/*
 
   benchmark:
     name: Benchmark
