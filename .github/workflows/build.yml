@@ -22,7 +22,6 @@ env:
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-  TURBO_FORCE: true # force a cache miss until we fix the turbo cache config
   IS_SAME_REPO_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
 
 jobs:
@@ -250,23 +249,6 @@ jobs:
           cache: "pnpm"
           node-version: ${{ matrix.node }}
 
-      - name: Install Rust
-        uses: moonrepo/setup-rust@v1
-        with:
-          inherit-toolchain: true
-          cache: false
-
-      - name: Setup Cargo Cache
-        uses: Swatinem/rust-cache@v2
-        with:
-          # Don't save cache here, to avoid thrashing with test job
-          save-if: false
-
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
-
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -275,7 +257,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm install --frozen-lockfile
+          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+          pnpm run compile --filter jsii-fixture
 
       - name: Build and Package
         run: pnpm package:ci
