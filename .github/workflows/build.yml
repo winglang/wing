@@ -239,6 +239,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Docker on macOS
+        if: runner.os == 'macOS'
+        uses: douglascamata/setup-docker-macos-action@v1-alpha
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
