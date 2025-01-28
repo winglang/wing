@@ -22,7 +22,6 @@ env:
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-  TURBO_FORCE: true # force a cache miss until we fix the turbo cache config
   IS_SAME_REPO_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
 
 jobs:
@@ -221,7 +220,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        runner: [ubuntu-latest, macos-13]
+        runner: [ubuntu-latest, macos-13, windows-latest]
         node: ["20", "18"]
         shard: ["1/2", "2/2"]
         full_run:
