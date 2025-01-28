@@ -278,10 +278,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm install --frozen-lockfile
-
-      - name: Build and Package
-        run: pnpm package:ci
+          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+          pnpm turbo compile --filter jsii-fixture
 
       - name: Run Hangar Tests
         working-directory: tools/hangar
