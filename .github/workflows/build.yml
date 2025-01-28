@@ -284,6 +284,7 @@ jobs:
         run: pnpm package:ci
 
       - name: Remove dev tarballs
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           rm -rf dist/*-0.0.0.tgz
 
