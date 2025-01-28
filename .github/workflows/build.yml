@@ -278,15 +278,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm install --frozen-lockfile
-
-      - name: Build and Package
-        run: pnpm package:ci
-
-      - name: Remove dev tarballs
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          rm -rf dist/*-0.0.0.tgz
+          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+          pnpm run compile --filter jsii-fixture
 
       - name: Run Hangar Tests
         working-directory: tools/hangar
