@@ -283,6 +283,10 @@ jobs:
       - name: Build and Package
         run: pnpm package:ci
 
+      - name: Remove dev tarballs
+        run: |
+          rm -rf dist/*-0.0.0.tgz
+
       - name: Run Hangar Tests
         working-directory: tools/hangar
         run: |
