@@ -220,7 +220,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        runner: [ubuntu-latest, macos-13]
+        runner: [ubuntu-latest, macos-13, windows-latest]
         node: ["20", "18"]
         shard: ["1/2", "2/2"]
         full_run:
