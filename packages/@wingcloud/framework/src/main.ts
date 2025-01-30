@@ -1,5 +1,5 @@
 import { platform, std } from "@winglang/sdk";
-import type { Construct } from "@winglang/sdk/lib/core/types";
+import type { Construct } from "@winglang/sdk/core/types";
 
 /**
  * Properties for a Wing app.
@@ -49,10 +49,10 @@ export function main(
     test: (
       name: string,
       handler: std.ITestHandler,
-      props?: std.TestProps
-    ) => void
+      props?: std.TestProps,
+    ) => void,
   ) => void,
-  props: AppProps = {}
+  props: AppProps = {},
 ) {
   // check if we have everything we need
   const requiredEnvVars = [
@@ -79,7 +79,7 @@ This is a Wing app and must be run through the Wing CLI (npm install -g winglang
   }
 
   const platformPaths = ((s) => (!s ? [] : s.split(";")))(
-    process.env.WING_PLATFORMS
+    process.env.WING_PLATFORMS,
   );
   const outdir = process.env.WING_SYNTH_DIR;
   const name = props.name ?? "main";

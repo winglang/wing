@@ -5,7 +5,7 @@ import {
 } from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import { cloud } from "@winglang/sdk";
-import { Secret as AwsSecret } from "@winglang/sdk/lib/shared-aws";
+import { Secret as AwsSecret } from "@winglang/sdk/shared-aws";
 
 /**
  * AWS Implemntation of `cloud.Secret`

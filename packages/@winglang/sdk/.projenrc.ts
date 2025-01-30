@@ -142,6 +142,63 @@ const project = new cdk.JsiiProject({
 project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
 project.deps.removeDependency("ts-node");
 
+const exportedModules = [
+  "cloud",
+  "core",
+  "expect",
+  "fs",
+  "http",
+  "platform",
+  "shared-aws",
+  "shared-gcp",
+  "shared",
+  "simulator",
+  "std",
+  "target-sim",
+  "target-tf-aws",
+  "target-tf-azure",
+  "target-tf-gcp",
+  "ui",
+  "util",
+  "test",
+];
+project.addFields({
+  main: "lib/index.js",
+  types: "lib/index.d.ts",
+  exports: {
+    ".": {
+      require: "./lib/index.js",
+      default: "./lib/index.js",
+      types: "./lib/index.d.ts",
+    },
+    "./helpers": {
+      require: "./lib/helpers.js",
+      default: "./lib/helpers.js",
+      types: "./lib/helpers.d.ts",
+    },
+    ...Object.fromEntries(
+      exportedModules.map((path) => [
+        `./${path}`,
+        {
+          require: `./lib/${path}/index.js`,
+          default: `./lib/${path}/index.js`,
+          types: `./lib/${path}/index.d.ts`,
+        },
+      ]),
+    ),
+    ...Object.fromEntries(
+      exportedModules.map((path) => [
+        `./${path}/*`,
+        {
+          require: `./lib/${path}/*.js`,
+          default: `./lib/${path}/*.js`,
+          types: `./lib/${path}/*.d.ts`,
+        },
+      ]),
+    ),
+  },
+});
+
 /**
  * Pin AWS SDK version and keep deps in sync
  *

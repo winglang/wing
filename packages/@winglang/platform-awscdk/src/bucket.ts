@@ -10,12 +10,9 @@ import { LambdaDestination } from "aws-cdk-lib/aws-s3-notifications";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, std } from "@winglang/sdk";
-import { Bucket as AwsBucket } from "@winglang/sdk/lib/shared-aws/bucket";
-import {
-  IAwsCdkFunction,
-  isAwsCdkFunction,
-} from "./function";
-import { lift } from "@winglang/sdk/lib/core";
+import { Bucket as AwsBucket } from "@winglang/sdk/shared-aws/bucket";
+import { IAwsCdkFunction, isAwsCdkFunction } from "./function";
+import { lift } from "@winglang/sdk/core";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -44,7 +41,7 @@ export class Bucket extends AwsBucket {
 
     if (props.cors ?? true) {
       this.addCorsRule(
-        props.corsOptions ?? cloud.DEFAULT_BUCKET_CORS_CONFIGURATION
+        props.corsOptions ?? cloud.DEFAULT_BUCKET_CORS_CONFIGURATION,
       );
     }
   }
@@ -73,7 +70,7 @@ export class Bucket extends AwsBucket {
   private onEventFunction(
     event: cloud.BucketEventType,
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnCreateOptions
+    opts?: cloud.BucketOnCreateOptions,
   ): IAwsCdkFunction {
     const functionHandler = lift({
       handler: inflight,
@@ -96,7 +93,7 @@ export class Bucket extends AwsBucket {
       this.node.scope!, // ok since we're not a tree root
       App.of(this).makeId(this, `${this.node.id}-${event}`),
       functionHandler,
-      opts
+      opts,
     );
 
     if (!isAwsCdkFunction(fn)) {
@@ -108,12 +105,12 @@ export class Bucket extends AwsBucket {
 
   public onCreate(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnCreateOptions
+    opts?: cloud.BucketOnCreateOptions,
   ): void {
     const fn = this.onEventFunction(
       cloud.BucketEventType.CREATE,
       inflight,
-      opts
+      opts,
     );
 
     std.Node.of(this).addConnection({
@@ -124,18 +121,18 @@ export class Bucket extends AwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
-      new LambdaDestination(fn.awscdkFunction)
+      new LambdaDestination(fn.awscdkFunction),
     );
   }
 
   public onDelete(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnDeleteOptions
+    opts?: cloud.BucketOnDeleteOptions,
   ): void {
     const fn = this.onEventFunction(
       cloud.BucketEventType.DELETE,
       inflight,
-      opts
+      opts,
     );
 
     std.Node.of(this).addConnection({
@@ -146,18 +143,18 @@ export class Bucket extends AwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
-      new LambdaDestination(fn.awscdkFunction)
+      new LambdaDestination(fn.awscdkFunction),
     );
   }
 
   public onUpdate(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnUpdateOptions
+    opts?: cloud.BucketOnUpdateOptions,
   ): void {
     const fn = this.onEventFunction(
       cloud.BucketEventType.UPDATE,
       inflight,
-      opts
+      opts,
     );
 
     std.Node.of(this).addConnection({
@@ -168,13 +165,13 @@ export class Bucket extends AwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
-      new LambdaDestination(fn.awscdkFunction)
+      new LambdaDestination(fn.awscdkFunction),
     );
   }
 
   public onEvent(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnEventOptions
+    opts?: cloud.BucketOnEventOptions,
   ) {
     this.onCreate(inflight, opts);
     this.onDelete(inflight, opts);
@@ -198,7 +195,7 @@ export function createEncryptedBucket(
   scope: Construct,
   isPublic: boolean,
   forceDestroy: boolean,
-  name: string = "Default"
+  name: string = "Default",
 ): S3Bucket {
   const isTestEnvironment = App.of(scope).isTestEnvironment;
 
@@ -206,11 +203,11 @@ export function createEncryptedBucket(
     encryption: BucketEncryption.S3_MANAGED,
     blockPublicAccess: isPublic
       ? {
-        blockPublicAcls: false,
-        blockPublicPolicy: false,
-        ignorePublicAcls: false,
-        restrictPublicBuckets: false,
-      }
+          blockPublicAcls: false,
+          blockPublicPolicy: false,
+          ignorePublicAcls: false,
+          restrictPublicBuckets: false,
+        }
       : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,

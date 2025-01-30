@@ -1,4 +1,4 @@
-import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/simulator.js";
+import type { ResourceRunningState } from "@winglang/sdk/simulator/simulator";
 
 import type { ConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
 

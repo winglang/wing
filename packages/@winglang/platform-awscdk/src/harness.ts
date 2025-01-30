@@ -1,10 +1,11 @@
 import { readFile, rm } from "fs/promises";
-import { ITestRunnerClient } from "@winglang/sdk/lib/std";
-import { Util } from "@winglang/sdk/lib/util";
-import { ITestHarness } from "@winglang/sdk/lib/platform";
+import { ITestRunnerClient } from "@winglang/sdk/std";
+import { Util } from "@winglang/sdk/util";
+import { ITestHarness } from "@winglang/sdk/platform";
 import * as path from "path";
 
-export const WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
+export const WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK =
+  "WingTestRunnerFunctionArns";
 
 const OUTPUT_FILE = "output.json";
 
@@ -22,18 +23,38 @@ export class AwsCdkTestHarness implements ITestHarness {
       );
     }
 
-    Util.exec("cdk", ["deploy", "--require-approval", "never", "--ci", "true", "-O", OUTPUT_FILE, "--app", "."], opts);
+    Util.exec(
+      "cdk",
+      [
+        "deploy",
+        "--require-approval",
+        "never",
+        "--ci",
+        "true",
+        "-O",
+        OUTPUT_FILE,
+        "--app",
+        ".",
+      ],
+      opts,
+    );
 
-    const stackName = process.env.CDK_STACK_NAME! + Util.sha256(synthDir).slice(-8);
+    const stackName =
+      process.env.CDK_STACK_NAME! + Util.sha256(synthDir).slice(-8);
     const testArns = await this.getFunctionArnsOutput(synthDir, stackName);
 
-    const { TestRunnerClient } = await import("@winglang/sdk/lib/shared-aws/test-runner.inflight");
+    const { TestRunnerClient } = await import(
+      "@winglang/sdk/shared-aws/test-runner.inflight"
+    );
     return new TestRunnerClient({ $tests: testArns });
   }
 
   public async cleanup(synthDir: string): Promise<void> {
     await rm(path.join(synthDir, OUTPUT_FILE));
-    Util.exec("cdk", ["destroy", "-f", "--ci", "true", "--app", "."], { cwd: synthDir, inheritEnv: true });
+    Util.exec("cdk", ["destroy", "-f", "--ci", "true", "--app", "."], {
+      cwd: synthDir,
+      inheritEnv: true,
+    });
     await rm(synthDir, { recursive: true, force: true });
   }
 

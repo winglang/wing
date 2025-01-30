@@ -2,7 +2,10 @@ import { RemovalPolicy } from "aws-cdk-lib";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
 import { cloud } from "@winglang/sdk";
-import { Counter as AwsCounter, COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/counter";
+import {
+  Counter as AwsCounter,
+  COUNTER_HASH_KEY,
+} from "@winglang/sdk/shared-aws/counter";
 
 /**
  * AWS implementation of `cloud.Counter`.
@@ -11,7 +14,7 @@ import { Counter as AwsCounter, COUNTER_HASH_KEY } from "@winglang/sdk/lib/share
  */
 export class Counter extends AwsCounter {
   private readonly table: Table;
-  
+
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
 

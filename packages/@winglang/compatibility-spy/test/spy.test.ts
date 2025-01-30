@@ -2,9 +2,9 @@ import { test, describe, expect, vi } from "vitest";
 import { join } from "node:path";
 import { Platform } from "../src";
 import { cloud, platform } from "@winglang/sdk";
-import { App as SimApp } from "@winglang/sdk/lib/target-sim/app";
+import { App as SimApp } from "@winglang/sdk/target-sim/app";
 
-import { Platform as SimPlatform } from "@winglang/sdk/lib/target-sim/platform";
+import { Platform as SimPlatform } from "@winglang/sdk/target-sim/platform";
 
 describe("compatibility spy", async () => {
   let spyPlatform = new Platform();
@@ -18,9 +18,9 @@ describe("compatibility spy", async () => {
   vi.spyOn(manager, "loadPlatformPath").mockImplementation(
     (platformPath: string) => {
       manager.platformInstances.push(
-        platformPath === "sim" ? new SimPlatform() : spyPlatform
+        platformPath === "sim" ? new SimPlatform() : spyPlatform,
       );
-    }
+    },
   );
 
   const factory = manager.createClassFactory();
@@ -39,7 +39,7 @@ describe("compatibility spy", async () => {
     cloud.BUCKET_FQN,
     undefined,
     app,
-    "bucket"
+    "bucket",
   ) as cloud.Bucket;
 
   bucket.addObject("a", "b");
@@ -48,7 +48,7 @@ describe("compatibility spy", async () => {
   test("each new instance is wrapped in a proxy", () => {
     expect(spyPlatform.newInstance).toBeCalledTimes(1);
     expect(spyPlatform._usageContext.get("Bucket")).toEqual(
-      new Set(["addObject"])
+      new Set(["addObject"]),
     );
   });
 });

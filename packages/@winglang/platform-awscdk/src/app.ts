@@ -6,8 +6,8 @@ import stringify from "safe-stable-stringify";
 import { TestRunner } from "./test-runner";
 import { CdkTokens } from "./tokens";
 import { core } from "@winglang/sdk";
-import { Util } from "@winglang/sdk/lib/util";
-import { registerTokenResolver } from "@winglang/sdk/lib/core/tokens";
+import { Util } from "@winglang/sdk/util";
+import { registerTokenResolver } from "@winglang/sdk/core/tokens";
 
 /**
  * AWS-CDK App props
@@ -29,7 +29,7 @@ export interface CdkAppProps extends core.AppProps {
   readonly stackFactory?: (
     app: cdk.App,
     stackName: string,
-    props?: cdk.StackProps
+    props?: cdk.StackProps,
   ) => cdk.Stack;
 }
 
@@ -48,7 +48,7 @@ export class App extends core.App {
   private _vpc?: cdk.aws_ec2.IVpc;
 
   /** Subnets shared across app */
-  public subnets: { [key: string]: (cdk.aws_ec2.ISubnet)[] };
+  public subnets: { [key: string]: cdk.aws_ec2.ISubnet[] };
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
@@ -64,7 +64,7 @@ export class App extends core.App {
     let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
       throw new Error(
-        "A CDK stack name must be specified through the CDK_STACK_NAME environment variable."
+        "A CDK stack name must be specified through the CDK_STACK_NAME environment variable.",
       );
     }
 
@@ -119,8 +119,12 @@ export class App extends core.App {
 
   private importExistingVpc(): cdk.aws_ec2.IVpc {
     const vpcId: string = this.parameters.value(`${this._target}/vpc_id`);
-    const privateSubnetIds: string[] = this.parameters.value(`${this._target}/private_subnet_ids`);
-    const publicSubnetIds: string[] = this.parameters.value(`${this._target}/public_subnet_ids`);
+    const privateSubnetIds: string[] = this.parameters.value(
+      `${this._target}/private_subnet_ids`,
+    );
+    const publicSubnetIds: string[] = this.parameters.value(
+      `${this._target}/public_subnet_ids`,
+    );
 
     this._vpc = cdk.aws_ec2.Vpc.fromLookup(this, "ExistingVpc", {
       vpcId: vpcId,
@@ -128,14 +132,22 @@ export class App extends core.App {
 
     for (const subnetId of privateSubnetIds) {
       this.subnets.private.push(
-        cdk.aws_ec2.Subnet.fromSubnetId(this, `PrivateSubnet${subnetId.slice(-8)}`, subnetId)
+        cdk.aws_ec2.Subnet.fromSubnetId(
+          this,
+          `PrivateSubnet${subnetId.slice(-8)}`,
+          subnetId,
+        ),
       );
     }
 
     if (publicSubnetIds) {
       for (const subnetId of publicSubnetIds) {
         this.subnets.public.push(
-          cdk.aws_ec2.Subnet.fromSubnetId(this, `PublicSubnet${subnetId.slice(-8)}`, subnetId)
+          cdk.aws_ec2.Subnet.fromSubnetId(
+            this,
+            `PublicSubnet${subnetId.slice(-8)}`,
+            subnetId,
+          ),
         );
       }
     }

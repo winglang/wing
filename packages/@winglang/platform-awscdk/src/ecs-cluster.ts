@@ -1,6 +1,6 @@
 import { App } from "./app";
 import { Cluster } from "aws-cdk-lib/aws-ecs";
-import { Resource } from "@winglang/sdk/lib/std";
+import { Resource } from "@winglang/sdk/std";
 
 let clusterInstance: Cluster | undefined = undefined;
 

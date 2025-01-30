@@ -2,10 +2,10 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud, std } from "@winglang/sdk";
 import { AwsCdkApp, awscdkSanitize } from "./util";
-import { inflight } from "@winglang/sdk/lib/core";
+import { inflight } from "@winglang/sdk/core";
 
 const INFLIGHT_CODE = inflight(async (_, name) =>
-  console.log("Hello, " + name)
+  console.log("Hello, " + name),
 );
 
 test("basic function", () => {
@@ -22,7 +22,7 @@ test("basic function", () => {
       Handler: "index.handler",
       Runtime: "nodejs20.x",
       Timeout: 60,
-    })
+    }),
   );
   template.resourceCountIs("AWS::Logs::LogGroup", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
@@ -53,7 +53,7 @@ test("basic function with environment variables", () => {
           FOO: "BAR",
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -74,7 +74,7 @@ test("basic function with timeout explicitly set", () => {
       Handler: "index.handler",
       Runtime: "nodejs20.x",
       Timeout: 300,
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -93,7 +93,7 @@ test("basic function with memory size specified", () => {
       Handler: "index.handler",
       Runtime: "nodejs20.x",
       MemorySize: 512,
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -111,7 +111,7 @@ test("basic function with standard log retention", () => {
     "AWS::Logs::LogGroup",
     Match.objectEquals({
       RetentionInDays: 30,
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -129,7 +129,7 @@ test("basic function with custom log retention", () => {
     "AWS::Logs::LogGroup",
     Match.objectEquals({
       RetentionInDays: 7,
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -162,7 +162,7 @@ test("source map setting", () => {
           NODE_OPTIONS: "--enable-source-maps",
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

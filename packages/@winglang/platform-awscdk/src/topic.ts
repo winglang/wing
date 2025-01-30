@@ -10,7 +10,7 @@ import { cloud, std } from "@winglang/sdk";
 import {
   Topic as AwsTopic,
   TopicOnMessageHandler,
-} from "@winglang/sdk/lib/shared-aws/topic";
+} from "@winglang/sdk/shared-aws/topic";
 import { Queue } from "./queue";
 import { isAwsCdkFunction } from "./function";
 
@@ -18,7 +18,6 @@ import { isAwsCdkFunction } from "./function";
  * AWS Implementation of `cloud.Topic`.
  */
 export class Topic extends AwsTopic {
-
   private readonly topic: SNSTopic;
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
@@ -28,7 +27,7 @@ export class Topic extends AwsTopic {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageOptions = {}
+    props: cloud.TopicOnMessageOptions = {},
   ): cloud.Function {
     const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
 
@@ -36,12 +35,12 @@ export class Topic extends AwsTopic {
       this.node.scope!, // ok since we're not a tree root
       App.of(this).makeId(this, `${this.node.id}-OnMessage`),
       functionHandler,
-      props
+      props,
     );
 
     if (!isAwsCdkFunction(fn)) {
       throw new Error(
-        "Expected function to implement 'IAwsCdkFunction' method"
+        "Expected function to implement 'IAwsCdkFunction' method",
       );
     }
 
@@ -60,7 +59,7 @@ export class Topic extends AwsTopic {
   public subscribeQueue(queue: cloud.Queue): void {
     if (!(queue instanceof Queue)) {
       throw new Error(
-        "'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic"
+        "'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic",
       );
     }
 

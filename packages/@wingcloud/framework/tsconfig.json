@@ -3,9 +3,9 @@
     "strict": true,
     "alwaysStrict": true,
     "target": "ES2022",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "esModuleInterop": true,
-    "isolatedModules": true,
+    "isolatedModules": true
   }
 }

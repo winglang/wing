@@ -1,1 +1,1 @@
-export { WebsiteClient } from "@winglang/sdk/lib/shared-aws/website.inflight";
+export { WebsiteClient } from "@winglang/sdk/shared-aws/website.inflight";

@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { PlatformManager, SECRETS_FILE_NAME } from "@winglang/sdk/lib/platform";
-import inquirer from "inquirer";
+import { PlatformManager, SECRETS_FILE_NAME } from "@winglang/sdk/platform";
 import { CompileOptions, compile } from "./compile";
 
 export interface SecretsOptions extends CompileOptions {
@@ -31,6 +30,7 @@ export async function secrets(entrypoint?: string, options?: SecretsOptions): Pr
     return;
   }
 
+  const { default: inquirer } = await import("inquirer");
   for (const secret of secretNames) {
     const response = await inquirer.prompt([
       {

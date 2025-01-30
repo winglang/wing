@@ -9,7 +9,7 @@ import { BuiltinPlatform } from "./constants";
 import { PreflightError } from "./errors";
 import { readFile } from "fs/promises";
 import { fork } from "child_process";
-import { PlatformManager } from "@winglang/sdk/lib/platform";
+import { PlatformManager } from "@winglang/sdk/platform";
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
 Error.stackTraceLimit = 50;
@@ -209,7 +209,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     let [err, finished] = await runPreflightCodeInWorkerThread(
       compileForPreflightResult.preflightEntrypoint,
       preflightEnv,
-      (data) => preflightLog?.(data.toString())
+      (data) => preflightLog?.(data.toString()),
     );
     preflightError = err;
     if (!finished) {
@@ -277,7 +277,7 @@ async function compileTypeScriptForPreflight(props: {
         {
           message: `\
   Failed to load "@wingcloud/framework": ${(err as any).message}
-  
+
   To use Wing with TypeScript files, you must install "@wingcloud/framework" as a dependency of your project.
   npm i @wingcloud/framework
   `,
@@ -329,7 +329,7 @@ async function compileWingForPreflight(props: {
     const data_buf = Buffer.from(
       (wingc.exports.memory as WebAssembly.Memory).buffer,
       data_ptr,
-      data_len
+      data_len,
     );
     const data_str = new TextDecoder().decode(data_buf);
     diagnostics.push(JSON.parse(data_str));
@@ -372,7 +372,7 @@ function defaultValuesFile() {
 async function runPreflightCodeInWorkerThread(
   entrypoint: string,
   env: Record<string, string | undefined>,
-  onStdout: (data: Buffer) => void
+  onStdout: (data: Buffer) => void,
 ): Promise<[PreflightError | undefined, boolean]> {
   try {
     env.WING_PREFLIGHT_ENTRYPOINT = JSON.stringify(entrypoint);

@@ -3,7 +3,7 @@ import fsPromises from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
-import { LogLevel, TestResult, TraceType } from "@winglang/sdk/lib/std";
+import { LogLevel, TestResult, TraceType } from "@winglang/sdk/std";
 import chalk from "chalk";
 import { describe, test, expect, beforeEach, afterEach, vi, MockInstance } from "vitest";
 import { filterTests, renderTestReport, collectTestFiles, test as wingTest } from ".";
@@ -76,7 +76,7 @@ describe("wing test (custom platform)", () => {
     const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
     // can't be resolved within tmp directory
-    const targetTfAws = require.resolve("@winglang/sdk/lib/target-tf-aws/platform");
+    const targetTfAws = require.resolve("@winglang/sdk/target-tf-aws/platform");
 
     process.chdir(outDir);
     fs.writeFileSync("foo.test.w", `bring cloud;`);

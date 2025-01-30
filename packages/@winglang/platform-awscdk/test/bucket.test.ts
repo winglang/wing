@@ -2,7 +2,7 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud } from "@winglang/sdk";
 import { AwsCdkApp, awscdkSanitize } from "./util";
-import { inflight } from "@winglang/sdk/lib/core";
+import { inflight } from "@winglang/sdk/core";
 
 const EVENT_HANDLER = inflight(async (_, event) => {
   console.log("Received: ", event.name);
@@ -25,7 +25,7 @@ test("create a bucket", async () => {
         IgnorePublicAcls: true,
         RestrictPublicBuckets: true,
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -71,7 +71,7 @@ test("bucket with two preflight objects", () => {
         Match.stringLikeRegexp(".zip"),
         Match.stringLikeRegexp(".zip"),
       ]),
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -94,7 +94,7 @@ test("bucket with two preflight files", () => {
         Match.stringLikeRegexp(".zip"),
         Match.stringLikeRegexp(".zip"),
       ]),
-    })
+    }),
   );
   expect(template.toJSON()).toMatchSnapshot();
 });
@@ -118,7 +118,7 @@ test("bucket with onCreate method", () => {
           },
         ],
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -142,7 +142,7 @@ test("bucket with onDelete method", () => {
           },
         ],
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -166,7 +166,7 @@ test("bucket with onUpdate method", () => {
           },
         ],
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -190,7 +190,7 @@ test("bucket with onEvent method", () => {
           { Events: ["s3:ObjectCreated:Post"] },
         ],
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

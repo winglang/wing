@@ -6,8 +6,8 @@ import { Bucket as S3Bucket } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 import { createEncryptedBucket } from "./bucket";
-import { cloud } from "@winglang/sdk/lib";
-import { IAwsWebsite } from "@winglang/sdk/lib/shared-aws";
+import { cloud } from "@winglang/sdk";
+import { IAwsWebsite } from "@winglang/sdk/shared-aws";
 
 const INDEX_FILE = "index.html";
 
@@ -39,10 +39,10 @@ export class Website extends cloud.Website implements IAwsWebsite {
         resources: [this.bucket.arnForObjects("*")],
         principals: [
           new CanonicalUserPrincipal(
-            cloudFrontOAI.cloudFrontOriginAccessIdentityS3CanonicalUserId
+            cloudFrontOAI.cloudFrontOriginAccessIdentityS3CanonicalUserId,
           ),
         ],
-      })
+      }),
     );
 
     // create a cloudFront distribution
@@ -71,7 +71,7 @@ export class Website extends cloud.Website implements IAwsWebsite {
   public addFile(
     path: string,
     data: string,
-    options?: cloud.AddFileOptions
+    options?: cloud.AddFileOptions,
   ): string {
     new BucketDeployment(this, `S3Object-${path}`, {
       destinationBucket: this.bucket,

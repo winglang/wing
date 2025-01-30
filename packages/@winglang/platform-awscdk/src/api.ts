@@ -14,8 +14,8 @@ import {
   ApiEndpointHandler,
   Api as AwsApi,
   STAGE_NAME,
-} from "@winglang/sdk/lib/shared-aws/api";
-import { createApiDefaultResponse } from "@winglang/sdk/lib/shared-aws/api.default";
+} from "@winglang/sdk/shared-aws";
+import { createApiDefaultResponse } from "@winglang/sdk/shared-aws/api.default";
 import { isAwsCdkFunction } from "./function";
 
 /**
@@ -53,7 +53,7 @@ export class Api extends AwsApi {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiEndpointOptions
+    props?: cloud.ApiEndpointOptions,
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
@@ -80,7 +80,7 @@ export class Api extends AwsApi {
   public get(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions
+    props?: cloud.ApiGetOptions,
   ): void {
     this.httpRequests("GET", path, inflight, props);
   }
@@ -93,7 +93,7 @@ export class Api extends AwsApi {
   public post(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPostOptions
+    props?: cloud.ApiPostOptions,
   ): void {
     this.httpRequests("POST", path, inflight, props);
   }
@@ -106,7 +106,7 @@ export class Api extends AwsApi {
   public put(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPutOptions
+    props?: cloud.ApiPutOptions,
   ): void {
     this.httpRequests("PUT", path, inflight, props);
   }
@@ -119,7 +119,7 @@ export class Api extends AwsApi {
   public delete(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiDeleteOptions
+    props?: cloud.ApiDeleteOptions,
   ): void {
     this.httpRequests("DELETE", path, inflight, props);
   }
@@ -132,7 +132,7 @@ export class Api extends AwsApi {
   public patch(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPatchOptions
+    props?: cloud.ApiPatchOptions,
   ): void {
     this.httpRequests("PATCH", path, inflight, props);
   }
@@ -145,7 +145,7 @@ export class Api extends AwsApi {
   public options(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiOptionsOptions
+    props?: cloud.ApiOptionsOptions,
   ): void {
     this.httpRequests("OPTIONS", path, inflight, props);
   }
@@ -158,7 +158,7 @@ export class Api extends AwsApi {
   public head(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiHeadOptions
+    props?: cloud.ApiHeadOptions,
   ): void {
     this.httpRequests("HEAD", path, inflight, props);
   }
@@ -171,7 +171,7 @@ export class Api extends AwsApi {
   public connect(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiConnectOptions
+    props?: cloud.ApiConnectOptions,
   ): void {
     this.httpRequests("CONNECT", path, inflight, props);
   }
@@ -186,7 +186,7 @@ export class Api extends AwsApi {
     inflight: cloud.IApiEndpointHandler,
     method: string,
     path: string,
-    props?: cloud.ApiEndpointOptions
+    props?: cloud.ApiEndpointOptions,
   ): cloud.Function {
     return this.addInflightHandler(inflight, method, path, props);
   }
@@ -201,20 +201,20 @@ export class Api extends AwsApi {
     inflight: cloud.IApiEndpointHandler,
     method: string,
     path: string,
-    props?: cloud.ApiEndpointOptions
+    props?: cloud.ApiEndpointOptions,
   ): cloud.Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
       const newInflight = ApiEndpointHandler.toFunctionHandler(
         inflight,
-        Api.renderCorsHeaders(this.corsOptions)?.defaultResponse
+        Api.renderCorsHeaders(this.corsOptions)?.defaultResponse,
       );
       const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
       handler = new cloud.Function(
         this,
         App.of(this).makeId(this, prefix),
         newInflight,
-        props
+        props,
       );
       this.handlers[inflight._id] = handler;
     }
@@ -262,7 +262,7 @@ class WingRestApi extends Construct {
     props: {
       getApiSpec: () => cloud.OpenApiSpec;
       cors?: cloud.ApiCorsOptions;
-    }
+    },
   ) {
     super(scope, id);
     this.region = (App.of(this) as App).region;
@@ -274,7 +274,7 @@ class WingRestApi extends Construct {
             const injectGreedy404Handler = (openApiSpec: cloud.OpenApiSpec) => {
               const defaultResponse = createApiDefaultResponse(
                 Object.keys(openApiSpec.paths),
-                props.cors
+                props.cors,
               );
 
               openApiSpec.paths = {
@@ -285,7 +285,7 @@ class WingRestApi extends Construct {
             };
             return injectGreedy404Handler(props.getApiSpec());
           },
-        })
+        }),
       ),
       deploy: false,
     });
@@ -355,7 +355,7 @@ class WingRestApi extends Construct {
   private addHandlerPermissions = (
     path: string,
     method: string,
-    handler: cloud.Function
+    handler: cloud.Function,
   ) => {
     if (!isAwsCdkFunction(handler)) {
       throw new Error("Expected 'handler' to implement IAwsCdkFunction");

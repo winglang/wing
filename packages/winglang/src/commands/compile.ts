@@ -1,8 +1,8 @@
 import { dirname, resolve } from "path";
 
 import * as wingCompiler from "@winglang/compiler";
-import { loadEnvVariables } from "@winglang/sdk/lib/helpers";
-import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
+import { loadEnvVariables } from "@winglang/sdk/helpers";
+import { prettyPrintError } from "@winglang/sdk/util/enhanced-error";
 import chalk from "chalk";
 import debug from "debug";
 import { glob } from "glob";

@@ -1,17 +1,17 @@
-import type { BaseResourceSchema } from "@winglang/sdk/lib/simulator/index.js";
+import type { BaseResourceSchema } from "@winglang/sdk/simulator";
 import type {
   ApiSchema as ApiSchema_,
   WebsiteSchema as WebsiteSchema_,
   EndpointSchema as EndpointSchema_,
-} from "@winglang/sdk/lib/target-sim/schema-resources.js";
+} from "@winglang/sdk/target-sim/schema-resources";
 
 export {
   Simulator,
   type WingSimulatorSchema,
   type BaseResourceSchema,
-} from "@winglang/sdk/lib/simulator/index.js";
+} from "@winglang/sdk/simulator";
 
-export { Json } from "@winglang/sdk/lib/std/json.js";
+export { Json } from "@winglang/sdk/std/json";
 
 export type {
   IBucketClient,
@@ -22,9 +22,9 @@ export type {
   IApiClient,
   IEndpointClient,
   OpenApiSpec,
-} from "@winglang/sdk/lib/cloud/index.js";
+} from "@winglang/sdk/cloud";
 
-export type { ITestRunnerClient } from "@winglang/sdk/lib/std/index.js";
+export type { ITestRunnerClient } from "@winglang/sdk/std";
 
 export type ApiSchema = BaseResourceSchema & {
   props: ApiSchema_;

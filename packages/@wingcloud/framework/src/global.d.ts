@@ -1,4 +1,4 @@
-import { ClassFactory } from "@winglang/sdk/lib/core";
+import { ClassFactory } from "@winglang/sdk/core";
 
 declare global {
   var $ClassFactory: ClassFactory;

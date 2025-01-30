@@ -169,7 +169,7 @@ export class ApiEndpointHandler {
       const {
         apigwFunctionHandler,
         // eslint-disable-next-line @typescript-eslint/no-require-imports
-      } = require("@winglang/sdk/lib/shared-aws/api-util.js");
+      } = require("@winglang/sdk/shared-aws/api-util.js");
       return apigwFunctionHandler(
         request as unknown as APIGatewayProxyEvent,
         ctx.handler,

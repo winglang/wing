@@ -1,5 +1,5 @@
-import type { ITestRunnerClient } from "@winglang/sdk/lib/std/test-runner.js";
-import { TraceType } from "@winglang/sdk/lib/std/test-runner.js";
+import type { ITestRunnerClient } from "@winglang/sdk/std/test-runner.js";
+import { TraceType } from "@winglang/sdk/std/test-runner.js";
 
 import type { ConsoleLogger } from "../../consoleLogger.js";
 import type { InternalTestResult } from "../../router/test.js";

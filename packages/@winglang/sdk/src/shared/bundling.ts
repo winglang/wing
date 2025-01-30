@@ -5,7 +5,7 @@ import { posix, resolve } from "path";
 import { decode, encode } from "vlq";
 import { normalPath } from "./misc";
 
-const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
+const SDK_PATH = normalPath(resolve(__dirname, "..", "..", "lib"));
 
 // TODO: refactor Bundle into a dedicated class with methods to check if the bundling is
 // finished, invalidated, etc.

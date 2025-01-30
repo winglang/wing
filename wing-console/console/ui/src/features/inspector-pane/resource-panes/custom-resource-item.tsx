@@ -6,7 +6,7 @@ import type {
   UIFileBrowser,
   UIHttpClient,
   UITable,
-} from "@winglang/sdk/lib/core";
+} from "@winglang/sdk/core";
 
 import { CustomResourceFileBrowser } from "./custom-resource-file-browser.js";
 import { CustomResourceHttpClientItem } from "./custom-resource-http-client.js";

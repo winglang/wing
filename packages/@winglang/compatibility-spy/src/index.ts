@@ -2,7 +2,7 @@ import { writeFileSync, readFileSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { Construct } from "constructs";
 import { platform, core, std } from "@winglang/sdk";
-import { ClassFactory } from "@winglang/sdk/lib/core";
+import { ClassFactory } from "@winglang/sdk/core";
 
 const PARENT_PROPERTIES: Set<string> = new Set([
   "node",
@@ -24,8 +24,8 @@ export class Platform implements platform.IPlatform {
         join(require.resolve("@winglang/sdk"), "..", "..", ".jsii"),
         {
           encoding: "utf8",
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -58,7 +58,7 @@ export class Platform implements platform.IPlatform {
           !PARENT_PROPERTIES.has(prop) &&
           !!allowedMethods.find(
             (o: { name: string; protected?: boolean }) =>
-              o.name === prop && !o.protected
+              o.name === prop && !o.protected,
           )
         ) {
           this._addToUsageContext(target, prop);
@@ -111,7 +111,7 @@ export class Platform implements platform.IPlatform {
 
     writeFileSync(
       resolve(app.outdir, "usage_context.json"),
-      JSON.stringify(context, null, 2)
+      JSON.stringify(context, null, 2),
     );
   }
 }

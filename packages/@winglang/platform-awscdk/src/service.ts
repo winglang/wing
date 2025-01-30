@@ -1,23 +1,37 @@
 import { App } from "./app";
 import { Construct } from "constructs";
-import { cloud, core } from "@winglang/sdk/lib";
+import { cloud, core } from "@winglang/sdk";
 import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
-import { AwsInflightHost, IAwsInflightHost, NetworkConfig, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
-import { LiftMap } from "@winglang/sdk/lib/core";
+import {
+  AwsInflightHost,
+  IAwsInflightHost,
+  NetworkConfig,
+  PolicyStatement,
+} from "@winglang/sdk/shared-aws";
+import { LiftMap } from "@winglang/sdk/core";
 import { join } from "path";
-import { ContainerImage, FargateService, FargateTaskDefinition, ICluster, LogDrivers } from "aws-cdk-lib/aws-ecs";
+import {
+  ContainerImage,
+  FargateService,
+  FargateTaskDefinition,
+  ICluster,
+  LogDrivers,
+} from "aws-cdk-lib/aws-ecs";
 import { EcsCluster as CdkEcsCluster } from "./ecs-cluster";
-import { DockerImageAsset, Platform, } from "aws-cdk-lib/aws-ecr-assets";
+import { DockerImageAsset, Platform } from "aws-cdk-lib/aws-ecr-assets";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { writeFileSync } from "fs";
-import { createBundle } from "@winglang/sdk/lib/shared/bundling";
-import { createServiceDockerfile, createServiceWrapper } from "@winglang/sdk/lib/shared-aws";
-import { IInflightHost } from "@winglang/sdk/lib/std";
+import { createBundle } from "@winglang/sdk/shared/bundling";
+import {
+  createServiceDockerfile,
+  createServiceWrapper,
+} from "@winglang/sdk/shared-aws";
+import { IInflightHost } from "@winglang/sdk/std";
 
 /**
  * Represents an ECS service in AWS.
  *
- * Converts the service handler into a DockerFile that is then built and published 
+ * Converts the service handler into a DockerFile that is then built and published
  * to default AWS-CDK ECR repository, on deployment.
  * The service is then run as a Fargate task in an ECS cluster.
  */
@@ -26,7 +40,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
   public static _toInflightType(): string {
     return core.InflightClient.forType(
       __filename.replace("service", "service.inflight"),
-      "ServiceClient"
+      "ServiceClient",
     );
   }
 
@@ -45,7 +59,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     scope: Construct,
     id: string,
     handler: cloud.IServiceHandler,
-    props: cloud.ServiceProps = {}
+    props: cloud.ServiceProps = {},
   ) {
     super(scope, id, handler, props);
 
@@ -59,7 +73,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
 
     const logGroup = new LogGroup(this, "LogGroup", {
       logGroupName: `/ecs/${this.assetName}`,
-      retention: RetentionDays.FIVE_DAYS
+      retention: RetentionDays.FIVE_DAYS,
     });
 
     const image = new DockerImageAsset(this, "DockerImage", {
@@ -92,7 +106,9 @@ export class Service extends cloud.Service implements IAwsInflightHost {
 
   addPolicyStatements(...statements: PolicyStatement[]): void {
     for (const statement of statements) {
-      this.service.taskDefinition.taskRole.addToPrincipalPolicy(new CdkPolicyStatement(statement));
+      this.service.taskDefinition.taskRole.addToPrincipalPolicy(
+        new CdkPolicyStatement(statement),
+      );
     }
   }
   addNetwork(vpcConfig: NetworkConfig): void {
@@ -153,7 +169,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
   public addEnvironment(name: string, value: string): void {
     if (this._env[name] !== undefined && this._env[name] !== value) {
       throw new Error(
-        `Environment variable "${name}" already set with a different value.`
+        `Environment variable "${name}" already set with a different value.`,
       );
     }
     this._env[name] = value;
@@ -170,5 +186,4 @@ export class Service extends cloud.Service implements IAwsInflightHost {
   private envName(): string {
     return `SERVICE_NAME_${this.node.addr.slice(-8)}`;
   }
-
 }

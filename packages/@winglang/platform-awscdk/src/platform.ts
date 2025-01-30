@@ -16,7 +16,7 @@ import { cloud } from "@winglang/sdk";
 import { Construct } from "constructs";
 import { Service } from "./service";
 import { AwsCdkTestHarness } from "./harness";
-import { ITestHarness } from "@winglang/sdk/lib/platform";
+import { ITestHarness } from "@winglang/sdk/platform";
 
 const {
   API_FQN,

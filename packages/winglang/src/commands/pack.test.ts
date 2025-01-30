@@ -195,12 +195,12 @@ describe("wing pack", () => {
     });
 
     await fs.symlink(
-      require.resolve("@winglang/sdk/lib/index.js"),
+      require.resolve("@winglang/sdk/index.js"),
       join(outdir, "package", "node_modules", "@winglang", "sdk", "index.js"),
     );
 
     await fs.symlink(
-      require.resolve("@winglang/sdk/lib/macros.js"),
+      require.resolve("@winglang/sdk/macros.js"),
       join(outdir, "package", "node_modules", "@winglang", "sdk", "lib", "macros.js"),
     );
 
