@@ -41,7 +41,7 @@ export async function compile(options: CompileOptions) {
     const { config, error } = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
     if (error) {
       throw new Error(
-        `Failed to read tsconfig at ${tsconfigPath}: ${error.messageText}`
+        `Failed to read tsconfig at ${tsconfigPath}: ${error.messageText}`,
       );
     }
 
@@ -49,7 +49,7 @@ export async function compile(options: CompileOptions) {
       config,
       ts.sys,
       dirname(tsconfigPath),
-      compilerOptions
+      compilerOptions,
     );
     compilerOptions = options;
 
@@ -57,7 +57,7 @@ export async function compile(options: CompileOptions) {
       throw new Error(
         `Failed to parse tsconfig at ${tsconfigPath}: ${errors
           .map((e) => e.messageText)
-          .join("\n")}`
+          .join("\n")}`,
       );
     }
 
@@ -65,7 +65,7 @@ export async function compile(options: CompileOptions) {
     for (const managedOption of Object.keys(mandatoryCompilerOptions)) {
       if (config?.compilerOptions?.[managedOption] !== undefined) {
         console.warn(
-          `'${managedOption}' is managed by wing and will be ignored from ${tsconfigPath}`
+          `'${managedOption}' is managed by wing and will be ignored from ${tsconfigPath}`,
         );
         attemptedOverride = true;
         delete options[managedOption];
@@ -82,7 +82,7 @@ export async function compile(options: CompileOptions) {
 
   const program = ts.createProgram([options.entrypoint], compilerOptions);
 
-  const { InflightTransformer } = await import("./transformer");
+  const { InflightTransformer } = await import("./transformer.js");
   const transformer = new InflightTransformer(program);
 
   const emitResult = program.emit(undefined, undefined, undefined, undefined, {
@@ -107,13 +107,13 @@ export async function compile(options: CompileOptions) {
 
   // get the last .js file emitted, this should be the entrypoint
   const emittedFiles = emitResult.emittedFiles?.filter((f) =>
-    f.endsWith(".js")
+    f.endsWith(".js"),
   );
   const emittedFile = emittedFiles?.[emittedFiles.length - 1];
 
   if (!emittedFile) {
     throw new Error(
-      `TS compilation failed: Could not find emitted file in ${outDir}`
+      `TS compilation failed: Could not find emitted file in ${outDir}`,
     );
   }
 
