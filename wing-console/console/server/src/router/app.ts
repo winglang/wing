@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
 import { uniqBy } from "@wingconsole/utilities";
-import type { UIComponent } from "@winglang/sdk/core/tree.js";
-import type { ResourceRunningState } from "@winglang/sdk/simulator/simulator.js";
+import type { UIComponent } from "@winglang/sdk/core/tree";
+import type { ResourceRunningState } from "@winglang/sdk/simulator/simulator";
 import { z } from "zod";
 
 import type { LogEntry } from "../consoleLogger.js";

@@ -1,5 +1,5 @@
-import { ENDPOINT_FQN } from "@winglang/sdk/cloud/endpoint.js";
-import { type Endpoint } from "@winglang/sdk/target-sim/endpoint.inflight.js";
+import { ENDPOINT_FQN } from "@winglang/sdk/cloud/endpoint";
+import { type Endpoint } from "@winglang/sdk/target-sim/endpoint.inflight";
 import * as z from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
