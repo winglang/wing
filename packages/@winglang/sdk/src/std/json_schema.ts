@@ -77,7 +77,10 @@ export class JsonSchema {
     const fields = extractFieldsFromSchema(this._rawSchema);
     // Filter rawParameters based on the schema
     const filteredParameters = filterParametersBySchema(fields, obj);
-    return filteredParameters;
+
+    // Remove all `null` values (recursively)
+    const cleanedParameters = removeNullValues(filteredParameters);
+    return cleanedParameters;
   }
 
   /** @internal */
@@ -102,4 +105,18 @@ export class JsonSchema {
   public _toInflightType() {
     return JsonSchema._toInflightType(this._rawSchema);
   }
+}
+
+function removeNullValues(obj: any): any {
+  if (typeof obj === "object" && !Array.isArray(obj)) {
+    const result: any = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== null) {
+        result[key] = removeNullValues(value);
+      }
+    }
+    return result;
+  }
+
+  return obj;
 }

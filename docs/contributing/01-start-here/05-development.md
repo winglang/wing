@@ -98,39 +98,50 @@ pnpm build
 
 It will compile, lint, test and package all modules.
 
-## 🏠 What's the recommended development workflow?
-:::info
-When testing your changes to Wing, locally it may be helpful to be able to easily invoke your local version of the Wing CLI.
-In which case adding a shell alias may be helpful for instance on Linux and Mac you could add: 
+## What's the recommended development workflow? 🏠
 
-`alias mywing=/<PATH_TO_WING_REPO>/packages/winglang/bin/wing` to your shell's rc file.
-:::
-
-The `pnpm wing` command can be executed from the root of the repository in order to build and run the
-compiler, SDK (standard library) and the Wing CLI. Turbo is configured to make sure only the changed components are built
+The `pnpm wing` command can be executed from the *root of the repository* in order to build
+everything and run Wing CLI. Turbo is configured to make sure only the changed components are built
 every time.
 
+
+:::info
 To get full diagnostics, use these exports:
 
 ```sh
 export NODE_OPTIONS=--stack-trace-limit=100
 export RUST_BACKTRACE=full
 ```
-
-Or if you just want to compile your changes and run a local version of the Wing CLI:
-
-```sh
-turbo compile -F winglang
-```
+:::
 
 Now, you can edit a source file anywhere across the stack and run the compiler with arguments.
 For example:
 
 ```sh
-pnpm wing -- test examples/tests/valid/captures.test.w
+pnpm wing -- test tests/valid/captures.test.w
 ```
 
 This command runs the full Wing CLI with the given arguments. Turbo will ensure the CLI build is updated.
+
+:::info
+When testing your changes to Wing locally it may be helpful to be able to easily invoke your local version of the Wing CLI.
+
+First, you need to compile changes:
+
+```sh
+npx turbo compile -F winglang
+```
+
+Then, run the Wing CLI binary directly:
+
+```sh
+./packages/winglang/bin/wing
+```
+
+Pro tip: create a shell alias: 
+
+`alias mywing=/<PATH_TO_WING_REPO>/packages/winglang/bin/wing` to your shell's rc file.
+:::
 
 ## How is the repository structured?
 
@@ -154,7 +165,7 @@ If you wish to install it manually, you may do so by running `scripts/setup_wasi
 
 :::
 
-## 🧪 How do I run tests?
+## How do I run tests? 🧪
 
 End-to-end tests are hosted under `tools/hangar`. To get started, first ensure you can [build
 wing](#-how-do-i-build-wing).
@@ -166,6 +177,14 @@ turbo wing:e2e
 ```
 
 (This is a helpful shortcut for `turbo test -F hangar`)
+
+To run a single test, use the `wing test` from the root and reference the test file name:
+
+For example:
+
+```sh
+pnpm wing -- test tests/valid/optionals.test.w
+```
 
 ### Test Meta-Comments
 
@@ -186,7 +205,7 @@ Currently, the only supported meta-comment for regular tests is `skipPlatforms`.
 This will skip the test on the given platforms when when running on CI. The current supported platforms are `win32`, `darwin`, and `linux`.
 This is useful if, for example, the test requires docker. In our CI only linux supports docker.
 
-### Benchmarks
+## Performance Benchmarks
 
 Benchmark files are located in `examples/tests/valid/benchmarks`. To run the benchmarks, run the following command from anywhere in the monorepo:
 
@@ -256,7 +275,7 @@ highlight queries, run:
 turbo playground -F @winglang/tree-sitter-wing
 ```
 
-## 🔨 How do I build the VSCode extension?
+## How do I build the VSCode extension? 🔨
 
 The VSCode extension is located in `packages/vscode-wing`. Most of the "logic" is in the language server, which
 is located in the Wing CLI at `packages/winglang/src/commands/lsp.ts`.
@@ -277,7 +296,7 @@ To modify the package.json, make sure to edit `.projenrc.ts` and rebuild.
 
 Tip: if you want to print debug messages in your code while developing, you should use Rust's `dbg!` macro, instead of `print!` or `println!`.
 
-## 🧹 How do I lint my code?
+## How do I lint my code? 🧹
 
 To lint Rust code, you can run the `lint` target on the `wingc` or `wingii` projects:
 
@@ -294,7 +313,7 @@ Lastly you can show linting errors in your IDE by enabling the following setting
 "rust-analyzer.check.command": "clippy",
 ```
 
-## 🏁 How do I add a quickstart template to the `wing` CLI?
+## How do I add a quickstart template to the `wing` CLI? 🏁
 
 Adding a new template is straightforward!
 
