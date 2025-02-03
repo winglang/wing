@@ -256,3 +256,37 @@ assert(maybeX! == 0);
 
 let maybeY: str? = "";
 assert(maybeY! == "");
+
+// ------------------------------------------------------------------------------------------------
+// verify that `null` is treated as undefined/nil
+// https://github.com/winglang/wing/issues/7257
+
+struct S1 {
+  x: str?;
+}
+
+log(S1.schema().asStr());
+
+let s9 = S1.parseJson("\{\"x\": null}");
+assert(s9.x == nil);
+
+struct S2 {
+  y: S1?;
+}
+
+log(S2.schema().asStr());
+let s10 = S2.parseJson("\{\"y\": null}");
+assert(s10.y == nil);
+
+let s11 = S2.parseJson("\{\"y\": \{\"x\": null\}}");
+assert(s11.y?.x == nil);
+
+struct S3 {
+  arr: Array<str>?;
+  map: Map<str>?;
+}
+
+let s12 = S3.parseJson("\{\"arr\": null,\"map\": null}");
+assert(s12.arr == nil);
+assert(s12.map == nil); 
+// ------------------------------------------------------------------------------------------------

@@ -418,6 +418,9 @@ let x = Contact.fromJson(p, unsafe: true);
 assert(x.last.len > 0); // RUNTIME ERROR
 ```
 
+> NOTE: `fromJson()` and `parseJson()` treats `null` values as `undefined` and therefore can be
+> assigned to optional fields.
+
 ##### 1.1.4.8 Serialization
 
 The `Json.stringify(j: Json): str` static method can be used to serialize a `Json` as a string

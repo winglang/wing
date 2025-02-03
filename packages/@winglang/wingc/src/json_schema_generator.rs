@@ -99,7 +99,10 @@ impl JsonSchemaGenerator {
 				code.append("}");
 				code.to_string()
 			}
-			Type::Optional(ref t) => self.get_struct_schema_field(t, docs),
+			Type::Optional(ref t) => format!(
+				"{{oneOf:[{{type:\"null\"}},{}]}}",
+				self.get_struct_schema_field(t, docs)
+			),
 			Type::Json(_) => match docs {
 				Some(docs) => format!(
 					"{{type:[\"object\",\"string\",\"boolean\",\"number\",\"array\"],description:\"{}\"}}",
