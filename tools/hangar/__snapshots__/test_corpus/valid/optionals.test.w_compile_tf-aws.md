@@ -159,6 +159,9 @@ class $Root extends $stdlib.std.Resource {
     let $preflightTypesMap = {};
     const cloud = $stdlib.cloud;
     const Person = $stdlib.std.Struct._createJsonSchema({$id:"/Person",type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",],description:""});
+    const S1 = $stdlib.std.Struct._createJsonSchema({$id:"/S1",type:"object",properties:{x:{oneOf:[{type:"null"},{type:"string"}]},},required:[],description:""});
+    const S2 = $stdlib.std.Struct._createJsonSchema({$id:"/S2",type:"object",properties:{y:{oneOf:[{type:"null"},{type:"object",properties:{x:{oneOf:[{type:"null"},{type:"string"}]},},required:[],description:""}]},},required:[],description:""});
+    const S3 = $stdlib.std.Struct._createJsonSchema({$id:"/S3",type:"object",properties:{arr:{oneOf:[{type:"null"},{type:"array",items:{type:"string"}}]},map:{oneOf:[{type:"null"},{type:"object",patternProperties: {".*":{type:"string"}},}]},},required:[],description:""});
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Super extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -506,6 +509,17 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq($helpers.unwrap(maybeX), 0), "maybeX! == 0");
     const maybeY = "";
     $helpers.assert($helpers.eq($helpers.unwrap(maybeY), ""), "maybeY! == \"\"");
+    console.log(($macros.__Struct_schema(false, S1, ).asStr()));
+    const s9 = $macros.__Struct_parseJson(false, S1, "{\"x\": null}");
+    $helpers.assert($helpers.eq(s9.x, undefined), "s9.x == nil");
+    console.log(($macros.__Struct_schema(false, S2, ).asStr()));
+    const s10 = $macros.__Struct_parseJson(false, S2, "{\"y\": null}");
+    $helpers.assert($helpers.eq(s10.y, undefined), "s10.y == nil");
+    const s11 = $macros.__Struct_parseJson(false, S2, "{\"y\": {\"x\": null\}}");
+    $helpers.assert($helpers.eq(s11.y?.x, undefined), "s11.y?.x == nil");
+    const s12 = $macros.__Struct_parseJson(false, S3, "{\"arr\": null,\"map\": null}");
+    $helpers.assert($helpers.eq(s12.arr, undefined), "s12.arr == nil");
+    $helpers.assert($helpers.eq(s12.map, undefined), "s12.map == nil");
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "optionals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
