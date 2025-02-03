@@ -68,8 +68,7 @@ export function filterParametersBySchema(
 
   for (const field of fields) {
     if (parameters.hasOwnProperty(field)) {
-      let value = parameters[field];
-      filtered[field] = value;
+      filtered[field] = parameters[field];
     }
   }
 
