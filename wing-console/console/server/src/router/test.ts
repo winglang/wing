@@ -1,4 +1,4 @@
-import { type TestResult } from "@winglang/sdk/lib/std";
+import { type TestResult } from "@winglang/sdk/std";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";

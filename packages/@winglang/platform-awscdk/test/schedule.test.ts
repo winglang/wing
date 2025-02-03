@@ -2,7 +2,7 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud, std } from "@winglang/sdk";
 import { AwsCdkApp, awscdkSanitize } from "./util";
-import { inflight } from "@winglang/sdk/lib/core";
+import { inflight } from "@winglang/sdk/core";
 
 const INFLIGHT_CODE = inflight(async (_, event) => {
   console.log("Received: ", event);
@@ -129,7 +129,7 @@ test("schedule with rate and cron simultaneously", () => {
       new cloud.Schedule(app, "Schedule", {
         rate: std.Duration.fromSeconds(30),
         cron: "0/1 * ? * *",
-      })
+      }),
   ).toThrow("rate and cron cannot be configured simultaneously.");
 });
 
@@ -142,7 +142,7 @@ test("cron with more than five values", () => {
     () =>
       new cloud.Schedule(app, "Schedule", {
         cron: "0/1 * ? * * *",
-      })
+      }),
   ).toThrow("cron string must be in UNIX cron format");
 });
 
@@ -152,7 +152,7 @@ test("schedule without rate or cron", () => {
 
   // THEN
   expect(() => new cloud.Schedule(app, "Schedule")).toThrow(
-    "rate or cron need to be filled."
+    "rate or cron need to be filled.",
   );
 });
 
@@ -165,7 +165,7 @@ test("schedule with rate less than 1 minute", () => {
     () =>
       new cloud.Schedule(app, "Schedule", {
         rate: std.Duration.fromSeconds(30),
-      })
+      }),
   ).toThrow("rate can not be set to less than 1 minute.");
 });
 
@@ -178,8 +178,8 @@ test("cron with day of month and day of week configured at the same time", () =>
     () =>
       new cloud.Schedule(app, "Schedule", {
         cron: "* * 1 * 1",
-      })
+      }),
   ).toThrow(
-    "Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'"
+    "Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'",
   );
 });

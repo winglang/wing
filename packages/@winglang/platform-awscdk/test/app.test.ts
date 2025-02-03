@@ -3,7 +3,7 @@ import * as awscdk from "../src";
 import { Stack } from "aws-cdk-lib";
 import { cloud } from "@winglang/sdk";
 import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
-import { inflight } from "@winglang/sdk/lib/core";
+import { inflight } from "@winglang/sdk/core";
 import { AwsCdkApp } from "./util";
 
 test("custom stack", async () => {
@@ -40,12 +40,12 @@ test("custom Functions", async () => {
     inflight(async () => {
       console.log("hello");
       return undefined;
-    })
+    }),
   );
 
   const cfn = JSON.parse(app.synth());
 
   expect(
-    cfn.Resources.MyFunctionDBE6350A.Properties.Environment.Variables
+    cfn.Resources.MyFunctionDBE6350A.Properties.Environment.Variables,
   ).toStrictEqual({ BOOM: "BAR" });
 });

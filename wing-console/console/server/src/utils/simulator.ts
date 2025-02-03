@@ -1,5 +1,5 @@
 import { simulator } from "@winglang/sdk";
-import { LogLevel, TraceType } from "@winglang/sdk/lib/std/test-runner.js";
+import { LogLevel, TraceType } from "@winglang/sdk/std/test-runner.js";
 import Emittery from "emittery";
 
 import type { ResourceLifecycleEvent, Trace } from "../types.js";

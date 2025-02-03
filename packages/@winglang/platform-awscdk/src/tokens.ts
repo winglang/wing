@@ -1,6 +1,6 @@
 import { Fn, Token } from "aws-cdk-lib";
-import { tokenEnvName, ITokenResolver } from "@winglang/sdk/lib/core/tokens";
-import { IInflightHost } from "@winglang/sdk/lib/std";
+import { tokenEnvName, ITokenResolver } from "@winglang/sdk/core/tokens";
+import { IInflightHost } from "@winglang/sdk/std";
 import { isAwsCdkFunction } from "./function";
 
 /**

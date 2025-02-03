@@ -2,7 +2,7 @@ import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud } from "@winglang/sdk";
 import { sanitizeCode, awscdkSanitize, AwsCdkApp } from "./util";
-import { inflight } from "@winglang/sdk/lib/core";
+import { inflight } from "@winglang/sdk/core";
 
 test("default topic behavior", () => {
   // GIVEN
@@ -20,7 +20,7 @@ test("topic with subscriber function", () => {
   const app = new AwsCdkApp();
   const topic = new cloud.Topic(app, "Topic");
   const subscriber = inflight(async (_, event) =>
-    console.log("Received: ", event)
+    console.log("Received: ", event),
   );
   topic.onMessage(subscriber);
   const output = app.synth();
@@ -41,7 +41,7 @@ test("topic with multiple subscribers", () => {
   const app = new AwsCdkApp();
   const topic = new cloud.Topic(app, "Topic");
   const subOne = inflight(async (_, event) =>
-    console.log("Got Event: ", event)
+    console.log("Got Event: ", event),
   );
   const subTwo = inflight(async (_, event) => console.log("Ohh yea!! ", event));
 

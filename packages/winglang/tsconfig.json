@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "es2022",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "lib": ["es2022", "dom"],
     "sourceMap": true,
     "outDir": "./dist",
@@ -21,7 +21,7 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "baseUrl": ".",
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["src/**/*.test.ts"]

@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 
 import { CompileError, PreflightError } from "@winglang/compiler";
-import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
+import { prettyPrintError } from "@winglang/sdk/util/enhanced-error";
 import type { File, Label } from "codespan-wasm";
 import { CHARS_ASCII, emitDiagnostic } from "codespan-wasm";
 

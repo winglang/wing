@@ -1,7 +1,7 @@
 import { std } from "@winglang/sdk";
 import { test, expect, expectTypeOf, vi } from "vitest";
 import { lift } from "../src";
-import { INFLIGHT_SYMBOL } from "@winglang/sdk/lib/core/types";
+import { INFLIGHT_SYMBOL } from "@winglang/sdk/core/types";
 
 interface FakeBucketClient {
   field: string;

@@ -14,7 +14,7 @@ import {
   ScrollableArea,
 } from "@wingconsole/design-system";
 import type { NodeDisplay } from "@wingconsole/server";
-import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/simulator.js";
+import type { ResourceRunningState } from "@winglang/sdk/simulator/simulator.js";
 import classNames from "classnames";
 import { memo, useCallback, useMemo, useState } from "react";
 

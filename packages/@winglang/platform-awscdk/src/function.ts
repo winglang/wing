@@ -12,15 +12,15 @@ import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Asset } from "aws-cdk-lib/aws-s3-assets";
 import { Construct, IConstruct } from "constructs";
 import { cloud } from "@winglang/sdk";
-import { NotImplementedError } from "@winglang/sdk/lib/core/errors";
-import { createBundle } from "@winglang/sdk/lib/shared/bundling";
+import { NotImplementedError } from "@winglang/sdk/core/errors";
+import { createBundle } from "@winglang/sdk/shared/bundling";
 import {
   Function as AwsFunction,
   NetworkConfig,
   PolicyStatement,
   externalLibraries,
-} from "@winglang/sdk/lib/shared-aws";
-import { makeAwsLambdaHandler } from "@winglang/sdk/lib/shared-aws/function-util";
+} from "@winglang/sdk/shared-aws";
+import { makeAwsLambdaHandler } from "@winglang/sdk/shared-aws/function-util";
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
@@ -41,7 +41,7 @@ export function isAwsCdkFunction(x: any): x is IAwsCdkFunction {
  */
 export function addPolicyStatements(
   fn: CdkFunction,
-  statements: PolicyStatement[]
+  statements: PolicyStatement[],
 ) {
   for (const statement of statements) {
     fn.addToRolePolicy(new CdkPolicyStatement(statement));
@@ -61,13 +61,13 @@ export class Function extends AwsFunction implements IAwsCdkFunction {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps = {}
+    props: cloud.FunctionProps = {},
   ) {
     super(scope, id, inflight, props);
 
     if (props.concurrency != null) {
       throw new NotImplementedError(
-        "Function concurrency isn't implemented yet on the current target."
+        "Function concurrency isn't implemented yet on the current target.",
       );
     }
 
@@ -88,7 +88,7 @@ export class Function extends AwsFunction implements IAwsCdkFunction {
     const asset: Asset = (code as any).asset;
     if (!asset.assetPath) {
       throw new Error(
-        "AWS CDK 'Asset' class no longer has an 'assetPath' property"
+        "AWS CDK 'Asset' class no longer has an 'assetPath' property",
       );
     }
     this.assetPath = asset.assetPath;
@@ -98,7 +98,7 @@ export class Function extends AwsFunction implements IAwsCdkFunction {
     const layer = LayerVersion.fromLayerVersionArn(
       this,
       `Layer${layerArn}`,
-      layerArn
+      layerArn,
     );
     this.function.addLayers(layer);
   }
@@ -117,7 +117,6 @@ export class Function extends AwsFunction implements IAwsCdkFunction {
     renameSync(bundle.directory, assetDir);
   }
 
-
   /**
    * Can be overridden by subclasses to customize the AWS CDK function creation.
    * @param code The AWS Lambda `Code` object that represents the inflight closure defined for this function.
@@ -126,7 +125,7 @@ export class Function extends AwsFunction implements IAwsCdkFunction {
    */
   protected createFunction(
     code: Code,
-    props: cloud.FunctionProps
+    props: cloud.FunctionProps,
   ): CdkFunction {
     const logRetentionDays =
       props.logRetentionDays === undefined
@@ -181,7 +180,7 @@ export class Function extends AwsFunction implements IAwsCdkFunction {
   public addNetwork(config: NetworkConfig): void {
     config;
     throw new Error(
-      "The AWS CDK platform provider does not support adding network configurations to AWS Lambda functions at the moment."
+      "The AWS CDK platform provider does not support adding network configurations to AWS Lambda functions at the moment.",
     );
   }
   public get awscdkFunction() {

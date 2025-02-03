@@ -4,7 +4,7 @@ import { mkdtemp } from "@winglang/sdk/test/util";
 import { readdirSync } from "fs";
 import { Bucket } from "../src";
 import { Stack } from "aws-cdk-lib";
-import { ClassFactory } from "@winglang/sdk/lib/core";
+import { ClassFactory } from "@winglang/sdk/core";
 
 test("wing platform", async () => {
   const workdir = mkdtemp();
@@ -12,7 +12,7 @@ test("wing platform", async () => {
   process.env.CDK_STACK_NAME = "MyStack";
   const factory = new ClassFactory(
     [platform.newInstance.bind(platform)],
-    [platform.resolveType.bind(platform)]
+    [platform.resolveType.bind(platform)],
   );
   const app = platform.newApp?.({
     entrypointDir: workdir,
@@ -45,19 +45,9 @@ test("wing platform", async () => {
       CorsConfiguration: {
         CorsRules: [
           {
-            AllowedHeaders: [
-              "*",
-            ],
-            AllowedMethods: [
-              "GET",
-              "POST",
-              "PUT",
-              "DELETE",
-              "HEAD",
-            ],
-            AllowedOrigins: [
-              "*",
-            ],
+            AllowedHeaders: ["*"],
+            AllowedMethods: ["GET", "POST", "PUT", "DELETE", "HEAD"],
+            AllowedOrigins: ["*"],
             ExposedHeaders: [],
             MaxAge: 0,
           },
@@ -88,7 +78,7 @@ test("CDK_STACK_NAME, CDK_AWS_ACCOUNT, CDK_AWS_REGION", async () => {
   process.env.CDK_AWS_REGION = "us-west-2";
   const factory = new ClassFactory(
     [platform.newInstance.bind(platform)],
-    [platform.resolveType.bind(platform)]
+    [platform.resolveType.bind(platform)],
   );
 
   const app = platform.newApp?.({

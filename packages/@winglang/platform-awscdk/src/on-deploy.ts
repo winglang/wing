@@ -2,7 +2,7 @@ import { Trigger } from "aws-cdk-lib/triggers";
 import { Construct } from "constructs";
 import { cloud } from "@winglang/sdk";
 import { isAwsCdkFunction } from "./function";
-import { OnDeploy as AwsOnDeploy } from "@winglang/sdk/lib/shared-aws/on-deploy";
+import { OnDeploy as AwsOnDeploy } from "@winglang/sdk/shared-aws/on-deploy";
 
 /**
  * AWS implementation of `cloud.OnDeploy`.
@@ -12,7 +12,7 @@ export class OnDeploy extends AwsOnDeploy {
     scope: Construct,
     id: string,
     handler: cloud.IOnDeployHandler,
-    props: cloud.OnDeployProps = {}
+    props: cloud.OnDeployProps = {},
   ) {
     super(scope, id, handler, props);
 
@@ -20,12 +20,12 @@ export class OnDeploy extends AwsOnDeploy {
       this,
       "Function",
       handler as cloud.IFunctionHandler,
-      props
+      props,
     );
 
     if (!isAwsCdkFunction(fn)) {
       throw new Error(
-        "Expected function to implement 'IAwsCdkFunction' method"
+        "Expected function to implement 'IAwsCdkFunction' method",
       );
     }
 

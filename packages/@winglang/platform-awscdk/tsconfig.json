@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2020",                                
-    "module": "commonjs",                                
-    "rootDir": "./src",                                  
-    "outDir": "./lib",                                   
+    "target": "ES2020",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "rootDir": "./src",
+    "outDir": "./lib",
     "declarationMap": false,
     "inlineSourceMap": true,
     "inlineSources": true,
@@ -11,10 +12,7 @@
     "declaration": true,
     "experimentalDecorators": true,
     "incremental": true,
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "esModuleInterop": true,
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
@@ -32,10 +30,6 @@
     "composite": false,
     "tsBuildInfoFile": "lib/tsconfig.tsbuildinfo"
   },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "./node_modules"
-  ]
+  "include": ["./src/**/*"],
+  "exclude": ["./node_modules"]
 }

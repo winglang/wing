@@ -6,7 +6,6 @@ import { cp, mkdir, readFile, readdir, writeFile } from "fs/promises";
 import { join, relative } from "path";
 import { promisify } from "util";
 import chalk from "chalk";
-import inquirer from "inquirer";
 import { exists } from "./pack";
 import { projectTemplateNames, PROJECT_TEMPLATES_DIR, currentPackage } from "../util";
 
@@ -43,6 +42,8 @@ export async function init(template: string, options: InitOptions = {}): Promise
     console.log("Usage: wing new <template> [--language <language>]");
     console.log();
     try {
+      const { default: inquirer } = await import("inquirer");
+
       const responses = await inquirer.prompt([
         {
           type: "list",

@@ -2,7 +2,7 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud } from "@winglang/sdk";
 import { sanitizeCode, awscdkSanitize, AwsCdkApp } from "./util";
-import { lift } from "@winglang/sdk/lib/core";
+import { lift } from "@winglang/sdk/core";
 
 test("default counter behavior", () => {
   const app = new AwsCdkApp();
@@ -16,7 +16,7 @@ test("default counter behavior", () => {
       KeySchema: [{ AttributeName: "id", KeyType: "HASH" }],
       AttributeDefinitions: [{ AttributeName: "id", AttributeType: "S" }],
       BillingMode: "PAY_PER_REQUEST",
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -35,7 +35,7 @@ test("counter with initial value", () => {
       KeySchema: [{ AttributeName: "id", KeyType: "HASH" }],
       AttributeDefinitions: [{ AttributeName: "id", AttributeType: "S" }],
       BillingMode: "PAY_PER_REQUEST",
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

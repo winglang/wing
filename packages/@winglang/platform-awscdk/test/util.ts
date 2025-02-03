@@ -1,6 +1,6 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { App, CdkAppProps, Platform } from "../src";
-import { ClassFactory } from "@winglang/sdk/lib/core";
+import { ClassFactory } from "@winglang/sdk/core";
 import { mkdtemp } from "@winglang/sdk/test/util";
 
 export interface AwsCdkAppProps extends Partial<CdkAppProps> {}
@@ -10,7 +10,7 @@ export class AwsCdkApp extends App {
     const platform = new Platform();
     const classFactory = new ClassFactory(
       [platform.newInstance.bind(platform)],
-      [platform.resolveType.bind(platform)]
+      [platform.resolveType.bind(platform)],
     );
 
     super({
@@ -52,7 +52,7 @@ export function awscdkSanitize(template: Template): any {
 
   jsonString = jsonString.replace(
     /CurrentVersion.+?"/g,
-    'CurrentVersion<GUID>"'
+    'CurrentVersion<GUID>"',
   );
 
   return JSON.parse(jsonString);

@@ -2,7 +2,7 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import * as awscdk from "../src";
 import { AwsCdkApp, awscdkSanitize } from "./util";
-import { inflight } from "@winglang/sdk/lib/core";
+import { inflight } from "@winglang/sdk/core";
 
 const INFLIGHT_CODE = inflight(async () => "Hello, World");
 const INFLIGHT_CODE_2 = inflight(async () => "Hello, Wing");
@@ -29,7 +29,7 @@ test("api with GET route at root", () => {
           },
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -61,7 +61,7 @@ test("api with multiple methods on same route", () => {
           },
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -224,7 +224,7 @@ test("api with POST route", () => {
           },
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -254,7 +254,7 @@ test("api with PUT route", () => {
           },
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -284,7 +284,7 @@ test("api with PATCH route", () => {
           },
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -314,7 +314,7 @@ test("api with DELETE route", () => {
           },
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -344,7 +344,7 @@ test("api with OPTIONS route", () => {
           },
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -374,7 +374,7 @@ test("api with HEAD route", () => {
           },
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -404,7 +404,7 @@ test("api with CONNECT route", () => {
           },
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -433,7 +433,7 @@ test("api url can be used as environment variable", () => {
           API_URL: {},
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -488,7 +488,7 @@ test("api configured for cors", () => {
           },
         },
       },
-    })
+    }),
   );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

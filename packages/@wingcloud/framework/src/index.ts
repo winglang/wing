@@ -1,9 +1,9 @@
 // re-exporting useful types from the sdk
 export { cloud } from "@winglang/sdk";
-export { Construct } from "@winglang/sdk/lib/core/types";
+export { Construct } from "@winglang/sdk/core/types";
 
 // typescript workflow primitives
-export { inflight, lift } from "@winglang/sdk/lib/core";
+export { inflight, lift } from "@winglang/sdk/core";
 export { main } from "./main";
 export { asJson } from "./json";
 

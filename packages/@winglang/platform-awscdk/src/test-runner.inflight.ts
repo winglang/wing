@@ -1,1 +1,1 @@
-export { TestRunnerClient } from "@winglang/sdk/lib/shared-aws/test-runner.inflight";
+export { TestRunnerClient } from "@winglang/sdk/shared-aws/test-runner.inflight";

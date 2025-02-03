@@ -5,7 +5,7 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import type { MapItem } from "@wingconsole/server";
-import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/index.js";
+import type { ResourceRunningState } from "@winglang/sdk/simulator/index.js";
 import clsx from "classnames";
 import type { ElkExtendedEdge } from "elkjs";
 import { type ElkPoint, type LayoutOptions } from "elkjs";

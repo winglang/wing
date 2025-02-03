@@ -182,7 +182,7 @@ impl<'a> JSifier<'a> {
 		output.line("\"use strict\";");
 
 		output.line(format!("const {STDLIB} = require('{STDLIB_MODULE}');"));
-		output.line(format!("const {MACROS_VAR} = require(\"@winglang/sdk/lib/macros\");"));
+		output.line(format!("const {MACROS_VAR} = require(\"@winglang/sdk/macros\");"));
 
 		if is_entrypoint {
 			output.line(format!(
@@ -1977,8 +1977,8 @@ impl<'a> JSifier<'a> {
 		let sourcemap_file = format!("{}.map", filename);
 
 		code.line("\"use strict\";");
-		code.line(format!("const {HELPERS_VAR} = require(\"@winglang/sdk/lib/helpers\");"));
-		code.line(format!("const {MACROS_VAR} = require(\"@winglang/sdk/lib/macros\");"));
+		code.line(format!("const {HELPERS_VAR} = require(\"@winglang/sdk/helpers\");"));
+		code.line(format!("const {MACROS_VAR} = require(\"@winglang/sdk/macros\");"));
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));

@@ -7,7 +7,7 @@ import { std, cloud } from "@winglang/sdk";
 import {
   Queue as AwsQueue,
   QueueSetConsumerHandler,
-} from "@winglang/sdk/lib/shared-aws/queue";
+} from "@winglang/sdk/shared-aws/queue";
 import { isAwsCdkFunction } from "./function";
 
 /**
@@ -15,7 +15,7 @@ import { isAwsCdkFunction } from "./function";
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
-export class Queue extends AwsQueue  {
+export class Queue extends AwsQueue {
   private readonly queue: SQSQueue;
   private readonly timeout: std.Duration;
 
@@ -35,7 +35,7 @@ export class Queue extends AwsQueue  {
             queue: SQSQueue.fromQueueArn(
               this,
               "DeadLetterQueue",
-              AwsQueue.from(props.dlq.queue)?.queueArn!
+              AwsQueue.from(props.dlq.queue)?.queueArn!,
             ),
             maxReceiveCount:
               props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
@@ -55,7 +55,7 @@ export class Queue extends AwsQueue  {
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
-    props: cloud.QueueSetConsumerOptions = {}
+    props: cloud.QueueSetConsumerOptions = {},
   ): cloud.Function {
     const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
 
@@ -67,7 +67,7 @@ export class Queue extends AwsQueue  {
       {
         ...props,
         timeout: this.timeout,
-      }
+      },
     );
 
     if (!isAwsCdkFunction(fn)) {

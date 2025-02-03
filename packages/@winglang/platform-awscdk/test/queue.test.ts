@@ -2,7 +2,7 @@ import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { std, cloud } from "@winglang/sdk";
 import { sanitizeCode, awscdkSanitize, AwsCdkApp } from "./util";
-import { inflight } from "@winglang/sdk/lib/core";
+import { inflight } from "@winglang/sdk/core";
 
 test("default queue behavior", () => {
   // GIVEN

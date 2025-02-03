@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     globalSetup: "test/global.setup.ts",
     testTimeout: 300_000,
-    retry: 2,
+    // retry: 2,
     include: ["test/**/*.test.ts"],
     // https://vitest.dev/guide/features.html#chai-and-jest-expect-compatibility
     // Allows to use the matchers added by "aws-sdk-client-mock-jest"

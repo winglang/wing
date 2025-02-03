@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { cloud } from "@winglang/sdk";
-import { Endpoint as AwsEndpoint } from "@winglang/sdk/lib/shared-aws/endpoint";
+import { Endpoint as AwsEndpoint } from "@winglang/sdk/shared-aws/endpoint";
 import { CfnOutput } from "aws-cdk-lib";
 
 /**
@@ -11,7 +11,7 @@ export class Endpoint extends AwsEndpoint {
     scope: Construct,
     id: string,
     url: string,
-    props: cloud.EndpointProps = {}
+    props: cloud.EndpointProps = {},
   ) {
     super(scope, id, url, props);
 

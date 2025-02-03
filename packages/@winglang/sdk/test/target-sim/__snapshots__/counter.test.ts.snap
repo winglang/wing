@@ -21,7 +21,7 @@ exports[`create a counter 1`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("[REDACTED]/@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("[REDACTED]/@winglang/sdk/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -273,7 +273,7 @@ exports[`dec 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("[REDACTED]/@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("[REDACTED]/@winglang/sdk/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -525,7 +525,7 @@ exports[`inc 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("[REDACTED]/@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("[REDACTED]/@winglang/sdk/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -777,7 +777,7 @@ exports[`key dec 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("[REDACTED]/@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("[REDACTED]/@winglang/sdk/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -1029,7 +1029,7 @@ exports[`key inc 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("[REDACTED]/@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("[REDACTED]/@winglang/sdk/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -1279,7 +1279,7 @@ exports[`key set to new value 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("[REDACTED]/@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("[REDACTED]/@winglang/sdk/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -1529,7 +1529,7 @@ exports[`set to new value 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("[REDACTED]/@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("[REDACTED]/@winglang/sdk/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;

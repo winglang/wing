@@ -2,10 +2,10 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { expect, test } from "vitest";
 import { cloud } from "@winglang/sdk";
 import { AwsCdkApp, awscdkSanitize } from "./util";
-import { inflight } from "@winglang/sdk/lib/core";
+import { inflight } from "@winglang/sdk/core";
 
 const INFLIGHT_CODE = inflight(async (_, name) =>
-  console.log("Hello, " + name)
+  console.log("Hello, " + name),
 );
 
 test("create an OnDeploy", () => {

@@ -11,7 +11,7 @@ import {
   ScheduleOnTickHandler,
   convertUnixCronToAWSCron,
   Schedule as AwsSchedule,
-} from "@winglang/sdk/lib/shared-aws/schedule";
+} from "@winglang/sdk/shared-aws/schedule";
 import { isAwsCdkFunction } from "./function";
 
 /**
@@ -51,7 +51,7 @@ export class Schedule extends AwsSchedule {
       this.scheduleExpression = EventSchedule.cron(cronOpt);
     } else {
       this.scheduleExpression = EventSchedule.rate(
-        Duration.minutes(rate!.minutes)
+        Duration.minutes(rate!.minutes),
       );
     }
 
@@ -63,7 +63,7 @@ export class Schedule extends AwsSchedule {
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props?: cloud.ScheduleOnTickOptions | undefined
+    props?: cloud.ScheduleOnTickOptions | undefined,
   ): cloud.Function {
     const functionHandler = ScheduleOnTickHandler.toFunctionHandler(inflight);
 
@@ -72,12 +72,12 @@ export class Schedule extends AwsSchedule {
       this.node.scope!,
       App.of(this).makeId(this, `${this.node.id}-OnTick`),
       functionHandler,
-      props
+      props,
     );
 
     if (!isAwsCdkFunction(fn)) {
       throw new Error(
-        "Expected function to implement 'isAwsCdkFunction' method"
+        "Expected function to implement 'isAwsCdkFunction' method",
       );
     }
 

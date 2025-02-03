@@ -185,6 +185,198 @@
       "rootDir": "src"
     }
   },
+  "exports": {
+    ".": {
+      "require": "./lib/index.js",
+      "default": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    },
+    "./helpers": {
+      "require": "./lib/helpers.js",
+      "default": "./lib/helpers.js",
+      "types": "./lib/helpers.d.ts"
+    },
+    "./cloud": {
+      "require": "./lib/cloud/index.js",
+      "default": "./lib/cloud/index.js",
+      "types": "./lib/cloud/index.d.ts"
+    },
+    "./core": {
+      "require": "./lib/core/index.js",
+      "default": "./lib/core/index.js",
+      "types": "./lib/core/index.d.ts"
+    },
+    "./expect": {
+      "require": "./lib/expect/index.js",
+      "default": "./lib/expect/index.js",
+      "types": "./lib/expect/index.d.ts"
+    },
+    "./fs": {
+      "require": "./lib/fs/index.js",
+      "default": "./lib/fs/index.js",
+      "types": "./lib/fs/index.d.ts"
+    },
+    "./http": {
+      "require": "./lib/http/index.js",
+      "default": "./lib/http/index.js",
+      "types": "./lib/http/index.d.ts"
+    },
+    "./platform": {
+      "require": "./lib/platform/index.js",
+      "default": "./lib/platform/index.js",
+      "types": "./lib/platform/index.d.ts"
+    },
+    "./shared-aws": {
+      "require": "./lib/shared-aws/index.js",
+      "default": "./lib/shared-aws/index.js",
+      "types": "./lib/shared-aws/index.d.ts"
+    },
+    "./shared-gcp": {
+      "require": "./lib/shared-gcp/index.js",
+      "default": "./lib/shared-gcp/index.js",
+      "types": "./lib/shared-gcp/index.d.ts"
+    },
+    "./shared": {
+      "require": "./lib/shared/index.js",
+      "default": "./lib/shared/index.js",
+      "types": "./lib/shared/index.d.ts"
+    },
+    "./simulator": {
+      "require": "./lib/simulator/index.js",
+      "default": "./lib/simulator/index.js",
+      "types": "./lib/simulator/index.d.ts"
+    },
+    "./std": {
+      "require": "./lib/std/index.js",
+      "default": "./lib/std/index.js",
+      "types": "./lib/std/index.d.ts"
+    },
+    "./target-sim": {
+      "require": "./lib/target-sim/index.js",
+      "default": "./lib/target-sim/index.js",
+      "types": "./lib/target-sim/index.d.ts"
+    },
+    "./target-tf-aws": {
+      "require": "./lib/target-tf-aws/index.js",
+      "default": "./lib/target-tf-aws/index.js",
+      "types": "./lib/target-tf-aws/index.d.ts"
+    },
+    "./target-tf-azure": {
+      "require": "./lib/target-tf-azure/index.js",
+      "default": "./lib/target-tf-azure/index.js",
+      "types": "./lib/target-tf-azure/index.d.ts"
+    },
+    "./target-tf-gcp": {
+      "require": "./lib/target-tf-gcp/index.js",
+      "default": "./lib/target-tf-gcp/index.js",
+      "types": "./lib/target-tf-gcp/index.d.ts"
+    },
+    "./ui": {
+      "require": "./lib/ui/index.js",
+      "default": "./lib/ui/index.js",
+      "types": "./lib/ui/index.d.ts"
+    },
+    "./util": {
+      "require": "./lib/util/index.js",
+      "default": "./lib/util/index.js",
+      "types": "./lib/util/index.d.ts"
+    },
+    "./test": {
+      "require": "./lib/test/index.js",
+      "default": "./lib/test/index.js",
+      "types": "./lib/test/index.d.ts"
+    },
+    "./cloud/*": {
+      "require": "./lib/cloud/*.js",
+      "default": "./lib/cloud/*.js",
+      "types": "./lib/cloud/*.d.ts"
+    },
+    "./core/*": {
+      "require": "./lib/core/*.js",
+      "default": "./lib/core/*.js",
+      "types": "./lib/core/*.d.ts"
+    },
+    "./expect/*": {
+      "require": "./lib/expect/*.js",
+      "default": "./lib/expect/*.js",
+      "types": "./lib/expect/*.d.ts"
+    },
+    "./fs/*": {
+      "require": "./lib/fs/*.js",
+      "default": "./lib/fs/*.js",
+      "types": "./lib/fs/*.d.ts"
+    },
+    "./http/*": {
+      "require": "./lib/http/*.js",
+      "default": "./lib/http/*.js",
+      "types": "./lib/http/*.d.ts"
+    },
+    "./platform/*": {
+      "require": "./lib/platform/*.js",
+      "default": "./lib/platform/*.js",
+      "types": "./lib/platform/*.d.ts"
+    },
+    "./shared-aws/*": {
+      "require": "./lib/shared-aws/*.js",
+      "default": "./lib/shared-aws/*.js",
+      "types": "./lib/shared-aws/*.d.ts"
+    },
+    "./shared-gcp/*": {
+      "require": "./lib/shared-gcp/*.js",
+      "default": "./lib/shared-gcp/*.js",
+      "types": "./lib/shared-gcp/*.d.ts"
+    },
+    "./shared/*": {
+      "require": "./lib/shared/*.js",
+      "default": "./lib/shared/*.js",
+      "types": "./lib/shared/*.d.ts"
+    },
+    "./simulator/*": {
+      "require": "./lib/simulator/*.js",
+      "default": "./lib/simulator/*.js",
+      "types": "./lib/simulator/*.d.ts"
+    },
+    "./std/*": {
+      "require": "./lib/std/*.js",
+      "default": "./lib/std/*.js",
+      "types": "./lib/std/*.d.ts"
+    },
+    "./target-sim/*": {
+      "require": "./lib/target-sim/*.js",
+      "default": "./lib/target-sim/*.js",
+      "types": "./lib/target-sim/*.d.ts"
+    },
+    "./target-tf-aws/*": {
+      "require": "./lib/target-tf-aws/*.js",
+      "default": "./lib/target-tf-aws/*.js",
+      "types": "./lib/target-tf-aws/*.d.ts"
+    },
+    "./target-tf-azure/*": {
+      "require": "./lib/target-tf-azure/*.js",
+      "default": "./lib/target-tf-azure/*.js",
+      "types": "./lib/target-tf-azure/*.d.ts"
+    },
+    "./target-tf-gcp/*": {
+      "require": "./lib/target-tf-gcp/*.js",
+      "default": "./lib/target-tf-gcp/*.js",
+      "types": "./lib/target-tf-gcp/*.d.ts"
+    },
+    "./ui/*": {
+      "require": "./lib/ui/*.js",
+      "default": "./lib/ui/*.js",
+      "types": "./lib/ui/*.d.ts"
+    },
+    "./util/*": {
+      "require": "./lib/util/*.js",
+      "default": "./lib/util/*.js",
+      "types": "./lib/util/*.d.ts"
+    },
+    "./test/*": {
+      "require": "./lib/test/*.js",
+      "default": "./lib/test/*.js",
+      "types": "./lib/test/*.d.ts"
+    }
+  },
   "optionalDependencies": {
     "esbuild": "^0.19.12"
   },
