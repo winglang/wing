@@ -1,5 +1,5 @@
 import { test, expect, vi, describe } from "vitest";
-import { Util } from "../src/util"; // Assuming your Util class is in src/util.ts
+import { Util } from "../src/util";
 
 describe("env", () => {
   test("env", () => {
