@@ -424,5 +424,31 @@ export class Util {
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
+  /**
+   * Sets up a recurring interval to execute the provided function at the specified interval.
+   *
+   * @param func - The function to be executed repeatedly.
+   * @param delayInSeconds - The delay between executions of the function, in seconds.
+   *
+   * @returns NodeJS.Timeout - The ID of the interval, which can be used to clear the interval.
+   */
+  public static setInterval(
+    func: () => any,
+    delayInSeconds: number,
+  ): number {
+    const delayInMilliseconds = delayInSeconds * 1000;
+    return setInterval(func, delayInMilliseconds) as unknown as number; // Timeout Type isnt Supported
+  }
+  /**
+   * Clears the recurring interval with the given interval ID.
+   *
+   * @param intervalId - The ID of the interval to be cleared, returned from `setIntervalCustom`.
+   *
+   * @returns void - This function does not return anything.
+   */
+  public static clearInterval(intervalId: number): void {
+    clearInterval(intervalId); // Clears the interval using the ID
+  }
+
   private constructor() {}
 }
