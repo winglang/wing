@@ -17,7 +17,7 @@ import { Hierarchy } from "../hierarchy-pane/hierarchy.js";
 import { Inspector } from "../inspector-pane/inspector.js";
 import { LogsWidget } from "../logs-pane/logs.js";
 import { useSelectionContext } from "../selection-context/selection-context.js";
-import { SignInModal } from "../sign-in/sign-in.js";
+// import { SignInModal } from "../sign-in/sign-in.js";
 import { StatusBar } from "../status-bar/status-bar.js";
 import { TestTree } from "../tests-pane/test-tree.js";
 import { WebSocketState } from "../websocket-state/websocket-state.js";
@@ -158,7 +158,7 @@ export const DefaultLayout = ({
 
   return (
     <>
-      <SignInModal />
+      {/* <SignInModal /> */}
       <WebSocketState />
 
       <div className={classNames("w-full h-full", theme.bg1)}>
