@@ -122,7 +122,7 @@ export interface SignInModalProps {}
 export const SignInModal = (props: SignInModalProps) => {
   const { theme } = useTheme();
   const { signInWithGithub, signInWithGoogle } = useSignIn();
-  const signInRequired = useSignInRequired();
+  const signInRequired = false; // never require sign in (eladb oct 1, 2025)
   useNotifyAfterSigningIn();
 
   const [githubIsLoading, setGithubIsLoading] = useState(false);
