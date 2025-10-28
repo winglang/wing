@@ -1,4 +1,4 @@
-import Analytics from "@segment/analytics-node";
+// import Analytics from "@segment/analytics-node";
 
 export interface CreateAnalyticsOptions {
   anonymousId: string;
@@ -12,28 +12,28 @@ export interface IAnalytics {
 export const createAnalytics = (
   options: CreateAnalyticsOptions,
 ): IAnalytics => {
-  let segment: Analytics;
-  const sessionId = Date.now();
+  // let segment: Analytics;
+  // const sessionId = Date.now();
   try {
-    segment = new Analytics({ writeKey: options.segmentWriteKey });
+    // segment = new Analytics({ writeKey: options.segmentWriteKey });
   } catch {}
   return {
     track(event: string, properties?: Record<string, any>) {
-      if (!segment) {
-        return;
-      }
-      try {
-        segment.track({
-          anonymousId: options.anonymousId,
-          event: event.toLowerCase().replaceAll(/\s/g, ""),
-          properties,
-          integrations: {
-            "Actions Amplitude": {
-              session_id: sessionId,
-            },
-          },
-        });
-      } catch {}
+      // if (!segment) {
+      //   return;
+      // }
+      // try {
+      //   segment.track({
+      //     anonymousId: options.anonymousId,
+      //     event: event.toLowerCase().replaceAll(/\s/g, ""),
+      //     properties,
+      //     integrations: {
+      //       "Actions Amplitude": {
+      //         session_id: sessionId,
+      //       },
+      //     },
+      //   });
+      // } catch {}
     },
   };
 };
