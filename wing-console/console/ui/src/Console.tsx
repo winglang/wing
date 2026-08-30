@@ -24,8 +24,6 @@ export const Console = ({
   theme,
   color,
   onTrace,
-  wingCloudSignInUrl: githubSignInURL,
-  googleSignInURL,
 }: {
   trpcUrl: string;
   wsUrl: string;
@@ -34,8 +32,6 @@ export const Console = ({
   theme?: Mode;
   color?: string;
   onTrace?: (trace: Trace) => void;
-  wingCloudSignInUrl?: string;
-  googleSignInURL?: string;
 }) => {
   const [queryClient] = useState(
     () =>
@@ -140,8 +136,6 @@ export const Console = ({
       value={{
         appMode,
         title: windowTitle,
-        githubSignInURL,
-        googleSignInURL,
       }}
     >
       <trpc.Provider client={trpcClient} queryClient={queryClient}>

@@ -64,8 +64,6 @@ export interface CreateConsoleServerOptions {
   stateDir?: string;
   analyticsAnonymousId?: string;
   analytics?: Analytics;
-  requireSignIn?: () => Promise<boolean>;
-  notifySignedIn?: () => Promise<void>;
   watchGlobs?: string[];
   getEndpointWarningAccepted?: () => Promise<boolean>;
   notifyEndpointWarningAccepted?: () => Promise<void>;
@@ -87,8 +85,6 @@ export const createConsoleServer = async ({
   stateDir,
   analyticsAnonymousId,
   analytics,
-  requireSignIn,
-  notifySignedIn,
   watchGlobs,
   getEndpointWarningAccepted,
   notifyEndpointWarningAccepted,
@@ -307,8 +303,6 @@ export const createConsoleServer = async ({
     },
     analyticsAnonymousId,
     analytics,
-    requireSignIn,
-    notifySignedIn,
     getEndpointWarningAccepted,
     notifyEndpointWarningAccepted,
   });

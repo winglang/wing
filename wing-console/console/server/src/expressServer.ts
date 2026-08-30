@@ -49,8 +49,6 @@ export interface CreateExpressServerOptions {
   getTestRunner: () => TestRunner;
   analyticsAnonymousId?: string;
   analytics?: Analytics;
-  requireSignIn?: () => Promise<boolean>;
-  notifySignedIn?: () => Promise<void>;
   getEndpointWarningAccepted?: () => Promise<boolean>;
   notifyEndpointWarningAccepted?: () => Promise<void>;
 }
@@ -77,8 +75,6 @@ export const createExpressServer = async ({
   getTestRunner,
   analyticsAnonymousId,
   analytics,
-  requireSignIn,
-  notifySignedIn,
   getEndpointWarningAccepted,
   notifyEndpointWarningAccepted,
 }: CreateExpressServerOptions) => {
@@ -116,8 +112,6 @@ export const createExpressServer = async ({
       getTestRunner,
       analyticsAnonymousId,
       analytics,
-      requireSignIn,
-      notifySignedIn,
       getEndpointWarningAccepted,
       notifyEndpointWarningAccepted,
     };

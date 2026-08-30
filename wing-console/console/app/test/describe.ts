@@ -29,16 +29,12 @@ import { createConsoleApp } from "../dist/index.js";
 export const describe = (
   wingfile: string,
   callback: () => void,
-  options?: {
-    requireSignIn?: boolean;
-  },
 ) => {
   let server: { port: number; close: () => void } | undefined;
 
   test.beforeEach(async ({ page }) => {
     server = await createConsoleApp({
       wingfile: path.resolve(__dirname, wingfile),
-      requireSignIn: options?.requireSignIn ?? false,
     });
 
     await page.goto(`http://localhost:${server.port}/`);
