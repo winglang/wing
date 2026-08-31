@@ -214,6 +214,12 @@ test "copyMut()" {
   assert(mutRuleOfTwo.copy() == ruleOfTwo);
   assert(mutRuleOfTwo.delete("master") == true);
   assert(mutRuleOfTwo.size() == 0);
+
+  let mutAuthority = MutMap<str> {"republic" => "senate", "empire" => "emperor"};
+  let mutCopy = mutAuthority.copyMut();
+  mutCopy.set("clone", "army");
+  assert(mutCopy.size() == mutAuthority.size() + 1);
+  assert(mutAuthority.get("republic") == "senate");
 }
 
 

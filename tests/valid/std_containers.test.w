@@ -2,6 +2,10 @@ let sArray = ["one", "two"];
 let mutArray = sArray.copyMut();
 mutArray.push("three");
 let immutArray = mutArray.copy();
+let mutArrayCopy = mutArray.copyMut();
+mutArrayCopy.push("four");
+assert(mutArrayCopy.length == 4);
+assert(mutArray.length == 3);
 let s: str = sArray.at(1);
 assert(s == "two");
 assert(sArray.at(1) == "two");
@@ -30,6 +34,10 @@ let immutSet = mutSet.copy();
 assert(sSet.has("one"));
 assert(sSet.size == 2);
 assert(immutSet.size == 3);
+let mutSetCopy = mutSet.copyMut();
+mutSetCopy.add("four");
+assert(mutSetCopy.size == 4);
+assert(mutSet.size == 3);
 
 
 let sMap = {"one" => 1, "two" => 2};
@@ -40,6 +48,10 @@ let immutMap = mutMap.copy();
 assert(sMap.get("one") == 1);
 assert(sMap.size() == 2);
 assert(immutMap.size() == 3);
+let mutMapCopy = mutMap.copyMut();
+mutMapCopy.set("six", 6);
+assert(mutMapCopy.size() == 4);
+assert(mutMap.size() == 3);
 assert(nestedMap.get("a").get("b").get("c") == "hello");
 
 class Animal {}

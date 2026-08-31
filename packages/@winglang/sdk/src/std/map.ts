@@ -180,6 +180,17 @@ export class MutMap {
   }
 
   /**
+   * Create a mutable shallow copy of this map
+   *
+   * @macro ({...($self$)})
+   *
+   * @returns a MutableMap with the same values as this map
+   */
+  public copyMut(): MutMap {
+    throw new Error("Macro");
+  }
+
+  /**
    * Removes the specified element from a map.
    *
    * @macro (delete ($self$)[$args$])
