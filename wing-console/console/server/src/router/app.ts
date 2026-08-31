@@ -519,29 +519,6 @@ export const createAppRouter = () => {
         return ui as Array<UIComponent>;
       }),
 
-    "app.analytics": createProcedure.query(async ({ ctx }) => {
-      const requireSignIn = (await ctx.requireSignIn?.()) ?? false;
-      if (requireSignIn) {
-        ctx.analytics?.track("console_sign_in_shown");
-      }
-      return {
-        anonymousId: ctx.analyticsAnonymousId,
-        requireSignIn,
-      };
-    }),
-
-    "app.analytics.signInClicked": createProcedure.mutation(async ({ ctx }) => {
-      ctx.analytics?.track("console_sign_in_clicked");
-      return {};
-    }),
-
-    "app.analytics.notifySignedIn": createProcedure.mutation(
-      async ({ ctx }) => {
-        ctx.analytics?.track("console_sign_in_completed");
-        await ctx.notifySignedIn?.();
-      },
-    ),
-
     /**
      * Warning! Subscribing to this procedure will override the default behavior of opening files in the editor
      * provided by the "app.openFileInEditor" procedure.

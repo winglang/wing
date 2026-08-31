@@ -5,7 +5,7 @@
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
-module.exports = function({ $_types_t15_class_MyClass, $_types_t1_interface_MyInterface, $_types_t29_enum_MyEnum, $_types_t30_struct_MyStruct, $expect_Util, $std_reflect_Phase, $std_reflect_Type__ofArray_std_reflect_Type__ofNum____false_, $std_reflect_Type__ofBool__, $std_reflect_Type__ofBytes__, $std_reflect_Type__ofDatetime__, $std_reflect_Type__ofDuration__, $std_reflect_Type__ofFunction_new_std_reflect_FunctionType_std_reflect_Phase_INFLIGHT___std_reflect_Type__ofNum_______std_reflect_Type__ofBool____, $std_reflect_Type__ofJson__, $std_reflect_Type__ofMap_std_reflect_Type__ofBool____true_, $std_reflect_Type__ofMutJson__, $std_reflect_Type__ofNum__, $std_reflect_Type__ofOptional_std_reflect_Type__ofStr___, $std_reflect_Type__ofStr__, $std_reflect_Type__ofVoid__ }) {
+module.exports = function({ $_types_t1_interface_MyInterface, $_types_t21_class_MyClass, $_types_t36_enum_MyEnum, $_types_t37_struct_MyStruct, $expect_Util, $std_reflect_Phase, $std_reflect_Type__ofArray_std_reflect_Type__ofNum____false_, $std_reflect_Type__ofBool__, $std_reflect_Type__ofBytes__, $std_reflect_Type__ofDatetime__, $std_reflect_Type__ofDuration__, $std_reflect_Type__ofFunction_new_std_reflect_FunctionType_std_reflect_Phase_INFLIGHT___std_reflect_Type__ofNum_______std_reflect_Type__ofBool____, $std_reflect_Type__ofJson__, $std_reflect_Type__ofMap_std_reflect_Type__ofBool____true_, $std_reflect_Type__ofMutJson__, $std_reflect_Type__ofNum__, $std_reflect_Type__ofOptional_std_reflect_Type__ofStr___, $std_reflect_Type__ofStr__, $std_reflect_Type__ofVoid__ }) {
   class $Closure1 {
     constructor($args) {
       const {  } = $args;
@@ -124,7 +124,7 @@ module.exports = function({ $_types_t15_class_MyClass, $_types_t1_interface_MyIn
           (await $expect_Util.fail("t16 is not an interface"));
         }
       }
-      const t17 = $_types_t15_class_MyClass;
+      const t17 = $_types_t21_class_MyClass;
       (await $expect_Util.equal(t17.kind, "class"));
       (await $expect_Util.equal((await t17.toString()), "MyClass"));
       {
@@ -158,7 +158,7 @@ module.exports = function({ $_types_t15_class_MyClass, $_types_t1_interface_MyIn
           (await $expect_Util.fail("t17 is not a class"));
         }
       }
-      const t18 = $_types_t29_enum_MyEnum;
+      const t18 = $_types_t36_enum_MyEnum;
       (await $expect_Util.equal(t18.kind, "enum"));
       (await $expect_Util.equal((await t18.toString()), "MyEnum"));
       {
@@ -175,7 +175,7 @@ module.exports = function({ $_types_t15_class_MyClass, $_types_t1_interface_MyIn
           (await $expect_Util.fail("t18 is not an enum"));
         }
       }
-      const t19 = $_types_t30_struct_MyStruct;
+      const t19 = $_types_t37_struct_MyStruct;
       (await $expect_Util.equal(t19.kind, "struct"));
       (await $expect_Util.equal((await t19.toString()), "MyStruct"));
       {
@@ -301,10 +301,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $_types_t15_class_MyClass: ${$stdlib.core.liftObject($types.t15_class_MyClass)},
             $_types_t1_interface_MyInterface: ${$stdlib.core.liftObject($types.t1_interface_MyInterface)},
-            $_types_t29_enum_MyEnum: ${$stdlib.core.liftObject($types.t29_enum_MyEnum)},
-            $_types_t30_struct_MyStruct: ${$stdlib.core.liftObject($types.t30_struct_MyStruct)},
+            $_types_t21_class_MyClass: ${$stdlib.core.liftObject($types.t21_class_MyClass)},
+            $_types_t36_enum_MyEnum: ${$stdlib.core.liftObject($types.t36_enum_MyEnum)},
+            $_types_t37_struct_MyStruct: ${$stdlib.core.liftObject($types.t37_struct_MyStruct)},
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
             $std_reflect_Phase: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.reflect.Phase, "@winglang/sdk/std", "reflect.Phase"))},
             $std_reflect_Type__ofArray_std_reflect_Type__ofNum____false_: ${$stdlib.core.liftObject(std.reflect.Type._ofArray(std.reflect.Type._ofNum(), false))},
@@ -328,10 +328,10 @@ class $Root extends $stdlib.std.Resource {
           "handle": [
             [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), [].concat(["equal"], ["fail"], ["ok"])],
             [$stdlib.core.toLiftableModuleType(std.reflect.Phase, "@winglang/sdk/std", "reflect.Phase"), ["INFLIGHT"]],
-            [$types.t15_class_MyClass, []],
             [$types.t1_interface_MyInterface, []],
-            [$types.t29_enum_MyEnum, []],
-            [$types.t30_struct_MyStruct, []],
+            [$types.t21_class_MyClass, []],
+            [$types.t36_enum_MyEnum, []],
+            [$types.t37_struct_MyStruct, []],
             [std.reflect.Type._ofArray(std.reflect.Type._ofNum(), false), []],
             [std.reflect.Type._ofBool(), []],
             [std.reflect.Type._ofBytes(), []],
@@ -349,10 +349,10 @@ class $Root extends $stdlib.std.Resource {
           "$inflight_init": [
             [$stdlib.core.toLiftableModuleType(globalThis.$ClassFactory.resolveType("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"), []],
             [$stdlib.core.toLiftableModuleType(std.reflect.Phase, "@winglang/sdk/std", "reflect.Phase"), []],
-            [$types.t15_class_MyClass, []],
             [$types.t1_interface_MyInterface, []],
-            [$types.t29_enum_MyEnum, []],
-            [$types.t30_struct_MyStruct, []],
+            [$types.t21_class_MyClass, []],
+            [$types.t36_enum_MyEnum, []],
+            [$types.t37_struct_MyStruct, []],
             [std.reflect.Type._ofArray(std.reflect.Type._ofNum(), false), []],
             [std.reflect.Type._ofBool(), []],
             [std.reflect.Type._ofBytes(), []],
@@ -496,7 +496,7 @@ class $Root extends $stdlib.std.Resource {
         (expect.Util.fail("t16 is not an interface"));
       }
     }
-    const t17 = $types.t15_class_MyClass;
+    const t17 = $types.t21_class_MyClass;
     (expect.Util.equal(t17.kind, "class"));
     (expect.Util.equal((t17.toString()), "MyClass"));
     {
@@ -530,7 +530,7 @@ class $Root extends $stdlib.std.Resource {
         (expect.Util.fail("t17 is not a class"));
       }
     }
-    const t18 = $types.t29_enum_MyEnum;
+    const t18 = $types.t36_enum_MyEnum;
     (expect.Util.equal(t18.kind, "enum"));
     (expect.Util.equal((t18.toString()), "MyEnum"));
     {
@@ -547,7 +547,7 @@ class $Root extends $stdlib.std.Resource {
         (expect.Util.fail("t18 is not an enum"));
       }
     }
-    const t19 = $types.t30_struct_MyStruct;
+    const t19 = $types.t37_struct_MyStruct;
     (expect.Util.equal(t19.kind, "struct"));
     (expect.Util.equal((t19.toString()), "MyStruct"));
     {

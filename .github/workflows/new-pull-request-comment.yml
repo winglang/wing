@@ -12,7 +12,6 @@ permissions:
 jobs:
   comment:
     runs-on: ubuntu-24.04
-    if: ${{ !startsWith(github.head_ref, 'mergify/merge-queue/') }}
     steps:
       - name: Comment on new PR
         uses: thollander/actions-comment-pull-request@v2

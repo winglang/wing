@@ -93,8 +93,6 @@ export interface RouterContext {
   setSelectedNode: (node: string) => void;
   getTestRunner: () => TestRunner;
   analyticsAnonymousId?: string;
-  requireSignIn?: () => Promise<boolean>;
-  notifySignedIn?: () => Promise<void>;
   analytics?: Analytics;
   getEndpointWarningAccepted?: () => Promise<boolean>;
   notifyEndpointWarningAccepted?: () => Promise<void>;

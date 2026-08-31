@@ -18,14 +18,6 @@ ReactDOM.createRoot(document.querySelector("#root")!).render(
         // Playground and Learn need to be able to listen to all traces.
         window.parent.postMessage({ trace }, "*");
       }}
-      wingCloudSignInUrl={
-        import.meta.env.VITE_WING_CLOUD_SIGN_IN_URL ??
-        "https://wing.cloud/wrpc/console.signIn"
-      }
-      googleSignInURL={
-        import.meta.env.VITE_GOOGLE_SIGN_IN_URL ??
-        "https://wing.cloud/wrpc/console.signIn/google"
-      }
     />
   </React.StrictMode>,
 );

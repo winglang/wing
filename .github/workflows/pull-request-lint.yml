@@ -12,7 +12,6 @@ jobs:
   validate:
     name: Validate PR title
     runs-on: ubuntu-24.04
-    if: ${{ !startsWith(github.head_ref, 'mergify/merge-queue/') }}
     steps:
       - uses: amannn/action-semantic-pull-request@v5.4.0
         env:
