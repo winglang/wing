@@ -219,17 +219,16 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        runner: [ubuntu-latest, macos-13, windows-latest]
+        # Windows/macOS e2e temporarily dropped: those runners mass-fail on the
+        # push-only full matrix against infra that died with the company.
+        # Tracked in https://github.com/winglang/wing/issues/7270.
+        runner: [ubuntu-latest]
         node: ["20", "18"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
           - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
         exclude:
-          - runner: macos-13
-            full_run: false
-          - runner: windows-latest
-            full_run: false
           - runner: ubuntu-latest
             node: "18"
             full_run: false
@@ -306,7 +305,10 @@ jobs:
   sdk-spec-test:
     needs:
       - build
-    if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
+    # Temporarily disabled: the tf-aws/Azure/GCP variants deploy to the defunct
+    # company cloud accounts and fail with invalid credentials. Re-enable once
+    # valid cloud creds exist. Tracked in https://github.com/winglang/wing/issues/7270.
+    if: false && github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
     uses: ./.github/workflows/sdk-spec-test.yml
     secrets: inherit
 
@@ -319,7 +321,6 @@ jobs:
       - e2e-test
       - benchmark
       - test
-      - sdk-spec-test
     steps:
       - name: Check failure
         # All jobs must either be sucessful or skipped
