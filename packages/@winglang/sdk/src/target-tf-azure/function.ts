@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -14,7 +15,7 @@ import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
 import { LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
-import { createBundle } from "../shared/bundling";
+import { createArchive, createBundle } from "../shared/bundling";
 import {
   CaseConventions,
   NameOptions,
@@ -250,9 +251,12 @@ export class Function extends cloud.Function {
     );
 
     // Create zip asset from function code
+    const archiveZip = resolve(codeDir, "..", "archive.zip");
+    createArchive(codeDir, archiveZip);
+
     const asset = new TerraformAsset(this, "Asset", {
-      path: `${codeDir}`,
-      type: AssetType.ARCHIVE,
+      path: archiveZip,
+      type: AssetType.FILE,
     });
 
     this.assetPath = asset.path;

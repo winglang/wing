@@ -1,3 +1,4 @@
+import { execFileSync } from "child_process";
 import * as crypto from "crypto";
 import { mkdirSync, realpathSync, statSync, writeFileSync } from "fs";
 import { stat } from "fs/promises";
@@ -130,6 +131,32 @@ export function createBundle(
     inputFiles,
     time: startTime,
   };
+}
+
+/**
+ * Archives (zips) the contents of `srcDir` into a single zip file at `destFile`.
+ *
+ * This replaces cdktf's `TerraformAsset` with `AssetType.ARCHIVE`, whose internal
+ * implementation shells out to `node .../private/fs.js <src> <dest>` using a
+ * command string that does NOT quote the paths. When the project directory (or
+ * any path component) contains spaces, the shell splits on the spaces and the
+ * archive is written to the wrong location (or fails entirely), which later
+ * causes errors like `opening S3 object source (assets/.../archive.zip): no
+ * such file or directory` during `terraform apply`.
+ *
+ * Instead of relying on that shell string, we invoke the archiver directly with
+ * `execFileSync` and an array of arguments (no shell), so paths containing
+ * spaces are handled correctly. The resulting zip file is then presented to
+ * `TerraformAsset` as a single `AssetType.FILE`, which is simply copied into the
+ * output directory with `copyFileSync` (no shell involved).
+ */
+export function createArchive(srcDir: string, destFile: string): void {
+  // Reuse the archiver bundled with cdktf (this repo pins cdktf to an exact
+  // version, so this internal module path is stable). It is invoked as a CLI
+  // with array arguments rather than a shell string to preserve spaces.
+  // eslint-disable-next-line import/no-extraneous-dependencies, @typescript-eslint/no-require-imports
+  const archiveScript = require.resolve("cdktf/lib/private/fs") as string;
+  execFileSync(process.execPath, [archiveScript, srcDir, destFile]);
 }
 
 export interface SourceMap {

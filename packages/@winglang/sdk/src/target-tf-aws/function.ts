@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -11,7 +12,7 @@ import { S3Object } from "../.gen/providers/aws/s3-object";
 import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import * as cloud from "../cloud";
 import { NotImplementedError } from "../core/errors";
-import { createBundle } from "../shared/bundling";
+import { createArchive, createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import {
@@ -272,11 +273,17 @@ export class Function extends AwsFunction {
 
     const bundle = createBundle(this.entrypoint, externalLibraries);
 
+    // Archive the bundle directory into a zip ourselves, then reference it as a
+    // single file. This avoids cdktf's `AssetType.ARCHIVE` shelling out with an
+    // unquoted path, which breaks when the directory contains spaces.
+    const archiveZip = resolve(bundle.directory, "..", "archive.zip");
+    createArchive(bundle.directory, archiveZip);
+
     // would prefer to create TerraformAsset in the constructor, but using a CDKTF token for
     // the "path" argument isn't supported
     const asset = new TerraformAsset(this, "Asset", {
-      path: bundle.directory,
-      type: AssetType.ARCHIVE,
+      path: archiveZip,
+      type: AssetType.FILE,
     });
 
     this.bundleHash = bundle.hash;
