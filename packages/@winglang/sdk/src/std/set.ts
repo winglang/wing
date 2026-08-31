@@ -114,6 +114,17 @@ export class MutSet {
   }
 
   /**
+   * Create a mutable shallow copy of this set
+   *
+   * @macro new Set($self$)
+   *
+   * @returns a MutableSet with the same values as this set
+   */
+  public copyMut(): MutSet {
+    throw new Error("Macro");
+  }
+
+  /**
    * Removes a specified value from a set, if it is in the set.
    * @param value The value to remove from the set.
    * @returns Returns `true` if `value` was already in the set; otherwise `false`.

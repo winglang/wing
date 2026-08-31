@@ -320,6 +320,12 @@ test "copyMut()" {
   let r = q.copyMut();
   assert(q.length == r.length);
   assert(q.at(0) == r.at(0));
+
+  let m = MutArray<str>["hello", "wing"];
+  let c = m.copyMut();
+  c.push("world");
+  assert(c.length == m.length + 1);
+  assert(m.at(0) == c.at(0));
 }
 
 //-----------------------------------------------------------------------------

@@ -140,6 +140,12 @@ assert(talkingQuirks.copyMut() == MutSet<str> ["dattebane", "battebayo", "datteb
 test "copyMut()" {
     let talkingQuirks = Set<str> ["dattebane", "battebayo", "dattebasa"];
     assert(talkingQuirks.copyMut() == MutSet<str> ["dattebane", "battebayo", "dattebasa"]);
+
+    let m = MutSet<str> ["dattebane", "battebayo", "dattebasa"];
+    let c = m.copyMut();
+    c.add("nani");
+    assert(c.size == m.size + 1);
+    assert(m.has("dattebayo"));
 }
 
 

@@ -222,6 +222,17 @@ export class MutArray {
   }
 
   /**
+   * Create a mutable shallow copy of this array
+   *
+   * @macro [...($self$)]
+   *
+   * @returns a MutableArray with the same values as this array
+   */
+  public copyMut(): MutArray {
+    throw new Error("Macro");
+  }
+
+  /**
    * Returns the index of the first occurrence of searchElement found.
    *
    * @macro $self$.indexOf($args$)
