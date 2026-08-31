@@ -5,10 +5,9 @@ merge_queue:
 queue_rules:
   - name: default
     merge_method: squash
-    commit_message_template: |-
-      {{ title }} (#{{ number }})
-      {{ body }}
-
+    commit_message_format:
+      title: pr-title
+      body: pr-body
 pull_request_rules:
   - name: automatic merge
     actions:
@@ -24,10 +23,10 @@ pull_request_rules:
       - -merged
       - -closed
       - -draft
-      - branch-protection-review-decision=APPROVED
-      - "#approved-reviews-by>=1"
-      - "#changes-requested-reviews-by=0"
-      - "#review-threads-unresolved=0"
+      - github-review-decision=APPROVED
+      - '#approved-reviews-by>=1'
+      - '#changes-requested-reviews-by=0'
+      - '#review-threads-unresolved=0'
       - -approved-reviews-by~=author
       - check-success=Validate PR title
       - check-success=Quality Gate
