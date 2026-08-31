@@ -26,10 +26,7 @@ import { createConsoleApp } from "../dist/index.js";
  * `describe(wingfile, callback)`. Any tests added in
  * this callback will belong to the group.
  */
-export const describe = (
-  wingfile: string,
-  callback: () => void,
-) => {
+export const describe = (wingfile: string, callback: () => void) => {
   let server: { port: number; close: () => void } | undefined;
 
   test.beforeEach(async ({ page }) => {
