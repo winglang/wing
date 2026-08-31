@@ -352,6 +352,8 @@ jobs:
       - quality-gate
       - build
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
@@ -359,8 +361,12 @@ jobs:
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
         if: ${{ needs.build.outputs.last-version != needs.build.outputs.version }}
+        # Tagging is ancillary to the npm release and must never block it — the
+        # old PROJEN_GITHUB_TOKEN is a defunct company PAT (bad credentials), so
+        # use the built-in GITHUB_TOKEN and keep the step non-fatal.
+        continue-on-error: true
         with:
-          repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
           tag: "v${{ needs.build.outputs.version }}"
 
       - name: Login to NPM registry
@@ -431,9 +437,12 @@ jobs:
 
       - name: Cut Development Release
         uses: softprops/action-gh-release@v1
+        # Ancillary to the npm release; use the built-in GITHUB_TOKEN and don't
+        # let a GitHub-release hiccup fail the job after npm has published.
+        continue-on-error: true
         with:
           name: "Wing ${{ needs.build.outputs.version }}"
           tag_name: "v${{ needs.build.outputs.version }}"
           body_path: CHANGELOG.md
           files: dist/*
-          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
