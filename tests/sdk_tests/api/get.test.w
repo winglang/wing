@@ -10,7 +10,7 @@ let body = "ok!";
 api.get("/path", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   assert(req.method == cloud.HttpMethod.GET);
   assert(req.path == "/path");
-  assert(req.body?.length == 0);
+  assert(req.body == nil);
   assert(req.headers?.get("content-type") == "application/json");
 
   return cloud.ApiResponse {
