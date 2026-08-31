@@ -229,6 +229,42 @@ test.skip("messages are not requeued if the function fails before timeout", asyn
   `);
 });
 
+test("messages are redelivered if the consumer exceeds the visibility timeout", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const queue = new cloud.Queue(app, "my_queue", {
+    timeout: Duration.fromMilliseconds(300),
+  });
+  queue.setConsumer(
+    inflight(async () => {
+      // consumer takes longer than the visibility timeout
+      await new Promise((r) => setTimeout(r, 2000));
+    }),
+  );
+  const s = await app.startSimulator();
+
+  // WHEN
+  const REQUEUE_MSG =
+    "1 messages pushed back to queue after visibility timeout.";
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+  void queueClient.push("foo");
+  await waitUntilTrace(s, (trace) => trace.data.message.startsWith("Invoke"));
+  // wait for the visibility timeout to expire and the message to be redelivered
+  await waitUntilTrace(s, (trace) =>
+    trace.data.message.startsWith(REQUEUE_MSG),
+  );
+
+  // THEN
+  await s.stop();
+
+  expect(
+    s
+      .listTraces()
+      .filter((v) => v.sourceType == cloud.QUEUE_FQN)
+      .map((trace) => trace.data.message),
+  ).toContain(REQUEUE_MSG);
+});
+
 // TODO: this test is skipped because it is flaky
 test.skip("messages are not requeued if the function fails after retention timeout", async () => {
   // GIVEN
