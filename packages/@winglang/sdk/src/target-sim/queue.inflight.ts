@@ -25,6 +25,7 @@ export class Queue
   implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
 {
   private readonly messages = new Array<QueueMessage>();
+  private readonly inFlightMessages = new Array<InFlightMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly processLoop: LoopController;
   private _context: ISimulatorContext | undefined;
@@ -138,6 +139,8 @@ export class Queue
   }
 
   private async processMessages() {
+    // Re-enqueue messages whose visibility timeout has expired
+    this.redeliverExpiredMessages();
     let processedMessages = false;
     do {
       processedMessages = false;
@@ -200,6 +203,17 @@ export class Queue
           timestamp: new Date().toISOString(),
         });
 
+        // Track the messages as in-flight so they can be redelivered if
+        // the consumer does not finish within the visibility timeout.
+        const deliveredAt = Date.now();
+        for (const message of messages) {
+          this.inFlightMessages.push({
+            message,
+            deliveredAt,
+            redelivered: false,
+          });
+        }
+
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
         void fnClient
@@ -235,6 +249,11 @@ export class Queue
               }
               this.messages.push(...retriesMessages);
             }
+            // On success (or after handling batch failures), remove the
+            // messages from the in-flight set. They are not returned to the
+            // queue unless their visibility timeout already expired while the
+            // consumer was still running (handled by redeliverExpiredMessages).
+            this.removeFromInFlight(messages);
           })
           .catch((err) => {
             // If the function is at a concurrency limit, pretend we just didn't call it
@@ -242,6 +261,7 @@ export class Queue
               err.message ===
               "Too many requests, the function has reached its concurrency limit."
             ) {
+              this.removeFromInFlight(messages);
               this.messages.push(...messages);
               return;
             }
@@ -256,11 +276,40 @@ export class Queue
               level: LogLevel.ERROR,
               timestamp: new Date().toISOString(),
             });
+            this.removeFromInFlight(messages);
             this.pushMessagesBackToQueue(messages);
           });
         processedMessages = true;
       }
     } while (processedMessages);
+  }
+
+  /**
+   * Re-enqueues messages whose in-flight (visibility) timeout has expired
+   * while their consumer was still processing them. This mirrors the SQS
+   * visibility timeout behavior: a message is redelivered if the consumer
+   * does not complete within `timeout`.
+   */
+  private redeliverExpiredMessages(): void {
+    const now = Date.now();
+    const expired = this.inFlightMessages.filter(
+      (inFlight) =>
+        !inFlight.redelivered &&
+        now - inFlight.deliveredAt >= this.timeoutSeconds * 1000,
+    );
+    for (const inFlight of expired) {
+      inFlight.redelivered = true;
+      this.pushMessagesBackToQueue([inFlight.message]);
+    }
+  }
+
+  private removeFromInFlight(messages: Array<QueueMessage>): void {
+    const payloads = new Set(messages.map((m) => m.payload));
+    for (let i = this.inFlightMessages.length - 1; i >= 0; i--) {
+      if (payloads.has(this.inFlightMessages[i].message.payload)) {
+        this.inFlightMessages.splice(i, 1);
+      }
+    }
   }
 
   public pushMessagesBackToQueue(messages: Array<QueueMessage>): void {
@@ -300,6 +349,12 @@ class QueueMessage {
     this.payload = message;
     this.remainingDeliveryAttempts = remainingDeliveryAttempts;
   }
+}
+
+interface InFlightMessage {
+  message: QueueMessage;
+  deliveredAt: number;
+  redelivered: boolean;
 }
 
 class RandomArrayIterator<T = any> implements Iterable<T> {
