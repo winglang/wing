@@ -67,7 +67,6 @@ export function getTurboTaskData(): TurboOutput {
     "test",
     "package",
     "bench",
-    "preview:fly",
     "--dry-run=json",
   ];
 

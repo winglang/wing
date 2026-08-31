@@ -34,7 +34,6 @@ jobs:
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
       vscode-wing-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changes }}
-      console-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['@wingconsole/app#preview:fly'].changes }}
       e2e-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
       bench-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#bench'].changes }}
     steps:
@@ -310,53 +309,6 @@ jobs:
     if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
     uses: ./.github/workflows/sdk-spec-test.yml
     secrets: inherit
-
-  console-preview:
-    name: "Console Preview"
-    runs-on: ubuntu-24.04
-    needs:
-      - build
-    env:
-      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      FLY_VERSION: "0.1.80"
-      APP_NAME: wing-console-pr-${{github.event.number}}
-    if: ${{ needs.build.outputs.console-changed == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download Dist Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
-
-      - name: Install flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@1.5
-        with:
-          version: ${{ env.FLY_VERSION }}
-
-      - name: Deploy to Fly.io
-        id: deploy-fly
-        run: |
-          if ! flyctl status --app "$APP_NAME"; then
-            pushd ./wing-console/console/app/preview
-            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest -o personal
-            popd
-          fi
-          flyctl deploy . --config ./wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 1024 --strategy immediate
-          flyctl scale count 1 --yes --app "$APP_NAME"
-          echo "deploytime=$(TZ=UTC date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
-
-      - name: Post preview comment
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
-
-            ###### Last Updated (UTC) ${{steps.deploy-fly.outputs.deploytime }}
-          comment_tag: Console preview environment
-          GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
 
   quality-gate:
     name: Quality Gate
