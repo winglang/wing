@@ -1420,6 +1420,7 @@ impl TypeRef {
 				true
 			}
 			Type::Enum(_) => true,
+			Type::Duration | Type::Regex => true,
 			Type::Optional(t) | Type::Array(t) | Type::Set(t) | Type::Map(t) => t.has_json_representation(),
 			_ => self.is_json_legal_value(),
 		}

@@ -50,6 +50,21 @@ impl JsonSchemaGenerator {
 					None => format!("{{type:\"{}\"}}", jsified_type),
 				}
 			}
+			Type::Duration | Type::Regex => {
+				let format_name = if matches!(**typ, Type::Duration) {
+					"duration"
+				} else {
+					"regex"
+				};
+				match docs {
+					Some(docs) => format!(
+						"{{type:\"string\",format:\"{}\",description:\"{}\"}}",
+						format_name,
+						docs.to_escaped_string()
+					),
+					None => format!("{{type:\"string\",format:\"{}\"}}", format_name),
+				}
+			}
 			Type::Struct(ref s) => {
 				let mut code = CodeMaker::default();
 				code.append("{");
