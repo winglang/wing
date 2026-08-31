@@ -261,7 +261,7 @@ impl<'a> ExternDTSifier<'a> {
 		let return_type = if f.return_type.is_strict_option() {
 			let unwrapped_type = *f.return_type.maybe_unwrap_option();
 			let type_string = self.dtsify_type(unwrapped_type, is_inflight);
-			format!("{} | void", type_string)
+			format!("{} | undefined", type_string)
 		} else {
 			self.dtsify_type(f.return_type, is_inflight)
 		};
@@ -432,5 +432,57 @@ impl<'a> ExternDTSifier<'a> {
 			));
 		}
 		code
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+	use crate::docs::Docs;
+
+	#[test]
+	fn optional_return_type_is_emitted_as_undefined() {
+		let mut types = Types::new();
+		let string_t = types.add_type(Type::String);
+		let optional_string_t = types.add_type(Type::Optional(string_t));
+
+		let signature = FunctionSignature {
+			this_type: None,
+			parameters: vec![],
+			return_type: optional_string_t,
+			phase: Phase::Independent,
+			implicit_scope_param: false,
+			js_override: None,
+			is_macro: false,
+			docs: Docs::default(),
+		};
+
+		let mut dtsifier = ExternDTSifier::new(&types);
+		let result = dtsifier.dtsify_function_signature(&signature, false);
+
+		assert_eq!(result, "() => string | undefined");
+		assert!(!result.contains("void"), "expected undefined, got void: {result}");
+	}
+
+	#[test]
+	fn plain_void_return_type_stays_void() {
+		let mut types = Types::new();
+		let void_t = types.add_type(Type::Void);
+
+		let signature = FunctionSignature {
+			this_type: None,
+			parameters: vec![],
+			return_type: void_t,
+			phase: Phase::Independent,
+			implicit_scope_param: false,
+			js_override: None,
+			is_macro: false,
+			docs: Docs::default(),
+		};
+
+		let mut dtsifier = ExternDTSifier::new(&types);
+		let result = dtsifier.dtsify_function_signature(&signature, false);
+
+		assert_eq!(result, "() => void");
 	}
 }
