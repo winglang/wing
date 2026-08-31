@@ -1,5 +1,5 @@
 import { writeFileSync } from "fs";
-import { join, basename } from "path";
+import { join, basename, resolve } from "path";
 import { AssetType, Lazy, TerraformAsset, Fn } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -13,7 +13,7 @@ import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-obj
 import * as cloud from "../cloud";
 import { LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
-import { createBundle } from "../shared/bundling";
+import { createArchive, createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import {
   CaseConventions,
@@ -223,9 +223,12 @@ export class Function extends cloud.Function {
       ),
     );
 
+    const archiveZip = resolve(bundle.directory, "..", "archive.zip");
+    createArchive(bundle.directory, archiveZip);
+
     const asset = new TerraformAsset(this, "Asset", {
-      path: bundle.directory,
-      type: AssetType.ARCHIVE,
+      path: archiveZip,
+      type: AssetType.FILE,
     });
 
     this.assetPath = asset.path;

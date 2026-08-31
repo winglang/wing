@@ -1,6 +1,37 @@
+import {
+  writeFileSync,
+  mkdtempSync,
+  readFileSync,
+  mkdirSync,
+  existsSync,
+} from "fs";
+import { tmpdir } from "os";
+import { join } from "path";
 import { describe, it, expect } from "vitest";
 import { encode, decode } from "vlq";
-import { fixSourcemaps } from "../../src/shared/bundling";
+import { createArchive, fixSourcemaps } from "../../src/shared/bundling";
+
+describe("createArchive", () => {
+  it("should create a zip archive when the directory path contains spaces", () => {
+    // create a temp directory with spaces in its name, mirroring the scenario in
+    // https://github.com/winglang/wing/issues/6465 where the project directory
+    // contains a space
+    const root = mkdtempSync(join(tmpdir(), "dir with spaces "));
+    const srcDir = join(root, "src");
+    const destFile = join(root, "archive.zip");
+    mkdirSync(srcDir, { recursive: true });
+    writeFileSync(join(srcDir, "index.js"), "module.exports = {};");
+
+    // WHEN
+    createArchive(srcDir, destFile);
+
+    // THEN
+    expect(existsSync(destFile)).toBe(true);
+    // a valid zip archive starts with the "PK" magic bytes
+    expect(readFileSync(destFile).subarray(0, 2).toString()).toBe("PK");
+    expect(readFileSync(destFile).length).toBeGreaterThan(0);
+  });
+});
 
 describe("fixSourcemaps", () => {
   it("should fix sourcemaps", () => {
