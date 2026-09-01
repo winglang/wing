@@ -2,6 +2,7 @@ mod class_fields_init;
 mod has_type_stmt;
 mod inference_visitor;
 pub(crate) mod jsii_importer;
+mod self_reference;
 pub mod lifts;
 pub mod symbol_env;
 pub(crate) mod type_reference_transform;
@@ -22,6 +23,7 @@ use crate::docs::{Docs, Documented};
 use crate::file_graph::{File, FileGraph};
 use crate::parser::normalize_path;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
+use crate::type_check::self_reference::SelfReferenceVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit::Visit;
 use crate::visit_context::{VisitContext, VisitorWithContext};
@@ -5463,6 +5465,18 @@ This value is set by the CLI at compile time and can be used to conditionally co
 		reassignable: &bool,
 		env: &mut SymbolEnv,
 	) {
+		let mut self_reference_visitor = SelfReferenceVisitor::default();
+		self_reference_visitor.analyze(&var_name.name, initial_value);
+		if self_reference_visitor.has_self_reference {
+			self.spanned_error(
+				var_name,
+				format!(
+					"Cannot reference variable \"{}\" in its own definition. \"{}\" does not exist yet until after its initializer has been evaluated.",
+					var_name.name, var_name.name
+				),
+			);
+		}
+
 		let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env));
 		let (mut inferred_type, _) = self.type_check_exp(initial_value, env);
 		if inferred_type.is_void() {
