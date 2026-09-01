@@ -354,7 +354,8 @@ impl<'a> DTSifier<'a> {
 			};
 
 			args.push(format!(
-				"{arg_name}{}: {}",
+				"{}{arg_name}{}: {}",
+				if arg.variadic { "..." } else { "" },
 				if matches!(arg.type_annotation.kind, TypeAnnotationKind::Optional(_)) {
 					"?"
 				} else {
