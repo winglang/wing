@@ -17,11 +17,21 @@ export const getFileEncoding = (file: string): "base64" | "utf8" => {
     return "utf8";
   }
 
-  if (textextensions.includes(extension)) {
+  if (isTextExtension(extension)) {
     return "utf8";
   }
 
   return "base64";
+};
+
+// Wing source files (`.w`), unlike other source extensions, are not included
+// in the `textextensions` list, so they must be detected explicitly.
+const isTextExtension = (extension: string): boolean => {
+  if (extension === "w") {
+    return true;
+  }
+
+  return textextensions.includes(extension);
 };
 
 const getEncodedUrl = (file: string, content: string) => {
