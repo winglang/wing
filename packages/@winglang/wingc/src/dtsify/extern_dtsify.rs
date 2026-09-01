@@ -387,7 +387,8 @@ impl<'a> ExternDTSifier<'a> {
 			};
 
 			args.push(format!(
-				"{arg_name}{}: {}",
+				"{}{arg_name}{}: {}",
+				if arg.variadic { "..." } else { "" },
 				if arg.typeref.is_option() { "?" } else { "" },
 				self.dtsify_type(arg.typeref, is_inflight)
 			));
@@ -484,5 +485,63 @@ mod tests {
 		let result = dtsifier.dtsify_function_signature(&signature, false);
 
 		assert_eq!(result, "() => void");
+	}
+
+	#[test]
+	fn variadic_parameter_is_emitted_as_rest_parameter() {
+		let mut types = Types::new();
+		let string_t = types.add_type(Type::String);
+		let string_array_t = types.add_type(Type::Array(string_t));
+		let void_t = types.add_type(Type::Void);
+
+		let signature = FunctionSignature {
+			this_type: None,
+			parameters: vec![FunctionParameter {
+				name: "args".to_string(),
+				typeref: string_array_t,
+				docs: Docs::default(),
+				variadic: true,
+			}],
+			return_type: void_t,
+			phase: Phase::Independent,
+			implicit_scope_param: false,
+			js_override: None,
+			is_macro: false,
+			docs: Docs::default(),
+		};
+
+		let mut dtsifier = ExternDTSifier::new(&types);
+		let result = dtsifier.dtsify_function_signature(&signature, false);
+
+		assert_eq!(result, "(...args: (readonly (string)[])) => void");
+	}
+
+	#[test]
+	fn non_variadic_array_parameter_is_not_a_rest_parameter() {
+		let mut types = Types::new();
+		let string_t = types.add_type(Type::String);
+		let string_array_t = types.add_type(Type::Array(string_t));
+		let void_t = types.add_type(Type::Void);
+
+		let signature = FunctionSignature {
+			this_type: None,
+			parameters: vec![FunctionParameter {
+				name: "items".to_string(),
+				typeref: string_array_t,
+				docs: Docs::default(),
+				variadic: false,
+			}],
+			return_type: void_t,
+			phase: Phase::Independent,
+			implicit_scope_param: false,
+			js_override: None,
+			is_macro: false,
+			docs: Docs::default(),
+		};
+
+		let mut dtsifier = ExternDTSifier::new(&types);
+		let result = dtsifier.dtsify_function_signature(&signature, false);
+
+		assert_eq!(result, "(items: (readonly (string)[])) => void");
 	}
 }
