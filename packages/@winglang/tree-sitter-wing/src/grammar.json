@@ -304,9 +304,17 @@
         }
       ]
     },
+    "empty_statement": {
+      "type": "STRING",
+      "value": ";"
+    },
     "_statement": {
       "type": "CHOICE",
       "members": [
+        {
+          "type": "SYMBOL",
+          "name": "empty_statement"
+        },
         {
           "type": "SYMBOL",
           "name": "test_statement"

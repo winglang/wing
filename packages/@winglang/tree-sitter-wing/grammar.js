@@ -108,8 +108,11 @@ module.exports = grammar({
 
     phase_specifier: ($) => choice("unphased", "inflight"),
 
+    empty_statement: ($) => ";",
+
     _statement: ($) =>
       choice(
+        $.empty_statement,
         $.test_statement,
         $.import_statement,
         $.expression_statement,
