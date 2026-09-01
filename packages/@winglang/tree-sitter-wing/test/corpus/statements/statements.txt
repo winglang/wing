@@ -549,3 +549,38 @@ super(man, was, here);
       (positional_argument
         (reference
           (reference_identifier))))))
+
+================================================================================
+Empty statement
+================================================================================
+
+;
+
+;;;
+
+for x in y {
+  ;
+  log("cool beans");;
+}
+
+--------------------------------------------------------------------------------
+
+(source
+  (empty_statement)
+  (empty_statement)
+  (empty_statement)
+  (empty_statement)
+  (for_in_loop
+    iterator: (identifier)
+    iterable: (reference
+      (reference_identifier))
+    block: (block
+      (empty_statement)
+      (expression_statement
+        (call
+          caller: (reference
+            (reference_identifier))
+          args: (argument_list
+            (positional_argument
+              (string)))))
+      (empty_statement))))

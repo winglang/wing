@@ -630,7 +630,7 @@ impl<'s> Parser<'s> {
 			let DocBuilderResult::Done(doc) = doc_builder.process_node(&child) else {
 				continue;
 			};
-			if child.kind() == "AUTOMATIC_BLOCK" {
+			if matches!(child.kind(), "AUTOMATIC_BLOCK" | "empty_statement") {
 				continue;
 			}
 
@@ -3220,5 +3220,24 @@ mod tests {
 		assert_eq!(true, contains_non_symbolic("$wowzer"));
 		assert_eq!(false, contains_non_symbolic("_wowzer"));
 		assert_eq!(false, contains_non_symbolic("wowzer"));
+	}
+
+	#[test]
+	fn empty_statement_parses_without_error() {
+		// https://github.com/winglang/wing/issues/2989
+		let language = tree_sitter_wing::language();
+		let mut tree_sitter_parser = tree_sitter::Parser::new();
+		tree_sitter_parser.set_language(&language).unwrap();
+
+		for code in [
+			";",
+			";;;",
+			"let x = 1;;",
+			"x = 2;;",
+			"if true {\n  ;\n  log(\"cool beans\");;\n}",
+		] {
+			let tree = tree_sitter_parser.parse(code.as_bytes(), None).unwrap();
+			assert!(!tree.root_node().has_error(), "expected no parse error for: {code}");
+		}
 	}
 }
