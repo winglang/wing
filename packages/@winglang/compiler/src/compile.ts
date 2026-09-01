@@ -358,7 +358,7 @@ async function compileWingForPreflight(props: {
  *
  * @returns default values file from the current working directory
  */
-function defaultValuesFile() {
+export function defaultValuesFile(): string | undefined {
   const defaultConfigs = ["wing.toml", "wing.yaml", "wing.yml", "wing.json"];
 
   for (const configFile of defaultConfigs) {
@@ -366,7 +366,7 @@ function defaultValuesFile() {
       return configFile;
     }
   }
-  return "";
+  return undefined;
 }
 
 async function runPreflightCodeInWorkerThread(

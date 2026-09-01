@@ -1,9 +1,39 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, afterEach, beforeEach } from "vitest";
 import { join, resolve, basename } from "path";
-import { stat, mkdtemp } from "fs/promises";
+import { stat, mkdtemp, writeFile } from "fs/promises";
 import { tmpdir } from "os";
 import { BuiltinPlatform } from "./constants";
-import { compile, CompileOptions } from "./compile";
+import { compile, CompileOptions, defaultValuesFile } from "./compile";
+
+const originalCwd = process.cwd();
+
+describe("defaultValuesFile", () => {
+  let dir: string;
+
+  beforeEach(async () => {
+    dir = await mkdtemp(join(tmpdir(), "-wing-values-test"));
+    process.chdir(dir);
+  });
+
+  afterEach(async () => {
+    process.chdir(originalCwd);
+  });
+
+  test("returns undefined when no default values file exists", async () => {
+    expect(defaultValuesFile()).toBeUndefined();
+  });
+
+  test("returns a matching default values file when present", async () => {
+    await writeFile(join(dir, "wing.toml"), "");
+    expect(defaultValuesFile()).toBe("wing.toml");
+  });
+
+  test("returns the first matching default values file in order", async () => {
+    await writeFile(join(dir, "wing.json"), "");
+    await writeFile(join(dir, "wing.toml"), "");
+    expect(defaultValuesFile()).toBe("wing.toml");
+  });
+});
 
 const compileOrFail = async (entrypoint: string, options: CompileOptions) => {
   const result = await compile(entrypoint, options);
