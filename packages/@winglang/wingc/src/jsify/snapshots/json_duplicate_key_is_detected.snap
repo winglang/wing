@@ -1,0 +1,5 @@
+---
+source: packages/@winglang/wingc/src/jsify/tests.rs
+---
+## Errors
+Duplicate key "a" in json object literal 3:6

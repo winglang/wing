@@ -2592,7 +2592,7 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_json_map_literal(&self, expression_node: &Node<'_>, phase: Phase) -> Result<Expr, ()> {
-		let mut fields = IndexMap::new();
+		let mut fields = Vec::new();
 		let mut cursor = expression_node.walk();
 		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
 			if field_node.is_extra() {
@@ -2600,25 +2600,35 @@ impl<'s> Parser<'s> {
 			}
 			let key_node = field_node.named_child(0).unwrap();
 			let key = match key_node.kind() {
-				"string" => {
-					let s = self.node_text(&key_node);
-					// Remove quotes, we assume this is a valid key for a map
-					let s = s[1..s.len() - 1].to_string();
-					Symbol::new(s, self.node_span(&key_node))
+				"string" => self.build_string_expression(&key_node, phase)?,
+				"identifier" => {
+					let symbol = self.node_symbol(&key_node)?;
+					Expr::new(ExprKind::Literal(Literal::String(symbol.name.clone())), symbol.span())
 				}
-				"identifier" => self.node_symbol(&key_node)?,
 				other => panic!("Unexpected map key type {} at {:?}", other, key_node),
 			};
 			let value = if let Some(value_node) = field_node.named_child(1) {
 				self.build_expression(&value_node, phase)?
 			} else {
-				Expr::new(ExprKind::Reference(Reference::Identifier(key.clone())), key.span())
+				// Shorthand `Json { key }` sets the value to a reference to the identifier
+				let symbol = self.node_symbol(&key_node)?;
+				Expr::new(ExprKind::Reference(Reference::Identifier(symbol)), key.span().clone())
 			};
-			if fields.contains_key(&key) {
-				self.add_error(format!("Duplicate key {} in json object literal", key), &key_node);
-			} else {
-				fields.insert(key, value);
+			if let ExprKind::Literal(Literal::String(key_name)) = &key.kind {
+				let is_duplicate = fields.iter().any(|(existing_key, _): &(Expr, Expr)| {
+					matches!(
+						(&existing_key.kind, &key.kind),
+						(ExprKind::Literal(Literal::String(a)), ExprKind::Literal(Literal::String(b))) if a == b
+					)
+				});
+				if is_duplicate {
+					self.add_error(
+						format!("Duplicate key \"{}\" in json object literal", key_name),
+						&key_node,
+					);
+				}
 			}
+			fields.push((key, value));
 		}
 
 		Ok(Expr::new(

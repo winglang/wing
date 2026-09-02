@@ -1242,6 +1242,48 @@ fn json_object() {
 }
 
 #[test]
+fn json_dynamic_key_issue_5917() {
+	assert_compile_ok!(
+		r#"
+    let url = "http://example.com";
+
+    let x = Json {
+      "{url}": "valid"
+    };
+
+    test "test" {
+      log(Json.stringify(x));
+    }
+    "#
+	);
+}
+
+#[test]
+fn json_duplicate_key_is_detected() {
+	assert_compile_fail!(
+		r#"
+    let x = Json {
+      a: 1,
+      a: 2
+    };
+    "#
+	);
+}
+
+#[test]
+fn json_shorthand_key_references_identifier() {
+	assert_compile_ok!(
+		r#"
+    let foo = 42;
+
+    let x = Json {
+      foo
+    };
+    "#
+	);
+}
+
+#[test]
 fn capture_token() {
 	assert_compile_ok!(
 		r#"
