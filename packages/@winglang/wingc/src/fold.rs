@@ -371,7 +371,7 @@ where
 		ExprKind::JsonMapLiteral { fields } => ExprKind::JsonMapLiteral {
 			fields: fields
 				.into_iter()
-				.map(|(key, value)| (key, f.fold_expr(value)))
+				.map(|(key, value)| (f.fold_expr(key), f.fold_expr(value)))
 				.collect(),
 		},
 		ExprKind::MapLiteral { type_, fields } => ExprKind::MapLiteral {

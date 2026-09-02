@@ -2586,20 +2586,27 @@ This value is set by the CLI at compile time and can be used to conditionally co
 
 	fn type_check_json_map_lit(
 		&mut self,
-		fields: &IndexMap<Symbol, Expr>,
+		fields: &Vec<(Expr, Expr)>,
 		env: &mut SymbolEnv,
 		exp: &Expr,
 	) -> (TypeRef, Phase) {
 		let mut known_types = IndexMap::new();
-		fields.iter().for_each(|(name, v)| {
+		fields.iter().for_each(|(key, v)| {
 			let (known_type, _) = self.type_check_exp(v, env);
-			known_types.insert(
-				name.clone(),
-				SpannedTypeInfo {
-					type_: known_type,
-					span: v.span(),
-				},
-			);
+			if let ExprKind::Literal(Literal::String(name)) = &key.kind {
+				known_types.insert(
+					Symbol::new(name.clone(), key.span.clone()),
+					SpannedTypeInfo {
+						type_: known_type,
+						span: v.span(),
+					},
+				);
+			}
+			// Keys are always strings: plain string literals, or interpolated/dynamic string
+			// expressions. Type-check the key expression itself (also validates that every
+			// interpolated part is stringable) and require the result to be a string.
+			let (key_type, _) = self.type_check_exp(key, env);
+			self.validate_type_in(key_type, &[self.types.string()], key, None, None);
 			// Ensure we don't allow MutJson to Json or vice versa
 			match *known_type {
 				Type::Json(_) => {
