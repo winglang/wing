@@ -27,6 +27,46 @@ fn free_preflight_object_from_preflight() {
 }
 
 #[test]
+fn recursive_inflight_closure_self_capture() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+
+    let applyMiddlewares = inflight (index: num?): str => {
+      let next = (request: str): str => {
+        let newIndex = (index ?? 0) + 1;
+        if newIndex < 3 {
+          return applyMiddlewares(newIndex);
+        }
+        return "done";
+      };
+      return next("go");
+    };
+
+    let api = new cloud.Api();
+    api.get("/", inflight () => {
+      return { body: applyMiddlewares(0) };
+    });
+    "#
+	);
+}
+
+#[test]
+fn recursive_preflight_closure_self_capture() {
+	assert_compile_ok!(
+		r#"
+    let f = (x: num): num => {
+      if x < 3 {
+        return f(x + 1);
+      }
+      return x;
+    };
+    let y = f(0);
+    "#
+	);
+}
+
+#[test]
 fn free_inflight_obj_from_inflight() {
 	assert_compile_ok!(
 		r#"
