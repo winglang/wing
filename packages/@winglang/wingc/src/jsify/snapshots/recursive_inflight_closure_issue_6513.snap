@@ -7,22 +7,16 @@ source: packages/@winglang/wingc/src/jsify/tests.rs
 
     bring cloud;
 
-    let applyMiddlewares = inflight (index: num?): str => {
-      let next = (request: str): str => {
-        let newIndex = (index ?? 0) + 1;
-        if newIndex < 3 {
-          return applyMiddlewares(newIndex);
-        }
-        return "done";
-      };
-      return next("go");
+    let f = inflight (x: num): str => {
+      if x < 3 {
+        return f(x + 1);
+      }
+      return "done";
     };
 
-    let api = new cloud.Api();
-    api.get("/", inflight () => {
-      return { body: applyMiddlewares(0) };
+    new cloud.Function(inflight () => {
+      f(0);
     });
-    
 ```
 
 ## inflight.$Closure1-1.cjs
@@ -39,15 +33,11 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(index) {
-      const next = (async (request) => {
-        const newIndex = ((index ?? 0) + 1);
-        if ((newIndex < 3)) {
-          return (await this.handle(newIndex));
-        }
-        return "done";
-      });
-      return (await next("go"));
+    async handle(x) {
+      if ((x < 3)) {
+        return (await this.handle((x + 1)));
+      }
+      return "done";
     }
   }
   return $Closure1;
@@ -61,7 +51,7 @@ module.exports = function({  }) {
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
-module.exports = function({ $applyMiddlewares }) {
+module.exports = function({ $f }) {
   class $Closure2 {
     constructor($args) {
       const {  } = $args;
@@ -70,7 +60,7 @@ module.exports = function({ $applyMiddlewares }) {
       return $obj;
     }
     async handle() {
-      return ({"body": (await $applyMiddlewares(0))});
+      (await $f(0));
     }
   }
   return $Closure2;
@@ -129,24 +119,23 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
-            $applyMiddlewares: ${$stdlib.core.liftObject(applyMiddlewares)},
+            $f: ${$stdlib.core.liftObject(f)},
           })
         `;
       }
       get _liftMap() {
         return ({
           "handle": [
-            [applyMiddlewares, ["handle"]],
+            [f, ["handle"]],
           ],
           "$inflight_init": [
-            [applyMiddlewares, []],
+            [f, []],
           ],
         });
       }
     }
-    const applyMiddlewares = new $Closure1(this, "$Closure1");
-    const api = globalThis.$ClassFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
-    (api.get("/", new $Closure2(this, "$Closure2")));
+    const f = new $Closure1(this, "$Closure1");
+    globalThis.$ClassFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", new $Closure2(this, "$Closure2"));
   }
 }
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });

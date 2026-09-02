@@ -5,6 +5,7 @@ use crate::{
 		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 		UserDefinedType,
 	},
+	closure_transform::CLOSURE_CLASS_PREFIX,
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic, DiagnosticSeverity},
 	jsify::{JSifier, JSifyContext},
@@ -259,6 +260,17 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			//---------------
 			// LIFT
 			if expr_phase == Phase::Preflight {
+				// A reference to the enclosing closure class instance (`this`) inside a compiler-generated
+				// closure class (e.g. a recursive call via `this.handle(...)`) doesn't need to be lifted --
+				// the closure instance is the object itself. Lifting it would add a self-reference to the
+				// closure's `_liftMap` that the simulator's connection walker would recurse on infinitely
+				// (see #6513).
+				if v.ctx.current_class().map_or(false, |c| c.root.name.starts_with(CLOSURE_CLASS_PREFIX))
+					&& matches!(&node.kind, ExprKind::Reference(Reference::Identifier(ident)) if ident.name == "this")
+				{
+					return;
+				}
+
 				// Get the property being accessed on the preflight expression, this is used to qualify the lift
 				let property = match v.ctx.current_property() {
 					Some((PropertyObject::Instance(prop_expr_id), property)) if node.id == prop_expr_id => Some(property),

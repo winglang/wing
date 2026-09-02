@@ -67,6 +67,25 @@ fn recursive_preflight_closure_self_capture() {
 }
 
 #[test]
+fn recursive_inflight_closure_issue_6513() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+
+    let f = inflight (x: num): str => {
+      if x < 3 {
+        return f(x + 1);
+      }
+      return "done";
+    };
+
+    new cloud.Function(inflight () => {
+      f(0);
+    });"#
+	);
+}
+
+#[test]
 fn free_inflight_obj_from_inflight() {
 	assert_compile_ok!(
 		r#"
