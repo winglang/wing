@@ -221,7 +221,13 @@ impl<'a> ExternDTSifier<'a> {
 					i.name.name.clone()
 				}
 			}
-			Type::Struct(s) => s.name.name.clone(),
+			Type::Struct(s) => {
+				if is_inflight {
+					format!("{}{}", s.name.name, TYPE_INFLIGHT_POSTFIX)
+				} else {
+					s.name.name.clone()
+				}
+			}
 			Type::Enum(e) => e.name.name.clone(),
 			_ => panic!("Not a named type"),
 		};
@@ -243,7 +249,7 @@ impl<'a> ExternDTSifier<'a> {
 			let type_code = match &*type_ {
 				Type::Class(c) => self.dtsify_class(c, is_inflight),
 				Type::Interface(i) => self.dtsify_interface(i, is_inflight),
-				Type::Struct(s) => self.dtsify_struct(s),
+				Type::Struct(s) => self.dtsify_struct(s, is_inflight),
 				Type::Enum(e) => self.dtsify_enum(e),
 				_ => panic!("Not a named type"),
 			};
@@ -291,14 +297,19 @@ impl<'a> ExternDTSifier<'a> {
 		code
 	}
 
-	fn dtsify_struct(&mut self, struct_: &Struct) -> CodeMaker {
+	fn dtsify_struct(&mut self, struct_: &Struct, is_inflight: bool) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		if let Some(docs) = &struct_.docs.as_jsdoc_comment() {
 			code.line(docs);
 		}
-		code.open(format!("export interface {} {{", struct_.name.name));
+		let struct_name = if is_inflight {
+			format!("{}{TYPE_INFLIGHT_POSTFIX}", struct_.name.name)
+		} else {
+			struct_.name.name.to_string()
+		};
+		code.open(format!("export interface {struct_name} {{"));
 
-		code.line(self.dtsify_inner_classlike(struct_, false));
+		code.line(self.dtsify_inner_classlike(struct_, is_inflight));
 
 		code.close("}");
 
@@ -439,7 +450,76 @@ impl<'a> ExternDTSifier<'a> {
 #[cfg(test)]
 mod tests {
 	use super::*;
+	use crate::ast::Symbol;
+	use crate::diagnostic::WingSpan;
 	use crate::docs::Docs;
+	use crate::type_check::symbol_env::{StatementIdx, SymbolEnv, SymbolEnvKind};
+
+	#[test]
+	fn struct_members_use_inflight_types_in_inflight_context() {
+		// https://github.com/winglang/wing/issues/6495
+		let mut types = Types::new();
+
+		// A minimal preflight class type to reference from the struct (like `cloud.Bucket`)
+		let bucket_t = types.add_type(Type::Class(Class {
+			name: Symbol::new("Bucket", WingSpan::default()),
+			parent: None,
+			implements: vec![],
+			env: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0, "test".to_string()),
+			fqn: Some("cloud.Bucket".to_string()),
+			is_abstract: false,
+			phase: Phase::Preflight,
+			docs: Docs::default(),
+			lifts: None,
+			defined_in_phase: Phase::Preflight,
+			std_construct_args: true,
+			uid: 0,
+		}));
+
+		// A struct with a field that references the preflight class: `struct Output { myBucket: Bucket }`
+		let mut output_env =
+			SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0, "test".to_string());
+		output_env
+			.define(
+				&Symbol::new("myBucket", WingSpan::default()),
+				SymbolKind::make_member_variable(
+					Symbol::new("myBucket", WingSpan::default()),
+					bucket_t,
+					false,
+					false,
+					Phase::Independent,
+					AccessModifier::Public,
+					None,
+				),
+				AccessModifier::Public,
+				StatementIdx::Top,
+			)
+			.unwrap();
+
+		let output_t = types.add_type(Type::Struct(Struct {
+			name: Symbol::new("Output", WingSpan::default()),
+			fqn: "root.Output".to_string(),
+			docs: Docs::default(),
+			extends: vec![],
+			env: output_env,
+		}));
+
+		let mut dtsifier = ExternDTSifier::new(&types);
+
+		// The struct referenced from a preflight signature keeps the preflight field types
+		let preflight = dtsifier.dtsify_type(output_t, false);
+		assert_eq!(preflight, "Output");
+
+		// The struct referenced from an inflight signature gets the `$Inflight` variant
+		let inflight = dtsifier.dtsify_type(output_t, true);
+		assert_eq!(inflight, "Output$Inflight");
+
+		let hoisted = dtsifier.hoisted_types.to_string();
+		assert!(hoisted.contains("export interface Output {"), "{hoisted}");
+		assert!(hoisted.contains("readonly myBucket: Bucket;"), "{hoisted}");
+		assert!(hoisted.contains("export interface Output$Inflight {"), "{hoisted}");
+		assert!(hoisted.contains("readonly myBucket: Bucket$Inflight;"), "{hoisted}");
+	}
 
 	#[test]
 	fn optional_return_type_is_emitted_as_undefined() {
