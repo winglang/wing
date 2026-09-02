@@ -54,6 +54,12 @@ pub struct ClosureTransformer {
 	// Track the statement index of the nearest statement we're inside so that
 	// newly-inserted classes will have access to the correct state
 	nearest_stmt_idx: usize,
+	// The name of the variable that the inflight closure currently being transformed is bound
+	// to. When a closure is bound directly via `let <name> = inflight ...`, references to
+	// `<name>` inside its own body are rewritten to `this.<handle>` so that recursive closures
+	// call themselves through the generated class instance instead of capturing (and lifting)
+	// themselves, which would otherwise cause an infinite lift cycle.
+	self_closure_name: Option<String>,
 }
 
 impl ClosureTransformer {
@@ -64,6 +70,7 @@ impl ClosureTransformer {
 			closure_counter: 0,
 			class_statements: vec![],
 			nearest_stmt_idx: 0,
+			self_closure_name: None,
 		}
 	}
 }
@@ -108,6 +115,32 @@ impl Fold for ClosureTransformer {
 		let new_node = fold::fold_function_definition(self, node);
 		self.inside_scope_with_this = prev_inside_scope_with_this;
 		self.phase = prev_phase;
+		new_node
+	}
+
+	fn fold_stmt(&mut self, node: Stmt) -> Stmt {
+		// If the closure is bound directly via `let <name> = inflight ...`, record its name so
+		// that recursive references to `<name>` inside the closure's own body can be rewritten
+		// to calls on the generated class instance (see `RenameSelfReferenceTransformer`).
+		let is_self_bound_inflight_closure = self.phase != Phase::Inflight
+			&& matches!(
+				&node.kind,
+				StmtKind::Let {
+					reassignable: false,
+					initial_value,
+					..
+				} if matches!(&initial_value.kind, ExprKind::FunctionClosure(func_def) if func_def.signature.phase == Phase::Inflight)
+			);
+
+		let prev_self_closure_name = self.self_closure_name.take();
+		if is_self_bound_inflight_closure {
+			if let StmtKind::Let { var_name, .. } = &node.kind {
+				self.self_closure_name = Some(var_name.name.clone());
+			}
+		}
+
+		let new_node = fold::fold_stmt(self, node);
+		self.self_closure_name = prev_self_closure_name;
 		new_node
 	}
 
@@ -178,6 +211,20 @@ impl Fold for ClosureTransformer {
 					is_static: false,
 					access: AccessModifier::Public,
 					doc: None,
+				};
+
+				// If the closure is bound directly to a variable (e.g. `let f = inflight ...`), rewrite
+				// recursive references to `f` inside the closure's own body to `this.<handle>` calls on
+				// the generated class instance. This prevents the closure from lifting itself into its
+				// own `_toInflightType`, which would cause an infinite lift cycle (see #6513).
+				let new_func_def = if let Some(self_name) = &self.self_closure_name {
+					let mut self_reference_transform = RenameSelfReferenceTransformer {
+						from: self_name,
+						to: handle_name.clone(),
+					};
+					self_reference_transform.fold_function_definition(new_func_def)
+				} else {
+					new_func_def
 				};
 
 				// class_init_body :=
@@ -353,6 +400,51 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 						name: self.to.to_string(),
 						span: ident.span,
 					})
+				} else {
+					Reference::Identifier(ident)
+				}
+			}
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::ElementAccess { .. } => {
+				fold::fold_reference(self, node)
+			}
+		}
+	}
+}
+
+/// Rewrite references to a closure's own binding name inside its body into `this.<handle>`
+/// calls on the enclosing generated class instance.
+///
+/// This is what makes recursive inflight closures work: without it, a reference to the closure
+/// from inside its own body would be emitted as a lift of the closure object into itself, which
+/// recursively tries to serialize the closure into its own `_toInflightType` and blows the stack.
+///
+/// Since anonymous closures are emitted as arrow functions, `this` inside the closure's body
+/// (including nested closures) lexically refers to the generated class instance, so the rewritten
+/// calls resolve to the `handle` method.
+struct RenameSelfReferenceTransformer<'a> {
+	from: &'a str,
+	to: Symbol,
+}
+
+impl<'a> Fold for RenameSelfReferenceTransformer<'a> {
+	fn fold_class(&mut self, node: Class) -> Class {
+		// The transform shouldn't change references to the closure inside nested classes since
+		// `this` would refer to a different object there. Skip inner class.
+		node
+	}
+
+	fn fold_reference(&mut self, node: Reference) -> Reference {
+		match node {
+			Reference::Identifier(ident) => {
+				if ident.name == self.from {
+					Reference::InstanceMember {
+						object: Box::new(Expr::new(
+							ExprKind::Reference(Reference::Identifier(Symbol::new("this", ident.span.clone()))),
+							ident.span.clone(),
+						)),
+						property: self.to.clone(),
+						optional_accessor: false,
+					}
 				} else {
 					Reference::Identifier(ident)
 				}
