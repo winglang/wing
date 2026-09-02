@@ -375,8 +375,8 @@ where
 			}
 		}
 		ExprKind::JsonMapLiteral { fields } => {
-			for (name, val) in fields.iter() {
-				v.visit_symbol(name);
+			for (key, val) in fields.iter() {
+				v.visit_expr(key);
 				v.visit_expr(val);
 			}
 		}

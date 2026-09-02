@@ -1202,6 +1202,23 @@ fn json_object() {
 }
 
 #[test]
+fn json_dynamic_key_issue_5917() {
+	assert_compile_ok!(
+		r#"
+    let url = "http://example.com";
+
+    let x = Json {
+      "{url}": "valid"
+    };
+
+    test "test" {
+      log(Json.stringify(x));
+    }
+    "#
+	);
+}
+
+#[test]
 fn capture_token() {
 	assert_compile_ok!(
 		r#"

@@ -2583,20 +2583,28 @@ This value is set by the CLI at compile time and can be used to conditionally co
 
 	fn type_check_json_map_lit(
 		&mut self,
-		fields: &IndexMap<Symbol, Expr>,
+		fields: &Vec<(Expr, Expr)>,
 		env: &mut SymbolEnv,
 		exp: &Expr,
 	) -> (TypeRef, Phase) {
 		let mut known_types = IndexMap::new();
-		fields.iter().for_each(|(name, v)| {
-			let (known_type, _) = self.type_check_exp(v, env);
-			known_types.insert(
-				name.clone(),
-				SpannedTypeInfo {
-					type_: known_type,
-					span: v.span(),
-				},
-			);
+		let mut phase = env.phase;
+		fields.iter().for_each(|(key, v)| {
+			let (known_type, vphase) = self.type_check_exp(v, env);
+			phase = combine_phases(phase, vphase);
+			if let ExprKind::Literal(Literal::String(name)) = &key.kind {
+				known_types.insert(
+					Symbol::new(name.clone(), key.span.clone()),
+					SpannedTypeInfo {
+						type_: known_type,
+						span: v.span(),
+					},
+				);
+			}
+			// Keys are runtime-evaluated strings: check the key expression to ensure it's string typed
+			let (key_type, kphase) = self.type_check_exp(key, env);
+			self.validate_type_in(key_type, &[self.types.string()], key, None, None);
+			phase = combine_phases(phase, kphase);
 			// Ensure we don't allow MutJson to Json or vice versa
 			match *known_type {
 				Type::Json(_) => {
@@ -2634,7 +2642,7 @@ This value is set by the CLI at compile time and can be used to conditionally co
 				expression_id: exp.id,
 				kind: JsonDataKind::Fields(known_types),
 			}))),
-			env.phase,
+			phase,
 		)
 	}
 

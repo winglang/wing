@@ -396,7 +396,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 					}
 				}
 			}
-			ExprKind::JsonMapLiteral { fields } | ExprKind::StructLiteral { fields, .. } => {
+			ExprKind::StructLiteral { fields, .. } => {
 				if let Some(f) = fields.iter().find(|f| f.0.span.contains_location(&self.location)) {
 					let field_name = f.0;
 					let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));
@@ -419,6 +419,35 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 							object: type_.to_owned(),
 							field_type: inner_type.to_owned(),
 							field: field_name.clone(),
+						});
+					}
+				}
+			}
+			ExprKind::JsonMapLiteral { fields } => {
+				if let Some((key, value)) = fields.iter().find(|(k, _)| k.span().contains_location(&self.location)) {
+					let Some(field_name) = static_key_symbol(key) else {
+						return;
+					};
+					let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));
+					let type_ = *if let Some(type_) = self.types.get_type_from_json_cast(node.id) {
+						*type_
+					} else {
+						type_
+					}
+					.maybe_unwrap_option();
+
+					if type_.is_struct() {
+						self.set_result(SymbolLocatorResult::StructField {
+							struct_type: type_.to_owned(),
+							field: field_name,
+						});
+					} else {
+						// just use the type info
+						let inner_type = self.types.maybe_unwrap_inference(self.types.get_expr_type(value));
+						self.set_result(SymbolLocatorResult::LooseField {
+							object: type_.to_owned(),
+							field_type: inner_type.to_owned(),
+							field: field_name,
 						});
 					}
 				}
@@ -559,3 +588,13 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 		}
 	}
 }
+
+/// If a Json map literal key is a plain string literal, return it as a symbol;
+/// interpolated/dynamic keys have no static name and return `None`.
+fn static_key_symbol(key: &Expr) -> Option<Symbol> {
+	match &key.kind {
+		ExprKind::Literal(Literal::String(s)) => Some(Symbol::new(s.clone(), key.span.clone())),
+		_ => None,
+	}
+}
+

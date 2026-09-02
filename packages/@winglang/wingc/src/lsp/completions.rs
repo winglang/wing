@@ -7,7 +7,8 @@ use std::cmp::max;
 use tree_sitter::{Node, Point};
 
 use crate::ast::{
-	AccessModifier, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, UserDefinedType,
+	AccessModifier, CalleeKind, Expr, ExprKind, Literal, Phase, Reference, Scope, Symbol, TypeAnnotation,
+	UserDefinedType,
 };
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
@@ -419,7 +420,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						}
 
 						let (fields, structy) = if let ExprKind::StructLiteral { fields, .. } = &expr.kind {
-							(fields, types.get_expr_type(expr))
+							(fields.keys().map(|f| f.name.clone()).collect(), types.get_expr_type(expr))
 						} else if let ExprKind::JsonLiteral { is_mut: false, element } = &expr.kind {
 							let ExprKind::JsonMapLiteral { fields } = &element.kind else {
 								return vec![];
@@ -428,19 +429,37 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								return vec![];
 							};
 
-							(fields, *structy)
+							(
+								fields
+									.iter()
+									.filter_map(|(k, _)| match &k.kind {
+										ExprKind::Literal(Literal::String(s)) => Some(s.clone()),
+										_ => None,
+									})
+									.collect(),
+								*structy,
+							)
 						} else if let ExprKind::JsonMapLiteral { fields } = &expr.kind {
 							let Some(structy) = types.get_type_from_json_cast(expr.id) else {
 								return vec![];
 							};
 
-							(fields, *structy)
+							(
+								fields
+									.iter()
+									.filter_map(|(k, _)| match &k.kind {
+										ExprKind::Literal(Literal::String(s)) => Some(s.clone()),
+										_ => None,
+									})
+									.collect(),
+								*structy,
+							)
 						} else {
 							return vec![];
 						};
 
 						return if let Some(structy) = structy.maybe_unwrap_option().as_struct() {
-							get_inner_struct_completions(structy, &fields.keys().map(|f| f.name.clone()).collect())
+							get_inner_struct_completions(structy, &fields)
 						} else {
 							vec![]
 						};

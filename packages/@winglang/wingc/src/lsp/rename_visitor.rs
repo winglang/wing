@@ -8,13 +8,13 @@ use crate::type_check::{
 use crate::visit::{visit_scope, Visit};
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::{ast::*, visit_context};
-pub struct LinkedSymbol<'a> {
+pub struct LinkedSymbol {
 	symbol: Symbol,
-	references: Vec<&'a Symbol>,
+	references: Vec<Symbol>,
 }
 pub struct RenameVisitor<'a> {
 	types: &'a Types,
-	linked_symbols: Vec<LinkedSymbol<'a>>,
+	linked_symbols: Vec<LinkedSymbol>,
 	ctx: VisitContext,
 }
 
@@ -27,14 +27,14 @@ impl<'a> RenameVisitor<'a> {
 		}
 	}
 
-	fn is_symbol_linked(&mut self, symbol: &'a Symbol) -> bool {
+	fn is_symbol_linked(&mut self, symbol: &Symbol) -> bool {
 		self
 			.linked_symbols
 			.iter()
-			.any(|s: &LinkedSymbol<'a>| symbol.same(&s.symbol) || s.references.iter().any(|r| symbol.same(r)))
+			.any(|s: &LinkedSymbol| symbol.same(&s.symbol) || s.references.iter().any(|r| symbol.same(r)))
 	}
 
-	fn add_reference_symbol(&mut self, symbol: &'a Symbol, symbol_env: Option<&UnsafeRef<SymbolEnv>>) {
+	fn add_reference_symbol(&mut self, symbol: &Symbol, symbol_env: Option<&UnsafeRef<SymbolEnv>>) {
 		// symbols that appear in let/if lef statements will point to a prev declaration of a variable of the same name if exists
 		// this is why we add them in advance during visit_statement
 		// the other condition is for "this" that points to the "new" keyword for some reason
@@ -58,7 +58,7 @@ impl<'a> RenameVisitor<'a> {
 						.iter_mut()
 						.find(|s| lookup_info.span.eq(&s.symbol.span))
 					{
-						linked.references.push(symbol);
+						linked.references.push(symbol.clone());
 					} else {
 						self.linked_symbols.push(LinkedSymbol {
 							symbol: Symbol {
@@ -68,7 +68,7 @@ impl<'a> RenameVisitor<'a> {
 							references: if lookup_info.span.eq(&symbol.span) {
 								vec![]
 							} else {
-								vec![symbol]
+								vec![symbol.clone()]
 							},
 						});
 					}
@@ -172,8 +172,16 @@ impl<'a> Visit<'a> for RenameVisitor<'a> {
 				.maybe_unwrap_option();
 
 				if let Some(c) = type_.as_struct() {
-					for (field, ..) in fields {
-						self.add_reference_symbol(field, Some(&UnsafeRef::from(&c.env)));
+					for (key, _) in fields {
+						if let ExprKind::Literal(Literal::String(key_name)) = &key.kind {
+							self.add_reference_symbol(
+								&Symbol {
+									name: key_name.clone(),
+									span: key.span.clone(),
+								},
+								Some(&UnsafeRef::from(&c.env)),
+							);
+						}
 					}
 				}
 			}

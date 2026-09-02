@@ -952,7 +952,24 @@ impl<'a> JSifier<'a> {
 			ExprKind::JsonMapLiteral { fields } => {
 				let f = fields
 					.iter()
-					.map(|(key, expr)| new_code!(expr_span, "\"", &key.name, "\": ", self.jsify_expression(expr, ctx)))
+					.map(|(key, expr)| {
+						let mut kv = match &key.kind {
+							ExprKind::Literal(Literal::String(name)) => {
+								let mut code = new_code!(&key.span, "\"");
+								code.append(new_code!(&key.span, name));
+								code.append(new_code!(&key.span, "\": "));
+								code
+							}
+							_ => {
+								let mut code = new_code!(&key.span, "[");
+								code.append(self.jsify_expression(key, ctx));
+								code.append(new_code!(&key.span, "]: "));
+								code
+							}
+						};
+						kv.append(new_code!(&expr.span, self.jsify_expression(expr, ctx)));
+						kv
+					})
 					.collect_vec();
 				new_code!(expr_span, "({", f, "})")
 			}

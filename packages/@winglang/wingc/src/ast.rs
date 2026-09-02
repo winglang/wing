@@ -686,7 +686,7 @@ pub enum ExprKind {
 		fields: IndexMap<Symbol, Expr>,
 	},
 	JsonMapLiteral {
-		fields: IndexMap<Symbol, Expr>,
+		fields: Vec<(Expr, Expr)>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,
