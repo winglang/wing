@@ -50,7 +50,7 @@ export function toLiftableModuleType(
   }
 }
 
-export function liftObject(obj: any): string {
+export function liftObject(obj: any, name?: string): string {
   // since typeof(null) is "object", we cover all nullity cases (undefined and null) apriori.
   if (obj == null) {
     return JSON.stringify(obj);
@@ -106,7 +106,32 @@ export function liftObject(obj: any): string {
       break;
   }
 
-  throw new Error(`Unable to lift object of type ${obj?.constructor?.name}`);
+  throw new Error(formatLiftError(obj, name));
+}
+
+/**
+ * Build a clear, actionable error message when a non-liftable preflight
+ * value is being captured into an inflight scope.
+ *
+ * Common trigger: `let x = nodeof(this); test { log(x.addr); }` — `Node` is
+ * considered phase-independent by the compiler (because it has no inflight
+ * methods), so the lifter tries to capture the whole `Node` instance. At
+ * runtime, the SDK can't serialize it, so we end up here.
+ */
+function formatLiftError(obj: any, name?: string): string {
+  const typeName = obj?.constructor?.name ?? "unknown";
+  const label = name
+    ? `'${name}' of type '${typeName}'`
+    : `object of type '${typeName}'`;
+  return [
+    `Cannot lift ${label} into an inflight scope.`,
+    `Preflight objects that are not part of the Wing SDK (for example JSII classes like 'Node', 'Bucket', 'Counter', etc.) cannot be passed to inflight code as a whole.`,
+    `Workaround: lift only the specific fields you need. For example, instead of`,
+    `  let x = nodeof(this); test { log(x.addr); }`,
+    `use`,
+    `  let addr = nodeof(this).addr; test { log(addr); }`,
+    `See https://www.winglang.io/docs/concepts/inflights#using-preflight-data-from-inflight for more.`,
+  ].join("\n");
 }
 
 export type LiftMap = Record<string, Array<[any, Array<string>]>>;
