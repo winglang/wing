@@ -1976,6 +1976,70 @@ fn no_lift_shadow_inside_inner_scopes() {
 	);
 }
 
+// winglang/wing#6566 — when a `MutArray`/`MutMap`/`MutSet`/`MutJson` declared in
+// preflight scope is referenced inside an inflight scope (e.g. a `test` block),
+// the compiler lifts the value across the boundary and silently strips the
+// mutability. The user then calls a method that exists only on the mutable
+// type and gets a clear hint about why the call failed.
+#[test]
+fn fails_preflight_mutarray_push_in_inflight_with_clear_hint() {
+	assert_compile_fail!(
+		r#"
+    let a = MutArray<num>[1, 2];
+    test "x" {
+      a.push(3);
+    }
+    "#
+	);
+}
+
+// winglang/wing#6566 — the `MutMap` variant of the same pattern.
+#[test]
+fn fails_preflight_mutmap_set_in_inflight_with_clear_hint() {
+	assert_compile_fail!(
+		r#"
+    let m = MutMap<num>{"a" => 1};
+    test "x" {
+      m.set("b", 2);
+    }
+    "#
+	);
+}
+
+// winglang/wing#6566 — same idea but chained through an instance field. The
+// hint should still fire even when the receiver is `obj.field` rather than a
+// bare identifier.
+#[test]
+fn fails_preflight_mutarray_field_push_in_inflight_with_clear_hint() {
+	assert_compile_fail!(
+		r#"
+    class Holder {
+      pub arr: MutArray<num>;
+      new() { this.arr = MutArray<num>[1, 2]; }
+    }
+    let h = new Holder();
+    test "x" {
+      h.arr.push(3);
+    }
+    "#
+	);
+}
+
+// winglang/wing#6566 — when the user calls a method that *also* doesn't exist
+// on the mutable counterpart, the standard "Member X doesn't exist" message is
+// the right answer; we should not give the lift hint in that case.
+#[test]
+fn fails_typo_on_lifted_mutable_collection_with_standard_message() {
+	assert_compile_fail!(
+		r#"
+    let a = MutArray<num>[1, 2];
+    test "x" {
+      a.pushhhh(3);
+    }
+    "#
+	);
+}
+
 #[test]
 fn capture_var_from_method_inflight() {
 	assert_compile_ok!(
