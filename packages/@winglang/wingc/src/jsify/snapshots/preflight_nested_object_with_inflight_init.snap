@@ -5,14 +5,24 @@ source: packages/@winglang/wingc/src/jsify/tests.rs
 
 ```w
 
-    class Foo {
-      pub value: str;
-      new() { this.value = "hello"; }
+    class Inner {
+      pub inflight var value: num;
+      pub inflight increment() { this.value += 1; }
+      new() {}
+      inflight new() { this.value = 42; }
     }
 
-    let foo_this = new Foo();
+    class Outer {
+      pub inner: Inner;
+      new() { this.inner = new Inner(); }
+      inflight new() { this.inner.increment(); }
+    }
+
+    let o = new Outer();
     test "test" {
-      assert(foo_this.value == "hello");
+      // Access only the field - the outer's $inflight_init should still be called
+      // so that `increment()` runs, making value 43 (42 from inner init + 1 from outer init).
+      assert(o.inner.value == 43);
     }
     
 ```
@@ -23,17 +33,16 @@ source: packages/@winglang/wingc/src/jsify/tests.rs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
-module.exports = function({ $foo_this }) {
+module.exports = function({ $o, $o_inner }) {
   class $Closure1 {
     constructor($args) {
-      const { $foo_this_value } = $args;
-      this.$foo_this_value = $foo_this_value;
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq(this.$foo_this_value, "hello"), "foo_this.value == \"hello\"");
+      $helpers.assert($helpers.eq($o_inner.value, 43), "o.inner.value == 43");
     }
   }
   return $Closure1;
@@ -41,18 +50,45 @@ module.exports = function({ $foo_this }) {
 //# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.Foo-1.cjs
+## inflight.Inner-1.cjs
 
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
 module.exports = function({  }) {
-  class Foo {
+  class Inner {
+    async increment() {
+      this.value += 1;
+    }
+    async $inflight_init() {
+      this.value = 42;
+    }
   }
-  return Foo;
+  return Inner;
 }
-//# sourceMappingURL=inflight.Foo-1.cjs.map
+//# sourceMappingURL=inflight.Inner-1.cjs.map
+```
+
+## inflight.Outer-1.cjs
+
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+const $macros = require("@winglang/sdk/lib/macros");
+module.exports = function({  }) {
+  class Outer {
+    constructor($args) {
+      const { $this_inner } = $args;
+      this.$this_inner = $this_inner;
+    }
+    async $inflight_init() {
+      (await this.$this_inner.increment());
+    }
+  }
+  return Outer;
+}
+//# sourceMappingURL=inflight.Outer-1.cjs.map
 ```
 
 ## preflight.cjs
@@ -75,20 +111,48 @@ class $Root extends $stdlib.std.Resource {
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
-    class Foo extends $stdlib.std.Resource {
+    class Inner extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.value = "hello";
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Inner-1.cjs")({
           })
         `;
       }
       get _liftMap() {
         return ({
+          "increment": [
+          ],
           "$inflight_init": [
+          ],
+          "value": [
+          ],
+        });
+      }
+    }
+    class Outer extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.inner = new Inner(this, "Inner");
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.Outer-1.cjs")({
+          })
+        `;
+      }
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+          $this_inner: $stdlib.core.liftObject(this.inner),
+        };
+      }
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+            [this.inner, ["increment"]],
           ],
         });
       }
@@ -102,30 +166,25 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $foo_this: ${$stdlib.core.liftObject(foo_this)},
+            $o: ${$stdlib.core.liftObject(o)},
+            $o_inner: ${$stdlib.core.liftObject(o.inner)},
           })
         `;
-      }
-      _liftedState() {
-        return {
-          ...(super._liftedState?.() ?? {}),
-          $foo_this_value: $stdlib.core.liftObject(foo_this.value),
-        };
       }
       get _liftMap() {
         return ({
           "handle": [
-            [foo_this, []],
-            [foo_this.value, []],
+            [o, []],
+            [o.inner, ["value"]],
           ],
           "$inflight_init": [
-            [foo_this, []],
-            [foo_this.value, []],
+            [o, []],
+            [o.inner, []],
           ],
         });
       }
     }
-    const foo_this = new Foo(this, "Foo");
+    const o = new Outer(this, "Outer");
     globalThis.$ClassFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
