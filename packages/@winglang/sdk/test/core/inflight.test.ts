@@ -9,16 +9,18 @@ import { InflightClient } from "../../src/core/inflight";
 // Init behavior is configured by setting properties on the returned class so
 // the init logic can be observed from the test even when the class is later
 // reconstructed inside a `vm` context.
-function makeInflightClass(opts: {
-  initImpl?: () => Promise<void> | void;
-  readonlyName?: string;
-} = {}) {
+function makeInflightClass(
+  opts: {
+    initImpl?: () => Promise<void> | void;
+    readonlyName?: string;
+  } = {},
+) {
   const { initImpl, readonlyName } = opts;
   class C {
-    public readonly name: string = readonlyName ?? "";
     public static _toInflightType() {
       return "module.exports";
     }
+    public readonly name: string = readonlyName ?? "";
     public async $inflight_init() {
       if (initImpl) {
         await initImpl();
@@ -35,7 +37,10 @@ function makeInflightClass(opts: {
   return C;
 }
 
-function runInVm(code: string, opts: { initImpl?: () => Promise<void> | void; readonlyName?: string } = {}) {
+function runInVm(
+  code: string,
+  opts: { initImpl?: () => Promise<void> | void; readonlyName?: string } = {},
+) {
   const C = makeInflightClass(opts);
   const module = { exports: C };
   const ctx: any = {
@@ -46,10 +51,7 @@ function runInVm(code: string, opts: { initImpl?: () => Promise<void> | void; re
   // (e.g. `(await (async () => { ... })())`). Strip the leading/trailing
   // whitespace, then evaluate it as the body of an async wrapper.
   return Promise.resolve(
-    vm.runInNewContext(
-      `(async () => { return ${code.trim()}; })()`,
-      ctx
-    )
+    vm.runInNewContext(`(async () => { return ${code.trim()}; })()`, ctx),
   );
 }
 
@@ -65,10 +67,18 @@ describe("InflightClient.forV2", () => {
     // The init should not have run by the time `forV2`'s IIFE has resolved.
     let initCount = 0;
     const code = InflightClient.forV2(
-      makeInflightClass({ initImpl: () => { initCount++; } }),
+      makeInflightClass({
+        initImpl: () => {
+          initCount++;
+        },
+      }),
       {},
     );
-    const client = (await runInVm(code, { initImpl: () => { initCount++; } })) as any;
+    const client = (await runInVm(code, {
+      initImpl: () => {
+        initCount++;
+      },
+    })) as any;
     expect(initCount).toBe(0);
 
     // First method call triggers init exactly once.
@@ -131,10 +141,20 @@ describe("InflightClient.forV2", () => {
   test("non-function properties pass through without triggering init", async () => {
     let initCount = 0;
     const code = InflightClient.forV2(
-      makeInflightClass({ initImpl: () => { initCount++; }, readonlyName: "alpha" }),
+      makeInflightClass({
+        initImpl: () => {
+          initCount++;
+        },
+        readonlyName: "alpha",
+      }),
       {},
     );
-    const client = (await runInVm(code, { initImpl: () => { initCount++; }, readonlyName: "alpha" })) as any;
+    const client = (await runInVm(code, {
+      initImpl: () => {
+        initCount++;
+      },
+      readonlyName: "alpha",
+    })) as any;
     expect(client.name).toBe("alpha");
     expect(initCount).toBe(0);
   });
