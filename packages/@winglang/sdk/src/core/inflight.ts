@@ -252,7 +252,7 @@ class Lifter<
   const $func = ${serializedFunction}
   const $ctx = {
   ${Object.entries(this.lifts)
-    .map(([name, liftable]) => `${name}: ${liftObject(liftable)}`)
+    .map(([name, liftable]) => `${name}: ${liftObject(liftable, name)}`)
     .join(",\n")}
   };
   let newFunction = async (...args) => {

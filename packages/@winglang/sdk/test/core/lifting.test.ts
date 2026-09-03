@@ -1,8 +1,10 @@
 import { Construct } from "constructs";
 import { describe, expect, test } from "vitest";
+import { Node } from "../../src/std/node";
 import {
   LiftMapNormalized,
   collectLifts,
+  liftObject,
   mergeLiftDeps,
 } from "../../src/core/lifting";
 
@@ -246,3 +248,58 @@ function expectMergeDeps(
   const result = mergeLiftDeps(deps1, deps2);
   expect(result).toEqual(expected);
 }
+
+describe("liftObject", () => {
+  test("serializes primitives and collections", () => {
+    expect(liftObject("hi")).toBe(`"hi"`);
+    expect(liftObject(42)).toBe(`42`);
+    expect(liftObject(true)).toBe(`true`);
+    expect(liftObject(null)).toBe(`null`);
+    // JSON.stringify(undefined) returns the JS value `undefined`, not the string "null"
+    expect(liftObject(undefined)).toBeUndefined();
+    expect(liftObject([1, 2])).toBe(`[1,2]`);
+    expect(liftObject(new Set([1]))).toBe(`new Set([1])`);
+    expect(liftObject(new Map([["a", 1]]))).toBe(`new Map([["a",1]])`);
+  });
+
+  test("throws a clear error when lifting a plain object (no name)", () => {
+    // A `Node` instance (e.g. from `nodeof(this)`) is the canonical case:
+    // the compiler treats it as phase-independent, the lifter captures the
+    // whole instance, and the runtime cannot serialize it.
+    const root = new Construct(undefined as any, "TestRoot");
+    const node = Node.of(root);
+
+    let caught: Error | undefined;
+    try {
+      liftObject(node);
+    } catch (e) {
+      caught = e as Error;
+    }
+
+    expect(caught).toBeDefined();
+    expect(caught!.message).toContain(`Cannot lift object of type 'Node'`);
+    expect(caught!.message).toContain(
+      "Workaround: lift only the specific fields you need",
+    );
+    expect(caught!.message).toContain(
+      "https://www.winglang.io/docs/concepts/inflights#using-preflight-data-from-inflight",
+    );
+  });
+
+  test("includes the variable name in the error when provided", () => {
+    const root = new Construct(undefined as any, "TestRoot");
+    const node = Node.of(root);
+
+    let caught: Error | undefined;
+    try {
+      liftObject(node, "x");
+    } catch (e) {
+      caught = e as Error;
+    }
+
+    expect(caught).toBeDefined();
+    // The name + the type should both appear, and the message should be
+    // targeted to the specific capture site.
+    expect(caught!.message).toContain(`Cannot lift 'x' of type 'Node'`);
+  });
+});
