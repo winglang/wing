@@ -18,7 +18,7 @@ source: packages/@winglang/wingc/src/jsify/tests.rs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 const $macros = require("@winglang/sdk/lib/macros");
-module.exports = function({ $api_url }) {
+module.exports = function({ $api, $api_url }) {
   class $Closure1 {
     constructor($args) {
       const {  } = $args;
@@ -65,6 +65,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+            $api: ${$stdlib.core.liftObject(api)},
             $api_url: ${$stdlib.core.liftObject(api.url)},
           })
         `;
@@ -72,9 +73,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [api, []],
             [api.url, []],
           ],
           "$inflight_init": [
+            [api, []],
             [api.url, []],
           ],
         });

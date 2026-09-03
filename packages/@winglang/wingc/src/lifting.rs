@@ -302,6 +302,39 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 					&code,
 				);
 				lifts.capture(&Liftable::Expr(node.id), &code, is_field);
+
+				// If this is an instance member access (e.g. `foo.b`), also lift the parent
+				// (`foo`) so that the parent class's `$inflight_init` gets called when the
+				// field is used. Without this, accessing only a preflight field of a preflight
+				// class with an inflight init never triggers the parent's init, since the
+				// outer expression is the only thing being lifted.
+				// See https://github.com/winglang/wing/issues/3979.
+				let mut current = node;
+				while let ExprKind::Reference(Reference::InstanceMember { object, .. }) = &current.kind {
+					// Only walk through reference expressions (identifiers and other
+					// instance member accesses). Skip function calls, element access, etc.
+					if !matches!(&object.kind, ExprKind::Reference(_)) {
+						break;
+					}
+					// "this" is already in scope and lifting it would add a self-reference
+					// that the simulator's connection walker would recurse on infinitely
+					// (see #6513).
+					if matches!(&object.kind, ExprKind::Reference(Reference::Identifier(ident)) if ident.name == "this") {
+						break;
+					}
+
+					let object_code = v.jsify_expr(object);
+					let is_object_field = object_code.contains("this.");
+					lifts.lift(
+						v.ctx.current_method().map(|(m, _)| m).expect("a method"),
+						None,
+						&object_code,
+					);
+					lifts.capture(&Liftable::Expr(object.id), &object_code, is_object_field);
+
+					current = object;
+				}
+
 				v.lifts_stack.push(lifts);
 				return;
 			}

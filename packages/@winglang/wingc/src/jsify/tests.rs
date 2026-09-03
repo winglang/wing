@@ -338,7 +338,37 @@ fn preflight_nested_object_with_operations() {
     let a = new A();
     test "test" {
       a.bucky.list();
-    } 
+    }
+    "#
+	);
+}
+
+#[test]
+fn preflight_nested_object_with_inflight_init() {
+	// See https://github.com/winglang/wing/issues/3979 - when only a preflight
+	// field is accessed in inflight code, the parent class's `$inflight_init`
+	// must still be called (so the field can be set up properly).
+	assert_compile_ok!(
+		r#"
+    class Inner {
+      pub inflight var value: num;
+      pub inflight increment() { this.value += 1; }
+      new() {}
+      inflight new() { this.value = 42; }
+    }
+
+    class Outer {
+      pub inner: Inner;
+      new() { this.inner = new Inner(); }
+      inflight new() { this.inner.increment(); }
+    }
+
+    let o = new Outer();
+    test "test" {
+      // Access only the field - the outer's $inflight_init should still be called
+      // so that `increment()` runs, making value 43 (42 from inner init + 1 from outer init).
+      assert(o.inner.value == 43);
+    }
     "#
 	);
 }
