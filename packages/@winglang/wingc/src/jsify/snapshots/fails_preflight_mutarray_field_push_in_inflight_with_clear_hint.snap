@@ -1,0 +1,5 @@
+---
+source: packages/@winglang/wingc/src/jsify/tests.rs
+---
+## Errors
+Preflight "MutArray<num>" object was implicitly converted to "Array" when lifting to inflight - mutable methods cannot be called on a lifted preflight value 7:12

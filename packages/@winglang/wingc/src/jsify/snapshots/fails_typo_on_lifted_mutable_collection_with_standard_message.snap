@@ -1,0 +1,5 @@
+---
+source: packages/@winglang/wingc/src/jsify/tests.rs
+---
+## Errors
+Member "pushhhh" does not exist in "Array" 3:8

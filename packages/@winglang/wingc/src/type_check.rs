@@ -6459,6 +6459,57 @@ This value is set by the CLI at compile time and can be used to conditionally co
 		})
 	}
 
+	/// If `expr` is a reference (`a` or `a.b.c`...), walk it and recover the
+	/// *originally-declared* type of the outermost receiver — i.e. the type
+	/// before any `make_immutable` stripping that would have happened if the
+	/// reference is being evaluated inside an inflight scope but reaches back
+	/// to a preflight declaration.
+	///
+	/// Used by the property-lookup diagnostics to give a clearer error when
+	/// a method is accessed on a value that was implicitly converted from
+	/// `MutArray` -> `Array`, `MutMap` -> `Map`, etc. during preflight-to-
+	/// inflight lifting (see winglang/wing#6566).
+	///
+	/// Returns `None` for any reference shape we can't statically walk
+	/// (function calls, element accesses, etc.) or for references whose
+	/// receiver is not a class/interface/struct type.
+	fn receiver_original_declared_type(&self, expr: &Expr, env: &SymbolEnv) -> Option<TypeRef> {
+		let reference = match &expr.kind {
+			ExprKind::Reference(r) => r,
+			_ => return None,
+		};
+		match reference {
+			Reference::Identifier(symbol) => {
+				let lookup = env.lookup_ext(symbol, None);
+				if let LookupResult::Found(kind, _) = lookup {
+					kind.as_variable().map(|v| v.type_)
+				} else {
+					None
+				}
+			}
+			Reference::InstanceMember { object, property, .. } => {
+				let inner = self.receiver_original_declared_type(object, env)?;
+				let lookup = inner
+					.as_class()
+					.map(|c| c.get_env().lookup_ext(property, None))
+					.or_else(|| {
+						inner
+							.as_interface()
+							.map(|i| i.get_env().lookup_ext(property, None))
+					})
+					.or_else(|| {
+						inner.as_struct().map(|s| s.get_env().lookup_ext(property, None))
+					})?;
+				if let LookupResult::Found(kind, _) = lookup {
+					kind.as_variable().map(|v| v.type_)
+				} else {
+					None
+				}
+			}
+			_ => None,
+		}
+	}
+
 	/// Check if this expression is actually a reference to a type. The parser doesn't distinguish between a `some_expression.field` and `SomeType.field`.
 	/// This function checks if the expression is a reference to a user define type and if it is it returns it. If not it returns `None`.
 	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv) -> Option<UserDefinedType> {
@@ -6597,7 +6648,14 @@ This value is set by the CLI at compile time and can be used to conditionally co
 					);
 				}
 
-				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env);
+				// Recover the *originally-declared* receiver type so we can give a clearer error
+				// if the property is missing because mutability was stripped during lift
+				// (winglang/wing#6566). For most receivers this returns the declared type stored in
+				// the symbol environment, which is unaffected by `make_immutable`.
+				let original_receiver_type = self.receiver_original_declared_type(object, env);
+
+				let mut property_variable =
+					self.resolve_variable_from_instance_type(instance_type, property, env, original_receiver_type);
 
 				// Make sure we're not referencing a preflight field on an inflight instance
 				let mut property_phase = property_variable.phase;
@@ -6710,11 +6768,11 @@ This value is set by the CLI at compile time and can be used to conditionally co
 						}
 
 						let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_STRUCT, env), vec![type_]);
-						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true, env);
+						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true, env, None);
 						(ResolveReferenceResult::Variable(v), Phase::Independent)
 					}
 					Type::Class(ref c) => {
-						let v = self.get_property_from_class_like(c, property, true, env);
+						let v = self.get_property_from_class_like(c, property, true, env, None);
 						if matches!(v.kind, VariableKind::InstanceMember) {
 							let err = self.spanned_error_with_var(
 								property,
@@ -6829,11 +6887,12 @@ This value is set by the CLI at compile time and can be used to conditionally co
 		instance_type: TypeRef,
 		property: &Symbol,
 		env: &SymbolEnv,
+		original_receiver_type: Option<TypeRef>,
 	) -> VariableInfo {
 		match *instance_type {
-			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env),
-			Type::Class(ref class) => self.get_property_from_class_like(class, property, false, env),
-			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property, false, env),
+			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, original_receiver_type),
+			Type::Class(ref class) => self.get_property_from_class_like(class, property, false, env, original_receiver_type),
+			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property, false, env, original_receiver_type),
 			Type::Anything => VariableInfo {
 				name: property.clone(),
 				type_: instance_type,
@@ -6847,71 +6906,78 @@ This value is set by the CLI at compile time and can be used to conditionally co
 			// Lookup wingsdk std types, hydrating generics if necessary
 			Type::Array(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_ARRAY, env), vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env, original_receiver_type)
 			}
 			Type::MutArray(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_MUT_ARRAY, env), vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env, original_receiver_type)
 			}
 			Type::Set(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_SET, env), vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env, original_receiver_type)
 			}
 			Type::MutSet(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_MUT_SET, env), vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env, original_receiver_type)
 			}
 			Type::Map(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_MAP, env), vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env, original_receiver_type)
 			}
 			Type::MutMap(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_MUT_MAP, env), vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env, original_receiver_type)
 			}
 			Type::Json(_) => self.get_property_from_class_like(
 				lookup_known_type(WINGSDK_JSON, env).as_class().unwrap(),
 				property,
 				false,
 				env,
+				original_receiver_type,
 			),
 			Type::MutJson => self.get_property_from_class_like(
 				lookup_known_type(WINGSDK_MUT_JSON, env).as_class().unwrap(),
 				property,
 				false,
 				env,
+				original_receiver_type,
 			),
 			Type::String => self.get_property_from_class_like(
 				lookup_known_type(WINGSDK_STRING, env).as_class().unwrap(),
 				property,
 				false,
 				env,
+				original_receiver_type,
 			),
 			Type::Duration => self.get_property_from_class_like(
 				lookup_known_type(WINGSDK_DURATION, env).as_class().unwrap(),
 				property,
 				false,
 				env,
+				original_receiver_type,
 			),
 			Type::Datetime => self.get_property_from_class_like(
 				lookup_known_type(WINGSDK_DATETIME, env).as_class().unwrap(),
 				property,
 				false,
 				env,
+				original_receiver_type,
 			),
 			Type::Regex => self.get_property_from_class_like(
 				lookup_known_type(WINGSDK_REGEX, env).as_class().unwrap(),
 				property,
 				false,
 				env,
+				original_receiver_type,
 			),
 			Type::Bytes => self.get_property_from_class_like(
 				lookup_known_type(WINGSDK_BYTES, env).as_class().unwrap(),
 				property,
 				false,
 				env,
+				original_receiver_type,
 			),
-			Type::Struct(ref s) => self.get_property_from_class_like(s, property, true, env),
+			Type::Struct(ref s) => self.get_property_from_class_like(s, property, true, env, original_receiver_type),
 			_ => self.spanned_error_with_var(property, "Property not found").0,
 		}
 	}
@@ -6923,6 +6989,7 @@ This value is set by the CLI at compile time and can be used to conditionally co
 		property: &Symbol,
 		allow_static: bool,
 		env: &SymbolEnv,
+		original_receiver_type: Option<TypeRef>,
 	) -> VariableInfo {
 		let lookup_res = class.get_env().lookup_ext(property, None);
 		if let LookupResult::Found(field, lookup_info) = lookup_res {
@@ -7021,7 +7088,18 @@ This value is set by the CLI at compile time and can be used to conditionally co
 				var.clone()
 			}
 		} else {
-			self.type_error(lookup_result_to_type_error(lookup_res, property));
+			// Detect the case from winglang/wing#6566: the receiver was declared as a mutable
+			// collection (`MutArray` / `MutMap` / `MutSet` / `MutJson`) but the value was
+			// lifted into an inflight scope, where `make_immutable` silently stripped it
+			// down to its immutable counterpart. The user then calls a method that exists
+			// only on the mutable type and gets a cryptic "Member X doesn't exist in Y" error.
+			// If we can identify that the receiver's *original* declared type was a mutable
+			// collection, replace the cryptic message with one that explains what happened.
+			if let Some(lift_hint) = lift_immutability_hint(&lookup_res, original_receiver_type, property, env) {
+				self.type_error(lift_hint);
+			} else {
+				self.type_error(lookup_result_to_type_error(lookup_res, property));
+			}
 			self.make_error_variable_info()
 		}
 	}
@@ -7323,6 +7401,144 @@ fn add_parent_members_to_iface_env(
 		}
 	}
 	Ok(())
+}
+
+/// Detect winglang/wing#6566: the receiver was a mutable collection that was
+/// stripped to its immutable counterpart during preflight->inflight lifting,
+/// and the missing member is one that exists on the mutable type. If so,
+/// return a clearer `TypeError` explaining the lift, otherwise return `None`
+/// so the caller falls back to the standard `lookup_result_to_type_error`.
+fn lift_immutability_hint(
+	lookup_result: &LookupResult,
+	original_receiver_type: Option<TypeRef>,
+	property: &Symbol,
+	env: &SymbolEnv,
+) -> Option<TypeError> {
+	let LookupResult::NotFound(_s, maybe_env_type) = lookup_result else {
+		return None;
+	};
+	let original = original_receiver_type?;
+	let env_type = maybe_env_type.as_ref()?;
+
+	// Only fire the hint when:
+	//   - The receiver's *original* declared type was one of the mutable collections.
+	//   - The receiver was looked up on the corresponding immutable collection.
+	if !is_mutable_collection_shape(&original) {
+		return None;
+	}
+	// The env_type stored in `LookupResult::NotFound` is the type whose class env the
+	// property was looked up in. For std collection types that's the hydrated class
+	// (e.g. `WINGSDK_ARRAY` for `Array<num>`). We recognise each by FQN.
+	if !is_immutable_collection_class(env_type) {
+		return None;
+	}
+	if !collection_shapes_match(&original, env_type) {
+		return None;
+	}
+
+	// Confirm the missing property actually exists on the original mutable type.
+	// If it doesn't (e.g. a typo), the user gets the standard "doesn't exist" message.
+	let mutable_class_ty = match &*original {
+		Type::MutArray(_) => lookup_known_type(WINGSDK_MUT_ARRAY, env),
+		Type::MutMap(_) => lookup_known_type(WINGSDK_MUT_MAP, env),
+		Type::MutSet(_) => lookup_known_type(WINGSDK_MUT_SET, env),
+		Type::MutJson => lookup_known_type(WINGSDK_MUT_JSON, env),
+		_ => return None,
+	};
+	if let Some(mutable_class) = mutable_class_ty.as_class() {
+		if matches!(
+			mutable_class.get_env().lookup_ext(property, None),
+			LookupResult::Found(..)
+		) {
+			// The class name (e.g. `MutArray`) is more meaningful to the user than the
+			// fully-qualified env type (`@winglang/sdk.std.Array`).
+			let immutable_short = immutable_short_name(env_type);
+			let message = format!(
+				"Preflight \"{}\" object was implicitly converted to \"{}\" when lifting to inflight - mutable methods cannot be called on a lifted preflight value",
+				original,
+				immutable_short,
+			);
+			let hints = vec![
+				"create the mutable value inside the inflight scope, or capture it via an inflight initializer".to_string(),
+				"see https://www.winglang.io/docs/concepts/inflights#using-preflight-data-from-inflight".to_string(),
+			];
+			return Some(TypeError {
+				message,
+				span: property.span(),
+				annotations: vec![],
+				hints,
+			});
+		}
+	}
+	None
+}
+
+fn is_mutable_collection_shape(t: &TypeRef) -> bool {
+	matches!(
+		**t,
+		Type::MutArray(_) | Type::MutMap(_) | Type::MutSet(_) | Type::MutJson
+	)
+}
+
+/// Render the short class name for an immutable std collection type. Returns
+/// `"Immutable"` for anything we don't recognise.
+fn immutable_short_name(t: &TypeRef) -> &'static str {
+	let Some(class) = t.as_class() else {
+		return "Immutable";
+	};
+	let Some(fqn) = class.fqn.as_ref() else {
+		return "Immutable";
+	};
+	match fqn.as_str() {
+		"@winglang/sdk.std.Array" => "Array",
+		"@winglang/sdk.std.Map" => "Map",
+		"@winglang/sdk.std.Set" => "Set",
+		"@winglang/sdk.std.Json" => "Json",
+		_ => "Immutable",
+	}
+}
+
+/// Recognise the stdlib immutable collection *classes* (`WINGSDK_ARRAY`,
+/// `WINGSDK_MAP`, `WINGSDK_SET`, `WINGSDK_JSON`) by their fully qualified name.
+/// The env type stored in `LookupResult::NotFound` is always a hydrated class
+/// type, never a `Type::Array(...)` etc.
+fn is_immutable_collection_class(t: &TypeRef) -> bool {
+	let Some(class) = t.as_class() else {
+		return false;
+	};
+	let fqn = match &class.fqn {
+		Some(f) => f.as_str(),
+		None => return false,
+	};
+	matches!(
+		fqn,
+		"@winglang/sdk.std.Array" | "@winglang/sdk.std.Map" | "@winglang/sdk.std.Set" | "@winglang/sdk.std.Json"
+	)
+}
+
+fn immutable_class_name_for(mutable: &TypeRef) -> Option<&'static str> {
+	match **mutable {
+		Type::MutArray(_) => Some("@winglang/sdk.std.Array"),
+		Type::MutMap(_) => Some("@winglang/sdk.std.Map"),
+		Type::MutSet(_) => Some("@winglang/sdk.std.Set"),
+		Type::MutJson => Some("@winglang/sdk.std.Json"),
+		_ => None,
+	}
+}
+
+/// `true` iff `mutable` and `immutable` correspond as the Mut*/-> immutable
+/// pair (e.g. `MutArray` and `Array`), ignoring nested type arguments.
+fn collection_shapes_match(mutable: &TypeRef, immutable: &TypeRef) -> bool {
+	let Some(expected_immutable_fqn) = immutable_class_name_for(mutable) else {
+		return false;
+	};
+	let Some(class) = immutable.as_class() else {
+		return false;
+	};
+	match &class.fqn {
+		Some(f) => f == expected_immutable_fqn,
+		None => false,
+	}
 }
 
 fn lookup_result_to_type_error<T>(lookup_result: LookupResult, looked_up_object: &T) -> TypeError
