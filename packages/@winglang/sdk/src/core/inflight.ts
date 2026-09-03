@@ -45,6 +45,14 @@ export class InflightClient {
 
   /**
    * Returns code for instantiating an inflight client from a class.
+   *
+   * The returned client is wrapped in a `Proxy` that defers invocation of
+   * `$inflight_init` until the first method call on the client. This is so
+   * that an error thrown by `$inflight_init` surfaces at the call site of
+   * that method, where a user `try { ... } catch { ... }` can actually
+   * observe it. Without this, the IIFE evaluates the init eagerly while
+   * constructing the client, and the throw escapes the user's try/catch
+   * (see winglang/wing#5948).
    */
   public static forV2(
     klass: any,
@@ -63,8 +71,32 @@ export class InflightClient {
 (await (async () => {
   const klass = ${klass._toInflightType()};
   const client = new klass({${liftedFieldsStr}});
-  if (client.$inflight_init) { await client.$inflight_init(); }
-  return client;
+  let $__initialized = false;
+  let $__initPromise = undefined;
+  const $__ensureInit = () => {
+    if (!$__initPromise) {
+      $__initPromise = (async () => {
+        if (!$__initialized) {
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          $__initialized = true;
+        }
+      })();
+    }
+    return $__initPromise;
+  };
+  return new Proxy(client, {
+    get($__target, $__prop, $__receiver) {
+      const $__value = Reflect.get($__target, $__prop, $__receiver);
+      if ($__prop === "$inflight_init") { return $__value; }
+      if (typeof $__value === "function") {
+        return async (...$__args) => {
+          await $__ensureInit();
+          return $__value.apply($__target, $__args);
+        };
+      }
+      return $__value;
+    },
+  });
 })())
 `;
   }
