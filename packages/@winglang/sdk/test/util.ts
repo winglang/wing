@@ -158,6 +158,7 @@ export function directorySnapshot(initialRoot: string) {
             break;
 
           case ".cjs":
+          case ".mjs":
           case ".js":
             const code = readFileSync(abspath, "utf-8");
             snapshot[key] = sanitizeCode(code);

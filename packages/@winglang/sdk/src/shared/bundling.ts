@@ -27,25 +27,45 @@ export interface Bundle {
   time: Date;
 }
 
+export type BundleFormat = "cjs" | "esm";
+
+export interface CreateBundleOptions {
+  /**
+   * Output module format.
+   *
+   * Use `"esm"` when the bundle (or one of its dependencies) needs top-level
+   * await. Defaults to `"cjs"` to limit blast radius for cloud targets that
+   * still expect CommonJS entrypoints.
+   * @default "cjs"
+   */
+  readonly format?: BundleFormat;
+
+}
+
 /**
  * Bundles a javascript entrypoint into a single file.
  * @param entrypoint The javascript entrypoint
  * @param outputDir Defaults to `${entrypoint}.bundle`
  * @param external external packages
+ * @param options Bundle options (e.g. output format)
  * @returns Bundle information
  */
 export function createBundle(
   entrypoint: string,
   external: string[] = [],
   outputDir?: string,
+  options: CreateBundleOptions = {},
 ): Bundle {
+  const format: BundleFormat = options.format ?? "cjs";
   const normalEntrypoint = normalPath(realpathSync(entrypoint));
   const outdir = outputDir
     ? normalPath(realpathSync(outputDir))
     : `${normalEntrypoint}.bundle`;
   mkdirSync(outdir, { recursive: true });
 
-  const outfileName = "index.cjs";
+  // ESM bundles must use .mjs so Node treats the file as an ES module when
+  // forked (e.g. by the simulator Sandbox). CJS keeps the historical name.
+  const outfileName = format === "esm" ? "index.mjs" : "index.cjs";
   const soucemapFilename = `${outfileName}.map`;
 
   const outfile = posix.join(outdir, outfileName);
@@ -87,8 +107,18 @@ export function createBundle(
     sourcemap: "linked",
     platform: "node",
     target: "node20",
-    format: "cjs",
+    format,
     external,
+    // For ESM output, define a real Node `require` before esbuild's __require
+    // shim so leftover dynamic requires (e.g. require("node:assert") inside
+    // bundled CJS) work instead of throwing.
+    ...(format === "esm"
+      ? {
+          banner: {
+            js: 'import { createRequire } from "node:module";const require = createRequire(import.meta.url);',
+          },
+        }
+      : {}),
     metafile: true,
     write: false,
   });
