@@ -184,3 +184,51 @@ test("throws during service start", async () => {
   expect(msg).toBeTruthy();
   expect(msg?.data.message).toEqual("Failed to start service: ThisIsAnError");
 });
+
+test("stop a service with a continuous loop start handler", async () => {
+  // GIVEN — start handler never returns (no onStop closure)
+  const app = new SimApp();
+  new cloud.Service(
+    app,
+    "my_service",
+    inflight(async () => {
+      console.log("start!");
+      // Continuous loop — never returns a stop handler
+      while (true) {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+    }),
+    { autoStart: false },
+  );
+  const s = await app.startSimulator();
+  const service = s.getResource("/my_service") as cloud.IServiceClient;
+
+  // WHEN — start without awaiting (it never resolves on its own)
+  const startPromise = service.start();
+  // Allow the sandbox to enter the loop
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  expect(await service.started()).toBeTruthy();
+
+  await service.stop();
+  // start() should settle once the sandbox is terminated
+  await startPromise;
+
+  // THEN
+  expect(await service.started()).toBeFalsy();
+  expect(
+    s
+      .listTraces()
+      .filter((v) => v.sourceType == cloud.SERVICE_FQN)
+      .map((trace) => trace.data.message),
+  ).toContain("start!");
+
+  // Can start again after forced stop
+  const startPromise2 = service.start();
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  expect(await service.started()).toBeTruthy();
+  await service.stop();
+  await startPromise2;
+  expect(await service.started()).toBeFalsy();
+
+  await s.stop();
+});

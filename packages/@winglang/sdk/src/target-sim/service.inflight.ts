@@ -89,8 +89,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   }
 
   public async start(): Promise<void> {
-    // Do nothing if service is already running.
-    if (this.running) {
+    // Do nothing if service is already running (or start is in progress).
+    if (this.running || this.sandbox) {
       return;
     }
 
@@ -120,15 +120,29 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       },
     });
 
+    // Mark running once the sandbox exists so stop() can terminate a start
+    // handler that never returns (e.g. a continuous loop).
+    this.running = true;
+
     try {
       await this.sandbox.call("start");
-      this.running = true;
     } catch (e: any) {
+      // If stop() already cleaned up the sandbox, the pending start call is
+      // resolved/rejected as part of that cleanup — ignore those errors.
+      if (!this.running || !this.sandbox) {
+        return;
+      }
+      this.running = false;
       this.addTrace(
         `Failed to start service: ${e.message}`,
         TraceType.RESOURCE,
         LogLevel.ERROR,
       );
+      try {
+        await this.sandbox.cleanup();
+      } finally {
+        this.sandbox = undefined;
+      }
     }
   }
 
@@ -141,7 +155,13 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     try {
       this.running = false;
       await this.createBundlePromise;
-      await this.sandbox.call("stop");
+
+      // If start() completed, the sandbox is free for another call — invoke the
+      // graceful onStop handler. If start() is still in progress (continuous
+      // loop), the sandbox is busy and we force-terminate instead.
+      if (this.sandbox.isAvailable()) {
+        await this.sandbox.call("stop");
+      }
       await this.sandbox.cleanup();
     } catch (e: any) {
       this.addTrace(
@@ -149,6 +169,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
         TraceType.RESOURCE,
         LogLevel.ERROR,
       );
+    } finally {
+      this.sandbox = undefined;
     }
   }
 
