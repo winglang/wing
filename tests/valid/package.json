@@ -11,7 +11,7 @@
     "cdk8s": "^2.68.81",
     "cdk8s-plus-27": "^2.9.5",
     "cdktf": "0.20.7",
-    "constructs": "^10.5.0",
+    "constructs": "^10.3.0",
     "jsii-code-samples": "1.7.0",
     "jsii-fixture": "workspace:^",
     "projen": "^0.71.163",

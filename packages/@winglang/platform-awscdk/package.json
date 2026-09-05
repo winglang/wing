@@ -22,7 +22,7 @@
   "dependencies": {
     "@winglang/sdk": "workspace:^",
     "aws-cdk-lib": "^2.260.0",
-    "constructs": "^10.5.0",
+    "constructs": "^10.3.0",
     "safe-stable-stringify": "^2.4.3"
   },
   "devDependencies": {
