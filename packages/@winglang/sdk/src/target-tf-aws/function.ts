@@ -12,7 +12,11 @@ import { S3Object } from "../.gen/providers/aws/s3-object";
 import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import * as cloud from "../cloud";
 import { NotImplementedError } from "../core/errors";
-import { createArchive, createBundle } from "../shared/bundling";
+import {
+  createArchive,
+  createBundle,
+  prepareEsmEntrypoint,
+} from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import {
@@ -268,10 +272,15 @@ export class Function extends AwsFunction {
   public _preSynthesize(): void {
     super._preSynthesize();
 
-    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
-    // `require` resolves naturally.
-
-    const bundle = createBundle(this.entrypoint, externalLibraries);
+    // Bundle as ESM so inflight externs with top-level await can be included.
+    // Wrap CJS-style `exports.handler` so Lambda still resolves index.handler
+    // from the ESM named export (outfile is index.mjs).
+    const esmEntrypoint = prepareEsmEntrypoint(this.entrypoint, {
+      exportStyle: "handler",
+    });
+    const bundle = createBundle(esmEntrypoint, externalLibraries, undefined, {
+      format: "esm",
+    });
 
     // Archive the bundle directory into a zip ourselves, then reference it as a
     // single file. This avoids cdktf's `AssetType.ARCHIVE` shelling out with an

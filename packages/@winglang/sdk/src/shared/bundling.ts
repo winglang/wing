@@ -1,6 +1,12 @@
 import { execFileSync } from "child_process";
 import * as crypto from "crypto";
-import { mkdirSync, realpathSync, statSync, writeFileSync } from "fs";
+import {
+  mkdirSync,
+  readFileSync,
+  realpathSync,
+  statSync,
+  writeFileSync,
+} from "fs";
 import { stat } from "fs/promises";
 import { posix, resolve } from "path";
 import { decode, encode } from "vlq";
@@ -34,12 +40,78 @@ export interface CreateBundleOptions {
    * Output module format.
    *
    * Use `"esm"` when the bundle (or one of its dependencies) needs top-level
-   * await. Defaults to `"cjs"` to limit blast radius for cloud targets that
-   * still expect CommonJS entrypoints.
+   * await. Cloud function/service targets should pass `"esm"` together with
+   * {@link prepareEsmEntrypoint} so CJS-style `exports.*` entrypoints still
+   * resolve. Defaults to `"cjs"`.
    * @default "cjs"
    */
   readonly format?: BundleFormat;
+}
 
+/**
+ * Preamble that gives Wing-generated CJS entrypoints local `module`/`exports`
+ * bindings so they keep working when bundled as ESM.
+ */
+export const CJS_EXPORTS_SHIM =
+  "const module = { exports: {} };\n" + "const exports = module.exports;\n";
+
+/**
+ * How to re-export CJS-style `exports` / `module.exports` for cloud runtimes
+ * after an ESM bundle.
+ *
+ * - `"handler"` — named `export const handler` (AWS Lambda `index.handler`)
+ * - `"default"` — `export default` (Azure Functions classic / function.json)
+ * - `"none"` — shim only (GCP side-effect registration via functions-framework,
+ *   or callers that append their own footer)
+ */
+export type EsmCloudExportStyle = "handler" | "default" | "none";
+
+export interface PrepareEsmEntrypointOptions {
+  /**
+   * @default "none"
+   */
+  readonly exportStyle?: EsmCloudExportStyle;
+}
+
+/**
+ * Wraps a Wing-generated CJS entrypoint so it can be bundled with
+ * `createBundle(..., { format: "esm" })` while still exposing the entry the
+ * cloud runtime expects.
+ *
+ * Writes a sibling `*.esm.*` file next to `entrypoint` and returns its path.
+ */
+export function prepareEsmEntrypoint(
+  entrypoint: string,
+  options: PrepareEsmEntrypointOptions = {},
+): string {
+  const exportStyle: EsmCloudExportStyle = options.exportStyle ?? "none";
+  const contents = readFileSync(entrypoint, "utf-8");
+
+  let footer = "";
+  if (exportStyle === "handler") {
+    // Look up at call time so lazy assignment to exports.handler still works.
+    footer =
+      "\nexport const handler = (...args) => module.exports.handler(...args);\n";
+  } else if (exportStyle === "default") {
+    // Azure classic model: CJS uses `module.exports = async function...`.
+    // ESM import() yields `{ default }`; LegacyFunctionLoader picks the sole key.
+    footer =
+      "\nexport default function (...args) {\n" +
+      "  const fn =\n" +
+      '    typeof module.exports === "function"\n' +
+      "      ? module.exports\n" +
+      "      : (module.exports.default ?? module.exports.handler);\n" +
+      "  return fn.apply(this, args);\n" +
+      "}\n";
+  }
+
+  const wrapped = CJS_EXPORTS_SHIM + contents + footer;
+
+  const wrappedPath = entrypoint.replace(/(\.[cm]?js)$/, ".esm$1");
+  const outPath =
+    wrappedPath === entrypoint ? `${entrypoint}.esm.js` : wrappedPath;
+  writeFileSync(outPath, wrapped);
+  return outPath;
 }
 
 /**

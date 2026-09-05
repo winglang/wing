@@ -2,7 +2,7 @@ import * as cp from "child_process";
 import { writeFileSync } from "fs";
 import { readFile, stat } from "fs/promises";
 import { url as inspectorUrl } from "inspector";
-import { Bundle, createBundle } from "./bundling";
+import { Bundle, CJS_EXPORTS_SHIM, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
 import { LogLevel } from "../std";
 
@@ -70,8 +70,7 @@ export class Sandbox {
     // assign to CommonJS `exports.*`, so wrap with local module/exports bindings
     // that survive as ordinary locals in the ESM output.
     contents =
-      "const module = { exports: {} };\n" +
-      "const exports = module.exports;\n" +
+      CJS_EXPORTS_SHIM +
       contents +
       `
 process.on("uncaughtException", (reason) => {
