@@ -2,7 +2,7 @@ import * as cp from "child_process";
 import { writeFileSync } from "fs";
 import { readFile, stat } from "fs/promises";
 import { url as inspectorUrl } from "inspector";
-import { Bundle, createBundle } from "./bundling";
+import { Bundle, CJS_EXPORTS_SHIM, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
 import { LogLevel } from "../std";
 
@@ -65,9 +65,14 @@ export class Sandbox {
         "\n  await new Promise((resolve) => setTimeout(resolve, 25));";
     }
 
-    // wrap contents with a shim that handles the communication with the parent process
-    // we insert this shim before bundling to ensure source maps are generated correctly
-    contents += `
+    // Inflight sim workers are bundled as ESM so extern JS with top-level await
+    // can be included. Entrypoints still assign to CommonJS `exports.*`, so wrap
+    // with local module/exports bindings that survive as ordinary locals in the
+    // ESM output.
+    contents =
+      CJS_EXPORTS_SHIM +
+      contents +
+      `
 process.on("uncaughtException", (reason) => {
   process.send({ type: "error", reason });
 });

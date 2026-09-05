@@ -30,8 +30,9 @@ test("basic function", () => {
       "utf-8",
     ),
   );
-  const indexFilename = "index.cjs";
+  const indexFilename = "index.mjs";
   expect(packageJson.main).toBe(indexFilename);
+  expect(packageJson.type).toBe("module");
   expect(
     existsSync(join(app.workdir, functionOutDir.name, indexFilename)),
   ).toBeTruthy();

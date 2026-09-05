@@ -1586,15 +1586,21 @@ impl<'a> JSifier<'a> {
 				let require_path = self.get_require_path(extern_path, &func_def.span);
 
 				if let Some(require_path) = require_path {
-					let require = if ctx.visit_ctx.current_phase() == Phase::Inflight {
-						"require"
+					// Inflight externs use dynamic `import()` so esbuild can emit ESM
+					// bundles that include top-level await. Preflight keeps the
+					// `$extern` helper (jiti) which loads modules synchronously.
+					// Parenthesize `await import(...)` so property access applies to the
+					// resolved module namespace, not the Promise (member access binds
+					// tighter than `await`).
+					let call = if ctx.visit_ctx.current_phase() == Phase::Inflight {
+						format!("return ((await import(\"{require_path}\"))[\"{name}\"])(")
 					} else {
-						EXTERN_VAR
+						format!("return ({EXTERN_VAR}(\"{require_path}\")[\"{name}\"])(")
 					};
 
 					new_code!(
 						&func_def.span,
-						format!("return ({require}(\"{require_path}\")[\"{name}\"])("),
+						call,
 						parameters.clone(),
 						")"
 					)

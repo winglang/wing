@@ -1,3 +1,5 @@
+import { existsSync, readdirSync } from "fs";
+import { join } from "path";
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { AwsApp } from "./aws-util";
@@ -21,6 +23,22 @@ test("basic function", () => {
 
   new Function(app, "Function", INFLIGHT_CODE);
   const output = app.synth();
+
+  // Cloud functions now bundle as ESM (index.mjs) for top-level await support
+  const findFile = (dir: string, fileName: string): string | undefined => {
+    for (const name of readdirSync(dir)) {
+      const p = join(dir, name);
+      try {
+        const found = findFile(p, fileName);
+        if (found) return found;
+      } catch {
+        if (name === fileName) return p;
+      }
+    }
+    return undefined;
+  };
+  expect(findFile(app.workdir, "index.mjs")).toBeDefined();
+  expect(findFile(app.workdir, "index.cjs")).toBeUndefined();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_cloudwatch_log_group", // log group for Lambda

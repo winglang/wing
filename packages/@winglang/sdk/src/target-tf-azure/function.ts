@@ -15,7 +15,11 @@ import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
 import { LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
-import { createArchive, createBundle } from "../shared/bundling";
+import {
+  createArchive,
+  createBundle,
+  prepareEsmEntrypoint,
+} from "../shared/bundling";
 import {
   CaseConventions,
   NameOptions,
@@ -201,16 +205,27 @@ export class Function extends cloud.Function {
   public _preSynthesize(): void {
     super._preSynthesize();
 
-    const bundle = createBundle(this.entrypoint);
+    // Bundle as ESM so inflight externs with top-level await can be included.
+    // Azure classic model expects a default export; wrap CJS `module.exports = fn`.
+    // Keep the .mjs extension (do NOT rename to .js) so Node treats it as ESM —
+    // renaming to .js without "type":"module" would load as CJS and break TLA.
+    const esmEntrypoint = prepareEsmEntrypoint(this.entrypoint, {
+      exportStyle: "default",
+    });
+    const bundle = createBundle(esmEntrypoint);
     const codeDir = bundle.directory;
 
     // Package up code in azure expected format
     const outDir = `${codeDir}/${this.functionName}`;
 
-    // Move index.js to function name directory. Every Azure function in a function app
-    // must be in its own folder containing an index.js and function.json files
+    // Every Azure function in a function app must be in its own folder containing
+    // the entry script and function.json. Use index.mjs + scriptFile for ESM.
     fs.mkdirSync(`${codeDir}/${this.functionName}`);
-    fs.renameSync(bundle.outfilePath, `${outDir}/index.js`);
+    fs.renameSync(bundle.outfilePath, `${outDir}/index.mjs`);
+    // Keep the sourcemap next to the entry if present
+    if (fs.existsSync(bundle.sourcemapPath)) {
+      fs.renameSync(bundle.sourcemapPath, `${outDir}/index.mjs.map`);
+    }
 
     // As per documentation "a function must have exactly one trigger" so for now
     // by default a function will support http get requests
@@ -234,6 +249,8 @@ export class Function extends cloud.Function {
             name: "res",
           },
         ],
+        // Default lookup is index.js; point at the ESM entry explicitly.
+        scriptFile: "index.mjs",
       }),
     );
 

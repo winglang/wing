@@ -1,3 +1,5 @@
+import { existsSync, readdirSync, readFileSync } from "fs";
+import { join } from "path";
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { AzureApp } from "./azure-util";
@@ -17,6 +19,28 @@ test("basic function", () => {
   // WHEN
   new Function(app, "Function", INFLIGHT_CODE);
   const output = app.synth();
+
+  // ESM packaging: function folder has index.mjs + scriptFile, not index.js
+  const findFile = (dir: string, fileName: string): string | undefined => {
+    for (const name of readdirSync(dir)) {
+      const p = join(dir, name);
+      try {
+        const found = findFile(p, fileName);
+        if (found) return found;
+      } catch {
+        if (name === fileName) return p;
+      }
+    }
+    return undefined;
+  };
+  const functionJsonPath = findFile(app.workdir, "function.json");
+  expect(functionJsonPath).toBeDefined();
+  const functionDir = join(functionJsonPath!, "..");
+  expect(existsSync(join(functionDir, "index.mjs"))).toBe(true);
+  expect(existsSync(join(functionDir, "index.js"))).toBe(false);
+  expect(JSON.parse(readFileSync(functionJsonPath!, "utf-8")).scriptFile).toBe(
+    "index.mjs",
+  );
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([

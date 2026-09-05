@@ -88,7 +88,7 @@ export function createServiceDockerfile(assetName: string) {
   return `FROM --platform=linux/amd64 node:20-slim
 WORKDIR /app
 COPY ./${assetName}_wrapper.js.bundle .
-CMD [ "node", "index.cjs" ]`;
+CMD [ "node", "index.mjs" ]`;
 }
 
 export function createServiceWrapper(entrypoint: string) {

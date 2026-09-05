@@ -9,7 +9,12 @@ import { tmpdir } from "os";
 import { join } from "path";
 import { describe, it, expect } from "vitest";
 import { encode, decode } from "vlq";
-import { createArchive, fixSourcemaps } from "../../src/shared/bundling";
+import {
+  createArchive,
+  createBundle,
+  fixSourcemaps,
+  prepareEsmEntrypoint,
+} from "../../src/shared/bundling";
 
 describe("createArchive", () => {
   it("should create a zip archive when the directory path contains spaces", () => {
@@ -99,5 +104,76 @@ describe("fixSourcemaps", () => {
       mappings[4][2],
       mappings[4][3],
     ]);
+  });
+});
+
+describe("createBundle ESM", () => {
+  it("emits index.mjs with createRequire banner by default", () => {
+    const root = mkdtempSync(join(tmpdir(), "wing-esm-bundle-"));
+    const entry = join(root, "handler.cjs");
+    writeFileSync(
+      entry,
+      `"use strict";
+exports.handler = async function(event) {
+  return event;
+};
+`,
+    );
+
+    const wrapped = prepareEsmEntrypoint(entry, { exportStyle: "handler" });
+    const bundle = createBundle(wrapped);
+
+    expect(bundle.outfilePath.endsWith("index.mjs")).toBe(true);
+    expect(existsSync(bundle.outfilePath)).toBe(true);
+    const out = readFileSync(bundle.outfilePath, "utf-8");
+    expect(out).toContain("createRequire");
+    expect(out).toMatch(/export\s*\{?\s*handler|\bhandler\b/);
+  });
+
+  it("bundles an entrypoint that imports a top-level-await extern", () => {
+    const root = mkdtempSync(join(tmpdir(), "wing-esm-tla-"));
+    const extern = join(root, "extern.mjs");
+    writeFileSync(
+      extern,
+      `await Promise.resolve();
+export const double = async (value) => value * 2;
+`,
+    );
+    const entry = join(root, "handler.cjs");
+    // Mimic wingc's await import() emission for inflight externs
+    writeFileSync(
+      entry,
+      `"use strict";
+exports.handler = async function(event) {
+  return ((await import(${JSON.stringify(extern)}))["double"])(event);
+};
+`,
+    );
+
+    const wrapped = prepareEsmEntrypoint(entry, { exportStyle: "handler" });
+    const bundle = createBundle(wrapped);
+    expect(bundle.outfilePath.endsWith("index.mjs")).toBe(true);
+    const out = readFileSync(bundle.outfilePath, "utf-8");
+    // Bundled successfully — file is non-trivial ESM
+    expect(out.length).toBeGreaterThan(50);
+    expect(out).toContain("createRequire");
+  });
+
+  it("prepareEsmEntrypoint default style exposes export default for Azure", () => {
+    const root = mkdtempSync(join(tmpdir(), "wing-esm-azure-"));
+    const entry = join(root, "handler.cjs");
+    writeFileSync(
+      entry,
+      `"use strict";
+module.exports = async function(context, req) {
+  context.res = { body: "ok" };
+};
+`,
+    );
+
+    const wrapped = prepareEsmEntrypoint(entry, { exportStyle: "default" });
+    const bundle = createBundle(wrapped);
+    const out = readFileSync(bundle.outfilePath, "utf-8");
+    expect(out).toMatch(/export\s*\{?\s*default|\bdefault\b/);
   });
 });
