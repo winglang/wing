@@ -184,7 +184,7 @@ project.eslint!.addOverride({
 });
 
 project.package.addField("optionalDependencies", {
-  esbuild: "^0.25.0",
+  esbuild: "^0.19.12",
 });
 
 // use fork of jsii-docgen with wing-ish support
