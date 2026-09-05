@@ -311,7 +311,7 @@ monorepo.addFields({
       "vscode-wing>typescript": "5.5.2",
       "wing-api-checker>typescript": "5.5.2",
       "winglang>typescript": "5.5.2",
-      "aws-cdk-lib": "2.260.0",
+      "aws-cdk-lib": "2.147.0",
       "constructs@^10.3.0": "10.3.0",
       "@types/minimatch": "5.1.2",
       "downlevel-dts>typescript": "5.8.0-dev.20250122",

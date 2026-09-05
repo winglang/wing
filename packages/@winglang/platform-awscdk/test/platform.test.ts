@@ -72,7 +72,6 @@ test("wing platform", async () => {
   // when the CDK CLI is used
   expect(readdirSync(workdir)).toStrictEqual([
     "MyStack.assets.json",
-    "MyStack.metadata.json",
     "MyStack.template.json",
     "cdk.out",
     "connections.json",

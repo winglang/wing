@@ -91,7 +91,7 @@ overrides:
   vscode-wing>typescript: 5.5.2
   wing-api-checker>typescript: 5.5.2
   winglang>typescript: 5.5.2
-  aws-cdk-lib: 2.260.0
+  aws-cdk-lib: 2.147.0
   constructs@^10.3.0: 10.3.0
   '@types/minimatch': 5.1.2
   downlevel-dts>typescript: 5.8.0-dev.20250122
@@ -364,8 +364,8 @@ importers:
         specifier: workspace:^
         version: link:../sdk
       aws-cdk-lib:
-        specifier: 2.260.0
-        version: 2.260.0(constructs@10.3.0)
+        specifier: 2.147.0
+        version: 2.147.0(constructs@10.3.0)
       constructs:
         specifier: 10.3.0
         version: 10.3.0
@@ -1062,8 +1062,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/@winglibs/testfixture
       aws-cdk-lib:
-        specifier: 2.260.0
-        version: 2.260.0(constructs@10.3.0)
+        specifier: 2.147.0
+        version: 2.147.0(constructs@10.3.0)
       cdk8s:
         specifier: ^2.68.81
         version: 2.70.100(constructs@10.3.0)
@@ -1850,10 +1850,6 @@ packages:
       default-browser-id: 3.0.0
     dev: true
 
-  /@aws-cdk/asset-awscli-v1@2.2.282:
-    resolution: {integrity: sha512-7hKMi5tTxDcKGIMIOq14PnY0GBcugW33Uh/2YHDZiEwSxLeFOCYBwhR+BFXONb/EJeVI3RETFgailNZbkcKF6g==}
-    dev: false
-
   /@aws-cdk/asset-awscli-v1@2.2.294:
     resolution: {integrity: sha512-Mjgpu6jomCFUdg+acz5vCnR8/i9RWq6JnEn+e9fYw1yWV0cP0Xo5ZZpGgmtsZ03E5SZLRFxZT57BupHbwHOAhA==}
     dev: false
@@ -1960,14 +1956,6 @@ packages:
 
       For more information on how to migrate, see https://docs.aws.amazon.com/cdk/v2/guide/migrating-v2.html
     dev: true
-    bundledDependencies:
-      - jsonschema
-      - semver
-
-  /@aws-cdk/cloud-assembly-schema@54.22.0:
-    resolution: {integrity: sha512-vsOuFw4+UC5+m2YZLhCecxt6wibIOmXCszA4uXaBcde2tZWx06vp1z5ByHnJeLS83A11XpAkW/TiIBGCL6jxuQ==}
-    engines: {node: '>= 18.0.0'}
-    dev: false
     bundledDependencies:
       - jsonschema
       - semver
@@ -13474,20 +13462,19 @@ packages:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  /aws-cdk-lib@2.260.0(constructs@10.3.0):
-    resolution: {integrity: sha512-2PPG+hbPDot8+ibkb5Jl9y3OY5rBE6TFwjzOi+yEyU4ZG6u8bM4DDKhhBi/S20NqqSFDso9rH1txVJAdwXNiuQ==}
-    engines: {node: '>= 20.0.0'}
+  /aws-cdk-lib@2.147.0(constructs@10.3.0):
+    resolution: {integrity: sha512-0dzUEeWxpuLeeQvqwR4Vz2ja/V0nzzgndgPdp56nc9CsghbrFtMATtno3ec5INHiJz/Mj6/NXQ5t9vrffd6Mgw==}
+    engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: 10.3.0
     dependencies:
-      '@aws-cdk/asset-awscli-v1': 2.2.282
+      '@aws-cdk/asset-awscli-v1': 2.2.294
+      '@aws-cdk/asset-kubectl-v20': 2.1.4
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.2
-      '@aws-cdk/cloud-assembly-schema': 54.22.0
       constructs: 10.3.0
     dev: false
     bundledDependencies:
       - '@balena/dockerignore'
-      - '@aws-cdk/cloud-assembly-api'
       - case
       - fs-extra
       - ignore

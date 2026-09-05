@@ -7,7 +7,7 @@
     "@aws-sdk/client-dynamodb": "^3.602.0",
     "@cdktf/provider-aws": "^19.23.0",
     "@winglibs/testfixture": "workspace:^",
-    "aws-cdk-lib": "^2.260.0",
+    "aws-cdk-lib": "^2.147.0",
     "cdk8s": "^2.68.81",
     "cdk8s-plus-27": "^2.9.5",
     "cdktf": "0.20.7",
