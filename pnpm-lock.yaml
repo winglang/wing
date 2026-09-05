@@ -91,6 +91,7 @@ overrides:
   vscode-wing>typescript: 5.5.2
   wing-api-checker>typescript: 5.5.2
   winglang>typescript: 5.5.2
+  aws-cdk-lib: 2.260.0
   '@types/minimatch': 5.1.2
   downlevel-dts>typescript: 5.8.0-dev.20250122
   jsii-pacmak: 1.100.0
@@ -362,8 +363,8 @@ importers:
         specifier: workspace:^
         version: link:../sdk
       aws-cdk-lib:
-        specifier: ^2.260.0
-        version: 2.268.0(constructs@10.8.1)
+        specifier: 2.260.0
+        version: 2.260.0(constructs@10.8.1)
       constructs:
         specifier: ^10.5.0
         version: 10.8.1
@@ -1060,8 +1061,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/@winglibs/testfixture
       aws-cdk-lib:
-        specifier: ^2.260.0
-        version: 2.268.0(constructs@10.8.1)
+        specifier: 2.260.0
+        version: 2.260.0(constructs@10.8.1)
       cdk8s:
         specifier: ^2.68.81
         version: 2.70.100(constructs@10.8.1)
@@ -1848,8 +1849,8 @@ packages:
       default-browser-id: 3.0.0
     dev: true
 
-  /@aws-cdk/asset-awscli-v1@2.2.292:
-    resolution: {integrity: sha512-d4aMFsAFj19FtxVyw8IzlUKv5Zu4sIvgnEjI2IU6IWBJgVbJ4aFnadANqYa+6MwB1CQbGOg0jh8WE77M+Nb/9A==}
+  /@aws-cdk/asset-awscli-v1@2.2.282:
+    resolution: {integrity: sha512-7hKMi5tTxDcKGIMIOq14PnY0GBcugW33Uh/2YHDZiEwSxLeFOCYBwhR+BFXONb/EJeVI3RETFgailNZbkcKF6g==}
     dev: false
 
   /@aws-cdk/asset-awscli-v1@2.2.294:
@@ -13472,19 +13473,18 @@ packages:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  /aws-cdk-lib@2.268.0(constructs@10.8.1):
-    resolution: {integrity: sha512-bm0mWG0xxIJtV0vhkmnFy6TFgwqBowvXeRKudhAsjM0TMOEcyFPBbwjUNlAA6S1+AjUwEt5yaMrT0A/P97lUqg==}
+  /aws-cdk-lib@2.260.0(constructs@10.8.1):
+    resolution: {integrity: sha512-2PPG+hbPDot8+ibkb5Jl9y3OY5rBE6TFwjzOi+yEyU4ZG6u8bM4DDKhhBi/S20NqqSFDso9rH1txVJAdwXNiuQ==}
     engines: {node: '>= 20.0.0'}
     peerDependencies:
       constructs: ^10.5.0
     dependencies:
-      '@aws-cdk/asset-awscli-v1': 2.2.292
+      '@aws-cdk/asset-awscli-v1': 2.2.282
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.2
       '@aws-cdk/cloud-assembly-schema': 54.21.0
       constructs: 10.8.1
     dev: false
     bundledDependencies:
-      - '@aws/cloudformation-validate'
       - '@balena/dockerignore'
       - '@aws-cdk/cloud-assembly-api'
       - case
@@ -13494,6 +13494,7 @@ packages:
       - minimatch
       - punycode
       - semver
+      - table
       - yaml
       - mime-types
 
