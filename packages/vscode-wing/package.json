@@ -52,7 +52,7 @@
     "vscode-languageclient": "^8.1.0",
     "which": "^4.0.0",
     "winglang": "workspace:^",
-    "ws": "^8.17.1"
+    "ws": "^8.21.0"
   },
   "keywords": [
     "cdk",

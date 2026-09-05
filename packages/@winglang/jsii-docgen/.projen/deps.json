@@ -59,7 +59,7 @@
     },
     {
       "name": "jsii",
-      "version": "~5.5.4",
+      "version": "~5.5.15",
       "type": "build"
     },
     {
