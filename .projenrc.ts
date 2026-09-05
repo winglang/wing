@@ -280,6 +280,14 @@ monorepo.addFields({
       "@octokit/request-error@>=2.0.0 <5.1.1": ">=5.1.1 <6.0.0",
       "@octokit/request@>=5.0.0 <8.4.1": ">=8.4.1 <9.0.0",
       "@octokit/plugin-paginate-rest@>=2.0.0 <9.2.2": ">=9.2.2 <10.0.0",
+      // Pins below are not security fixes: they hold build-time tooling at the
+      // versions main resolved to. Re-resolving the lockfile floated these to new
+      // majors that break the build (TS 7 has no ts.createProgram; @types/minimatch 6
+      // drops IOptions/IMinimatch, which @types/glob@7 still references).
+      "@types/minimatch": "5.1.2",
+      "downlevel-dts>typescript": "5.8.0-dev.20250122",
+      "jsii-pacmak": "1.100.0",
+      "jsii-reflect": "1.100.0",
     },
     patchedDependencies: {
       "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
