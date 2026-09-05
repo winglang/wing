@@ -284,7 +284,7 @@ monorepo.addFields({
       // versions main resolved to. Re-resolving the lockfile floated these to new
       // majors that break the build (TS 7 has no ts.createProgram; @types/minimatch 6
       // drops IOptions/IMinimatch, which @types/glob@7 still references).
-      "jsii@>=5.5.0 <5.6.0": "5.5.4",
+      "jsii@>=5.5.0 <5.6.0": "5.5.33",
       "@types/minimatch": "5.1.2",
       "downlevel-dts>typescript": "5.8.0-dev.20250122",
       "jsii-pacmak": "1.100.0",
@@ -293,7 +293,7 @@ monorepo.addFields({
     patchedDependencies: {
       "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
       "mime@3.0.0": "patches/mime@3.0.0.patch",
-      "jsii@5.5.4": "patches/jsii@5.5.4.patch",
+      "jsii@5.5.33": "patches/jsii@5.5.33.patch",
     },
   },
 });
