@@ -74,7 +74,7 @@ const project = new cdk.JsiiProject({
     "@google-cloud/storage@6.9.5",
     "@google-cloud/datastore@8.4.0",
     "google-auth-library",
-    "protobufjs@7.2.5",
+    "protobufjs@^7.6.1",
     // simulator dependencies
     "express",
     "uuid",
@@ -137,7 +137,7 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "~5.5.4",
+  jsiiVersion: "~5.5.15",
 });
 project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
 project.deps.removeDependency("ts-node");
@@ -184,7 +184,7 @@ project.eslint!.addOverride({
 });
 
 project.package.addField("optionalDependencies", {
-  esbuild: "^0.19.12",
+  esbuild: "^0.25.0",
 });
 
 // use fork of jsii-docgen with wing-ish support

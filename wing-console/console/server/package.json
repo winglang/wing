@@ -43,14 +43,14 @@
     "env-paths": "^3.0.0",
     "esbuild-plugin-raw": "^0.1.8",
     "eslint": "^8.57.0",
-    "express": "^4.19.2",
+    "express": "^4.21.2",
     "get-port": "^6.1.2",
     "nanoid": "^4.0.2",
     "node-fetch": "^3.3.2",
     "tsup": "^8.1.0",
     "typescript": "^5.5.2",
     "vitest": "^1.6.0",
-    "ws": "^8.17.1",
+    "ws": "^8.21.0",
     "zod": "^3.23.8"
   },
   "volta": {
