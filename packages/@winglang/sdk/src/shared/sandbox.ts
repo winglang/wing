@@ -66,9 +66,9 @@ export class Sandbox {
     }
 
     // Inflight sim workers are bundled as ESM so extern JS with top-level await
-    // can be included (esbuild rejects TLA with format "cjs"). Entrypoints still
-    // assign to CommonJS `exports.*`, so wrap with local module/exports bindings
-    // that survive as ordinary locals in the ESM output.
+    // can be included. Entrypoints still assign to CommonJS `exports.*`, so wrap
+    // with local module/exports bindings that survive as ordinary locals in the
+    // ESM output.
     contents =
       CJS_EXPORTS_SHIM +
       contents +
@@ -87,9 +87,7 @@ process.on("message", async (message) => {${debugShim}
     const wrappedPath = entrypoint.replace(/\.cjs$/, ".sandbox.cjs");
 
     writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
-    const bundle = createBundle(wrappedPath, [], undefined, {
-      format: "esm",
-    });
+    const bundle = createBundle(wrappedPath);
 
     if (process.env.DEBUG) {
       const fileStats = await stat(entrypoint);

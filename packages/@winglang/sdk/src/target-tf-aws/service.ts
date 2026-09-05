@@ -291,9 +291,7 @@ export class Service extends AwsService {
     writeFileSync(this.wrapperEntrypoint, wrapper);
     // ESM so service inflight externs can use top-level await. The wrapper is a
     // self-running script (no cloud handler export), so no prepareEsmEntrypoint.
-    const bundle = createBundle(this.wrapperEntrypoint, [], undefined, {
-      format: "esm",
-    });
+    const bundle = createBundle(this.wrapperEntrypoint);
     this.bundledHash = bundle.hash;
 
     const dockerFile = createServiceDockerfile(this.assetName);

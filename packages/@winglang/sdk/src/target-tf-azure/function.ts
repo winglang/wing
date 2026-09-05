@@ -212,9 +212,7 @@ export class Function extends cloud.Function {
     const esmEntrypoint = prepareEsmEntrypoint(this.entrypoint, {
       exportStyle: "default",
     });
-    const bundle = createBundle(esmEntrypoint, [], undefined, {
-      format: "esm",
-    });
+    const bundle = createBundle(esmEntrypoint);
     const codeDir = bundle.directory;
 
     // Package up code in azure expected format

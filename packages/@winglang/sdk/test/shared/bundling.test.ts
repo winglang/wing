@@ -107,8 +107,8 @@ describe("fixSourcemaps", () => {
   });
 });
 
-describe("createBundle ESM for cloud", () => {
-  it("emits index.mjs with createRequire banner when format is esm", () => {
+describe("createBundle ESM", () => {
+  it("emits index.mjs with createRequire banner by default", () => {
     const root = mkdtempSync(join(tmpdir(), "wing-esm-bundle-"));
     const entry = join(root, "handler.cjs");
     writeFileSync(
@@ -121,7 +121,7 @@ exports.handler = async function(event) {
     );
 
     const wrapped = prepareEsmEntrypoint(entry, { exportStyle: "handler" });
-    const bundle = createBundle(wrapped, [], undefined, { format: "esm" });
+    const bundle = createBundle(wrapped);
 
     expect(bundle.outfilePath.endsWith("index.mjs")).toBe(true);
     expect(existsSync(bundle.outfilePath)).toBe(true);
@@ -130,7 +130,7 @@ exports.handler = async function(event) {
     expect(out).toMatch(/export\s*\{?\s*handler|\bhandler\b/);
   });
 
-  it("bundles an entrypoint that imports a top-level-await extern as ESM", () => {
+  it("bundles an entrypoint that imports a top-level-await extern", () => {
     const root = mkdtempSync(join(tmpdir(), "wing-esm-tla-"));
     const extern = join(root, "extern.mjs");
     writeFileSync(
@@ -150,17 +150,13 @@ exports.handler = async function(event) {
 `,
     );
 
-    // CJS format must reject TLA
-    expect(() => createBundle(entry)).toThrow(
-      /Top-level await|top-level await|await/i,
-    );
-
     const wrapped = prepareEsmEntrypoint(entry, { exportStyle: "handler" });
-    const bundle = createBundle(wrapped, [], undefined, { format: "esm" });
+    const bundle = createBundle(wrapped);
     expect(bundle.outfilePath.endsWith("index.mjs")).toBe(true);
     const out = readFileSync(bundle.outfilePath, "utf-8");
     // Bundled successfully — file is non-trivial ESM
     expect(out.length).toBeGreaterThan(50);
+    expect(out).toContain("createRequire");
   });
 
   it("prepareEsmEntrypoint default style exposes export default for Azure", () => {
@@ -176,7 +172,7 @@ module.exports = async function(context, req) {
     );
 
     const wrapped = prepareEsmEntrypoint(entry, { exportStyle: "default" });
-    const bundle = createBundle(wrapped, [], undefined, { format: "esm" });
+    const bundle = createBundle(wrapped);
     const out = readFileSync(bundle.outfilePath, "utf-8");
     expect(out).toMatch(/export\s*\{?\s*default|\bdefault\b/);
   });

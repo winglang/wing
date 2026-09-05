@@ -278,9 +278,7 @@ export class Function extends AwsFunction {
     const esmEntrypoint = prepareEsmEntrypoint(this.entrypoint, {
       exportStyle: "handler",
     });
-    const bundle = createBundle(esmEntrypoint, externalLibraries, undefined, {
-      format: "esm",
-    });
+    const bundle = createBundle(esmEntrypoint, externalLibraries);
 
     // Archive the bundle directory into a zip ourselves, then reference it as a
     // single file. This avoids cdktf's `AssetType.ARCHIVE` shelling out with an

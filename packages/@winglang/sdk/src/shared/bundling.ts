@@ -33,21 +33,6 @@ export interface Bundle {
   time: Date;
 }
 
-export type BundleFormat = "cjs" | "esm";
-
-export interface CreateBundleOptions {
-  /**
-   * Output module format.
-   *
-   * Use `"esm"` when the bundle (or one of its dependencies) needs top-level
-   * await. Cloud function/service targets should pass `"esm"` together with
-   * {@link prepareEsmEntrypoint} so CJS-style `exports.*` entrypoints still
-   * resolve. Defaults to `"cjs"`.
-   * @default "cjs"
-   */
-  readonly format?: BundleFormat;
-}
-
 /**
  * Preamble that gives Wing-generated CJS entrypoints local `module`/`exports`
  * bindings so they keep working when bundled as ESM.
@@ -75,7 +60,7 @@ export interface PrepareEsmEntrypointOptions {
 
 /**
  * Wraps a Wing-generated CJS entrypoint so it can be bundled with
- * `createBundle(..., { format: "esm" })` while still exposing the entry the
+ * `createBundle(...)` (ESM) while still exposing the entry the
  * cloud runtime expects.
  *
  * Writes a sibling `*.esm.*` file next to `entrypoint` and returns its path.
@@ -119,25 +104,22 @@ export function prepareEsmEntrypoint(
  * @param entrypoint The javascript entrypoint
  * @param outputDir Defaults to `${entrypoint}.bundle`
  * @param external external packages
- * @param options Bundle options (e.g. output format)
  * @returns Bundle information
  */
 export function createBundle(
   entrypoint: string,
   external: string[] = [],
   outputDir?: string,
-  options: CreateBundleOptions = {},
 ): Bundle {
-  const format: BundleFormat = options.format ?? "cjs";
   const normalEntrypoint = normalPath(realpathSync(entrypoint));
   const outdir = outputDir
     ? normalPath(realpathSync(outputDir))
     : `${normalEntrypoint}.bundle`;
   mkdirSync(outdir, { recursive: true });
 
-  // ESM bundles must use .mjs so Node treats the file as an ES module when
-  // forked (e.g. by the simulator Sandbox). CJS keeps the historical name.
-  const outfileName = format === "esm" ? "index.mjs" : "index.cjs";
+  // Always emit ESM (.mjs) so Node treats the file as an ES module when
+  // forked (e.g. by the simulator Sandbox) and top-level await works.
+  const outfileName = "index.mjs";
   const soucemapFilename = `${outfileName}.map`;
 
   const outfile = posix.join(outdir, outfileName);
@@ -179,18 +161,14 @@ export function createBundle(
     sourcemap: "linked",
     platform: "node",
     target: "node20",
-    format,
+    format: "esm",
     external,
-    // For ESM output, define a real Node `require` before esbuild's __require
-    // shim so leftover dynamic requires (e.g. require("node:assert") inside
-    // bundled CJS) work instead of throwing.
-    ...(format === "esm"
-      ? {
-          banner: {
-            js: 'import { createRequire } from "node:module";const require = createRequire(import.meta.url);',
-          },
-        }
-      : {}),
+    // Define a real Node `require` before esbuild's __require shim so leftover
+    // dynamic requires (e.g. require("node:assert") inside bundled CJS) work
+    // instead of throwing.
+    banner: {
+      js: 'import { createRequire } from "node:module";const require = createRequire(import.meta.url);',
+    },
     metafile: true,
     write: false,
   });

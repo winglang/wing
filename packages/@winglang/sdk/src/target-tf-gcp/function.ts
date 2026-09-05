@@ -202,12 +202,10 @@ export class Function extends cloud.Function {
 
     // Bundle as ESM so inflight externs with top-level await can be included.
     // GCP registers via functions-framework side effects (no handler export).
-    const bundle = createBundle(
-      this.entrypoint,
-      ["@google-cloud/functions-framework", "@google-cloud/datastore"],
-      undefined,
-      { format: "esm" },
-    );
+    const bundle = createBundle(this.entrypoint, [
+      "@google-cloud/functions-framework",
+      "@google-cloud/datastore",
+    ]);
 
     const packageJson = join(bundle.directory, "package.json");
 
