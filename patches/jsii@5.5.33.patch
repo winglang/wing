@@ -1,5 +1,5 @@
 diff --git a/lib/assembler.js b/lib/assembler.js
-index a8ae750fa6ec83cd56b84848bcd3cfdd4c297de1..c620930d412b6c87c8f38dcf0cd5f6ce17189d70 100644
+index a8ae750..b6cc864 100644
 --- a/lib/assembler.js
 +++ b/lib/assembler.js
 @@ -1575,7 +1575,12 @@ class Assembler {
@@ -30,7 +30,7 @@ index a8ae750fa6ec83cd56b84848bcd3cfdd4c297de1..c620930d412b6c87c8f38dcf0cd5f6ce
          const fqn = this._getFQN(type, declaration, purpose, isThisType);
          if (fqn == null) {
 diff --git a/lib/tsconfig/compiler-options.js b/lib/tsconfig/compiler-options.js
-index e7ac0ec99906448c609beff54dc868bf41c2da82..fab0114ba5ae57f71ca987d08b19eb176d3e9b7d 100644
+index e7ac0ec..d44c98f 100644
 --- a/lib/tsconfig/compiler-options.js
 +++ b/lib/tsconfig/compiler-options.js
 @@ -15,8 +15,9 @@ exports.BASE_COMPILER_OPTIONS = {
