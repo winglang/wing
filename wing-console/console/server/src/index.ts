@@ -263,7 +263,7 @@ export const createConsoleServer = async ({
   // listening but don't wait for it, yet.
   log.info("Starting the dev server...");
 
-  const { server, port } = await createExpressServer({
+  const { server, port, closeWebSockets } = await createExpressServer({
     consoleLogger,
     simulatorInstance() {
       return simulator.instance();
@@ -315,12 +315,18 @@ export const createConsoleServer = async ({
       isStopping = true;
       updater?.removeEventListener("status-change", invalidateUpdaterStatus);
       config?.removeEventListener("config-change", invalidateConfig);
+
+      // Close websockets first so the HTTP server can finish closing.
+      await closeWebSockets().catch(() => {});
+      server.closeAllConnections();
+
       await Promise.allSettled([
-        server.closeAllConnections(),
-        server.close(),
+        new Promise<void>((resolve, reject) => {
+          server.close((error) => (error ? reject(error) : resolve()));
+        }),
         compiler.stop(),
         simulator.stop(),
-        testRunner.forceStop(),
+        Promise.resolve(testRunner.forceStop()),
       ]);
       await consoleLogger.close();
     } catch (error) {

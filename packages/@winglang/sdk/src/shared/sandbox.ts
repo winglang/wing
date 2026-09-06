@@ -121,20 +121,77 @@ process.on("message", async (message) => {${debugShim}
     this.options = options;
   }
 
+  /**
+   * How long to wait for a graceful SIGTERM before escalating to SIGKILL.
+   * Detached children (see initialize()) can otherwise survive parent exit and
+   * spin at 100% CPU — see https://github.com/winglang/wing/issues/6861.
+   */
+  private static readonly CLEANUP_GRACE_MS = 2_000;
+
   public async cleanup() {
     this.cleaningUp = true;
     if (this.timeout) {
       clearTimeout(this.timeout);
-    } else {
+      this.timeout = undefined;
     }
 
-    if (this.child) {
+    const child = this.child;
+    const pid = this.childPid;
+    this.child = undefined;
+    this.available = true;
+
+    if (!child || pid === undefined) {
+      return;
+    }
+
+    this.debugLog(`Terminating sandbox child process (PID ${pid}).`);
+
+    const exited = new Promise<void>((resolve) => {
+      if (child.exitCode !== null || child.signalCode !== null) {
+        resolve();
+        return;
+      }
+      child.once("exit", () => resolve());
+    });
+
+    // Detached forks are session/process-group leaders; prefer signaling the
+    // whole group so grandchildren cannot outlive cleanup.
+    this.killProcessTree(pid, "SIGTERM");
+
+    const timedOut = await Promise.race([
+      exited.then(() => false),
+      new Promise<boolean>((resolve) =>
+        setTimeout(() => resolve(true), Sandbox.CLEANUP_GRACE_MS),
+      ),
+    ]);
+
+    if (timedOut) {
       this.debugLog(
-        `Terminating sandbox child process (PID ${this.childPid}).`,
+        `Sandbox (PID ${pid}) did not exit after SIGTERM; sending SIGKILL.`,
       );
-      this.child.kill("SIGTERM");
-      this.child = undefined;
-      this.available = true;
+      this.killProcessTree(pid, "SIGKILL");
+      await Promise.race([
+        exited,
+        new Promise<void>((resolve) => setTimeout(resolve, 500)),
+      ]);
+    }
+  }
+
+  private killProcessTree(pid: number, signal: NodeJS.Signals) {
+    // Prefer process-group kill on Unix: detached forks are group leaders, so
+    // this also reaps any grandchildren. Windows does not support group signals.
+    if (process.platform !== "win32") {
+      try {
+        process.kill(-pid, signal);
+        return;
+      } catch {
+        // Fall through to single-PID kill.
+      }
+    }
+    try {
+      process.kill(pid, signal);
+    } catch {
+      // Already gone.
     }
   }
 
