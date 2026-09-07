@@ -332,10 +332,11 @@ process.on("message", async (message) => {${debugShim}
       // (e.g. the process couldn't be spawned or killed, or a message couldn't be sent).
       // Since this is unexpected, we kill the process with SIGKILL to ensure it's dead, and reject the promise.
       this.onChildError = (error: Error) => {
-        this.debugLog(
-          `Unexpected error from the sandbox (PID ${this.childPid}).`,
-        );
-        this.child?.kill("SIGKILL");
+        const errorPid = this.childPid;
+        this.debugLog(`Unexpected error from the sandbox (PID ${errorPid}).`);
+        if (errorPid !== undefined) {
+          this.killProcessTree(errorPid, "SIGKILL");
+        }
         this.child = undefined;
         this.available = true;
         if (this.timeout) {

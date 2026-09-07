@@ -75,7 +75,7 @@ const SHUTDOWN_TIMEOUT_MS = 10_000;
       process.exit(1);
     }, SHUTDOWN_TIMEOUT_MS);
     // Don't let the timer keep the process alive on its own.
-    forceTimer.unref?.();
+    forceTimer.unref();
 
     try {
       await Promise.allSettled([

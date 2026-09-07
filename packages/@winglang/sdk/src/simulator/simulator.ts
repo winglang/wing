@@ -412,6 +412,11 @@ export class Simulator {
    * @param simDir The path to the new version of the app
    */
   public async update(simDir: string) {
+    // Defensive: a leaked _stopRequested from a previous aborted start would
+    // cause startResources() below to short-circuit and silently skip
+    // starting any resources.
+    this._stopRequested = false;
+
     const newModel = this._loadApp(simDir);
 
     const plan = await this.planUpdate(
@@ -528,7 +533,24 @@ export class Simulator {
 
     const handle = this.tryGetResourceHandle(path);
     if (!handle) {
-      // Resource is mid-start (state exists but handle not allocated yet).
+      // Resource is mid-start: state[path] was set, but HANDLE_ATTRIBUTE
+      // hasn't been written yet (startResource writes it after init() settles).
+      // The handle itself WAS allocated in _handles.paths by startResource
+      // (see the allocation above the await on init()), so we can still recover
+      // the resource and call cleanup() — critical for reaping detached
+      // sandbox children whose init() never returns (#6861).
+      const pendingHandle = this._handles.tryFindHandleByPath(path);
+      if (pendingHandle) {
+        try {
+          const resource = this._handles.find(pendingHandle);
+          await this.ensureStateDirExists(path);
+          await resource.cleanup();
+          this._handles.deallocate(pendingHandle);
+        } catch (err) {
+          console.warn(err);
+        }
+        this._policyRegistry.deregister(path);
+      }
       // Clear the partial state so a concurrent startResource can exit cleanly.
       delete this.state[path];
       this.setResourceRunningState(path, "stopped");
@@ -1032,6 +1054,13 @@ export class Simulator {
     try {
       const attrs = await resourceObject.init(context);
 
+      // stop() may have torn down this resource while init() was in flight
+      // (see stopResource's "no handle" branch — #6861). Bailing prevents a
+      // TypeError on `this.state[path].attrs = ...` below.
+      if (this._stopRequested || this.isStopInProgress()) {
+        return;
+      }
+
       this.state[path].attrs = {
         ...this.state[path].attrs,
         ...attrs,
@@ -1042,6 +1071,11 @@ export class Simulator {
 
     // save the current state
     await resourceObject.save();
+
+    // Re-check after save() — stop() may have run during the await above.
+    if (this._stopRequested || this.isStopInProgress()) {
+      return;
+    }
 
     // merge the attributes
     this.state[path].attrs = {
@@ -1313,6 +1347,21 @@ class HandleManager {
 
   public tryFindPath(handle: string): string | undefined {
     return this.paths.get(handle);
+  }
+
+  /**
+   * Reverse lookup: find the handle for a given resource path.
+   * Used to recover mid-init resources whose HANDLE_ATTRIBUTE hasn't been
+   * written to state yet but whose handle was already allocated
+   * (see Simulator.stopResource's "no handle" branch — #6861).
+   */
+  public tryFindHandleByPath(path: string): string | undefined {
+    for (const [handle, p] of this.paths) {
+      if (p === path) {
+        return handle;
+      }
+    }
+    return undefined;
   }
 
   public deallocate(handle: string): ISimulatorResourceInstance {
