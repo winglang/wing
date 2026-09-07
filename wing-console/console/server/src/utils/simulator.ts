@@ -129,6 +129,12 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
     }
   };
 
+  // Track the in-flight start so stop() can wait for (or race) it. The console
+  // fires simulator.start() without awaiting it from the compiler "compiled"
+  // handler; without this, Ctrl+C during boot left detached sandboxes running
+  // (https://github.com/winglang/wing/issues/6861).
+  let currentStart: Promise<void> | undefined;
+
   return {
     async waitForInstance() {
       return (
@@ -142,10 +148,26 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
       return instance;
     },
     async start(simfile: string) {
-      await start(simfile);
+      const p = start(simfile);
+      currentStart = p;
+      try {
+        await p;
+      } finally {
+        if (currentStart === p) {
+          currentStart = undefined;
+        }
+      }
     },
     async stop() {
-      await instance?.stop();
+      if (currentStart) {
+        await Promise.race([
+          currentStart.catch(() => {}),
+          new Promise<void>((resolve) => setTimeout(resolve, 5_000)),
+        ]);
+      }
+      if (instance) {
+        await stopSilently(instance);
+      }
     },
     async reload() {
       await reload();

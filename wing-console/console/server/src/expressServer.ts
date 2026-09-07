@@ -151,10 +151,25 @@ export const createExpressServer = async ({
     createContext,
   });
 
-  process.on("SIGTERM", () => {
-    handler.broadcastReconnectNotification();
-    wss.close();
-  });
+  /**
+   * Terminate WebSocket clients and close the WSS.
+   * Required before `server.close()` — otherwise open ws sockets keep the
+   * HTTP server from finishing (and Ctrl+C of the console/dev script hangs).
+   * See https://github.com/winglang/wing/issues/6861.
+   */
+  const closeWebSockets = async () => {
+    try {
+      handler.broadcastReconnectNotification();
+    } catch {
+      // ignore — handler may already be closed
+    }
+    for (const client of wss.clients) {
+      client.terminate();
+    }
+    await new Promise<void>((resolve) => {
+      wss.close(() => resolve());
+    });
+  };
 
-  return { port, server };
+  return { port, server, closeWebSockets };
 };

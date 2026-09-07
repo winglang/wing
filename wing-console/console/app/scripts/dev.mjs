@@ -17,6 +17,9 @@ const options = parseArgs({
   },
 });
 
+/** Max time to wait for graceful close before force-exiting (ms). */
+const SHUTDOWN_TIMEOUT_MS = 10_000;
+
 (async () => {
   const consoleServer = await createConsoleServer({
     wingfile:
@@ -50,20 +53,49 @@ const options = parseArgs({
     },
   });
 
+  // Declare before registering signal handlers so a Ctrl+C during vite startup
+  // does not hit the temporal dead zone (and leave the process hung).
+  /** @type {import("vite").ViteDevServer | undefined} */
+  let vite;
+
   let closing = false;
-  const events = ["beforeExit", "SIGINT", "SIGTERM", "SIGHUP"];
-  for (const event of events) {
-    process.on(event, async () => {
-      if (closing) {
-        return;
-      }
-      closing = true;
-      await Promise.allSettled([consoleServer.close(), vite.close()]).catch();
-      process.exit();
+  const shutdown = async () => {
+    if (closing) {
+      // Second signal — force exit immediately.
+      // eslint-disable-next-line unicorn/no-process-exit
+      process.exit(1);
+    }
+    closing = true;
+
+    const forceTimer = setTimeout(() => {
+      console.error(
+        `[wing-console] graceful shutdown timed out after ${SHUTDOWN_TIMEOUT_MS}ms; forcing exit`,
+      );
+      // eslint-disable-next-line unicorn/no-process-exit
+      process.exit(1);
+    }, SHUTDOWN_TIMEOUT_MS);
+    // Don't let the timer keep the process alive on its own.
+    forceTimer.unref();
+
+    try {
+      await Promise.allSettled([
+        consoleServer.close(),
+        vite ? vite.close() : Promise.resolve(),
+      ]);
+    } finally {
+      clearTimeout(forceTimer);
+      // eslint-disable-next-line unicorn/no-process-exit
+      process.exit(0);
+    }
+  };
+
+  for (const event of ["SIGINT", "SIGTERM", "SIGHUP"]) {
+    process.on(event, () => {
+      void shutdown();
     });
   }
 
-  const vite = await createViteServer({
+  vite = await createViteServer({
     ...viteConfig,
     server: {
       proxy: {

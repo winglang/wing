@@ -210,6 +210,9 @@ export class Simulator {
 
   // fields that change between simulation runs / reloads
   private _running: RunningState;
+  private _stopRequested = false;
+  /** In-flight stop promise so concurrent stop()/start()-teardown share one run. */
+  private _stopPromise: Promise<void> | undefined;
   private readonly _handles: HandleManager;
   private _traces: Array<Trace>;
   private readonly _traceSubscribers: Array<ITraceSubscriber>;
@@ -330,15 +333,33 @@ export class Simulator {
       );
     }
     this._running = "starting";
+    this._stopRequested = false;
 
     try {
       this.lockfile.lock();
       await this.startServer();
       await this.startResources();
+      // If stop() was requested while we were still starting, either stop() is
+      // already tearing down (share its promise) or we need to finish teardown.
+      if (this._stopRequested) {
+        if (this._stopPromise) {
+          await this._stopPromise;
+        } else {
+          this._running = "stopping";
+          this._stopPromise = this.finishStop();
+          try {
+            await this._stopPromise;
+          } finally {
+            this._stopPromise = undefined;
+          }
+        }
+        return;
+      }
     } catch (err: any) {
       this.stopServer();
       this.lockfile.release();
       this._running = "stopped";
+      this._stopRequested = false;
       throw err;
     }
   }
@@ -348,6 +369,11 @@ export class Simulator {
     const queue = this._model.graph.nodes.map((n) => n.path);
     const failed = [];
     while (queue.length > 0) {
+      // Allow stop() during startup to abort remaining work (#6861).
+      // Check isStopInProgress too — finishStop() clears _stopRequested when done.
+      if (this._stopRequested || this.isStopInProgress()) {
+        return;
+      }
       const top = queue.shift()!;
       try {
         await this.startResource(top);
@@ -386,6 +412,11 @@ export class Simulator {
    * @param simDir The path to the new version of the app
    */
   public async update(simDir: string) {
+    // Defensive: a leaked _stopRequested from a previous aborted start would
+    // cause startResources() below to short-circuit and silently skip
+    // starting any resources.
+    this._stopRequested = false;
+
     const newModel = this._loadApp(simDir);
 
     const plan = await this.planUpdate(
@@ -422,20 +453,46 @@ export class Simulator {
    * Stop the simulation and clean up all resources.
    */
   public async stop(): Promise<void> {
-    if (this._running === "starting") {
-      throw new Error("Cannot stop a simulation that is still starting.");
-    }
-    if (this._running === "stopping") {
-      throw new Error("There is already a stop operation in progress.");
-    }
     if (this._running === "stopped") {
       throw new Error(
         "There is no running simulation to stop. Did you mean to call `await simulator.start()` first?",
       );
     }
-    this._running = "stopping";
 
+    // Previously we refused to stop while "starting", which left detached
+    // sandbox children orphaned when the console/dev process exited mid-boot
+    // (https://github.com/winglang/wing/issues/6861).
+    if (this._running === "starting") {
+      this._stopRequested = true;
+    }
+
+    if (this._stopPromise) {
+      await this._stopPromise;
+      return;
+    }
+
+    if (this._running === "stopping") {
+      throw new Error("There is already a stop operation in progress.");
+    }
+
+    this._running = "stopping";
+    this._stopPromise = this.finishStop();
+    try {
+      await this._stopPromise;
+    } finally {
+      this._stopPromise = undefined;
+    }
+  }
+
+  private isStopInProgress(): boolean {
+    const state: RunningState = this._running;
+    return state === "stopping" || state === "stopped";
+  }
+
+  private async finishStop(): Promise<void> {
     // just call "stopResource" for all resources. it will stop all dependents as well.
+    // Calling this while a resource is mid-init is intentional: cleanup() unblocks
+    // hanging sandbox.start() calls (e.g. continuous-loop Services).
     for (const node of this._model.graph.nodes) {
       await this.stopResource(node.path);
     }
@@ -446,6 +503,7 @@ export class Simulator {
 
     this._handles.reset();
     this._running = "stopped";
+    this._stopRequested = false;
   }
 
   private isStarted(path: string): boolean {
@@ -475,9 +533,28 @@ export class Simulator {
 
     const handle = this.tryGetResourceHandle(path);
     if (!handle) {
-      throw new Error(
-        `Resource ${path} could not be cleaned up, no handle for it was found.`,
-      );
+      // Resource is mid-start: state[path] was set, but HANDLE_ATTRIBUTE
+      // hasn't been written yet (startResource writes it after init() settles).
+      // The handle itself WAS allocated in _handles.paths by startResource
+      // (see the allocation above the await on init()), so we can still recover
+      // the resource and call cleanup() — critical for reaping detached
+      // sandbox children whose init() never returns (#6861).
+      const pendingHandle = this._handles.tryFindHandleByPath(path);
+      if (pendingHandle) {
+        try {
+          const resource = this._handles.find(pendingHandle);
+          await this.ensureStateDirExists(path);
+          await resource.cleanup();
+          this._handles.deallocate(pendingHandle);
+        } catch (err) {
+          console.warn(err);
+        }
+        this._policyRegistry.deregister(path);
+      }
+      // Clear the partial state so a concurrent startResource can exit cleanly.
+      delete this.state[path];
+      this.setResourceRunningState(path, "stopped");
+      return;
     }
 
     this.setResourceRunningState(path, "stopping");
@@ -913,6 +990,9 @@ export class Simulator {
   }
 
   private async startResource(path: string): Promise<void> {
+    if (this._stopRequested || this.isStopInProgress()) {
+      return; // abort — stop() is tearing down (or already did)
+    }
     if (this.isStarted(path)) {
       return; // already started
     }
@@ -920,6 +1000,9 @@ export class Simulator {
     // first lets make sure all my dependencies have been started (depth-first)
     for (const d of this._model.graph.tryFind(path)?.dependencies ?? []) {
       await this.startResource(d);
+    }
+    if (this._stopRequested || this.isStopInProgress()) {
+      return;
     }
 
     const resourceConfig = this.getResourceConfig(path);
@@ -971,6 +1054,13 @@ export class Simulator {
     try {
       const attrs = await resourceObject.init(context);
 
+      // stop() may have torn down this resource while init() was in flight
+      // (see stopResource's "no handle" branch — #6861). Bailing prevents a
+      // TypeError on `this.state[path].attrs = ...` below.
+      if (this._stopRequested || this.isStopInProgress()) {
+        return;
+      }
+
       this.state[path].attrs = {
         ...this.state[path].attrs,
         ...attrs,
@@ -981,6 +1071,11 @@ export class Simulator {
 
     // save the current state
     await resourceObject.save();
+
+    // Re-check after save() — stop() may have run during the await above.
+    if (this._stopRequested || this.isStopInProgress()) {
+      return;
+    }
 
     // merge the attributes
     this.state[path].attrs = {
@@ -1252,6 +1347,21 @@ class HandleManager {
 
   public tryFindPath(handle: string): string | undefined {
     return this.paths.get(handle);
+  }
+
+  /**
+   * Reverse lookup: find the handle for a given resource path.
+   * Used to recover mid-init resources whose HANDLE_ATTRIBUTE hasn't been
+   * written to state yet but whose handle was already allocated
+   * (see Simulator.stopResource's "no handle" branch — #6861).
+   */
+  public tryFindHandleByPath(path: string): string | undefined {
+    for (const [handle, p] of this.paths) {
+      if (p === path) {
+        return handle;
+      }
+    }
+    return undefined;
   }
 
   public deallocate(handle: string): ISimulatorResourceInstance {
