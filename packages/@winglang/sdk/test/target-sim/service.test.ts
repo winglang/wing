@@ -1,6 +1,9 @@
+import { mkdirSync } from "fs";
+import { join } from "path";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { inflight } from "../../src/core";
+import { createProjectWithNativePackages } from "../native-packages";
 import { SimApp } from "../sim-app";
 
 const HANDLER_WITH_START = inflight(async () => {
@@ -231,4 +234,30 @@ test("stop a service with a continuous loop start handler", async () => {
   expect(await service.started()).toBeFalsy();
 
   await s.stop();
+});
+
+// https://github.com/winglang/wing/issues/4965
+test("service can use installed packages that can't be bundled", async () => {
+  const root = createProjectWithNativePackages();
+  const outdir = join(root, "target");
+  mkdirSync(outdir);
+  const app = new SimApp({ outdir });
+  new cloud.Service(
+    app,
+    "my_service",
+    inflight(async () => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      console.log(require("fake-native").hello("service"));
+    }),
+  );
+
+  const s = await app.startSimulator();
+  await s.stop();
+
+  const logs = s
+    .listTraces()
+    .filter((t) => t.type === "log")
+    .map((t) => t.data.message);
+  expect(logs).toContain("hello service from fake-native");
+  expect(s.listTraces().filter((t) => t.level === "error")).toEqual([]);
 });

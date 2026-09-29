@@ -87,7 +87,15 @@ process.on("message", async (message) => {${debugShim}
     const wrappedPath = entrypoint.replace(/\.cjs$/, ".sandbox.cjs");
 
     writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
-    const bundle = createBundle(wrappedPath);
+    // The sandbox runs the bundle in place (next to the app's node_modules),
+    // so npm packages used by inflight code (e.g. externs) can be loaded
+    // natively instead of being bundled. This is what allows using packages
+    // that esbuild can't bundle (native addons, optional dependencies, code
+    // that relies on __dirname, ...).
+    // See https://github.com/winglang/wing/issues/4965
+    const bundle = createBundle(wrappedPath, [], undefined, {
+      externalizeInstalledPackages: true,
+    });
 
     if (process.env.DEBUG) {
       const fileStats = await stat(entrypoint);
