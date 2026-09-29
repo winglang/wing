@@ -1,6 +1,7 @@
 import { execFileSync } from "child_process";
 import * as crypto from "crypto";
 import {
+  existsSync,
   mkdirSync,
   readFileSync,
   realpathSync,
@@ -8,7 +9,8 @@ import {
   writeFileSync,
 } from "fs";
 import { stat } from "fs/promises";
-import { posix, resolve } from "path";
+import { builtinModules, createRequire } from "module";
+import { dirname, isAbsolute, posix, resolve } from "path";
 import { decode, encode } from "vlq";
 import { normalPath } from "./misc";
 
@@ -99,17 +101,39 @@ export function prepareEsmEntrypoint(
   return outPath;
 }
 
+export interface CreateBundleOptions {
+  /**
+   * Leave npm packages imported by user code (e.g. externs) out of the bundle
+   * and load them natively at runtime, as long as Node would resolve the exact
+   * same package from the bundle's output directory.
+   *
+   * This is meant for targets that run the bundle in place on the developer's
+   * machine (the simulator), where the project's `node_modules` is available.
+   * It lets inflight code use packages that cannot be bundled (native addons,
+   * optional dependencies that aren't installed, code that relies on
+   * `__dirname`, etc.). Cloud targets must not use this, since the bundle is
+   * shipped without `node_modules`.
+   *
+   * Can be disabled with `WING_SIM_BUNDLE_ALL_PACKAGES=1`.
+   *
+   * @default false
+   */
+  readonly externalizeInstalledPackages?: boolean;
+}
+
 /**
  * Bundles a javascript entrypoint into a single file.
  * @param entrypoint The javascript entrypoint
  * @param outputDir Defaults to `${entrypoint}.bundle`
  * @param external external packages
+ * @param options additional bundling options
  * @returns Bundle information
  */
 export function createBundle(
   entrypoint: string,
   external: string[] = [],
   outputDir?: string,
+  options: CreateBundleOptions = {},
 ): Bundle {
   const normalEntrypoint = normalPath(realpathSync(entrypoint));
   const outdir = outputDir
@@ -143,6 +167,22 @@ export function createBundle(
   // eslint-disable-next-line import/no-extraneous-dependencies,@typescript-eslint/no-require-imports
   const esbuilder: typeof import("esbuild") = require("esbuild");
 
+  const nodePaths = process.env.WING_NODE_MODULES
+    ? [normalPath(process.env.WING_NODE_MODULES as string)]
+    : undefined;
+
+  const allExternal = [...external];
+  if (
+    options.externalizeInstalledPackages &&
+    !process.env.WING_SIM_BUNDLE_ALL_PACKAGES
+  ) {
+    allExternal.push(
+      ...findRuntimeResolvablePackages(esbuilder, normalEntrypoint, outdir, {
+        nodePaths,
+      }),
+    );
+  }
+
   let esbuild = esbuilder.buildSync({
     bundle: true,
     entryPoints: [normalEntrypoint],
@@ -151,9 +191,7 @@ export function createBundle(
     // https://stackoverflow.com/questions/70332883/webpack-azure-storage-blob-node-fetch-abortsignal-issue
     keepNames: true,
     // if the user has specified a node_modules directory to resolve from
-    nodePaths: process.env.WING_NODE_MODULES
-      ? [normalPath(process.env.WING_NODE_MODULES as string)]
-      : undefined,
+    nodePaths,
     alias: {
       "@winglang/sdk": SDK_PATH,
     },
@@ -162,7 +200,7 @@ export function createBundle(
     platform: "node",
     target: "node20",
     format: "esm",
-    external,
+    external: allExternal,
     // Define a real Node `require` before esbuild's __require shim so leftover
     // dynamic requires (e.g. require("node:assert") inside bundled CJS) work
     // instead of throwing.
@@ -211,6 +249,281 @@ export function createBundle(
     inputFiles,
     time: startTime,
   };
+}
+
+const BUILTIN_MODULES = new Set(builtinModules);
+
+/**
+ * Returns the npm package name of a bare import specifier (e.g. `vite`,
+ * `@aws-sdk/client-s3` for `@aws-sdk/client-s3/dist/foo.js`), or `undefined` if
+ * the specifier is not a bare package specifier (relative/absolute paths,
+ * `node:` builtins, subpath imports, URLs, etc.).
+ */
+export function packageNameOf(specifier: string): string | undefined {
+  if (
+    specifier.startsWith(".") ||
+    specifier.startsWith("#") ||
+    isAbsolute(specifier) ||
+    /^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(specifier) // node:, file:, data:, C:\, ...
+  ) {
+    return undefined;
+  }
+  const parts = specifier.split("/");
+  const name = specifier.startsWith("@")
+    ? parts.length >= 2 && parts[1]
+      ? `${parts[0]}/${parts[1]}`
+      : undefined
+    : parts[0];
+  if (!name || BUILTIN_MODULES.has(name)) {
+    return undefined;
+  }
+  return name;
+}
+
+/**
+ * Finds the directory of package `name` the way Node's resolver does for bare
+ * specifiers: walk up from `fromDir` looking for `node_modules/<name>`, then
+ * fall back to `extraPaths`. Returns the real path, or `undefined`.
+ */
+function findPackageDir(
+  name: string,
+  fromDir: string,
+  extraPaths: string[] = [],
+): string | undefined {
+  const candidates: string[] = [];
+  let dir = resolve(fromDir);
+  while (true) {
+    if (posix.basename(normalPath(dir)) !== "node_modules") {
+      candidates.push(resolve(dir, "node_modules", name));
+    }
+    const parent = dirname(dir);
+    if (parent === dir) {
+      break;
+    }
+    dir = parent;
+  }
+  candidates.push(...extraPaths.map((p) => resolve(p, name)));
+
+  for (const candidate of candidates) {
+    if (existsSync(resolve(candidate, "package.json"))) {
+      return normalPath(realpathSync(candidate));
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Whether Node (and esbuild) treat `file` as an ES module, i.e. whether
+ * esbuild applies Node's (rather than Babel's) interop rules to its imports.
+ */
+function isNodeEsmFile(file: string): boolean {
+  if (/\.m[jt]s$/.test(file)) {
+    return true;
+  }
+  if (/\.c[jt]s$/.test(file)) {
+    return false;
+  }
+  let dir = dirname(file);
+  while (true) {
+    const pkgJson = resolve(dir, "package.json");
+    if (existsSync(pkgJson)) {
+      try {
+        return JSON.parse(readFileSync(pkgJson, "utf-8")).type === "module";
+      } catch {
+        return false;
+      }
+    }
+    const parent = dirname(dir);
+    if (parent === dir) {
+      return false;
+    }
+    dir = parent;
+  }
+}
+
+/**
+ * Checks whether an ESM `import` of `specifier` (from a file in `resolveDir`
+ * that esbuild treats with Babel-style interop, e.g. a `.ts` extern) behaves
+ * the same whether the package is bundled or loaded natively by Node.
+ *
+ * That is the case when the target is an ES module, or a CommonJS module that
+ * doesn't use the `__esModule` marker (for which esbuild would pick
+ * `exports.default` as the default import, while Node picks `module.exports`).
+ */
+function isImportInteropSafe(
+  esbuilder: typeof import("esbuild"),
+  specifier: string,
+  resolveDir: string,
+  nodePaths: string[] | undefined,
+): boolean {
+  let inputs: Record<string, { format?: string }>;
+  try {
+    // Resolve the specifier with esbuild's resolver (same conditions as the
+    // real build) without descending into its dependencies.
+    const r = esbuilder.buildSync({
+      entryPoints: [specifier],
+      absWorkingDir: resolveDir,
+      nodePaths,
+      bundle: false,
+      write: false,
+      metafile: true,
+      platform: "node",
+      target: "node20",
+      format: "esm",
+      outdir: resolveDir,
+      logLevel: "silent",
+    });
+    inputs = r.metafile.inputs;
+  } catch {
+    return false;
+  }
+  const entries = Object.entries(inputs);
+  if (entries.length !== 1) {
+    return false;
+  }
+  const [file, { format }] = entries[0];
+  if (format === "esm") {
+    return true;
+  }
+  if (format !== "cjs") {
+    // e.g. JSON files, which Node can't `import` without import attributes
+    return false;
+  }
+  try {
+    const code = readFileSync(resolve(resolveDir, file), "utf-8");
+    return !code.includes("__esModule");
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Checks whether a `require()` of `specifier` from `importer` resolves (with
+ * Node's own resolver and `require` conditions) to a CommonJS file, so that
+ * calling Node's native `require` for it works the same as bundling it.
+ * `require()`-ing an ES module isn't supported by every Node.js 20 release.
+ */
+function isRequireSafe(specifier: string, importer: string): boolean {
+  let resolved: string;
+  try {
+    resolved = createRequire(importer).resolve(specifier);
+  } catch {
+    return false;
+  }
+  if (!isAbsolute(resolved)) {
+    return false;
+  }
+  return !isNodeEsmFile(resolved);
+}
+
+/**
+ * Returns the packages imported (directly) by non-SDK code in the bundle that
+ * can be safely left out of the bundle and loaded natively at runtime.
+ *
+ * A package qualifies if:
+ * - Node, starting from `outdir` (where the bundle is written and executed),
+ *   resolves the exact same package directory that esbuild would have bundled
+ *   for every importer (so packages that only resolve through `nodePaths`, or
+ *   that the SDK depends on with a different copy, stay bundled), and
+ * - loading it natively doesn't change import semantics (see
+ *   `isImportInteropSafe`).
+ */
+export function findRuntimeResolvablePackages(
+  esbuilder: typeof import("esbuild"),
+  entrypoint: string,
+  outdir: string,
+  options: { nodePaths?: string[] } = {},
+): string[] {
+  // A cheap pre-pass: don't descend into any package, only record which
+  // packages are imported and by whom.
+  let result: import("esbuild").BuildResult<{ metafile: true; write: false }>;
+  try {
+    result = esbuilder.buildSync({
+      bundle: true,
+      entryPoints: [entrypoint],
+      outdir,
+      nodePaths: options.nodePaths,
+      alias: {
+        "@winglang/sdk": SDK_PATH,
+      },
+      platform: "node",
+      target: "node20",
+      format: "esm",
+      packages: "external",
+      metafile: true,
+      write: false,
+      logLevel: "silent",
+    });
+  } catch {
+    // Let the real build report the error.
+    return [];
+  }
+
+  const cwd = process.cwd();
+  // package name -> directories esbuild would bundle it from
+  const bundleDirs = new Map<string, Set<string | undefined>>();
+  const userPackages = new Set<string>();
+  const unsafe = new Set<string>();
+
+  for (const [inputPath, input] of Object.entries(result.metafile.inputs)) {
+    const importer = normalPath(resolve(cwd, inputPath));
+    const importerDir = dirname(importer);
+    const isSdk = importer.startsWith(SDK_PATH + "/");
+    for (const imp of input.imports) {
+      if (!imp.external) {
+        continue;
+      }
+      const name = packageNameOf(imp.path);
+      // The SDK is always bundled from its aliased location.
+      if (!name || name === "@winglang/sdk") {
+        continue;
+      }
+
+      const dirs = bundleDirs.get(name) ?? new Set();
+      dirs.add(findPackageDir(name, importerDir, options.nodePaths));
+      bundleDirs.set(name, dirs);
+
+      if (isSdk || unsafe.has(name)) {
+        continue;
+      }
+      userPackages.add(name);
+
+      // Externalized `require()` calls go to Node's real `require` (see the
+      // banner in `createBundle`); externalized imports are left as ESM
+      // imports. Make sure neither changes what the importer gets.
+      let safe: boolean;
+      if (imp.kind === "import-statement" || imp.kind === "dynamic-import") {
+        safe =
+          isNodeEsmFile(importer) ||
+          isImportInteropSafe(
+            esbuilder,
+            imp.path,
+            importerDir,
+            options.nodePaths,
+          );
+      } else if (imp.kind === "require-call") {
+        safe = isRequireSafe(imp.path, importer);
+      } else {
+        safe = false;
+      }
+      if (!safe) {
+        unsafe.add(name);
+      }
+    }
+  }
+
+  const packages = new Array<string>();
+  for (const name of userPackages) {
+    if (unsafe.has(name)) {
+      continue;
+    }
+    const runtimeDir = findPackageDir(name, outdir);
+    const dirs = bundleDirs.get(name)!;
+    if (runtimeDir !== undefined && dirs.size === 1 && dirs.has(runtimeDir)) {
+      packages.push(name, `${name}/*`);
+    }
+  }
+  return packages;
 }
 
 /**
