@@ -86,6 +86,54 @@ fn recursive_inflight_closure_issue_6513() {
 }
 
 #[test]
+fn implicit_empty_struct_arg_survives_type_reference_fold_issue_6626() {
+	// `http.post` is a type reference (`http` is a module), which makes the compiler re-fold the
+	// whole file after type checking. The type checker records which argument lists need an
+	// implicit `{}` appended (for an omitted, all-optional struct parameter) by `ArgList` id,
+	// so those ids must survive that fold. Otherwise `new EmailService()` is emitted without
+	// its props object and the constructor crashes reading `props.emailIdentities`.
+	let snap = crate::test_utils::compile_ok(
+		r#"
+    bring cloud;
+    bring http;
+
+    struct EmailServiceProps {
+      emailIdentities: Array<str>?;
+    }
+
+    class EmailService {
+      new(props: EmailServiceProps) {
+        if let emailIdentities = props.emailIdentities {
+          log("{emailIdentities.length}");
+        }
+      }
+    }
+
+    class Email {
+      new() {
+        new EmailService();
+        new cloud.Function(inflight () => {
+          http.post("");
+        });
+      }
+    }
+
+    new Email();
+    "#,
+	);
+	assert!(
+		snap.contains(r#""EmailService", {  })"#),
+		"expected the omitted all-optional struct argument to be emitted as `{{}}`:\n{snap}"
+	);
+	insta::with_settings!({
+		prepend_module_to_snapshot => false,
+		omit_expression => true,
+	}, {
+		insta::assert_snapshot!(snap);
+	});
+}
+
+#[test]
 fn free_inflight_obj_from_inflight() {
 	assert_compile_ok!(
 		r#"
