@@ -17,7 +17,7 @@ on:
         description: "Ref to checkout. Must be present in the repo input."
       target:
         type: choice
-        default: all
+        default: all-stable
         description: "target to run at, can be one or all of them"
         options:
           - all-stable # tf-aws and sim
@@ -38,8 +38,10 @@ env:
   # this variable indicates wheater to use wing cli from a local version (using the current repo code)
   # or use the latest remote npm version
   LOCAL_BUILD: ${{ github.workflow == 'build' }}
-  # indicates if the action triggered from a workflow_dispatch
-  MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+  # indicates if this workflow itself was dispatched manually (when called from
+  # build.yml, github.event_name is the caller's event, which may also be
+  # workflow_dispatch, so check the workflow name too)
+  MANUAL: ${{ github.event_name == 'workflow_dispatch' && github.workflow == 'SDK Spec Tests' }}
   REPO: ${{ inputs.repo || github.repository }}
   REF: ${{ inputs.ref || github.ref }}
   TARGET: ${{ inputs.target || (github.workflow == 'build' && 'all-stable') || (github.event_name == 'release' && 'all-unstable')  || 'all' }} #the build runs only stable targets, realease only unstable
@@ -101,6 +103,16 @@ jobs:
   test:
     needs: setup
     runs-on: ubuntu-24.04
+    # Credentials (below) last 4h; stop well before so `terraform destroy` never
+    # runs with expired credentials. Leaked resources are swept by
+    # periodic-aws-clean.yml.
+    timeout-minutes: 180
+    # Only jobs bound to this environment can assume the e2e AWS role (the
+    # role's trust policy pins the OIDC subject to
+    # repo:winglang/wing:environment:aws-e2e). See .github/aws/README.md.
+    environment:
+      name: ${{ matrix.target == 'tf-aws' && 'aws-e2e' || '' }}
+      deployment: false
     strategy:
       fail-fast: false
       max-parallel: 10
@@ -162,12 +174,18 @@ jobs:
         run: |
           cd tests/sdk_tests
           npm install
+      - name: Check AWS e2e role is configured
+        if: ${{ matrix.target == 'tf-aws' && vars.AWS_E2E_ROLE_ARN == '' }}
+        run: |
+          echo "::error::The AWS_E2E_ROLE_ARN repository variable is not set. See .github/aws/README.md."
+          exit 1
       - name: Configure AWS credentials
         if: ${{ matrix.target == 'tf-aws' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ vars.AWS_E2E_ROLE_ARN }}
+          role-session-name: wing-sdk-spec-${{ github.run_id }}-${{ github.run_attempt }}
+          role-duration-seconds: 14400
           aws-region: ${{ env.AWS_REGION }}
       - name: Configure azure credentials
         if: ${{ matrix.target == 'tf-azure' }}
@@ -196,7 +214,7 @@ jobs:
         uses: nick-fields/retry@v3
         env:
           TF_LOG: info
-          TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
+          TF_LOG_PATH: ${{ runner.temp }}/terraform.log
         with:
           max_attempts: 3
           retry_on: error
@@ -208,7 +226,7 @@ jobs:
       - name: Execute wing test in matrix directory
         env:
           TF_LOG: info
-          TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
+          TF_LOG_PATH: ${{ runner.temp }}/terraform.log
         run: |
           if  ${{ env.MANUAL == 'true' }}
           then
@@ -234,10 +252,10 @@ jobs:
 
       - name: Output Terraform log
         if: failure()
-        run: cat ${{ runner.workspace }}/terraform.log
+        run: cat ${{ runner.temp }}/terraform.log
 
   update-matrix:
     needs: test
-    if: ${{ github.workflow == 'build' }}
+    if: ${{ github.workflow == 'build' && github.event_name == 'push' }}
     uses: ./.github/workflows/matrix-update.yml
     secrets: inherit

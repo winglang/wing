@@ -68,6 +68,8 @@ In pull requests, by default we only run tests for the same operating system and
 If you want to run tests for all operating systems, you can add the `🧪 pr/e2e-full` label to your PR. 
 This label must be present before the build job starts, so if you add it after the build job has started, you will need to re-trigger the build by pushing a new commit to your PR.
 
+For PRs opened from a branch of `winglang/wing` (not a fork), the label also runs the SDK spec tests against a real AWS account (`tf-aws`). See [`.github/aws/README.md`](https://github.com/winglang/wing/blob/main/.github/aws/README.md) for how that account is wired up.
+
 ## 🧪 How do I set up my PRs to update snapshots?
 
 When PR checks run they may mutate the PR branch with updates to the snapshots or other things you may have missed.

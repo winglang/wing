@@ -305,10 +305,29 @@ jobs:
   sdk-spec-test:
     needs:
       - build
-    # Temporarily disabled: the tf-aws/Azure/GCP variants deploy to the defunct
-    # company cloud accounts and fail with invalid credentials. Re-enable once
-    # valid cloud creds exist. Tracked in https://github.com/winglang/wing/issues/7270.
-    if: false && github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
+    # SDK spec tests for tf-aws (+ sim), deployed to the dedicated e2e sandbox
+    # account via GitHub OIDC (setup: .github/aws/README.md). Runs on pushes to
+    # main that touch e2e-relevant code, on manual dispatch, and on same-repo PRs
+    # labeled "🧪 pr/e2e-full" (forks never get AWS credentials).
+    # Skipped (which the quality gate accepts) until the AWS_E2E_ROLE_ARN repo
+    # variable is set; unsetting it is the kill switch.
+    # tf-azure/tf-gcp stay off: they only run from sdk-spec-test.yml's manual or
+    # release triggers, and those accounts are gone too (#7270).
+    if: >-
+      vars.AWS_E2E_ROLE_ARN != '' &&
+      github.repository == 'winglang/wing' &&
+      (
+        (github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true') ||
+        github.event_name == 'workflow_dispatch' ||
+        (
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
+        )
+      )
+    permissions:
+      contents: read
+      id-token: write
     uses: ./.github/workflows/sdk-spec-test.yml
     secrets: inherit
 
@@ -321,6 +340,7 @@ jobs:
       - e2e-test
       - benchmark
       - test
+      - sdk-spec-test
     steps:
       - name: Check failure
         # All jobs must either be sucessful or skipped

@@ -1,0 +1,320 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  GitHub Actions OIDC access for the winglang/wing SDK spec (tf-aws end-to-end)
+  tests. Deploy once into a dedicated, disposable sandbox AWS account; see
+  .github/aws/README.md.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: GitHub
+        Parameters:
+          - GitHubRepository
+          - GitHubEnvironment
+          - CreateOIDCProvider
+      - Label:
+          default: CI role
+        Parameters:
+          - RoleName
+          - MaxSessionDuration
+      - Label:
+          default: Cost guardrail (optional)
+        Parameters:
+          - MonthlyBudgetUSD
+          - BudgetNotificationEmail
+
+Parameters:
+  GitHubRepository:
+    Type: String
+    Default: winglang/wing
+    AllowedPattern: "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+    Description: owner/name of the only repository allowed to assume the CI role.
+
+  GitHubEnvironment:
+    Type: String
+    Default: aws-e2e
+    AllowedPattern: "^[A-Za-z0-9_.-]+$"
+    Description: >-
+      GitHub environment a job must be bound to in order to assume the CI role
+      (OIDC subject repo:<GitHubRepository>:environment:<GitHubEnvironment>).
+
+  CreateOIDCProvider:
+    Type: String
+    Default: "true"
+    AllowedValues: ["true", "false"]
+    Description: >-
+      Create the token.actions.githubusercontent.com OIDC provider. Set to false
+      if the account already has one (an account can only have one per URL).
+
+  RoleName:
+    Type: String
+    Default: wing-github-e2e
+    AllowedPattern: "^[\\w+=,.@-]{1,52}$"
+    Description: Name of the IAM role assumed by CI (also prefixes the managed policy names).
+
+  MaxSessionDuration:
+    Type: Number
+    Default: 14400
+    MinValue: 3600
+    MaxValue: 43200
+    Description: >-
+      Maximum CI session length in seconds. Must be >= role-duration-seconds in
+      .github/workflows/sdk-spec-test.yml (4h), which outlives the job timeout so
+      credentials never expire mid-deploy/destroy.
+
+  MonthlyBudgetUSD:
+    Type: Number
+    Default: 50
+    MinValue: 1
+    Description: Monthly cost budget in USD (only used when BudgetNotificationEmail is set).
+
+  BudgetNotificationEmail:
+    Type: String
+    Default: ""
+    Description: >-
+      Email to alert at 80% actual / 100% forecasted of MonthlyBudgetUSD.
+      Leave empty to skip creating the budget.
+
+Conditions:
+  ShouldCreateOIDCProvider: !Equals [!Ref CreateOIDCProvider, "true"]
+  ShouldCreateBudget: !Not [!Equals [!Ref BudgetNotificationEmail, ""]]
+
+Resources:
+  GitHubOIDCProvider:
+    Type: AWS::IAM::OIDCProvider
+    Condition: ShouldCreateOIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      # IAM no longer uses thumbprints for this provider (it trusts GitHub's CA
+      # directly), but some tooling still expects them to be present.
+      ThumbprintList:
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+        - 1c58a3a8518e8759bf075b76b750d4f2df264fcd
+
+  # What the SDK spec tests (tests/sdk_tests, `wing test -t tf-aws`) deploy and
+  # call, scoped by service rather than AdministratorAccess. Also covers the
+  # stale-resource sweeper (.github/aws/cleanup-stale-resources.sh).
+  PermissionsPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Sub "${RoleName}-permissions"
+      Description: Services deployed by the Wing tf-aws SDK spec tests.
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: WingTfAwsServices
+            Effect: Allow
+            Action:
+              - apigateway:*
+              - cloudfront:*
+              - dynamodb:*
+              - ecr:*
+              - ecs:*
+              - events:*
+              - lambda:*
+              - logs:*
+              - s3:*
+              - secretsmanager:*
+              - sns:*
+              - sqs:*
+              - sts:GetCallerIdentity
+              - tag:GetResources
+              - tag:TagResources
+              - tag:UntagResources
+            Resource: "*"
+          # cloud.Service / VPC networking (app VPC, NAT, subnets, security
+          # groups). Deliberately excludes launching EC2 instances.
+          - Sid: VpcNetworking
+            Effect: Allow
+            Action:
+              - ec2:Describe*
+              - ec2:*Vpc*
+              - ec2:*Subnet*
+              - ec2:*InternetGateway*
+              - ec2:*NatGateway*
+              - ec2:*RouteTable*
+              - ec2:*Route
+              - ec2:*Address*
+              - ec2:*SecurityGroup*
+              - ec2:*NetworkInterface*
+              - ec2:CreateTags
+              - ec2:DeleteTags
+            Resource: "*"
+          - Sid: IamRead
+            Effect: Allow
+            Action:
+              - iam:Get*
+              - iam:List*
+            Resource: "*"
+          # Function/service execution roles. Terraform generates the names
+          # (terraform-<timestamp>), so they cannot be scoped by prefix.
+          - Sid: ManageExecutionRoles
+            Effect: Allow
+            Action:
+              - iam:CreateRole
+              - iam:DeleteRole
+              - iam:UpdateRole
+              - iam:UpdateRoleDescription
+              - iam:UpdateAssumeRolePolicy
+              - iam:PutRolePolicy
+              - iam:DeleteRolePolicy
+              - iam:DetachRolePolicy
+              - iam:TagRole
+              - iam:UntagRole
+              - iam:RemoveRoleFromInstanceProfile
+            Resource:
+              - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/*"
+              - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:instance-profile/*"
+          # Only AWS-managed service-role policies (e.g.
+          # AWSLambdaBasicExecutionRole, AmazonECSTaskExecutionRolePolicy).
+          - Sid: AttachServiceRolePoliciesOnly
+            Effect: Allow
+            Action: iam:AttachRolePolicy
+            Resource: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/*"
+            Condition:
+              ArnLike:
+                iam:PolicyARN: !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/*"
+          - Sid: PassRolesToComputeOnly
+            Effect: Allow
+            Action: iam:PassRole
+            Resource: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/*"
+            Condition:
+              StringEquals:
+                iam:PassedToService:
+                  - lambda.amazonaws.com
+                  - ecs-tasks.amazonaws.com
+          - Sid: EcsServiceLinkedRole
+            Effect: Allow
+            Action: iam:CreateServiceLinkedRole
+            Resource: "*"
+            Condition:
+              StringEquals:
+                iam:AWSServiceName:
+                  - ecs.amazonaws.com
+
+  # Explicit denies win over any allow, including ones added to the role later.
+  GuardrailsPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Sub "${RoleName}-guardrails"
+      Description: Account-level and self-tampering denies for the Wing e2e CI role.
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: DenyAccountBillingAndLongLivedCredentials
+            Effect: Deny
+            Action:
+              - account:*
+              - aws-portal:*
+              - billing:*
+              - budgets:*
+              - ce:*
+              - cur:*
+              - freetier:*
+              - invoicing:*
+              - organizations:*
+              - payments:*
+              - purchase-orders:*
+              - tax:*
+              - cloudtrail:DeleteTrail
+              - cloudtrail:StopLogging
+              - cloudtrail:UpdateTrail
+              - iam:CreateUser
+              - iam:CreateAccessKey
+              - iam:CreateLoginProfile
+              - iam:UpdateLoginProfile
+              - iam:CreateServiceSpecificCredential
+              - iam:UploadSSHPublicKey
+              - iam:*OpenIDConnectProvider*
+              - iam:*SAMLProvider*
+              - iam:*AccountAlias
+              - iam:*AccountPasswordPolicy
+              - iam:CreatePolicy
+              - iam:CreatePolicyVersion
+              - iam:SetDefaultPolicyVersion
+            Resource: "*"
+          - Sid: DenyTamperingWithCiIdentity
+            Effect: Deny
+            Action:
+              - iam:Add*
+              - iam:Attach*
+              - iam:Delete*
+              - iam:Detach*
+              - iam:PassRole
+              - iam:Put*
+              - iam:Remove*
+              - iam:Tag*
+              - iam:Untag*
+              - iam:Update*
+            Resource:
+              - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${RoleName}"
+              - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${RoleName}-*"
+              - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com"
+
+  CiRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Ref RoleName
+      Description: !Sub "Assumed via GitHub OIDC by ${GitHubRepository} jobs in the ${GitHubEnvironment} environment."
+      MaxSessionDuration: !Ref MaxSessionDuration
+      ManagedPolicyArns:
+        - !Ref PermissionsPolicy
+        - !Ref GuardrailsPolicy
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: GitHubActionsEnvironmentOnly
+            Effect: Allow
+            Principal:
+              Federated: !If
+                - ShouldCreateOIDCProvider
+                - !Ref GitHubOIDCProvider
+                - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com"
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:sub: !Sub "repo:${GitHubRepository}:environment:${GitHubEnvironment}"
+
+  MonthlyBudget:
+    Type: AWS::Budgets::Budget
+    Condition: ShouldCreateBudget
+    Properties:
+      Budget:
+        BudgetName: !Sub "${RoleName}-monthly"
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit:
+          Amount: !Ref MonthlyBudgetUSD
+          Unit: USD
+      NotificationsWithSubscribers:
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 80
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref BudgetNotificationEmail
+        - Notification:
+            NotificationType: FORECASTED
+            ComparisonOperator: GREATER_THAN
+            Threshold: 100
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref BudgetNotificationEmail
+
+Outputs:
+  RoleArn:
+    Description: Set this as the AWS_E2E_ROLE_ARN repository variable.
+    Value: !GetAtt CiRole.Arn
+  SetVariableCommand:
+    Description: Run this to wire the role into CI.
+    Value: !Sub "gh variable set AWS_E2E_ROLE_ARN --repo ${GitHubRepository} --body ${CiRole.Arn}"
+  OIDCSubject:
+    Description: The only OIDC subject allowed to assume the role.
+    Value: !Sub "repo:${GitHubRepository}:environment:${GitHubEnvironment}"
