@@ -45,6 +45,10 @@ jobs:
 
       - name: Create a PR
         uses: peter-evans/create-pull-request@v6
+        # The docs refresh is ancillary to the spec tests and must not fail them
+        # (and with them the release gate): PROJEN_GITHUB_TOKEN is a defunct
+        # company PAT. Tracked in https://github.com/winglang/wing/issues/7270.
+        continue-on-error: true
         with:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           title: "chore(docs): compatibility matrix update"

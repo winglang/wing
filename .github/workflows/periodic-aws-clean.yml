@@ -1,0 +1,59 @@
+name: Periodic AWS e2e cleanup
+
+# Sweeps resources leaked by the tf-aws SDK spec tests (cancelled or timed-out
+# runs skip `terraform destroy`) from the dedicated e2e sandbox account. Only
+# Wing/Terraform-named resources older than MAX_AGE_HOURS are touched; see
+# .github/aws/cleanup-stale-resources.sh.
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        type: boolean
+        default: true
+        description: "Only list what would be deleted"
+      max_age_hours:
+        type: number
+        default: 4
+        description: "Delete matching resources older than this many hours (keep > 3, the spec test job timeout)"
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: periodic-aws-clean
+  cancel-in-progress: false
+
+jobs:
+  aws-cleanup:
+    # Skipped until the e2e AWS account is wired up (see .github/aws/README.md).
+    if: vars.AWS_E2E_ROLE_ARN != '' && github.repository == 'winglang/wing'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    environment:
+      name: aws-e2e
+      deployment: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/aws
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_E2E_ROLE_ARN }}
+          role-session-name: wing-e2e-cleanup-${{ github.run_id }}
+          aws-region: us-east-1
+
+      - name: Sweep stale resources
+        env:
+          AWS_REGION: us-east-1
+          ROLE_ARN: ${{ vars.AWS_E2E_ROLE_ARN }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+          MAX_AGE_HOURS: ${{ inputs.max_age_hours || 4 }}
+        run: |
+          EXPECTED_ROLE_NAME="${ROLE_ARN##*/}" ./.github/aws/cleanup-stale-resources.sh
