@@ -1,3 +1,4 @@
+import { execFileSync } from "child_process";
 import {
   writeFileSync,
   mkdtempSync,
@@ -13,8 +14,10 @@ import {
   createArchive,
   createBundle,
   fixSourcemaps,
+  packageNameOf,
   prepareEsmEntrypoint,
 } from "../../src/shared/bundling";
+import { createProjectWithNativePackages } from "../native-packages";
 
 describe("createArchive", () => {
   it("should create a zip archive when the directory path contains spaces", () => {
@@ -175,5 +178,161 @@ module.exports = async function(context, req) {
     const bundle = createBundle(wrapped);
     const out = readFileSync(bundle.outfilePath, "utf-8");
     expect(out).toMatch(/export\s*\{?\s*default|\bdefault\b/);
+  });
+});
+
+describe("packageNameOf", () => {
+  it.each([
+    ["vite", "vite"],
+    ["vite/client", "vite"],
+    ["@aws-sdk/client-s3", "@aws-sdk/client-s3"],
+    ["@aws-sdk/client-s3/dist/foo.js", "@aws-sdk/client-s3"],
+    ["lodash.merge", "lodash.merge"],
+  ])("%s -> %s", (specifier, name) => {
+    expect(packageNameOf(specifier)).toBe(name);
+  });
+
+  it.each([
+    "./foo",
+    "../foo",
+    "/abs/foo",
+    "#internal",
+    "node:fs",
+    "fs",
+    "fs/promises",
+    "file:///foo.js",
+    "@scope",
+  ])("%s is not a package", (specifier) => {
+    expect(packageNameOf(specifier)).toBeUndefined();
+  });
+});
+
+// https://github.com/winglang/wing/issues/4965
+describe("createBundle externalizeInstalledPackages", () => {
+  const run = (bundlePath: string) =>
+    execFileSync(process.execPath, [bundlePath], { encoding: "utf-8" }).trim();
+
+  it("fails to bundle packages esbuild can't bundle by default", () => {
+    const root = createProjectWithNativePackages();
+    const entry = join(root, "entry.cjs");
+    writeFileSync(entry, `console.log(require("fake-native").hello("wing"));`);
+
+    expect(() => createBundle(entry)).toThrow(
+      /Could not resolve "\.\/binding\.node"/,
+    );
+  });
+
+  it("loads installed packages natively instead of bundling them", () => {
+    const root = createProjectWithNativePackages();
+    const entry = join(root, "entry.cjs");
+    writeFileSync(
+      entry,
+      `
+const { hello } = require("fake-native");
+const { whereAmI } = require("dirname-pkg");
+console.log(hello("wing") + " " + whereAmI());
+`,
+    );
+
+    const bundle = createBundle(entry, [], undefined, {
+      externalizeInstalledPackages: true,
+    });
+
+    const code = readFileSync(bundle.outfilePath, "utf-8");
+    expect(code).toContain('__require("fake-native")');
+    expect(code).toContain('__require("dirname-pkg")');
+    expect(code).not.toContain("binding.node");
+    expect(bundle.inputFiles.some((f) => f.includes("node_modules"))).toBe(
+      false,
+    );
+
+    // `__dirname` works because the package isn't bundled
+    expect(run(bundle.outfilePath)).toBe(
+      "hello wing from fake-native dirname-pkg",
+    );
+  });
+
+  it("supports ESM imports of installed packages", () => {
+    const root = createProjectWithNativePackages();
+    writeFileSync(
+      join(root, "extern.mjs"),
+      `
+import { hello } from "fake-native";
+import { esmValue } from "esm-pkg";
+export const value = () => hello("esm") + " " + esmValue();
+`,
+    );
+    const entry = join(root, "entry.cjs");
+    writeFileSync(entry, `console.log(require("./extern.mjs").value());`);
+
+    const bundle = createBundle(entry, [], undefined, {
+      externalizeInstalledPackages: true,
+    });
+
+    const code = readFileSync(bundle.outfilePath, "utf-8");
+    expect(code).toMatch(/from "fake-native"/);
+    expect(code).toMatch(/from "esm-pkg"/);
+    expect(run(bundle.outfilePath)).toBe(
+      "hello esm from fake-native esm value",
+    );
+  });
+
+  it("keeps bundling packages whose default import would change", () => {
+    const root = createProjectWithNativePackages();
+    // .ts files get Babel-style interop from esbuild: the default import is
+    // `exports.default`, while Node's native ESM loader would return
+    // `module.exports`. Keep bundling to preserve behavior.
+    writeFileSync(
+      join(root, "extern.ts"),
+      `
+import greet from "esmodule-flag-cjs";
+export const value = (): string => greet();
+`,
+    );
+    const entry = join(root, "entry.cjs");
+    writeFileSync(entry, `console.log(require("./extern.ts").value());`);
+
+    const bundle = createBundle(entry, [], undefined, {
+      externalizeInstalledPackages: true,
+    });
+
+    const code = readFileSync(bundle.outfilePath, "utf-8");
+    expect(code).not.toMatch(/from "esmodule-flag-cjs"/);
+    expect(code).toContain("default export");
+    expect(run(bundle.outfilePath)).toBe("default export");
+  });
+
+  it("keeps bundling packages that can't be resolved from the output directory", () => {
+    const root = createProjectWithNativePackages();
+    const entry = join(root, "entry.cjs");
+    writeFileSync(entry, `console.log(require("dirname-pkg").whereAmI());`);
+
+    // the output directory is outside of the project, so `node_modules` isn't
+    // reachable from it at runtime
+    const outdir = mkdtempSync(join(tmpdir(), "wingsdk-outdir."));
+    const bundle = createBundle(entry, [], outdir, {
+      externalizeInstalledPackages: true,
+    });
+
+    const code = readFileSync(bundle.outfilePath, "utf-8");
+    expect(code).not.toContain('__require("dirname-pkg")');
+    expect(code).toContain("whereAmI");
+  });
+
+  it("can be disabled with WING_SIM_BUNDLE_ALL_PACKAGES", () => {
+    const root = createProjectWithNativePackages();
+    const entry = join(root, "entry.cjs");
+    writeFileSync(entry, `console.log(require("dirname-pkg").whereAmI());`);
+
+    process.env.WING_SIM_BUNDLE_ALL_PACKAGES = "1";
+    try {
+      const bundle = createBundle(entry, [], undefined, {
+        externalizeInstalledPackages: true,
+      });
+      const code = readFileSync(bundle.outfilePath, "utf-8");
+      expect(code).not.toContain('__require("dirname-pkg")');
+    } finally {
+      delete process.env.WING_SIM_BUNDLE_ALL_PACKAGES;
+    }
   });
 });

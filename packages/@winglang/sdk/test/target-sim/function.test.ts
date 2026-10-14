@@ -1,8 +1,11 @@
+import { mkdirSync } from "fs";
+import { join } from "path";
 import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { inflight } from "../../src/core";
 import { Json, Node } from "../../src/std";
+import { createProjectWithNativePackages } from "../native-packages";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = inflight(async (_, event) => {
@@ -287,4 +290,31 @@ test("__dirname and __filename cannot be used within inflight code", async () =>
       ),
     ),
   ).toHaveLength(2);
+});
+
+// https://github.com/winglang/wing/issues/4965
+// https://github.com/winglang/wing/issues/2084
+test("inflight code can use installed packages that can't be bundled", async () => {
+  const root = createProjectWithNativePackages();
+  const outdir = join(root, "target");
+  mkdirSync(outdir);
+  const app = new SimApp({ outdir });
+
+  const invoker = app.newCloudFunction(
+    inflight(async () => {
+      /* eslint-disable @typescript-eslint/no-require-imports */
+      // loads a native addon / missing optional dependency (can't be bundled)
+      const { hello } = require("fake-native");
+      // relies on __dirname (breaks when bundled as ESM)
+      const { whereAmI } = require("dirname-pkg");
+      /* eslint-enable @typescript-eslint/no-require-imports */
+      return `${hello("function")} ${whereAmI()}`;
+    }),
+  );
+
+  const s = await app.startSimulator();
+  expect(await invoker(s)).toEqual(
+    "hello function from fake-native dirname-pkg",
+  );
+  await s.stop();
 });
